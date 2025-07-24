@@ -1,0 +1,6 @@
+[submodule "_docs/front_end_best_practices"]
+	path = _docs/front_end_best_practices
+	url = https://github.com/TechWithTy/front_end_best_practices.git
+[submodule "scripts"]
+	path = scripts
+	url = https://github.com/TechWithTy/scripts.git

@@ -1,0 +1,68 @@
+services:
+  postgresql:
+    image: postgres:15-alpine
+    container_name: deal-scale-strapi-db
+    environment:
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+      POSTGRES_DB: strapi
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - strapi
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U strapi -d strapi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer:latest
+    container_name: deal-scale-db-admin
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: postgresql
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+    networks:
+      - strapi
+
+  strapi:
+    build:
+      context: ../apps/strapi
+      dockerfile: Dockerfile
+    container_name: deal-scale-strapi
+    env_file: ../.env
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: strapi
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+      NODE_ENV: development
+      # The following are not needed as they are defaults in development
+      # STRAPI_URL: http://localhost:1337
+      # STRAPI_ADMIN_URL: http://localhost:1337/admin
+      # STRAPI_HOST: 0.0.0.0
+      # STRAPI_PORT: 1337
+    volumes:
+      - ../apps/strapi:/opt/app
+      - /opt/app/node_modules
+    ports:
+      - "1337:1337"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - strapi
+
+networks:
+  strapi:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  strapi_node_modules:

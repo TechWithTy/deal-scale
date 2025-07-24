@@ -1,0 +1,78 @@
+export type CompanyPartner = {
+	name: string;
+	logo: string;
+	link?: string;
+	description?: string;
+};
+
+export type CompanyLogoDictType = {
+	[key: string]: CompanyPartner;
+};
+
+export const companyLogos: CompanyLogoDictType = {
+	crosscountrymortgage: {
+		name: "Cross Country Mortgage",
+		logo: "https://crosscountrymortgage.com/app/themes/ccm-redesign/theme/assets/images/CCM_logo.svg",
+		link: "https://crosscountrymortgage.com/",
+		description: "Preferred mortgage partner.",
+	},
+	homing: {
+		name: "Homing",
+		logo: "/partners/homing.svg",
+		link: "https://homing.com/",
+		description: "Home search and analytics platform.",
+	},
+	onepercenthomesale: {
+		name: "One Percent Homesale",
+		logo: "https://onepercenthomesale.com/assets/images/image01.png?v=84001c8d",
+		link: "https://onepercenthomesale.com/",
+		description: "Discount real estate brokerage.",
+	},
+	wisdomRealEstate: {
+		name: "Wisdom Real Estate",
+		logo: "https://images.squarespace-cdn.com/content/v1/63125958c6ee562a58123c62/4174ee79-b0b4-468b-898c-028b20807057/fcfcc0a4-737e-4a7b-aac4-ee58b751291dfoot.jpg?format=1500w",
+		description: "Local real estate experts.",
+		link: "https://wisdomrealestate.com/",
+	},
+	mastersRealEstateGroup: {
+		name: "Masters Real Estate Group",
+		logo: "https://lirp.cdn-website.com/55da37ec/dms3rep/multi/opt/vertical-326w.png",
+		description: "Expert real estate group focused on client success.",
+		link: "https://www.rentcoloradohomes.com/",
+	},
+	dwelList: {
+		name: "Dwellist",
+		logo: "https://www.dwellist.com/wp-content/uploads/2022/10/Untitled-design-41.png",
+		description: "Modern property search and listing platform.",
+		link: "https://www.dwellist.com/",
+	},
+	smartSkip: {
+		name: "Smart Skip",
+		logo: "/partners/smart-skip.png",
+		description: "Nationwide junk removal and dumpster rental.",
+		link: "https://smartskip.io/",
+	},
+	mangoWood: {
+		name: "MangoWood",
+		logo: "/partners/mangowood.jpg",
+		description: "Data-driven real estate investment analytics.",
+	},
+	oneSignal: {
+		name: "OneSignal",
+		logo: "/partners/onesignal.jpg",
+		description: "Leading customer messaging and push notification platform.",
+		link: "https://onesignal.com/",
+	},
+	newWestern: {
+		name: "New Western",
+		logo: "https://www.newwestern.com/assets/nw/nw-logo-black.svg",
+		description: "Real estate investment marketplace.",
+		link: "https://www.newwestern.com/",
+	},
+	theBuyoutCompany: {
+		name: "The Buyout Company",
+		logo: "https://thebuyoutcompany.com/wp-content/uploads/2019/09/Thebuyoutcompanylogo.png",
+		description: "Home buying company offering quick, cash offers.",
+		link: "https://thebuyoutcompany.com/",
+	},
+};

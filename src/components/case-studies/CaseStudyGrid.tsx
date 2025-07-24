@@ -1,0 +1,173 @@
+"use client";
+import { GlassCard } from "@/components/ui/glass-card";
+import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
+import { ChevronRight, FileText } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
+import { caseStudyCategories } from "@/data/caseStudy/caseStudies";
+// Accepts caseStudies and categoryFilter as props
+import { useCategoryFilter } from "@/hooks/use-category-filter";
+import { usePagination } from "@/hooks/use-pagination";
+import Header from "../common/Header";
+
+interface CaseStudyGridProps {
+	caseStudies: CaseStudy[];
+	title?: string;
+	subtitle?: string;
+	/**
+	 * ! If set, limits the number of visible case studies (used for home/landing page)
+	 */
+	limit?: number;
+	/**
+	 * ! If true, shows the "View All Case Studies" button (used for home/landing page)
+	 */
+	showViewAllButton?: boolean;
+	/**
+	 * * Controls display of the category filter. Default: true
+	 */
+	showCategoryFilter?: boolean;
+}
+
+const DEFAULT_TITLE = "Case Studies";
+const DEFAULT_SUBTITLE =
+	"See real success stories and ways to leverage Deal Scale to grow your business.";
+
+const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
+	caseStudies,
+	title = DEFAULT_TITLE,
+	subtitle = DEFAULT_SUBTITLE,
+	limit,
+	showViewAllButton = false,
+	showCategoryFilter = true,
+}) => {
+	const { activeCategory, setActiveCategory, CategoryFilter } =
+		useCategoryFilter(caseStudyCategories);
+
+	// * If limit is set, ignore category filtering and show latest case studies
+	let visibleStudies: CaseStudy[];
+	let showViewAll = false;
+
+	if (typeof limit === "number") {
+		// todo: If caseStudies have a 'date' or 'createdAt', sort by newest first. Otherwise, use array order.
+		visibleStudies = [...caseStudies]
+			// .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Uncomment if date exists
+			.slice(0, limit);
+		showViewAll = showViewAllButton && caseStudies.length > limit;
+	} else {
+		// * Filter by category if no limit
+		// * Robust filtering: show all if no category, 'All' (any case), empty string, or empty array
+		const isAll =
+			!activeCategory ||
+			(typeof activeCategory === "string" &&
+				activeCategory.toLowerCase() === "all") ||
+			activeCategory === "" ||
+			(Array.isArray(activeCategory) && activeCategory.length === 0);
+
+		const filteredStudies = isAll
+			? caseStudies
+			: caseStudies.filter((cs) => cs.categories.includes(activeCategory));
+		visibleStudies = filteredStudies;
+		showViewAll = showViewAllButton && filteredStudies.length > 0;
+	}
+
+	return (
+		<section className="bg-background-dark px-6 py-20 lg:px-8">
+			{/* Title and subtitle header */}
+			<div className="mx-auto mb-10 max-w-4xl text-center">
+				<Header
+					title={title}
+					subtitle={subtitle}
+					size="lg" // or "sm", "md", "xl"
+				/>
+			</div>
+
+			<div className="mx-auto max-w-7xl">
+				{/* Optionally render the category filter */}
+				{showCategoryFilter && CategoryFilter && <CategoryFilter />}
+				<div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+					{visibleStudies.map((study) => (
+						<motion.div
+							key={study.id}
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.5 }}
+							viewport={{ once: true }}
+							className="w-full max-w-sm"
+						>
+							<Link href={`/case-studies/${study.slug}`} passHref>
+								<GlassCard
+									highlighted={study.featured}
+									className="hover:-translate-y-2 flex h-full flex-col transition-all duration-300"
+								>
+									<div className="relative">
+										{study.featured && (
+											<div className="absolute top-4 left-4 z-10 rounded bg-focus px-2 py-1 font-medium text-black text-xs dark:text-white">
+												Featured
+											</div>
+										)}
+										<div className="relative h-48 overflow-hidden">
+											<Image
+												src={study.thumbnailImage}
+												alt={study.title}
+												fill
+												style={{ objectFit: "cover" }}
+												className="transition-transform duration-500 group-hover:scale-105"
+											/>
+										</div>
+									</div>
+									<div className="flex flex-grow flex-col p-6">
+										<div className="mb-2 text-center">
+											{study.categories.map((category) => (
+												<span
+													key={uuidv4()}
+													className="rounded-full bg-white/10 px-2 py-1 text-black text-xs dark:text-white/70"
+												>
+													{category}
+												</span>
+											))}
+										</div>
+										<h3 className="mb-2 text-center font-semibold text-xl transition-colors group-hover:text-primary">
+											{study.title}
+										</h3>
+										<p className="mb-4 line-clamp-2 text-center text-black text-sm dark:text-white/70">
+											{study.subtitle}
+										</p>
+										<span className="inline-flex items-center justify-center text-primary text-sm transition-colors hover:text-tertiary">
+											<FileText className="mr-1 h-4 w-4" /> View Case
+										</span>
+									</div>
+								</GlassCard>
+							</Link>
+						</motion.div>
+					))}
+				</div>
+				{/* Show 'View All Case Studies' button if enabled and more studies exist */}
+				{showViewAll && (
+					<div className="mt-8 flex justify-center">
+						<Link
+							href="/case-studies"
+							className="inline-flex items-center rounded-md bg-primary px-6 py-3 font-semibold text-white shadow-md transition-all hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary/60"
+						>
+							<span>View All Case Studies</span>
+							<ChevronRight className="ml-2 h-5 w-5 flex-shrink-0" />
+						</Link>
+					</div>
+				)}
+				{visibleStudies.length === 0 && (
+					<div className="py-16 text-center">
+						<p className="text-black dark:text-white/70">
+							No case studies found for this category. Please try another
+							filter.
+						</p>
+					</div>
+				)}
+			</div>
+		</section>
+	);
+};
+
+export default CaseStudyGrid;
