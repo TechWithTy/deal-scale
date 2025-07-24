@@ -1,0 +1,33 @@
+{
+  "name": "deal-scale-strapi",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Content Management System for Deal Scale",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi",
+    "db:create": "strapi db:create",
+    "db:migrate": "strapi db:migrate",
+    "db:seed": "node scripts/seed.js",
+    "setup": "yarn install && yarn build",
+    "dev": "docker-compose up --build",
+    "stop": "docker-compose down",
+    "clean": "docker-compose down -v"
+  },
+  "dependencies": {
+    "@strapi/plugin-i18n": "4.18.0",
+    "@strapi/plugin-users-permissions": "4.18.0",
+    "@strapi/strapi": "4.18.0",
+    "better-sqlite3": "8.6.0",
+    "pg": "8.11.3",
+    "zod": "^3.22.4"
+  },
+  "engines": {
+    "node": ">=16.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad"
+}

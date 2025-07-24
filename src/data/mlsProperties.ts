@@ -1,0 +1,83 @@
+export interface Property {
+	id: number;
+	name: string;
+	address: string;
+	price: number;
+	bedrooms: number;
+	bathrooms: number;
+	sqft: number;
+	lat: number;
+	lng: number;
+	zipcode: string;
+	rent: number;
+	propertyType: "Single Family" | "Multi-Family" | "Condo";
+	yearBuilt: number;
+	hoaFee: number | null;
+}
+
+export const properties: Property[] = [
+	{
+		id: 1,
+		name: "Cozy Downtown Apartment",
+		address: "123 Main St, Denver, CO",
+		price: 450000,
+		bedrooms: 2,
+		bathrooms: 2,
+		sqft: 1100,
+		lat: 39.7392,
+		lng: -104.9903,
+		zipcode: "80202",
+		rent: 2800,
+		propertyType: "Condo",
+		yearBuilt: 2015,
+		hoaFee: 300,
+	},
+	{
+		id: 2,
+		name: "Spacious Suburban Home",
+		address: "456 Oak Ave, Aurora, CO",
+		price: 650000,
+		bedrooms: 4,
+		bathrooms: 3,
+		sqft: 2500,
+		lat: 39.7294,
+		lng: -104.8319,
+		zipcode: "80012",
+		rent: 3200,
+		propertyType: "Single Family",
+		yearBuilt: 1998,
+		hoaFee: null,
+	},
+	{
+		id: 3,
+		name: "Modern Loft in RiNo",
+		address: "789 Walnut St, Denver, CO",
+		price: 550000,
+		bedrooms: 1,
+		bathrooms: 1,
+		sqft: 900,
+		lat: 39.7541,
+		lng: -104.9861,
+		zipcode: "80205",
+		rent: 2400,
+		propertyType: "Condo",
+		yearBuilt: 2018,
+		hoaFee: 250,
+	},
+	{
+		id: 4,
+		name: "Charming Victorian House",
+		address: "101 Pine St, Boulder, CO",
+		price: 850000,
+		bedrooms: 3,
+		bathrooms: 2.5,
+		sqft: 2200,
+		lat: 40.015,
+		lng: -105.2705,
+		zipcode: "80302",
+		rent: 4000,
+		propertyType: "Single Family",
+		yearBuilt: 1905,
+		hoaFee: null,
+	},
+];

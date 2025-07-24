@@ -1,0 +1,150 @@
+body {
+	@apply text-black;
+
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
+}
+h2,
+h3 {
+	@apply text-black;
+}
+
+.dark h2,
+.dark h3 {
+	@apply text-white;
+}
+.logo {
+	height: 6em;
+	padding: 1.5em;
+	will-change: filter;
+	transition: filter 300ms;
+}
+.logo:hover {
+	filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+	filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	a:nth-of-type(2) .logo {
+		animation: logo-spin infinite 20s linear;
+	}
+}
+
+.dark body,
+.dark p,
+.dark span,
+.dark li,
+.dark ul,
+.dark ol,
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark label,
+.dark input,
+.dark textarea,
+.dark select,
+.dark button,
+.dark th,
+.dark td {
+	@apply text-white;
+}
+
+.dark body,
+.dark p,
+.dark span,
+.dark li,
+.dark ul,
+.dark ol,
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark label,
+.dark input,
+.dark textarea,
+.dark select,
+.dark button,
+.dark th,
+.dark td {
+	@apply text-white;
+}
+
+.dark body {
+	@apply text-white;
+
+	padding: 2em;
+}
+
+.card {
+	padding: 2em;
+}
+
+.read-the-docs {
+	color: #888;
+}
+
+.prose .blog-content ul {
+	list-style-type: disc !important;
+	padding-left: 2.5rem !important;
+	margin-left: 1rem !important;
+}
+
+.prose .blog-content ol {
+	list-style-type: decimal !important;
+	padding-left: 2.5rem !important;
+	margin-left: 1rem !important;
+}
+
+.prose .blog-content li {
+	display: list-item !important;
+	padding-left: 0.5rem !important;
+	margin: 0.75rem 0 !important;
+}
+
+:root {
+	--animate-marquee: marquee var(--duration, 40s) infinite linear;
+	--animate-marquee-vertical: marquee-vertical var(--duration, 40s) linear
+		infinite;
+}
+
+@keyframes marquee {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(calc(-100% - var(--gap)));
+	}
+}
+@keyframes marquee-vertical {
+	from {
+		transform: translateY(0);
+	}
+	to {
+		transform: translateY(calc(-100% - var(--gap)));
+	}
+}
+
+.animate-marquee {
+	animation: var(--animate-marquee);
+}
+.animate-marquee-vertical {
+	animation: var(--animate-marquee-vertical);
+}

@@ -1,0 +1,42 @@
+import type { CompanyMilestone } from "@/types/about/milestones";
+
+export const companyMilestones: CompanyMilestone[] = [
+	{
+		title: "Founded",
+		description: "CyberOni was born with a mission to make AI accessible.",
+		date: "2021-03-15",
+		achievements: ["Company registered", "Initial team assembled"],
+		tags: ["founding", "startup"],
+		icon: "Rocket",
+	},
+	{
+		title: "First Product Launch",
+		description: "Released our first AI-powered web tool.",
+		date: "2021-10-05",
+		achievements: ["Product shipped", "First 100 users"],
+		tags: ["product", "launch"],
+		icon: "Sparkles",
+		kpis: [{ name: "Users", value: 100, unit: "users", target: 100 }],
+		externalLinks: [
+			{ label: "Product Page", url: "https://cyberoni.com/products/ai-tool" },
+		],
+	},
+	{
+		title: "Team Expansion",
+		description: "Grew to a global, diverse team.",
+		date: "2022-06-01",
+		achievements: ["10+ team members", "Multinational hiring"],
+		tags: ["team", "growth"],
+		icon: "Users",
+		kpis: [{ name: "Team Size", value: 12, unit: "members", target: 10 }],
+	},
+	{
+		title: "Open Source",
+		description: "Contributed major components to the community.",
+		date: "2023-02-20",
+		achievements: ["First open source repo", "100+ stars on GitHub"],
+		tags: ["open-source", "community"],
+		icon: "Code",
+		externalLinks: [{ label: "GitHub", url: "https://github.com/CyberOni" }],
+	},
+];

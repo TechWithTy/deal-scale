@@ -1,0 +1,16 @@
+// src/data/categories.ts
+import type { Category } from "@/types/case-study";
+
+export const categories: Category[] = [
+	{ id: "all", name: "All" },
+	{ id: "ai", name: "AI" },
+	{ id: "crm", name: "CRM" },
+	{ id: "enterprise", name: "Enterprise" },
+	{ id: "analytics", name: "Analytics" },
+	{ id: "machine-learning", name: "Machine Learning" },
+	{ id: "dashboard", name: "Dashboard" },
+	{ id: "e-commerce", name: "E-commerce" },
+	{ id: "personalization", name: "Personalization" },
+	{ id: "automation", name: "Automation" },
+	{ id: "workflow", name: "Workflow" },
+];

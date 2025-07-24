@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--background: 225 30% 6%;
+		--foreground: 210 40% 98%;
+		--card: 224 71% 4%;
+		--card-foreground: 210 40% 98%;
+		--popover: 224 71% 4%;
+		--popover-foreground: 210 40% 98%;
+		--primary: 210 100% 52%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 217 76% 63%;
+		--secondary-foreground: 210 40% 98%;
+		--muted: 217 32% 17%;
+		--muted-foreground: 215 20% 65%;
+		--accent: 199 89% 48%;
+		--accent-foreground: 210 40% 98%;
+		--destructive: 0 63% 31%;
+		--destructive-foreground: 210 40% 98%;
+		--border: 215 27% 19%;
+		--input: 215 27% 19%;
+		--ring: 224 76% 48%;
+		--radius: 0.75rem;
+	}
+
+	.light {
+		--background: 0 0% 100%;
+		--foreground: 224 71% 4%;
+		--card: 0 0% 100%;
+		--card-foreground: 224 71% 4%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 224 71% 4%;
+		--primary: 210 100% 52%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 217 76% 63%;
+		--secondary-foreground: 210 40% 98%;
+		--muted: 217 32% 83%;
+		--muted-foreground: 215 20% 35%;
+		--accent: 199 89% 48%;
+		--accent-foreground: 210 40% 98%;
+		--destructive: 0 84% 60%;
+		--destructive-foreground: 210 40% 98%;
+		--border: 215 27% 81%;
+		--input: 215 27% 81%;
+		--ring: 224 76% 48%;
+	}
+
+	* {
+		@apply border-border selection:border-primary/20 selection:text-black dark:selection:text-white;
+	}
+
+	html {
+		@apply scroll-smooth;
+	}
+
+	body {
+		@apply relative overflow-x-hidden bg-background text-foreground antialiased;
+		font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+	}
+
+	.dark body {
+		background-image: radial-gradient(
+				circle at 20% 40%,
+				rgba(45, 156, 219, 0.08) 0%,
+				rgba(15, 23, 42, 0) 40%
+			),
+			radial-gradient(
+				circle at 80% 60%,
+				rgba(108, 99, 255, 0.08) 0%,
+				rgba(15, 23, 42, 0) 30%
+			),
+			linear-gradient(180deg, rgba(15, 23, 42, 1) 0%, rgba(8, 15, 31, 1) 100%);
+		background-attachment: fixed;
+	}
+
+	.light body {
+		background-image: radial-gradient(
+				circle at 20% 40%,
+				rgba(45, 156, 219, 0.05) 0%,
+				rgba(255, 255, 255, 0) 40%
+			),
+			radial-gradient(
+				circle at 80% 60%,
+				rgba(108, 99, 255, 0.05) 0%,
+				rgba(255, 255, 255, 0) 30%
+			),
+			linear-gradient(
+				180deg,
+				rgba(255, 255, 255, 1) 0%,
+				rgba(240, 240, 240, 1) 100%
+			);
+		background-attachment: fixed;
+	}
+}
+
+@layer components {
+	.glass-card {
+		@apply border border-white/10 bg-white/5 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3)] backdrop-blur-xl dark:border-black/10 dark:bg-black/5;
+	}
+
+	.neo-blur {
+		@apply border border-black/10 bg-white/40 backdrop-blur-2xl dark:border-white/10 dark:bg-black/40;
+	}
+
+	.cyber-glow {
+		@apply relative;
+	}
+
+	.cyber-glow::after {
+		@apply absolute -inset-[1px] -z-10 rounded-[inherit] bg-gradient-to-r from-primary to-secondary opacity-70 blur-[5px] transition-all duration-300 content-[''];
+	}
+
+	.cyber-glow:hover::after {
+		@apply opacity-100 blur-[10px];
+	}
+
+	.cyber-bg-grid {
+		@apply dark:bg-background-dark relative bg-white;
+	}
+
+	.cyber-bg-grid::before {
+		@apply absolute inset-0 bg-grid-lines opacity-10 content-[''] dark:opacity-30;
+	}
+
+	.dark-cyber-glow {
+		@apply relative;
+	}
+
+	.dark-cyber-glow::after {
+		@apply absolute -inset-[1px] -z-10 rounded-[inherit] bg-gradient-to-r from-cyber-blue/30 to-cyber-purple/30 opacity-40 blur-[8px] transition-all duration-300 content-[''];
+	}
+
+	.dark-cyber-glow:hover::after {
+		@apply opacity-60 blur-[14px];
+	}
+
+	.darker-cyber-glow {
+		@apply relative;
+	}
+
+	.darker-cyber-glow::after {
+		@apply absolute -inset-[1px] -z-10 rounded-[inherit] bg-gradient-to-r from-gray-200/80 to-gray-100 opacity-50 blur-[10px] transition-all duration-300 content-[''] dark:from-cyber-dark/80 dark:to-cyber-darker;
+	}
+
+	.darker-cyber-glow:hover::after {
+		@apply opacity-70 blur-[16px];
+	}
+}
+
+@layer utilities {
+	.scrollbar-none {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	.scrollbar-none::-webkit-scrollbar {
+		display: none;
+	}
+
+	.mask-gradient-r {
+		-webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+		mask-image: linear-gradient(to right, black 80%, transparent 100%);
+	}
+
+	.text-glow {
+		text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+	}
+
+	.text-glow-sm {
+		text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+	}
+}
