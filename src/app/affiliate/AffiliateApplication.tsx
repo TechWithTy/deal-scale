@@ -19,8 +19,10 @@ import type { DiscountCode } from "@/types/discount/discountCode";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useSearchParams } from "next/navigation";
+import { affiliateFormFields, type AffiliateFormValues } from "@/data/contact/affiliate";
 // * Centralized SEO for /affiliate using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/affiliate");
@@ -28,6 +30,38 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const AffiliateApplication = () => {
+	const searchParams = useSearchParams();
+
+	const prefill = useMemo(() => {
+		const result: Partial<AffiliateFormValues> = {};
+		if (!searchParams) return result;
+		for (const field of affiliateFormFields) {
+			const name = field.name as keyof AffiliateFormValues;
+			const raw = searchParams.get(field.name);
+			if (raw == null) continue;
+			switch (field.type) {
+				case "multiselect": {
+					(result[name] as unknown) = raw
+						.split(",")
+						.map((s) => s.trim())
+						.filter((s) => s.length > 0);
+					break;
+				}
+				case "checkbox": {
+					(result[name] as unknown) = /^(true|1|yes|on)$/i.test(raw);
+					break;
+				}
+				case "file": {
+					// Not supported via URL
+					break;
+				}
+				default: {
+					(result[name] as unknown) = raw;
+				}
+			}
+		}
+		return result;
+	}, [searchParams]);
 	const [success, setSuccess] = useState(false);
 	const [affiliateId, setAffiliateId] = useState<string>("");
 	const [discountCode, setDiscountCode] = useState<DiscountCode | null>(null);
@@ -80,7 +114,7 @@ const AffiliateApplication = () => {
 								discountCode={discountCode}
 							/>
 						) : (
-							<AffiliateForm onSuccess={handleSuccess} />
+							<AffiliateForm onSuccess={handleSuccess} prefill={prefill} />
 						)}
 					</div>
 					<div className="flex flex-col lg:col-span-5">

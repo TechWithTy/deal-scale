@@ -2,6 +2,7 @@ import type { SeoMeta } from "@/utils/seo/seo";
 import { defaultSeo } from "@/utils/seo/staticSeo";
 // src/components/common/SEO.tsx
 import Head from "next/head";
+import Script from "next/script";
 
 /**
  * SEO component for injecting dynamic meta tags into the page head.
@@ -52,6 +53,18 @@ export function SEOWrapper(
 			{dateModified && (
 				<meta property="article:modified_time" content={dateModified} />
 			)}
+			<Script
+				dangerouslySetInnerHTML={{
+					__html:
+						'window.$zoho=window.$zoho || {}; $zoho.salesiq=$zoho.salesiq||{ready:function(){}};',
+				}}
+			/>
+			<Script
+				id="zsiqscript"
+				src="https://salesiq.zohopublic.com/widget?wc=siq7b1a5f3f6a15e414fcb16d6c1373946d677d54b16f2302c3baca23636aa89295"
+				defer
+			/>
+
 			{/* Additional custom meta tags */}
 			{Object.entries(rest).map(([key, value]) => (
 				<meta key={key} name={key} content={String(value)} />

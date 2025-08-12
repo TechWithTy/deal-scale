@@ -12,7 +12,7 @@ import {
 	renderFormField,
 } from "@/components/contact/form/formFieldHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -47,26 +47,58 @@ import {
 } from "@/data/contact/formFields";
 import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
 
-export default function ContactForm() {
+export default function ContactForm({
+  prefill,
+}: {
+  prefill?: Partial<BetaTesterFormValues>;
+}) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const baseDefaults: Partial<BetaTesterFormValues> = {
+		firstName: "",
+		lastName: "",
+		companyName: "",
+		email: "",
+		phone: "",
+		icpType: "",
+		employeeCount: "",
+		dealsClosedLastYear: "",
+		dealDocuments: [],
+		termsAccepted: false,
+	};
+
+	// Merge defaults with prefill and remove empty arrays for non-empty tuple fields
+	const computeMergedDefaults = (
+		seed?: Partial<BetaTesterFormValues>,
+	): BetaTesterFormValues => {
+		const merged: Partial<BetaTesterFormValues> = {
+			...baseDefaults,
+			...(seed ?? {}),
+		};
+		if (
+			Array.isArray(merged.wantedFeatures) &&
+			merged.wantedFeatures.length === 0
+		) {
+			delete merged.wantedFeatures;
+		}
+		if (Array.isArray(merged.painPoints) && merged.painPoints.length === 0) {
+			delete merged.painPoints;
+		}
+		return merged as BetaTesterFormValues;
+	};
 
 	const form = useForm<BetaTesterFormValues>({
 		resolver: zodResolver(betaTesterFormSchema),
-		defaultValues: {
-			firstName: "",
-			lastName: "",
-			companyName: "",
-			email: "",
-			phone: "",
-			icpType: "",
-			employeeCount: "",
-			dealsClosedLastYear: "",
-			wantedFeatures: [],
-			painPoints: [],
-			dealDocuments: [],
-			termsAccepted: false,
-		},
+		defaultValues: computeMergedDefaults(prefill),
 	});
+
+	// Ensure URL-based prefill applies after hydration
+	useEffect(() => {
+		if (prefill && Object.keys(prefill).length > 0) {
+			form.reset(computeMergedDefaults(prefill));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [JSON.stringify(prefill)]);
 
 	const onSubmit = async (data: BetaTesterFormValues) => {
 		setIsSubmitting(true);

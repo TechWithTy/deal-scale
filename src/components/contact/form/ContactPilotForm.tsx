@@ -8,7 +8,7 @@
 // todo Integrate real submission endpoint once available.
 
 import { loadStripe } from "@stripe/stripe-js";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
@@ -59,7 +59,11 @@ import {
 	renderFormField,
 } from "@/components/contact/form/formFieldHelpers";
 
-export default function ContactPilotForm() {
+export default function ContactPilotForm({
+  prefill,
+}: {
+  prefill?: Partial<PriorityPilotFormValues>;
+}) {
 	const [formStep, setFormStep] = useState<"form" | "payment">("form");
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
 	const [formData, setFormData] = useState<PriorityPilotFormValues | null>(
@@ -67,12 +71,45 @@ export default function ContactPilotForm() {
 	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
+	// Base defaults derived from field config values
+	const baseDefaults = useMemo(() => {
+		return Object.fromEntries(
+			priorityPilotFormFields.map((f) => [f.name, f.value]),
+		) as Partial<PriorityPilotFormValues>;
+	}, []);
+
+	// Merge defaults with prefill and remove empty arrays for multiselect fields
+	const computeMergedDefaults = (
+		seed?: Partial<PriorityPilotFormValues>,
+	): PriorityPilotFormValues => {
+		const merged: Partial<PriorityPilotFormValues> = {
+			...baseDefaults,
+			...(seed ?? {}),
+		};
+		for (const field of priorityPilotFormFields) {
+			if (field.type === "multiselect") {
+				const name = field.name as keyof PriorityPilotFormValues;
+				const val = merged[name] as unknown;
+				if (Array.isArray(val) && val.length === 0) {
+					delete merged[name];
+				}
+			}
+		}
+		return merged as PriorityPilotFormValues;
+	};
+
 	const form = useForm<PriorityPilotFormValues>({
 		resolver: zodResolver(priorityPilotFormSchema),
-		defaultValues: Object.fromEntries(
-			priorityPilotFormFields.map((f) => [f.name, f.value]),
-		) as Partial<PriorityPilotFormValues>,
+		defaultValues: computeMergedDefaults(prefill),
 	});
+
+	// Ensure URL-based prefill applies after hydration
+	useEffect(() => {
+		if (prefill && Object.keys(prefill).length > 0) {
+			form.reset(computeMergedDefaults(prefill));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [JSON.stringify(prefill)]);
 
 	// Step 1: Collect user info, then fetch clientSecret and go to payment
 	const onSubmit = async (data: PriorityPilotFormValues) => {
