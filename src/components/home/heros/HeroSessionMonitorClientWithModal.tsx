@@ -36,7 +36,7 @@ export default function HeroSessionMonitorClientWithModal() {
 				subheadline="Stop cold calling all day and start taking appointments from sales-ready home sellers! Deal Scale’s AI suite does the grunt work, so you can focus on what you do best: closing deals."
 				badge="AI Powered Seller Lead Qualification & Appointment Setting"
 				ctaLabel="Become Beta Tester"
-				ctaLabel2="Get Free Seller Leads"
+				ctaLabel2="Get 15 Free Ai Credits"
 				onCtaClick={() => router.push("/contact")}
 				onCtaClick2={() => setShowCallCompleteModal(true)}
 				highlight="Dead-End Leads?"
