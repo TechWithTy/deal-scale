@@ -1,3 +1,5 @@
+"use client";
+
 import ContactForm from "@/components/contact/form/ContactForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import { ContactSteps } from "@/components/contact/form/ContactSteps";
@@ -11,6 +13,11 @@ import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
+import { useMemo } from "react";
+import { useSearchParams } from "next/navigation";
+import { betaTesterFormFields } from "@/data/contact/formFields";
+import type { BetaTesterFormValues } from "@/data/contact/formFields";
+
 // * Centralized SEO for /contact using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/contact");
@@ -18,12 +25,52 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const Contact = () => {
+	const searchParams = useSearchParams();
+
+	// Build prefill object from URL params based on field config names/types
+	const prefill = useMemo(() => {
+		const result: Partial<BetaTesterFormValues> = {};
+		if (!searchParams) return result;
+
+		for (const field of betaTesterFormFields) {
+			const name = field.name as keyof BetaTesterFormValues;
+			const raw = searchParams.get(field.name);
+			if (raw == null) continue;
+
+			switch (field.type) {
+				case "multiselect": {
+					// Support comma-separated values
+					const arr = raw
+						.split(",")
+						.map((s) => s.trim())
+						.filter((s) => s.length > 0);
+					(result[name] as unknown) = arr;
+					break;
+				}
+				case "checkbox": {
+					// Accept true/1/yes/on
+					const val = /^(true|1|yes|on)$/i.test(raw);
+					(result[name] as unknown) = val;
+					break;
+				}
+				case "file": {
+					// Not supported via URL
+					break;
+				}
+				default: {
+					(result[name] as unknown) = raw as never;
+				}
+			}
+		}
+
+		return result;
+	}, [searchParams]);
 	return (
 		<>
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
-						<ContactForm />
+						<ContactForm prefill={prefill} />
 					</div>
 					<div className="flex flex-col lg:col-span-5">
 						<ScheduleMeeting />
