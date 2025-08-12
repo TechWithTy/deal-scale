@@ -48,6 +48,15 @@ export function useDraggableScroll(
 		const handlePointerDown = (e: PointerEvent) => {
 			// Only left mouse/touch/pen
 			if (e.pointerType === "mouse" && e.button !== 0) return;
+			// Ignore drags that start from interactive elements inside the container
+			const target = e.target as HTMLElement | null;
+			if (
+				target &&
+				(target.closest("button, a, input, textarea, select, [role='button']") ||
+					target.getAttribute("contenteditable") === "true")
+			) {
+				return;
+			}
 			dragging.current = true;
 			startX.current = e.clientX;
 			scrollLeft.current = el.scrollLeft;

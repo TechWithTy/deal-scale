@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,6 +12,7 @@ import {
 	Zap,
 } from "lucide-react"; // * Added 5 Lucide icons + Users icon
 import type { FeatureRequest } from "./types";
+import { useRouter } from "next/navigation";
 
 // * Icon options for cards (extendable)
 const ICON_OPTIONS = [Lightbulb, Rocket, Star, Zap, Heart];
@@ -54,6 +56,7 @@ const FeatureCard = ({
 	isTopFeature = false,
 	...rest
 }: FeatureCardProps) => {
+	const router = useRouter();
 	// Helper functions to determine button states
 	const isUpvoted = feature.userVote === "up";
 	const isDownvoted = feature.userVote === "down";
@@ -133,6 +136,7 @@ const FeatureCard = ({
 					</span>
 					<div className="flex gap-2">
 						<Button
+							type="button"
 							size="sm"
 							variant={isUpvoted ? "default" : "outline"}
 							className={
@@ -140,13 +144,29 @@ const FeatureCard = ({
 									? "bg-primary/90 text-primary-foreground ring-2 ring-primary"
 									: ""
 							}
-							onClick={() => onVote(feature.id, "up")}
-							disabled={isVoting}
+							onPointerDown={(e) => {
+								e.stopPropagation();
+							}}
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								console.log("[FeatureCard] Upvote clicked", {
+									id: feature.id,
+									title: feature.title,
+								});
+								onVote(feature.id, "up");
+								const params = new URLSearchParams();
+								params.set("featureVotes", `${feature.id},${feature.title}`);
+								const url = `/contact-pilot?${params.toString()}`;
+								console.log("[FeatureCard] Navigating to", url);
+								router.push(url);
+							}}
 							aria-label="Upvote"
 						>
 							<ArrowUp className="h-4 w-4" />
 						</Button>
 						<Button
+							type="button"
 							size="sm"
 							variant={isDownvoted ? "default" : "outline"}
 							className={
@@ -154,8 +174,21 @@ const FeatureCard = ({
 									? "bg-destructive/90 text-destructive-foreground ring-2 ring-destructive"
 									: ""
 							}
-							onClick={() => onVote(feature.id, "down")}
-							disabled={isVoting}
+							onPointerDown={(e) => {
+								e.stopPropagation();
+							}}
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								console.log("[FeatureCard] Downvote clicked", {
+									id: feature.id,
+									title: feature.title,
+								});
+								onVote(feature.id, "down");
+								const url = "/contact-pilot";
+								console.log("[FeatureCard] Navigating to", url);
+								router.push(url);
+							}}
 							aria-label="Downvote"
 						>
 							<ArrowDown className="h-4 w-4" />

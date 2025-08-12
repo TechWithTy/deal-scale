@@ -32,6 +32,45 @@ const Contact = () => {
 		const result: Partial<BetaTesterFormValues> = {};
 		if (!searchParams) return result;
 
+		// Build option lists for fields that need title->value mapping
+		const featureVotesField = betaTesterFormFields.find(
+			(f) => f.name === "featureVotes",
+		);
+		const wantedFeaturesField = betaTesterFormFields.find(
+			(f) => f.name === "wantedFeatures",
+		);
+		const featureVotesOptions = Array.isArray((featureVotesField as any)?.options)
+			? ((featureVotesField as any).options as { value: string; label: string }[])
+			: undefined;
+		const wantedFeaturesOptions = Array.isArray(
+			(wantedFeaturesField as any)?.options,
+		)
+			? ((wantedFeaturesField as any).options as {
+					value: string;
+					label: string;
+			  }[])
+			: undefined;
+
+		const normalize = (s: string) =>
+			s
+				.toLowerCase()
+				.replace(/[^a-z0-9]+/g, " ")
+				.trim()
+				.replace(/\s+/g, " ");
+
+		if (featureVotesOptions) {
+			console.log(
+				"[ContactClient] featureVotes options:",
+				featureVotesOptions.map((o) => o.label),
+			);
+		}
+		if (wantedFeaturesOptions) {
+			console.log(
+				"[ContactClient] wantedFeatures options:",
+				wantedFeaturesOptions.map((o) => o.label),
+			);
+		}
+
 		for (const field of betaTesterFormFields) {
 			const name = field.name as keyof BetaTesterFormValues;
 			const raw = searchParams.get(field.name);
@@ -39,12 +78,69 @@ const Contact = () => {
 
 			switch (field.type) {
 				case "multiselect": {
-					// Support comma-separated values
-					const arr = raw
+					let tokens = raw
 						.split(",")
 						.map((s) => s.trim())
 						.filter((s) => s.length > 0);
-					(result[name] as unknown) = arr;
+					if (field.name === "featureVotes") {
+						console.log("[ContactClient] featureVotes raw:", raw, tokens);
+					}
+					if (field.name === "wantedFeatures") {
+						console.log("[ContactClient] wantedFeatures raw:", raw, tokens);
+					}
+
+					const mapWithOptions = (
+						arr: string[],
+						options?: { value: string; label: string }[],
+					) => {
+						if (!options) return arr;
+						return arr
+							.map((t) => {
+								const direct = options.find((opt) => opt.value === t);
+								if (direct) return t;
+								const norm = normalize(t);
+								const byLabel = options.find(
+									(opt) => normalize(opt.label) === norm,
+								);
+								if (byLabel) return byLabel.value;
+								const byContains = options.find((opt) =>
+									normalize(opt.label).includes(norm),
+								);
+								if (byContains) return byContains.value;
+								// fuzzy token-overlap
+								const normTokens = new Set(norm.split(" ").filter(Boolean));
+								let best: { val: string; score: number } | null = null;
+								for (const opt of options) {
+									const labelNorm = normalize(opt.label);
+									const labelTokens = new Set(
+										labelNorm.split(" ").filter(Boolean),
+									);
+									let overlap = 0;
+									for (const tk of normTokens)
+										if (labelTokens.has(tk)) overlap++;
+									const denom = Math.max(
+										normTokens.size,
+										labelTokens.size,
+									) || 1;
+									const score = overlap / denom;
+									if (!best || score > best.score)
+										best = { val: opt.value, score };
+								}
+								if (best && best.score >= 0.5) return best.val;
+								return t;
+							})
+							.filter((t) => t.length > 0);
+					};
+
+					if (field.name === "featureVotes") {
+						tokens = mapWithOptions(tokens, featureVotesOptions);
+						console.log("[ContactClient] featureVotes mapped:", tokens);
+					} else if (field.name === "wantedFeatures") {
+						tokens = mapWithOptions(tokens, wantedFeaturesOptions);
+						console.log("[ContactClient] wantedFeatures mapped:", tokens);
+					}
+
+					(result[name] as unknown) = tokens;
 					break;
 				}
 				case "checkbox": {
