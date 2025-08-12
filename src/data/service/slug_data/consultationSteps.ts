@@ -15,7 +15,7 @@ export const betaSignupSteps: ConsultationStep[] = [
 		number: 2,
 		title: "Unlock Beta Perks",
 		description:
-			"Complete a short profile about your business needs and challenges. Instantly unlock your Beta Tester Perks—5 free off-market leads, exclusive newsletter access, a future subscription discount, and bonus Credits if you're approved.",
+			"Complete a short profile about your business needs and challenges. Instantly unlock your Beta Tester Perks—5 Ai Credits, exclusive newsletter access, a future subscription discount, and bonus Credits if you're approved.",
 	},
 	{
 		number: 3,
@@ -27,7 +27,7 @@ export const betaSignupSteps: ConsultationStep[] = [
 		number: 4,
 		title: "You're In!",
 		description:
-			"Welcome to the program! Watch for your onboarding email with free credits, your 5 leads, newsletter access, and everything you need to automate your deal flow and close more deals.",
+			"Welcome to the program! Watch for your onboarding email with free credits, your 5 AI Credits, newsletter access, and everything you need to automate your deal flow and close more deals.",
 	},
 ];
 export const affiliateProgramSteps: ConsultationStep[] = [
@@ -74,7 +74,7 @@ export const pilotProgramSteps: ConsultationStep[] = [
 		number: 3,
 		title: "Unlock Pilot Perks",
 		description:
-			"Enjoy exclusive Pilot Program perks: 1 free off-market lead, unlimited free skip tracing, early feature access, founder recognition, and more.",
+			"Enjoy exclusive Pilot Program perks: 15 free Ai Credits, unlimited free skip tracing, early feature access, founder recognition, and more.",
 	},
 	{
 		number: 4,

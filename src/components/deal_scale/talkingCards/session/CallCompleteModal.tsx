@@ -139,7 +139,7 @@ export const CallCompleteModal = ({
 								Processing...
 							</>
 						) : (
-							"Get 5 On-Market Leads"
+							"Get 5 Ai Calling Credits"
 						)}
 					</Button>
 					<Button
@@ -166,7 +166,7 @@ export const CallCompleteModal = ({
 							<span className="tracking-tight drop-shadow-sm">
 								Get{" "}
 								<span className="rounded bg-background px-2 py-1 font-extrabold text-primary shadow">
-									1 Off-Market Lead
+									15 Ai Calling Credits
 								</span>
 							</span>
 						)}

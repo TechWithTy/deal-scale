@@ -131,7 +131,7 @@ export default function ContactForm() {
 			<div className="-z-10 absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-focus/10 opacity-60 blur-lg dark:from-primary/30 dark:to-focus/20" />
 			<Header
 				title="Beta Tester Application"
-				subtitle="Apply to become a beta tester and get early access to the latest features"
+				subtitle="Apply to become a beta tester and get early access, 5 Ai Credits and Vote for the next features"
 				size="md"
 				className="mb-12 md:mb-16"
 			/>
