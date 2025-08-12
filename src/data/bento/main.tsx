@@ -135,16 +135,16 @@ export const MainBentoFeatures: BentoFeature[] = [
 		description: "On-market and off-market deals",
 		size: "md",
 		content: (
-			<div className="flex min-h-0 flex-col items-center p-4 sm:items-start sm:p-6">
+			<div className="flex h-full flex-col items-center p-4 sm:items-start sm:p-6">
 				<div className="flex flex-col items-center text-center">
 					<h3 className="mb-2 font-bold text-black text-lg sm:text-xl dark:text-white">
 						Total Market Access
 					</h3>
-					<div className="mb-0 flex min-h-0 items-center justify-center">
+					<div className="mb-0 flex min-h-0 w-full flex-1 items-center justify-center">
 						{/* Lottie animation for market access */}
 						<Lottie
 							animationData={require("@/assets/animations/market_analysis.json")}
-							className="m-0 max-h-48 object-contain p-0 sm:max-h-56 md:max-h-64"
+							className="m-0 h-full w-full max-h-48 object-contain p-0 sm:max-h-56 md:max-h-64"
 							style={{ display: "block", margin: 0, padding: 0, lineHeight: 1 }}
 						/>
 					</div>
