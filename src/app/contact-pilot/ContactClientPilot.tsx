@@ -21,16 +21,76 @@ const Contact = () => {
   const prefill = useMemo(() => {
     const result: Partial<PriorityPilotFormValues> = {};
     if (!searchParams) return result;
+    // Access options for featureVotes to map human-readable titles to values
+    const featureVotesField = priorityPilotFormFields.find(
+      (f) => f.name === "featureVotes",
+    );
+    const featureVotesOptions = Array.isArray((featureVotesField as any)?.options)
+      ? ((featureVotesField as any).options as { value: string; label: string }[])
+      : undefined;
+    const normalize = (s: string) =>
+      s
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ") // strip punctuation
+        .trim()
+        .replace(/\s+/g, " "); // collapse spaces
+    if (featureVotesOptions) {
+      console.log(
+        "[ContactClientPilot] featureVotes options:",
+        featureVotesOptions.map((o) => o.label),
+      );
+    }
+
     for (const field of priorityPilotFormFields) {
       const name = field.name as keyof PriorityPilotFormValues;
       const raw = searchParams.get(field.name);
       if (raw == null) continue;
       switch (field.type) {
         case "multiselect": {
-          (result[name] as unknown) = raw
+          let tokens = raw
             .split(",")
             .map((s) => s.trim())
             .filter((s) => s.length > 0);
+          if (field.name === "featureVotes") {
+            console.log("[ContactClientPilot] featureVotes raw:", raw, tokens);
+          }
+          // If this is the featureVotes field, map labels to values so titles work in URL
+          if (field.name === "featureVotes" && featureVotesOptions) {
+            tokens = tokens
+              .map((t) => {
+                // if already a value (id), keep it
+                const direct = featureVotesOptions.find((opt) => opt.value === t);
+                if (direct) return t;
+                // try to map by label (case-insensitive)
+                const norm = normalize(t);
+                const byLabel = featureVotesOptions.find(
+                  (opt) => normalize(opt.label) === norm,
+                );
+                if (byLabel) return byLabel.value;
+                // fallback: substring/contains match (case-insensitive)
+                const byContains = featureVotesOptions.find(
+                  (opt) => normalize(opt.label).includes(norm),
+                );
+                if (byContains) return byContains.value;
+                // fuzzy: token-overlap best match
+                const normTokens = new Set(norm.split(" ").filter(Boolean));
+                let best: { val: string; score: number } | null = null;
+                for (const opt of featureVotesOptions) {
+                  const labelNorm = normalize(opt.label);
+                  const labelTokens = new Set(labelNorm.split(" ").filter(Boolean));
+                  let overlap = 0;
+                  for (const tk of normTokens) if (labelTokens.has(tk)) overlap++;
+                  const denom = Math.max(normTokens.size, labelTokens.size) || 1;
+                  const score = overlap / denom;
+                  if (!best || score > best.score) best = { val: opt.value, score };
+                }
+                if (best && best.score >= 0.5) return best.val;
+                return t; // fallback to raw if no reasonable match
+              })
+              .filter((t) => t.length > 0);
+            console.log("[ContactClientPilot] featureVotes mapped:", tokens);
+          }
+          (result[name] as unknown) = tokens;
           break;
         }
         case "checkbox": {

@@ -14,7 +14,8 @@ import * as React from "react";
  */
 export const ZOHO_SALESIQ_CONFIG = {
 	WIDGET_CODE: process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE || "",
-	WIDGET_URL: "https://salesiq.zoho.com/widget",
+	// Use the public CDN host per Zoho embed snippet
+	WIDGET_URL: "https://salesiq.zohopublic.com/widget",
 } as const;
 
 /**
@@ -23,6 +24,13 @@ export const ZOHO_SALESIQ_CONFIG = {
  */
 export const initializeZohoSalesIQ = () => {
 	if (typeof window === "undefined") return;
+	// Guard: must have widget code
+	if (!ZOHO_SALESIQ_CONFIG.WIDGET_CODE) {
+		console.warn(
+			"Zoho SalesIQ: NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE is missing; widget will not load.",
+		);
+		return;
+	}
 	window.$zoho = window.$zoho || {};
 	window.$zoho.salesiq = window.$zoho.salesiq || {
 		widgetcode: ZOHO_SALESIQ_CONFIG.WIDGET_CODE,
@@ -34,7 +42,9 @@ export const initializeZohoSalesIQ = () => {
 		script.type = "text/javascript";
 		script.id = "zsiqscript";
 		script.defer = true;
-		script.src = ZOHO_SALESIQ_CONFIG.WIDGET_URL;
+		script.src = `${ZOHO_SALESIQ_CONFIG.WIDGET_URL}?wc=${encodeURIComponent(
+			ZOHO_SALESIQ_CONFIG.WIDGET_CODE,
+		)}`;
 		const firstScript = document.getElementsByTagName("script")[0];
 		if (firstScript?.parentNode) {
 			firstScript.parentNode.insertBefore(script, firstScript);
