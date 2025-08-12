@@ -102,7 +102,7 @@ const DesktopNav = () => {
 												// * Render CTA Card if any CTA fields are present
 												<div
 													key={child.title}
-													className="relative flex flex-col gap-4 rounded-lg border border-primary bg-gradient-to-tr from-white via-gray-50 to-primary/10 p-4 shadow-lg md:col-span-2 md:flex-row md:items-center dark:border-primary/70 dark:bg-background-dark/80 dark:text-white dark:shadow-2xl"
+													className="relative flex flex-col gap-4 rounded-lg border bg-card p-4 shadow-sm md:col-span-2 md:flex-row md:items-center border-border text-card-foreground dark:shadow-md"
 												>
 													{child.image && (
 														<div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md md:h-32 md:w-32">
@@ -115,17 +115,17 @@ const DesktopNav = () => {
 														</div>
 													)}
 													<div className="flex flex-1 flex-col gap-2">
-														<span className="font-semibold text-primary text-xs uppercase">
+														<span className="text-xs font-semibold uppercase text-primary">
 															{child.ctaTitle || child.title}
 														</span>
 														{child.ctaSubtitle && (
-															<span className="text-black text-sm dark:text-white/80">
+															<span className="text-sm text-muted-foreground">
 																{child.ctaSubtitle}
 															</span>
 														)}
 														{/* Newsletter Signup replaces CTA button */}
 														<div className="mt-2 flex flex-col gap-2">
-															<span className="font-bold text-primary text-xs">
+															<span className="text-xs font-bold text-foreground">
 																Sign up for our newsletter
 															</span>
 															<NewsletterEmailInput />
@@ -231,14 +231,34 @@ const MobileNav = ({ isOpen, onClose }) => {
 										<ul className="space-y-2 py-2">
 											{item.children.map((child) => (
 												<li key={child.title} className="flex justify-center">
-													<MegaMenuLink
-														href={child.href}
-														title={child.title}
-														icon={
-															child.icon && <child.icon className="h-4 w-4" />
-														}
-														className=""
-													/>
+													{child.image || child.ctaTitle || child.ctaSubtitle || child.ctaButton ? (
+														<div className="w-full max-w-md rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm">
+															{child.image && (
+																<div className="relative mb-3 h-24 w-full overflow-hidden rounded-md">
+																	<Image src={child.image} alt={child.ctaTitle || child.title} fill className="object-cover" />
+																</div>
+															)}
+															<div className="flex flex-col gap-2">
+																<span className="text-xs font-semibold uppercase text-primary">
+																	{child.ctaTitle || child.title}
+																</span>
+																{child.ctaSubtitle && (
+																	<span className="text-sm text-muted-foreground">{child.ctaSubtitle}</span>
+																)}
+																<div className="mt-2">
+																	<span className="mb-2 block text-xs font-bold text-foreground">Sign up for our newsletter</span>
+																	<NewsletterEmailInput />
+																</div>
+															</div>
+														</div>
+													) : (
+														<MegaMenuLink
+															href={child.href}
+															title={child.title}
+															icon={child.icon && <child.icon className="h-4 w-4" />}
+															className=""
+														/>
+													)}
 												</li>
 											))}
 										</ul>
@@ -365,7 +385,7 @@ export default function Navbar() {
 				variant="default"
 				className="top-[56px] px-2 py-2 text-sm lg:top-[64px] lg:px-4 lg:py-3 lg:text-base"
 			>
-				<span className="font-semibold">🆓 5 Leads:&nbsp;</span>
+				<span className="font-semibold">🆓 5 Ai Credits:&nbsp;</span>
 				<span className="inline md:hidden">Join beta!</span>
 				<span className="hidden md:inline">
 					Apply to join our exclusive beta testing program!
