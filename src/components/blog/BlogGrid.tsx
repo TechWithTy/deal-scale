@@ -17,8 +17,6 @@ export function truncateSubtitle(subtitle: string, maxLength = 60): string {
 
 import type { BeehiivPost } from "@/types/behiiv";
 
-import { usePagination } from "@/hooks/use-pagination";
-
 const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
   if (posts.length === 0) {
     return (
@@ -88,24 +86,8 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
   // Regular posts: all others, sorted by recency for browsing
   const regularPosts = sortedByRecency.filter((p) => p.id !== featuredPost?.id);
 
-  // PAGINATION LOGIC for regular posts
-  const {
-    pagedItems: paginatedPosts,
-    page,
-    totalPages,
-    nextPage,
-    prevPage,
-    setPage,
-    canShowPagination,
-    canShowShowMore,
-    canShowShowLess,
-    showMore,
-    showLess,
-  } = usePagination(regularPosts, {
-    itemsPerPage: 6,
-    initialPage: 1,
-    enableShowAll: true,
-  });
+  // Server-driven pagination: render posts as provided (no client re-slicing)
+  const paginatedPosts = regularPosts;
 
   return (
     <div className="space-y-10">
@@ -125,66 +107,7 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
         ))}
       </div>
 
-      {/* Pagination Controls */}
-      {(canShowPagination || canShowShowMore || canShowShowLess) && (
-        <div className="mt-8 flex flex-col items-center justify-center gap-2">
-          {canShowShowMore && (
-            <button
-              className="mb-2 cursor-pointer border-none bg-transparent p-0 font-medium text-blue-600 underline"
-              onClick={showMore}
-              type="button"
-            >
-              Show More
-            </button>
-          )}
-          {canShowPagination && (
-            <div className="flex items-center justify-center gap-2">
-              <button
-                className="rounded bg-gray-200 px-3 py-1 text-gray-700 disabled:opacity-50"
-                onClick={prevPage}
-                disabled={page === 1}
-                type="button"
-                aria-label="Previous page"
-              >
-                Prev
-              </button>
-              {/* Page numbers */}
-              {Array.from({ length: totalPages }, (_, i) => {
-                const pageNum = i + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    className={`rounded px-3 py-1 ${page === pageNum ? "bg-blue-600 text-black dark:text-white" : "bg-gray-200 text-gray-700"}`}
-                    onClick={() => setPage(pageNum)}
-                    type="button"
-                    aria-label={`Page ${pageNum}`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-              <button
-                className="rounded bg-gray-200 px-3 py-1 text-gray-700 disabled:opacity-50"
-                onClick={nextPage}
-                disabled={page === totalPages}
-                type="button"
-                aria-label="Next page"
-              >
-                Next
-              </button>
-            </div>
-          )}
-          {canShowShowLess && (
-            <button
-              className="mt-2 cursor-pointer font-medium text-blue-600 underline"
-              onClick={showLess}
-              type="button"
-            >
-              Show Less
-            </button>
-          )}
-        </div>
-      )}
+      {/* Pagination controls removed: page navigation is URL-driven by the parent */}
     </div>
   );
 };

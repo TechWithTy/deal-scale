@@ -51,7 +51,8 @@ export async function getLatestBeehiivPosts(
         console.log("[getLatestBeehiivPosts] Fetching from:", url); // * Debug: log which URL is being fetched
 
         const res = await fetch(url, {
-            cache: "no-store",
+            // Let Next.js cache per unique query using route's revalidate
+            next: { revalidate: 300 },
             headers: {
                 "Content-Type": "application/json",
             },
