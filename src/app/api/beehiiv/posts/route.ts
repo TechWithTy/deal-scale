@@ -1,5 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
 
+// Cache this route per unique query for 5 minutes (ISR-style caching)
+export const revalidate = 300;
+
 // ! GET /api/beehiiv/posts - Fetch all posts from Beehiiv publication (server-side, CORS-safe)
 export async function GET(request: NextRequest) {
     console.log("[API] /api/beehiiv/posts route hit");
@@ -130,7 +133,7 @@ export async function GET(request: NextRequest) {
             const expands = expandParam.length > 0 ? expandParam : ["stats"]; // default stats
             for (const e of new Set(expands)) url.searchParams.append("expand", e);
             console.log("[API] Fetching Beehiiv URL:", url.toString());
-            const res = await fetch(url.toString(), { headers });
+            const res = await fetch(url.toString(), { headers, next: { revalidate: 300 } });
             if (!res.ok) {
                 // Always return a 'data' field for consistency
                 return NextResponse.json(

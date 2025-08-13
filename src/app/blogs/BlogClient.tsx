@@ -55,7 +55,7 @@ function BlogContent() {
 			}
 		}
 		fetchPosts();
-	}, [searchParams]);
+	}, [searchParams?.toString()]);
 
 	const categories = [
 		{ id: "all", name: "All Posts" },
