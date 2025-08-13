@@ -13,7 +13,15 @@ import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const baseUrl = getTestBaseUrl();
+	// Resolve and normalize the canonical base URL
+	const normalize = (raw: string): string => {
+		let url = (raw || "").trim();
+		if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
+		url = url.replace(/^https:\/(?!\/)/i, "https://");
+		url = url.replace(/^http:\/(?!\/)/i, "http://");
+		return url.replace(/\/+$/g, "");
+	};
+	const baseUrl = normalize(defaultSeo.canonical || getTestBaseUrl());
 	// Static pages with SEO metadata for sitemap
 
 	const staticPaths = [
