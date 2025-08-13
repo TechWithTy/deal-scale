@@ -90,7 +90,7 @@ const LeadEnrichmentDemo = () => {
 						<Button variant="outline" onClick={handleReset}>
 							New Search
 						</Button>
-						<Button onClick={() => setIsModalOpen(true)}>Get Free Leads</Button>
+						<Button onClick={() => setIsModalOpen(true)}>Get Free Calls</Button>
 					</div>
 				</div>
 			)}
