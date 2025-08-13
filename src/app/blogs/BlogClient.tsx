@@ -28,7 +28,18 @@ function BlogContent() {
 				const { getLatestBeehiivPosts } = await import(
 					"@/lib/beehiiv/getPosts"
 				);
-				const posts = await getLatestBeehiivPosts();
+				// Read pagination flags from URL to optionally fetch all or a specific page
+				const all = searchParams?.get("all") === "true";
+				const per_page = searchParams?.get("per_page");
+				const page = searchParams?.get("page");
+				const limit = searchParams?.get("limit");
+
+				const posts = await getLatestBeehiivPosts({
+					all,
+					perPage: per_page ? Number(per_page) : undefined,
+					page: page ? Number(page) : undefined,
+					limit: limit ? Number(limit) : undefined,
+				});
 				console.log("[Beehiiv] Fetched blogs:", posts);
 				setArticles(posts);
 			} catch (err) {
@@ -38,7 +49,7 @@ function BlogContent() {
 			}
 		}
 		fetchPosts();
-	}, []);
+	}, [searchParams]);
 
 	const categories = [
 		{ id: "all", name: "All Posts" },
