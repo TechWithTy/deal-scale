@@ -28,26 +28,24 @@ function BlogContent() {
 				const { getLatestBeehiivPosts } = await import(
 					"@/lib/beehiiv/getPosts"
 				);
-				// Read pagination flags from URL to optionally fetch all or a specific page
-				const all = searchParams?.get("all") === "true";
+				// Read pagination flags from URL
 				const per_page = searchParams?.get("per_page");
 				const page = searchParams?.get("page");
 				const limit = searchParams?.get("limit");
 
-				// If a page is specified but per_page is not, default perPage to 13
-				const inferredPerPage = per_page
-					? Number(per_page)
-					: page
-						? 13
-						: undefined;
+				// Default per_page to 10 when missing or invalid
+				const parsedPerPage = per_page ? Number(per_page) : NaN;
+				const inferredPerPage = Number.isFinite(parsedPerPage) && parsedPerPage > 0
+					? parsedPerPage
+					: 10;
 				const posts = await getLatestBeehiivPosts({
-					all,
 					perPage: inferredPerPage,
 					page: page ? Number(page) : undefined,
 					limit: limit ? Number(limit) : undefined,
 				});
 				console.log("[Beehiiv] Fetched blogs:", posts);
-				setArticles(posts);
+				// Safety clamp: never exceed inferredPerPage on the page
+				setArticles(Array.isArray(posts) ? posts.slice(0, inferredPerPage) : []);
 			} catch (err) {
 				setError((err as Error).message || "Unknown error");
 			} finally {

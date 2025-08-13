@@ -96,8 +96,13 @@ export async function GET(request: NextRequest) {
                 console.log(`[API] Page ${page} received ${pagePosts.length} post(s)`);
                 if (pagePosts.length === 0) break;
                 allPosts.push(...pagePosts);
-                if (limit && allPosts.length >= limit) {
-                    const sliced = allPosts.slice(0, limit);
+                // Filter out drafts and scheduled posts before applying limit/sort
+                const visiblePosts = (allPosts as any[]).filter((p) => {
+                    const s = (p as any)?.status;
+                    return s !== "draft" && s !== "scheduled";
+                });
+                if (limit && Number.isFinite(limit) && limit > 0) {
+                    const sliced = visiblePosts.slice(0, limit);
                     const sorted = (sliced as any[]).sort((a, b) => toTime(b?.published_at) - toTime(a?.published_at));
                     return NextResponse.json({ data: sorted, meta: { total: sliced.length, total_results: totalResults, total_pages: totalPages } });
                 }
@@ -109,9 +114,11 @@ export async function GET(request: NextRequest) {
                 console.log("[API] No blog posts returned.");
             }
             // Sort newest first by published_at
-            const sorted = (allPosts as any[]).sort((a, b) => {
-                return toTime(b?.published_at) - toTime(a?.published_at);
+            const filtered = (allPosts as any[]).filter((p) => {
+                const s = (p as any)?.status;
+                return s !== "draft" && s !== "scheduled";
             });
+            const sorted = filtered.sort((a, b) => toTime(b?.published_at) - toTime(a?.published_at));
             return NextResponse.json({ data: sorted, meta: { total: sorted.length, total_results: totalResults, total_pages: totalPages } });
         } else {
             // Single page fetch
@@ -144,11 +151,16 @@ export async function GET(request: NextRequest) {
             const data = await res.json();
             // Ensure the response always has a 'data' array
             const posts = Array.isArray(data.data) ? data.data : [];
+            // Filter out drafts and scheduled posts
+            const visiblePosts = (posts as any[]).filter((p) => {
+                const s = (p as any)?.status;
+                return s !== "draft" && s !== "scheduled";
+            });
             console.log(`[API] Single-page received ${posts.length} post(s)`);
             if (posts.length === 0) {
                 console.log("[API] No blog posts returned.");
             }
-            const sorted = (posts as any[]).sort((a, b) => {
+            const sorted = (visiblePosts as any[]).sort((a, b) => {
                 return toTime(b?.published_at) - toTime(a?.published_at);
             });
             // Include meta if present but do not overwrite our data
