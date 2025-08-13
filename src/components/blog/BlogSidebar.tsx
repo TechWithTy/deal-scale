@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import type { BeehiivPost } from "@/types/behiiv";
 import { motion } from "framer-motion";
 import { RssIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { NewsletterFooter } from "../contact/newsletter/NewsletterFooter";
+import { RecentPostsSection } from "./RecentPostsSection";
 
 interface BlogSidebarProps {
 	posts: BeehiivPost[];
@@ -93,6 +93,21 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 			.slice(0, 3);
 	}, [visibleSource]);
 
+	const popularityScore = (p: BeehiivPost): number => {
+		const webViews = Number((p as any)?.stats?.web?.views) || 0;
+		const webClicks = Number((p as any)?.stats?.web?.clicks) || 0;
+		const emailUniqueClicks = Number((p as any)?.stats?.email?.unique_clicks) || 0;
+		const emailUniqueOpens = Number((p as any)?.stats?.email?.unique_opens) || 0;
+		// Weighted score: prioritize views, then clicks, then opens
+		return webViews * 1 + webClicks * 0.8 + emailUniqueClicks * 0.7 + emailUniqueOpens * 0.4;
+	};
+
+	const popularPosts = useMemo(() => {
+		return [...visibleSource]
+			.sort((a, b) => popularityScore(b as BeehiivPost) - popularityScore(a as BeehiivPost))
+			.slice(0, 3);
+	}, [visibleSource]);
+
 	const allTags = useMemo(() => {
 		return Array.from(
 			new Set(
@@ -116,72 +131,9 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 		<div className="space-y-8">
 			<NewsletterFooter />
 
-			<motion.div
-				initial={{ opacity: 0, y: 20 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.5, delay: 0.1 }}
-				className="glass-card rounded-xl p-6"
-			>
-				<h3 className="mb-4 font-semibold text-black text-xl dark:text-white">
-					Recent Posts
-				</h3>
-				<div className="space-y-4">
-					{recentPosts.map((post) => (
-						<a
-							key={post.id}
-							href={typeof post.web_url === "string" ? post.web_url : "/"}
-							className="group flex items-start space-x-3"
-						>
-							<Image
-								src={
-									typeof post.thumbnail_url === "string"
-										? post.thumbnail_url
-										: "https://place-hold.it/600x600"
-								}
-								alt={post.title}
-								className="h-16 w-16 flex-shrink-0 rounded-md object-cover"
-								style={{
-									objectFit:
-										typeof post.thumbnail_url === "string" &&
-										post.thumbnail_url.endsWith(".gif")
-											? "contain"
-											: "cover",
-								}}
-								width={800}
-								height={450}
-							/>
-							<div>
-								<h4 className="font-medium text-black text-sm transition-colors group-hover:text-primary dark:text-white">
-									{post.title}
-								</h4>
-								<p className="text-primary text-xs">
-									{(() => {
-										const raw = (post as any).published_at ?? (post as any).publish_date;
-										if (typeof raw === "number") return new Date(raw * 1000).toLocaleDateString();
-										if (typeof raw === "string") return new Date(raw).toLocaleDateString();
-										return "—";
-									})()}
-								</p>
-								{Array.isArray(post.content_tags) &&
-									post.content_tags.length > 0 && (
-										<div className="mt-1 flex flex-wrap gap-1">
-											{post.content_tags
-												.filter((tag): tag is string => typeof tag === "string")
-												.map((tag) => (
-													<span
-														key={tag}
-														className="rounded bg-primary/10 px-2 py-0.5 text-primary text-xs"
-													>
-														{tag}
-													</span>
-												))}
-										</div>
-									)}
-							</div>
-						</a>
-					))}
-				</div>
-			</motion.div>
+			<RecentPostsSection title="Recent Posts" posts={recentPosts} />
+
+			<RecentPostsSection title="Popular Posts" posts={popularPosts} />
 
 			{/* <motion.div
 				initial={{ opacity: 0, y: 20 }}
