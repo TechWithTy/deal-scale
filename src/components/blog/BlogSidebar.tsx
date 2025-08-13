@@ -24,7 +24,7 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 		const fetchRecent = async () => {
 			try {
 				const res = await fetch(
-					"/api/beehiiv/posts?limit=3&order_by=publish_date&direction=desc",
+					"/api/beehiiv/posts?limit=3&order_by=publish_date&direction=desc&include_scheduled=true",
 					{ cache: "no-store", signal: controller.signal },
 				);
 				if (!res.ok) return;
@@ -34,7 +34,9 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 					: Array.isArray(data?.posts)
 						? data.posts
 						: [];
-				setFallbackPosts(items);
+				// Safety filter: exclude hidden_from_feed and future-dated (scheduled) posts
+				const visible = items.filter((p: any) => isVisible(p));
+				setFallbackPosts(visible);
 			} catch (_) {
 				// ignore
 			}
@@ -44,32 +46,50 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 	}, [posts]);
 
 	const toTime = (v: unknown): number => {
-		if (typeof v === "string" || typeof v === "number") {
-			const t = new Date(v as string | number).getTime();
+		// Handles: ISO strings, ms timestamps, and unix seconds
+		if (typeof v === "number") {
+			const ms = v < 1e12 ? v * 1000 : v; // seconds -> ms if too small
+			return Number.isFinite(ms) ? ms : 0;
+		}
+		if (typeof v === "string") {
+			const num = Number(v);
+			if (!Number.isNaN(num)) {
+				const ms = num < 1e12 ? num * 1000 : num;
+				return Number.isFinite(ms) ? ms : 0;
+			}
+			const t = new Date(v).getTime();
 			return Number.isFinite(t) ? t : 0;
 		}
 		if (v instanceof Date) return v.getTime();
 		return 0;
 	};
 
+	const isVisible = (p: any) => {
+		const hidden = p?.hidden_from_feed === true;
+		return !hidden;
+	};
+
 	const sourcePosts = (Array.isArray(posts) && posts.length > 0 ? posts : fallbackPosts) as BeehiivPost[];
+	const visibleSource = useMemo(() => {
+		return (sourcePosts || []).filter((p: any) => isVisible(p));
+	}, [sourcePosts]);
 	const recentPosts = useMemo(() => {
-		return [...(sourcePosts || [])]
+		return [...visibleSource]
 			.sort((a, b) => toTime((b as any).published_at ?? b.publish_date) - toTime((a as any).published_at ?? a.publish_date))
 			.slice(0, 3);
-	}, [sourcePosts]);
+	}, [visibleSource]);
 
 	const allTags = useMemo(() => {
 		return Array.from(
 			new Set(
-				(sourcePosts || []).flatMap((post) =>
+				(visibleSource || []).flatMap((post) =>
 					Array.isArray((post as any).content_tags)
 						? (post as any).content_tags.filter((t: unknown): t is string => typeof t === "string")
 						: [],
 				),
 			),
 		).sort();
-	}, [sourcePosts]);
+	}, [visibleSource]);
 
 	const handleSubscribe = (e: React.FormEvent) => {
 		e.preventDefault();
