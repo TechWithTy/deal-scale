@@ -20,14 +20,28 @@ interface FeaturedBlogCardProps {
 const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 	featuredPost,
 }) => {
-	// Extract web stats safely for featured post
+	// Extract web + email stats safely for featured post
 	const featuredWebStats = featuredPost?.stats?.web;
+	const featuredEmailStats = (featuredPost?.stats as any)?.email as
+		| {
+				unique_opens?: number;
+				unique_clicks?: number;
+				open_rate?: number;
+				click_rate?: number;
+		  }
+		| undefined;
 	const featuredViews =
-		typeof featuredWebStats?.views === "number" ? featuredWebStats.views : "—";
+		typeof featuredWebStats?.views === "number" ? featuredWebStats.views : undefined;
 	const featuredClicks =
-		typeof featuredWebStats?.clicks === "number"
-			? featuredWebStats.clicks
-			: "—";
+		typeof featuredWebStats?.clicks === "number" ? featuredWebStats.clicks : undefined;
+	const featuredUniqueOpens =
+		typeof featuredEmailStats?.unique_opens === "number" ? featuredEmailStats.unique_opens : undefined;
+	const featuredUniqueClicks =
+		typeof featuredEmailStats?.unique_clicks === "number" ? featuredEmailStats.unique_clicks : undefined;
+	const featuredOpenRate =
+		typeof featuredEmailStats?.open_rate === "number" ? featuredEmailStats.open_rate : undefined;
+	const featuredClickRate =
+		typeof featuredEmailStats?.click_rate === "number" ? featuredEmailStats.click_rate : undefined;
 
 	// Safely extract content string for reading time
 	const contentString =
@@ -87,13 +101,36 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 							<Clock className="mr-1 h-3 w-3 text-secondary" /> {readingTime}{" "}
 							min read
 						</span>
-						<span className="inline-flex items-center gap-1">
-							<Eye className="h-4 w-4 text-secondary" /> {featuredViews} views
-						</span>
-						<span className="inline-flex items-center gap-1">
-							<MousePointerClick className="h-4 w-4 text-secondary" />{" "}
-							{featuredClicks} clicks
-						</span>
+						{typeof featuredViews === "number" && featuredViews > 0 && (
+							<span className="inline-flex items-center gap-1">
+								<Eye className="h-4 w-4 text-secondary" /> {featuredViews} views
+							</span>
+						)}
+						{typeof featuredClicks === "number" && featuredClicks > 0 && (
+							<span className="inline-flex items-center gap-1">
+								<MousePointerClick className="h-4 w-4 text-secondary" /> {featuredClicks} clicks
+							</span>
+						)}
+						{typeof featuredUniqueOpens === "number" && featuredUniqueOpens > 0 && (
+							<span className="inline-flex items-center gap-1">
+								<Eye className="h-4 w-4 text-secondary" /> {featuredUniqueOpens} unique opens
+							</span>
+						)}
+						{typeof featuredUniqueClicks === "number" && featuredUniqueClicks > 0 && (
+							<span className="inline-flex items-center gap-1">
+								<MousePointerClick className="h-4 w-4 text-secondary" /> {featuredUniqueClicks} unique clicks
+							</span>
+						)}
+						{typeof featuredOpenRate === "number" && featuredOpenRate > 0 && (
+							<span className="inline-flex items-center gap-1">
+								{featuredOpenRate}% open rate
+							</span>
+						)}
+						{typeof featuredClickRate === "number" && featuredClickRate > 0 && (
+							<span className="inline-flex items-center gap-1">
+								{featuredClickRate}% click rate
+							</span>
+						)}
 					</div>
 					<div className="mb-4 flex flex-col items-center space-y-1">
 						<Link
