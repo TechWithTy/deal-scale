@@ -22,6 +22,7 @@ export type BeehiivPostsOptions = {
     page?: number; // page index (1-based)
     all?: boolean; // fetch all pages server-side
     limit?: number; // cap total results when all=true
+    includeScheduled?: boolean; // include future-dated posts (default: false for paginated grid)
 };
 
 // Backward compatible signature: either a number (legacy limit) or options
@@ -42,6 +43,13 @@ export async function getLatestBeehiivPosts(
         if (options.page) params.set("page", String(options.page));
         if (options.all) params.set("all", "true");
         if (options.limit) params.set("limit", String(options.limit));
+        // By default, exclude scheduled posts for paginated grid fetches (all=false)
+        // API defaults to include all; we opt-out here unless explicitly overridden.
+        if (typeof options.includeScheduled === "boolean") {
+            params.set("include_scheduled", String(options.includeScheduled));
+        } else if (!options.all) {
+            params.set("include_scheduled", "false");
+        }
 
         const qs = params.toString();
         const url = isServer

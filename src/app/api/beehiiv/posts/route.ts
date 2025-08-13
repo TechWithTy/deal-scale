@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
     const contentTagsRepeated = search.getAll("content_tags[]");
     const contentTagsCsv = search.get("content_tags");
     const expandParam = search.getAll("expand"); // can be repeated, e.g., stats
+    const includeScheduledParam = search.get("include_scheduled"); // true | false, default true
 
     // Sanitize values
     const per_page = Math.max(1, Math.min(100, Number(perPageParam) || Number(limitParam) || 100));
@@ -38,6 +39,7 @@ export async function GET(request: NextRequest) {
     const limit = limitParam ? Math.max(1, Number(limitParam)) : undefined;
 
     const baseUrl = `https://api.beehiiv.com/v2/publications/${publicationId}/posts`;
+    const includeScheduled = includeScheduledParam === null ? true : includeScheduledParam === "true";
     const headers: Record<string, string> = {
         "Content-Type": "application/json",
     };
@@ -46,8 +48,18 @@ export async function GET(request: NextRequest) {
     }
     try {
         const toTime = (v: unknown): number => {
-            if (typeof v === "string" || typeof v === "number") {
-                const t = new Date(v as string | number).getTime();
+            // Handles: ISO strings, ms timestamps, and unix seconds
+            if (typeof v === "number") {
+                const ms = v < 1e12 ? v * 1000 : v; // seconds -> ms if too small
+                return Number.isFinite(ms) ? ms : 0;
+            }
+            if (typeof v === "string") {
+                const num = Number(v);
+                if (!Number.isNaN(num)) {
+                    const ms = num < 1e12 ? num * 1000 : num;
+                    return Number.isFinite(ms) ? ms : 0;
+                }
+                const t = new Date(v).getTime();
                 return Number.isFinite(t) ? t : 0;
             }
             if (v instanceof Date) return v.getTime();
@@ -96,10 +108,13 @@ export async function GET(request: NextRequest) {
                 console.log(`[API] Page ${page} received ${pagePosts.length} post(s)`);
                 if (pagePosts.length === 0) break;
                 allPosts.push(...pagePosts);
-                // Filter out drafts and scheduled posts before applying limit/sort
+                // Filter out non-visible posts: drafts, scheduled (future-dated), hidden_from_feed
                 const visiblePosts = (allPosts as any[]).filter((p) => {
                     const s = (p as any)?.status;
-                    return s !== "draft" && s !== "scheduled";
+                    const hidden = (p as any)?.hidden_from_feed === true;
+                    const ts = toTime((p as any)?.published_at ?? (p as any)?.publish_date ?? (p as any)?.displayed_date);
+                    const isFuture = ts > Date.now();
+                    return s !== "draft" && !hidden && (includeScheduled || !isFuture);
                 });
                 if (limit && Number.isFinite(limit) && limit > 0) {
                     const sliced = visiblePosts.slice(0, limit);
@@ -116,7 +131,10 @@ export async function GET(request: NextRequest) {
             // Sort newest first by published_at
             const filtered = (allPosts as any[]).filter((p) => {
                 const s = (p as any)?.status;
-                return s !== "draft" && s !== "scheduled";
+                const hidden = (p as any)?.hidden_from_feed === true;
+                const ts = toTime((p as any)?.published_at ?? (p as any)?.publish_date ?? (p as any)?.displayed_date);
+                const isFuture = ts > Date.now();
+                return s !== "draft" && !hidden && (includeScheduled || !isFuture);
             });
             const sorted = filtered.sort((a, b) => toTime(b?.published_at) - toTime(a?.published_at));
             return NextResponse.json({ data: sorted, meta: { total: sorted.length, total_results: totalResults, total_pages: totalPages } });
@@ -151,10 +169,13 @@ export async function GET(request: NextRequest) {
             const data = await res.json();
             // Ensure the response always has a 'data' array
             const posts = Array.isArray(data.data) ? data.data : [];
-            // Filter out drafts and scheduled posts
+            // Filter out non-visible posts: drafts, scheduled (future-dated), hidden_from_feed
             const visiblePosts = (posts as any[]).filter((p) => {
                 const s = (p as any)?.status;
-                return s !== "draft" && s !== "scheduled";
+                const hidden = (p as any)?.hidden_from_feed === true;
+                const ts = toTime((p as any)?.published_at ?? (p as any)?.publish_date ?? (p as any)?.displayed_date);
+                const isFuture = ts > Date.now();
+                return s !== "draft" && !hidden && (includeScheduled || !isFuture);
             });
             console.log(`[API] Single-page received ${posts.length} post(s)`);
             if (posts.length === 0) {
