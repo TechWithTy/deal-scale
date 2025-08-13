@@ -2,14 +2,19 @@ export function getTestBaseUrl() {
 	// * Use NEXT_PUBLIC_SITE_URL if set (canonical domain)
 	const normalize = (raw: string): string => {
 		let url = raw.trim();
-		// If missing protocol, assume https
+		// 1) Fix single-slash schemes at start: https:/example -> https://example
+		url = url.replace(/^(https?:)\/(?!\/)/i, "$1//");
+		// 2) If missing protocol, assume https
 		if (!/^https?:\/\//i.test(url)) {
 			url = `https://${url}`;
 		}
-		// Fix cases like https:/example.com -> https://example.com
-		url = url.replace(/^https:\/(?!\/)/i, "https://");
-		url = url.replace(/^http:\/(?!\/)/i, "http://");
-		// Drop any trailing slashes for consistency
+		// 3) Collapse duplicate protocols at start: https://https:// -> https://
+		url = url.replace(/^(https?:\/\/)(https?:\/\/)/i, "$1");
+		// 4) Also handle mixed duplicate like https://https:/ -> https://
+		url = url.replace(/^(https?:\/\/)(https?:)\/(?!\/)/i, "$1");
+		// 5) Ensure protocol is followed by exactly two slashes
+		url = url.replace(/^(https?:):\/(?!\/)/i, "$1://");
+		// 6) Drop any trailing slashes for consistency
 		url = url.replace(/\/+$/g, "");
 		return url;
 	};

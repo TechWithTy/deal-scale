@@ -16,9 +16,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	// Resolve and normalize the canonical base URL
 	const normalize = (raw: string): string => {
 		let url = (raw || "").trim();
-		if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
-		url = url.replace(/^https:\/(?!\/)/i, "https://");
-		url = url.replace(/^http:\/(?!\/)/i, "http://");
+		// 1) Fix single-slash schemes at start: https:/example -> https://example
+		url = url.replace(/^(https?:):\/(?!\/)/i, "$1//");
+		// 2) If missing protocol, assume https
+		if (!/^https?:\/\//i.test(url)) {
+			url = `https://${url}`;
+		}
+		// 3) Collapse duplicate protocols at start: https://https:// -> https://
+		url = url.replace(/^(https?:\/\/)(https?:\/\/)/i, "$1");
+		// 4) Also handle mixed duplicate like https://https:/ -> https://
+		url = url.replace(/^(https?:\/\/)(https?:)\/(?!\/)/i, "$1");
+		// 5) Ensure protocol is followed by exactly two slashes
+		url = url.replace(/^(https?:):\/(?!\/)/i, "$1://");
+		// 6) Drop any trailing slashes for consistency
 		return url.replace(/\/+$/g, "");
 	};
 	const baseUrl = normalize(defaultSeo.canonical || getTestBaseUrl());
