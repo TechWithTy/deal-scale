@@ -36,6 +36,20 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 						: [];
 				// Safety filter: exclude hidden_from_feed and future-dated (scheduled) posts
 				const visible = items.filter((p: any) => isVisible(p));
+				try {
+					const todayUnix = Math.floor(Date.now() / 1000);
+					console.log("[Sidebar] Today (unix seconds):", todayUnix);
+					console.log(
+						"[Sidebar] Fetched posts publish/displayed:",
+						visible.map((p: any) => ({
+							id: p?.id,
+							title: p?.title,
+							publish_date: p?.publish_date,
+							published_at: p?.published_at,
+							displayed_date: p?.displayed_date,
+						}))
+					);
+				} catch {}
 				setFallbackPosts(visible);
 			} catch (_) {
 				// ignore

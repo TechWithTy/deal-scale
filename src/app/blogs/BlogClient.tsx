@@ -22,6 +22,11 @@ function BlogContent() {
 
 	useEffect(() => {
 		async function fetchPosts() {
+			try {
+				const todayUnix = Math.floor(Date.now() / 1000);
+				// Debug: today in Beehiiv-style seconds
+				console.log("[BlogClient] Today (unix seconds):", todayUnix);
+			} catch {}
 			setLoading(true);
 			setError(null);
 			try {
@@ -43,11 +48,22 @@ function BlogContent() {
 					page: page ? Number(page) : undefined,
 					limit: limit ? Number(limit) : undefined,
 				});
-				console.log("[Beehiiv] Fetched blogs:", posts);
-				// Safety clamp: never exceed inferredPerPage on the page
-				setArticles(Array.isArray(posts) ? posts.slice(0, inferredPerPage) : []);
-			} catch (err) {
-				setError((err as Error).message || "Unknown error");
+				try {
+					console.log(
+						"[BlogClient] Posts publish/displayed sample:",
+						posts.slice(0, 10).map((p: any) => ({
+							id: p?.id,
+							title: p?.title,
+							publish_date: p?.publish_date,
+							published_at: p?.published_at,
+							displayed_date: p?.displayed_date,
+						})),
+					);
+				} catch {}
+				setArticles(posts.slice(0, inferredPerPage));
+			} catch (err: unknown) {
+				console.error("Failed to load posts:", err);
+				setError(err instanceof Error ? err.message : "Unknown error");
 			} finally {
 				setLoading(false);
 			}
