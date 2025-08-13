@@ -103,9 +103,6 @@ export const priorityPilotFormSchema = z.object({
 	primaryChallenge: z
 		.array(z.string())
 		.nonempty({ message: "Please select at least one pain point." }),
-	interestedFeatures: z
-		.array(z.string())
-		.nonempty({ message: "Please select at least one feature." }),
 	successMetrics: z.string().min(30, {
 		message:
 			"Please describe what success would look like in at least 30 characters.",
@@ -258,16 +255,7 @@ export const priorityPilotFormFields: FieldConfig[] = [
 		value: [],
 		onChange: (value: string[]) => {},
 	},
-	{
-		name: "interestedFeatures",
-		label:
-			"Which pilot features are you interested in? (Select all that apply)",
-		type: "multiselect",
-		placeholder: "Select pilot features",
-		options: interestedFeatureOptions,
-		value: [],
-		onChange: (value: string[]) => {},
-	},
+	
 	{
 		name: "featureVotes",
 		label:
