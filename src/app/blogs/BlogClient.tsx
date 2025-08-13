@@ -34,9 +34,15 @@ function BlogContent() {
 				const page = searchParams?.get("page");
 				const limit = searchParams?.get("limit");
 
+				// If a page is specified but per_page is not, default perPage to 13
+				const inferredPerPage = per_page
+					? Number(per_page)
+					: page
+						? 13
+						: undefined;
 				const posts = await getLatestBeehiivPosts({
 					all,
-					perPage: per_page ? Number(per_page) : undefined,
+					perPage: inferredPerPage,
 					page: page ? Number(page) : undefined,
 					limit: limit ? Number(limit) : undefined,
 				});
@@ -124,7 +130,7 @@ function BlogContent() {
 					<CategoryFilter />
 					<div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
 						<div className="lg:col-span-8">
-							<BlogGrid posts={filteredPosts} />
+							<BlogGrid posts={filteredPosts.length > 0 ? filteredPosts : articles} />
 						</div>
 						<div className="lg:col-span-4">
 							<BlogSidebar posts={articles} />
