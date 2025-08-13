@@ -32,18 +32,21 @@ export async function getLatestBeehiivPosts(
         const isServer = typeof window === "undefined";
         const baseUrl = getBaseUrl();
         const apiPath = "/api/beehiiv/posts";
-        const urlObj = new URL(isServer ? `${baseUrl}${apiPath}` : apiPath, baseUrl || undefined);
 
         // Normalize options
         const options: BeehiivPostsOptions =
             typeof opts === "number" ? { limit: opts } : opts || {};
 
-        if (options.perPage) urlObj.searchParams.set("per_page", String(options.perPage));
-        if (options.page) urlObj.searchParams.set("page", String(options.page));
-        if (options.all) urlObj.searchParams.set("all", "true");
-        if (options.limit) urlObj.searchParams.set("limit", String(options.limit));
+        const params = new URLSearchParams();
+        if (options.perPage) params.set("per_page", String(options.perPage));
+        if (options.page) params.set("page", String(options.page));
+        if (options.all) params.set("all", "true");
+        if (options.limit) params.set("limit", String(options.limit));
 
-        const url = urlObj.toString();
+        const qs = params.toString();
+        const url = isServer
+            ? `${baseUrl}${apiPath}${qs ? `?${qs}` : ""}`
+            : `${apiPath}${qs ? `?${qs}` : ""}`;
 
         console.log("[getLatestBeehiivPosts] Fetching from:", url); // * Debug: log which URL is being fetched
 
@@ -73,19 +76,19 @@ export async function getLatestBeehiivPosts(
 
         const posts = Array.isArray(data.data) ? data.data : [];
 
-        // Debug: show fetched posts summary and a small preview to avoid noisy logs
+        // Debug: show fetched posts summary for ALL posts (id, title, published_at)
         try {
-            const preview = posts.slice(0, 3).map((p: any) => ({
+            const summary = posts.map((p: any) => ({
                 id: p?.id,
                 title: p?.title,
                 published_at: p?.published_at,
             }));
             console.log(
-                `[getLatestBeehiivPosts] Received ${posts.length} post(s). Preview:`,
-                preview,
+                `[getLatestBeehiivPosts] Received ${posts.length} post(s). Full summary:`,
+                summary,
             );
         } catch (logErr) {
-            console.warn("[getLatestBeehiivPosts] Failed to log posts preview:", logErr);
+            console.warn("[getLatestBeehiivPosts] Failed to log posts summary:", logErr);
         }
         // If legacy numeric limit was supplied, slice on client as a fallback
         if (typeof opts === "number" && Number.isFinite(opts)) {
