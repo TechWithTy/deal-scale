@@ -19,10 +19,26 @@ type BlogCardProps = {
 export function BlogCard({ post, className = "" }: BlogCardProps) {
 	// Extract web stats safely
 	const webStats = post.stats?.web;
-	const views =
-		typeof webStats?.views === "number" ? webStats.views : undefined;
-	const clicks =
-		typeof webStats?.clicks === "number" ? webStats.clicks : undefined;
+	const emailStats = (post.stats as any)?.email as
+		| {
+				open_rate?: number;
+				click_rate?: number;
+				unique_opens?: number;
+				unique_clicks?: number;
+				opens?: number;
+				clicks?: number;
+			}
+		| undefined;
+	const views = typeof webStats?.views === "number" ? webStats.views : undefined;
+	const clicks = typeof webStats?.clicks === "number" ? webStats.clicks : undefined;
+	const uniqueOpens =
+		typeof emailStats?.unique_opens === "number" ? emailStats.unique_opens : undefined;
+	const uniqueClicks =
+		typeof emailStats?.unique_clicks === "number" ? emailStats.unique_clicks : undefined;
+	const openRate =
+		typeof emailStats?.open_rate === "number" ? emailStats.open_rate : undefined;
+	const clickRate =
+		typeof emailStats?.click_rate === "number" ? emailStats.click_rate : undefined;
 
 	return (
 		<Card className={`transition-colors ${className}`}>
@@ -90,8 +106,8 @@ export function BlogCard({ post, className = "" }: BlogCardProps) {
 						</small>
 					)}
 				</div>
-				{/* Vital web stats */}
-				<div className="mt-2 flex items-center gap-4 text-muted-foreground text-xs">
+				{/* Web and Email analytics */}
+				<div className="mt-2 flex flex-wrap items-center gap-4 text-muted-foreground text-xs">
 					{typeof views === "number" && views > 0 && (
 						<span className="inline-flex items-center gap-1">
 							<Eye className="h-4 w-4" /> {views} views
@@ -100,6 +116,27 @@ export function BlogCard({ post, className = "" }: BlogCardProps) {
 					{typeof clicks === "number" && clicks > 0 && (
 						<span className="inline-flex items-center gap-1">
 							<MousePointerClick className="h-4 w-4" /> {clicks} clicks
+						</span>
+					)}
+					{typeof uniqueOpens === "number" && uniqueOpens > 0 && (
+						<span className="inline-flex items-center gap-1">
+							{/* reuse Eye icon to represent opens */}
+							<Eye className="h-4 w-4" /> {uniqueOpens} unique opens
+						</span>
+					)}
+					{typeof uniqueClicks === "number" && uniqueClicks > 0 && (
+						<span className="inline-flex items-center gap-1">
+							<MousePointerClick className="h-4 w-4" /> {uniqueClicks} unique clicks
+						</span>
+					)}
+					{typeof openRate === "number" && openRate > 0 && (
+						<span className="inline-flex items-center gap-1">
+							{openRate}% open rate
+						</span>
+					)}
+					{typeof clickRate === "number" && clickRate > 0 && (
+						<span className="inline-flex items-center gap-1">
+							{clickRate}% click rate
 						</span>
 					)}
 				</div>
