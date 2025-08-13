@@ -1,17 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { companyData } from "@/data/company";
-import type { MediumArticle } from "@/data/medium/post";
 import type { BeehiivPost } from "@/types/behiiv";
 import { motion } from "framer-motion";
 import { RssIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useMemo, useState } from "react";
 import { NewsletterFooter } from "../contact/newsletter/NewsletterFooter";
-import NewsletterSidebar from "../contact/newsletter/NewsletterSidebar";
 
 interface BlogSidebarProps {
 	posts: BeehiivPost[];
@@ -19,12 +15,61 @@ interface BlogSidebarProps {
 
 const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 	const [email, setEmail] = useState("");
+	const [fallbackPosts, setFallbackPosts] = useState<BeehiivPost[]>([]);
 
-	const allTags = Array.from(
-		new Set(posts.flatMap((post) => post.categories || [])),
-	).sort();
+	// If no posts are provided, fetch the latest 3 as a fallback
+	useEffect(() => {
+		if (Array.isArray(posts) && posts.length > 0) return;
+		const controller = new AbortController();
+		const fetchRecent = async () => {
+			try {
+				const res = await fetch(
+					"/api/beehiiv/posts?limit=3&order_by=publish_date&direction=desc",
+					{ cache: "no-store", signal: controller.signal },
+				);
+				if (!res.ok) return;
+				const data = await res.json();
+				const items: BeehiivPost[] = Array.isArray(data?.data)
+					? data.data
+					: Array.isArray(data?.posts)
+						? data.posts
+						: [];
+				setFallbackPosts(items);
+			} catch (_) {
+				// ignore
+			}
+		};
+		void fetchRecent();
+		return () => controller.abort();
+	}, [posts]);
 
-	const recentPosts = posts.slice(0, 3);
+	const toTime = (v: unknown): number => {
+		if (typeof v === "string" || typeof v === "number") {
+			const t = new Date(v as string | number).getTime();
+			return Number.isFinite(t) ? t : 0;
+		}
+		if (v instanceof Date) return v.getTime();
+		return 0;
+	};
+
+	const sourcePosts = (Array.isArray(posts) && posts.length > 0 ? posts : fallbackPosts) as BeehiivPost[];
+	const recentPosts = useMemo(() => {
+		return [...(sourcePosts || [])]
+			.sort((a, b) => toTime((b as any).published_at ?? b.publish_date) - toTime((a as any).published_at ?? a.publish_date))
+			.slice(0, 3);
+	}, [sourcePosts]);
+
+	const allTags = useMemo(() => {
+		return Array.from(
+			new Set(
+				(sourcePosts || []).flatMap((post) =>
+					Array.isArray((post as any).content_tags)
+						? (post as any).content_tags.filter((t: unknown): t is string => typeof t === "string")
+						: [],
+				),
+			),
+		).sort();
+	}, [sourcePosts]);
 
 	const handleSubscribe = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -76,11 +121,12 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 									{post.title}
 								</h4>
 								<p className="text-primary text-xs">
-									{typeof post.publish_date === "number"
-										? new Date(post.publish_date * 1000).toLocaleDateString()
-										: typeof post.publish_date === "string"
-											? new Date(post.publish_date).toLocaleDateString()
-											: "—"}
+									{(() => {
+										const raw = (post as any).published_at ?? (post as any).publish_date;
+										if (typeof raw === "number") return new Date(raw * 1000).toLocaleDateString();
+										if (typeof raw === "string") return new Date(raw).toLocaleDateString();
+										return "—";
+									})()}
 								</p>
 								{Array.isArray(post.content_tags) &&
 									post.content_tags.length > 0 && (
