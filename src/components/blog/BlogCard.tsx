@@ -28,37 +28,41 @@ export function BlogCard({ post, className = "" }: BlogCardProps) {
 		<Card className={`transition-colors ${className}`}>
 			<CardHeader className="relative h-48 overflow-hidden p-0">
 				{post.thumbnail_url && typeof post.thumbnail_url === "string" ? (
-					<Image
-						src={post.thumbnail_url}
-						alt={post.title}
-						className="h-full w-full object-contain"
-						width={800}
-						height={450}
-						style={{
-							position: "absolute",
-							top: "50%",
-							left: "50%",
-							transform: "translate(-50%, -50%)",
-							maxWidth: "100%",
-							maxHeight: "100%",
-						}}
-					/>
+					<Link href={post.web_url || "/"} aria-label={`Read ${post.title}`}>
+						<Image
+							src={post.thumbnail_url}
+							alt={post.title}
+							className="h-full w-full object-contain"
+							width={800}
+							height={450}
+							style={{
+								position: "absolute",
+								top: "50%",
+								left: "50%",
+								transform: "translate(-50%, -50%)",
+								maxWidth: "100%",
+								maxHeight: "100%",
+							}}
+						/>
+					</Link>
 				) : (
-					<Image
-						src="/placeholder.jpg"
-						alt="No image available"
-						className="h-full w-full object-contain"
-						width={800}
-						height={450}
-						style={{
-							position: "absolute",
-							top: "50%",
-							left: "50%",
-							transform: "translate(-50%, -50%)",
-							maxWidth: "100%",
-							maxHeight: "100%",
-						}}
-					/>
+					<Link href={post.web_url || "/"} aria-label={`Read ${post.title}`}>
+						<Image
+							src="/placeholder.jpg"
+							alt="No image available"
+							className="h-full w-full object-contain"
+							width={800}
+							height={450}
+							style={{
+								position: "absolute",
+								top: "50%",
+								left: "50%",
+								transform: "translate(-50%, -50%)",
+								maxWidth: "100%",
+								maxHeight: "100%",
+							}}
+						/>
+					</Link>
 				)}
 			</CardHeader>
 			<CardContent className="flex-1 pt-6 pr-6 pl-4">
@@ -75,7 +79,7 @@ export function BlogCard({ post, className = "" }: BlogCardProps) {
 				</div>
 				<div className="mb-4 flex flex-col items-center space-y-1">
 					<Link
-						href={`/blogs/${post.slug}`}
+						href={post.web_url || "/"}
 						className="line-clamp-2 text-center font-semibold text-card-foreground text-xl transition-colors hover:text-primary dark:text-card-foreground"
 					>
 						{truncateTitle(post.title)}
