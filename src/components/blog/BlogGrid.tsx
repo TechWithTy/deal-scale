@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import FeaturedBlogCard from "./FeaturedBlogCard";
 const BlogCard = React.lazy(() =>
   import("./BlogCard").then((mod) => ({ default: mod.BlogCard })),
@@ -18,6 +19,19 @@ export function truncateSubtitle(subtitle: string, maxLength = 60): string {
 import type { BeehiivPost } from "@/types/behiiv";
 
 const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageSize = (() => {
+    const s = searchParams?.get("per_page");
+    const n = s ? Number(s) : 10;
+    return Number.isFinite(n) && n > 0 ? n : 10;
+  })();
+  const currentPage = (() => {
+    const p = searchParams?.get("page");
+    const n = p ? Number(p) : 1;
+    return Number.isFinite(n) && n > 0 ? n : 1;
+  })();
+
   if (posts.length === 0) {
     return (
       <div className="glass-card rounded-xl py-20 text-center">
@@ -89,6 +103,15 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
   // Server-driven pagination: render posts as provided (no client re-slicing)
   const paginatedPosts = regularPosts;
 
+  // URL-driven pagination: push ?page= and enforce per_page=10 so server returns 10 and grid uses first as featured + 9 regular
+  const goToPage = (next: number) => {
+    const params = new URLSearchParams(searchParams?.toString() || "");
+    params.set("page", String(next));
+    // Ensure consistent server page size for featured+12 layout
+    if (!params.get("per_page")) params.set("per_page", "10");
+    router.push(`/blogs?${params.toString()}`);
+  };
+
   return (
     <div className="space-y-10">
       {featuredPost ? <FeaturedBlogCard featuredPost={featuredPost} /> : null}
@@ -107,7 +130,28 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
         ))}
       </div>
 
-      {/* Pagination controls removed: page navigation is URL-driven by the parent */}
+      {/* URL-driven pagination controls */}
+      <div className="mt-8 flex items-center justify-center gap-2">
+        <button
+          className="rounded bg-gray-200 px-3 py-1 text-gray-700 disabled:opacity-50"
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage <= 1}
+          type="button"
+          aria-label="Previous page"
+        >
+          Prev
+        </button>
+        <span className="px-2 text-sm text-gray-600 dark:text-gray-300">Page {currentPage}</span>
+        <button
+          className="rounded bg-gray-200 px-3 py-1 text-gray-700"
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={posts.length < pageSize}
+          type="button"
+          aria-label="Next page"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
