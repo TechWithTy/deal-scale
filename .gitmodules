@@ -4,3 +4,4 @@
 [submodule "scripts"]
 	path = scripts
 	url = https://github.com/TechWithTy/scripts.git
+	branch = local/updates
