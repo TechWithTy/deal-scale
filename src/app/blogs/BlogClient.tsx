@@ -154,8 +154,8 @@ function BlogContent() {
 			</div>
 			<div className="mt-12">
 				<CTASection
-					title="Ready to transform your business?"
-					description="Get in touch with our team today"
+					title="Ready to scale your deal pipeline?"
+					description="Become a beta tester for Deal Scale and get early access to our AI-powered deal pipeline tools."
 					buttonText="Contact Us"
 					href="/contact"
 				/>
