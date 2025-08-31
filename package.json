@@ -17,7 +17,10 @@
 		"test-metadata": "pnpm exec jest src/utils/__tests__/metadata",
 		"lint": "biome check --fix src",
 		"format": "biome format --write src",
-		"clean-build": "rm -rf .next dist .svelte-kit node_modules/.cache && pnpm build"
+		"clean-build": "rm -rf .next dist .svelte-kit node_modules/.cache && pnpm build",
+		"export:categories": "pnpm exec ts-node -r tsconfig-paths/register --compiler-options '{\"module\":\"CommonJS\"}' scripts/export-categories.ts",
+		"seed:categories": "pnpm exec ts-node -r tsconfig-paths/register --compiler-options '{\"module\":\"CommonJS\"}' scripts/seed-to-strapi.ts",
+		"seed:generic": "pnpm exec ts-node -r tsconfig-paths/register --compiler-options '{\"module\":\"CommonJS\"}' scripts/seed-generic.ts"
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
@@ -146,7 +149,8 @@
 		"ts-jest": "^29.3.2",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.8.3",
-		"typescript-eslint": "^8.0.1"
+		"typescript-eslint": "^8.0.1",
+		"tsconfig-paths": "^4.2.0"
 	},
 	"packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531"
 }
