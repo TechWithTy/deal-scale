@@ -1,5 +1,11 @@
 {
 	"buildCommand": "pnpm install --no-frozen-lockfile && pnpm run build",
 	"installCommand": "corepack enable && corepack prepare pnpm@8.15.4 --activate && pnpm install --no-frozen-lockfile --prefer-offline",
-	"framework": "nextjs"
+	"framework": "nextjs",
+	"crons": [
+    {
+      "path": "/api/cron/sync",
+      "schedule": "*/5 * * * *"
+    }
+  ]
 }
