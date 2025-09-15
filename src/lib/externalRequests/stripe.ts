@@ -5,8 +5,8 @@ let client: Stripe | null = null;
 
 export function getStripeClient(): Stripe {
 	if (!client) {
-		const isProduction = process.env.STAGING_ENVIRONMENT === 'PRODUCTION';
-		const STRIPE_SECRET_KEY = isProduction 
+		const isProduction = process.env.STAGING_ENVIRONMENT === "PRODUCTION";
+		const STRIPE_SECRET_KEY = isProduction
 			? process.env.STRIPE_SECRET_LIVE_KEY || process.env.STRIPE_SECRET_KEY
 			: process.env.STRIPE_SECRET_KEY;
 		const NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY =

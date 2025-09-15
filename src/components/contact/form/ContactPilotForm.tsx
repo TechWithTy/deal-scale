@@ -60,9 +60,9 @@ import {
 } from "@/components/contact/form/formFieldHelpers";
 
 export default function ContactPilotForm({
-  prefill,
+	prefill,
 }: {
-  prefill?: Partial<PriorityPilotFormValues>;
+	prefill?: Partial<PriorityPilotFormValues>;
 }) {
 	const [formStep, setFormStep] = useState<"form" | "payment">("form");
 	const [clientSecret, setClientSecret] = useState<string | null>(null);

@@ -122,4 +122,3 @@ const DemoTabs = () => {
 };
 
 export default DemoTabs;
-

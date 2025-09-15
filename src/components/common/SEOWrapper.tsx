@@ -53,7 +53,6 @@ export function SEOWrapper(
 				<meta property="article:modified_time" content={dateModified} />
 			)}
 
-
 			{/* Additional custom meta tags */}
 			{Object.entries(rest).map(([key, value]) => (
 				<meta key={key} name={key} content={String(value)} />

@@ -234,8 +234,7 @@ export const betaTesterFormFields: FieldConfig[] = [
 	},
 	{
 		name: "featureVotes",
-		label:
-			"Vote On Upcoming on upcoming features (Select all that excite you)",
+		label: "Vote On Upcoming on upcoming features (Select all that excite you)",
 		type: "multiselect", // * Custom multi-select for feature voting
 		options: upcomingFeatureOptions,
 		value: [], // * Initial value required by MultiselectField type

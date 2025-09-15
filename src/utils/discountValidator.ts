@@ -29,11 +29,18 @@ export const validateDiscountCode = (
 ): ValidationResult => {
 	// 1. Check basic code validity (active, not expired)
 	if (!discountCode.isActive) {
-		console.log("Discount validation failed: code is not active.", { discountCode });
-		return { isValid: false, errorMessage: "This discount code is no longer active." };
+		console.log("Discount validation failed: code is not active.", {
+			discountCode,
+		});
+		return {
+			isValid: false,
+			errorMessage: "This discount code is no longer active.",
+		};
 	}
 	if (discountCode.expires && new Date(discountCode.expires) < new Date()) {
-		console.log("Discount validation failed: code has expired.", { discountCode });
+		console.log("Discount validation failed: code has expired.", {
+			discountCode,
+		});
 		return { isValid: false, errorMessage: "This discount code has expired." };
 	}
 
@@ -42,25 +49,36 @@ export const validateDiscountCode = (
 		discountCode.maxUses !== undefined &&
 		(discountCode.usedCount ?? 0) >= discountCode.maxUses
 	) {
-		console.log("Discount validation failed: usage limit reached.", { discountCode });
-		return { isValid: false, errorMessage: "This discount code has reached its usage limit." };
+		console.log("Discount validation failed: usage limit reached.", {
+			discountCode,
+		});
+		return {
+			isValid: false,
+			errorMessage: "This discount code has reached its usage limit.",
+		};
 	}
 
 	// 3. Check service and category restrictions
 	if (
 		discountCode.serviceIds &&
-		(!validationData.serviceId || !discountCode.serviceIds.includes(validationData.serviceId))
+		(!validationData.serviceId ||
+			!discountCode.serviceIds.includes(validationData.serviceId))
 	) {
 		console.log("Discount validation failed: service ID mismatch.", {
 			required: discountCode.serviceIds,
 			actual: validationData.serviceId,
 		});
-		return { isValid: false, errorMessage: "This code is not valid for this service." };
+		return {
+			isValid: false,
+			errorMessage: "This code is not valid for this service.",
+		};
 	}
 	if (
 		discountCode.serviceCategoryIds &&
 		(!validationData.serviceCategoryId ||
-			!discountCode.serviceCategoryIds.includes(validationData.serviceCategoryId))
+			!discountCode.serviceCategoryIds.includes(
+				validationData.serviceCategoryId,
+			))
 	) {
 		console.log("Discount validation failed: service category ID mismatch.", {
 			required: discountCode.serviceCategoryIds,
@@ -75,13 +93,17 @@ export const validateDiscountCode = (
 	// 3.5. Check plan and plan category restrictions
 	if (
 		discountCode.planIds &&
-		(!validationData.planId || !discountCode.planIds.includes(validationData.planId))
+		(!validationData.planId ||
+			!discountCode.planIds.includes(validationData.planId))
 	) {
 		console.log("Discount validation failed: plan ID mismatch.", {
 			required: discountCode.planIds,
 			actual: validationData.planId,
 		});
-		return { isValid: false, errorMessage: "This code is not valid for the selected plan." };
+		return {
+			isValid: false,
+			errorMessage: "This code is not valid for the selected plan.",
+		};
 	}
 	if (
 		discountCode.planCategoryIds &&
@@ -101,17 +123,24 @@ export const validateDiscountCode = (
 	// 4. Check product and product category restrictions
 	if (
 		discountCode.productIds &&
-		(!validationData.productId || !discountCode.productIds.includes(validationData.productId))
+		(!validationData.productId ||
+			!discountCode.productIds.includes(validationData.productId))
 	) {
 		console.log("Discount validation failed: product ID mismatch.", {
 			required: discountCode.productIds,
 			actual: validationData.productId,
 		});
-		return { isValid: false, errorMessage: "This code is not valid for this product." };
+		return {
+			isValid: false,
+			errorMessage: "This code is not valid for this product.",
+		};
 	}
 
 	// Check if any of the product's categories are in the allowed list
-	if (discountCode.productCategoryIds && discountCode.productCategoryIds.length > 0) {
+	if (
+		discountCode.productCategoryIds &&
+		discountCode.productCategoryIds.length > 0
+	) {
 		const allowedCategories = discountCode.productCategoryIds;
 		const hasMatchingCategory = validationData.productCategories?.some((cat) =>
 			allowedCategories.includes(cat),

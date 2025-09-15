@@ -70,13 +70,19 @@ export async function PUT(req: NextRequest) {
 		const { intentId, discountCode: codeToValidate } = await req.json();
 
 		if (!intentId) {
-			return NextResponse.json({ error: "Payment Intent ID is required" }, { status: 400 });
+			return NextResponse.json(
+				{ error: "Payment Intent ID is required" },
+				{ status: 400 },
+			);
 		}
 
 		// 1. Retrieve the existing payment intent to get its current state from Stripe
 		const existingIntent = await retrievePaymentIntent(intentId);
 		if (!existingIntent) {
-			return NextResponse.json({ error: "Payment Intent not found" }, { status: 404 });
+			return NextResponse.json(
+				{ error: "Payment Intent not found" },
+				{ status: 404 },
+			);
 		}
 
 		const originalPrice = existingIntent.amount;
@@ -85,15 +91,26 @@ export async function PUT(req: NextRequest) {
 
 		// 2. If a discount code is provided, validate it and recalculate the price
 		if (codeToValidate) {
-			const discountCode = mockDiscountCodes.find(dc => dc.code === codeToValidate);
+			const discountCode = mockDiscountCodes.find(
+				(dc) => dc.code === codeToValidate,
+			);
 
 			if (!discountCode) {
-				return NextResponse.json({ error: "Invalid discount code" }, { status: 400 });
+				return NextResponse.json(
+					{ error: "Invalid discount code" },
+					{ status: 400 },
+				);
 			}
 
 			// Use the retrieved metadata for validation, casting the category ID to its specific type
 			if (!metadata?.planId || !metadata?.pricingCategoryId) {
-				return NextResponse.json({ error: "Cannot validate discount. Plan information is missing from the payment intent." }, { status: 400 });
+				return NextResponse.json(
+					{
+						error:
+							"Cannot validate discount. Plan information is missing from the payment intent.",
+					},
+					{ status: 400 },
+				);
 			}
 			const validationResult = validateDiscountCode(discountCode, {
 				planId: metadata?.planId,
@@ -101,7 +118,10 @@ export async function PUT(req: NextRequest) {
 			});
 
 			if (!validationResult.isValid) {
-				return NextResponse.json({ error: validationResult.errorMessage }, { status: 400 });
+				return NextResponse.json(
+					{ error: validationResult.errorMessage },
+					{ status: 400 },
+				);
 			}
 
 			// Recalculate price based on the original amount from the retrieved intent
@@ -123,10 +143,15 @@ export async function PUT(req: NextRequest) {
 		const response = NextResponse.json(intent);
 		response.cookies.set("intentId", intent.id as string);
 		return response;
-
 	} catch (error) {
 		console.log(error);
-		return NextResponse.json({ error: error instanceof Error ? error.message : 'An unknown error occurred' }, { status: 500 });
+		return NextResponse.json(
+			{
+				error:
+					error instanceof Error ? error.message : "An unknown error occurred",
+			},
+			{ status: 500 },
+		);
 	}
 }
 

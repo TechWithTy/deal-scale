@@ -139,19 +139,19 @@ export function SocialShare({
 	}, [propTitle, propText, propSummary]);
 
 	const handleShare = (platform: SocialPlatform) => {
-		console.group('Social Share Debug');
-		console.log('Platform:', platform);
-		
+		console.group("Social Share Debug");
+		console.log("Platform:", platform);
+
 		const shareTitle = propTitle || pageTitle;
 		// Start with the base share text (page text or empty string)
 		const shareText = propText || pageText || "";
 		const shareSummary = propSummary || pageSummary;
-		
-		console.log('Share Title:', shareTitle);
-		console.log('Share Text:', shareText);
-		console.log('Share Summary:', shareSummary);
-		console.log('Default Share Text:', defaultShareText);
-		console.log('Share Texts:', shareTexts);
+
+		console.log("Share Title:", shareTitle);
+		console.log("Share Text:", shareText);
+		console.log("Share Summary:", shareSummary);
+		console.log("Default Share Text:", defaultShareText);
+		console.log("Share Texts:", shareTexts);
 
 		// Platform-specific text handling
 		let platformText = "";
@@ -170,9 +170,9 @@ export function SocialShare({
 			// For other platforms, only use explicitly provided text
 			textToShare = shareTexts?.[platform] || shareText;
 		}
-		
-		console.log('Final textToShare:', textToShare);
-		console.log('Share URL:', url);
+
+		console.log("Final textToShare:", textToShare);
+		console.log("Share URL:", url);
 
 		// Apply custom template if provided
 		if (shareTemplates?.[platform]) {
@@ -205,20 +205,25 @@ export function SocialShare({
 		try {
 			switch (platform) {
 				case "facebook":
-					console.log('Sharing to Facebook with text:', textToShare);
+					console.log("Sharing to Facebook with text:", textToShare);
 					shareToFacebook(url, textToShare);
 					break;
 				case "twitter":
-					console.log('Sharing to X/Twitter with text:', textToShare);
+					console.log("Sharing to X/Twitter with text:", textToShare);
 					shareToX(url, textToShare);
 					break;
 				case "linkedin":
-					console.log('Sharing to LinkedIn with title:', shareTitle, 'and text:', textToShare);
+					console.log(
+						"Sharing to LinkedIn with title:",
+						shareTitle,
+						"and text:",
+						textToShare,
+					);
 					shareToLinkedIn(url, shareTitle, textToShare);
 					break;
-		}
+			}
 		} catch (error) {
-			console.error('Error during sharing:', error);
+			console.error("Error during sharing:", error);
 		} finally {
 			console.groupEnd();
 			setIsOpen(false);

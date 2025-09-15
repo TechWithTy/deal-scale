@@ -48,22 +48,23 @@ export default function ProductInfo({
 	const handleCheckoutClick = () => {
 		try {
 			// Debug log the product data
-			console.group('Product Checkout Debug');
-			console.log('Product:', product);
-			console.log('Selected Type Data:', selectedTypeData);
-			console.log('Product Types:', product.types);
-			console.log('Product Colors:', product.colors);
-			console.log('Product Sizes:', product.sizes);
+			console.group("Product Checkout Debug");
+			console.log("Product:", product);
+			console.log("Selected Type Data:", selectedTypeData);
+			console.log("Product Types:", product.types);
+			console.log("Product Colors:", product.colors);
+			console.log("Product Sizes:", product.sizes);
 
 			// Safely build description with fallbacks
-			const typeName = selectedTypeData?.name || (product.types?.[0]?.name ?? 'Standard');
-			const colorName = product.colors?.[0]?.name ?? 'Default';
-			const sizeName = product.sizes?.[0]?.name ?? 'One Size';
+			const typeName =
+				selectedTypeData?.name || (product.types?.[0]?.name ?? "Standard");
+			const colorName = product.colors?.[0]?.name ?? "Default";
+			const sizeName = product.sizes?.[0]?.name ?? "One Size";
 
 			const description = `${product.name} (${typeName}, ${colorName}, ${sizeName})`;
 
 			// Log the computed values
-			console.log('Computed Description:', description);
+			console.log("Computed Description:", description);
 			console.groupEnd();
 
 			onInitiateCheckout({
@@ -78,9 +79,9 @@ export default function ProductInfo({
 				},
 			});
 		} catch (error) {
-			console.error('Error in handleCheckoutClick:', error);
+			console.error("Error in handleCheckoutClick:", error);
 			// Optionally show an error toast to the user
-			toast.error('Failed to process checkout. Please try again.');
+			toast.error("Failed to process checkout. Please try again.");
 		}
 	};
 

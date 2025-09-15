@@ -40,9 +40,10 @@ function BlogContent() {
 
 				// Default per_page to 10 when missing or invalid
 				const parsedPerPage = per_page ? Number(per_page) : NaN;
-				const inferredPerPage = Number.isFinite(parsedPerPage) && parsedPerPage > 0
-					? parsedPerPage
-					: 10;
+				const inferredPerPage =
+					Number.isFinite(parsedPerPage) && parsedPerPage > 0
+						? parsedPerPage
+						: 10;
 				const posts = await getLatestBeehiivPosts({
 					perPage: inferredPerPage,
 					page: page ? Number(page) : undefined,
@@ -144,7 +145,9 @@ function BlogContent() {
 					<CategoryFilter />
 					<div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
 						<div className="lg:col-span-8">
-							<BlogGrid posts={filteredPosts.length > 0 ? filteredPosts : articles} />
+							<BlogGrid
+								posts={filteredPosts.length > 0 ? filteredPosts : articles}
+							/>
 						</div>
 						<div className="lg:col-span-4">
 							<BlogSidebar posts={articles} />

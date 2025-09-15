@@ -21,13 +21,13 @@ import * as stripeModule from "@/lib/externalRequests/stripe";
 
 // Helper function to set environment variables safely
 const setEnv = (envVars: Record<string, string | undefined>) => {
-  for (const [key, value] of Object.entries(envVars)) {
-    if (value === undefined) {
-      process.env[key] = ''; // Set to empty string instead of deleting
-    } else {
-      process.env[key] = value;
-    }
-  }
+	for (const [key, value] of Object.entries(envVars)) {
+		if (value === undefined) {
+			process.env[key] = ""; // Set to empty string instead of deleting
+		} else {
+			process.env[key] = value;
+		}
+	}
 };
 
 /**
@@ -35,98 +35,98 @@ const setEnv = (envVars: Record<string, string | undefined>) => {
  * All network calls are mocked. No real payment or subscription is created.
  */
 describe("Stripe integration", () => {
-  const originalEnv = { ...process.env };
-  // Store original env vars that we might modify
-  const originalStagingEnv = process.env.STAGING_ENVIRONMENT;
-  const originalStripeKey = process.env.STRIPE_SECRET_KEY;
-  const originalStripeLiveKey = process.env.STRIPE_SECRET_LIVE_KEY;
+	const originalEnv = { ...process.env };
+	// Store original env vars that we might modify
+	const originalStagingEnv = process.env.STAGING_ENVIRONMENT;
+	const originalStripeKey = process.env.STRIPE_SECRET_KEY;
+	const originalStripeLiveKey = process.env.STRIPE_SECRET_LIVE_KEY;
 
-  beforeEach(() => {
-    // Reset to default test environment
-    process.env = { ...originalEnv };
-    setEnv({
-      STRIPE_SECRET_KEY: "sk_test_123",
-      STRIPE_SECRET_LIVE_KEY: "sk_live_123",
-      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_123",
-      STRIPE_WEB_SECRET: "whsec_123"
-    });
-    // Set default staging environment for tests
-    process.env.STAGING_ENVIRONMENT = 'DEVELOPMENT';
-    
-    stripeModule.resetStripeClientForTest();
-    jest.resetModules();
-  });
+	beforeEach(() => {
+		// Reset to default test environment
+		process.env = { ...originalEnv };
+		setEnv({
+			STRIPE_SECRET_KEY: "sk_test_123",
+			STRIPE_SECRET_LIVE_KEY: "sk_live_123",
+			NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_123",
+			STRIPE_WEB_SECRET: "whsec_123",
+		});
+		// Set default staging environment for tests
+		process.env.STAGING_ENVIRONMENT = "DEVELOPMENT";
 
-  afterAll(() => {
-    // Restore original environment variables
-    process.env = originalEnv;
-    // Restore STAGING_ENVIRONMENT
-    if (originalStagingEnv !== undefined) {
-      process.env.STAGING_ENVIRONMENT = originalStagingEnv;
-    }
-  });
+		stripeModule.resetStripeClientForTest();
+		jest.resetModules();
+	});
 
-  describe('Environment-specific behavior', () => {
-    it('uses test key in non-production environment', () => {
-      process.env.STAGING_ENVIRONMENT = 'DEVELOPMENT';
-      
-      setEnv({
-        STRIPE_SECRET_KEY: 'sk_test_env',
-        STRIPE_SECRET_LIVE_KEY: 'sk_live_env'
-      });
-      
-      stripeModule.resetStripeClientForTest();
-      const client = stripeModule.getStripeClient();
-      
-      expect(client).toBeDefined();
-      expect(process.env.STRIPE_SECRET_KEY).toBe('sk_test_env');
-    });
+	afterAll(() => {
+		// Restore original environment variables
+		process.env = originalEnv;
+		// Restore STAGING_ENVIRONMENT
+		if (originalStagingEnv !== undefined) {
+			process.env.STAGING_ENVIRONMENT = originalStagingEnv;
+		}
+	});
 
-    it('uses live key in production environment', () => {
-      process.env.STAGING_ENVIRONMENT = 'PRODUCTION';
-      
-      setEnv({
-        STRIPE_SECRET_KEY: 'sk_test_env',
-        STRIPE_SECRET_LIVE_KEY: 'sk_live_env'
-      });
-      
-      stripeModule.resetStripeClientForTest();
-      const client = stripeModule.getStripeClient();
-      
-      expect(client).toBeDefined();
-      expect(process.env.STRIPE_SECRET_LIVE_KEY).toBe('sk_live_env');
-    });
+	describe("Environment-specific behavior", () => {
+		it("uses test key in non-production environment", () => {
+			process.env.STAGING_ENVIRONMENT = "DEVELOPMENT";
 
-    it('falls back to test key if live key is not available in production', () => {
-      process.env.STAGING_ENVIRONMENT = 'PRODUCTION';
-      
-      setEnv({
-        STRIPE_SECRET_KEY: 'sk_test_env',
-        STRIPE_SECRET_LIVE_KEY: '' // Empty string simulates unset
-      });
-      
-      stripeModule.resetStripeClientForTest();
-      const client = stripeModule.getStripeClient();
-      
-      expect(client).toBeDefined();
-      expect(process.env.STRIPE_SECRET_KEY).toBe('sk_test_env');
-    });
+			setEnv({
+				STRIPE_SECRET_KEY: "sk_test_env",
+				STRIPE_SECRET_LIVE_KEY: "sk_live_env",
+			});
 
-    it('throws error if no keys are available', () => {
-      process.env.STAGING_ENVIRONMENT = 'PRODUCTION';
-      
-      setEnv({
-        STRIPE_SECRET_KEY: '',
-        STRIPE_SECRET_LIVE_KEY: ''
-      });
-      
-      stripeModule.resetStripeClientForTest();
-      
-      expect(() => stripeModule.getStripeClient()).toThrow(
-        'STRIPE_SECRET_LIVE_KEY (or STRIPE_SECRET_KEY) is not set in environment variables'
-      );
-    });
-  });
+			stripeModule.resetStripeClientForTest();
+			const client = stripeModule.getStripeClient();
+
+			expect(client).toBeDefined();
+			expect(process.env.STRIPE_SECRET_KEY).toBe("sk_test_env");
+		});
+
+		it("uses live key in production environment", () => {
+			process.env.STAGING_ENVIRONMENT = "PRODUCTION";
+
+			setEnv({
+				STRIPE_SECRET_KEY: "sk_test_env",
+				STRIPE_SECRET_LIVE_KEY: "sk_live_env",
+			});
+
+			stripeModule.resetStripeClientForTest();
+			const client = stripeModule.getStripeClient();
+
+			expect(client).toBeDefined();
+			expect(process.env.STRIPE_SECRET_LIVE_KEY).toBe("sk_live_env");
+		});
+
+		it("falls back to test key if live key is not available in production", () => {
+			process.env.STAGING_ENVIRONMENT = "PRODUCTION";
+
+			setEnv({
+				STRIPE_SECRET_KEY: "sk_test_env",
+				STRIPE_SECRET_LIVE_KEY: "", // Empty string simulates unset
+			});
+
+			stripeModule.resetStripeClientForTest();
+			const client = stripeModule.getStripeClient();
+
+			expect(client).toBeDefined();
+			expect(process.env.STRIPE_SECRET_KEY).toBe("sk_test_env");
+		});
+
+		it("throws error if no keys are available", () => {
+			process.env.STAGING_ENVIRONMENT = "PRODUCTION";
+
+			setEnv({
+				STRIPE_SECRET_KEY: "",
+				STRIPE_SECRET_LIVE_KEY: "",
+			});
+
+			stripeModule.resetStripeClientForTest();
+
+			expect(() => stripeModule.getStripeClient()).toThrow(
+				"STRIPE_SECRET_LIVE_KEY (or STRIPE_SECRET_KEY) is not set in environment variables",
+			);
+		});
+	});
 
 	it("creates a payment intent", async () => {
 		const res = await stripeModule.createPaymentIntent({

@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function ForgotPasswordPage() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || undefined;
+	const searchParams = useSearchParams();
+	const callbackUrl = searchParams.get("callbackUrl") || undefined;
 	return (
 		<div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
 			<div className="hidden h-full bg-muted lg:block" />

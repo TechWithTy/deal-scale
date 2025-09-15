@@ -22,7 +22,10 @@ import type { Metadata } from "next";
 import { useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useSearchParams } from "next/navigation";
-import { affiliateFormFields, type AffiliateFormValues } from "@/data/contact/affiliate";
+import {
+	affiliateFormFields,
+	type AffiliateFormValues,
+} from "@/data/contact/affiliate";
 // * Centralized SEO for /affiliate using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/affiliate");

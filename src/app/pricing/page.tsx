@@ -6,15 +6,15 @@ import dynamic from "next/dynamic";
 
 // * Centralized SEO for /pricing using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
-  const seo = getStaticSeo("/pricing");
-  return mapSeoMetaToMetadata(seo);
+	const seo = getStaticSeo("/pricing");
+	return mapSeoMetaToMetadata(seo);
 }
 
 // Client component wrapper
 export default function PricingPage() {
-  const PricingClient = dynamic(() => import('./PricingClient'), {
-    loading: () => <div>Loading pricing...</div>,
-  });
+	const PricingClient = dynamic(() => import("./PricingClient"), {
+		loading: () => <div>Loading pricing...</div>,
+	});
 
-  return <PricingClient plans={PricingPlans} />;
+	return <PricingClient plans={PricingPlans} />;
 }

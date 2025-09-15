@@ -231,11 +231,19 @@ const MobileNav = ({ isOpen, onClose }) => {
 										<ul className="space-y-2 py-2">
 											{item.children.map((child) => (
 												<li key={child.title} className="flex justify-center">
-													{child.image || child.ctaTitle || child.ctaSubtitle || child.ctaButton ? (
+													{child.image ||
+													child.ctaTitle ||
+													child.ctaSubtitle ||
+													child.ctaButton ? (
 														<div className="w-full max-w-md rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm">
 															{child.image && (
 																<div className="relative mb-3 h-24 w-full overflow-hidden rounded-md">
-																	<Image src={child.image} alt={child.ctaTitle || child.title} fill className="object-cover" />
+																	<Image
+																		src={child.image}
+																		alt={child.ctaTitle || child.title}
+																		fill
+																		className="object-cover"
+																	/>
 																</div>
 															)}
 															<div className="flex flex-col gap-2">
@@ -243,10 +251,14 @@ const MobileNav = ({ isOpen, onClose }) => {
 																	{child.ctaTitle || child.title}
 																</span>
 																{child.ctaSubtitle && (
-																	<span className="text-sm text-muted-foreground">{child.ctaSubtitle}</span>
+																	<span className="text-sm text-muted-foreground">
+																		{child.ctaSubtitle}
+																	</span>
 																)}
 																<div className="mt-2">
-																	<span className="mb-2 block text-xs font-bold text-foreground">Sign up for our newsletter</span>
+																	<span className="mb-2 block text-xs font-bold text-foreground">
+																		Sign up for our newsletter
+																	</span>
 																	<NewsletterEmailInput />
 																</div>
 															</div>
@@ -255,7 +267,9 @@ const MobileNav = ({ isOpen, onClose }) => {
 														<MegaMenuLink
 															href={child.href}
 															title={child.title}
-															icon={child.icon && <child.icon className="h-4 w-4" />}
+															icon={
+																child.icon && <child.icon className="h-4 w-4" />
+															}
 															className=""
 														/>
 													)}

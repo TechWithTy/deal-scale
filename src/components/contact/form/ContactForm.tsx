@@ -48,9 +48,9 @@ import {
 import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
 
 export default function ContactForm({
-  prefill,
+	prefill,
 }: {
-  prefill?: Partial<BetaTesterFormValues>;
+	prefill?: Partial<BetaTesterFormValues>;
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 

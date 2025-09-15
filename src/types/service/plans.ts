@@ -28,7 +28,7 @@ export interface Plan {
 	productId?: string;
 	productCategoryId?: ProductCategory;
 	name: string;
-	
+
 	price: {
 		oneTime: BasePlanPrice & {
 			amount: number | PercentageString;

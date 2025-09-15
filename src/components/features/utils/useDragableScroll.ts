@@ -52,7 +52,9 @@ export function useDraggableScroll(
 			const target = e.target as HTMLElement | null;
 			if (
 				target &&
-				(target.closest("button, a, input, textarea, select, [role='button']") ||
+				(target.closest(
+					"button, a, input, textarea, select, [role='button']",
+				) ||
 					target.getAttribute("contenteditable") === "true")
 			) {
 				return;

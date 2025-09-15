@@ -29,7 +29,9 @@ export function ShippingMethodSelector({
 									{option.carrier.serviceLevel}
 								</div>
 							</div>
-							<div className="font-medium">${option.price.amount.toFixed(2)}</div>
+							<div className="font-medium">
+								${option.price.amount.toFixed(2)}
+							</div>
 						</div>
 					</button>
 				))}
