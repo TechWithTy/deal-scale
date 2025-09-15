@@ -47,7 +47,7 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 							publish_date: p?.publish_date,
 							published_at: p?.published_at,
 							displayed_date: p?.displayed_date,
-						}))
+						})),
 					);
 				} catch {}
 				setFallbackPosts(visible);
@@ -83,28 +83,44 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 		return !hidden;
 	};
 
-	const sourcePosts = (Array.isArray(posts) && posts.length > 0 ? posts : fallbackPosts) as BeehiivPost[];
+	const sourcePosts = (
+		Array.isArray(posts) && posts.length > 0 ? posts : fallbackPosts
+	) as BeehiivPost[];
 	const visibleSource = useMemo(() => {
 		return (sourcePosts || []).filter((p: any) => isVisible(p));
 	}, [sourcePosts]);
 	const recentPosts = useMemo(() => {
 		return [...visibleSource]
-			.sort((a, b) => toTime((b as any).published_at ?? b.publish_date) - toTime((a as any).published_at ?? a.publish_date))
+			.sort(
+				(a, b) =>
+					toTime((b as any).published_at ?? b.publish_date) -
+					toTime((a as any).published_at ?? a.publish_date),
+			)
 			.slice(0, 3);
 	}, [visibleSource]);
 
 	const popularityScore = (p: BeehiivPost): number => {
 		const webViews = Number((p as any)?.stats?.web?.views) || 0;
 		const webClicks = Number((p as any)?.stats?.web?.clicks) || 0;
-		const emailUniqueClicks = Number((p as any)?.stats?.email?.unique_clicks) || 0;
-		const emailUniqueOpens = Number((p as any)?.stats?.email?.unique_opens) || 0;
+		const emailUniqueClicks =
+			Number((p as any)?.stats?.email?.unique_clicks) || 0;
+		const emailUniqueOpens =
+			Number((p as any)?.stats?.email?.unique_opens) || 0;
 		// Weighted score: prioritize views, then clicks, then opens
-		return webViews * 1 + webClicks * 0.8 + emailUniqueClicks * 0.7 + emailUniqueOpens * 0.4;
+		return (
+			webViews * 1 +
+			webClicks * 0.8 +
+			emailUniqueClicks * 0.7 +
+			emailUniqueOpens * 0.4
+		);
 	};
 
 	const popularPosts = useMemo(() => {
 		return [...visibleSource]
-			.sort((a, b) => popularityScore(b as BeehiivPost) - popularityScore(a as BeehiivPost))
+			.sort(
+				(a, b) =>
+					popularityScore(b as BeehiivPost) - popularityScore(a as BeehiivPost),
+			)
 			.slice(0, 3);
 	}, [visibleSource]);
 
@@ -113,7 +129,9 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 			new Set(
 				(visibleSource || []).flatMap((post) =>
 					Array.isArray((post as any).content_tags)
-						? (post as any).content_tags.filter((t: unknown): t is string => typeof t === "string")
+						? (post as any).content_tags.filter(
+								(t: unknown): t is string => typeof t === "string",
+							)
 						: [],
 				),
 			),

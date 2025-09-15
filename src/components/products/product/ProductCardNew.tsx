@@ -44,15 +44,23 @@ const ProductCardNew = (props: CardProps) => {
 	const addToCart = useCartStore((state) => state.addItem);
 
 	const handleAddToCart = useCallback(() => {
-		const { name, price, images = [], description = '', slug = '', sku, categories = [] } = props;
-		
+		const {
+			name,
+			price,
+			images = [],
+			description = "",
+			slug = "",
+			sku,
+			categories = [],
+		} = props;
+
 		// Create a cart item with all required properties
 		const cartItem = {
 			id: sku || Date.now().toString(), // Use SKU as ID or fallback to timestamp
 			name,
 			description,
 			price,
-			sku: sku || '',
+			sku: sku || "",
 			slug,
 			images,
 			reviews: [],

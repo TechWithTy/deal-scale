@@ -3,21 +3,21 @@ import type { ButtonProps } from "@/components/ui/button";
 export type SocialPlatform = "facebook" | "twitter" | "linkedin";
 
 export interface PlatformTextConfig {
-  /** Default text template function */
-  template?: (text: string, url: string) => string;
-  /** Maximum allowed characters for this platform */
-  maxLength?: number;
-  /** Whether to include URL in the shared text */
-  includeUrl?: boolean;
+	/** Default text template function */
+	template?: (text: string, url: string) => string;
+	/** Maximum allowed characters for this platform */
+	maxLength?: number;
+	/** Whether to include URL in the shared text */
+	includeUrl?: boolean;
 }
 
 export interface PlatformConfig {
-  /** Display label for the platform */
-  label: string;
-  /** Network identifier (used for icons/class names) */
-  network: string;
-  /** Text configuration for sharing */
-  text?: PlatformTextConfig;
+	/** Display label for the platform */
+	label: string;
+	/** Network identifier (used for icons/class names) */
+	network: string;
+	/** Text configuration for sharing */
+	text?: PlatformTextConfig;
 }
 
 export interface SocialShareBaseProps {

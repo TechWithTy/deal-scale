@@ -27,18 +27,28 @@ export function BlogCard({ post, className = "" }: BlogCardProps) {
 				unique_clicks?: number;
 				opens?: number;
 				clicks?: number;
-			}
+		  }
 		| undefined;
-	const views = typeof webStats?.views === "number" ? webStats.views : undefined;
-	const clicks = typeof webStats?.clicks === "number" ? webStats.clicks : undefined;
+	const views =
+		typeof webStats?.views === "number" ? webStats.views : undefined;
+	const clicks =
+		typeof webStats?.clicks === "number" ? webStats.clicks : undefined;
 	const uniqueOpens =
-		typeof emailStats?.unique_opens === "number" ? emailStats.unique_opens : undefined;
+		typeof emailStats?.unique_opens === "number"
+			? emailStats.unique_opens
+			: undefined;
 	const uniqueClicks =
-		typeof emailStats?.unique_clicks === "number" ? emailStats.unique_clicks : undefined;
+		typeof emailStats?.unique_clicks === "number"
+			? emailStats.unique_clicks
+			: undefined;
 	const openRate =
-		typeof emailStats?.open_rate === "number" ? emailStats.open_rate : undefined;
+		typeof emailStats?.open_rate === "number"
+			? emailStats.open_rate
+			: undefined;
 	const clickRate =
-		typeof emailStats?.click_rate === "number" ? emailStats.click_rate : undefined;
+		typeof emailStats?.click_rate === "number"
+			? emailStats.click_rate
+			: undefined;
 
 	return (
 		<Card className={`transition-colors ${className}`}>
@@ -126,7 +136,8 @@ export function BlogCard({ post, className = "" }: BlogCardProps) {
 					)}
 					{typeof uniqueClicks === "number" && uniqueClicks > 0 && (
 						<span className="inline-flex items-center gap-1">
-							<MousePointerClick className="h-4 w-4" /> {uniqueClicks} unique clicks
+							<MousePointerClick className="h-4 w-4" /> {uniqueClicks} unique
+							clicks
 						</span>
 					)}
 					{typeof openRate === "number" && openRate > 0 && (

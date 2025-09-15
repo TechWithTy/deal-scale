@@ -53,7 +53,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// Pagination state now handled by usePagination
 
 	const [searchTerm, setSearchTerm] = useState("");
-	const [activeCategory, setActiveCategory] = useState<ServiceCategoryValue | "">("");
+	const [activeCategory, setActiveCategory] = useState<
+		ServiceCategoryValue | ""
+	>("");
 	const [cardsPerPage, setCardsPerPage] = useState(getCardsPerPage()); // Responsive, passed to hook below
 	// Define filterServices above its first usage
 

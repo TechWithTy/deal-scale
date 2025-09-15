@@ -66,14 +66,14 @@ export default function PortfolioHomeClient() {
 					{/* Show More button at the top */}
 					{canShowShowMore && (
 						<div className="flex w-full justify-center">
-						<button
-							className="flex items-center justify-center rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
-							onClick={showMore}
-							type="button"
-						>
-							Show More Projects
-						</button>
-					</div>
+							<button
+								className="flex items-center justify-center rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
+								onClick={showMore}
+								type="button"
+							>
+								Show More Projects
+							</button>
+						</div>
 					)}
 
 					{/* Pagination controls */}

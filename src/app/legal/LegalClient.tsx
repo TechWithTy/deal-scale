@@ -14,8 +14,11 @@ import {
 	DialogTitle,
 	DialogDescription,
 } from "@/components/ui/dialog";
-import DOMPurify from 'dompurify';
-import { legalDocuments, type LegalDocument } from "@/data/legal/legalDocuments";
+import DOMPurify from "dompurify";
+import {
+	legalDocuments,
+	type LegalDocument,
+} from "@/data/legal/legalDocuments";
 
 const LegalClient = () => {
 	const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
@@ -53,7 +56,9 @@ const LegalClient = () => {
 						</DialogHeader>
 						<div
 							className="prose dark:prose-invert mt-4"
-							dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedDoc.content) }}
+							dangerouslySetInnerHTML={{
+								__html: DOMPurify.sanitize(selectedDoc.content),
+							}}
 						/>
 					</DialogContent>
 				</Dialog>

@@ -39,8 +39,13 @@ const Contact = () => {
 		const wantedFeaturesField = betaTesterFormFields.find(
 			(f) => f.name === "wantedFeatures",
 		);
-		const featureVotesOptions = Array.isArray((featureVotesField as any)?.options)
-			? ((featureVotesField as any).options as { value: string; label: string }[])
+		const featureVotesOptions = Array.isArray(
+			(featureVotesField as any)?.options,
+		)
+			? ((featureVotesField as any).options as {
+					value: string;
+					label: string;
+				}[])
 			: undefined;
 		const wantedFeaturesOptions = Array.isArray(
 			(wantedFeaturesField as any)?.options,
@@ -48,7 +53,7 @@ const Contact = () => {
 			? ((wantedFeaturesField as any).options as {
 					value: string;
 					label: string;
-			  }[])
+				}[])
 			: undefined;
 
 		const normalize = (s: string) =>
@@ -118,10 +123,8 @@ const Contact = () => {
 									let overlap = 0;
 									for (const tk of normTokens)
 										if (labelTokens.has(tk)) overlap++;
-									const denom = Math.max(
-										normTokens.size,
-										labelTokens.size,
-									) || 1;
+									const denom =
+										Math.max(normTokens.size, labelTokens.size) || 1;
 									const score = overlap / denom;
 									if (!best || score > best.score)
 										best = { val: opt.value, score };

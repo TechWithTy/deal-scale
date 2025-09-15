@@ -117,7 +117,8 @@ const Pricing: React.FC<PricingProps> = ({
 			setCheckoutState({ clientSecret: data.clientSecret, plan });
 			setLoading(null);
 		} catch (error) {
-			const errorMessage = error instanceof Error ? error.message : "Payment failed";
+			const errorMessage =
+				error instanceof Error ? error.message : "Payment failed";
 			toast.error(errorMessage);
 			setLoading(null);
 		}
@@ -171,16 +172,24 @@ const Pricing: React.FC<PricingProps> = ({
 
 									const discounts = plans
 										.map((plan) => plan.price.annual?.discount?.code)
-										.filter((code): code is NonNullable<typeof code> => !!code) as DiscountCode[];
+										.filter(
+											(code): code is NonNullable<typeof code> => !!code,
+										) as DiscountCode[];
 
 									let maxPercent = 0;
 									let maxAmount = 0;
 
 									for (const code of discounts) {
-										if (code.discountPercent && code.discountPercent > maxPercent) {
+										if (
+											code.discountPercent &&
+											code.discountPercent > maxPercent
+										) {
 											maxPercent = code.discountPercent;
 										}
-										if (code.discountAmount && code.discountAmount > maxAmount) {
+										if (
+											code.discountAmount &&
+											code.discountAmount > maxAmount
+										) {
 											maxAmount = code.discountAmount;
 										}
 									}

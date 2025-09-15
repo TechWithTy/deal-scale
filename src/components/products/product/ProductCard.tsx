@@ -249,7 +249,7 @@
 // 			</div>
 
 // 			{/* Product Title with truncation */}
-// 			<h3 
+// 			<h3
 // 				className="mb-1 line-clamp-1 text-left font-bold text-black text-lg leading-tight transition-all hover:line-clamp-none dark:text-white"
 // 				title={name} // Show full name on hover
 // 			>

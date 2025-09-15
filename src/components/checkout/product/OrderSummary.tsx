@@ -57,12 +57,13 @@ export function OrderSummary({
 				<div className="flex justify-between">
 					<span className="text-muted-foreground">Shipping</span>
 					<span>
-						{shipping 
-							? `$${typeof shipping === 'number' 
-								? shipping.toFixed(2) 
-								: shipping.amount.toFixed(2)}`
-							: "Calculated"
-						}
+						{shipping
+							? `$${
+									typeof shipping === "number"
+										? shipping.toFixed(2)
+										: shipping.amount.toFixed(2)
+								}`
+							: "Calculated"}
 					</span>
 				</div>
 				<div className="flex justify-between">

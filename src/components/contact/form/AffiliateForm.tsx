@@ -53,7 +53,10 @@ type AffiliateFormProps = {
 	prefill?: Partial<AffiliateFormValues>;
 };
 
-export default function AffiliateForm({ onSuccess, prefill }: AffiliateFormProps) {
+export default function AffiliateForm({
+	onSuccess,
+	prefill,
+}: AffiliateFormProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	// Base defaults derived from field config values
