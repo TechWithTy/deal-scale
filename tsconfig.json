@@ -41,8 +41,12 @@
 		".next/types/**/*.ts",
 		"**/*.ts",
 		"**/*.tsx",
-		"next.configtjs",
+		"next.config.ts",
 		"src/utils/__tests__/metadata/caonical/index.test.ts"
 	],
-	"exclude": ["node_modules"]
+	"exclude": [
+		"node_modules",
+		"scripts",
+		"scripts/**/*"
+	]
 }
