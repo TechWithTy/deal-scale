@@ -27,9 +27,16 @@ export function LinkCardBody({ title, description, details }: LinkCardBodyProps)
         >
           {expanded ? "Hide details" : (description ?? "Show details")}
         </button>
-      ) : description ? (
-        <div className="truncate text-muted-foreground text-sm">{description}</div>
-      ) : null}
+      ) : (
+        <>
+          {description ? (
+            <div className="truncate text-muted-foreground text-sm">{description}</div>
+          ) : null}
+          {details ? (
+            <div className="mt-0.5 truncate text-muted-foreground text-sm">{details}</div>
+          ) : null}
+        </>
+      )}
       {details && expanded ? (
         <div className="mt-1 whitespace-pre-wrap text-muted-foreground text-xs">{details}</div>
       ) : null}

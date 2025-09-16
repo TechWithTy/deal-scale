@@ -59,23 +59,43 @@ export async function GET(req: Request) {
       incrementCalls(pageId);
     }
 
-    // Build 302 redirect
+    // Build 302 redirect safely
     // 1) Only decode relative paths (e.g., %2Fsignup). Keep absolute URLs as-is to avoid breaking signatures.
     let location = to;
     if (to.startsWith('%2F')) {
       try { location = decodeURIComponent(to); } catch { /* keep as-is */ }
     }
 
-    // 2) Normalize external URLs missing a scheme (e.g., 'www.example.com' -> 'https://www.example.com')
+    // 2) Normalize forms
+    // protocol-relative -> https
+    if (/^\/\//.test(location)) {
+      location = `https:${location}`;
+    }
     const hasScheme = /^(https?:)\/\//i.test(location);
     const isRelative = location.startsWith('/');
+    // bare host -> https://host
     if (!isRelative && !hasScheme) {
-      location = `https://${location}`;
+      if (/^[a-z0-9.-]+\.[a-z]{2,}(?:\/.*)?$/i.test(location)) {
+        location = `https://${location}`;
+      } else {
+        return NextResponse.json({ ok: false, error: "invalid 'to'" }, { status: 400 });
+      }
     }
 
-    // 3) Build absolute URL for internal paths to satisfy Next.js requirement
+    // 3) Validate absolute URLs (no "https://" without host)
+    const isValidAbsoluteHttpUrl = (s: string): boolean => {
+      try {
+        const u = new URL(s);
+        return (u.protocol === 'http:' || u.protocol === 'https:') && Boolean(u.hostname);
+      } catch { return false; }
+    };
+
+    // 4) Build absolute URL for internal paths to satisfy Next.js requirement
     const reqUrl = new URL(req.url);
     const redirectTarget = isRelative ? new URL(location, reqUrl.origin) : location;
+    if (!isRelative && !isValidAbsoluteHttpUrl(String(redirectTarget))) {
+      return NextResponse.json({ ok: false, error: "invalid absolute URL" }, { status: 400 });
+    }
 
     // For file downloads, just 302 so the origin's headers control Content-Disposition
     const res = NextResponse.redirect(redirectTarget, 302);
