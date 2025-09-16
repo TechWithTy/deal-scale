@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 export type LinkCardProps = {
   title: string;
@@ -7,12 +8,20 @@ export type LinkCardProps = {
   description?: string;
   iconEmoji?: string;
   imageUrl?: string;
+  thumbnailUrl?: string;
   videoUrl?: string;
   details?: string;
-  files?: Array<{ name: string; url: string; kind?: "image" | "video" | "other"; ext?: string }>;
+  files?: Array<{
+    name: string;
+    url: string;
+    kind?: "image" | "video" | "other";
+    ext?: string;
+  }>;
   pageId?: string;
   slug?: string;
-  externalOverride?: boolean;
+  highlighted?: boolean;
+  showArrow?: boolean;
+  openInNewTab?: boolean;
   onPreview?: (media: {
     type: "image" | "video";
     url: string;
@@ -26,33 +35,48 @@ export function LinkCard({
   description,
   iconEmoji,
   imageUrl,
+  thumbnailUrl,
   videoUrl,
   details,
   files,
   pageId,
   slug,
-  externalOverride,
+  highlighted,
+  showArrow,
+  openInNewTab,
   onPreview,
 }: LinkCardProps) {
   const computedExternal = /^(https?:)?\/\//i.test(href);
-  const isExternal = externalOverride ?? computedExternal;
+  const target = openInNewTab ?? computedExternal ? "_blank" : undefined;
+  const rel = target === "_blank" ? "noopener noreferrer" : undefined;
   const common =
-    "flex items-center gap-4 p-5 rounded-xl border bg-card text-card-foreground hover:shadow-md transition-shadow duration-200";
+    "relative flex items-center gap-4 p-5 rounded-xl border bg-card text-card-foreground hover:shadow-md transition-shadow duration-200";
 
   // Determine if details should be expandable (heuristic: more than ~80 chars or contains a newline)
-  const needsToggle = Boolean(details && (details.length > 80 || /\n/.test(details)));
+  const needsToggle = Boolean(
+    details && (details.length > 80 || /\n/.test(details)),
+  );
   const [expanded, setExpanded] = React.useState(false);
   const [showInlineVideo, setShowInlineVideo] = React.useState(false);
   const [showInlineImage, setShowInlineImage] = React.useState(false);
+  const [showInlineThumb, setShowInlineThumb] = React.useState(false);
 
   // Determine best preview sources from files
   const firstVideoFromFiles = React.useMemo(() => {
-    const vids = files?.filter((f) => f.kind === "video" || /\.(mp4|webm|ogg|mov|m4v)(?:$|\?|#)/i.test(f.url));
+    const vids = files?.filter(
+      (f) =>
+        f.kind === "video" ||
+        /\.(mp4|webm|ogg|mov|m4v)(?:$|\?|#)/i.test(f.url),
+    );
     return vids && vids.length ? vids[0] : undefined;
   }, [files]);
 
   const firstImageFromFiles = React.useMemo(() => {
-    const imgs = files?.filter((f) => f.kind === "image" || /\.(jpg|jpeg|png|gif|webp|avif|svg)(?:$|\?|#)/i.test(f.url));
+    const imgs = files?.filter(
+      (f) =>
+        f.kind === "image" ||
+        /\.(jpg|jpeg|png|gif|webp|avif|svg)(?:$|\?|#)/i.test(f.url),
+    );
     return imgs && imgs.length ? imgs[0] : undefined;
   }, [files]);
 
@@ -60,17 +84,23 @@ export function LinkCard({
   const canPlayVideo = React.useCallback((url?: string) => {
     if (!url) return false;
     try {
-      const v = document.createElement('video');
+      const v = document.createElement("video");
       const extMatch = /\.([a-z0-9]+)(?:$|\?|#)/i.exec(url);
-      const ext = (extMatch?.[1] || '').toLowerCase();
-      const mime = ext === 'mp4' ? 'video/mp4'
-        : ext === 'webm' ? 'video/webm'
-        : ext === 'ogg' ? 'video/ogg'
-        : ext === 'mov' ? 'video/quicktime'
-        : ext === 'm4v' ? 'video/x-m4v'
-        : '';
+      const ext = (extMatch?.[1] || "").toLowerCase();
+      const mime =
+        ext === "mp4"
+          ? "video/mp4"
+          : ext === "webm"
+            ? "video/webm"
+            : ext === "ogg"
+              ? "video/ogg"
+              : ext === "mov"
+                ? "video/quicktime"
+                : ext === "m4v"
+                  ? "video/x-m4v"
+                  : "";
       if (!mime) return false;
-      return v.canPlayType(mime) !== '';
+      return v.canPlayType(mime) !== "";
     } catch {
       return false;
     }
@@ -79,7 +109,8 @@ export function LinkCard({
   // Default behavior: show playable video if present; otherwise show image if present
   React.useEffect(() => {
     const videoSrc = firstVideoFromFiles?.url || videoUrl;
-    const playable = typeof window !== 'undefined' ? canPlayVideo(videoSrc) : false;
+    const playable =
+      typeof window !== "undefined" ? canPlayVideo(videoSrc) : false;
     if (playable) {
       setShowInlineVideo(true);
       setShowInlineImage(false);
@@ -96,14 +127,21 @@ export function LinkCard({
   // Use title as provided (expecting Notion Title after sync)
 
   return (
-    <a
-      href={href}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener noreferrer" : undefined}
-      className={common}
-    >
+    <a href={href} target={target} rel={rel} className={common}>
+      {highlighted ? (
+        <BorderBeam className="pointer-events-none" size={64} />
+      ) : null}
       <div className="shrink-0">
-        {imageUrl ? (
+        {thumbnailUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={thumbnailUrl}
+            alt=""
+            className="h-8 w-8 rounded-md object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : imageUrl ? (
           // Decorative image/icon
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -120,7 +158,11 @@ export function LinkCard({
         )}
       </div>
       <div className="min-w-0 flex-1">
-        {(firstVideoFromFiles?.url || videoUrl || firstImageFromFiles?.url || imageUrl) && (
+        {(firstVideoFromFiles?.url ||
+          videoUrl ||
+          firstImageFromFiles?.url ||
+          imageUrl ||
+          thumbnailUrl) && (
           <div className="mb-2 flex flex-wrap items-center gap-1.5">
             {(firstVideoFromFiles?.url || videoUrl) && (
               <button
@@ -156,6 +198,23 @@ export function LinkCard({
                 <span>Image</span>
               </button>
             )}
+            {thumbnailUrl && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowInlineThumb((v) => !v);
+                }}
+                className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-muted-foreground text-[11px] leading-5 hover:bg-accent"
+                aria-pressed={showInlineThumb}
+                aria-label={showInlineThumb ? "Hide thumbnail" : "Show thumbnail"}
+                title={showInlineThumb ? "Hide thumbnail" : "Preview thumbnail"}
+              >
+                <span aria-hidden>🖼️</span>
+                <span>Thumb</span>
+              </button>
+            )}
             {files?.map((f) => (
               <button
                 key={f.url}
@@ -164,10 +223,12 @@ export function LinkCard({
                   e.preventDefault();
                   e.stopPropagation();
                   const to = encodeURIComponent(f.url);
-                  const pid = pageId ? `&pageId=${encodeURIComponent(pageId)}` : "";
+                  const pid = pageId
+                    ? `&pageId=${encodeURIComponent(pageId)}`
+                    : "";
                   const s = slug ? `&slug=${encodeURIComponent(slug)}` : "";
                   const url = `/api/redirect?isFile=1&to=${to}${pid}${s}`;
-                  window.open(url, '_self');
+                  window.open(url, "_self");
                 }}
                 className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-muted-foreground text-[11px] leading-5 hover:bg-accent max-w-[8rem]"
                 aria-label={`Download ${f.name}`}
@@ -196,26 +257,41 @@ export function LinkCard({
             {expanded ? "Hide details" : (description ?? "Show details")}
           </button>
         ) : description ? (
-          <div className="truncate text-muted-foreground text-sm">{description}</div>
+          <div className="truncate text-muted-foreground text-sm">
+            {description}
+          </div>
         ) : null}
         {details && expanded ? (
-          <div className="mt-1 whitespace-pre-wrap text-muted-foreground text-xs">{details}</div>
+          <div className="mt-1 whitespace-pre-wrap text-muted-foreground text-xs">
+            {details}
+          </div>
         ) : null}
-        {(showInlineVideo || showInlineImage) ? (
+        {(showInlineVideo || showInlineImage || showInlineThumb) ? (
           <div className="mt-2 w-full">
-            {showInlineVideo && (
-              firstVideoFromFiles ? (
+            {showInlineVideo &&
+              (firstVideoFromFiles ? (
                 <video className="w-full rounded" controls preload="metadata">
                   <source src={firstVideoFromFiles.url} />
-                  <track kind="captions" srcLang="en" label="English" default src="data:text/vtt,WEBVTT" />
+                  <track
+                    kind="captions"
+                    srcLang="en"
+                    label="English"
+                    default
+                    src="data:text/vtt,WEBVTT"
+                  />
                 </video>
               ) : videoUrl ? (
                 <video className="w-full rounded" controls preload="metadata">
                   <source src={videoUrl} />
-                  <track kind="captions" srcLang="en" label="English" default src="data:text/vtt,WEBVTT" />
+                  <track
+                    kind="captions"
+                    srcLang="en"
+                    label="English"
+                    default
+                    src="data:text/vtt,WEBVTT"
+                  />
                 </video>
-              ) : null
-            )}
+              ) : null)}
             {showInlineImage && (
               firstImageFromFiles ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -225,11 +301,15 @@ export function LinkCard({
                 <img src={imageUrl} alt="" className="w-full rounded" />
               ) : null
             )}
+            {showInlineThumb && thumbnailUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={thumbnailUrl} alt="" className="w-full rounded" />
+            ) : null}
           </div>
         ) : null}
       </div>
-      
-      {isExternal ? (
+
+      {showArrow ? (
         <span aria-hidden className="ml-2 text-muted-foreground">
           ↗
         </span>
