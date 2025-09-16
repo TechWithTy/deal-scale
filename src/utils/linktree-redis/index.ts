@@ -9,6 +9,7 @@ export type FileMeta = {
 };
 
 export type LinkTreeItem = {
+  pageId?: string;
   slug: string;
   title: string;
   destination: string;

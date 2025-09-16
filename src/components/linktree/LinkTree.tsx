@@ -91,7 +91,7 @@ export function LinkTree({
 		<div className="mx-auto max-w-2xl px-4 py-10 md:py-16">
 			<header className="mb-6 md:mb-8">
 				<div className="flex items-center justify-between">
-					<div className="text-center flex-1">
+					<div className="flex-1 text-center">
 						<h1 className="font-bold text-3xl tracking-tight">{title}</h1>
 						{subtitle ? (
 							<p className="mt-2 text-muted-foreground">{subtitle}</p>
@@ -168,6 +168,9 @@ export function LinkTree({
 											imageUrl={item.imageUrl}
 											videoUrl={item.videoUrl}
 											files={item.files}
+											pageId={item.pageId}
+											slug={item.slug}
+											externalOverride={true}
 											onPreview={(media) => setPreview(media)}
 										/>
 									))}
