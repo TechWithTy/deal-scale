@@ -89,18 +89,21 @@ export function LinkCard({
 			{files && files.length > 0 && (
 				<div className="mt-2 flex flex-wrap items-center gap-2">
 					{files.map((f) => (
-						<a
+						<button
 							key={f.url}
-							href={f.url}
-							target="_blank"
-							rel="noopener noreferrer"
-							download
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								window.open(f.url, '_blank', 'noopener,noreferrer');
+							}}
 							className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-muted-foreground text-xs hover:bg-accent"
-							aria-label={`Download ${f.name}`}
+							aria-label={`Open ${f.name}`}
+							title={f.name}
 						>
 							<span aria-hidden>⬇</span>
-							<span className="max-w-[10rem] truncate">{f.name}</span>
-						</a>
+							<span className="max-w-[12rem] truncate">{f.name}</span>
+						</button>
 					))}
 				</div>
 			)}
