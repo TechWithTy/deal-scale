@@ -16,6 +16,7 @@ export function LinkTree({
 	subtitle,
 }: LinkTreeProps) {
 	const [query, setQuery] = React.useState("");
+	const [pending, setPending] = React.useState(false);
 	const [preview, setPreview] = React.useState<null | {
 		type: "image" | "video";
 		url: string;
@@ -72,13 +73,48 @@ export function LinkTree({
 		return entries;
 	}, [normalized]);
 
+	async function handleRefresh() {
+		try {
+			setPending(true);
+			await fetch("/api/linktree/revalidate", { method: "POST" });
+			// Force a client transition refresh to pull latest server data
+			if (typeof window !== "undefined") {
+				// Soft refresh
+				window.location.reload();
+			}
+		} finally {
+			setPending(false);
+		}
+	}
+
 	return (
 		<div className="mx-auto max-w-2xl px-4 py-10 md:py-16">
-			<header className="mb-6 text-center md:mb-8">
-				<h1 className="font-bold text-3xl tracking-tight">{title}</h1>
-				{subtitle ? (
-					<p className="mt-2 text-muted-foreground">{subtitle}</p>
-				) : null}
+			<header className="mb-6 md:mb-8">
+				<div className="flex items-center justify-between">
+					<div className="text-center flex-1">
+						<h1 className="font-bold text-3xl tracking-tight">{title}</h1>
+						{subtitle ? (
+							<p className="mt-2 text-muted-foreground">{subtitle}</p>
+						) : null}
+					</div>
+					<button
+						type="button"
+						className="ml-4 h-9 w-9 rounded-md border bg-background hover:bg-accent flex items-center justify-center"
+						onClick={handleRefresh}
+						aria-label="Refresh links"
+						title="Refresh links"
+					>
+						{pending ? (
+							<svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+								<path d="M12 3v3m0 12v3m9-9h-3M6 12H3m14.778-6.778-2.121 2.121M7.343 16.657l-2.121 2.121m0-13.435 2.121 2.121M16.657 16.657l2.121 2.121" />
+							</svg>
+						) : (
+							<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+								<path d="M4.93 4.93a10 10 0 1 1-1.414 1.414M4 10V4h6" />
+							</svg>
+						)}
+					</button>
+				</div>
 			</header>
 
 			<div className="mb-4">

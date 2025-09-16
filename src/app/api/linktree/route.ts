@@ -14,9 +14,10 @@ async function queryNotionDatabase(databaseId: string) {
       "Notion-Version": NOTION_VERSION,
       "Content-Type": "application/json",
     },
-    // Important: Let Next cache this request; the route itself will be tag-cached
-    // by the page fetch via next: { tags: ['link-tree'], revalidate: 300 }
-    cache: "force-cache",
+    // The page that calls this API controls caching via next tags.
+    // Keep this request default (no-store here) to avoid double caching layers.
+    cache: "no-store",
+    body: JSON.stringify({ page_size: 100 }),
   });
   if (!resp.ok) {
     const text = await resp.text();
@@ -27,7 +28,16 @@ async function queryNotionDatabase(databaseId: string) {
 
 export async function GET() {
   try {
-    const dbId = process.env.NOTION_REDIRECTS_ID;
+    const rawId = process.env.NOTION_REDIRECTS_ID;
+    const addDashes = (id: string) =>
+      id.replace(/^(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})$/, "$1-$2-$3-$4-$5");
+    const dbId = !rawId
+      ? undefined
+      : rawId.includes("-")
+      ? rawId
+      : rawId.length === 32
+      ? addDashes(rawId)
+      : rawId;
     if (!dbId) {
       return NextResponse.json({ ok: false, error: "missing NOTION_REDIRECTS_ID" }, { status: 500 });
     }
@@ -39,6 +49,12 @@ export async function GET() {
       .map((page) => mapNotionPageToLinkTree(page))
       .filter((m) => Boolean(m?.linkTreeEnabled && m?.destination));
 
+    const debug = false; // flip to true temporarily if needed
+    if (debug) {
+      console.log("[linktree-api] dbId", dbId);
+      console.log("[linktree-api] total pages", results.length);
+      console.log("[linktree-api] items", items.map((i) => i.slug));
+    }
     return NextResponse.json({ ok: true, items });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "internal error";

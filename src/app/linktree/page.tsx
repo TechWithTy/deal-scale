@@ -1,15 +1,15 @@
 import { LinkTree } from "@/components/linktree/LinkTree";
 import type { LinkTreeItem } from "@/utils/linktree-redis";
+import { headers } from "next/headers";
 
 export default async function LinkTreePage() {
-	const base =
-		process.env.NEXT_PUBLIC_SITE_URL ||
-		(process.env.VERCEL_URL
-			? `https://${process.env.VERCEL_URL}`
-			: "http://localhost:3000");
+	// Build an absolute URL for server-side fetch to avoid URL parse errors in RSC
+	const h = headers();
+	const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+	const protocol = h.get("x-forwarded-proto") ?? (process.env.VERCEL ? "https" : "http");
+	const base = `${protocol}://${host}`;
 	const resp = await fetch(`${base}/api/linktree`, {
 		next: { tags: ["link-tree"], revalidate: 300 },
-		// Ensures we leverage Next.js caching; the webhook will revalidate via tag
 	});
 	if (!resp.ok) {
 		// Fail closed with empty list to avoid hard error on UI
