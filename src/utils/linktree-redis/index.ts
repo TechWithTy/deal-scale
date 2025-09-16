@@ -236,34 +236,35 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
   return results;
 }
 
+/**
+ * Preferred source: Notion.
+ *
+ * We keep this function name for backward compatibility, but it no longer
+ * reads from Redis. This avoids UI drift/staleness and centralizes LinkTree
+ * as a pure Notion-driven feature. Redis usage remains for legacy callers
+ * via fetchFromRedis() if explicitly invoked elsewhere.
+ */
 export async function fetchLinkTreeItems(): Promise<LinkTreeItem[]> {
-	try {
-		const fromRedis = await fetchFromRedis();
-		if (fromRedis.length > 0) return fromRedis;
-	} catch (err) {
-		// fall through to Notion
-	}
-	return fetchFromNotion();
+  return fetchFromNotion();
 }
 
 export function withUtm(url: string, slug: string): string {
-	try {
-		const u = new URL(url, "http://dummy.base");
-		// Internal path: do not alter
-		if (!/^https?:/i.test(url)) return url;
+  try {
+    const u = new URL(url, "http://dummy.base");
+    // Internal path: do not alter
+    if (!/^https?:/i.test(url)) return url;
 
-		// Determine site host as source (no "linktree" branding)
-		const sourceHost =
-			typeof window !== "undefined"
-				? window.location.host
-				: process.env.NEXT_PUBLIC_SITE_HOST || "dealscale.ai";
+    // Determine site host in a deterministic way for SSR + CSR to avoid hydration mismatches.
+    // Use a single source of truth that is embedded at build time on the client.
+    // Set NEXT_PUBLIC_SITE_HOST="localhost:3000" in dev, and "www.dealscale.io" in prod.
+    const sourceHost = process.env.NEXT_PUBLIC_SITE_HOST || "dealscale.ai";
 
-		if (!u.searchParams.get("utm_source"))
-			u.searchParams.set("utm_source", sourceHost);
-		if (!u.searchParams.get("utm_campaign"))
-			u.searchParams.set("utm_campaign", slug);
-		return u.toString();
-	} catch {
-		return url;
-	}
+    if (!u.searchParams.get("utm_source"))
+      u.searchParams.set("utm_source", sourceHost);
+    if (!u.searchParams.get("utm_campaign"))
+      u.searchParams.set("utm_campaign", slug);
+    return u.toString();
+  } catch {
+    return url;
+  }
 }
