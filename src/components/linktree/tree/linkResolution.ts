@@ -1,12 +1,31 @@
 import { withUtm } from "@/utils/linktree-redis";
 import type { LinkTreeItem } from "@/utils/linktree-redis";
 
+function sanitizeUrlLike(input: string | undefined | null): string {
+  let s = String(input ?? "");
+  // Remove common invisible spaces without unicode-range classes (to satisfy strict linters)
+  s = s.replace(/\uFEFF/g, "").replace(/\u00A0/g, " ");
+  s = s.trim();
+  // Collapse and remove ASCII whitespace inside the URL
+  s = s.replace(/\s+/g, "");
+  return s;
+}
+
+function isValidAbsoluteHttpUrl(s: string): boolean {
+  try {
+    const u = new URL(s);
+    return (u.protocol === "http:" || u.protocol === "https:") && Boolean(u.hostname);
+  } catch {
+    return false;
+  }
+}
+
 export function resolveLink(item: LinkTreeItem): { dest: string; isExternal: boolean } {
   const raw0 = withUtm(item.destination, item.slug);
-  let dest = raw0;
-  const isAbsolute = /^(https?:)\/\//i.test(raw0);
-  const isProtoRelative = /^\/\//.test(raw0);
-  const isRelativePath = raw0.startsWith("/");
+  let dest = sanitizeUrlLike(raw0);
+  const isAbsolute = /^(https?:)\/\//i.test(dest);
+  const isProtoRelative = /^\/\//.test(dest);
+  const isRelativePath = dest.startsWith("/");
   let isExternal = false;
 
   if (isAbsolute) {
@@ -48,6 +67,16 @@ export function resolveLink(item: LinkTreeItem): { dest: string; isExternal: boo
 
   // Notion override
   if (item.redirectExternal) isExternal = true;
+
+  // Final safety: prevent malformed absolute (e.g., 'https://') from becoming href
+  if (/^https?:\/\//i.test(dest) && !isValidAbsoluteHttpUrl(dest)) {
+    if (typeof window !== "undefined") {
+      // eslint-disable-next-line no-console
+      console.warn("[LinkTree] Invalid absolute URL for slug:", item.slug, JSON.stringify(dest));
+    }
+    const fallback = item.slug ? `/${String(item.slug).replace(/^\//, "")}` : "#";
+    return { dest: fallback, isExternal: false };
+  }
 
   return { dest, isExternal };
 }

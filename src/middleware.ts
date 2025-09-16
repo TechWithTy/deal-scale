@@ -10,6 +10,16 @@ type Found = {
     nextCalls?: number;
 };
 
+function sanitizeUrlLike(input: string | undefined | null): string {
+    const s = String(input ?? "");
+    // Remove zero-width and unusual unicode spaces around the value
+    // Includes NBSP (\u00A0), zero-width spaces (\u200B-\u200D, \uFEFF), and other unicode spaces
+    return s
+        .replace(/[\u200B-\u200D\u2060\uFEFF]/g, "")
+        .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, " ")
+        .trim();
+}
+
 function parseDevRedirects(): Record<string, string> {
     // Priority: ENV JSON > ENV CSV > built-in defaults
     const out: Record<string, string> = {};
@@ -52,10 +62,10 @@ function getPlain(prop: unknown): string | undefined {
 function getDestinationStrict(prop: unknown): string | undefined {
     const p = prop as { type?: string; [k: string]: any } | undefined;
     if (!p) return undefined;
-    if (p.type === "url") return (p.url as string | undefined)?.trim();
+    if (p.type === "url") return sanitizeUrlLike(p.url as string | undefined);
     if (p.type === "rich_text") {
         const parts = (p.rich_text as Array<{ plain_text?: string }> | undefined) ?? [];
-        const joined = parts.map((t) => (t.plain_text ?? "")).join("").trim();
+        const joined = sanitizeUrlLike(parts.map((t) => (t.plain_text ?? "")).join(""));
         if (!joined) return undefined;
         // 1) Full URL inside text
         const m = joined.match(/https?:\/\/[^\s]+/i);
@@ -149,7 +159,7 @@ export async function middleware(req: NextRequest) {
         const found = await findRedirectBySlug(slug);
         if (!found) return NextResponse.next();
 
-        let dest = (found.destination || "").trim();
+        let dest = sanitizeUrlLike(found.destination || "");
         if (dest.length < 3) {
             console.warn("[middleware] Weak destination for slug:", slug, JSON.stringify(dest));
             return NextResponse.next();

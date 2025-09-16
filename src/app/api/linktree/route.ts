@@ -47,7 +47,7 @@ export async function GET() {
 
     const items = results
       .map((page) => mapNotionPageToLinkTree(page))
-      .filter((m) => Boolean(m?.linkTreeEnabled && m?.destination));
+      .filter((m) => Boolean(m?.linkTreeEnabled && ((m?.destination && m.destination.length > 0) || (Array.isArray(m?.files) && m.files.length > 0))));
 
     const debug = false; // flip to true temporarily if needed
     if (debug) {

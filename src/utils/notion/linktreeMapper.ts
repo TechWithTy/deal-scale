@@ -39,8 +39,13 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   const props = page.properties ?? {};
   const rawSlug = (props.Slug as NotionRichTextProperty | undefined)?.rich_text?.[0]?.plain_text;
   const slug = rawSlug?.startsWith('/') ? rawSlug.substring(1) : rawSlug;
-  let destination = (props.Destination as NotionRichTextProperty | undefined)
-    ?.rich_text?.[0]?.plain_text;
+  // Destination can be URL or rich_text — prefer URL first
+  let destination = (props.Destination as NotionUrlProperty | undefined)?.url
+    ?? (props.Destination as NotionRichTextProperty | undefined)?.rich_text?.[0]?.plain_text;
+  if (destination) {
+    const d = destination.replace(/\uFEFF/g, '').replace(/\u00A0/g, ' ').trim();
+    destination = d.toLowerCase() === 'none' ? undefined : d;
+  }
   const titleRich = (props.Title as NotionRichTextProperty | undefined)
     ?.rich_text?.[0]?.plain_text as string | undefined;
   const titleFromTitle =

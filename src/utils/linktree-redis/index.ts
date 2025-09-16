@@ -132,6 +132,14 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
   if (!resp.ok) return [];
   const data = await resp.json();
 
+  const sanitize = (s: string | undefined): string =>
+    (s ?? "").replace(/\uFEFF/g, "").replace(/\u00A0/g, " ").trim();
+  const kebab = (s: string): string =>
+    `/${s
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")}`;
+
   const readRichText = (prop: any): string | undefined => {
     try {
       if (!prop) return undefined;
@@ -155,10 +163,30 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
   const results: LinkTreeItem[] = [];
   for (const page of data.results ?? []) {
     const props = page.properties ?? {};
-    const slug = readRichText((props as any)?.Slug);
-    const destination = readRichText((props as any)?.Destination);
+    let slug = readRichText((props as any)?.Slug);
+    let destination = readRichText((props as any)?.Destination);
+    if (destination && destination.trim().toLowerCase() === "none") destination = "";
     const titleFromTitle = readRichText((props as any)?.Title);
     const title = titleFromTitle || slug || "";
+    // Fallback: derive slug from Title when Slug is absent
+    if (!slug && titleFromTitle) {
+      const t = sanitize(titleFromTitle);
+      if (t.startsWith("/")) {
+        // Use first token if spaces exist (Notion titles sometimes have descriptions)
+        slug = t.split(/\s+/)[0];
+      }
+    }
+    // Fallback: derive slug from Destination when it's an internal path
+    if (!slug && typeof destination === "string") {
+      const d = sanitize(destination);
+      if (d.startsWith("/")) {
+        slug = d.split(/[?#]/)[0];
+      }
+    }
+    // Last resort: derive from Title by kebab-case
+    if (!slug && titleFromTitle) {
+      slug = kebab(titleFromTitle);
+    }
     const description = readRichText((props as any)?.Description) ?? readRichText((props as any)?.Desc);
     const details = readRichText((props as any)?.Details) ?? readRichText((props as any)?.Detail);
     const iconEmoji = page?.icon?.emoji as string | undefined;
@@ -178,7 +206,15 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
     } else if (lte?.type === "select") {
       const name = (lte.select?.name ?? "").toString().toLowerCase();
       linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
-    } else if (props?.Type?.select?.name === "LinkTree") {
+    } else if ((lte?.type === "status") && lte.status?.name) {
+      const name = (lte.status.name ?? "").toString().toLowerCase();
+      linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
+    } else if ((lte?.type === "rich_text" || lte?.type === "title")) {
+      const txt = readRichText(lte) ?? "";
+      const name = txt.toLowerCase();
+      linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
+    }
+    if (!linkTreeEnabled && props?.Type?.select?.name === "LinkTree") {
       linkTreeEnabled = true;
     }
 
@@ -195,7 +231,7 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
     let videoUrl = (props as any)?.Video?.url as string | undefined;
     // Files (support Notion files property named "Media" or "Files")
     let files: FileMeta[] | undefined;
-    const filesProp = (props as any)?.Media || (props as any)?.Files;
+    const filesProp = (props as any)?.Media || (props as any)?.Files || (props as any)?.File;
     const inferKind = (nameOrUrl: string): { kind: "image" | "video" | "other"; ext?: string } => {
       try {
         const m = /\.([a-z0-9]+)(?:$|\?|#)/i.exec(nameOrUrl);
@@ -236,7 +272,8 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
       if (firstVideo) videoUrl = firstVideo.url;
     }
 
-    if (slug && destination && linkTreeEnabled) {
+    const hasFiles = Array.isArray(files) && files.length > 0;
+    if (slug && linkTreeEnabled && (Boolean(destination) || hasFiles)) {
       results.push({
         slug,
         title: title || slug,
