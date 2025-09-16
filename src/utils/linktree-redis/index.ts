@@ -259,6 +259,15 @@ export function withUtm(url: string, slug: string): string {
     // Set NEXT_PUBLIC_SITE_HOST="localhost:3000" in dev, and "www.dealscale.io" in prod.
     const sourceHost = process.env.NEXT_PUBLIC_SITE_HOST || "dealscale.ai";
 
+    // Skip UTM appending for signed/file URLs (e.g., Notion/S3 presigned URLs).
+    // Adding UTM params invalidates signatures such as X-Amz-Signature.
+    const host = u.hostname.toLowerCase();
+    const hasSignedParams = Array.from(u.searchParams.keys()).some((k) => k.toLowerCase().startsWith("x-amz-"));
+    const isS3 = host.endsWith("amazonaws.com");
+    if (hasSignedParams || isS3) {
+      return url;
+    }
+
     if (!u.searchParams.get("utm_source"))
       u.searchParams.set("utm_source", sourceHost);
     if (!u.searchParams.get("utm_campaign"))

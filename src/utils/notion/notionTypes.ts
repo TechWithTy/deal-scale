@@ -93,7 +93,7 @@ export function inferKind(name: string): { kind: "image" | "video" | "other"; ex
   if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'svg'].includes(ext)) {
     return { kind: "image", ext };
   }
-  if (['mp4', 'webm', 'ogg', 'mov', 'm4v'].includes(ext)) {
+  if (['mp4', 'webm', 'ogg', 'mov', 'm4v', 'mkv'].includes(ext)) {
     return { kind: "video", ext };
   }
   return { kind: "other", ext };

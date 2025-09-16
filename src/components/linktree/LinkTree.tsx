@@ -99,17 +99,31 @@ export function LinkTree({
 					</div>
 					<button
 						type="button"
-						className="ml-4 h-9 w-9 rounded-md border bg-background hover:bg-accent flex items-center justify-center"
+						className="ml-4 flex h-9 w-9 items-center justify-center rounded-md border bg-background hover:bg-accent"
 						onClick={handleRefresh}
 						aria-label="Refresh links"
 						title="Refresh links"
 					>
 						{pending ? (
-							<svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+							<svg
+								className="h-4 w-4 animate-spin"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								aria-hidden="true"
+							>
 								<path d="M12 3v3m0 12v3m9-9h-3M6 12H3m14.778-6.778-2.121 2.121M7.343 16.657l-2.121 2.121m0-13.435 2.121 2.121M16.657 16.657l2.121 2.121" />
 							</svg>
 						) : (
-							<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+							<svg
+								className="h-4 w-4"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								aria-hidden="true"
+							>
 								<path d="M4.93 4.93a10 10 0 1 1-1.414 1.414M4 10V4h6" />
 							</svg>
 						)}
