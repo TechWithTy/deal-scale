@@ -161,6 +161,24 @@ export async function POST(req: NextRequest) {
         const page = await fetchNotionPage(pageId);
         const redirectsDbId = process.env.NOTION_REDIRECTS_ID;
 
+        if (redirectsDbId && page?.parent?.database_id) {
+          const normalizeId = (id: string) => id.replace(/-/g, '');
+          const normalizedPageDbId = normalizeId(page.parent.database_id);
+          const normalizedRedirectsDbId = normalizeId(redirectsDbId);
+          if (debug) {
+            console.log('Database IDs:', {
+              pageDb: page.parent.database_id,
+              normalizedPageDbId,
+              expected: redirectsDbId,
+              normalizedRedirectsDbId
+            });
+          }
+          if (normalizedPageDbId !== normalizedRedirectsDbId) {
+            if (debug) console.log('[notion-webhook] Ignoring page from different DB');
+            return NextResponse.json({ ok: true, ignored: true, reason: 'different_database' });
+          }
+        }
+
         const mapped = mapNotionPageToLinkTree(page);
         if (debug) {
             console.log('[notion-webhook] mapped', mapped);
