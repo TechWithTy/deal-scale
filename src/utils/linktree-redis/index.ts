@@ -132,23 +132,35 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
   if (!resp.ok) return [];
   const data = await resp.json();
 
+  const readRichText = (prop: any): string | undefined => {
+    try {
+      if (!prop) return undefined;
+      if (prop.type === "rich_text") {
+        const arr = (prop.rich_text as Array<{ plain_text?: string }> | undefined) ?? [];
+        const joined = arr.map((t) => t.plain_text ?? "").join("").trim();
+        return joined || undefined;
+      }
+      if (prop.type === "title") {
+        const arr = (prop.title as Array<{ plain_text?: string }> | undefined) ?? [];
+        const joined = arr.map((t) => t.plain_text ?? "").join("").trim();
+        return joined || undefined;
+      }
+      if (prop.type === "url") return (prop.url as string | undefined)?.trim();
+      return undefined;
+    } catch {
+      return undefined;
+    }
+  };
+
   const results: LinkTreeItem[] = [];
   for (const page of data.results ?? []) {
     const props = page.properties ?? {};
-    const slug = props?.Slug?.title?.[0]?.plain_text as string | undefined;
-    const destination = props?.Destination?.rich_text?.[0]?.plain_text as
-      | string
-      | undefined;
-    const titleFromTitle = props?.Title?.title?.[0]?.plain_text as
-      | string
-      | undefined;
+    const slug = readRichText((props as any)?.Slug);
+    const destination = readRichText((props as any)?.Destination);
+    const titleFromTitle = readRichText((props as any)?.Title);
     const title = titleFromTitle || slug || "";
-    const description = props?.Description?.rich_text?.[0]?.plain_text as
-      | string
-      | undefined;
-    const details = props?.Details?.rich_text?.[0]?.plain_text as
-      | string
-      | undefined;
+    const description = readRichText((props as any)?.Description) ?? readRichText((props as any)?.Desc);
+    const details = readRichText((props as any)?.Details) ?? readRichText((props as any)?.Detail);
     const iconEmoji = page?.icon?.emoji as string | undefined;
 
     // Image from explicit props or cover

@@ -19,15 +19,29 @@ export function resolveLink(item: LinkTreeItem): { dest: string; isExternal: boo
     isExternal = true;
   }
 
-  // Inspect internal redirect wrapper
+  // Inspect internal redirect wrapper and unwrap display href
   try {
     if (/^\/api\/redirect\b/.test(dest)) {
       const base = typeof window !== "undefined" ? window.location.origin : "http://localhost";
       const u = new URL(dest, base);
       const to = u.searchParams.get("to") ?? "";
       const decoded = to.startsWith("%2F") ? decodeURIComponent(to) : to;
-      if (/^(https?:)\/\//i.test(decoded) || /^\/\//.test(decoded) || (!decoded.startsWith("/") && decoded.length > 0)) {
+      const looksExternal = /^(https?:)\/\//i.test(decoded) || /^\/\//.test(decoded) || (!decoded.startsWith("/") && decoded.length > 0);
+      if (looksExternal) {
         isExternal = true;
+      }
+      // For display, if decoded looks like a usable target, unwrap it so <a href> is clean
+      if (decoded && decoded.length > 0) {
+        if (decoded.startsWith("/")) {
+          dest = decoded;
+        } else if (/^\/\//.test(decoded)) {
+          dest = `https:${decoded}`;
+        } else if (/^(https?:)\/\//i.test(decoded)) {
+          dest = decoded;
+        } else if (/^[a-z0-9.-]+\.[a-z]{2,}(?:\/.*)?$/i.test(decoded)) {
+          dest = `https://${decoded}`;
+          isExternal = true;
+        }
       }
     }
   } catch {}

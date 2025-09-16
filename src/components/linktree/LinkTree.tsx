@@ -120,11 +120,11 @@ export function LinkTree({ items, title = "Link Tree", subtitle }: LinkTreeProps
                   {cat}
                 </h2>
                 <div className="space-y-3">
-                  {list.map((item) => {
+                  {list.map((item, i) => {
                     const { dest, isExternal } = resolveLink(item);
                     return (
                       <LinkCard
-                        key={item.slug}
+                        key={`${item.slug}-${item.pageId ?? i}`}
                         title={item.title}
                         href={dest}
                         description={item.description}
@@ -148,7 +148,7 @@ export function LinkTree({ items, title = "Link Tree", subtitle }: LinkTreeProps
 
             {/* Normal sections after highlighted */}
             {normalEntries.map(([cat, list]) => (
-              <section key={cat}>
+              <section key={`norm-${cat}`}>
                 <h2 className="mb-2 font-semibold text-muted-foreground text-sm uppercase tracking-wide">
                   {cat}
                 </h2>

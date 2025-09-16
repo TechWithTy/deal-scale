@@ -6,6 +6,8 @@ type Found = {
     utm_source?: string;
     utm_campaign?: string;
     utm_medium?: string;
+    pageId?: string;
+    nextCalls?: number;
 };
 
 function parseDevRedirects(): Record<string, string> {
@@ -117,7 +119,10 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
             const utm_source = getPlain(props?.["UTM Source"]) ?? getPlain(props?.utm_source);
             const utm_campaign = getPlain(props?.["UTM Campaign"]) ?? getPlain(props?.["UTM Campaign (R...)"]) ?? getPlain(props?.utm_campaign);
             const utm_medium = getPlain(props?.["UTM Medium"]) ?? getPlain(props?.utm_medium);
-            return { destination, utm_source, utm_campaign, utm_medium };
+            const callsProp = (props as any)?.["Redirects (Calls)"];
+            const current = typeof callsProp?.number === "number" ? callsProp.number : 0;
+            const nextCalls = current + 1;
+            return { destination, utm_source, utm_campaign, utm_medium, pageId: page.id as string, nextCalls };
         }
     }
     return null;
@@ -163,12 +168,52 @@ export async function middleware(req: NextRequest) {
             }
         }
 
-        // Build URL
+        // Build URL safely
+        const isValidAbsoluteHttpUrl = (s: string): boolean => {
+            try {
+                const u = new URL(s);
+                return (u.protocol === "http:" || u.protocol === "https:") && Boolean(u.hostname);
+            } catch {
+                return false;
+            }
+        };
+
+        if (!isRelative && !isValidAbsoluteHttpUrl(dest)) {
+            console.warn("[middleware] Malformed absolute URL, skipping redirect:", JSON.stringify(dest));
+            return NextResponse.next();
+        }
+
         const url = isRelative ? new URL(dest, req.nextUrl.origin) : new URL(dest);
         // Append UTM if present
         if (found.utm_source) url.searchParams.set("utm_source", found.utm_source);
         if (found.utm_campaign) url.searchParams.set("utm_campaign", found.utm_campaign);
         if (found.utm_medium) url.searchParams.set("utm_medium", found.utm_medium);
+
+        // Increment Notion counter (fire-and-forget best-effort)
+        const NOTION_KEY = process.env.NOTION_KEY;
+        const pageId = found.pageId;
+        const nextCalls = found.nextCalls;
+        if (NOTION_KEY && pageId && typeof nextCalls === "number") {
+            try {
+                fetch(`https://api.notion.com/v1/pages/${pageId}`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            Authorization: `Bearer ${NOTION_KEY}`,
+                            "Notion-Version": "2022-06-28",
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            properties: {
+                                "Redirects (Calls)": { number: nextCalls },
+                            },
+                        }),
+                    },
+                ).catch(() => {});
+            } catch {
+                // ignore
+            }
+        }
 
         return NextResponse.redirect(url);
     } catch (error) {
