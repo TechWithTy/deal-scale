@@ -37,8 +37,8 @@ export type MappedLinkTree = {
 
 export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   const props = page.properties ?? {};
-  const slug = (props.Slug as NotionTitleProperty | undefined)?.title?.[0]
-    ?.plain_text;
+  const rawSlug = (props.Slug as NotionRichTextProperty | undefined)?.rich_text?.[0]?.plain_text;
+  const slug = rawSlug?.startsWith('/') ? rawSlug.substring(1) : rawSlug;
   let destination = (props.Destination as NotionRichTextProperty | undefined)
     ?.rich_text?.[0]?.plain_text;
   const titleRich = (props.Title as NotionRichTextProperty | undefined)
@@ -111,12 +111,12 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   );
   // Highlighted (Select Yes/No or Checkbox)
   let highlighted = false;
-  const hlSel = props["Highlighted"] as NotionSelectProperty | undefined;
+  const hlSel = props.Highlighted as NotionSelectProperty | undefined;
   if (hlSel?.type === "select") {
     const name = (hlSel.select?.name ?? "").toString().toLowerCase();
     highlighted = name === "yes" || name === "true" || name === "enabled";
   }
-  const hlCb = props["Highlighted"] as unknown as NotionCheckboxProperty | undefined;
+  const hlCb = props.Highlighted as NotionCheckboxProperty | undefined;
   if (hlCb?.type === "checkbox") highlighted = highlighted || Boolean(hlCb.checkbox);
   let videoUrl =
     (props.Video as NotionUrlProperty | undefined)?.url ?? undefined;
@@ -194,7 +194,7 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   // Fallback: scan any property of type 'files' (covers columns named 'File', 'Attachment', etc.)
   for (const val of Object.values(props)) {
     const maybe = val as NotionFilesProperty | undefined;
-    if (maybe && (maybe as any).type === "files") collectFrom(maybe);
+    if (maybe?.type === "files") collectFrom(maybe);
   }
 
   if (collected.length) {
@@ -238,10 +238,27 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
     if (firstImage) imageUrl = firstImage.url;
   }
   if (!videoUrl && files && files.length) {
-    const firstVideo =
-      files.find((f) => f.kind === "video") ||
-      files.find((f) => (f.ext ?? "").match(/^(mp4|webm|ogg|mov|m4v)$/i));
-    if (firstVideo) videoUrl = firstVideo.url;
+    // Prefer inline-playable formats first
+    const playable = files.find((f) => (f.ext ?? "").match(/^(mp4|webm|ogg|ogv|mov|m4v)$/i));
+    if (playable) {
+      videoUrl = playable.url;
+    } else {
+      // Fallback: pick any video, then try Cloudinary fetch transcode if configured
+      const anyVideo = files.find((f) => f.kind === "video");
+      if (anyVideo?.url) {
+        const cloud = process.env.CLOUDINARY_CLOUD_NAME;
+        if (cloud) {
+          // Build a Cloudinary fetch URL to transcode to MP4 (requires remote fetch enabled)
+          const src = anyVideo.url;
+          const base = `https://res.cloudinary.com/${cloud}/video/upload/f_mp4,vc_h264,q_auto:good/`;
+          const transformed = base + encodeURIComponent(src);
+          videoUrl = transformed;
+        } else {
+          // No Cloudinary; keep the original so file chips still work
+          videoUrl = anyVideo.url;
+        }
+      }
+    }
   }
 
   return {
