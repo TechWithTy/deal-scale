@@ -128,80 +128,61 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
     (props.Media as NotionFilesProperty | undefined) ??
     (props.Files as NotionFilesProperty | undefined) ??
     (props.Image as NotionFilesProperty | undefined) ??
-    (props.File as NotionFilesProperty | undefined);
+    (props.File as NotionFilesProperty | undefined) ??
+    (props.file as NotionFilesProperty | undefined);
   const videoFilesProp = props.video as NotionFilesProperty | undefined;
-  if (filesProp?.type === "files" && Array.isArray(filesProp.files)) {
-    files = filesProp.files
-      .map((f) => {
-        if ((f as NotionFilesFile).type === "file") {
-          const file = f as NotionFilesFile;
-          const url = file.file?.url ?? "";
-          const meta = inferKind(file.name || url);
-          return {
-            name: file.name ?? url,
-            url,
-            kind: meta.kind,
-            ext: meta.ext,
-            expiry: file.file?.expiry_time,
-          };
-        }
-        if ((f as NotionFilesExternal).type === "external") {
-          const extf = f as NotionFilesExternal;
-          const url = extf.external?.url ?? "";
-          const meta = inferKind(extf.name || url);
-          return {
-            name: extf.name ?? url,
-            url,
-            kind: meta.kind,
-            ext: meta.ext,
-          };
-        }
-        return undefined;
-      })
-      .filter(Boolean) as Array<{
-      name: string;
-      url: string;
-      kind?: "image" | "video" | "other";
-      ext?: string;
-      expiry?: string;
-    }>;
+  const collected: typeof files extends Array<infer T> ? T[] : any[] = [] as any[];
+
+  const mapNotionFile = (f: NotionFilesFile | NotionFilesExternal) => {
+    if ((f as NotionFilesFile).type === "file") {
+      const file = f as NotionFilesFile;
+      const url = file.file?.url ?? "";
+      const meta = inferKind(file.name || url);
+      return {
+        name: file.name ?? url,
+        url,
+        kind: meta.kind,
+        ext: meta.ext,
+        expiry: file.file?.expiry_time,
+      };
+    }
+    if ((f as NotionFilesExternal).type === "external") {
+      const extf = f as NotionFilesExternal;
+      const url = extf.external?.url ?? "";
+      const meta = inferKind(extf.name || url);
+      return { name: extf.name ?? url, url, kind: meta.kind, ext: meta.ext };
+    }
+    return undefined;
+  };
+
+  const collectFrom = (prop?: NotionFilesProperty) => {
+    if (prop?.type === "files" && Array.isArray(prop.files)) {
+      for (const f of prop.files) {
+        const mapped = mapNotionFile(f as any);
+        if (mapped) collected.push(mapped);
+      }
+    }
+  };
+
+  collectFrom(filesProp);
+  collectFrom(videoFilesProp);
+
+  // Fallback: scan any property of type 'files' (covers columns named 'File', 'Attachment', etc.)
+  for (const val of Object.values(props)) {
+    const maybe = val as NotionFilesProperty | undefined;
+    if (maybe && (maybe as any).type === "files") collectFrom(maybe);
   }
-  if (videoFilesProp?.type === "files" && Array.isArray(videoFilesProp.files)) {
-    const extra = videoFilesProp.files
-      .map((f) => {
-        if ((f as NotionFilesFile).type === "file") {
-          const file = f as NotionFilesFile;
-          const url = file.file?.url ?? "";
-          const meta = inferKind(file.name || url);
-          return {
-            name: file.name ?? url,
-            url,
-            kind: "video" as const,
-            ext: meta.ext,
-            expiry: file.file?.expiry_time,
-          };
-        }
-        if ((f as NotionFilesExternal).type === "external") {
-          const extf = f as NotionFilesExternal;
-          const url = extf.external?.url ?? "";
-          const meta = inferKind(extf.name || url);
-          return {
-            name: extf.name ?? url,
-            url,
-            kind: "video" as const,
-            ext: meta.ext,
-          };
-        }
-        return undefined;
-      })
-      .filter(Boolean) as Array<{
-      name: string;
-      url: string;
-      kind?: "image" | "video" | "other";
-      ext?: string;
-      expiry?: string;
-    }>;
-    files = [...(files ?? []), ...extra];
+
+  if (collected.length) {
+    // Dedupe by URL
+    const seen = new Set<string>();
+    files = collected.filter((f) => {
+      if (!f?.url) return false;
+      const k = f.url;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
   }
 
   if (!imageUrl && files && files.length) {
