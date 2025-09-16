@@ -14,9 +14,32 @@ export type LinkTreeProps = {
 export function LinkTree({ items, title = "Link Tree", subtitle }: LinkTreeProps) {
   const [query, setQuery] = React.useState("");
   const [pending, setPending] = React.useState(false);
+  const [clientItems, setClientItems] = React.useState<LinkTreeItem[] | null>(null);
+  const displayItems = clientItems ?? items;
+
+  // Client-side fallback: if server-rendered items are stale/short, hydrate from API
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/linktree", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json();
+        const apiItems: LinkTreeItem[] = Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : [];
+        if (!cancelled && apiItems.length > items.length) {
+          setClientItems(apiItems);
+        }
+      } catch {
+        // ignore network errors; SSR items remain
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [items.length]);
 
   const normalized = React.useMemo(() => {
-    const copy = [...items].sort((a, b) => {
+    const copy = [...displayItems].sort((a, b) => {
       const ha = a.highlighted ? 0 : 1;
       const hb = b.highlighted ? 0 : 1;
       if (ha !== hb) return ha - hb;
@@ -32,7 +55,7 @@ export function LinkTree({ items, title = "Link Tree", subtitle }: LinkTreeProps
         .filter(Boolean)
         .some((s) => String(s).toLowerCase().includes(q)),
     );
-  }, [items, query]);
+  }, [displayItems, query]);
 
   const { highlightedLabeled, normalEntries } = React.useMemo(
     () => groupItems(normalized),
@@ -103,7 +126,7 @@ export function LinkTree({ items, title = "Link Tree", subtitle }: LinkTreeProps
         />
       </div>
 
-      {items.length === 0 ? (
+      {displayItems.length === 0 ? (
         <div className="rounded-xl border bg-card p-6 text-center text-card-foreground">
           <p className="font-medium">No links yet</p>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -153,11 +176,11 @@ export function LinkTree({ items, title = "Link Tree", subtitle }: LinkTreeProps
                   {cat}
                 </h2>
                 <div className="space-y-3">
-                  {list.map((item) => {
+                  {list.map((item, i) => {
                     const { dest, isExternal } = resolveLink(item);
                     return (
                       <LinkCard
-                        key={item.slug}
+                        key={`${item.slug}-${item.pageId ?? i}`}
                         title={item.title}
                         href={dest}
                         description={item.description}
