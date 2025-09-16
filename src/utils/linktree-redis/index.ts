@@ -24,6 +24,8 @@ export type LinkTreeItem = {
   videoUrl?: string;
   files?: FileMeta[];
   highlighted?: boolean;
+  // Derived from Notion 'Redirect Type' single select: External => true
+  redirectExternal?: boolean;
 };
 
 function coerceBool(v: unknown): boolean {
@@ -102,6 +104,7 @@ async function fetchFromRedis(): Promise<LinkTreeItem[]> {
       videoUrl,
       files,
       linkTreeEnabled: true,
+      redirectExternal: false,
     });
   }
 
@@ -174,6 +177,9 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
         (props?.Pinned as any)?.select?.name?.toString().toLowerCase() ===
           "true",
     );
+    // Redirect Type: Internal/External
+    const redirectType = (props as any)?.["Redirect Type"]?.select?.name as string | undefined;
+    const redirectExternal = (redirectType ?? "").toString().toLowerCase() === "external";
     let videoUrl = (props as any)?.Video?.url as string | undefined;
     // Files (support Notion files property named "Media" or "Files")
     let files: FileMeta[] | undefined;
@@ -232,6 +238,7 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
         videoUrl,
         files,
         linkTreeEnabled,
+        redirectExternal,
       });
     }
   }
