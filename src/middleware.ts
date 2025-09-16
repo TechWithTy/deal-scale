@@ -8,23 +8,81 @@ type Found = {
     utm_medium?: string;
 };
 
-function getPlain(prop: any): string | undefined {
+function parseDevRedirects(): Record<string, string> {
+    // Priority: ENV JSON > ENV CSV > built-in defaults
+    const out: Record<string, string> = {};
+    const raw = process.env.DEV_REDIRECTS?.trim();
+    if (raw) {
+        try {
+            // Try JSON first: { "live-demo": "https://app.dealscale.io" }
+            const obj = JSON.parse(raw) as Record<string, string>;
+            for (const [k, v] of Object.entries(obj)) out[k.toLowerCase()] = String(v);
+            return out;
+        } catch {
+            // CSV fallback: slug=url,slug2=url2
+            for (const pair of raw.split(",")) {
+                const [k, v] = pair.split("=");
+                if (k && v) out[k.trim().toLowerCase()] = v.trim();
+            }
+            if (Object.keys(out).length) return out;
+        }
+    }
+    // Built-in minimal defaults for local testing
+    out["live-demo"] = "https://app.dealscale.io";
+    return out;
+}
+
+function getPlain(prop: unknown): string | undefined {
+    const p = prop as { type?: string; [k: string]: any } | undefined;
+    if (!p) return undefined;
     if (!prop) return undefined;
     // rich_text
-    if (prop.type === "rich_text") return prop.rich_text?.[0]?.plain_text as string | undefined;
+    if (p.type === "rich_text") return p.rich_text?.[0]?.plain_text as string | undefined;
     // title
-    if (prop.type === "title") return prop.title?.[0]?.plain_text as string | undefined;
+    if (p.type === "title") return p.title?.[0]?.plain_text as string | undefined;
     // url
-    if (prop.type === "url") return prop.url as string | undefined;
+    if (p.type === "url") return p.url as string | undefined;
     // select
-    if (prop.type === "select") return prop.select?.name as string | undefined;
+    if (p.type === "select") return p.select?.name as string | undefined;
+    return undefined;
+}
+
+function getDestinationStrict(prop: unknown): string | undefined {
+    const p = prop as { type?: string; [k: string]: any } | undefined;
+    if (!p) return undefined;
+    if (p.type === "url") return (p.url as string | undefined)?.trim();
+    if (p.type === "rich_text") {
+        const parts = (p.rich_text as Array<{ plain_text?: string }> | undefined) ?? [];
+        const joined = parts.map((t) => (t.plain_text ?? "")).join("").trim();
+        if (!joined) return undefined;
+        // 1) Full URL inside text
+        const m = joined.match(/https?:\/\/[^\s]+/i);
+        if (m) return m[0];
+        // 2) Protocol-relative
+        const m2 = joined.match(/(^|\s)\/\/[^\s]+/);
+        if (m2) return m2[0].trim();
+        // 3) Internal path
+        if (joined.startsWith("/")) return joined;
+        // 4) Bare host with a dot
+        const host = joined.split(/\s+/)[0];
+        if (/^[a-z0-9.-]+\.[a-z]{2,}(?:\/.+)?$/i.test(host)) return host;
+        return undefined;
+    }
     return undefined;
 }
 
 async function findRedirectBySlug(slug: string): Promise<Found | null> {
+    // Dev override: use DEV_REDIRECTS when not in production or when Notion env is missing
+    const isProd = process.env.NODE_ENV === "production";
     const NOTION_KEY = process.env.NOTION_KEY;
     const DB_ID = process.env.NOTION_REDIRECTS_ID;
-    if (!NOTION_KEY || !DB_ID) return null;
+    if (!isProd || !NOTION_KEY || !DB_ID) {
+        const dev = parseDevRedirects();
+        const hit = dev[slug];
+        if (hit) return { destination: hit };
+        // If Notion creds exist and we're in dev, we still attempt Notion below as fallback
+        if (!NOTION_KEY || !DB_ID) return null;
+    }
 
     const headers = {
         Authorization: `Bearer ${NOTION_KEY}`,
@@ -53,7 +111,7 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
             const page = data?.results?.[0];
             if (!page) continue;
             const props = page.properties ?? {};
-            const destination = getPlain(props?.Destination);
+            const destination = getDestinationStrict(props?.Destination);
             if (!destination) continue;
             // Support multiple UTM property spellings from Notion
             const utm_source = getPlain(props?.["UTM Source"]) ?? getPlain(props?.utm_source);
@@ -86,11 +144,24 @@ export async function middleware(req: NextRequest) {
         const found = await findRedirectBySlug(slug);
         if (!found) return NextResponse.next();
 
-        let dest = found.destination;
-        // Normalize bare hosts to https
+        let dest = (found.destination || "").trim();
+        if (dest.length < 3) {
+            console.warn("[middleware] Weak destination for slug:", slug, JSON.stringify(dest));
+            return NextResponse.next();
+        }
         const hasScheme = /^(https?:)\/\//i.test(dest);
+        const isProtoRelative = /^\/\//.test(dest);
         const isRelative = dest.startsWith("/");
-        if (!isRelative && !hasScheme) dest = `https://${dest}`;
+        if (isProtoRelative) dest = `https:${dest}`;
+        else if (!isRelative && !hasScheme) {
+            // Only treat as host if it looks like a domain (has a dot)
+            if (/^[a-z0-9.-]+$/i.test(dest) && dest.includes('.')) dest = `https://${dest}`;
+            else {
+                // Suspicious destination like single letter; skip redirect
+                console.warn("[middleware] Ignoring suspicious destination for slug:", slug, JSON.stringify(dest));
+                return NextResponse.next();
+            }
+        }
 
         // Build URL
         const url = isRelative ? new URL(dest, req.nextUrl.origin) : new URL(dest);

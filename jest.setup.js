@@ -1,4 +1,5 @@
 // jest.setup.js
+import "@testing-library/jest-dom";
 afterAll(async () => {
 	if (
 		global.fetch &&
