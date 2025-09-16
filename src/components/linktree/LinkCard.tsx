@@ -32,6 +32,12 @@ export function LinkCard({
 	const common =
 		"flex items-center gap-4 p-5 rounded-xl border bg-card text-card-foreground hover:shadow-md transition-shadow duration-200";
 
+	// Determine if details should be expandable (heuristic: more than ~80 chars or contains a newline)
+	const needsToggle = Boolean(details && (details.length > 80 || /\n/.test(details)));
+	const [expanded, setExpanded] = React.useState(false);
+
+	// Use title as provided (expecting Notion Title after sync)
+
 	return (
 		<a
 			href={href}
@@ -58,31 +64,46 @@ export function LinkCard({
 			</div>
 			<div className="min-w-0 flex-1">
 				<div className="truncate font-medium">{title}</div>
-				<div className="truncate text-muted-foreground text-sm">
-					{description ?? "Explore more details"}
-				</div>
-				{details && (
-					<div className="mt-1 text-muted-foreground text-xs">{details}</div>
-				)}
-				{files && files.length > 0 && (
-					<div className="mt-2 flex flex-wrap items-center gap-2">
-						{files.map((f) => (
-							<a
-								key={f.url}
-								href={f.url}
-								target="_blank"
-								rel="noopener noreferrer"
-								download
-								className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-muted-foreground text-xs hover:bg-accent"
-								aria-label={`Download ${f.name}`}
-							>
-								<span aria-hidden>⬇</span>
-								<span className="max-w-[10rem] truncate">{f.name}</span>
-							</a>
-						))}
-					</div>
-				)}
+				{/* Description row acts as a toggle when details are long */}
+				{needsToggle ? (
+					<button
+						type="button"
+						className="truncate text-muted-foreground text-sm underline-offset-2 hover:underline"
+						aria-expanded={expanded}
+						onClick={(e) => {
+							// Prevent navigating the parent anchor
+							e.preventDefault();
+							e.stopPropagation();
+							setExpanded((v) => !v);
+						}}
+					>
+						{expanded ? "Hide details" : (description ?? "Show details")}
+					</button>
+				) : description ? (
+					<div className="truncate text-muted-foreground text-sm">{description}</div>
+				) : null}
+				{details && expanded ? (
+					<div className="mt-1 whitespace-pre-wrap text-muted-foreground text-xs">{details}</div>
+				) : null}
 			</div>
+			{files && files.length > 0 && (
+				<div className="mt-2 flex flex-wrap items-center gap-2">
+					{files.map((f) => (
+						<a
+							key={f.url}
+							href={f.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							download
+							className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-muted-foreground text-xs hover:bg-accent"
+							aria-label={`Download ${f.name}`}
+						>
+							<span aria-hidden>⬇</span>
+							<span className="max-w-[10rem] truncate">{f.name}</span>
+						</a>
+					))}
+				</div>
+			)}
 			{(imageUrl || videoUrl) && onPreview ? (
 				<button
 					type="button"
