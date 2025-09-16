@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
-import type { LinkTreeItem } from "@/utils/linktree";
-import { withUtm } from "@/utils/linktree";
+import type { LinkTreeItem } from "@/utils/linktree-redis";
+import { withUtm } from "@/utils/linktree-redis";
 import { LinkCard } from "./LinkCard";
 
 export type LinkTreeProps = {
