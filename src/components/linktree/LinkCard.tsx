@@ -10,6 +10,9 @@ export type LinkCardProps = {
   videoUrl?: string;
   details?: string;
   files?: Array<{ name: string; url: string; kind?: "image" | "video" | "other"; ext?: string }>;
+  pageId?: string;
+  slug?: string;
+  externalOverride?: boolean;
   onPreview?: (media: {
     type: "image" | "video";
     url: string;
@@ -26,9 +29,13 @@ export function LinkCard({
   videoUrl,
   details,
   files,
+  pageId,
+  slug,
+  externalOverride,
   onPreview,
 }: LinkCardProps) {
-  const isExternal = /^(https?:)?\/\//i.test(href);
+  const computedExternal = /^(https?:)?\/\//i.test(href);
+  const isExternal = externalOverride ?? computedExternal;
   const common =
     "flex items-center gap-4 p-5 rounded-xl border bg-card text-card-foreground hover:shadow-md transition-shadow duration-200";
 
@@ -156,7 +163,11 @@ export function LinkCard({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  window.open(f.url, 'download', 'noopener,noreferrer');
+                  const to = encodeURIComponent(f.url);
+                  const pid = pageId ? `&pageId=${encodeURIComponent(pageId)}` : "";
+                  const s = slug ? `&slug=${encodeURIComponent(slug)}` : "";
+                  const url = `/api/redirect?isFile=1&to=${to}${pid}${s}`;
+                  window.open(url, '_self');
                 }}
                 className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-muted-foreground text-[11px] leading-5 hover:bg-accent max-w-[8rem]"
                 aria-label={`Download ${f.name}`}

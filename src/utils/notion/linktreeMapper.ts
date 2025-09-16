@@ -12,6 +12,7 @@ import type {
 import { inferKind } from "./notionTypes";
 
 export type MappedLinkTree = {
+  pageId?: string;
   slug?: string;
   destination?: string;
   title?: string;
@@ -239,6 +240,7 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   }
 
   return {
+    pageId: page.id,
     slug,
     destination,
     title,
