@@ -24,8 +24,11 @@ export function LinkTree({
 	}>(null);
 
 	const normalized = React.useMemo(() => {
-		// Base sort: pinned first, then by title
+		// Base sort: highlighted first, then pinned, then by title
 		const copy = [...items].sort((a, b) => {
+			const ha = a.highlighted ? 0 : 1;
+			const hb = b.highlighted ? 0 : 1;
+			if (ha !== hb) return ha - hb;
 			const pa = a.pinned ? 0 : 1;
 			const pb = b.pinned ? 0 : 1;
 			if (pa !== pb) return pa - pb;
@@ -42,36 +45,57 @@ export function LinkTree({
 	}, [items, query]);
 
 	const grouped = React.useMemo(() => {
-		const map = new Map<string, LinkTreeItem[]>();
+		const highlightMap = new Map<string, LinkTreeItem[]>();
+		const normalMap = new Map<string, LinkTreeItem[]>();
+
 		for (const it of normalized) {
 			const key = it.category || "Other";
-			const existing = map.get(key);
-			if (existing) {
-				existing.push(it);
-			} else {
-				map.set(key, [it]);
-			}
+			const target = it.highlighted ? highlightMap : normalMap;
+			const list = target.get(key);
+			if (list) list.push(it);
+			else target.set(key, [it]);
 		}
-		// Convert to entries and sort categories alphabetically, keeping "Other" last
-		const entries = Array.from(map.entries());
-		entries.sort(([a], [b]) => {
-			const aIsOther = a.toLowerCase() === "other";
-			const bIsOther = b.toLowerCase() === "other";
-			if (aIsOther && !bIsOther) return 1;
-			if (!aIsOther && bIsOther) return -1;
-			return a.localeCompare(b);
-		});
-		// Ensure items within each category remain sorted pinned-first then title
-		for (const [, list] of entries) {
-			list.sort((a, b) => {
-				const pa = a.pinned ? 0 : 1;
-				const pb = b.pinned ? 0 : 1;
-				if (pa !== pb) return pa - pb;
-				return a.title.localeCompare(b.title);
+
+		const sortCats = (entries: Array<[string, LinkTreeItem[]]>) => {
+			entries.sort(([a], [b]) => {
+				const aIsOther = a.toLowerCase() === "other";
+				const bIsOther = b.toLowerCase() === "other";
+				if (aIsOther && !bIsOther) return 1;
+				if (!aIsOther && bIsOther) return -1;
+				return a.localeCompare(b);
 			});
-		}
-		return entries;
+			for (const [, list] of entries) {
+				list.sort((a, b) => {
+					const pa = a.pinned ? 0 : 1;
+					const pb = b.pinned ? 0 : 1;
+					if (pa !== pb) return pa - pb;
+					return a.title.localeCompare(b.title);
+				});
+			}
+		};
+
+		const highlightedEntries = Array.from(highlightMap.entries());
+		const normalEntries = Array.from(normalMap.entries());
+		sortCats(highlightedEntries);
+		sortCats(normalEntries);
+
+		// Prefix highlighted section names
+		const highlightedLabeled = highlightedEntries.map(([cat, list]) => [
+			`Highlighted - ${cat}`,
+			list,
+		] as [string, LinkTreeItem[]]);
+
+		return { highlightedLabeled, normalEntries };
 	}, [normalized]);
+
+	// Backwards-compat for hot-reload: older chunk may still expect an array.
+	// If `grouped` comes in as an array, treat it as normalEntries with no highlighted sections.
+	const groups = React.useMemo(() => {
+		if (Array.isArray(grouped)) {
+			return { highlightedLabeled: [] as Array<[string, LinkTreeItem[]]>, normalEntries: grouped as Array<[string, LinkTreeItem[]]> };
+		}
+		return grouped as { highlightedLabeled: Array<[string, LinkTreeItem[]]>; normalEntries: Array<[string, LinkTreeItem[]]> };
+	}, [grouped]);
 
 	async function handleRefresh() {
 		try {
@@ -151,32 +175,104 @@ export function LinkTree({
 			) : (
 				<div className="max-h-[70vh] overflow-y-auto pr-1">
 					<div className="space-y-6">
-						{grouped.map(([cat, list]) => (
+						{/* Highlighted sections first */}
+						{groups.highlightedLabeled.map(([cat, list]) => (
+							<section key={`hl-${cat}`}>
+								<h2 className="mb-2 font-semibold text-muted-foreground text-sm uppercase tracking-wide">
+									{cat}
+								</h2>
+								<div className="space-y-3">
+									{list.map((item) => {
+										const raw = withUtm(item.destination, item.slug);
+										let dest = raw;
+										const isAbsolute = /^(https?:)\/\//i.test(raw);
+										const isProtoRelative = /^\/\//.test(raw);
+										const isRelativePath = raw.startsWith('/');
+										let isExternal = false;
+
+										if (isAbsolute) {
+											isExternal = true;
+										} else if (isProtoRelative) {
+											// Normalize protocol-relative URLs to https
+											dest = `https:${raw}`;
+											isExternal = true;
+										} else if (!isRelativePath) {
+											// Bare hostname or missing scheme -> treat as external and prefix https
+											dest = `https://${raw}`;
+											isExternal = true;
+										}
+										return (
+											<LinkCard
+												key={item.slug}
+												title={item.title}
+												href={dest}
+												description={item.description}
+												details={item.details}
+												iconEmoji={item.iconEmoji}
+												imageUrl={item.imageUrl}
+												thumbnailUrl={item.thumbnailUrl}
+												videoUrl={item.videoUrl}
+												files={item.files}
+												pageId={item.pageId}
+												slug={item.slug}
+												highlighted={item.highlighted}
+												showArrow={true}
+												openInNewTab={isExternal}
+												onPreview={(media) => setPreview(media)}
+											/>
+										);
+									})}
+								</div>
+							</section>
+						))}
+
+						{/* Normal sections after highlighted */}
+						{groups.normalEntries.map(([cat, list]) => (
 							<section key={cat}>
 								<h2 className="mb-2 font-semibold text-muted-foreground text-sm uppercase tracking-wide">
 									{cat}
 								</h2>
 								<div className="space-y-3">
-									{list.map((item) => (
-										<LinkCard
-											key={item.slug}
-											title={item.title}
-											href={withUtm(item.destination, item.slug)}
-											description={item.description}
-											details={item.details}
-											iconEmoji={item.iconEmoji}
-											imageUrl={item.imageUrl}
-											thumbnailUrl={item.thumbnailUrl}
-											videoUrl={item.videoUrl}
-											files={item.files}
-											pageId={item.pageId}
-											slug={item.slug}
-											highlighted={item.highlighted}
-											showArrow={true}
-											openInNewTab={false}
-											onPreview={(media) => setPreview(media)}
-										/>
-									))}
+									{list.map((item) => {
+										const raw = withUtm(item.destination, item.slug);
+										let dest = raw;
+										const isAbsolute = /^(https?:)\/\//i.test(raw);
+										const isProtoRelative = /^\/\//.test(raw);
+										const isRelativePath = raw.startsWith('/');
+										let isExternal = false;
+
+										if (isAbsolute) {
+											isExternal = true;
+										} else if (isProtoRelative) {
+											// Normalize protocol-relative URLs to https
+											dest = `https:${raw}`;
+											isExternal = true;
+										} else if (!isRelativePath) {
+											// Bare hostname or missing scheme -> treat as external and prefix https
+											dest = `https://${raw}`;
+											isExternal = true;
+										}
+										return (
+											<LinkCard
+												key={item.slug}
+												title={item.title}
+												href={dest}
+												description={item.description}
+												details={item.details}
+												iconEmoji={item.iconEmoji}
+												imageUrl={item.imageUrl}
+												thumbnailUrl={item.thumbnailUrl}
+												videoUrl={item.videoUrl}
+												files={item.files}
+												pageId={item.pageId}
+												slug={item.slug}
+												highlighted={item.highlighted}
+												showArrow={true}
+												openInNewTab={isExternal}
+												onPreview={(media) => setPreview(media)}
+											/>
+										);
+									})}
 								</div>
 							</section>
 						))}
