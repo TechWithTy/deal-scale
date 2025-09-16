@@ -110,7 +110,8 @@ export async function POST(req: NextRequest) {
 		);
 	}
 
-	let pageId: string | undefined;
+    const debug = req.headers.get('x-debug') === '1' || req.nextUrl.searchParams.get('debug') === '1';
+    let pageId: string | undefined;
 	try {
 		// Verify secret
 		const provided =
@@ -124,24 +125,32 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		type WebhookBody = { page_id?: string; pageId?: string; id?: string };
-		let body: WebhookBody = {};
-		try {
-			body = (await req.json()) as WebhookBody;
-		} catch {
-			body = {};
-		}
-		pageId = body.page_id ?? body.pageId ?? body.id;
-		if (!pageId) {
-			return NextResponse.json(
-				{ ok: false, error: "missing page_id" },
-				{ status: 400 },
-			);
-		}
+        type WebhookBody = { page_id?: string; pageId?: string; id?: string };
+        let body: WebhookBody = {};
+        try {
+            body = (await req.json()) as WebhookBody;
+        } catch {
+            body = {};
+        }
+        pageId = body.page_id ?? body.pageId ?? body.id;
+        if (debug) {
+            console.log('[notion-webhook] headers', Object.fromEntries(req.headers));
+            console.log('[notion-webhook] body', body);
+            console.log('[notion-webhook] derived pageId', pageId);
+        }
+        if (!pageId) {
+            return NextResponse.json(
+                { ok: false, error: "missing page_id" },
+                { status: 400 },
+            );
+        }
 
-		const page = await fetchNotionPage(pageId);
-		const mapped = mapNotionPageToLinkTree(page);
-		const { slug, destination } = mapped;
+        const page = await fetchNotionPage(pageId);
+        const mapped = mapNotionPageToLinkTree(page);
+        if (debug) {
+            console.log('[notion-webhook] mapped', mapped);
+        }
+        const { slug, destination } = mapped;
 
 		if (!slug || !destination) {
 			return NextResponse.json(
@@ -164,26 +173,34 @@ export async function POST(req: NextRequest) {
 			utm_campaign: getRichTextPlain(propsRec, 'utm_campaign'),
 			utm_medium: getRichTextPlain(propsRec, 'utm_medium'),
 		};
-		const payload = removeNullUndefined({
-			destination,
-			utm: JSON.stringify(utm),
-			linkTreeEnabled: mapped.linkTreeEnabled,
-			title: mapped.title,
-			description: mapped.description,
-			details: mapped.details,
-			iconEmoji: mapped.iconEmoji,
-			imageUrl: mapped.imageUrl,
-			category: mapped.category,
-			pinned: mapped.pinned,
-			videoUrl: mapped.videoUrl,
-			files: mapped.files ? JSON.stringify(mapped.files) : undefined,
-		});
-		await redis.hset(key, payload);
+        const payload = removeNullUndefined({
+            destination,
+            utm: JSON.stringify(utm),
+            linkTreeEnabled: mapped.linkTreeEnabled,
+            title: mapped.title,
+            description: mapped.description,
+            details: mapped.details,
+            iconEmoji: mapped.iconEmoji,
+            imageUrl: mapped.imageUrl,
+            category: mapped.category,
+            pinned: mapped.pinned,
+            videoUrl: mapped.videoUrl,
+            files: mapped.files ? JSON.stringify(mapped.files) : undefined,
+        });
+        if (debug) {
+            console.log('[notion-webhook] redis key', key);
+            console.log('[notion-webhook] redis payload', payload);
+        }
+        await redis.hset(key, payload);
 
-		// Trigger UI revalidation (ensure your data fetch uses this tag)
-		try { revalidateTag("link-tree"); } catch { /* best effort */ }
+        // Trigger UI revalidation (ensure your data fetch uses this tag)
+        try { revalidateTag("link-tree"); } catch (e) { if (debug) console.log('[notion-webhook] revalidate error', e); }
 
-		return NextResponse.json({ ok: true, slug });
+        if (debug) {
+            const saved = await redis.hgetall(key);
+            return NextResponse.json({ ok: true, slug, key, saved, payload, utm });
+        }
+        return NextResponse.json({ ok: true, slug });
 	} catch (err: unknown) {
 		const errorMsg = err instanceof Error ? err.message : "internal error";
 		await sendSlackAlert(errorMsg, pageId);
