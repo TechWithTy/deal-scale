@@ -159,12 +159,25 @@ export async function POST(req: NextRequest) {
         }
 
         const page = await fetchNotionPage(pageId);
-        // Check if the page belongs to the redirects database (when configured)
         const redirectsDbId = process.env.NOTION_REDIRECTS_ID;
-        if (redirectsDbId && page?.parent?.database_id && page.parent.database_id !== redirectsDbId) {
-          if (debug) console.log('[notion-webhook] Ignoring page from different DB', { pageDb: page.parent.database_id, expected: redirectsDbId });
-          // Gracefully ignore unrelated pages
-          return NextResponse.json({ ok: true, ignored: true, reason: 'different_database' });
+        if (redirectsDbId && page?.parent?.database_id) {
+          const normalizeId = (id: string) => id.replace(/-/g, '');
+          const normalizedPageDbId = normalizeId(page.parent.database_id);
+          const normalizedRedirectsDbId = normalizeId(redirectsDbId || '');
+          if (debug) {
+            console.log('Database IDs:', {
+              pageDb: page.parent.database_id,
+              normalizedPageDbId,
+              expected: redirectsDbId,
+              normalizedRedirectsDbId
+            });
+          }
+          if (normalizedRedirectsDbId && normalizedPageDbId !== normalizedRedirectsDbId) {
+            if (debug) console.log('[notion-webhook] Ignoring page from different DB because normalized IDs do not match');
+            return NextResponse.json({ ok: true, ignored: true, reason: 'different_database' });
+          } else if (debug) {
+            console.log('[notion-webhook] Database IDs match');
+          }
         }
         const mapped = mapNotionPageToLinkTree(page);
         if (debug) {
