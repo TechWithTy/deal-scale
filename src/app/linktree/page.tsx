@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 export default async function LinkTreePage() {
 	// Build an absolute URL for server-side fetch to avoid URL parse errors in RSC
-	const h = headers();
+	const h = await headers();
 	const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
 	const protocol = h.get("x-forwarded-proto") ?? (process.env.VERCEL ? "https" : "http");
 	const base = `${protocol}://${host}`;

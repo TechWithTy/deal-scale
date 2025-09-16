@@ -36,7 +36,7 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   const props = page.properties ?? {};
   const slug = (props.Slug as NotionTitleProperty | undefined)?.title?.[0]
     ?.plain_text;
-  const destination = (props.Destination as NotionRichTextProperty | undefined)
+  let destination = (props.Destination as NotionRichTextProperty | undefined)
     ?.rich_text?.[0]?.plain_text;
   const titleRich = (props.Title as NotionRichTextProperty | undefined)
     ?.rich_text?.[0]?.plain_text as string | undefined;
@@ -52,14 +52,15 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
     ?.rich_text?.[0]?.plain_text as string | undefined;
   const iconEmoji = page.icon?.emoji as string | undefined;
 
-  // Image from Image/Thumbnail URL/Rich text/Files or page cover
+  // Image from Thumbnail/Image URL/Rich text/Files or page cover
+  // Prefer Thumbnail over Image when both exist
   const imageProp =
-    (props.Image as
+    (props.Thumbnail as
       | NotionUrlProperty
       | NotionRichTextProperty
       | NotionFilesProperty
       | undefined) ??
-    (props.Thumbnail as
+    (props.Image as
       | NotionUrlProperty
       | NotionRichTextProperty
       | NotionFilesProperty
@@ -114,6 +115,16 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   let videoUrl =
     (props.Video as NotionUrlProperty | undefined)?.url ?? undefined;
 
+  // Redirect behavior: Select field 'Redirect To Download First File'
+  let redirectToFirstFile = false;
+  const rtd = props["Redirect To Download First File"] as
+    | NotionSelectProperty
+    | undefined;
+  if (rtd?.type === "select") {
+    const name = (rtd.select?.name ?? "").toString().toLowerCase();
+    redirectToFirstFile = name === "true" || name === "yes" || name === "enabled";
+  }
+
   // Files list (support Media/Files/Image/File/video as Files & media)
   let files:
     | Array<{
@@ -131,7 +142,14 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
     (props.File as NotionFilesProperty | undefined) ??
     (props.file as NotionFilesProperty | undefined);
   const videoFilesProp = props.video as NotionFilesProperty | undefined;
-  const collected: typeof files extends Array<infer T> ? T[] : any[] = [] as any[];
+  type FileOut = {
+    name: string;
+    url: string;
+    kind?: "image" | "video" | "other";
+    ext?: string;
+    expiry?: string;
+  };
+  const collected: FileOut[] = [];
 
   const mapNotionFile = (f: NotionFilesFile | NotionFilesExternal) => {
     if ((f as NotionFilesFile).type === "file") {
@@ -158,7 +176,7 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
   const collectFrom = (prop?: NotionFilesProperty) => {
     if (prop?.type === "files" && Array.isArray(prop.files)) {
       for (const f of prop.files) {
-        const mapped = mapNotionFile(f as any);
+        const mapped = mapNotionFile(f as NotionFilesFile | NotionFilesExternal);
         if (mapped) collected.push(mapped);
       }
     }
@@ -183,6 +201,26 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
       seen.add(k);
       return true;
     });
+  }
+
+  // If redirectToFirstFile is enabled, prefer the dedicated File/Files columns first for override.
+  if (redirectToFirstFile) {
+    const fileCol = (props.File as NotionFilesProperty | undefined);
+    const filesCol = (props.Files as NotionFilesProperty | undefined);
+    let firstFileUrl: string | undefined;
+    const pickFirstFrom = (prop?: NotionFilesProperty) => {
+      if (firstFileUrl) return;
+      if (prop?.type === "files" && Array.isArray(prop.files)) {
+        const f = prop.files[0] as NotionFilesFile | NotionFilesExternal | undefined;
+        if (f && (f as NotionFilesFile).type === "file") firstFileUrl = (f as NotionFilesFile).file?.url ?? firstFileUrl;
+        else if (f && (f as NotionFilesExternal).type === "external") firstFileUrl = (f as NotionFilesExternal).external?.url ?? firstFileUrl;
+      }
+    };
+    // Priority: File -> Files -> any collected file fallback
+    pickFirstFrom(fileCol);
+    pickFirstFrom(filesCol);
+    if (!firstFileUrl && files && files.length) firstFileUrl = files[0]?.url;
+    if (firstFileUrl) destination = firstFileUrl;
   }
 
   if (!imageUrl && files && files.length) {
