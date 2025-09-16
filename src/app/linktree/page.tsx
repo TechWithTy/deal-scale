@@ -7,7 +7,8 @@ export default async function LinkTreePage() {
 	// Build an absolute URL for server-side fetch to avoid URL parse errors in RSC
 	const h = await headers();
 	const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-	const protocol = h.get("x-forwarded-proto") ?? (process.env.VERCEL ? "https" : "http");
+	const protocol =
+		h.get("x-forwarded-proto") ?? (process.env.VERCEL ? "https" : "http");
 	const base = `${protocol}://${host}`;
 	const resp = await fetch(`${base}/api/linktree`, {
 		next: { tags: ["link-tree"], revalidate: 300 },
@@ -17,7 +18,7 @@ export default async function LinkTreePage() {
 		return (
 			<LinkTree
 				items={[]}
-				title="Link Tree"
+				title="Links"
 				subtitle="Quick access to our most important links"
 			/>
 		);
@@ -38,7 +39,7 @@ export default async function LinkTreePage() {
 	return (
 		<LinkTree
 			items={items}
-			title="Link Tree"
+			title="Links"
 			subtitle="Quick access to our most important links"
 		/>
 	);

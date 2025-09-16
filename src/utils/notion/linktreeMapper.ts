@@ -20,6 +20,7 @@ export type MappedLinkTree = {
   details?: string;
   iconEmoji?: string;
   imageUrl?: string;
+  thumbnailUrl?: string;
   category?: string;
   pinned?: boolean;
   videoUrl?: string;
@@ -31,6 +32,7 @@ export type MappedLinkTree = {
     expiry?: string;
   }>;
   linkTreeEnabled?: boolean;
+  highlighted?: boolean;
 };
 
 export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
@@ -53,40 +55,34 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
     ?.rich_text?.[0]?.plain_text as string | undefined;
   const iconEmoji = page.icon?.emoji as string | undefined;
 
-  // Image from Thumbnail/Image URL/Rich text/Files or page cover
-  // Prefer Thumbnail over Image when both exist
-  const imageProp =
-    (props.Thumbnail as
-      | NotionUrlProperty
-      | NotionRichTextProperty
-      | NotionFilesProperty
-      | undefined) ??
-    (props.Image as
-      | NotionUrlProperty
-      | NotionRichTextProperty
-      | NotionFilesProperty
-      | undefined);
+  // Thumbnail (for icon only) and Image (for preview)
+  let thumbnailUrl: string | undefined;
+  const thumbProp = props.Thumbnail as
+    | NotionUrlProperty
+    | NotionRichTextProperty
+    | NotionFilesProperty
+    | undefined;
+  if (thumbProp?.type === "url") thumbnailUrl = thumbProp.url ?? undefined;
+  if (!thumbnailUrl && thumbProp?.type === "rich_text")
+    thumbnailUrl = thumbProp.rich_text?.[0]?.plain_text ?? undefined;
+  if (!thumbnailUrl && thumbProp?.type === "files" && Array.isArray(thumbProp.files)) {
+    const tf = thumbProp.files[0] as NotionFilesFile | NotionFilesExternal | undefined;
+    thumbnailUrl = (tf && (tf as NotionFilesFile).file?.url) || (tf && (tf as NotionFilesExternal).external?.url) || undefined;
+  }
+
+  // Image for preview – do NOT consider Thumbnail here
   let imageUrl: string | undefined;
-  if (imageProp?.type === "url") imageUrl = imageProp.url ?? undefined;
-  if (!imageUrl && imageProp?.type === "rich_text")
-    imageUrl = imageProp.rich_text?.[0]?.plain_text ?? undefined;
-  if (
-    !imageUrl &&
-    imageProp?.type === "files" &&
-    Array.isArray(imageProp.files)
-  ) {
-    const first = imageProp.files.find(
-      (f) =>
-        (f as NotionFilesFile).file?.url ||
-        (f as NotionFilesExternal).external?.url,
-    );
-    const fFile = first as NotionFilesFile | NotionFilesExternal | undefined;
-    imageUrl =
-      (fFile && "file" in fFile
-        ? fFile.file?.url
-        : fFile && "external" in fFile
-          ? fFile.external?.url
-          : undefined) ?? undefined;
+  const imgProp = props.Image as
+    | NotionUrlProperty
+    | NotionRichTextProperty
+    | NotionFilesProperty
+    | undefined;
+  if (imgProp?.type === "url") imageUrl = imgProp.url ?? undefined;
+  if (!imageUrl && imgProp?.type === "rich_text")
+    imageUrl = imgProp.rich_text?.[0]?.plain_text ?? undefined;
+  if (!imageUrl && imgProp?.type === "files" && Array.isArray(imgProp.files)) {
+    const first = imgProp.files[0] as NotionFilesFile | NotionFilesExternal | undefined;
+    imageUrl = (first && (first as NotionFilesFile).file?.url) || (first && (first as NotionFilesExternal).external?.url) || undefined;
   }
   if (!imageUrl && page.cover?.external?.url)
     imageUrl = page.cover.external.url ?? undefined;
@@ -113,6 +109,15 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
         .toString()
         .toLowerCase() === "true",
   );
+  // Highlighted (Select Yes/No or Checkbox)
+  let highlighted = false;
+  const hlSel = props["Highlighted"] as NotionSelectProperty | undefined;
+  if (hlSel?.type === "select") {
+    const name = (hlSel.select?.name ?? "").toString().toLowerCase();
+    highlighted = name === "yes" || name === "true" || name === "enabled";
+  }
+  const hlCb = props["Highlighted"] as unknown as NotionCheckboxProperty | undefined;
+  if (hlCb?.type === "checkbox") highlighted = highlighted || Boolean(hlCb.checkbox);
   let videoUrl =
     (props.Video as NotionUrlProperty | undefined)?.url ?? undefined;
 
@@ -248,10 +253,12 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
     details,
     iconEmoji,
     imageUrl,
+    thumbnailUrl,
     category,
     pinned,
     videoUrl,
     files,
     linkTreeEnabled,
+    highlighted,
   };
 }

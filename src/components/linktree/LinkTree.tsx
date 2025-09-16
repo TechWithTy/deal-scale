@@ -88,7 +88,7 @@ export function LinkTree({
 	}
 
 	return (
-		<div className="mx-auto max-w-2xl px-4 py-10 md:py-16">
+		<div className="mx-auto my-20 max-w-2xl px-4 py-10">
 			<header className="mb-6 md:mb-8">
 				<div className="flex items-center justify-between">
 					<div className="flex-1 text-center">
@@ -166,11 +166,14 @@ export function LinkTree({
 											details={item.details}
 											iconEmoji={item.iconEmoji}
 											imageUrl={item.imageUrl}
+											thumbnailUrl={item.thumbnailUrl}
 											videoUrl={item.videoUrl}
 											files={item.files}
 											pageId={item.pageId}
 											slug={item.slug}
-											externalOverride={true}
+											highlighted={item.highlighted}
+											showArrow={true}
+											openInNewTab={false}
 											onPreview={(media) => setPreview(media)}
 										/>
 									))}

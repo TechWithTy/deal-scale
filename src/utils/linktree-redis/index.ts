@@ -18,10 +18,12 @@ export type LinkTreeItem = {
   iconEmoji?: string;
   linkTreeEnabled?: boolean;
   imageUrl?: string;
+  thumbnailUrl?: string;
   category?: string;
   pinned?: boolean;
   videoUrl?: string;
   files?: FileMeta[];
+  highlighted?: boolean;
 };
 
 function coerceBool(v: unknown): boolean {
