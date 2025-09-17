@@ -6,8 +6,6 @@ function sanitizeUrlLike(input: string | undefined | null): string {
   // Remove common invisible spaces without unicode-range classes (to satisfy strict linters)
   s = s.replace(/\uFEFF/g, "").replace(/\u00A0/g, " ");
   s = s.trim();
-  // Collapse and remove ASCII whitespace inside the URL
-  s = s.replace(/\s+/g, "");
   return s;
 }
 
@@ -28,14 +26,16 @@ export function resolveLink(item: LinkTreeItem): { dest: string; isExternal: boo
   const isRelativePath = dest.startsWith("/");
   let isExternal = false;
 
-  if (isAbsolute) {
+  // Determine externality for UI hints
+  if (isAbsolute || isProtoRelative || (!isRelativePath && dest.length > 0)) {
     isExternal = true;
-  } else if (isProtoRelative) {
-    dest = `https:${raw0}`;
-    isExternal = true;
-  } else if (!isRelativePath) {
-    dest = `https://${raw0}`;
-    isExternal = true;
+  }
+
+  // Always route through internal slug so middleware can increment Redirects (Calls)
+  const slugPath = item.slug ? `/${String(item.slug).replace(/^\//, "")}` : "#";
+  // If destination is an internal path already, keep it; otherwise force slug path
+  if (!isRelativePath) {
+    dest = slugPath;
   }
 
   // Inspect internal redirect wrapper and unwrap display href
@@ -68,7 +68,7 @@ export function resolveLink(item: LinkTreeItem): { dest: string; isExternal: boo
   // Notion override
   if (item.redirectExternal) isExternal = true;
 
-  // Final safety: prevent malformed absolute (e.g., 'https://') from becoming href
+  // Final safety: if somehow absolute sneaks in and is malformed, fall back to slug
   if (/^https?:\/\//i.test(dest) && !isValidAbsoluteHttpUrl(dest)) {
     if (typeof window !== "undefined") {
       // eslint-disable-next-line no-console
