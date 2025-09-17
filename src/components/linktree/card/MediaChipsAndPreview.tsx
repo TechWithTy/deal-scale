@@ -76,6 +76,21 @@ export function MediaChipsAndPreview({
 	);
 	const [showInlineThumb, setShowInlineThumb] = React.useState(false);
 
+	const trackClick = React.useCallback(() => {
+		try {
+			const payload = { pageId, slug } as { pageId?: string; slug?: string };
+			if (payload.pageId || payload.slug) {
+				fetch("/api/linktree/click", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(payload),
+				}).catch(() => {});
+			}
+		} catch {
+			// ignore
+		}
+	}, [pageId, slug]);
+
 	return (
 		<>
 			{(firstVideoFromFiles?.url ||
@@ -169,6 +184,7 @@ export function MediaChipsAndPreview({
 								onClick={(e) => {
 									e.preventDefault();
 									e.stopPropagation();
+									trackClick();
 									const to = encodeURIComponent(f.url);
 									const pid = pageId
 										? `&pageId=${encodeURIComponent(pageId)}`
@@ -225,6 +241,7 @@ export function MediaChipsAndPreview({
 								href={rawVideoSrc}
 								target="_blank"
 								rel="noopener noreferrer"
+								onClick={trackClick}
 								className="ml-1 underline"
 							>
 								Open video

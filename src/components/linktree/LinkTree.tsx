@@ -161,7 +161,7 @@ export function LinkTree({ items, title = "Link Tree", subtitle }: LinkTreeProps
                         slug={item.slug}
                         highlighted={item.highlighted}
                         showArrow={true}
-                        openInNewTab={isExternal}
+                        openInNewTab={false}
                       />
                     );
                   })}
