@@ -87,11 +87,6 @@ export function LinkCard({
       onAuxClick={handleClick}
       onKeyDown={(e) => { if (e.key === 'Enter') handleClick(); }}
     >
-      {/* Non-blocking user feedback about redirect */}
-      {React.useEffect(() => {
-        // no-op hook placeholder to satisfy lint if needed
-        return () => {};
-      }, [])}
       {highlighted ? (
         <BorderBeam className="pointer-events-none" size={64} />
       ) : null}
