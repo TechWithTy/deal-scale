@@ -1,5 +1,69 @@
 import { NextResponse } from "next/server";
 
+// ---- Types (minimal, only what's needed for diagnostics) ----
+interface LinktreePreviewRow {
+  pageId: string | null;
+  slug: string | null;
+  destination: string | null;
+  title: string | null;
+  highlighted: boolean;
+  category: string | null;
+}
+
+// ---- Type guards ----
+function isRichText(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: "rich_text" }> {
+  return Boolean(p && p.type === "rich_text");
+}
+function isTitle(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: "title" }> {
+  return Boolean(p && p.type === "title");
+}
+function isUrl(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: "url" }> {
+  return Boolean(p && p.type === "url");
+}
+function isCheckbox(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: "checkbox" }> {
+  return Boolean(p && p.type === "checkbox");
+}
+function isSelect(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: "select" }> {
+  return Boolean(p && p.type === "select");
+}
+
+type LinktreeItem = Record<string, unknown>;
+
+type NotionTextSpan = { plain_text?: string };
+type NotionSelect = { name?: string };
+
+type NotionProperty =
+  | { type: "rich_text"; rich_text?: NotionTextSpan[] }
+  | { type: "title"; title?: NotionTextSpan[] }
+  | { type: "url"; url?: string }
+  | { type: "checkbox"; checkbox?: boolean }
+  | { type: "select"; select?: NotionSelect }
+  | { type: string };
+
+interface NotionPage {
+  id: string;
+  properties?: Record<string, NotionProperty>;
+}
+
+interface NotionQueryResponse {
+  results?: NotionPage[];
+}
+
+interface DebugRow {
+  pageId: string;
+  title: string | null;
+  slug: string | null;
+  destination: string | null;
+  destination_sanitized: string | null;
+  enabled: boolean;
+  raw: {
+    lte: { type: string | null; checkbox: boolean | null; select: string | null };
+    slug: { type: string | null };
+    destination: { type: string | null };
+  };
+  reasons: string[];
+}
+
 function parseDevRedirects(): Record<string, string> {
 	const out: Record<string, string> = {};
 	const raw = process.env.DEV_REDIRECTS?.trim();
@@ -38,30 +102,30 @@ export async function GET(req: Request) {
 		ok: true,
 	};
 	let linktreeHeaders: Record<string, string> | undefined;
-	let linktreePreview: any[] | undefined;
-	let linktreeItems: any[] | undefined;
-	let notionInvalids: any[] | undefined;
-	let notionAllRows: any[] | undefined;
+	let linktreePreview: LinktreePreviewRow[] | undefined;
+	let linktreeItems: LinktreeItem[] | undefined;
+	let notionInvalids: DebugRow[] | undefined;
+	let notionAllRows: DebugRow[] | undefined;
 	try {
 		const res = await fetch(`${url.origin}/api/linktree`, {
 			cache: "no-store",
 		});
 		if (res.ok) {
 			const data = (await res.json()) as unknown;
-			const items = Array.isArray((data as any)?.items)
-				? (data as any).items
+			const items: LinktreeItem[] = Array.isArray((data as Record<string, unknown>)?.items)
+				? ((data as Record<string, unknown>).items as LinktreeItem[])
 				: Array.isArray(data)
-					? data
+					? (data as LinktreeItem[])
 					: [];
 			linktreeSample = { ok: true, count: items.length };
 			linktreeHeaders = Object.fromEntries(res.headers.entries());
-			linktreePreview = items.slice(0, 5).map((it: any) => ({
-				pageId: it.pageId ?? it.id ?? null,
-				slug: it.slug ?? null,
-				destination: it.destination ?? null,
-				title: it.title ?? null,
-				highlighted: !!it.highlighted,
-				category: it.category ?? null,
+			linktreePreview = items.slice(0, 5).map((it: LinktreeItem): LinktreePreviewRow => ({
+				pageId: (it.pageId as string | undefined) ?? (it.id as string | undefined) ?? null,
+				slug: (it.slug as string | undefined) ?? null,
+				destination: (it.destination as string | undefined) ?? null,
+				title: (it.title as string | undefined) ?? null,
+				highlighted: Boolean(it.highlighted),
+				category: (it.category as string | undefined) ?? null,
 			}));
 			linktreeItems = limit ? items.slice(0, limit) : items;
 		} else {
@@ -93,34 +157,32 @@ export async function GET(req: Request) {
 				},
 			);
 			if (res.ok) {
-				const data = (await res.json()) as any;
+				const data = (await res.json()) as NotionQueryResponse;
 				const sanitize = (s: string | undefined): string =>
 					(s ?? "")
 						.replace(/\uFEFF/g, "")
 						.replace(/\u00A0/g, " ")
 						.trim();
-				const readTxt = (prop: any): string | undefined => {
+				const readTxt = (prop: NotionProperty | undefined): string | undefined => {
 					try {
 						if (!prop) return undefined;
-						if (prop.type === "rich_text") {
-							const arr = (prop.rich_text ?? []) as Array<{
-								plain_text?: string;
-							}>;
+						if (isRichText(prop)) {
+							const arr = (prop.rich_text ?? []) as NotionTextSpan[];
 							const joined = arr
 								.map((t) => t.plain_text ?? "")
 								.join("")
 								.trim();
 							return joined || undefined;
 						}
-						if (prop.type === "title") {
-							const arr = (prop.title ?? []) as Array<{ plain_text?: string }>;
+						if (isTitle(prop)) {
+							const arr = (prop.title ?? []) as NotionTextSpan[];
 							const joined = arr
 								.map((t) => t.plain_text ?? "")
 								.join("")
 								.trim();
 							return joined || undefined;
 						}
-						if (prop.type === "url")
+						if (isUrl(prop))
 							return (prop.url as string | undefined)?.trim();
 						return undefined;
 					} catch {
@@ -138,21 +200,22 @@ export async function GET(req: Request) {
 						return false;
 					}
 				};
-				const invalids: any[] = [];
-				const allRows: any[] = [];
-				for (const page of (data.results ?? []) as any[]) {
-					const props = page.properties ?? {};
-					const lte = props?.["Link Tree Enabled"];
+				const invalids: DebugRow[] = [];
+				const allRows: DebugRow[] = [];
+				for (const page of (data.results ?? []) as NotionPage[]) {
+					const props = page.properties ?? {} as Record<string, NotionProperty>;
+					const lte = props?.["Link Tree Enabled"] as NotionProperty | undefined;
 					let enabled = false;
-					if (lte?.type === "checkbox") enabled = Boolean(lte.checkbox);
-					else if (lte?.type === "select") {
+					if (isCheckbox(lte)) enabled = Boolean(lte.checkbox);
+					else if (isSelect(lte)) {
 						const name = (lte.select?.name ?? "").toString().toLowerCase();
 						enabled = name === "true" || name === "yes" || name === "enabled";
 					}
-					if (!enabled && props?.Type?.select?.name === "LinkTree") enabled = true;
-					const slugTxt = readTxt(props?.Slug);
-					const titleTxt = readTxt(props?.Title);
-					const destTxtRaw = readTxt(props?.Destination);
+					const typeProp = props.Type as NotionProperty | undefined;
+					if (!enabled && isSelect(typeProp) && typeProp.select?.name === "LinkTree") enabled = true;
+					const slugTxt = readTxt(props.Slug as NotionProperty | undefined);
+					const titleTxt = readTxt(props.Title as NotionProperty | undefined);
+					const destTxtRaw = readTxt(props.Destination as NotionProperty | undefined);
 					const destTxt = sanitize(destTxtRaw);
 					const reasons: string[] = [];
 					if (!slugTxt && !(titleTxt || "").startsWith("/"))
@@ -163,7 +226,7 @@ export async function GET(req: Request) {
 						!isValidAbsoluteHttpUrl(destTxt)
 					)
 						reasons.push("invalid absolute destination");
-					const row = {
+					const row: DebugRow = {
 						pageId: page.id,
 						title: titleTxt ?? null,
 						slug: slugTxt ?? null,
@@ -173,11 +236,11 @@ export async function GET(req: Request) {
 						raw: {
 							lte: {
 								type: lte?.type ?? null,
-								checkbox: lte?.checkbox ?? null,
-								select: lte?.select?.name ?? null,
+								checkbox: isCheckbox(lte) ? lte.checkbox ?? null : null,
+								select: isSelect(lte) ? lte.select?.name ?? null : null,
 							},
-							slug: { type: props?.Slug?.type ?? null },
-							destination: { type: props?.Destination?.type ?? null },
+							slug: { type: props.Slug?.type ?? null },
+							destination: { type: props.Destination?.type ?? null },
 						},
 						reasons,
 					};

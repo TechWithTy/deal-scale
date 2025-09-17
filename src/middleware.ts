@@ -6,6 +6,10 @@ type Found = {
 	utm_source?: string;
 	utm_campaign?: string;
 	utm_medium?: string;
+	utm_content?: string;
+	utm_term?: string;
+	utm_id?: string;
+	utm_redirect_url?: string;
 	pageId?: string;
 	nextCalls?: number;
 };
@@ -18,6 +22,32 @@ function sanitizeUrlLike(input: string | undefined | null): string {
 		.replace(/[\u200B-\u200D\u2060\uFEFF]/g, "")
 		.replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, " ")
 		.trim();
+}
+
+function pickProp(
+  props: Record<string, unknown>,
+  aliases: string[],
+): unknown {
+  // 1) Exact alias match
+  for (const a of aliases) {
+    if (Object.prototype.hasOwnProperty.call(props, a)) return (props as any)[a];
+  }
+  // 2) Case-insensitive exact
+  const lowerMap = new Map<string, string>();
+  for (const k of Object.keys(props)) lowerMap.set(k.toLowerCase(), k);
+  for (const a of aliases) {
+    const hit = lowerMap.get(a.toLowerCase());
+    if (hit) return (props as any)[hit];
+  }
+  // 3) Starts-with / includes fuzzy
+  for (const a of aliases) {
+    for (const k of Object.keys(props)) {
+      const lk = k.toLowerCase();
+      const la = a.toLowerCase();
+      if (lk.startsWith(la) || lk.includes(la)) return (props as any)[k];
+    }
+  }
+  return undefined;
 }
 
 function parseDevRedirects(): Record<string, string> {
@@ -145,18 +175,20 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 			const data = await resp.json();
 			const page = data?.results?.[0];
 			if (!page) continue;
-			const props = page.properties ?? {};
+			const props = page.properties ?? {} as Record<string, unknown>;
 			const destination = getDestinationStrict(props?.Destination);
 			if (!destination) continue;
 			// Support multiple UTM property spellings from Notion
-			const utm_source =
-				getPlain(props?.["UTM Source"]) ?? getPlain(props?.utm_source);
-			const utm_campaign =
-				getPlain(props?.["UTM Campaign"]) ??
-				getPlain(props?.["UTM Campaign (R...)"]) ??
-				getPlain(props?.utm_campaign);
-			const utm_medium =
-				getPlain(props?.["UTM Medium"]) ?? getPlain(props?.utm_medium);
+			const utm_source = getPlain(pickProp(props, ["UTM Source", "utm_source"]))?.trim();
+			const utm_campaign = getPlain(pickProp(props, ["UTM Campaign", "utm_campaign"]))?.trim();
+			const utm_medium = getPlain(pickProp(props, ["UTM Medium", "utm_medium"]))?.trim();
+			const utm_content = getPlain(pickProp(props, ["UTM Content", "utm_content"]))?.trim();
+			const utm_term = getPlain(pickProp(props, ["UTM Term", "utm_term"]))?.trim();
+			const utm_id = getPlain(pickProp(props, ["UTM Id", "utm_id"]))?.trim();
+			// Custom second-stage redirect URL captured as UTM param
+			const redirectUrlRawPlain = getPlain(pickProp(props, ["RedirectUrl", "Redirect URL", "redirect_url", "redirecturl"]))?.trim();
+			const redirectUrlRaw = redirectUrlRawPlain || getDestinationStrict(pickProp(props, ["RedirectUrl", "Redirect URL"])) || undefined;
+			const utm_redirect_url = redirectUrlRaw ? sanitizeUrlLike(redirectUrlRaw) : undefined;
 			const callsProp = (props as any)?.["Redirects (Calls)"];
 			const current =
 				typeof callsProp?.number === "number" ? callsProp.number : 0;
@@ -166,6 +198,10 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 				utm_source,
 				utm_campaign,
 				utm_medium,
+				utm_content,
+				utm_term,
+				utm_id,
+				utm_redirect_url,
 				pageId: page.id as string,
 				nextCalls,
 			};
@@ -255,18 +291,64 @@ export async function middleware(req: NextRequest) {
 		}
 
 		const url = isRelative ? new URL(dest, req.nextUrl.origin) : new URL(dest);
-		// Append UTM if present
+		// First, remove any existing utm_* on the destination to avoid leaking defaults from source links
+		for (const [k] of url.searchParams.entries()) {
+			if (k.startsWith("utm_")) url.searchParams.delete(k);
+		}
+		// Append UTM if present (from Notion)
 		if (found.utm_source) url.searchParams.set("utm_source", found.utm_source);
-		if (found.utm_campaign)
-			url.searchParams.set("utm_campaign", found.utm_campaign);
+		if (found.utm_campaign) url.searchParams.set("utm_campaign", found.utm_campaign);
 		if (found.utm_medium) url.searchParams.set("utm_medium", found.utm_medium);
+		if (found.utm_content) url.searchParams.set("utm_content", found.utm_content);
+		if (found.utm_term) url.searchParams.set("utm_term", found.utm_term);
+		if (found.utm_id) url.searchParams.set("utm_id", found.utm_id);
+		if (found.utm_redirect_url)
+			url.searchParams.set("utm_redirect_url", found.utm_redirect_url);
 
-		// Pass through UTMs from original request, overriding any from Notion
-		for (const [key, value] of req.nextUrl.searchParams.entries()) {
-			if (key.startsWith("utm_")) {
-				url.searchParams.set(key, value);
+		// Debug: show the UTMs we are about to use (helps verify Notion -> URL mapping)
+		console.log("[middleware] UTMs (after Notion + optional overrides):", {
+			source: url.searchParams.get("utm_source"),
+			campaign: url.searchParams.get("utm_campaign"),
+			medium: url.searchParams.get("utm_medium"),
+			content: url.searchParams.get("utm_content"),
+			term: url.searchParams.get("utm_term"),
+			id: url.searchParams.get("utm_id"),
+			redirect_url: url.searchParams.get("utm_redirect_url"),
+		});
+
+		// Optional: allow incoming request UTMs to override Notion (off by default)
+		if ((process.env.ALLOW_INCOMING_UTM || "").trim() === "1") {
+			for (const [key, value] of req.nextUrl.searchParams.entries()) {
+				if (!key.startsWith("utm_")) continue;
+				const v = (value ?? "").trim();
+				if (!v) continue; // skip empty
+				if (v.toLowerCase() === "undefined" || v.toLowerCase() === "null") continue; // skip placeholders
+				url.searchParams.set(key, v);
 			}
 		}
+
+		// If we have a second-stage utm_redirect_url, embed the same UTM params into it
+		const rawSecond = url.searchParams.get("utm_redirect_url");
+		if (rawSecond) {
+			try {
+				const secondUrl = new URL(rawSecond, req.nextUrl.origin);
+				// Remove any existing utm_* on the second-stage URL first
+				for (const [k] of secondUrl.searchParams.entries()) {
+					if (k.startsWith("utm_")) secondUrl.searchParams.delete(k);
+				}
+				// Copy over all utm_ params from the outer URL to the inner second-stage URL
+				for (const [k, v] of url.searchParams.entries()) {
+					if (k.startsWith("utm_") && k !== "utm_redirect_url") {
+						secondUrl.searchParams.set(k, v);
+					}
+				}
+				url.searchParams.set("utm_redirect_url", secondUrl.toString());
+			} catch {
+				// leave as-is if it wasn't a valid URL
+			}
+		}
+
+		console.log("[middleware] Final redirect:", url.toString());
 
 		// Add RedirectSource based on referer
 		const referer = req.headers.get("referer");

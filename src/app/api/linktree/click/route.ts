@@ -37,6 +37,9 @@ async function findPageIdBySlug(dbId: string, slug: string, token: string): Prom
       const page = data?.results?.[0];
       if (page?.id) return page.id as string;
     }
+  }
+  return null;
+}
 
 export async function GET(req: Request) {
   try {
@@ -72,9 +75,6 @@ export async function GET(req: Request) {
   } catch (e) {
     return NextResponse.json({ ok: false, error: (e as Error).message }, { status: 500 });
   }
-}
-  }
-  return null;
 }
 
 type NotionPageDump = { properties?: Record<string, { type?: string; number?: number }> };
