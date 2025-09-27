@@ -12,7 +12,7 @@ import {
 	renderFormField,
 } from "@/components/contact/form/formFieldHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -54,38 +54,42 @@ export default function ContactForm({
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const baseDefaults: Partial<BetaTesterFormValues> = {
-		firstName: "",
-		lastName: "",
-		companyName: "",
-		email: "",
-		phone: "",
-		icpType: "",
-		employeeCount: "",
-		dealsClosedLastYear: "",
-		dealDocuments: [],
-		termsAccepted: false,
-	};
+	const baseDefaults = useMemo<Partial<BetaTesterFormValues>>(
+		() => ({
+			firstName: undefined,
+			lastName: undefined,
+			companyName: "",
+			email: undefined,
+			phone: undefined,
+			icpType: "",
+			employeeCount: "",
+			dealsClosedLastYear: "",
+			dealDocuments: [],
+			termsAccepted: false,
+		}),
+		[],
+	);
 
 	// Merge defaults with prefill and remove empty arrays for non-empty tuple fields
-	const computeMergedDefaults = (
-		seed?: Partial<BetaTesterFormValues>,
-	): BetaTesterFormValues => {
-		const merged: Partial<BetaTesterFormValues> = {
-			...baseDefaults,
-			...(seed ?? {}),
-		};
-		if (
-			Array.isArray(merged.wantedFeatures) &&
-			merged.wantedFeatures.length === 0
-		) {
-			delete merged.wantedFeatures;
-		}
-		if (Array.isArray(merged.painPoints) && merged.painPoints.length === 0) {
-			delete merged.painPoints;
-		}
-		return merged as BetaTesterFormValues;
-	};
+	const computeMergedDefaults = useCallback(
+		(seed?: Partial<BetaTesterFormValues>): BetaTesterFormValues => {
+			const merged: Partial<BetaTesterFormValues> = {
+				...baseDefaults,
+				...(seed ?? {}),
+			};
+			const { wantedFeatures, painPoints, ...rest } = merged;
+			return {
+				...rest,
+				...(Array.isArray(wantedFeatures) && wantedFeatures.length > 0
+					? { wantedFeatures }
+					: {}),
+				...(Array.isArray(painPoints) && painPoints.length > 0
+					? { painPoints }
+					: {}),
+			} as BetaTesterFormValues;
+		},
+		[baseDefaults],
+	);
 
 	const form = useForm<BetaTesterFormValues>({
 		resolver: zodResolver(betaTesterFormSchema),
@@ -94,22 +98,36 @@ export default function ContactForm({
 
 	// Ensure URL-based prefill applies after hydration
 	useEffect(() => {
-		if (prefill && Object.keys(prefill).length > 0) {
-			form.reset(computeMergedDefaults(prefill));
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [JSON.stringify(prefill)]);
+		form.reset(computeMergedDefaults(prefill));
+	}, [prefill, form, computeMergedDefaults]);
 
 	const onSubmit = async (data: BetaTesterFormValues) => {
 		setIsSubmitting(true);
 		try {
+			const resolvedFirstName = data.firstName ?? prefill?.firstName;
+			const resolvedLastName = data.lastName ?? prefill?.lastName;
+			const resolvedEmail = data.email ?? prefill?.email;
+			const resolvedPhone = data.phone ?? prefill?.phone;
+			if (!resolvedEmail) {
+				toast.error(
+					"We couldn't find an email on your profile. Please update it before submitting.",
+				);
+				return;
+			}
+			const submission: BetaTesterFormValues = {
+				...data,
+				firstName: resolvedFirstName,
+				lastName: resolvedLastName,
+				email: resolvedEmail,
+				phone: resolvedPhone,
+			};
 			// * Send form data to the new contact endpoint for SendGrid integration
 			const response = await fetch("/api/contact", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ ...data, beta_tester: true }),
+				body: JSON.stringify({ ...submission, beta_tester: true }),
 			});
 
 			if (!response.ok) {
@@ -126,7 +144,10 @@ export default function ContactForm({
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email: data.email, send_welcome_email: true }),
+				body: JSON.stringify({
+					email: submission.email,
+					send_welcome_email: true,
+				}),
 			});
 
 			if (beehiivResponse.ok) {
@@ -149,7 +170,7 @@ export default function ContactForm({
 				}
 			}
 
-			form.reset();
+			form.reset(computeMergedDefaults(prefill));
 		} catch (err) {
 			console.error("Submission failed:", err);
 			toast.error("Submission failed. Please try again.");
@@ -171,6 +192,10 @@ export default function ContactForm({
 			<FormProvider {...form}>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+						<input type="hidden" {...form.register("firstName")} />
+						<input type="hidden" {...form.register("lastName")} />
+						<input type="hidden" {...form.register("email")} />
+						<input type="hidden" {...form.register("phone")} />
 						{/* Dynamically render all fields */}
 						{betaTesterFormFields.map((field) => (
 							<FormField

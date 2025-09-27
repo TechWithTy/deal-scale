@@ -144,7 +144,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 						{/* Lottie animation for market access */}
 						<Lottie
 							animationData={require("@/assets/animations/market_analysis.json")}
-							className="m-0 h-full w-full max-h-48 object-contain p-0 sm:max-h-56 md:max-h-64"
+							className="m-0 h-full max-h-48 w-full object-contain p-0 sm:max-h-56 md:max-h-64"
 							style={{ display: "block", margin: 0, padding: 0, lineHeight: 1 }}
 						/>
 					</div>

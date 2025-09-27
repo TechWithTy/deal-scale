@@ -1,8 +1,8 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import type { Plan } from "@/types/service/plans";
 import Pricing from "@/components/home/Pricing";
+import type { Plan } from "@/types/service/plans";
+import { useSearchParams } from "next/navigation";
 
 /**
  * Props for PricingClient, supporting callbackUrl for post-auth/payment redirects.

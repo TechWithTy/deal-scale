@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { AnimatedList } from "@/components/ui/animatedList";
-import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
-import { exampleResults } from "@/data/skiptTraceExample";
 import Header from "@/components/common/Header";
+import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
+import { AnimatedList } from "@/components/ui/animatedList";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { exampleResults } from "@/data/skiptTraceExample";
+import { useState } from "react";
 
 const LeadEnrichmentDemo = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +58,7 @@ const LeadEnrichmentDemo = () => {
 			)}
 			{loading && (
 				<div className="flex h-40 w-full animate-pulse flex-col items-center justify-center">
-					<span className="mb-2 text-base font-medium text-muted-foreground">
+					<span className="mb-2 font-medium text-base text-muted-foreground">
 						Analyzing public records…
 					</span>
 					<div className="h-4 w-2/3 rounded bg-muted" />
@@ -73,11 +73,11 @@ const LeadEnrichmentDemo = () => {
 									key={section.name}
 									className="mb-2 rounded-xl border bg-background p-4 shadow-sm"
 								>
-									<div className="mb-1 flex items-center gap-2 text-lg font-semibold">
+									<div className="mb-1 flex items-center gap-2 font-semibold text-lg">
 										<span className="text-2xl">{section.icon}</span>
 										<span>{section.label}</span>
 									</div>
-									<ul className="ml-7 mt-1 list-disc text-base text-muted-foreground">
+									<ul className="mt-1 ml-7 list-disc text-base text-muted-foreground">
 										{section.items.map((item) => (
 											<li key={item}>{item}</li>
 										))}

@@ -1,5 +1,5 @@
-import type { z } from "zod";
 import type { priorityPilotFormSchema } from "@/data/contact/pilotFormFields";
+import type { z } from "zod";
 
 /**
  * @description Represents the type derived from the Zod schema for a pilot program user.

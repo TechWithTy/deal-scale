@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import type { Testimonial } from "@/types/testimonial";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
@@ -9,7 +10,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Header from "../common/Header";
-import { cn } from "@/lib/utils";
 interface TestimonialsProps {
 	testimonials: Testimonial[];
 	title: string;

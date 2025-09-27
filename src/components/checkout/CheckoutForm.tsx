@@ -11,15 +11,15 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
-import { validateDiscountCode } from "@/utils/discountValidator";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import type { DiscountCode } from "@/types/discount/discountCode";
-import type { Plan } from "@/types/service/plans";
 import type { ProductCategory } from "@/types/products";
+import type { Plan } from "@/types/service/plans";
 import type {
-	ServiceItemData,
 	ServiceCategoryValue,
+	ServiceItemData,
 } from "@/types/service/services";
+import { validateDiscountCode } from "@/utils/discountValidator";
 import {
 	PaymentElement,
 	useElements,

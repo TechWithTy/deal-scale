@@ -1,12 +1,8 @@
+import type { CartItem, CartState, CartSummary } from "@/types/cart/index";
+import { DEFAULT_CART_SUMMARY } from "@/types/cart/index";
+import type { ProductType } from "@/types/products";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { ProductType } from "@/types/products";
-import type {
-	CartItem,
-	CartState,
-	CartSummary,
-	DEFAULT_CART_SUMMARY,
-} from "@/types/cart";
 
 // Helper to safely get the price of an item (supports both product and variant prices)
 const getItemPrice = (item: CartItem): number =>

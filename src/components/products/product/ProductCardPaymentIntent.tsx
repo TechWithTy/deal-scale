@@ -42,6 +42,7 @@ const validateProductProps = (
 };
 
 import CheckoutForm from "@/components/checkout/CheckoutForm";
+import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
 import { Button } from "@/components/ui/button";
 /**
  * ProductCard - displays product info in a styled card (no icon)
@@ -52,7 +53,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import { CircleDollarSign, Gem } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)

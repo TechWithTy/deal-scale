@@ -11,7 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { properties as allProperties } from "@/data/mlsProperties";
 import type { Property } from "@/data/mlsProperties";
 import dynamic from "next/dynamic";
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const RentalMarketAnalyzer = () => {
 	const [zipcode, setZipcode] = useState("");
@@ -95,7 +95,7 @@ const RentalMarketAnalyzer = () => {
 							<div>
 								<Label htmlFor="zipcodes">
 									Zip Codes{" "}
-									<span className="text-xs text-gray-500">
+									<span className="text-gray-500 text-xs">
 										(comma separated for multiple areas)
 									</span>
 								</Label>
@@ -107,14 +107,14 @@ const RentalMarketAnalyzer = () => {
 									placeholder="e.g. 94110, 94117"
 									className="mt-2"
 								/>
-								<p className="mt-1 text-xs text-gray-500">
+								<p className="mt-1 text-gray-500 text-xs">
 									Analyze rental markets in one or more zip codes.
 								</p>
 							</div>
 							<div>
 								<Label htmlFor="address">
 									Address{" "}
-									<span className="text-xs text-gray-500">(optional)</span>
+									<span className="text-gray-500 text-xs">(optional)</span>
 								</Label>
 								<Input
 									id="address"
@@ -125,7 +125,7 @@ const RentalMarketAnalyzer = () => {
 									// value={address}
 									// onChange={(e) => setAddress(e.target.value)}
 								/>
-								<p className="mt-1 text-xs text-gray-500">
+								<p className="mt-1 text-gray-500 text-xs">
 									Estimate property value for a specific address.
 								</p>
 							</div>
@@ -155,7 +155,7 @@ const RentalMarketAnalyzer = () => {
 				<div className="h-[300px]">
 					<MapComponent properties={displayedProperties} />
 					<div className="mt-4">
-						<h3 className="font-bold text-lg mb-2">Sample Listings</h3>
+						<h3 className="mb-2 font-bold text-lg">Sample Listings</h3>
 						<ul className="divide-y divide-gray-200 dark:divide-gray-700">
 							{displayedProperties.slice(0, 3).map((property) => (
 								<li key={property.id} className="py-2">

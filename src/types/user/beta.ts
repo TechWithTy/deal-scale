@@ -1,5 +1,5 @@
-import type { z } from "zod";
 import type { betaTesterFormSchema } from "@/data/contact/formFields";
+import type { z } from "zod";
 
 /**
  * @description Represents the type derived from the Zod schema for a beta tester.

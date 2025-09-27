@@ -20,6 +20,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { fetchUserDisplayName } from "@/lib/auth/user-display-name";
 import { createFieldProps, renderFormField } from "./formFieldHelpers";
 
 /**
@@ -34,15 +35,16 @@ export function SignUpForm({ callbackUrl }: { callbackUrl?: string }) {
 		resolver: zodResolver(signUpSchema),
 		defaultValues: {
 			email: "",
-			phone: "",
+			first_name: "",
+			last_name: "",
 			password: "",
+			confirm_password: "",
 		},
 	});
 
 	async function onSubmit(values: SignUpFormValues) {
 		setIsLoading(true);
 		try {
-			// todo: Create the /api/auth/register endpoint
 			const res = await fetch("/api/auth/register", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -51,7 +53,40 @@ export function SignUpForm({ callbackUrl }: { callbackUrl?: string }) {
 
 			if (!res.ok) {
 				const errorData = await res.json();
-				throw new Error(errorData.message || "Failed to create account.");
+				const errorMessage =
+					errorData?.message ||
+					errorData?.detail ||
+					"Failed to create account.";
+
+				// Parse field-specific validation errors from DealScale API
+				if (errorData?.detail && Array.isArray(errorData.detail)) {
+					for (const err of errorData.detail) {
+						const fieldPath = err.loc?.join(".") || "";
+						const errorMsg = err.msg || err.message || "";
+
+						// Map API field names to form field names
+						const fieldMapping: Record<string, keyof SignUpFormValues> = {
+							"body.email": "email",
+							"body.password": "password",
+							"body.confirm_password": "confirm_password",
+							"body.first_name": "first_name",
+							"body.last_name": "last_name",
+						};
+
+						const formField = fieldMapping[fieldPath];
+						if (formField) {
+							form.setError(formField, {
+								type: "server",
+								message: errorMsg,
+							});
+						}
+					}
+				} else {
+					// Show general error as toast
+					toast.error(errorMessage);
+				}
+
+				throw new Error(errorMessage);
 			}
 
 			// Automatically sign in the user after successful registration
@@ -63,7 +98,12 @@ export function SignUpForm({ callbackUrl }: { callbackUrl?: string }) {
 			});
 
 			if (signInResult?.ok) {
-				toast.success("Account created and logged in!");
+				const fullName = await fetchUserDisplayName();
+				toast.success(
+					fullName
+						? `Welcome ${fullName}! Please check your email & SMS for next steps.`
+						: "Account created! Please check your email & SMS for next steps.",
+				);
 				if (callbackUrl) {
 					// Redirect to the callback URL if provided
 					window.location.href = callbackUrl;

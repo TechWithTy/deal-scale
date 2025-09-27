@@ -1,29 +1,29 @@
 "use client";
 
-// External imports
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+// External imports
+import { useEffect, useState } from "react";
 
 // Internal imports
 import { Button } from "@/components/ui/button";
 import { useProductSelection } from "@/contexts/ProductSelectionContext";
 import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
-import { getShippingInfo, calculateShippingCost } from "@/data/shipping";
+import { calculateShippingCost, getShippingInfo } from "@/data/shipping";
 import { cn } from "@/lib/utils";
-import type { ProductType } from "@/types/products";
-import { TAX_RATE, type ShippingOption } from "@/types/products/shipping";
 import type { DiscountCode } from "@/types/discount/discountCode";
+import type { ProductType } from "@/types/products";
+import { type ShippingOption, TAX_RATE } from "@/types/products/shipping";
 
+import { CheckoutFooter } from "./CheckoutFooter";
 // Local component imports
 import { CheckoutHeader } from "./CheckoutHeader";
 import { DiscountCodeInput } from "./DiscountCodeInput";
+import { OrderSummary } from "./OrderSummary";
 import { PaymentSection } from "./PaymentSection";
 import { ShippingMethodSelector } from "./ShippingMethodSelector";
-import { OrderSummary } from "./OrderSummary";
-import { CheckoutFooter } from "./CheckoutFooter";
 
 interface ProductCheckoutFormProps {
 	product: ProductType;

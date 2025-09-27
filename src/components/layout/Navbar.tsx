@@ -102,7 +102,7 @@ const DesktopNav = () => {
 												// * Render CTA Card if any CTA fields are present
 												<div
 													key={child.title}
-													className="relative flex flex-col gap-4 rounded-lg border bg-card p-4 shadow-sm md:col-span-2 md:flex-row md:items-center border-border text-card-foreground dark:shadow-md"
+													className="relative flex flex-col gap-4 rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm md:col-span-2 md:flex-row md:items-center dark:shadow-md"
 												>
 													{child.image && (
 														<div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md md:h-32 md:w-32">
@@ -115,17 +115,17 @@ const DesktopNav = () => {
 														</div>
 													)}
 													<div className="flex flex-1 flex-col gap-2">
-														<span className="text-xs font-semibold uppercase text-primary">
+														<span className="font-semibold text-primary text-xs uppercase">
 															{child.ctaTitle || child.title}
 														</span>
 														{child.ctaSubtitle && (
-															<span className="text-sm text-muted-foreground">
+															<span className="text-muted-foreground text-sm">
 																{child.ctaSubtitle}
 															</span>
 														)}
 														{/* Newsletter Signup replaces CTA button */}
 														<div className="mt-2 flex flex-col gap-2">
-															<span className="text-xs font-bold text-foreground">
+															<span className="font-bold text-foreground text-xs">
 																Sign up for our newsletter
 															</span>
 															<NewsletterEmailInput />
@@ -247,16 +247,16 @@ const MobileNav = ({ isOpen, onClose }) => {
 																</div>
 															)}
 															<div className="flex flex-col gap-2">
-																<span className="text-xs font-semibold uppercase text-primary">
+																<span className="font-semibold text-primary text-xs uppercase">
 																	{child.ctaTitle || child.title}
 																</span>
 																{child.ctaSubtitle && (
-																	<span className="text-sm text-muted-foreground">
+																	<span className="text-muted-foreground text-sm">
 																		{child.ctaSubtitle}
 																	</span>
 																)}
 																<div className="mt-2">
-																	<span className="mb-2 block text-xs font-bold text-foreground">
+																	<span className="mb-2 block font-bold text-foreground text-xs">
 																		Sign up for our newsletter
 																	</span>
 																	<NewsletterEmailInput />

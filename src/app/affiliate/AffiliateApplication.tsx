@@ -8,6 +8,10 @@ import { Newsletter } from "@/components/contact/newsletter/Newsletter";
 import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
 import Testimonials from "@/components/home/Testimonials";
+import {
+	type AffiliateFormValues,
+	affiliateFormFields,
+} from "@/data/contact/affiliate";
 import { discountCodes } from "@/data/discount";
 import {
 	affiliateProgramSteps,
@@ -19,13 +23,9 @@ import type { DiscountCode } from "@/types/discount/discountCode";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useSearchParams } from "next/navigation";
-import {
-	affiliateFormFields,
-	type AffiliateFormValues,
-} from "@/data/contact/affiliate";
 // * Centralized SEO for /affiliate using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/affiliate");

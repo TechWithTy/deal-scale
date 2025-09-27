@@ -1,7 +1,7 @@
-import { cookiesPolicyMarkdown } from "@/data/constants/legal/cookies";
 import { gdprPolicyMarkdown } from "@/data/constants/legal/GDPR";
-import { hipaaMarkdown } from "@/data/constants/legal/hippa";
 import { PIIMarkdown } from "@/data/constants/legal/PII";
+import { cookiesPolicyMarkdown } from "@/data/constants/legal/cookies";
+import { hipaaMarkdown } from "@/data/constants/legal/hippa";
 import { privacyPolicyMarkdown } from "@/data/constants/legal/privacy";
 import { tcpComplianceMarkdown } from "@/data/constants/legal/tcpCompliance";
 import { termsOfServiceMarkdown } from "@/data/constants/legal/terms";

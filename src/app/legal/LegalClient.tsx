@@ -1,24 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import {
 	Card,
+	CardDescription,
 	CardHeader,
 	CardTitle,
-	CardDescription,
 } from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
+	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogDescription,
 } from "@/components/ui/dialog";
-import DOMPurify from "dompurify";
 import {
-	legalDocuments,
 	type LegalDocument,
+	legalDocuments,
 } from "@/data/legal/legalDocuments";
+import DOMPurify from "dompurify";
+import { useState } from "react";
 
 const LegalClient = () => {
 	const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);

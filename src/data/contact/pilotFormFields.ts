@@ -74,12 +74,12 @@ const interestedFeatureOptions = [
 
 export const priorityPilotFormSchema = z.object({
 	// Section 1: Contact & Company Info
-	firstName: z.string().min(2, { message: "First name is required." }),
-	lastName: z.string().min(2, { message: "Last name is required." }),
+	firstName: z.string().optional(),
+	lastName: z.string().optional(),
+	email: z.string().email({ message: "A valid business email is required." }).optional(),
+	phone: z.string().optional(),
 	companyName: z.string().min(2, { message: "Company name is required." }),
 	companyLogo: z.instanceof(File).optional(),
-	email: z.string().email({ message: "A valid business email is required." }),
-	phone: z.string().min(10, { message: "A valid phone number is required." }),
 
 	// Section 1.5: Location
 	zipCode: z.string().min(5, { message: "A valid ZIP code is required." }),
@@ -124,22 +124,6 @@ export type PriorityPilotFormValues = z.infer<typeof priorityPilotFormSchema>;
 export const priorityPilotFormFields: FieldConfig[] = [
 	// --- Section 1: Your Information ---
 	{
-		name: "firstName",
-		label: "First Name",
-		type: "text",
-		placeholder: "Jane",
-		value: "",
-		onChange: (value: string) => {},
-	},
-	{
-		name: "lastName",
-		label: "Last Name",
-		type: "text",
-		placeholder: "Doe",
-		value: "",
-		onChange: (value: string) => {},
-	},
-	{
 		name: "companyName",
 		label: "Company Name",
 		type: "text",
@@ -155,23 +139,6 @@ export const priorityPilotFormFields: FieldConfig[] = [
 		multiple: false,
 		value: [],
 		onChange: (value: File[]) => {},
-	},
-	{
-		name: "email",
-		label: "Business Email",
-		type: "email",
-		placeholder: "jane@apex-re.com",
-		value: "",
-		onChange: (value: string) => {},
-	},
-	{
-		name: "phone",
-		label: "Primary Phone Number",
-		type: "tel",
-		placeholder: "+1 (555) 123-4567",
-		pattern: "^\\+?1?\\s?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4}$",
-		value: "",
-		onChange: (value: string) => {},
 	},
 	{
 		name: "zipCode",

@@ -5,9 +5,9 @@
 import { BorderBeam } from "@/components/magicui/border-beam";
 import type { HeroGridItem } from "@/data/products/hero";
 import { DEFAULT_GRID, defaultHeroProps } from "@/data/products/hero";
+import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import type React from "react";
-import { toast } from "@/hooks/use-toast";
 
 export type ProductHeroProps = {
 	headline?: string;

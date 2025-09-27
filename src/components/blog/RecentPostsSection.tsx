@@ -1,8 +1,8 @@
 "use client";
 
+import type { BeehiivPost } from "@/types/behiiv";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import type { BeehiivPost } from "@/types/behiiv";
 
 interface RecentPostsSectionProps {
 	title: string;

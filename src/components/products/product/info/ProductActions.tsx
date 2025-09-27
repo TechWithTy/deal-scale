@@ -1,11 +1,11 @@
 import { SocialShare } from "@/components/common/social/SocialShare";
 import { Button } from "@/components/ui/button";
-import { Heart, Loader2, ShoppingCart } from "lucide-react";
-import type { ProductType } from "@/types/products";
+import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/useCartStore";
+import type { ProductType } from "@/types/products";
+import { Heart, Loader2, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 /**
  * * ProductActions: Purchase, add to cart, favorite, and share buttons

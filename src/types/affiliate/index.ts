@@ -1,8 +1,8 @@
-import type { z } from "zod";
 import type { affiliateFormSchema } from "@/data/contact/affiliate";
+import type { DiscountCode } from "@/types/discount/discountCode";
 import type { BetaUser } from "@/types/user/beta";
 import type { PilotUser } from "@/types/user/pilot";
-import type { DiscountCode } from "@/types/discount/discountCode";
+import type { z } from "zod";
 
 /**
  * @description Base affiliate type derived from the affiliate sign-up form.

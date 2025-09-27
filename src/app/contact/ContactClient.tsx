@@ -1,5 +1,6 @@
 "use client";
 
+import AuthGuard from "@/components/auth/AuthGuard";
 import ContactForm from "@/components/contact/form/ContactForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import { ContactSteps } from "@/components/contact/form/ContactSteps";
@@ -7,16 +8,18 @@ import { Newsletter } from "@/components/contact/newsletter/Newsletter";
 import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
 import Testimonials from "@/components/home/Testimonials";
+import { betaTesterFormFields } from "@/data/contact/formFields";
+import type { BetaTesterFormValues } from "@/data/contact/formFields";
+import type { MultiselectField } from "@/types/contact/formFields";
 import { betaSignupSteps } from "@/data/service/slug_data/consultationSteps";
 import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
-import { useMemo } from "react";
+import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import { betaTesterFormFields } from "@/data/contact/formFields";
-import type { BetaTesterFormValues } from "@/data/contact/formFields";
+import { useMemo } from "react";
 
 // * Centralized SEO for /contact using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,6 +29,29 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const Contact = () => {
 	const searchParams = useSearchParams();
+	const { data: session } = useSession();
+
+	const profilePrefill = useMemo<Partial<BetaTesterFormValues>>(() => {
+		const user = session?.user;
+		if (!user) {
+			return {};
+		}
+		const name = user.name?.trim() ?? "";
+		let firstName: string | undefined;
+		let lastName: string | undefined;
+		if (name.length > 0) {
+			const [first, ...rest] = name.split(/\s+/);
+			firstName = first || undefined;
+			lastName = rest.length > 0 ? rest.join(" ") : undefined;
+		}
+		const phone = (user as { phone?: string }).phone;
+		return {
+			firstName,
+			lastName,
+			email: user.email ?? undefined,
+			phone: phone ?? undefined,
+		};
+	}, [session]);
 
 	// Build prefill object from URL params based on field config names/types
 	const prefill = useMemo(() => {
@@ -34,27 +60,15 @@ const Contact = () => {
 
 		// Build option lists for fields that need title->value mapping
 		const featureVotesField = betaTesterFormFields.find(
-			(f) => f.name === "featureVotes",
+			(field): field is MultiselectField =>
+				field.name === "featureVotes" && field.type === "multiselect",
 		);
 		const wantedFeaturesField = betaTesterFormFields.find(
-			(f) => f.name === "wantedFeatures",
+			(field): field is MultiselectField =>
+				field.name === "wantedFeatures" && field.type === "multiselect",
 		);
-		const featureVotesOptions = Array.isArray(
-			(featureVotesField as any)?.options,
-		)
-			? ((featureVotesField as any).options as {
-					value: string;
-					label: string;
-				}[])
-			: undefined;
-		const wantedFeaturesOptions = Array.isArray(
-			(wantedFeaturesField as any)?.options,
-		)
-			? ((wantedFeaturesField as any).options as {
-					value: string;
-					label: string;
-				}[])
-			: undefined;
+		const featureVotesOptions = featureVotesField?.options;
+		const wantedFeaturesOptions = wantedFeaturesField?.options;
 
 		const normalize = (s: string) =>
 			s
@@ -162,10 +176,10 @@ const Contact = () => {
 			}
 		}
 
-		return result;
-	}, [searchParams]);
+		return { ...result, ...profilePrefill };
+	}, [searchParams, profilePrefill]);
 	return (
-		<>
+		<AuthGuard>
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
@@ -197,7 +211,7 @@ const Contact = () => {
 				/>
 				<Newsletter />
 			</div>
-		</>
+		</AuthGuard>
 	);
 };
 

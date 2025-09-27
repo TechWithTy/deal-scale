@@ -24,30 +24,28 @@ function sanitizeUrlLike(input: string | undefined | null): string {
 		.trim();
 }
 
-function pickProp(
-  props: Record<string, unknown>,
-  aliases: string[],
-): unknown {
-  // 1) Exact alias match
-  for (const a of aliases) {
-    if (Object.prototype.hasOwnProperty.call(props, a)) return (props as any)[a];
-  }
-  // 2) Case-insensitive exact
-  const lowerMap = new Map<string, string>();
-  for (const k of Object.keys(props)) lowerMap.set(k.toLowerCase(), k);
-  for (const a of aliases) {
-    const hit = lowerMap.get(a.toLowerCase());
-    if (hit) return (props as any)[hit];
-  }
-  // 3) Starts-with / includes fuzzy
-  for (const a of aliases) {
-    for (const k of Object.keys(props)) {
-      const lk = k.toLowerCase();
-      const la = a.toLowerCase();
-      if (lk.startsWith(la) || lk.includes(la)) return (props as any)[k];
-    }
-  }
-  return undefined;
+function pickProp(props: Record<string, unknown>, aliases: string[]): unknown {
+	// 1) Exact alias match
+	for (const a of aliases) {
+		if (Object.prototype.hasOwnProperty.call(props, a))
+			return (props as any)[a];
+	}
+	// 2) Case-insensitive exact
+	const lowerMap = new Map<string, string>();
+	for (const k of Object.keys(props)) lowerMap.set(k.toLowerCase(), k);
+	for (const a of aliases) {
+		const hit = lowerMap.get(a.toLowerCase());
+		if (hit) return (props as any)[hit];
+	}
+	// 3) Starts-with / includes fuzzy
+	for (const a of aliases) {
+		for (const k of Object.keys(props)) {
+			const lk = k.toLowerCase();
+			const la = a.toLowerCase();
+			if (lk.startsWith(la) || lk.includes(la)) return (props as any)[k];
+		}
+	}
+	return undefined;
 }
 
 function parseDevRedirects(): Record<string, string> {
@@ -175,20 +173,44 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 			const data = await resp.json();
 			const page = data?.results?.[0];
 			if (!page) continue;
-			const props = page.properties ?? {} as Record<string, unknown>;
+			const props = page.properties ?? ({} as Record<string, unknown>);
 			const destination = getDestinationStrict(props?.Destination);
 			if (!destination) continue;
 			// Support multiple UTM property spellings from Notion
-			const utm_source = getPlain(pickProp(props, ["UTM Source", "utm_source"]))?.trim();
-			const utm_campaign = getPlain(pickProp(props, ["UTM Campaign", "utm_campaign"]))?.trim();
-			const utm_medium = getPlain(pickProp(props, ["UTM Medium", "utm_medium"]))?.trim();
-			const utm_content = getPlain(pickProp(props, ["UTM Content", "utm_content"]))?.trim();
-			const utm_term = getPlain(pickProp(props, ["UTM Term", "utm_term"]))?.trim();
+			const utm_source = getPlain(
+				pickProp(props, ["UTM Source", "utm_source"]),
+			)?.trim();
+			const utm_campaign = getPlain(
+				pickProp(props, ["UTM Campaign", "utm_campaign"]),
+			)?.trim();
+			const utm_medium = getPlain(
+				pickProp(props, ["UTM Medium", "utm_medium"]),
+			)?.trim();
+			const utm_content = getPlain(
+				pickProp(props, ["UTM Content", "utm_content"]),
+			)?.trim();
+			const utm_term = getPlain(
+				pickProp(props, ["UTM Term", "utm_term"]),
+			)?.trim();
 			const utm_id = getPlain(pickProp(props, ["UTM Id", "utm_id"]))?.trim();
 			// Custom second-stage redirect URL captured as UTM param
-			const redirectUrlRawPlain = getPlain(pickProp(props, ["RedirectUrl", "Redirect URL", "redirect_url", "redirecturl"]))?.trim();
-			const redirectUrlRaw = redirectUrlRawPlain || getDestinationStrict(pickProp(props, ["RedirectUrl", "Redirect URL"])) || undefined;
-			const utm_redirect_url = redirectUrlRaw ? sanitizeUrlLike(redirectUrlRaw) : undefined;
+			const redirectUrlRawPlain = getPlain(
+				pickProp(props, [
+					"RedirectUrl",
+					"Redirect URL",
+					"redirect_url",
+					"redirecturl",
+				]),
+			)?.trim();
+			const redirectUrlRaw =
+				redirectUrlRawPlain ||
+				getDestinationStrict(
+					pickProp(props, ["RedirectUrl", "Redirect URL"]),
+				) ||
+				undefined;
+			const utm_redirect_url = redirectUrlRaw
+				? sanitizeUrlLike(redirectUrlRaw)
+				: undefined;
 			const callsProp = (props as any)?.["Redirects (Calls)"];
 			const current =
 				typeof callsProp?.number === "number" ? callsProp.number : 0;
@@ -297,9 +319,11 @@ export async function middleware(req: NextRequest) {
 		}
 		// Append UTM if present (from Notion)
 		if (found.utm_source) url.searchParams.set("utm_source", found.utm_source);
-		if (found.utm_campaign) url.searchParams.set("utm_campaign", found.utm_campaign);
+		if (found.utm_campaign)
+			url.searchParams.set("utm_campaign", found.utm_campaign);
 		if (found.utm_medium) url.searchParams.set("utm_medium", found.utm_medium);
-		if (found.utm_content) url.searchParams.set("utm_content", found.utm_content);
+		if (found.utm_content)
+			url.searchParams.set("utm_content", found.utm_content);
 		if (found.utm_term) url.searchParams.set("utm_term", found.utm_term);
 		if (found.utm_id) url.searchParams.set("utm_id", found.utm_id);
 		if (found.utm_redirect_url)
@@ -322,7 +346,8 @@ export async function middleware(req: NextRequest) {
 				if (!key.startsWith("utm_")) continue;
 				const v = (value ?? "").trim();
 				if (!v) continue; // skip empty
-				if (v.toLowerCase() === "undefined" || v.toLowerCase() === "null") continue; // skip placeholders
+				if (v.toLowerCase() === "undefined" || v.toLowerCase() === "null")
+					continue; // skip placeholders
 				url.searchParams.set(key, v);
 			}
 		}

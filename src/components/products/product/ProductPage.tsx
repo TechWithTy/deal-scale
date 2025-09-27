@@ -1,17 +1,17 @@
 "use client";
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
 import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
 import { abTestExample } from "@/data/products/copy";
 import type { ProductType } from "@/types/products";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Breadcrumbs from "./Breadcrumbs";
 import ImageGallery from "./ImageGallery";
 import ProductInfo from "./ProductInfo";
 import ProductTabs from "./ProductTabs";
-import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)

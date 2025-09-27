@@ -1,15 +1,15 @@
 "use client";
 import "../index.css";
+import { Analytics } from "@/components/analytics/Analytics";
 import { PageLayout } from "@/components/layout/PageLayout";
 import NextAuthProvider from "@/components/providers/NextAuthProvider";
 import LoadingAnimation from "@/components/ui/loading-animation";
 import { Toaster } from "@/components/ui/toaster";
 import BodyThemeSync from "@/contexts/BodyThemeSync";
 import { ThemeProvider } from "@/contexts/theme-context";
-import { Analytics } from "@/components/analytics/Analytics";
-import { ZohoSalesIQScript } from "@/utils/zoho/salesiq";
 import { renderOpenGraphMeta } from "@/utils/seo/seo";
 import { defaultSeo } from "@/utils/seo/staticSeo";
+import { ZohoSalesIQScript } from "@/utils/zoho/salesiq";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Script from "next/script";
 import { Suspense } from "react";

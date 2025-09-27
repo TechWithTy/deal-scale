@@ -1,5 +1,5 @@
-import { Loader2 } from "lucide-react";
 import type { DiscountCodeInputProps } from "@/types/checkout";
+import { Loader2 } from "lucide-react";
 
 export function DiscountCodeInput({
 	discountCode,

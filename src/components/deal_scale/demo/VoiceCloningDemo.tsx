@@ -4,9 +4,9 @@ import { useCallback, useState } from "react";
 import { SessionView } from "../talkingCards/session";
 import { CallCompleteModal } from "../talkingCards/session/CallCompleteModal";
 
+import Header from "@/components/common/Header";
 import { afterTranscript } from "@/data/transcripts/voiceCloningAfter";
 import { beforeTranscript } from "@/data/transcripts/voiceCloningBefore";
-import Header from "@/components/common/Header";
 
 export const VoiceCloningDemo = () => {
 	const [demoStage, setDemoStage] = useState<"before" | "after">("before");

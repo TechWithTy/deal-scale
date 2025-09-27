@@ -1,4 +1,4 @@
-import { type Plan, PRICING_CATEGORIES } from "@/types/service/plans";
+import { PRICING_CATEGORIES, type Plan } from "@/types/service/plans";
 
 export const PricingPlans: Plan[] = [
 	{

@@ -54,7 +54,7 @@ export function ForgotPasswordForm({ callbackUrl }: { callbackUrl?: string }) {
 				throw new Error(errorData.message || "Failed to send reset link.");
 			}
 
-			toast.success("Password reset link sent!");
+			toast.success("Check your email or phone for the reset link.");
 			if (callbackUrl) {
 				// Redirect to the callback URL if provided
 				window.location.href = callbackUrl;

@@ -8,8 +8,8 @@ export function mockGenDiscountCode(handle: string): string {
 	return `${clean}-${uuidv4().slice(0, 6).toUpperCase()}`;
 }
 
-import { PRICING_CATEGORIES } from "@/types/service/plans";
 import { ProductCategory } from "@/types/products";
+import { PRICING_CATEGORIES } from "@/types/service/plans";
 import { SERVICE_CATEGORIES } from "@/types/service/services";
 
 export const mockDiscountCodes: DiscountCode[] = [

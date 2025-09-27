@@ -1,11 +1,11 @@
 import type {
 	ProductShippingInfo,
-	ShippingDimensions,
-	ShippingWeight,
-	ShippingOption,
 	ShippingCarrier,
+	ShippingDimensions,
+	ShippingOption,
 	ShippingPrice,
 	ShippingTimeEstimate,
+	ShippingWeight,
 } from "@/types/products/shipping";
 
 // Define common shipping carriers

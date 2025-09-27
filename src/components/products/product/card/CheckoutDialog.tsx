@@ -1,7 +1,7 @@
+import CheckoutForm from "@/components/checkout/CheckoutForm";
+import { Button } from "@/components/ui/button";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { Button } from "@/components/ui/button";
-import CheckoutForm from "@/components/checkout/CheckoutForm";
 import type { CheckoutDialogProps } from "./types";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY

@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 // Cache this route per unique query for 5 minutes (ISR-style caching)
 export const revalidate = 300;

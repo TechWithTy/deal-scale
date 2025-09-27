@@ -1,14 +1,14 @@
+import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
 import {
 	createPaymentIntent,
 	deletePaymentIntent,
 	retrievePaymentIntent,
 	updatePaymentIntent,
 } from "@/lib/externalRequests/stripe";
-import { cookies } from "next/headers";
-import { type NextRequest, NextResponse } from "next/server";
-import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
 import type { PricingCategoryValue } from "@/types/service/plans";
 import { validateDiscountCode } from "@/utils/discountValidator";
+import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
 import type stripe from "stripe";
 interface PaymentIntentRequest {
 	price: number;

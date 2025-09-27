@@ -1,6 +1,6 @@
 import type { DiscountCode } from "@/types/discount/discountCode";
-import type { ShippingOption, ShippingPrice } from "@/types/products/shipping";
 import type { ProductType } from "@/types/products";
+import type { ShippingOption, ShippingPrice } from "@/types/products/shipping";
 
 export interface ShippingMethodSelectorProps {
 	selectedShipping: ShippingOption | null;

@@ -1,7 +1,7 @@
+import type { ProductType } from "@/types/products";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProductClient from "./ProductClient";
-import type { ProductType } from "@/types/products";
 
 // Next.js 15+ Dynamic Route Compatibility Pattern
 export async function generateMetadata({

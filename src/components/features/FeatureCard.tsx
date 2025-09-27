@@ -11,8 +11,8 @@ import {
 	Users,
 	Zap,
 } from "lucide-react"; // * Added 5 Lucide icons + Users icon
-import type { FeatureRequest } from "./types";
 import { useRouter } from "next/navigation";
+import type { FeatureRequest } from "./types";
 
 // * Icon options for cards (extendable)
 const ICON_OPTIONS = [Lightbulb, Rocket, Star, Zap, Heart];

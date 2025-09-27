@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { getStaticSeo } from "@/utils/seo/staticSeo";
-import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import AboutUsClient from "@/components/about/AboutUsClient";
+import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
+import type { Metadata } from "next";
 
 // * Generate metadata for the about page
 export async function generateMetadata(): Promise<Metadata> {

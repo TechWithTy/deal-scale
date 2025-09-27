@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import Analytics from "analytics";
 import googleAnalytics from "@analytics/google-analytics";
+import Analytics from "analytics";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
 
 declare global {
 	interface Window {

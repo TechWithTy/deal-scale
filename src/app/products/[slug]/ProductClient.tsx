@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import ProductPage from "@/components/products/product/ProductPage";
 import type { ProductType } from "@/types/products";
+import React from "react";
 
 interface ProductClientProps {
 	product: ProductType;
