@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
-import { getStaticSeo } from "@/utils/seo/staticSeo";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
+import type { Metadata } from "next";
 import LegalClient from "./LegalClient";
 
 // Generate metadata for the legal hub page

@@ -1,16 +1,16 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
-import type { ProductCardProps } from "./types";
-import ProductImage from "./ProductImage";
-import ProductHeader from "./ProductHeader";
-import ProductMetadata from "./ProductMetadata";
-import ProductActions from "./ProductActions";
+import { v4 as uuidv4 } from "uuid";
 import CheckoutDialog from "./CheckoutDialog";
+import ProductActions from "./ProductActions";
+import ProductHeader from "./ProductHeader";
+import ProductImage from "./ProductImage";
+import ProductMetadata from "./ProductMetadata";
+import type { ProductCardProps } from "./types";
 
 const ProductCard = (props: ProductCardProps) => {
 	const {

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import React, { Suspense } from "react";
 import FeaturedBlogCard from "./FeaturedBlogCard";
 const BlogCard = React.lazy(() =>
 	import("./BlogCard").then((mod) => ({ default: mod.BlogCard })),
@@ -148,7 +148,7 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 				>
 					Prev
 				</button>
-				<span className="px-2 text-sm text-gray-600 dark:text-gray-300">
+				<span className="px-2 text-gray-600 text-sm dark:text-gray-300">
 					Page {currentPage}
 				</span>
 				<button

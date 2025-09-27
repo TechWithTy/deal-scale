@@ -1,18 +1,18 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { useCartStore } from "@/stores/useCartStore";
+import type { ProductType } from "@/types/products";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
-import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
-import type { ProductType } from "@/types/products";
-import { useCartStore } from "@/stores/useCartStore";
 import {
 	ProductCard as Card,
-	ProductImage,
-	ProductHeader,
-	ProductMetadata,
-	CheckoutDialog,
 	type ProductCardProps as CardProps,
+	CheckoutDialog,
+	ProductHeader,
+	ProductImage,
+	ProductMetadata,
 } from "./card";
 
 // Re-export types for convenience

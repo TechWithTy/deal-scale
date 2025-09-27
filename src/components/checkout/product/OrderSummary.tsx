@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import type { OrderSummaryProps } from "@/types/checkout";
+import { Loader2 } from "lucide-react";
 
 export function OrderSummary({
 	product,

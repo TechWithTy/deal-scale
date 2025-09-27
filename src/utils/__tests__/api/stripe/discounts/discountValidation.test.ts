@@ -1,8 +1,8 @@
+import type { DiscountCode } from "@/types/discount/discountCode";
+import type { ProductCategory } from "@/types/products";
+import type { PricingCategoryValue } from "@/types/service/plans";
 // src/utils/__tests__/api/stripe/discounts/discountValidation.test.ts
 import { validateDiscountCode } from "@/utils/discountValidator";
-import type { DiscountCode } from "@/types/discount/discountCode";
-import type { PricingCategoryValue } from "@/types/service/plans";
-import type { ProductCategory } from "@/types/products";
 
 describe("validateDiscountCode", () => {
 	const baseDiscountCode: DiscountCode = {

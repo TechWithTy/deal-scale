@@ -12,7 +12,7 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
 	return (
 		<article
 			className={cn(
-				"prose max-w-none leading-relaxed text-foreground dark:prose-invert",
+				"prose dark:prose-invert max-w-none text-foreground leading-relaxed",
 				className,
 			)}
 		>

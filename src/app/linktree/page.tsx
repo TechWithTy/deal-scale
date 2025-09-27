@@ -1,7 +1,7 @@
 import { LinkTree } from "@/components/linktree/LinkTree";
 import type { LinkTreeItem } from "@/utils/linktree-redis";
-import { headers } from "next/headers";
 import { withUtm } from "@/utils/linktree-redis";
+import { headers } from "next/headers";
 
 export default async function LinkTreePage() {
 	// Build an absolute URL for server-side fetch to avoid URL parse errors in RSC

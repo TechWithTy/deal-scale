@@ -15,6 +15,7 @@ import {
 	signInFormFields,
 	signInSchema,
 } from "@/data/contact/authFormFields";
+import { fetchUserDisplayName } from "@/lib/auth/user-display-name";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
@@ -48,7 +49,10 @@ export function SignInForm({ callbackUrl }: { callbackUrl?: string }) {
 			});
 
 			if (result?.ok) {
-				toast.success("Logged in successfully!");
+				const fullName = await fetchUserDisplayName();
+				toast.success(
+					fullName ? `Welcome ${fullName}!` : "Logged in successfully!",
+				);
 				if (callbackUrl) {
 					// Securely redirect to callbackUrl
 					window.location.href = callbackUrl;
@@ -59,7 +63,22 @@ export function SignInForm({ callbackUrl }: { callbackUrl?: string }) {
 				}
 				close();
 			} else {
-				toast.error(result?.error || "An unknown error occurred.");
+				// Handle authentication errors with field-level display
+				const errorMessage = result?.error || "An unknown error occurred.";
+
+				// Try to parse field-specific errors (if any)
+				if (errorMessage.includes("Invalid credentials")) {
+					form.setError("email", {
+						type: "server",
+						message: "Invalid email or password",
+					});
+					form.setError("password", {
+						type: "server",
+						message: "Invalid email or password",
+					});
+				} else {
+					toast.error(errorMessage);
+				}
 			}
 		} catch (error) {
 			toast.error("An unexpected error occurred.");

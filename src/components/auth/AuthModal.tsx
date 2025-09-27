@@ -1,22 +1,29 @@
-import { useAuthModal } from "@/components/auth/use-auth-store";
-import { X } from "lucide-react";
+"use client";
 
+import { useCallback } from "react";
+
+import { useAuthModal } from "@/components/auth/use-auth-store";
 import { ForgotPasswordForm } from "@/components/contact/form/ForgotPassword";
 import { SignInForm } from "@/components/contact/form/SignIn";
 import { SignUpForm } from "@/components/contact/form/SignUp";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { X } from "lucide-react";
 import type { AuthView } from "@/types/auth";
 
 // Map views to their respective titles and subtitles
 const viewConfig: Record<AuthView, { title: string; subtitle: string }> = {
 	signin: {
-		title: "Welcome back",
-		subtitle: "Enter your credentials to access your account",
+		title: "Welcome",
+		subtitle: "Sign in to pick up right where you left off.",
 	},
 	signup: {
-		title: "Create an account",
-		subtitle: "Enter your details to create your account",
+		title: "Create your DealScale account",
+		subtitle: "We'll confirm everything by email or SMS after you finish.",
 	},
 	reset: {
 		title: "Reset Password",
@@ -34,6 +41,75 @@ const viewConfig: Record<AuthView, { title: string; subtitle: string }> = {
 
 export function AuthModal() {
 	const { isOpen, view, setView, close } = useAuthModal();
+	const searchParams = useSearchParams();
+	const callbackUrl = searchParams?.get("callbackUrl") || undefined;
+	const supabase = createClientComponentClient();
+
+	const buildRedirectTo = useCallback(
+		(provider: "linkedin" | "facebook") => {
+			if (typeof window === "undefined") {
+				return undefined;
+			}
+
+			const params = new URLSearchParams({ provider });
+			if (callbackUrl) {
+				params.set("redirectTo", callbackUrl);
+			}
+
+			return `${window.location.origin}/api/auth/supabase/callback?${params.toString()}`;
+		},
+		[callbackUrl],
+	);
+
+	const handleLinkedIn = useCallback(async () => {
+		if (view === "signin") {
+			const destination = buildRedirectTo("linkedin");
+			if (!destination) {
+				return;
+			}
+
+			await supabase.auth.signInWithOAuth({
+				provider: "linkedin_oidc",
+				options: { redirectTo: destination },
+			});
+			toast({
+				title: "LinkedIn OAuth",
+				description: "LinkedIn account connected. Finishing sign-in...",
+			});
+			return;
+		}
+
+		toast({
+			title: "LinkedIn OAuth",
+			description: "LinkedIn account connected. We'll finish setting things up.",
+		});
+		await signIn("linkedin", callbackUrl ? { callbackUrl } : undefined);
+	}, [view, buildRedirectTo, supabase, callbackUrl]);
+
+	const handleFacebook = useCallback(async () => {
+		if (view === "signin") {
+			const destination = buildRedirectTo("facebook");
+			if (!destination) {
+				return;
+			}
+
+			await supabase.auth.signInWithOAuth({
+				provider: "facebook",
+				options: { redirectTo: destination },
+			});
+			toast({
+				title: "Facebook OAuth",
+				description: "Facebook account connected. Finishing sign-in...",
+			});
+			return;
+		}
+
+		toast({
+			title: "Facebook OAuth",
+			description: "Facebook account connected. We'll finish setting things up.",
+		});
+		await signIn("facebook", callbackUrl ? { callbackUrl } : undefined);
+	}, [view, buildRedirectTo, supabase, callbackUrl]);
 
 	if (!isOpen) return null;
 
@@ -48,11 +124,11 @@ export function AuthModal() {
 	const renderForm = () => {
 		switch (view) {
 			case "signin":
-				return <SignInForm />;
+				return <SignInForm callbackUrl={callbackUrl} />;
 			case "signup":
-				return <SignUpForm />;
+				return <SignUpForm callbackUrl={callbackUrl} />;
 			case "reset":
-				return <ForgotPasswordForm />;
+				return <ForgotPasswordForm callbackUrl={callbackUrl} />;
 			case "verify-email":
 			case "verify-phone":
 				return null; // No form needed for these views
@@ -93,13 +169,21 @@ export function AuthModal() {
 					{(view === "signin" || view === "signup") && (
 						<>
 							<div className="space-y-3">
-								<Button variant="outline" type="button" className="w-full">
-									<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with
-									LinkedIn
+								<Button
+									variant="outline"
+									type="button"
+									onClick={() => void handleLinkedIn()}
+									className="w-full"
+								>
+									<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with LinkedIn
 								</Button>
-								<Button variant="outline" type="button" className="w-full">
-									<Icons.facebook className="mr-2 h-4 w-4" /> Continue with
-									Facebook
+								<Button
+									variant="outline"
+									type="button"
+									onClick={() => void handleFacebook()}
+									className="w-full"
+								>
+									<Icons.facebook className="mr-2 h-4 w-4" /> Continue with Facebook
 								</Button>
 							</div>
 							<div className="relative my-3">

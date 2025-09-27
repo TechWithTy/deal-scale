@@ -2,11 +2,11 @@
 // ! Products page: displays ProductGrid with mock API call
 // * Follows DRY, SOLID, and type-safe best practices (see user rules)
 
-import type { Metadata } from "next";
+import type { ProductType } from "@/types/products";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
+import type { Metadata } from "next";
 import ProductsClient from "./ProductsClient";
-import type { ProductType } from "@/types/products";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/products");

@@ -1,5 +1,5 @@
-import { v4 as uuid } from "uuid";
 import { cn } from "@/lib/utils";
+import { v4 as uuid } from "uuid";
 
 interface HighlightsSectionProps {
 	highlights: string[];

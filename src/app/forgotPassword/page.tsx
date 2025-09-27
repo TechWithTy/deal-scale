@@ -1,8 +1,8 @@
 "use client";
 
 import { ForgotPasswordForm } from "@/components/contact/form/ForgotPassword";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function ForgotPasswordPage() {
 	const searchParams = useSearchParams();

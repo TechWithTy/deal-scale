@@ -39,7 +39,7 @@ function BlogContent() {
 				const limit = searchParams?.get("limit");
 
 				// Default per_page to 10 when missing or invalid
-				const parsedPerPage = per_page ? Number(per_page) : NaN;
+				const parsedPerPage = per_page ? Number(per_page) : Number.NaN;
 				const inferredPerPage =
 					Number.isFinite(parsedPerPage) && parsedPerPage > 0
 						? parsedPerPage

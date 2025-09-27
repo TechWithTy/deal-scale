@@ -94,6 +94,7 @@ import {
 	leadGenIntegrations,
 } from "./slug_data/integrations";
 
+import { PricingPlans } from "./slug_data/pricing";
 import {
 	aiDirectMailNurturingProblemsSolutions,
 	aiInboundAgentProblemsSolutions,
@@ -148,7 +149,6 @@ import {
 	socialLeadGenTestimonials,
 	socialProfileHunterTestimonials,
 } from "./slug_data/testimonials";
-import { PricingPlans } from "./slug_data/pricing";
 
 export const services: ServicesData = {
 	[SERVICE_CATEGORIES.LEAD_GENERATION]: {

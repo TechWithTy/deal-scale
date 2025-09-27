@@ -1,5 +1,5 @@
-import { type NextRequest, NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
 	const slug = req.nextUrl.searchParams.get("slug");

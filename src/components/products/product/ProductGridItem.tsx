@@ -1,6 +1,6 @@
 import type { HeroGridItem } from "@/data/products/hero";
-import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import type { ProductCategory } from "@/types/products";
 
 interface ProductGridItemProps {

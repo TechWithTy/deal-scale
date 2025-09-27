@@ -76,7 +76,7 @@ const DemoTabs = () => {
 				/>
 				<TabsList
 					ref={tabsContainerRef}
-					className="w-full justify-start overflow-x-auto scrollbar-hide"
+					className="scrollbar-hide w-full justify-start overflow-x-auto"
 				>
 					{TAB_LIST.map((tab) => (
 						<TabsTrigger key={tab.value} value={tab.value}>

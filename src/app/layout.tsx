@@ -1,13 +1,13 @@
 "use client";
 import "../index.css";
+import { Analytics } from "@/components/analytics/Analytics";
 import { PageLayout } from "@/components/layout/PageLayout";
-import NextAuthProvider from "@/components/providers/NextAuthProvider";
 import GAAnalyticsProvider from "@/components/providers/GAAnalyticsProvider";
+import NextAuthProvider from "@/components/providers/NextAuthProvider";
 import LoadingAnimation from "@/components/ui/loading-animation";
 import { Toaster } from "@/components/ui/toaster";
 import BodyThemeSync from "@/contexts/BodyThemeSync";
 import { ThemeProvider } from "@/contexts/theme-context";
-import { Analytics } from "@/components/analytics/Analytics";
 import { MicrosoftClarityScript } from "@/utils/clarity/ClarityScript";
 import { renderOpenGraphMeta } from "@/utils/seo/seo";
 import { defaultSeo } from "@/utils/seo/staticSeo";

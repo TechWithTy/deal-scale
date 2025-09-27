@@ -1,5 +1,5 @@
-import { PaymentElement } from "@stripe/react-stripe-js";
 import type { PaymentSectionProps } from "@/types/checkout";
+import { PaymentElement } from "@stripe/react-stripe-js";
 
 export function PaymentSection({ error }: PaymentSectionProps) {
 	return (

@@ -1,5 +1,5 @@
-import toast from "react-hot-toast";
 import type { ProductType } from "@/types/products";
+import toast from "react-hot-toast";
 import TrustedBySection from "./TrustedBySection";
 import ProductActions from "./info/ProductActions";
 import ProductColorPicker from "./info/ProductColorPicker";

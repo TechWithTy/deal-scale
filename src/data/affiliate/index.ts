@@ -2,9 +2,9 @@
 // This file contains mock affiliate data objects for the Deal Scale platform.
 // * Uses @faker-js/faker to generate realistic data.
 
-import { faker } from "@faker-js/faker";
-import type { AffiliateProfile } from "@/types/affiliate";
 import { discountCodes } from "@/data/discount";
+import type { AffiliateProfile } from "@/types/affiliate";
+import { faker } from "@faker-js/faker";
 
 const generateAffiliate = (): AffiliateProfile => {
 	return {

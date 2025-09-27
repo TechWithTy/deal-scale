@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 // GET /api/beehiiv/leaderboard
 // Ranks posts by combined analytics (email + web), then paginates the ranked list

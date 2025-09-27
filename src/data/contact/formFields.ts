@@ -91,18 +91,14 @@ export const painPointOptions: ContactFormOption[] = [
 ];
 
 export const betaTesterFormSchema = z.object({
-	firstName: z
-		.string()
-		.min(2, { message: "First name must be at least 2 characters" }),
-	lastName: z
-		.string()
-		.min(2, { message: "Last name must be at least 2 characters" }),
+	firstName: z.string().optional(),
+	lastName: z.string().optional(),
+	email: z.string().email({ message: "Please enter a valid email address" }).optional(),
+	phone: z.string().optional(),
 	companyName: z
 		.string()
 		.min(2, { message: "Company name must be at least 2 characters" }),
 	companyLogo: z.instanceof(File).optional(),
-	email: z.string().email({ message: "Please enter a valid email address" }),
-	phone: z.string().min(10, { message: "A valid phone number is required." }),
 	zipCode: z.string().min(5, { message: "A valid ZIP code is required." }),
 	icpType: z.string().min(1, { message: "Please select your profile type" }),
 	employeeCount: z
@@ -125,23 +121,8 @@ export const betaTesterFormSchema = z.object({
 
 export type BetaTesterFormValues = z.infer<typeof betaTesterFormSchema>;
 
+
 export const betaTesterFormFields: FieldConfig[] = [
-	{
-		name: "firstName",
-		label: "First Name",
-		type: "text",
-		placeholder: "John",
-		value: "",
-		onChange: (value: string) => {},
-	},
-	{
-		name: "lastName",
-		label: "Last Name",
-		type: "text",
-		placeholder: "Doe",
-		value: "",
-		onChange: (value: string) => {},
-	},
 	{
 		name: "companyName",
 		label: "Company Name",
@@ -169,23 +150,6 @@ export const betaTesterFormFields: FieldConfig[] = [
 		pattern: "^\\d{5}$",
 		minLength: 5,
 		maxLength: 5,
-	},
-	{
-		name: "email",
-		label: "Business Email",
-		type: "email",
-		placeholder: "john@acme-re.com",
-		value: "",
-		onChange: (value: string) => {},
-	},
-	{
-		name: "phone",
-		label: "Phone Number",
-		type: "tel",
-		placeholder: "+1 (234) 567-890",
-		pattern: "^\\+?1?\\s?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4}$",
-		value: "",
-		onChange: (value: string) => {},
 	},
 	{
 		name: "icpType",

@@ -1,5 +1,5 @@
-import { X } from "lucide-react";
 import type { CheckoutHeaderProps } from "@/types/checkout";
+import { X } from "lucide-react";
 
 export function CheckoutHeader({ onClose }: CheckoutHeaderProps) {
 	return (
