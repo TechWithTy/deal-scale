@@ -1,3 +1,5 @@
+"use client";
+
 import { NewsletterEmailInput } from "@/components/contact/newsletter/NewsletterEmailInput";
 import { StickyBanner } from "@/components/ui/StickyBanner";
 import { Button } from "@/components/ui/button";
@@ -10,6 +12,7 @@ import {
 	NavigationMenuTrigger,
 	NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { useAuthModal } from "@/components/auth/use-auth-store";
 import { navItems } from "@/data/layout/nav";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useHasMounted } from "@/hooks/useHasMounted";
@@ -17,10 +20,12 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
+import { signOut, useSession } from "next-auth/react";
 import { ThemeToggle } from "../theme/theme-toggle";
+
 const NavLink = ({ item, onClick, className = "" }) => {
 	const pathname = usePathname();
 	const isActive = pathname === item.href;
@@ -166,7 +171,23 @@ const DesktopNav = () => {
 	);
 };
 
-const MobileNav = ({ isOpen, onClose }) => {
+type MobileNavProps = {
+	isOpen: boolean;
+	onClose: () => void;
+	isAuthenticated: boolean;
+	isAuthLoading: boolean;
+	onSignOut: () => void;
+	onSignIn: () => void;
+};
+
+const MobileNav = ({
+	isOpen,
+	onClose,
+	isAuthenticated,
+	isAuthLoading,
+	onSignOut,
+	onSignIn,
+}: MobileNavProps) => {
 	const [openSubmenus, setOpenSubmenus] = useState({});
 
 	const toggleSubmenu = (title) => {
@@ -294,6 +315,34 @@ const MobileNav = ({ isOpen, onClose }) => {
 							/>
 						</div>
 					</li>
+					{isAuthenticated && !isAuthLoading && (
+						<li className="pt-2">
+							<Button
+								variant="outline"
+								className="w-full"
+								onClick={() => {
+									onClose();
+									onSignOut();
+								}}
+							>
+								Sign out
+							</Button>
+						</li>
+					)}
+					{!isAuthenticated && !isAuthLoading && (
+						<li className="pt-2">
+							<Button
+								variant="default"
+								className="w-full"
+								onClick={() => {
+									onClose();
+									onSignIn();
+								}}
+							>
+								Sign in
+							</Button>
+						</li>
+					)}
 				</ul>
 			</div>
 
@@ -329,7 +378,8 @@ export default function Navbar() {
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const isMobile = useIsMobile();
-	const router = useRouter();
+	const { data: session, status } = useSession();
+const openAuthModal = useAuthModal((state) => state.open);
 
 	useEffect(() => {
 		if (!hasMounted) return;
@@ -342,6 +392,16 @@ export default function Navbar() {
 			document.body.style.overflow = "auto";
 		};
 	}, [mobileMenuOpen, hasMounted]);
+
+	const isAuthenticated = status === "authenticated";
+
+	const handleSignOut = () => {
+		void signOut({ callbackUrl: "/" });
+	};
+
+	const handleSignIn = () => {
+		openAuthModal("signin");
+	};
 
 	return (
 		<>
@@ -371,7 +431,18 @@ export default function Navbar() {
 
 					{!isMobile && <DesktopNav />}
 
-					<div className="flex items-center space-x-4" />
+					<div className="hidden items-center space-x-2 md:flex">
+						{isAuthenticated && (
+							<Button variant="outline" size="sm" onClick={handleSignOut}>
+								Sign out
+							</Button>
+						)}
+						{!isAuthenticated && status !== "loading" && (
+							<Button variant="default" size="sm" onClick={handleSignIn}>
+								Sign in
+							</Button>
+						)}
+					</div>
 
 					<button
 						className="z-20 text-black md:hidden dark:text-white"
@@ -387,6 +458,10 @@ export default function Navbar() {
 					<MobileNav
 						isOpen={mobileMenuOpen}
 						onClose={() => setMobileMenuOpen(false)}
+						isAuthenticated={isAuthenticated}
+						isAuthLoading={status === "loading"}
+						onSignOut={handleSignOut}
+						onSignIn={handleSignIn}
 					/>
 				</div>
 			</nav>

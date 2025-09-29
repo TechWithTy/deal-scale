@@ -46,6 +46,7 @@ import {
 	betaTesterFormSchema,
 } from "@/data/contact/formFields";
 import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
+import { mapBetaTesterApplication } from "./testerApplicationMappers";
 
 export default function ContactForm({
 	prefill,
@@ -121,6 +122,32 @@ export default function ContactForm({
 				email: resolvedEmail,
 				phone: resolvedPhone,
 			};
+			const betaExtras = data as unknown as {
+				featureVotes?: string[];
+			};
+			const testerPayload = mapBetaTesterApplication(submission, {
+				featureVotes: betaExtras.featureVotes,
+			});
+			const testerResponse = await fetch("/api/testers/apply", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(testerPayload),
+			});
+
+			if (!testerResponse.ok) {
+				let testerMessage = "Failed to submit your beta application.";
+				try {
+					const errorBody = await testerResponse.json();
+					testerMessage = errorBody?.error ?? testerMessage;
+				} catch (error) {
+					console.error("Failed to parse tester error response", error);
+				}
+				toast.error(testerMessage);
+				return;
+			}
+
 			// * Send form data to the new contact endpoint for SendGrid integration
 			const response = await fetch("/api/contact", {
 				method: "POST",

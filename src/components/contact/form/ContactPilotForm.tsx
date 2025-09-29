@@ -8,7 +8,7 @@
 // todo Integrate real submission endpoint once available.
 
 import { loadStripe } from "@stripe/stripe-js";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
@@ -58,6 +58,7 @@ import {
 	createFieldProps,
 	renderFormField,
 } from "@/components/contact/form/formFieldHelpers";
+import { mapPilotTesterApplication } from "./testerApplicationMappers";
 
 export default function ContactPilotForm({
 	prefill,
@@ -79,24 +80,25 @@ export default function ContactPilotForm({
 	}, []);
 
 	// Merge defaults with prefill and remove empty arrays for multiselect fields
-	const computeMergedDefaults = (
-		seed?: Partial<PriorityPilotFormValues>,
-	): PriorityPilotFormValues => {
-		const merged: Partial<PriorityPilotFormValues> = {
-			...baseDefaults,
-			...(seed ?? {}),
-		};
-		for (const field of priorityPilotFormFields) {
-			if (field.type === "multiselect") {
-				const name = field.name as keyof PriorityPilotFormValues;
-				const val = merged[name] as unknown;
-				if (Array.isArray(val) && val.length === 0) {
-					delete merged[name];
+	const computeMergedDefaults = useCallback(
+		(seed?: Partial<PriorityPilotFormValues>): PriorityPilotFormValues => {
+			const merged: Partial<PriorityPilotFormValues> = {
+				...baseDefaults,
+				...(seed ?? {}),
+			};
+			for (const field of priorityPilotFormFields) {
+				if (field.type === "multiselect") {
+					const name = field.name as keyof PriorityPilotFormValues;
+					const val = merged[name] as unknown;
+					if (Array.isArray(val) && val.length === 0) {
+						delete merged[name];
+					}
 				}
 			}
-		}
-		return merged as PriorityPilotFormValues;
-	};
+			return merged as PriorityPilotFormValues;
+		},
+		[baseDefaults],
+	);
 
 	const form = useForm<PriorityPilotFormValues>({
 		resolver: zodResolver(priorityPilotFormSchema),
@@ -108,14 +110,43 @@ export default function ContactPilotForm({
 		if (prefill && Object.keys(prefill).length > 0) {
 			form.reset(computeMergedDefaults(prefill));
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [JSON.stringify(prefill)]);
+	}, [prefill, form, computeMergedDefaults]);
 
 	// Step 1: Collect user info, then fetch clientSecret and go to payment
 	const onSubmit = async (data: PriorityPilotFormValues) => {
 		console.log("[ContactPilotForm] onSubmit called", data);
 		setIsSubmitting(true);
 		try {
+			const pilotExtras = data as unknown as {
+				wantedFeatures?: string[];
+				featureVotes?: string[];
+				termsAccepted?: boolean;
+			};
+			const testerPayload = mapPilotTesterApplication(data, {
+				wantedFeatures: pilotExtras.wantedFeatures,
+				featureVotes: pilotExtras.featureVotes,
+				termsAccepted: pilotExtras.termsAccepted,
+			});
+			const testerResponse = await fetch("/api/testers/apply", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(testerPayload),
+			});
+
+			if (!testerResponse.ok) {
+				let testerMessage = "Failed to submit your pilot application.";
+				try {
+					const responseBody = await testerResponse.json();
+					testerMessage = responseBody?.error ?? testerMessage;
+				} catch (error) {
+					console.error("[ContactPilotForm] Failed to parse tester error", error);
+				}
+				toast.error(testerMessage);
+				return;
+			}
+
 			console.log("[ContactPilotForm] Fetching /api/stripe", {
 				price: 5000,
 				description: "Priority Pilot Program Deposit",
