@@ -2,57 +2,93 @@ import type { VoteResponse } from "../hooks/featureTypes";
 // import { supabase } from "@/integrations/supabase/client";
 import type { FeatureRequest } from "../types";
 
+const withDefaults = (feature: Partial<FeatureRequest> & Pick<FeatureRequest, "id" | "title" | "description" | "status">): FeatureRequest => {
+	const now = new Date().toISOString();
+	return {
+		category: feature.category ?? "Productivity",
+		categoryId: feature.categoryId ?? "productivity",
+		icpFocus: feature.icpFocus ?? "General",
+		completeness: feature.completeness ?? 25,
+		benefit: feature.benefit,
+		priority: feature.priority ?? "Medium",
+		toolUrl: feature.toolUrl,
+		owner: feature.owner ?? "Product Team",
+		lastUpdated: feature.lastUpdated ?? now,
+		created_at: feature.created_at ?? now,
+		updated_at: feature.updated_at ?? feature.lastUpdated ?? now,
+		upvotes: feature.upvotes ?? 0,
+		userVote: feature.userVote ?? null,
+		iconIndex: feature.iconIndex ?? 0,
+		...feature,
+	};
+};
+
 const mockFeatures: FeatureRequest[] = [
-	{
+	withDefaults({
 		id: "1",
 		title: "Dark Mode",
 		description: "Add support for dark mode.",
-		status: "open",
+		status: "discovery",
+		category: "Interface",
+		categoryId: "interface",
+		icpFocus: "Platform Admins",
+		completeness: 45,
+		priority: "High",
 		upvotes: 12,
-		created_at: "2024-05-22T12:00:00Z",
-		userVote: null,
-		iconIndex: 0, // Lightbulb
-	},
-	{
+		iconIndex: 0,
+	}),
+	withDefaults({
 		id: "2",
 		title: "Export Data",
 		description: "Allow exporting data as CSV.",
-		status: "planned",
+		status: "planning",
+		category: "Data Ops",
+		categoryId: "data-ops",
+		icpFocus: "Finance Teams",
+		completeness: 35,
+		priority: "Medium",
 		upvotes: 8,
-		created_at: "2024-05-23T09:00:00Z",
-		userVote: null,
-		iconIndex: 1, // Rocket
-	},
-	{
+		iconIndex: 1,
+	}),
+	withDefaults({
 		id: "3",
 		title: "Favorites",
 		description: "Mark items as favorite.",
-		status: "in progress",
+		status: "in_progress",
+		category: "Productivity",
+		categoryId: "productivity",
+		icpFocus: "Deal Finders",
+		completeness: 70,
+		priority: "Medium",
 		upvotes: 5,
-		created_at: "2024-05-24T10:00:00Z",
-		userVote: null,
-		iconIndex: 2, // Star
-	},
-	{
+		iconIndex: 2,
+	}),
+	withDefaults({
 		id: "4",
 		title: "Quick Actions",
 		description: "Add lightning-fast shortcuts.",
-		status: "planned",
+		status: "in_discovery",
+		category: "Workflow Automation",
+		categoryId: "workflow-automation",
+		icpFocus: "Sales Ops",
+		completeness: 30,
+		priority: "Low",
 		upvotes: 3,
-		created_at: "2024-05-25T11:00:00Z",
-		userVote: null,
-		iconIndex: 3, // Zap
-	},
-	{
+		iconIndex: 3,
+	}),
+	withDefaults({
 		id: "5",
 		title: "Like Feature",
 		description: "Show love for features you enjoy.",
-		status: "open",
+		status: "released",
+		category: "Engagement",
+		categoryId: "engagement",
+		icpFocus: "Customer Success",
+		completeness: 100,
+		priority: "High",
 		upvotes: 7,
-		created_at: "2024-05-26T12:00:00Z",
-		userVote: null,
-		iconIndex: 4, // Heart
-	},
+		iconIndex: 4,
+	}),
 ];
 
 const mockVotes: { [featureId: string]: { [userId: string]: "up" | "down" } } =

@@ -46,13 +46,23 @@ function paginate<T>(array: T[], page: number, pageSize: number): T[] {
 // Default page size for case studies
 const CASE_STUDY_PAGE_SIZE = 6;
 
+type IndexSearchParams = {
+	page?: string | string[];
+};
+
 // Main page component
 const Index = async ({
 	searchParams,
-}: { searchParams?: { page?: string } } = {}) => {
+}: { searchParams?: Promise<IndexSearchParams> } = {}) => {
+	const resolvedSearchParams: IndexSearchParams = searchParams
+		? await searchParams
+		: {};
+	const pageParam = Array.isArray(resolvedSearchParams.page)
+		? resolvedSearchParams.page[0]
+		: resolvedSearchParams.page;
 	// Get the current page from the query string (SSR-friendly, Next.js style)
-	const currentPage = searchParams?.page
-		? Number.parseInt(searchParams.page, 10) || 1
+	const currentPage = pageParam
+		? Number.parseInt(pageParam, 10) || 1
 		: 1;
 
 	// Paginate the case studies

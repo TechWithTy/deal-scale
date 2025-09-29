@@ -1,5 +1,4 @@
 import type { CartItem, CartState, CartSummary } from "@/types/cart/index";
-import { DEFAULT_CART_SUMMARY } from "@/types/cart/index";
 import type { ProductType } from "@/types/products";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";

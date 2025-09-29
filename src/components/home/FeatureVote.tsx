@@ -1,13 +1,12 @@
 "use client";
 import { type MutableRefObject, useRef } from "react";
 import Header from "../common/Header";
-import AutoScrollFeatures from "../features/AutoScrollFeatures";
 import FeaturesList from "../features/FeaturesList";
 import { useFeatures } from "../features/useFeatures";
-import { SectionHeading } from "../ui/section-heading";
 
 const UpcomingFeatures = () => {
-	const { features, loading, handleVote, isVotingInProgress } = useFeatures();
+	const { features, loading, handleVote, isVotingInProgress, CategoryFilter } =
+		useFeatures();
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const pausedRef: MutableRefObject<boolean> = useRef(false);
 
@@ -22,6 +21,9 @@ const UpcomingFeatures = () => {
 						className="mb-12 md:mb-16"
 					/>
 				</div>
+				<div className="mx-auto mb-8 max-w-4xl">
+					<CategoryFilter />
+				</div>
 
 				<FeaturesList
 					features={features}
@@ -31,8 +33,6 @@ const UpcomingFeatures = () => {
 					scrollRef={scrollRef}
 					pausedRef={pausedRef}
 				/>
-
-				<AutoScrollFeatures scrollRef={scrollRef} pausedRef={pausedRef} />
 			</div>
 		</section>
 	);

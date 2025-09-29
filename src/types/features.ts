@@ -59,6 +59,7 @@ export interface Vote {
 export interface VoteRequest {
 	feature_id: string;
 	comment?: string;
+	user_id?: string;
 }
 
 export interface VoteResponse {

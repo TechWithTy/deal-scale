@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pause, Play } from "lucide-react";
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { MutableRefObject } from "react";
 import type React from "react";
 import FeatureCard from "./FeatureCard";
@@ -12,7 +12,7 @@ import { useDraggableScroll } from "./utils/useDragableScroll"; // * Adds drag/s
 interface FeaturesListProps {
 	features: FeatureRequest[];
 	loading: boolean;
-	onVote: (featureId: string, voteType: "up" | "down") => void;
+	onVote: (featureId: string, voteType: "up" | "down") => Promise<boolean>;
 	isVotingInProgress: (featureId: string) => boolean;
 	scrollRef: React.RefObject<HTMLDivElement>;
 	pausedRef: MutableRefObject<boolean>;
@@ -46,9 +46,28 @@ const FeaturesList = ({
 	scrollRef,
 	pausedRef,
 }: FeaturesListProps) => {
-	useAutoScrollFeatures(scrollRef, pausedRef);
+	const [holdReasons, setHoldReasons] = useState({
+		hover: false,
+		pointer: false,
+		touch: false,
+		details: false,
+	});
+
+	const manualHold = useMemo(
+		() => holdReasons.hover || holdReasons.pointer || holdReasons.touch || holdReasons.details,
+		[holdReasons],
+	);
+
+	useAutoScrollFeatures(scrollRef, pausedRef, { manualHold });
 	useDraggableScroll(scrollRef, pausedRef); // * Enables swipe/drag-to-scroll for all users
 	// * If you need to customize drag UX, see useDraggableScroll.ts
+
+	const updateHoldReason = useCallback(
+		(reason: keyof typeof holdReasons, value: boolean) => {
+			setHoldReasons((prev) => (prev[reason] === value ? prev : { ...prev, [reason]: value }));
+		},
+		[],
+	);
 
 	useEffect(() => {
 		if (
@@ -63,38 +82,50 @@ const FeaturesList = ({
 	// * Robust touch lock for mobile pause/resume
 	const touchActiveRef = useRef(false);
 
-	const handlePause = () => {
-		if (pausedRef && typeof pausedRef.current !== "undefined") {
+	useEffect(() => {
+		if (manualHold) {
 			pausedRef.current = true;
-		}
-	};
-
-	const handleResume = () => {
-		// Only resume if no touch is active
-		if (
-			!touchActiveRef.current &&
-			pausedRef &&
-			typeof pausedRef.current !== "undefined"
-		) {
+		} else if (!touchActiveRef.current) {
 			pausedRef.current = false;
 		}
-	};
+	}, [manualHold, pausedRef]);
 
 	const handleTouchStart = () => {
 		touchActiveRef.current = true;
-		if (pausedRef && typeof pausedRef.current !== "undefined") {
-			pausedRef.current = true;
-		}
+		updateHoldReason("touch", true);
 	};
 
 	const handleTouchEnd = () => {
 		touchActiveRef.current = false;
-		if (pausedRef && typeof pausedRef.current !== "undefined") {
-			pausedRef.current = false;
-		}
+		updateHoldReason("touch", false);
 	};
 
 	const handleTouchCancel = handleTouchEnd;
+
+	const handlePointerEnter = () => {
+		updateHoldReason("hover", true);
+	};
+
+	const handlePointerLeave = () => {
+		updateHoldReason("hover", false);
+		updateHoldReason("pointer", false);
+	};
+
+	const handlePointerDown = () => {
+		updateHoldReason("pointer", true);
+	};
+
+	const handlePointerUp = () => {
+		updateHoldReason("pointer", false);
+	};
+
+	const pauseForDetails = useCallback(() => {
+		updateHoldReason("details", true);
+	}, [updateHoldReason]);
+
+	const resumeFromDetails = useCallback(() => {
+		updateHoldReason("details", false);
+	}, [updateHoldReason]);
 
 	// Visual indicator for pause/resume
 	const isPaused = usePaused(pausedRef);
@@ -132,6 +163,14 @@ const FeaturesList = ({
 			aria-label="Upcoming features list. Swipe or drag to scroll."
 			// ! Drag/swipe-to-scroll handled by useDraggableScroll
 			style={{ outline: "none" }} // * Remove default focus outline
+			onPointerEnter={handlePointerEnter}
+			onPointerLeave={handlePointerLeave}
+			onPointerDown={handlePointerDown}
+			onPointerUp={handlePointerUp}
+			onPointerCancel={handlePointerUp}
+			onTouchStart={handleTouchStart}
+			onTouchEnd={handleTouchEnd}
+			onTouchCancel={handleTouchCancel}
 		>
 			{/* Visual indicator badge */}
 			{/* <div
@@ -160,6 +199,8 @@ const FeaturesList = ({
 							feature.upvotes === Math.max(...features.map((f) => f.upvotes))
 						}
 						iconIndex={feature.iconIndex}
+						onAutoScrollPause={pauseForDetails}
+						onAutoScrollResume={resumeFromDetails}
 					/> // * Drag/swipe handled at container level
 				))}
 		</section>

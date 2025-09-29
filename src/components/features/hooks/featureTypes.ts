@@ -1,4 +1,6 @@
+import type { Category } from "@/types/case-study";
 import type { FeatureRequest } from "../types";
+import type { JSX } from "react";
 
 export interface FeatureVote {
 	feature_id: string;
@@ -14,7 +16,10 @@ export interface VoteResponse {
 
 export interface FeatureHookReturn {
 	features: FeatureRequest[];
+	categories: Category[];
+	activeCategory: string | "all" | "";
+	CategoryFilter: () => JSX.Element;
 	loading: boolean;
-	handleVote: (featureId: string, voteType: "up" | "down") => Promise<void>;
+	handleVote: (featureId: string, voteType: "up" | "down") => Promise<boolean>;
 	isVotingInProgress: (featureId: string) => boolean;
 }

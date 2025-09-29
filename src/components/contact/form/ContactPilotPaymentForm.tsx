@@ -81,7 +81,7 @@ export default function ContactPilotPaymentForm({
 			});
 			if (error) throw error;
 			// SendGrid email after payment
-			const sgRes = await fetch("/api/contact-pilot", {
+			const sgRes = await fetch("/api/contact", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(formData),
