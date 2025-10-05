@@ -14,7 +14,9 @@ import { Suspense } from "react";
 
 const queryClient = new QueryClient();
 
-const { ZOHOSALESIQ_WIDGETCODE, NEXT_PUBLIC_CLARITY_PROJECT_ID } = process.env;
+const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
+const zohoWidgetCode =
+        process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE ?? process.env.ZOHOSALESIQ_WIDGETCODE;
 
 export default function RootLayout({
 	children,
@@ -33,10 +35,10 @@ export default function RootLayout({
 							</QueryClientProvider>
 						</NextAuthProvider>
 					</Suspense>
-					<DeferredThirdParties
-						clarityProjectId={NEXT_PUBLIC_CLARITY_PROJECT_ID}
-						zohoWidgetCode={ZOHOSALESIQ_WIDGETCODE}
-					/>
+                                        <DeferredThirdParties
+                                                clarityProjectId={clarityProjectId}
+                                                zohoWidgetCode={zohoWidgetCode}
+                                        />
 				</ThemeProvider>
 			</body>
 		</html>
