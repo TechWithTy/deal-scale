@@ -1,5 +1,6 @@
 import AboutUsSection from "@/components/about/AboutUsSection";
 import CaseStudyGrid from "@/components/case-studies/CaseStudyGrid";
+import { ViewportLazy } from "@/components/common/ViewportLazy";
 import ContactForm from "@/components/contact/form/ContactForm";
 import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
 import Faq from "@/components/faq";
@@ -7,7 +8,6 @@ import { BlogPreview } from "@/components/home/BlogPreview";
 import ClientBento from "@/components/home/ClientBento";
 import UpcomingFeatures from "@/components/home/FeatureVote";
 import Pricing from "@/components/home/Pricing";
-import Projects from "@/components/home/Projects";
 import Services from "@/components/home/Services";
 import Testimonials from "@/components/home/Testimonials";
 import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
@@ -61,9 +61,7 @@ const Index = async ({
 		? resolvedSearchParams.page[0]
 		: resolvedSearchParams.page;
 	// Get the current page from the query string (SSR-friendly, Next.js style)
-	const currentPage = pageParam
-		? Number.parseInt(pageParam, 10) || 1
-		: 1;
+	const currentPage = pageParam ? Number.parseInt(pageParam, 10) || 1 : 1;
 
 	// Paginate the case studies
 	const paginatedCaseStudies = paginate(
@@ -95,45 +93,62 @@ const Index = async ({
 				]}
 			/>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<UpcomingFeatures />
+			<ViewportLazy>
+				<UpcomingFeatures />
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			{/* Pass only paginated case studies to the grid for performance and UX */}
-			<CaseStudyGrid
-				caseStudies={caseStudies}
-				limit={3}
-				showViewAllButton
-				showCategoryFilter={false}
-			/>
+			<ViewportLazy>
+				<CaseStudyGrid
+					caseStudies={caseStudies}
+					limit={3}
+					showViewAllButton
+					showCategoryFilter={false}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<Testimonials
-				testimonials={generalDealScaleTestimonials}
-				title={"What Our Clients Say"}
-				subtitle={
-					"Hear from our clients about their experiences with our services"
-				}
-			/>
+			<ViewportLazy>
+				<Testimonials
+					testimonials={generalDealScaleTestimonials}
+					title={"What Our Clients Say"}
+					subtitle={
+						"Hear from our clients about their experiences with our services"
+					}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<Faq
-				title="Frequently Asked Questions"
-				subtitle="Find answers to common questions about our services, process, and technology expertise."
-				faqItems={faqItems}
-			/>
+			<ViewportLazy>
+				<Faq
+					title="Frequently Asked Questions"
+					subtitle="Find answers to common questions about our services, process, and technology expertise."
+					faqItems={faqItems}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<Pricing
-				title={"Our Pricing"}
-				subtitle={"Lock In Pilot Pricing For 5 Years!"}
-				plans={PricingPlans}
-			/>
+			<ViewportLazy>
+				<Pricing
+					title={"Our Pricing"}
+					subtitle={"Lock In Pilot Pricing For 5 Years!"}
+					plans={PricingPlans}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<AboutUsSection />
+			<ViewportLazy>
+				<AboutUsSection />
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<ClientBento />
+			<ViewportLazy>
+				<ClientBento />
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<BlogPreview title="Latest Blogs" posts={posts} />
+			<ViewportLazy>
+				<BlogPreview title="Latest Blogs" posts={posts} />
+			</ViewportLazy>
 			<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
-			<div className="flex items-center justify-center py-5 lg:col-span-7">
-				<ContactForm />
-			</div>
+			<ViewportLazy>
+				<div className="flex items-center justify-center py-5 lg:col-span-7">
+					<ContactForm />
+				</div>
+			</ViewportLazy>
 		</>
 	);
 };

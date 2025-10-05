@@ -15,13 +15,11 @@ export default function HeroSessionMonitorClientWithModal() {
 	const [sessionReset, setSessionReset] = useState(() => () => {});
 
 	const handleCallEnd = () => {
-		console.log("handleCallEnd triggered in parent");
 		setModalContent("complete");
 		setShowCallCompleteModal(true);
 	};
 
 	const handleTransfer = () => {
-		console.log("handleTransfer triggered in parent");
 		setModalContent("transfer");
 		setShowCallCompleteModal(true);
 	};
