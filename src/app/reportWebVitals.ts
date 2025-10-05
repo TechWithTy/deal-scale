@@ -11,10 +11,18 @@ if (typeof window !== "undefined" && "performance" in window) {
 }
 
 const vitalsEndpoint =
-	process.env.NEXT_PUBLIC_VITALS_ENDPOINT &&
-	process.env.NEXT_PUBLIC_VITALS_ENDPOINT.length > 0
-		? process.env.NEXT_PUBLIC_VITALS_ENDPOINT
-		: DEFAULT_ENDPOINT;
+        process.env.NEXT_PUBLIC_VITALS_ENDPOINT &&
+        process.env.NEXT_PUBLIC_VITALS_ENDPOINT.length > 0
+                ? process.env.NEXT_PUBLIC_VITALS_ENDPOINT
+                : DEFAULT_ENDPOINT;
+
+type MetricWithNumericDelta = NextWebVitalsMetric & { delta: number };
+
+function metricHasNumericDelta(
+        metric: NextWebVitalsMetric,
+): metric is MetricWithNumericDelta {
+        return typeof (metric as { delta?: unknown }).delta === "number";
+}
 
 function sendMetric(body: string) {
 	if (typeof navigator !== "undefined" && "sendBeacon" in navigator) {
@@ -52,7 +60,9 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
 		page: window.location.pathname,
 		navigationType,
 		rating: "rating" in metric ? metric.rating : undefined,
-		delta: "delta" in metric ? Number(metric.delta.toFixed(3)) : undefined,
+                delta: metricHasNumericDelta(metric)
+                        ? Number(metric.delta.toFixed(3))
+                        : undefined,
 		timestamp: Date.now(),
 	};
 
