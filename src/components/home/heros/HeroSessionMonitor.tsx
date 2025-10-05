@@ -1,13 +1,19 @@
 "use client";
 
-import DemoTabs from "@/components/deal_scale/demo/tabs/DemoTabs";
 import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
 import type { Transcript } from "@/types/transcript";
-import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
+import { motion, useReducedMotion } from "framer-motion";
+import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
-import { useEffect, useState } from "react";
+
+const DemoTabs = dynamic(
+	() => import("@/components/deal_scale/demo/tabs/DemoTabs"),
+	{
+		loading: () => <HeroDemoSkeleton />,
+		ssr: false,
+	},
+);
 
 // Define words to highlight with their corresponding gradient colors
 const HIGHLIGHT_WORDS = [
@@ -109,41 +115,43 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	isMobile = false,
 	backgroundImage,
 }) => {
-	const { theme } = useTheme();
-	const [mounted, setMounted] = useState(false);
+	const shouldReduceMotion = useReducedMotion();
 
-	// Only render on client to avoid hydration mismatch
-	useEffect(() => {
-		setMounted(true);
-	}, []);
+	const animateIn = (delay = 0.1) =>
+		shouldReduceMotion
+			? {
+					initial: { opacity: 1, y: 0 },
+					animate: { opacity: 1, y: 0 },
+				}
+			: {
+					initial: { opacity: 0, y: 20 },
+					animate: { opacity: 1, y: 0 },
+					transition: { duration: 0.4, delay },
+				};
 
-	if (!mounted) {
-		return (
-			<div className={cn("relative overflow-hidden", className)}>
-				<div className="h-[500px] w-full animate-pulse bg-muted/20" />
-			</div>
-		);
-	}
 	return (
-		<div
+		<section
 			className={cn(
 				"mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-6 px-4 sm:mt-24 sm:mb-16 sm:px-6 lg:my-16 lg:grid-cols-2 lg:gap-8 lg:px-8",
+				"min-h-[640px] lg:min-h-[720px]",
 				className,
 			)}
+			aria-labelledby="hero-heading"
 		>
 			{/* Text Content */}
-			<div className="text-center sm:text-left md:mt-2">
+			<div className="flex h-full flex-col justify-center text-center sm:text-left md:mt-2">
 				{badge && (
 					<motion.span
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.4, delay: 0.1 }}
+						{...animateIn(0.1)}
 						className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
 					>
 						{badge}
 					</motion.span>
 				)}
-				<h1 className="mx-auto animate-fade-in font-bold text-3xl text-glow sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
+				<h1
+					id="hero-heading"
+					className="mx-auto font-bold text-3xl text-glow sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl"
+				>
 					{headline}
 				</h1>
 				<span className="mx-auto my-2 block bg-gradient-to-r from-primary to-focus bg-clip-text py-2 font-bold text-3xl text-transparent sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
@@ -155,9 +163,7 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 				</p>
 				{(onCtaClick || onCtaClick2) && (
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.4, delay: 0.4 }}
+						{...animateIn(0.4)}
 						className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
 					>
 						{onCtaClick && (
@@ -191,11 +197,33 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			</div>
 
 			{/* Session Monitor Carousel */}
-			<div className="relative w-full max-w-4xl">
-				<DemoTabs />
+			<div className="relative flex w-full max-w-4xl items-stretch justify-center">
+				<div className="relative flex w-full max-w-4xl items-stretch">
+					<div className="flex min-h-[420px] w-full items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur lg:min-h-[480px] dark:border-white/5">
+						<DemoTabs />
+					</div>
+				</div>
 			</div>
-		</div>
+		</section>
 	);
 };
 
 export default HeroSessionMonitor;
+
+function HeroDemoSkeleton() {
+	return (
+		<div className="flex h-full w-full flex-col items-center justify-center gap-4">
+			<div className="h-12 w-full max-w-lg animate-pulse rounded-full bg-white/5" />
+			<div className="flex w-full max-w-3xl flex-col gap-3">
+				{Array.from({ length: 4 }).map((_, index) => (
+					<div
+						// biome-ignore lint/suspicious/noArrayIndexKey: static placeholder content
+						key={index}
+						className="h-10 animate-pulse rounded-lg bg-white/5"
+					/>
+				))}
+			</div>
+			<div className="h-64 w-full max-w-3xl animate-pulse rounded-2xl bg-white/5" />
+		</div>
+	);
+}
