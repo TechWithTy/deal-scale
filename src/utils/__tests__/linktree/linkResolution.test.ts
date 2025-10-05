@@ -9,26 +9,26 @@ const createItem = (overrides: Partial<LinkTreeItem> = {}): LinkTreeItem => ({
 });
 
 describe("resolveLink", () => {
-	test("absolute external stays and opens new tab", () => {
-		const item = createItem({ destination: "https://example.com/x" });
-		const r = resolveLink(item);
-		expect(r.dest).toBe("https://example.com/x");
-		expect(r.isExternal).toBe(true);
-	});
+        test("absolute external routes through slug but opens new tab", () => {
+                const item = createItem({ destination: "https://example.com/x" });
+                const r = resolveLink(item);
+                expect(r.dest).toBe("/demo");
+                expect(r.isExternal).toBe(true);
+        });
 
-	test("protocol-relative becomes https and is external", () => {
-		const item = createItem({ destination: "//example.com/x" });
-		const r = resolveLink(item);
-		expect(r.dest).toBe("https://example.com/x");
-		expect(r.isExternal).toBe(true);
-	});
+        test("protocol-relative destination keeps protocol-relative href", () => {
+                const item = createItem({ destination: "//example.com/x" });
+                const r = resolveLink(item);
+                expect(r.dest).toBe("//example.com/x");
+                expect(r.isExternal).toBe(true);
+        });
 
-	test("bare host prepends https and is external", () => {
-		const item = createItem({ destination: "example.com/x" });
-		const r = resolveLink(item);
-		expect(r.dest).toBe("https://example.com/x");
-		expect(r.isExternal).toBe(true);
-	});
+        test("bare host resolves to slug and is external", () => {
+                const item = createItem({ destination: "example.com/x" });
+                const r = resolveLink(item);
+                expect(r.dest).toBe("/demo");
+                expect(r.isExternal).toBe(true);
+        });
 
 	test("internal path remains and is internal", () => {
 		const item = createItem({ destination: "/signup" });
