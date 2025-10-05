@@ -34,12 +34,17 @@ function sendMetric(body: string) {
 	});
 }
 
+export function dispatchMetric(payload: Record<string, unknown>) {
+	sendMetric(JSON.stringify(payload));
+}
+
 export function reportWebVitals(metric: NextWebVitalsMetric) {
 	if (typeof window === "undefined") {
 		return;
 	}
 
 	const payload = {
+		type: "web-vital" as const,
 		id: metric.id,
 		name: metric.name,
 		label: metric.label,
@@ -51,7 +56,7 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
 		timestamp: Date.now(),
 	};
 
-	sendMetric(JSON.stringify(payload));
+	dispatchMetric(payload);
 
 	if (process.env.NODE_ENV !== "production") {
 		// * Surface metrics in development for quick feedback.

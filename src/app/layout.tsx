@@ -3,6 +3,7 @@ import "../index.css";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { DeferredThirdParties } from "@/components/providers/DeferredThirdParties";
 import NextAuthProvider from "@/components/providers/NextAuthProvider";
+import { PerformanceMonitor } from "@/components/providers/PerformanceMonitor";
 import LoadingAnimation from "@/components/ui/loading-animation";
 import { Toaster } from "@/components/ui/toaster";
 import BodyThemeSync from "@/contexts/BodyThemeSync";
@@ -23,6 +24,7 @@ export default function RootLayout({
 			<body className="theme-cyberoni min-h-screen bg-background font-sans antialiased">
 				<ThemeProvider>
 					<BodyThemeSync />
+					<PerformanceMonitor />
 					<Suspense fallback={<LoadingAnimation />}>
 						<Toaster />
 						<NextAuthProvider>
