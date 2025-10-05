@@ -107,116 +107,62 @@ const Index = async ({
 				]}
 			/>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="26rem"
-                                fallback={<SectionFallback className="h-full w-full" />}
-                        >
-                                <UpcomingFeatures />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<UpcomingFeatures />
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="32rem"
-                                fallback={
-                                        <section className="bg-background-dark px-6 py-20 lg:px-8">
-                                                <SectionFallback className="h-[18rem] w-full" />
-                                        </section>
-                                }
-                        >
-                                <CaseStudyGrid
-                                        caseStudies={caseStudies}
-                                        limit={3}
-                                        showViewAllButton
-                                        showCategoryFilter={false}
-                                />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<CaseStudyGrid
+					caseStudies={caseStudies}
+					limit={3}
+					showViewAllButton
+					showCategoryFilter={false}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="36rem"
-                                fallback={
-                                        <section className="glass-card w-full bg-background-dark px-4 py-12 sm:px-6 lg:px-8">
-                                                <SectionFallback className="h-[20rem] w-full" />
-                                        </section>
-                                }
-                        >
-                                <Testimonials
-                                        testimonials={generalDealScaleTestimonials}
-                                        title={"What Our Clients Say"}
-                                        subtitle={
-                                                "Hear from our clients about their experiences with our services"
-                                        }
-                                />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<Testimonials
+					testimonials={generalDealScaleTestimonials}
+					title={"What Our Clients Say"}
+					subtitle={
+						"Hear from our clients about their experiences with our services"
+					}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="28rem"
-                                fallback={
-                                        <div className="container mx-auto px-4 py-12 md:px-6">
-                                                <SectionFallback className="h-[16rem] w-full" />
-                                        </div>
-                                }
-                        >
-                                <Faq
-                                        title="Frequently Asked Questions"
-                                        subtitle="Find answers to common questions about our services, process, and technology expertise."
-                                        faqItems={faqItems}
-                                />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<Faq
+					title="Frequently Asked Questions"
+					subtitle="Find answers to common questions about our services, process, and technology expertise."
+					faqItems={faqItems}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="34rem"
-                                fallback={
-                                        <section className="relative px-6 py-16 lg:px-8">
-                                                <div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" aria-hidden="true" />
-                                                <div className="relative mx-auto max-w-5xl">
-                                                        <SectionFallback className="h-[20rem] w-full" />
-                                                </div>
-                                        </section>
-                                }
-                        >
-                                <Pricing
-                                        title={"Our Pricing"}
-                                        subtitle={"Lock In Pilot Pricing For 5 Years!"}
-                                        plans={PricingPlans}
-                                />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<Pricing
+					title={"Our Pricing"}
+					subtitle={"Lock In Pilot Pricing For 5 Years!"}
+					plans={PricingPlans}
+				/>
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="28rem"
-                                fallback={<SectionFallback className="h-full w-full" />}
-                        >
-                                <AboutUsSection />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<AboutUsSection />
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="30rem"
-                                fallback={<SectionFallback className="h-full w-full" />}
-                        >
-                                <ClientBento />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<ClientBento />
+			</ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="30rem"
-                                fallback={
-                                        <section className="px-4 py-8 sm:px-6 lg:px-8">
-                                                <SectionFallback className="h-[18rem] w-full" />
-                                        </section>
-                                }
-                        >
-                                <BlogPreview title="Latest Blogs" posts={posts} />
-                        </ViewportLazy>
+			<ViewportLazy>
+				<BlogPreview title="Latest Blogs" posts={posts} />
+			</ViewportLazy>
 			<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
-                        <ViewportLazy
-                                minHeight="24rem"
-                                fallback={
-                                        <div className="flex items-center justify-center py-12">
-                                                <SectionFallback className="h-[12rem] w-full max-w-3xl" />
-                                        </div>
-                                }
-                        >
-                                <div className="flex items-center justify-center py-5 lg:col-span-7">
-                                        <ContactForm />
-                                </div>
-                        </ViewportLazy>
+			<ViewportLazy>
+				<div className="flex items-center justify-center py-5 lg:col-span-7">
+					<ContactForm />
+				</div>
+			</ViewportLazy>
 		</>
 	);
 };

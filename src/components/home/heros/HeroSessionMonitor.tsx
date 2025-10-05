@@ -3,7 +3,7 @@
 import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
 import type { Transcript } from "@/types/transcript";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
 
@@ -115,20 +115,6 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	isMobile = false,
 	backgroundImage,
 }) => {
-	const shouldReduceMotion = useReducedMotion();
-
-	const animateIn = (delay = 0.1) =>
-		shouldReduceMotion
-			? {
-					initial: { opacity: 1, y: 0 },
-					animate: { opacity: 1, y: 0 },
-				}
-			: {
-					initial: { opacity: 0, y: 20 },
-					animate: { opacity: 1, y: 0 },
-					transition: { duration: 0.4, delay },
-				};
-
 	return (
 		<section
 			className={cn(

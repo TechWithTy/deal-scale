@@ -6,32 +6,23 @@ import type { Plan, PlanType } from "@/types/service/plans";
 import { Check } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import Header from "../common/Header";
 import PricingCard from "./pricing/PricingCard";
 
 const PricingCheckoutDialog = dynamic(
-	() => import("./pricing/PricingCheckoutDialog"),
-	{
-		ssr: false,
-		loading: () => (
-			<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-				<div className="h-12 w-12 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
-			</div>
-		),
-	},
+        () => import("./pricing/PricingCheckoutDialog"),
+        {
+                ssr: false,
+                loading: () => (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+                                <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
+                        </div>
+                ),
+        },
 );
-
-let toastModule: Promise<typeof import("react-hot-toast")> | null = null;
-
-async function showErrorToast(message: string) {
-	if (!toastModule) {
-		toastModule = import("react-hot-toast");
-	}
-
-	const { default: toast } = await toastModule;
-	toast.error(message);
-}
 
 interface PricingProps {
 	title: string;
@@ -46,13 +37,13 @@ const Pricing: React.FC<PricingProps> = ({
 	plans,
 	callbackUrl,
 }) => {
-	const [planType, setPlanType] = useState<PlanType>("monthly");
-	const [loading, setLoading] = useState<string | null>(null);
-	const [checkoutState, setCheckoutState] = useState<{
-		clientSecret: string;
-		plan: Plan;
-		planType: PlanType;
-	} | null>(null);
+        const [planType, setPlanType] = useState<PlanType>("monthly");
+        const [loading, setLoading] = useState<string | null>(null);
+        const [checkoutState, setCheckoutState] = useState<{
+                clientSecret: string;
+                plan: Plan;
+                planType: PlanType;
+        } | null>(null);
 
 	if (!Array.isArray(plans)) {
 		return null;
@@ -79,7 +70,7 @@ const Pricing: React.FC<PricingProps> = ({
 
 	const handleCheckout = async (plan: Plan, callbackUrl?: string) => {
 		try {
-			setLoading(plan.id);
+                        setLoading(plan.id);
 
 			const price = plan.price[planType].amount;
 			if (typeof price === "string" && price.endsWith("%")) {
@@ -128,7 +119,7 @@ const Pricing: React.FC<PricingProps> = ({
 				throw new Error("No client secret returned from Stripe API");
 			}
 
-			setCheckoutState({ clientSecret: data.clientSecret, plan, planType });
+                        setCheckoutState({ clientSecret: data.clientSecret, plan, planType });
 			setLoading(null);
 		} catch (error) {
 			const errorMessage =
@@ -270,14 +261,14 @@ const Pricing: React.FC<PricingProps> = ({
 					</div>
 				)}
 
-				{checkoutState ? (
-					<PricingCheckoutDialog
-						clientSecret={checkoutState.clientSecret}
-						plan={checkoutState.plan}
-						planType={checkoutState.planType}
-						onClose={() => setCheckoutState(null)}
-					/>
-				) : null}
+                                {checkoutState ? (
+                                        <PricingCheckoutDialog
+                                                clientSecret={checkoutState.clientSecret}
+                                                plan={checkoutState.plan}
+                                                planType={checkoutState.planType}
+                                                onClose={() => setCheckoutState(null)}
+                                        />
+                                ) : null}
 
 				<div className="my-16 text-center">
 					<p className="mb-4 text-black text-lg dark:text-white/80">
