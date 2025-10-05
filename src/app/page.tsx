@@ -19,6 +19,7 @@ import { PricingPlans } from "@/data/service/slug_data/pricing";
 import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
+import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
 import { SERVICE_CATEGORIES } from "@/types/service/services";
 
@@ -47,8 +48,21 @@ function paginate<T>(array: T[], page: number, pageSize: number): T[] {
 const CASE_STUDY_PAGE_SIZE = 6;
 
 type IndexSearchParams = {
-	page?: string | string[];
+        page?: string | string[];
 };
+
+const SectionFallback = ({ className }: { className?: string }) => (
+        <div
+                className={cn(
+                        "flex h-full w-full items-center justify-center rounded-3xl border border-black/10 bg-black/5 backdrop-blur-sm",
+                        "dark:border-white/10 dark:bg-white/[0.05]",
+                        className,
+                )}
+                aria-hidden="true"
+        >
+                <div className="h-10 w-10 animate-spin rounded-full border-2 border-black/20 border-t-transparent dark:border-white/30" />
+        </div>
+);
 
 // Main page component
 const Index = async ({

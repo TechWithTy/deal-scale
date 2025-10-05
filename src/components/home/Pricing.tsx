@@ -2,26 +2,26 @@
 
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
-import { useHasMounted } from "@/hooks/useHasMounted";
 import type { Plan, PlanType } from "@/types/service/plans";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import { Check } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import CheckoutForm from "../checkout/CheckoutForm";
 import Header from "../common/Header";
-import { SectionHeading } from "../ui/section-heading";
 import PricingCard from "./pricing/PricingCard";
 
-const stripePromise = (() => {
-	const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-	if (!key || !key.startsWith("pk_")) {
-		throw new Error("Invalid Stripe publishable key");
-	}
-	return loadStripe(key);
-})();
+const PricingCheckoutDialog = dynamic(
+        () => import("./pricing/PricingCheckoutDialog"),
+        {
+                ssr: false,
+                loading: () => (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+                                <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
+                        </div>
+                ),
+        },
+);
 
 interface PricingProps {
 	title: string;
@@ -36,13 +36,13 @@ const Pricing: React.FC<PricingProps> = ({
 	plans,
 	callbackUrl,
 }) => {
-	const hasMounted = useHasMounted();
-	const [planType, setPlanType] = useState<PlanType>("monthly");
-	const [loading, setLoading] = useState<string | null>(null);
-	const [checkoutState, setCheckoutState] = useState<{
-		clientSecret: string;
-		plan: Plan;
-	} | null>(null);
+        const [planType, setPlanType] = useState<PlanType>("monthly");
+        const [loading, setLoading] = useState<string | null>(null);
+        const [checkoutState, setCheckoutState] = useState<{
+                clientSecret: string;
+                plan: Plan;
+                planType: PlanType;
+        } | null>(null);
 
 	if (!Array.isArray(plans)) {
 		return null;
@@ -64,8 +64,7 @@ const Pricing: React.FC<PricingProps> = ({
 
 	const handleCheckout = async (plan: Plan, callbackUrl?: string) => {
 		try {
-			setLoading(plan.id);
-			if (!stripePromise) throw new Error("Stripe not initialized");
+                        setLoading(plan.id);
 
 			const price = plan.price[planType].amount;
 			if (typeof price === "string" && price.endsWith("%")) {
@@ -114,7 +113,7 @@ const Pricing: React.FC<PricingProps> = ({
 				throw new Error("No client secret returned from Stripe API");
 			}
 
-			setCheckoutState({ clientSecret: data.clientSecret, plan });
+                        setCheckoutState({ clientSecret: data.clientSecret, plan, planType });
 			setLoading(null);
 		} catch (error) {
 			const errorMessage =
@@ -256,31 +255,14 @@ const Pricing: React.FC<PricingProps> = ({
 					</div>
 				)}
 
-				{checkoutState && (
-					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-						<div className="mx-auto w-full max-w-md rounded-lg bg-background-dark p-8">
-							<Elements
-								stripe={stripePromise}
-								options={{
-									clientSecret: checkoutState.clientSecret,
-									appearance: {
-										theme: "night",
-										variables: {
-											colorPrimary: "#6366f1",
-										},
-									},
-								}}
-							>
-								<CheckoutForm
-									clientSecret={checkoutState.clientSecret}
-									onSuccess={() => setCheckoutState(null)}
-									plan={checkoutState.plan}
-									planType={planType}
-								/>
-							</Elements>
-						</div>
-					</div>
-				)}
+                                {checkoutState ? (
+                                        <PricingCheckoutDialog
+                                                clientSecret={checkoutState.clientSecret}
+                                                plan={checkoutState.plan}
+                                                planType={checkoutState.planType}
+                                                onClose={() => setCheckoutState(null)}
+                                        />
+                                ) : null}
 
 				<div className="my-16 text-center">
 					<p className="mb-4 text-black text-lg dark:text-white/80">
