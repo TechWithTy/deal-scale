@@ -115,6 +115,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 												alt={study.title}
 												fill
 												style={{ objectFit: "cover" }}
+												sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
 												className="transition-transform duration-500 group-hover:scale-105"
 											/>
 										</div>
