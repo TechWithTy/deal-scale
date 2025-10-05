@@ -1,4 +1,4 @@
-import { sanitizeMetricPayload } from "../route";
+import { sanitizeMetricPayload } from "../sanitizeMetricPayload";
 
 describe("sanitizeMetricPayload", () => {
         beforeEach(() => {
