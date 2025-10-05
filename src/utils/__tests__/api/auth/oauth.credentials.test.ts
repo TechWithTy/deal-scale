@@ -1,6 +1,9 @@
+/**
+ * @jest-environment node
+ */
 import { NextResponse } from "next/server";
 import { GET } from "@/app/api/auth/oauth/credentials/route";
-import { createSession, mockFetchResponse, resetMocks } from "./test-helpers";
+import { createSession, mockFetchResponse, resetMocks } from "../../../testHelpers/auth";
 
 jest.mock("next-auth", () => ({
 	getServerSession: jest.fn(),

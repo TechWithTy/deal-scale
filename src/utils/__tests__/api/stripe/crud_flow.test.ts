@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 
+import { describeIfExternal, skipExternalTest } from "../../../testHelpers/external";
 import { getTestBaseUrl } from "@/utils/env";
 import axios from "axios";
 import { AxiosError } from "axios";
@@ -104,7 +105,8 @@ async function deleteIntent(intentId: string) {
 	}
 }
 
-describe("[E2E] Stripe Payment Intent CRUD Flow", () => {
+skipExternalTest("[E2E] Stripe Payment Intent CRUD Flow");
+describeIfExternal("[E2E] Stripe Payment Intent CRUD Flow", () => {
 	let intentId: string;
 	const testPrice = 1234;
 	const updatedPrice = 2345;
