@@ -1,5 +1,6 @@
 import AboutUsSection from "@/components/about/AboutUsSection";
 import CaseStudyGrid from "@/components/case-studies/CaseStudyGrid";
+import { ViewportLazy } from "@/components/common/ViewportLazy";
 import ContactForm from "@/components/contact/form/ContactForm";
 import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
 import Faq from "@/components/faq";
@@ -7,7 +8,6 @@ import { BlogPreview } from "@/components/home/BlogPreview";
 import ClientBento from "@/components/home/ClientBento";
 import UpcomingFeatures from "@/components/home/FeatureVote";
 import Pricing from "@/components/home/Pricing";
-import Projects from "@/components/home/Projects";
 import Services from "@/components/home/Services";
 import Testimonials from "@/components/home/Testimonials";
 import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
@@ -19,6 +19,7 @@ import { PricingPlans } from "@/data/service/slug_data/pricing";
 import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
+import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
 import { SERVICE_CATEGORIES } from "@/types/service/services";
 
@@ -47,8 +48,21 @@ function paginate<T>(array: T[], page: number, pageSize: number): T[] {
 const CASE_STUDY_PAGE_SIZE = 6;
 
 type IndexSearchParams = {
-	page?: string | string[];
+        page?: string | string[];
 };
+
+const SectionFallback = ({ className }: { className?: string }) => (
+        <div
+                className={cn(
+                        "flex h-full w-full items-center justify-center rounded-3xl border border-black/10 bg-black/5 backdrop-blur-sm",
+                        "dark:border-white/10 dark:bg-white/[0.05]",
+                        className,
+                )}
+                aria-hidden="true"
+        >
+                <div className="h-10 w-10 animate-spin rounded-full border-2 border-black/20 border-t-transparent dark:border-white/30" />
+        </div>
+);
 
 // Main page component
 const Index = async ({
@@ -61,9 +75,7 @@ const Index = async ({
 		? resolvedSearchParams.page[0]
 		: resolvedSearchParams.page;
 	// Get the current page from the query string (SSR-friendly, Next.js style)
-	const currentPage = pageParam
-		? Number.parseInt(pageParam, 10) || 1
-		: 1;
+	const currentPage = pageParam ? Number.parseInt(pageParam, 10) || 1 : 1;
 
 	// Paginate the case studies
 	const paginatedCaseStudies = paginate(
@@ -95,45 +107,116 @@ const Index = async ({
 				]}
 			/>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<UpcomingFeatures />
+                        <ViewportLazy
+                                minHeight="26rem"
+                                fallback={<SectionFallback className="h-full w-full" />}
+                        >
+                                <UpcomingFeatures />
+                        </ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			{/* Pass only paginated case studies to the grid for performance and UX */}
-			<CaseStudyGrid
-				caseStudies={caseStudies}
-				limit={3}
-				showViewAllButton
-				showCategoryFilter={false}
-			/>
+                        <ViewportLazy
+                                minHeight="32rem"
+                                fallback={
+                                        <section className="bg-background-dark px-6 py-20 lg:px-8">
+                                                <SectionFallback className="h-[18rem] w-full" />
+                                        </section>
+                                }
+                        >
+                                <CaseStudyGrid
+                                        caseStudies={caseStudies}
+                                        limit={3}
+                                        showViewAllButton
+                                        showCategoryFilter={false}
+                                />
+                        </ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<Testimonials
-				testimonials={generalDealScaleTestimonials}
-				title={"What Our Clients Say"}
-				subtitle={
-					"Hear from our clients about their experiences with our services"
-				}
-			/>
+                        <ViewportLazy
+                                minHeight="36rem"
+                                fallback={
+                                        <section className="glass-card w-full bg-background-dark px-4 py-12 sm:px-6 lg:px-8">
+                                                <SectionFallback className="h-[20rem] w-full" />
+                                        </section>
+                                }
+                        >
+                                <Testimonials
+                                        testimonials={generalDealScaleTestimonials}
+                                        title={"What Our Clients Say"}
+                                        subtitle={
+                                                "Hear from our clients about their experiences with our services"
+                                        }
+                                />
+                        </ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<Faq
-				title="Frequently Asked Questions"
-				subtitle="Find answers to common questions about our services, process, and technology expertise."
-				faqItems={faqItems}
-			/>
+                        <ViewportLazy
+                                minHeight="28rem"
+                                fallback={
+                                        <div className="container mx-auto px-4 py-12 md:px-6">
+                                                <SectionFallback className="h-[16rem] w-full" />
+                                        </div>
+                                }
+                        >
+                                <Faq
+                                        title="Frequently Asked Questions"
+                                        subtitle="Find answers to common questions about our services, process, and technology expertise."
+                                        faqItems={faqItems}
+                                />
+                        </ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<Pricing
-				title={"Our Pricing"}
-				subtitle={"Lock In Pilot Pricing For 5 Years!"}
-				plans={PricingPlans}
-			/>
+                        <ViewportLazy
+                                minHeight="34rem"
+                                fallback={
+                                        <section className="relative px-6 py-16 lg:px-8">
+                                                <div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" aria-hidden="true" />
+                                                <div className="relative mx-auto max-w-5xl">
+                                                        <SectionFallback className="h-[20rem] w-full" />
+                                                </div>
+                                        </section>
+                                }
+                        >
+                                <Pricing
+                                        title={"Our Pricing"}
+                                        subtitle={"Lock In Pilot Pricing For 5 Years!"}
+                                        plans={PricingPlans}
+                                />
+                        </ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<AboutUsSection />
+                        <ViewportLazy
+                                minHeight="28rem"
+                                fallback={<SectionFallback className="h-full w-full" />}
+                        >
+                                <AboutUsSection />
+                        </ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<ClientBento />
+                        <ViewportLazy
+                                minHeight="30rem"
+                                fallback={<SectionFallback className="h-full w-full" />}
+                        >
+                                <ClientBento />
+                        </ViewportLazy>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
-			<BlogPreview title="Latest Blogs" posts={posts} />
+                        <ViewportLazy
+                                minHeight="30rem"
+                                fallback={
+                                        <section className="px-4 py-8 sm:px-6 lg:px-8">
+                                                <SectionFallback className="h-[18rem] w-full" />
+                                        </section>
+                                }
+                        >
+                                <BlogPreview title="Latest Blogs" posts={posts} />
+                        </ViewportLazy>
 			<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
-			<div className="flex items-center justify-center py-5 lg:col-span-7">
-				<ContactForm />
-			</div>
+                        <ViewportLazy
+                                minHeight="24rem"
+                                fallback={
+                                        <div className="flex items-center justify-center py-12">
+                                                <SectionFallback className="h-[12rem] w-full max-w-3xl" />
+                                        </div>
+                                }
+                        >
+                                <div className="flex items-center justify-center py-5 lg:col-span-7">
+                                        <ContactForm />
+                                </div>
+                        </ViewportLazy>
 		</>
 	);
 };

@@ -5,13 +5,10 @@ import { motion } from "framer-motion";
 import { ChevronRight, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 import { caseStudyCategories } from "@/data/caseStudy/caseStudies";
 // Accepts caseStudies and categoryFilter as props
 import { useCategoryFilter } from "@/hooks/use-category-filter";
-import { usePagination } from "@/hooks/use-pagination";
 import Header from "../common/Header";
 
 interface CaseStudyGridProps {
@@ -115,6 +112,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 												alt={study.title}
 												fill
 												style={{ objectFit: "cover" }}
+												sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
 												className="transition-transform duration-500 group-hover:scale-105"
 											/>
 										</div>
@@ -123,7 +121,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 										<div className="mb-2 text-center">
 											{study.categories.map((category) => (
 												<span
-													key={uuidv4()}
+													key={category}
 													className="rounded-full bg-white/10 px-2 py-1 text-black text-xs dark:text-white/70"
 												>
 													{category}
