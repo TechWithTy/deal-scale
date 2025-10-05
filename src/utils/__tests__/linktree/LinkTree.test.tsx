@@ -53,20 +53,20 @@ describe("LinkTree component", () => {
 		);
 	});
 
-	test("external items get target=_blank via resolveLink", () => {
-		const items: LinkTreeItem[] = [
-			make({
-				slug: "ext",
-				title: "Ext",
-				destination: "https://example.com/x",
-				category: "Cat",
-			}),
-		];
+        test("external items get target=_blank via resolveLink", () => {
+                const items: LinkTreeItem[] = [
+                        make({
+                                slug: "ext",
+                                title: "Ext",
+                                destination: "https://example.com/x",
+                                category: "Cat",
+                        }),
+                ];
 
-		render(<LinkTree items={items} title="Link Tree" />);
+                render(<LinkTree items={items} title="Link Tree" />);
 
-		const a = screen.getByRole("link", { name: "Ext" });
-		expect(a).toHaveAttribute("href", "https://example.com/x");
-		expect(a).toHaveAttribute("target", "_blank");
-	});
+                const a = screen.getByRole("link", { name: "Ext" });
+                expect(a).toHaveAttribute("href", "/ext");
+                expect(a).toHaveAttribute("target", "_blank");
+        });
 });

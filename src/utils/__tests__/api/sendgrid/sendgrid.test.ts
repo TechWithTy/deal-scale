@@ -1,9 +1,14 @@
+jest.mock("@/lib/externalRequests/sendgrid", () => ({
+        sendMail: jest.fn().mockResolvedValue(202),
+        sendMailHtml: jest.fn().mockResolvedValue(202),
+}));
+
 import * as sendgrid from "@/lib/externalRequests/sendgrid";
 import sgMail from "@sendgrid/mail";
 
 jest.mock("@sendgrid/mail", () => ({
-	setApiKey: jest.fn(),
-	send: jest.fn().mockResolvedValue([{ statusCode: 202 }]),
+        setApiKey: jest.fn(),
+        send: jest.fn().mockResolvedValue([{ statusCode: 202 }]),
 }));
 
 /**

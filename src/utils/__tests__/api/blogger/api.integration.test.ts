@@ -4,15 +4,17 @@
 // * Provide real blog URLs, blog IDs, and post IDs for your public Blogger blog.
 // ! WARNING: These tests will use your API quota and may fail if the API key is invalid or data is missing.
 
+import { describeIfExternal, skipExternalTest } from "../../../testHelpers/external";
 import {
-	getBlogById,
-	getBlogByUrl,
-	getComments,
-	getPost,
-	getPosts,
+        getBlogById,
+        getBlogByUrl,
+        getComments,
+        getPost,
+        getPosts,
 } from "../../../../lib/blogger/api";
 
-describe("Blogger API client (integration)", () => {
+skipExternalTest("Blogger API client (integration)");
+describeIfExternal("Blogger API client (integration)", () => {
 	// Replace these with real values from your Blogger blog
 	const TEST_BLOG_URL = "https://blogger.googleblog.com"; // Official Blogger blog, public
 	const TEST_BLOG_ID: string = "7071425658654923642"; // Blogger Buzz blog ID
