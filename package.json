@@ -25,11 +25,25 @@
 		"export:categories:generic": "pnpm run export:generic -- --module src/data/categories.ts --collection categories",
 		"seed:categories:generic": "pnpm run seed:generic -- --module src/data/categories.ts --collection categories"
 	},
-	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
-			"biome format --write"
-		]
-	},
+        "lint-staged": {
+                "**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
+                        "biome format --write"
+                ]
+        },
+        "browserslist": {
+                "production": [
+                        "chrome >= 90",
+                        "edge >= 90",
+                        "firefox >= 90",
+                        "safari >= 15",
+                        "supports es6-module"
+                ],
+                "development": [
+                        "last 1 chrome version",
+                        "last 1 firefox version",
+                        "last 1 safari version"
+                ]
+        },
 	"dependencies": {
 		"@analytics/google-analytics": "^1.1.0",
 		"@calcom/embed-react": "^1.5.2",

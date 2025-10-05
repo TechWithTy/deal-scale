@@ -3,8 +3,16 @@ import type { NextConfig } from "next";
 import path from "node:path";
 
 const nextConfig: NextConfig = {
-	env: {
-		STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+        experimental: {
+                optimizePackageImports: [
+                        "lucide-react",
+                        "framer-motion",
+                        "react-hot-toast",
+                        "@radix-ui/react-icons",
+                ],
+        },
+        env: {
+                STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
 			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
 		STRIPE_WEB_SECRET: process.env.STRIPE_WEB_SECRET,

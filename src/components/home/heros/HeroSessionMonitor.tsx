@@ -128,9 +128,7 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			<div className="flex h-full flex-col justify-center text-center sm:text-left md:mt-2">
 				{badge && (
 					<motion.span
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.4, delay: 0.1 }}
+						{...animateIn(0.1)}
 						className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
 					>
 						{badge}
@@ -151,9 +149,7 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 				</p>
 				{(onCtaClick || onCtaClick2) && (
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.4, delay: 0.4 }}
+						{...animateIn(0.4)}
 						className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
 					>
 						{onCtaClick && (

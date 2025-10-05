@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import type { Plan, PlanType } from "@/types/service/plans";
 import { Check } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -48,19 +49,24 @@ const Pricing: React.FC<PricingProps> = ({
 		return null;
 	}
 
-	const filteredPlans = plans.filter((plan) => {
-		const price = plan.price[planType];
-		if (!price) return false;
-		const amount = price.amount;
-		if (typeof amount === "string" && amount.includes("%")) {
-			return true;
-		}
-		const numericAmount = typeof amount === "number" ? amount : Number(amount);
-		if (!Number.isNaN(numericAmount) && numericAmount > 0) {
-			return true;
-		}
-		return false;
-	});
+	const filteredPlans = useMemo(
+		() =>
+			plans.filter((plan) => {
+				const price = plan.price[planType];
+				if (!price) return false;
+				const amount = price.amount;
+				if (typeof amount === "string" && amount.includes("%")) {
+					return true;
+				}
+				const numericAmount =
+					typeof amount === "number" ? amount : Number(amount);
+				if (!Number.isNaN(numericAmount) && numericAmount > 0) {
+					return true;
+				}
+				return false;
+			}),
+		[planType, plans],
+	);
 
 	const handleCheckout = async (plan: Plan, callbackUrl?: string) => {
 		try {
@@ -118,7 +124,7 @@ const Pricing: React.FC<PricingProps> = ({
 		} catch (error) {
 			const errorMessage =
 				error instanceof Error ? error.message : "Payment failed";
-			toast.error(errorMessage);
+			await showErrorToast(errorMessage);
 			setLoading(null);
 		}
 	};
