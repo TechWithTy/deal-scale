@@ -1,3 +1,5 @@
+"use client";
+
 import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
 import type { Transcript } from "@/types/transcript";
@@ -14,17 +16,23 @@ const HIGHLIGHT_WORDS = [
 ];
 
 // Animation variants for framer-motion
-const animateIn = (delay = 0) => ({
-	initial: { opacity: 0, y: 20 },
-	animate: { opacity: 1, y: 0 },
-	transition: { duration: 0.6, delay },
-});
+const BADGE_ANIMATION_PROPS = {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, delay: 0.1 },
+} as const;
 
-interface HeroSessionMonitorProps {
-	transcript?: Transcript;
-	className?: string;
-	headline?: string;
-	subheadline?: string;
+const CTA_ANIMATION_PROPS = {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, delay: 0.4 },
+} as const;
+
+export interface HeroSessionMonitorProps {
+        transcript?: Transcript;
+        className?: string;
+        headline?: string;
+        subheadline?: string;
 	highlight?: string;
 	highlightWords?: Array<{ word: string; gradient: string }>;
 	ctaLabel?: string;
@@ -43,7 +51,7 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	transcript = demoTranscript,
 	className,
 	headline,
-	subheadline,
+        subheadline = "",
 	highlight = "Appointments Delivered",
 	highlightWords = HIGHLIGHT_WORDS,
 	ctaLabel = "Get Started",
@@ -130,14 +138,16 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 		>
 			{/* Text Content */}
 			<div className="flex h-full flex-col justify-center text-center sm:text-left md:mt-2">
-				{badge && (
-					<motion.span
-						{...animateIn(0.1)}
-						className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
-					>
-						{badge}
-					</motion.span>
-				)}
+                                {badge && (
+                                        <motion.span
+                                                initial={BADGE_ANIMATION_PROPS.initial}
+                                                animate={BADGE_ANIMATION_PROPS.animate}
+                                                transition={BADGE_ANIMATION_PROPS.transition}
+                                                className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
+                                        >
+                                                {badge}
+                                        </motion.span>
+                                )}
 				<h1
 					id="hero-heading"
 					className="mx-auto font-bold text-3xl text-glow sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl"
@@ -151,11 +161,13 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 				<p className="mx-auto mb-6 max-w-md text-base text-black sm:mb-10 sm:text-lg lg:max-w-xl lg:text-xl xl:max-w-2xl dark:text-white/70">
 					<HighlightedText text={subheadline} highlightWords={highlightWords} />
 				</p>
-				{(onCtaClick || onCtaClick2) && (
-					<motion.div
-						{...animateIn(0.4)}
-						className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
-					>
+                                {(onCtaClick || onCtaClick2) && (
+                                        <motion.div
+                                                initial={CTA_ANIMATION_PROPS.initial}
+                                                animate={CTA_ANIMATION_PROPS.animate}
+                                                transition={CTA_ANIMATION_PROPS.transition}
+                                                className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
+                                        >
 						{onCtaClick && (
 							<button
 								onClick={onCtaClick}
