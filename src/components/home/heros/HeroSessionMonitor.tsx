@@ -5,21 +5,6 @@ import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
 
-// Animation variants for framer-motion
-const animateIn = (delay = 0) => ({
-	initial: { opacity: 0, y: 20 },
-	animate: { opacity: 1, y: 0 },
-	transition: { duration: 0.6, delay },
-});
-
-const DemoTabs = dynamic(
-	() => import("@/components/deal_scale/demo/tabs/DemoTabs"),
-	{
-		loading: () => <HeroDemoSkeleton />,
-		ssr: false,
-	},
-);
-
 // Define words to highlight with their corresponding gradient colors
 const HIGHLIGHT_WORDS = [
 	{ word: "real-time", gradient: "from-primary to-focus" },
@@ -28,78 +13,31 @@ const HIGHLIGHT_WORDS = [
 	{ word: "monitor", gradient: "from-emerald-500 to-teal-400" },
 ];
 
-export interface HeroSessionMonitorProps {
+// Animation variants for framer-motion
+const animateIn = (delay = 0) => ({
+	initial: { opacity: 0, y: 20 },
+	animate: { opacity: 1, y: 0 },
+	transition: { duration: 0.6, delay },
+});
+
+interface HeroSessionMonitorProps {
 	transcript?: Transcript;
 	className?: string;
-	headline: string;
-	subheadline: string;
+	headline?: string;
+	subheadline?: string;
 	highlight?: string;
 	highlightWords?: Array<{ word: string; gradient: string }>;
 	ctaLabel?: string;
 	ctaLabel2?: string;
 	onCtaClick?: () => void;
 	onCtaClick2?: () => void;
-	onTransfer?: () => void;
 	onCallEnd?: () => void;
-	onSessionReset?: (resetFn: () => void) => void;
+	onTransfer?: () => void;
+	onSessionReset?: () => void;
 	badge?: string;
 	isMobile?: boolean;
-	backgroundImage?: string | StaticImageData;
+	backgroundImage?: StaticImageData;
 }
-
-// Helper component to render text with highlighted words
-const HighlightedText: React.FC<{
-	text: string;
-	highlightWords: Array<{ word: string; gradient: string }>;
-}> = ({ text, highlightWords }) => {
-	// Split text into parts and apply highlights
-	const parts: (string | JSX.Element)[] = [text];
-
-	for (const { word, gradient } of highlightWords) {
-		const regex = new RegExp(`\\b${word}\\b`, "gi");
-		const newParts: (string | JSX.Element)[] = [];
-
-		for (const part of parts) {
-			if (typeof part !== "string") {
-				newParts.push(part);
-				continue;
-			}
-
-			let lastIndex = 0;
-			let match: RegExpExecArray | null = null;
-
-			// biome-ignore lint/suspicious/noAssignInExpressions: Required for regex iteration
-			while ((match = regex.exec(part)) !== null) {
-				// Add text before the match
-				if (match.index > lastIndex) {
-					newParts.push(part.substring(lastIndex, match.index));
-				}
-
-				// Add the highlighted word
-				newParts.push(
-					<span
-						key={`${word}-${match.index}`}
-						className={`bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
-					>
-						{match[0]}
-					</span>,
-				);
-
-				lastIndex = match.index + match[0].length;
-			}
-
-			// Add remaining text
-			if (lastIndex < part.length) {
-				newParts.push(part.substring(lastIndex));
-			}
-		}
-
-		parts.length = 0;
-		parts.push(...newParts);
-	}
-
-	return <>{parts.length > 0 ? parts : text}</>;
-};
 
 const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	transcript = demoTranscript,
@@ -120,6 +58,67 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	isMobile = false,
 	backgroundImage,
 }) => {
+	// Helper component to render text with highlighted words
+	const HighlightedText: React.FC<{
+		text: string;
+		highlightWords: Array<{ word: string; gradient: string }>;
+	}> = ({ text, highlightWords }) => {
+		// Split text into parts and apply highlights
+		const parts: (string | JSX.Element)[] = [text];
+
+		for (const { word, gradient } of highlightWords) {
+			const regex = new RegExp(`\\b${word}\\b`, "gi");
+			const newParts: (string | JSX.Element)[] = [];
+
+			for (const part of parts) {
+				if (typeof part !== "string") {
+					newParts.push(part);
+					continue;
+				}
+
+				let lastIndex = 0;
+				let match: RegExpExecArray | null = null;
+
+				// biome-ignore lint/suspicious/noAssignInExpressions: Required for regex iteration
+				while ((match = regex.exec(part)) !== null) {
+					// Add text before the match
+					if (match.index > lastIndex) {
+						newParts.push(part.substring(lastIndex, match.index));
+					}
+
+					// Add the highlighted word
+					newParts.push(
+						<span
+							key={`${word}-${match.index}`}
+							className={`bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
+						>
+							{match[0]}
+						</span>,
+					);
+
+					lastIndex = match.index + match[0].length;
+				}
+
+				// Add remaining text
+				if (lastIndex < part.length) {
+					newParts.push(part.substring(lastIndex));
+				}
+			}
+
+			parts.length = 0;
+			parts.push(...newParts);
+		}
+
+		return <>{parts.length > 0 ? parts : text}</>;
+	};
+
+	const DemoTabs = dynamic(
+		() => import("@/components/deal_scale/demo/tabs/DemoTabs"),
+		{
+			loading: () => <HeroDemoSkeleton />,
+			ssr: false,
+		},
+	);
 	return (
 		<section
 			className={cn(
