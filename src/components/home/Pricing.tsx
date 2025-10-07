@@ -57,7 +57,7 @@ const Pricing: React.FC<PricingProps> = ({
 			plans.some((plan) => hasDisplayablePricing(plan.price[type])),
 		);
 
-		return types.length > 0 ? types : ["monthly"];
+		return types.length > 0 ? types : (["monthly"] as PlanType[]);
 	}, [plans]);
 
 	useEffect(() => {

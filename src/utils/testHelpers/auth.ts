@@ -34,7 +34,9 @@ export function mockFetchResponse({
 }: MockFetchResponseOptions) {
 	const bodyJson = json;
 	const bodyText = text ?? (json ? JSON.stringify(json) : "");
-	(global.fetch as jest.Mock).mockResolvedValueOnce({
+
+	// Create a proper mock response with minimal required properties
+	const mockResponse = {
 		ok: status >= 200 && status < 300,
 		status,
 		headers: {
@@ -42,7 +44,19 @@ export function mockFetchResponse({
 		},
 		json: async () => bodyJson,
 		text: async () => bodyText,
-	} satisfies Response);
+		// Add other required Response properties as no-ops or undefined
+		arrayBuffer: async () => new ArrayBuffer(0),
+		blob: async () => new Blob(),
+		clone: () => mockResponse,
+		body: null,
+		bodyUsed: false,
+		formData: async () => new FormData(),
+		type: 'basic' as const,
+		url: '',
+		redirected: false,
+	};
+
+	(global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse as Response);
 }
 
 /**

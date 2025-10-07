@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import type { Testimonial } from "@/types/testimonial";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import Header from "../common/Header";
@@ -10,6 +10,7 @@ import { TestimonialAvatar } from "./testimonials/TestimonialAvatar";
 import { TestimonialStars } from "./testimonials/TestimonialStars";
 import { TestimonialTabs } from "./testimonials/TestimonialTabs";
 import type { TabKey } from "./testimonials/tabConfig";
+
 interface TestimonialsProps {
 	testimonials: Testimonial[];
 	title: string;
@@ -50,7 +51,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 						transition: { duration: 0.3 },
 					},
 		[shouldReduceMotion],
-	);
+	) as Variants;
 
 	const fadeIn = useMemo(
 		() =>
@@ -68,7 +69,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 						transition: { duration: 0.3 },
 					},
 		[shouldReduceMotion],
-	);
+	) as Variants;
 
 	return (
 		<motion.section

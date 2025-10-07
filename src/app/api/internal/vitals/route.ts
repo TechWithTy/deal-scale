@@ -54,7 +54,7 @@ function toRounded(value: number) {
 	return Number(value.toFixed(3));
 }
 
-export function sanitizeMetricPayload(payload: unknown): MetricPayload | null {
+function sanitizeMetricPayload(payload: unknown): MetricPayload | null {
 	if (!isRecord(payload)) {
 		return null;
 	}
@@ -181,7 +181,6 @@ export async function POST(request: Request) {
 				body: JSON.stringify(payload),
 			});
 		} catch (error) {
-			// biome-ignore lint/suspicious/noConsole: Logging helps diagnose webhook issues.
 			console.error("Failed to forward web vitals", error);
 		}
 	}

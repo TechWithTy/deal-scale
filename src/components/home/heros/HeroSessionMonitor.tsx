@@ -41,7 +41,7 @@ export interface HeroSessionMonitorProps {
 	onCtaClick2?: () => void;
 	onCallEnd?: () => void;
 	onTransfer?: () => void;
-	onSessionReset?: () => void;
+	onSessionReset?: (resetFn: () => void) => void;
 	badge?: string;
 	isMobile?: boolean;
 	backgroundImage?: StaticImageData;

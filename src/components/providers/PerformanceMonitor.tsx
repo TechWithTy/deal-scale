@@ -17,7 +17,10 @@ function shouldReportResource(
 	entry: PerformanceResourceTiming,
 	isThirdParty: boolean,
 ) {
-	const { transferSize = 0, duration = 0, renderBlockingStatus } = entry;
+	const { transferSize = 0, duration = 0 } = entry;
+	const renderBlockingStatus = (entry as PerformanceResourceTiming & {
+		renderBlockingStatus?: string;
+	}).renderBlockingStatus;
 	if (
 		renderBlockingStatus === "blocking" ||
 		renderBlockingStatus === "queued"
@@ -161,7 +164,9 @@ export function PerformanceMonitor() {
 		}
 
 		return () => {
-			cleanupCallbacks.forEach((cleanup) => cleanup());
+			for (const cleanup of cleanupCallbacks) {
+				cleanup();
+			}
 		};
 	}, []);
 
