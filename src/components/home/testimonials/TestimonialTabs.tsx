@@ -1,19 +1,12 @@
-"use client";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Testimonial } from "@/types/testimonial";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { TAB_KEYS, type TabKey } from "./tabConfig";
 
 interface TestimonialTabsProps {
 	activeTab: TabKey;
 	onTabChange: (value: TabKey) => void;
-	fadeInUp: {
-		initial: Record<string, unknown>;
-		animate: Record<string, unknown>;
-		exit: Record<string, unknown>;
-		transition: Record<string, unknown>;
-	};
+	fadeInUp: Variants;
 	testimonial: Testimonial;
 }
 

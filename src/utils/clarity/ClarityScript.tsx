@@ -26,7 +26,6 @@ export function MicrosoftClarityScript({ projectId }: { projectId?: string }) {
 	// Initialize via official package API once on mount
 	useEffect(() => {
 		let cancelled = false;
-		let timeout: number | undefined;
 
 		const initialize = () => {
 			if (cancelled) return;
@@ -44,14 +43,19 @@ export function MicrosoftClarityScript({ projectId }: { projectId?: string }) {
 			if ("requestIdleCallback" in window) {
 				window.requestIdleCallback(initialize, { timeout: 1500 });
 			} else {
-				timeout = window.setTimeout(initialize, 800);
+				// Use type assertion to handle browser vs Node.js differences
+				(globalThis as typeof globalThis & { __clarityTimeout?: number }).__clarityTimeout =
+					globalThis.setTimeout(initialize, 800) as unknown as number;
 			}
 		}
 
 		return () => {
 			cancelled = true;
-			if (typeof window !== "undefined" && timeout) {
-				window.clearTimeout(timeout);
+			if (typeof window !== "undefined") {
+				const timeout = (globalThis as any).__clarityTimeout;
+				if (timeout) {
+					window.clearTimeout(timeout);
+				}
 			}
 		};
 	}, [id]);
