@@ -2,10 +2,13 @@
 // * Tests both fetching all posts and a single post via the usePosts hook
 // * Run only in a safe test environment (real API calls, may mutate data)
 
-import { describeIfExternal, skipExternalTest } from "../../../testHelpers/external";
 import { usePosts } from "@/hooks/beehiiv/use-posts";
 import type { BeehiivPost } from "@/types/behiiv";
 import { act, renderHook } from "@testing-library/react";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 
 import { getTestBaseUrl } from "@/utils/env";
 

@@ -9,11 +9,11 @@ import { SignUpForm } from "@/components/contact/form/SignUp";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import type { AuthView } from "@/types/auth";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { X } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import { X } from "lucide-react";
-import type { AuthView } from "@/types/auth";
 
 // Map views to their respective titles and subtitles
 const viewConfig: Record<AuthView, { title: string; subtitle: string }> = {
@@ -81,7 +81,8 @@ export function AuthModal() {
 
 		toast({
 			title: "LinkedIn OAuth",
-			description: "LinkedIn account connected. We'll finish setting things up.",
+			description:
+				"LinkedIn account connected. We'll finish setting things up.",
 		});
 		await signIn("linkedin", callbackUrl ? { callbackUrl } : undefined);
 	}, [view, buildRedirectTo, supabase, callbackUrl]);
@@ -106,7 +107,8 @@ export function AuthModal() {
 
 		toast({
 			title: "Facebook OAuth",
-			description: "Facebook account connected. We'll finish setting things up.",
+			description:
+				"Facebook account connected. We'll finish setting things up.",
 		});
 		await signIn("facebook", callbackUrl ? { callbackUrl } : undefined);
 	}, [view, buildRedirectTo, supabase, callbackUrl]);
@@ -175,7 +177,8 @@ export function AuthModal() {
 									onClick={() => void handleLinkedIn()}
 									className="w-full"
 								>
-									<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with LinkedIn
+									<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with
+									LinkedIn
 								</Button>
 								<Button
 									variant="outline"
@@ -183,7 +186,8 @@ export function AuthModal() {
 									onClick={() => void handleFacebook()}
 									className="w-full"
 								>
-									<Icons.facebook className="mr-2 h-4 w-4" /> Continue with Facebook
+									<Icons.facebook className="mr-2 h-4 w-4" /> Continue with
+									Facebook
 								</Button>
 							</div>
 							<div className="relative my-3">

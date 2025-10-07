@@ -2,8 +2,11 @@ jest.setTimeout(20000); // * Increase timeout for slow integration tests
 
 import { useNewsletterSubscribers } from "@/hooks/beehiiv/use-news-letter-subscribers";
 import type { Subscriber } from "@/types/behiiv";
-import { describeIfExternal, skipExternalTest } from "../../../testHelpers/external";
 import { act, renderHook } from "@testing-library/react";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 process.env.API_BASE_URL = "http://localhost:3000";
 /**
  * Integration test for exercising the full CRUD flow of Beehiiv subscribers.

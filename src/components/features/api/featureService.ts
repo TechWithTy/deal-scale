@@ -2,7 +2,10 @@ import type { VoteResponse } from "../hooks/featureTypes";
 // import { supabase } from "@/integrations/supabase/client";
 import type { FeatureRequest } from "../types";
 
-const withDefaults = (feature: Partial<FeatureRequest> & Pick<FeatureRequest, "id" | "title" | "description" | "status">): FeatureRequest => {
+const withDefaults = (
+	feature: Partial<FeatureRequest> &
+		Pick<FeatureRequest, "id" | "title" | "description" | "status">,
+): FeatureRequest => {
 	const now = new Date().toISOString();
 	return {
 		category: feature.category ?? "Productivity",

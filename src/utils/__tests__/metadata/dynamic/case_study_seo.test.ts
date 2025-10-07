@@ -23,19 +23,19 @@ describe("getCaseStudySeo", () => {
 			thumbnailImage: "https://dealscale.io/images/case-study-retail-thumb.jpg",
 			businessChallenges: ["Inventory management", "Sales forecasting"],
 			lastModified: new Date("2025-04-16T12:00:00Z"),
-                        howItWorks: [
-                                {
-                                        title: "Assess",
-                                        description: "Evaluate current operations",
-                                },
-                                {
-                                        title: "Automate",
-                                        description: "Implement AI workflows",
-                                },
-                        ],
-                        businessOutcomes: [
-                                {
-                                        title: "Improved Inventory",
+			howItWorks: [
+				{
+					title: "Assess",
+					description: "Evaluate current operations",
+				},
+				{
+					title: "Automate",
+					description: "Implement AI workflows",
+				},
+			],
+			businessOutcomes: [
+				{
+					title: "Improved Inventory",
 					subtitle: "30% reduction in overstocking",
 				},
 				{
@@ -44,7 +44,7 @@ describe("getCaseStudySeo", () => {
 				},
 			],
 			solutions: ["Custom AI model", "Real-time analytics dashboard"],
-                        techStacks: ["Next.js", "PostgreSQL"],
+			techStacks: ["Next.js", "PostgreSQL"],
 			description:
 				"Implemented an AI-driven system to optimize inventory and boost sales for MegaMart.",
 			results: [

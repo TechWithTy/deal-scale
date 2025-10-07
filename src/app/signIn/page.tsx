@@ -5,11 +5,11 @@ import { SignInForm } from "@/components/contact/form/SignIn";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
-import { toast } from "@/components/ui/use-toast";
 
 export default function SignInPage() {
 	const searchParams = useSearchParams();
@@ -69,9 +69,7 @@ export default function SignInPage() {
 			<div className="lg:p-8">
 				<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
 					<div className="flex flex-col space-y-2 text-center">
-						<h1 className="font-semibold text-2xl tracking-tight">
-							Welcome
-						</h1>
+						<h1 className="font-semibold text-2xl tracking-tight">Welcome</h1>
 						<p className="text-muted-foreground text-sm">
 							Sign in to pick up right where you left off.
 						</p>

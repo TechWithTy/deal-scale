@@ -16,7 +16,8 @@ const queryClient = new QueryClient();
 
 const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
 const zohoWidgetCode =
-        process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE ?? process.env.ZOHOSALESIQ_WIDGETCODE;
+	process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE ??
+	process.env.ZOHOSALESIQ_WIDGETCODE;
 
 export default function RootLayout({
 	children,
@@ -35,10 +36,10 @@ export default function RootLayout({
 							</QueryClientProvider>
 						</NextAuthProvider>
 					</Suspense>
-                                        <DeferredThirdParties
-                                                clarityProjectId={clarityProjectId}
-                                                zohoWidgetCode={zohoWidgetCode}
-                                        />
+					<DeferredThirdParties
+						clarityProjectId={clarityProjectId}
+						zohoWidgetCode={zohoWidgetCode}
+					/>
 				</ThemeProvider>
 			</body>
 		</html>

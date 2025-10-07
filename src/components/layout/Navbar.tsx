@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuthModal } from "@/components/auth/use-auth-store";
 import { NewsletterEmailInput } from "@/components/contact/newsletter/NewsletterEmailInput";
 import { StickyBanner } from "@/components/ui/StickyBanner";
 import { Button } from "@/components/ui/button";
@@ -12,18 +13,17 @@ import {
 	NavigationMenuTrigger,
 	NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
-import { useAuthModal } from "@/components/auth/use-auth-store";
 import { navItems } from "@/data/layout/nav";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
-import { signOut, useSession } from "next-auth/react";
 import { ThemeToggle } from "../theme/theme-toggle";
 
 const NavLink = ({ item, onClick, className = "" }) => {
@@ -379,7 +379,7 @@ export default function Navbar() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const isMobile = useIsMobile();
 	const { data: session, status } = useSession();
-const openAuthModal = useAuthModal((state) => state.open);
+	const openAuthModal = useAuthModal((state) => state.open);
 
 	useEffect(() => {
 		if (!hasMounted) return;
