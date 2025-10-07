@@ -12,6 +12,7 @@ import { MicrosoftClarityScript } from "@/utils/clarity/ClarityScript";
 import { renderOpenGraphMeta } from "@/utils/seo/seo";
 import { defaultSeo } from "@/utils/seo/staticSeo";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import Script from "next/script";
 import { Suspense } from "react";
 import { metadata } from "./metadata";
@@ -19,6 +20,11 @@ import { metadata } from "./metadata";
 const queryClient = new QueryClient();
 
 const { ZOHOSALESIQ_WIDGETCODE } = process.env;
+
+const DeferredThirdParties = dynamic(
+	() => import("@/components/providers/DeferredThirdParties"),
+	{ ssr: false, loading: () => null },
+);
 
 export default function RootLayout({
 	children,
@@ -38,11 +44,13 @@ export default function RootLayout({
 						<Analytics />
 						<GAAnalyticsProvider />
 						<MicrosoftClarityScript projectId="sttpn4xwgd" />
+						<DeferredThirdParties />
 					</Suspense>
 					{/* Zoho SalesIQ direct embed */}
 					<Script
 						id="zsiq-init"
 						strategy="afterInteractive"
+						// biome-ignore lint/security/noDangerouslySetInnerHtml: Third-party embed script is trusted
 						dangerouslySetInnerHTML={{
 							__html:
 								"window.$zoho=window.$zoho || {}; $zoho.salesiq=$zoho.salesiq||{ready:function(){}};",

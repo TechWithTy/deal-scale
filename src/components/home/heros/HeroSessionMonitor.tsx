@@ -17,6 +17,11 @@ const HIGHLIGHT_WORDS = [
 	{ word: "monitor", gradient: "from-emerald-500 to-teal-400" },
 ];
 
+const animateIn = {
+	hidden: { opacity: 0, y: 20 },
+	visible: { opacity: 1, y: 0 },
+};
+
 export interface HeroSessionMonitorProps {
 	transcript?: Transcript;
 	className?: string;
@@ -135,8 +140,9 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			<div className="text-center sm:text-left md:mt-2">
 				{badge && (
 					<motion.span
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
+						variants={animateIn}
+						initial="hidden"
+						animate="visible"
 						transition={{ duration: 0.4, delay: 0.1 }}
 						className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
 					>
@@ -155,8 +161,9 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 				</p>
 				{(onCtaClick || onCtaClick2) && (
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
+						variants={animateIn}
+						initial="hidden"
+						animate="visible"
 						transition={{ duration: 0.4, delay: 0.4 }}
 						className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
 					>
