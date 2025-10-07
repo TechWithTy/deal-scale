@@ -93,7 +93,10 @@ export const painPointOptions: ContactFormOption[] = [
 export const betaTesterFormSchema = z.object({
 	firstName: z.string().optional(),
 	lastName: z.string().optional(),
-	email: z.string().email({ message: "Please enter a valid email address" }).optional(),
+	email: z
+		.string()
+		.email({ message: "Please enter a valid email address" })
+		.optional(),
 	phone: z.string().optional(),
 	companyName: z
 		.string()
@@ -120,7 +123,6 @@ export const betaTesterFormSchema = z.object({
 });
 
 export type BetaTesterFormValues = z.infer<typeof betaTesterFormSchema>;
-
 
 export const betaTesterFormFields: FieldConfig[] = [
 	{

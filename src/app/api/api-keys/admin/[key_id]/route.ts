@@ -1,7 +1,7 @@
+import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
 // src/app/api/api-keys/admin/[key_id]/route.ts
 import { type NextRequest, NextResponse } from "next/server";
-import { authOptions } from "@/lib/authOptions";
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";

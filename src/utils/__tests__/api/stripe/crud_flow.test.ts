@@ -2,10 +2,13 @@
  * @jest-environment node
  */
 
-import { describeIfExternal, skipExternalTest } from "../../../testHelpers/external";
 import { getTestBaseUrl } from "@/utils/env";
 import axios from "axios";
 import { AxiosError } from "axios";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 
 // Helper to get the base URL for testing
 const BASE_URL = getTestBaseUrl();

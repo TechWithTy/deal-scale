@@ -1,16 +1,21 @@
+import { GET } from "@/app/api/auth/oauth/credentials/route";
 /**
  * @jest-environment node
  */
 import { NextResponse } from "next/server";
-import { GET } from "@/app/api/auth/oauth/credentials/route";
-import { createSession, mockFetchResponse, resetMocks } from "../../../testHelpers/auth";
+import {
+	createSession,
+	mockFetchResponse,
+	resetMocks,
+} from "../../../testHelpers/auth";
 
 jest.mock("next-auth", () => ({
 	getServerSession: jest.fn(),
 }));
 
 describe("GET /api/auth/oauth/credentials", () => {
-	const getServerSession = jest.requireMock("next-auth").getServerSession as jest.Mock;
+	const getServerSession = jest.requireMock("next-auth")
+		.getServerSession as jest.Mock;
 
 	beforeAll(() => {
 		global.fetch = jest.fn();
@@ -71,7 +76,9 @@ describe("GET /api/auth/oauth/credentials", () => {
 	it("handles unexpected exceptions with 500", async () => {
 		const session = createSession();
 		getServerSession.mockResolvedValueOnce(session);
-		(global.fetch as jest.Mock).mockRejectedValueOnce(new Error("network down"));
+		(global.fetch as jest.Mock).mockRejectedValueOnce(
+			new Error("network down"),
+		);
 
 		const response = await GET();
 		const json = await response.json();

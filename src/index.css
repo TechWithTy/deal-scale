@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 @layer base {
-        :root {
-                font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
-                        BlinkMacSystemFont, "Segoe UI", sans-serif;
-        }
+	:root {
+		font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+			BlinkMacSystemFont, "Segoe UI", sans-serif;
+	}
 
-        code,
-        pre {
-                font-family: var(--font-mono), ui-monospace, SFMono-Regular,
-                        Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        }
+	code,
+	pre {
+		font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
+			Consolas, "Liberation Mono", "Courier New", monospace;
+	}
 
-        .theme-cyberoni {
-                --focus: 262 83% 66%; /* purple accent for focus */
+	.theme-cyberoni {
+		--focus: 262 83% 66%; /* purple accent for focus */
 		--tertiary: 186 100% 60%; /* cyber-neon */
 		--tertiary-foreground: 210 40% 98%;
 		--background-dark: 225 30% 3%; /* darker shade for dark theme */

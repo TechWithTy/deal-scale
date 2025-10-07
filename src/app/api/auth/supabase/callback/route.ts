@@ -1,12 +1,12 @@
-import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
+import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 
+import { authOptions } from "@/lib/authOptions";
 import { encryptOAuthToken } from "@/lib/security";
 import type { Database } from "@/types/_postgresql/supabase";
-import { authOptions } from "@/lib/authOptions";
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
@@ -17,15 +17,25 @@ function resolveRedirect(target?: string | null) {
 	}
 
 	try {
-		const url = new URL(target, process.env.NEXTAUTH_URL ?? "http://localhost:3000");
+		const url = new URL(
+			target,
+			process.env.NEXTAUTH_URL ?? "http://localhost:3000",
+		);
 		return url.pathname + url.search + url.hash;
 	} catch (error) {
-		console.warn("Invalid redirectTo provided, falling back to integrations page", error);
+		console.warn(
+			"Invalid redirectTo provided, falling back to integrations page",
+			error,
+		);
 		return "/settings/integrations";
 	}
 }
 
-function redirectWithParams(origin: string, destination: string, params: Record<string, string | null | undefined>) {
+function redirectWithParams(
+	origin: string,
+	destination: string,
+	params: Record<string, string | null | undefined>,
+) {
 	const url = new URL(destination, origin);
 	for (const [key, value] of Object.entries(params)) {
 		if (typeof value === "string" && value.length > 0) {
@@ -100,9 +110,9 @@ export async function GET(request: NextRequest) {
 
 		const codeVerifierCookieNames = projectRef
 			? [
-				`sb-${projectRef}-auth-token-code-verifier`,
-				`sb-${projectRef}-auth-token-code-verifier.0`,
-			]
+					`sb-${projectRef}-auth-token-code-verifier`,
+					`sb-${projectRef}-auth-token-code-verifier.0`,
+				]
 			: [];
 
 		const codeVerifier = codeVerifierCookieNames
@@ -167,31 +177,28 @@ export async function GET(request: NextRequest) {
 				(data.session.user?.user_metadata?.scope as string | undefined) ?? null;
 			const expiresIn = data.session.expires_in ?? null;
 
-			const response = await fetch(
-				`${DEALSCALE_API_BASE}/api/v1/auth/social`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${session.dsTokens.access_token}`,
-					},
-					body: JSON.stringify({
-						provider,
-						provider_user_id: providerUserId,
-						access_token: encryptOAuthToken(providerAccessToken),
-						refresh_token: providerRefreshToken
-							? encryptOAuthToken(providerRefreshToken)
-							: null,
-						expires_in: expiresIn ?? 3600,
-						scope,
-						username: session.user.name ?? null,
-						handle: null,
-						page_id: null,
-						company_id: null,
-						provider_data: null,
-					}),
+			const response = await fetch(`${DEALSCALE_API_BASE}/api/v1/auth/social`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${session.dsTokens.access_token}`,
 				},
-			);
+				body: JSON.stringify({
+					provider,
+					provider_user_id: providerUserId,
+					access_token: encryptOAuthToken(providerAccessToken),
+					refresh_token: providerRefreshToken
+						? encryptOAuthToken(providerRefreshToken)
+						: null,
+					expires_in: expiresIn ?? 3600,
+					scope,
+					username: session.user.name ?? null,
+					handle: null,
+					page_id: null,
+					company_id: null,
+					provider_data: null,
+				}),
+			});
 
 			if (!response.ok) {
 				const payload = await response.text();

@@ -2,11 +2,14 @@ import {
 	type Publication,
 	usePublications,
 } from "@/hooks/beehiiv/use-publications";
-// ! Integration test for Beehiiv publications hook
-// * Run only in a safe test environment (real API calls)
-import { describeIfExternal, skipExternalTest } from "../../../testHelpers/external";
 import { act, renderHook } from "@testing-library/react";
 import { waitFor } from "@testing-library/react";
+// ! Integration test for Beehiiv publications hook
+// * Run only in a safe test environment (real API calls)
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 
 skipExternalTest("Beehiiv Publications integration");
 describeIfExternal("Beehiiv Publications integration", () => {

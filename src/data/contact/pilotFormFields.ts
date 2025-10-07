@@ -76,7 +76,10 @@ export const priorityPilotFormSchema = z.object({
 	// Section 1: Contact & Company Info
 	firstName: z.string().optional(),
 	lastName: z.string().optional(),
-	email: z.string().email({ message: "A valid business email is required." }).optional(),
+	email: z
+		.string()
+		.email({ message: "A valid business email is required." })
+		.optional(),
 	phone: z.string().optional(),
 	companyName: z.string().min(2, { message: "Company name is required." }),
 	companyLogo: z.instanceof(File).optional(),

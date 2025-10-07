@@ -1,21 +1,19 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-const Analytics = dynamic(() => import("@/components/analytics/Analytics"), {
-	ssr: false,
-});
-const GAAnalyticsProvider = dynamic(() => import("./GAAnalyticsProvider"), {
-	ssr: false,
-});
-const MicrosoftClarityScript = dynamic(
+const Analytics = dynamic(
 	() =>
-		import("@/utils/clarity/ClarityScript").then(
-			(mod) => mod.MicrosoftClarityScript,
-		),
-	{ ssr: false },
+		import("@/components/analytics/Analytics").then((mod) => ({
+			default: mod.Analytics,
+		})),
+	{
+		ssr: false,
+		loading: () => null,
+	},
 );
+
+const GAAnalyticsProvider = () => null;
+const MicrosoftClarityScript = ({ projectId }: { projectId?: string }) => null;
 
 const INTERACTION_EVENTS: Array<keyof WindowEventMap> = [
 	"scroll",
@@ -39,11 +37,15 @@ function useDeferredLoad() {
 			}
 		};
 
+		// Simple type guard to ensure we're in browser environment
+		const isBrowser = (): boolean => typeof window !== "undefined";
+
 		const idle = () => {
-			if ("requestIdleCallback" in window) {
+			if (isBrowser() && "requestIdleCallback" in window) {
 				window.requestIdleCallback(() => enable(), { timeout: 2000 });
-			} else {
-				window.setTimeout(() => enable(), 1200);
+			} else if (isBrowser()) {
+				// Use globalThis for better type inference
+				globalThis.setTimeout(() => enable(), 1200);
 			}
 		};
 
@@ -53,30 +55,23 @@ function useDeferredLoad() {
 			window.addEventListener("load", idle, { once: true });
 		}
 
-		INTERACTION_EVENTS.forEach((eventName) => {
-			window.addEventListener(eventName, enable, { once: true, passive: true });
-		});
+		for (const eventName of INTERACTION_EVENTS) {
+			window.addEventListener(eventName, enable, {
+				once: true,
+				passive: true,
+			});
+		}
 
 		return () => {
 			cancelled = true;
 			window.removeEventListener("load", idle);
-			INTERACTION_EVENTS.forEach((eventName) => {
+			for (const eventName of INTERACTION_EVENTS) {
 				window.removeEventListener(eventName, enable);
-			});
+			}
 		};
 	}, [shouldLoad]);
 
 	return shouldLoad;
-}
-
-declare global {
-	interface Window {
-		$zoho?: {
-			salesiq?: {
-				ready: () => void;
-			};
-		};
-	}
 }
 
 interface DeferredThirdPartiesProps {
@@ -100,7 +95,11 @@ export function DeferredThirdParties({
 		}
 
 		window.$zoho = window.$zoho || {};
-		window.$zoho.salesiq = window.$zoho.salesiq || { ready: () => undefined };
+		window.$zoho.salesiq = window.$zoho.salesiq || {
+			widgetcode: "",
+			values: {},
+			ready: () => undefined
+		};
 
 		const script = document.createElement("script");
 		script.id = "zsiqscript";
@@ -110,7 +109,10 @@ export function DeferredThirdParties({
 		document.body.appendChild(script);
 
 		return () => {
-			script.remove();
+			const scriptElement = document.getElementById("zsiqscript");
+			if (scriptElement) {
+				scriptElement.remove();
+			}
 		};
 	}, [shouldLoad, zohoWidgetCode]);
 

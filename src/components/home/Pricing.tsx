@@ -10,223 +10,235 @@ import Header from "../common/Header";
 import { PlanTypeToggle } from "./pricing/PlanTypeToggle";
 import PricingCard from "./pricing/PricingCard";
 import {
-        PLAN_TYPES,
-        computeAnnualDiscountSummary,
-        hasDisplayablePricing,
+	PLAN_TYPES,
+	computeAnnualDiscountSummary,
+	hasDisplayablePricing,
 } from "./pricing/pricingUtils";
 
-const PricingCheckoutDialog = dynamic(() => import("./pricing/PricingCheckoutDialog"), {
-        ssr: false,
-        loading: () => (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-                        <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
-                </div>
-        ),
-});
+const PricingCheckoutDialog = dynamic(
+	() => import("./pricing/PricingCheckoutDialog"),
+	{
+		ssr: false,
+		loading: () => (
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+				<div className="h-12 w-12 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
+			</div>
+		),
+	},
+);
 
 interface PricingProps {
-        title: string;
-        subtitle: string;
-        plans: Plan[];
-        callbackUrl?: string;
+	title: string;
+	subtitle: string;
+	plans: Plan[];
+	callbackUrl?: string;
 }
 
 interface CheckoutState {
-        clientSecret: string;
-        plan: Plan;
-        planType: PlanType;
+	clientSecret: string;
+	plan: Plan;
+	planType: PlanType;
 }
 
-const Pricing: React.FC<PricingProps> = ({ title, subtitle, plans, callbackUrl }) => {
-        const [planType, setPlanType] = useState<PlanType>("monthly");
-        const [loading, setLoading] = useState<string | null>(null);
-        const [checkoutState, setCheckoutState] = useState<CheckoutState | null>(null);
+const Pricing: React.FC<PricingProps> = ({
+	title,
+	subtitle,
+	plans,
+	callbackUrl,
+}) => {
+	const [planType, setPlanType] = useState<PlanType>("monthly");
+	const [loading, setLoading] = useState<string | null>(null);
+	const [checkoutState, setCheckoutState] = useState<CheckoutState | null>(
+		null,
+	);
 
-        const availableTypes = useMemo(() => {
-                const types = PLAN_TYPES.filter((type) =>
-                        plans.some((plan) => hasDisplayablePricing(plan.price[type])),
-                );
+	const availableTypes = useMemo(() => {
+		const types = PLAN_TYPES.filter((type) =>
+			plans.some((plan) => hasDisplayablePricing(plan.price[type])),
+		);
 
-                return types.length > 0 ? types : ["monthly"];
-        }, [plans]);
+		return types.length > 0 ? types : ["monthly"];
+	}, [plans]);
 
-        useEffect(() => {
-                if (!availableTypes.includes(planType)) {
-                        setPlanType(availableTypes[0]);
-                }
-        }, [availableTypes, planType]);
+	useEffect(() => {
+		if (!availableTypes.includes(planType)) {
+			setPlanType(availableTypes[0]);
+		}
+	}, [availableTypes, planType]);
 
-        const filteredPlans = useMemo(
-                () =>
-                        plans.filter((plan) => hasDisplayablePricing(plan.price[planType])),
-                [plans, planType],
-        );
+	const filteredPlans = useMemo(
+		() => plans.filter((plan) => hasDisplayablePricing(plan.price[planType])),
+		[plans, planType],
+	);
 
-        const annualDiscountSummary = useMemo(
-                () => computeAnnualDiscountSummary(plans),
-                [plans],
-        );
+	const annualDiscountSummary = useMemo(
+		() => computeAnnualDiscountSummary(plans),
+		[plans],
+	);
 
-        const handleCheckout = useCallback(
-                async (plan: Plan, planCallbackUrl?: string) => {
-                        const priceDetails = plan.price[planType];
+	const handleCheckout = useCallback(
+		async (plan: Plan, planCallbackUrl?: string) => {
+			const priceDetails = plan.price[planType];
 
-                        if (!hasDisplayablePricing(priceDetails)) {
-                                toast.error("This plan is not available for the selected billing option.");
-                                return;
-                        }
+			if (!hasDisplayablePricing(priceDetails)) {
+				toast.error(
+					"This plan is not available for the selected billing option.",
+				);
+				return;
+			}
 
-                        if (!priceDetails) {
-                                toast.error("Pricing details unavailable. Please try again later.");
-                                return;
-                        }
+			if (!priceDetails) {
+				toast.error("Pricing details unavailable. Please try again later.");
+				return;
+			}
 
-                        const { amount } = priceDetails;
+			const { amount } = priceDetails;
 
-                        if (typeof amount === "string" && amount.trim().endsWith("%")) {
-                                toast.error("Percentage-based pricing requires contacting sales.");
-                                return;
-                        }
+			if (typeof amount === "string" && amount.trim().endsWith("%")) {
+				toast.error("Percentage-based pricing requires contacting sales.");
+				return;
+			}
 
-                        const resolvedAmount =
-                                typeof amount === "number" ? amount : Number.parseFloat(amount.trim());
+			const resolvedAmount =
+				typeof amount === "number" ? amount : Number.parseFloat(amount.trim());
 
-                        if (!Number.isFinite(resolvedAmount) || resolvedAmount <= 0) {
-                                toast.error("Pricing information for this plan is unavailable.");
-                                return;
-                        }
+			if (!Number.isFinite(resolvedAmount) || resolvedAmount <= 0) {
+				toast.error("Pricing information for this plan is unavailable.");
+				return;
+			}
 
-                        try {
-                                setLoading(plan.id);
+			try {
+				setLoading(plan.id);
 
-                                const metadata: Record<string, string> = {
-                                        planName: plan.name,
-                                        planType,
-                                        planId: plan.id,
-                                };
+				const metadata: Record<string, string> = {
+					planName: plan.name,
+					planType,
+					planId: plan.id,
+				};
 
-                                if (plan.pricingCategoryId) {
-                                        metadata.pricingCategoryId = plan.pricingCategoryId;
-                                }
+				if (plan.pricingCategoryId) {
+					metadata.pricingCategoryId = plan.pricingCategoryId;
+				}
 
-                                const discountCode = priceDetails.discount?.code;
-                                if (discountCode) {
-                                        metadata.discountCode = discountCode.code;
-                                }
+				const discountCode = priceDetails.discount?.code;
+				if (discountCode) {
+					metadata.discountCode = discountCode.code;
+				}
 
-                                const resolvedCallbackUrl = planCallbackUrl ?? callbackUrl;
-                                if (resolvedCallbackUrl) {
-                                        metadata.callbackUrl = resolvedCallbackUrl;
-                                }
+				const resolvedCallbackUrl = planCallbackUrl ?? callbackUrl;
+				if (resolvedCallbackUrl) {
+					metadata.callbackUrl = resolvedCallbackUrl;
+				}
 
-                                const response = await fetch("/api/stripe/intent", {
-                                        method: "POST",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify({
-                                                price: Math.round(resolvedAmount * 100),
-                                                description: `${plan.name} subscription (${planType})`,
-                                                metadata,
-                                        }),
-                                });
+				const response = await fetch("/api/stripe/intent", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						price: Math.round(resolvedAmount * 100),
+						description: `${plan.name} subscription (${planType})`,
+						metadata,
+					}),
+				});
 
-                                if (!response.ok) {
-                                        const errorData = await response.json().catch(() => ({}));
-                                        throw new Error(errorData.error || "Failed to create payment intent");
-                                }
+				if (!response.ok) {
+					const errorData = await response.json().catch(() => ({}));
+					throw new Error(errorData.error || "Failed to create payment intent");
+				}
 
-                                const data = (await response.json()) as { clientSecret?: string };
-                                if (!data.clientSecret) {
-                                        throw new Error("No client secret returned from Stripe API");
-                                }
+				const data = (await response.json()) as { clientSecret?: string };
+				if (!data.clientSecret) {
+					throw new Error("No client secret returned from Stripe API");
+				}
 
-                                setCheckoutState({
-                                        clientSecret: data.clientSecret,
-                                        plan,
-                                        planType,
-                                });
-                        } catch (error) {
-                                const message =
-                                        error instanceof Error ? error.message : "Payment failed. Please try again.";
-                                toast.error(message);
-                        } finally {
-                                setLoading(null);
-                        }
-                },
-                [planType, callbackUrl],
-        );
+				setCheckoutState({
+					clientSecret: data.clientSecret,
+					plan,
+					planType,
+				});
+			} catch (error) {
+				const message =
+					error instanceof Error
+						? error.message
+						: "Payment failed. Please try again.";
+				toast.error(message);
+			} finally {
+				setLoading(null);
+			}
+		},
+		[planType, callbackUrl],
+	);
 
-        if (!Array.isArray(plans) || plans.length === 0) {
-                return null;
-        }
+	if (!Array.isArray(plans) || plans.length === 0) {
+		return null;
+	}
 
-        return (
-                <section id="pricing" className="relative px-6 lg:px-8">
-                        <div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
+	return (
+		<section id="pricing" className="relative px-6 lg:px-8">
+			<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
 
-                        <div className="mx-auto max-w-7xl">
-                                <div className="mb-16 text-center">
-                                        <Header title={title} subtitle={subtitle} size="lg" />
-                                        <div className="mt-8 flex flex-col items-center">
-                                                <PlanTypeToggle
-                                                        planType={planType}
-                                                        availableTypes={availableTypes}
-                                                        onChange={setPlanType}
-                                                        annualDiscountSummary={annualDiscountSummary}
-                                                />
-                                        </div>
-                                </div>
+			<div className="mx-auto max-w-7xl">
+				<div className="mb-16 text-center">
+					<Header title={title} subtitle={subtitle} size="lg" />
+					<div className="mt-8 flex flex-col items-center">
+						<PlanTypeToggle
+							planType={planType}
+							availableTypes={availableTypes}
+							onChange={setPlanType}
+							annualDiscountSummary={annualDiscountSummary}
+						/>
+					</div>
+				</div>
 
-                                {filteredPlans.length > 0 ? (
-                                        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-                                                {filteredPlans.map((plan) => (
-                                                        <PricingCard
-                                                                key={plan.id}
-                                                                plan={plan}
-                                                                planType={planType}
-                                                                loading={loading}
-                                                                onCheckout={handleCheckout}
-                                                                callbackUrl={callbackUrl}
-                                                        />
-                                                ))}
-                                        </div>
-                                ) : (
-                                        <div className="col-span-full py-12 text-center">
-                                                <p className="mb-4 text-gray-600 text-lg dark:text-gray-400">
-                                                        No {planType} plans available at the moment.
-                                                </p>
-                                                <Button variant="outline" onClick={() => setPlanType("monthly")}>
-                                                        View Monthly Plans
-                                                </Button>
-                                        </div>
-                                )}
+				{filteredPlans.length > 0 ? (
+					<div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+						{filteredPlans.map((plan) => (
+							<PricingCard
+								key={plan.id}
+								plan={plan}
+								planType={planType}
+								loading={loading}
+								onCheckout={handleCheckout}
+								callbackUrl={callbackUrl}
+							/>
+						))}
+					</div>
+				) : (
+					<div className="col-span-full py-12 text-center">
+						<p className="mb-4 text-gray-600 text-lg dark:text-gray-400">
+							No {planType} plans available at the moment.
+						</p>
+						<Button variant="outline" onClick={() => setPlanType("monthly")}>
+							View Monthly Plans
+						</Button>
+					</div>
+				)}
 
-                                {checkoutState ? (
-                                        <PricingCheckoutDialog
-                                                clientSecret={checkoutState.clientSecret}
-                                                plan={checkoutState.plan}
-                                                planType={checkoutState.planType}
-                                                onClose={() => setCheckoutState(null)}
-                                        />
-                                ) : null}
+				{checkoutState ? (
+					<PricingCheckoutDialog
+						clientSecret={checkoutState.clientSecret}
+						plan={checkoutState.plan}
+						planType={checkoutState.planType}
+						onClose={() => setCheckoutState(null)}
+					/>
+				) : null}
 
-                                <div className="my-16 text-center">
-                                        <p className="mb-4 text-black text-lg dark:text-white/80">
-                                                Want early access to Deal Scale? Help shape the future of scalable MVPs designed
-                                                for ambitious founders and agencies!
-                                        </p>
-                                        <Link href="/contact-pilot" className="inline-block">
-                                                <Button
-                                                        variant="outline"
-                                                        className="border-primary/70 bg-white/90 font-semibold text-primary shadow transition-colors hover:bg-primary hover:text-white dark:border-primary/40 dark:bg-background/80 dark:text-primary dark:hover:bg-primary/80"
-                                                >
-                                                        Become a Pilot Tester
-                                                </Button>
-                                        </Link>
-                                </div>
-                        </div>
-                </section>
-        );
+				<div className="my-16 text-center">
+					<p className="mb-4 text-black text-lg dark:text-white/80">
+						Want early access to Deal Scale? Help shape the future of scalable
+						MVPs designed for ambitious founders and agencies!
+					</p>
+					<Link href="/contact-pilot" className="inline-block">
+						<Button
+							variant="outline"
+							className="border-primary/70 bg-white/90 font-semibold text-primary shadow transition-colors hover:bg-primary hover:text-white dark:border-primary/40 dark:bg-background/80 dark:text-primary dark:hover:bg-primary/80"
+						>
+							Become a Pilot Tester
+						</Button>
+					</Link>
+				</div>
+			</div>
+		</section>
+	);
 };
 
 export default Pricing;
-

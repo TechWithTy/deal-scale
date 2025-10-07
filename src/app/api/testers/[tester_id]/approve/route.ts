@@ -1,7 +1,7 @@
+import { authOptions } from "@/lib/authOptions";
+import type { TesterApprovalRequestBody } from "@/types/testers";
 import { getServerSession } from "next-auth";
 import { type NextRequest, NextResponse } from "next/server";
-import type { TesterApprovalRequestBody } from "@/types/testers";
-import { authOptions } from "@/lib/authOptions";
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";

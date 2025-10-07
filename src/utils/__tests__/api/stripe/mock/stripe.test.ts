@@ -3,37 +3,37 @@
  */
 // Set env vars and mock Stripe BEFORE importing the Stripe module
 const stripeCtorMock = jest.fn().mockImplementation(() => ({
-        paymentIntents: {
-                create: jest.fn().mockResolvedValue({ id: "pi_123" }),
-                update: jest.fn().mockResolvedValue({ id: "pi_123" }),
-                retrieve: jest.fn().mockResolvedValue({ id: "pi_123" }),
-        },
-        webhooks: {
-                constructEvent: jest.fn().mockReturnValue({ id: "evt_123" }),
-        },
-        subscriptions: {
-                create: jest.fn().mockResolvedValue({ id: "sub_123" }),
-                update: jest.fn().mockResolvedValue({ id: "sub_123" }),
-                del: jest.fn().mockResolvedValue({ id: "sub_123" }),
-        },
+	paymentIntents: {
+		create: jest.fn().mockResolvedValue({ id: "pi_123" }),
+		update: jest.fn().mockResolvedValue({ id: "pi_123" }),
+		retrieve: jest.fn().mockResolvedValue({ id: "pi_123" }),
+	},
+	webhooks: {
+		constructEvent: jest.fn().mockReturnValue({ id: "evt_123" }),
+	},
+	subscriptions: {
+		create: jest.fn().mockResolvedValue({ id: "sub_123" }),
+		update: jest.fn().mockResolvedValue({ id: "sub_123" }),
+		del: jest.fn().mockResolvedValue({ id: "sub_123" }),
+	},
 }));
 
 jest.mock("stripe", () => ({
-        __esModule: true,
-        default: stripeCtorMock,
+	__esModule: true,
+	default: stripeCtorMock,
 }));
 
 import * as stripeModule from "@/lib/externalRequests/stripe";
 
 // Helper function to set environment variables safely
 const setEnv = (envVars: Record<string, string | undefined>) => {
-        for (const [key, value] of Object.entries(envVars)) {
-                if (value === undefined) {
-                        delete process.env[key];
-                } else {
-                        process.env[key] = value;
-                }
-        }
+	for (const [key, value] of Object.entries(envVars)) {
+		if (value === undefined) {
+			delete process.env[key];
+		} else {
+			process.env[key] = value;
+		}
+	}
 };
 
 /**
@@ -47,11 +47,11 @@ describe("Stripe integration", () => {
 	const originalStripeKey = process.env.STRIPE_SECRET_KEY;
 	const originalStripeLiveKey = process.env.STRIPE_SECRET_LIVE_KEY;
 
-        beforeEach(() => {
-                // Reset to default test environment
-                process.env = { ...originalEnv };
-                setEnv({
-                        STRIPE_SECRET_KEY: "sk_test_123",
+	beforeEach(() => {
+		// Reset to default test environment
+		process.env = { ...originalEnv };
+		setEnv({
+			STRIPE_SECRET_KEY: "sk_test_123",
 			STRIPE_SECRET_LIVE_KEY: "sk_live_123",
 			NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_123",
 			STRIPE_WEB_SECRET: "whsec_123",
@@ -59,9 +59,9 @@ describe("Stripe integration", () => {
 		// Set default staging environment for tests
 		process.env.STAGING_ENVIRONMENT = "DEVELOPMENT";
 
-                stripeModule.resetStripeClientForTest();
-                stripeCtorMock.mockClear();
-        });
+		stripeModule.resetStripeClientForTest();
+		stripeCtorMock.mockClear();
+	});
 
 	afterAll(() => {
 		// Restore original environment variables
@@ -118,25 +118,26 @@ describe("Stripe integration", () => {
 			expect(process.env.STRIPE_SECRET_KEY).toBe("sk_test_env");
 		});
 
-                it("throws error if no keys are available", () => {
-                        process.env.STAGING_ENVIRONMENT = "PRODUCTION";
+		it("throws error if no keys are available", () => {
+			process.env.STAGING_ENVIRONMENT = "PRODUCTION";
 
-                        setEnv({
-                                STRIPE_SECRET_KEY: "",
-                                STRIPE_SECRET_LIVE_KEY: "",
-                        });
+			setEnv({
+				STRIPE_SECRET_KEY: "",
+				STRIPE_SECRET_LIVE_KEY: "",
+			});
 
-                        stripeModule.resetStripeClientForTest();
-                        expect(process.env.STRIPE_SECRET_KEY).toBe("");
-                        expect(process.env.STRIPE_SECRET_LIVE_KEY).toBe("");
+			stripeModule.resetStripeClientForTest();
+			expect(process.env.STRIPE_SECRET_KEY).toBe("");
+			expect(process.env.STRIPE_SECRET_LIVE_KEY).toBe("");
 
-                        expect(process.env.STRIPE_SECRET_LIVE_KEY || process.env.STRIPE_SECRET_KEY).toBe("");
+			expect(
+				process.env.STRIPE_SECRET_LIVE_KEY || process.env.STRIPE_SECRET_KEY,
+			).toBe("");
 
-                        expect(() => stripeModule.getStripeClient()).toThrow(
-                                "STRIPE_SECRET_LIVE_KEY (or STRIPE_SECRET_KEY) is not set in environment variables",
-                        );
-
-                });
+			expect(() => stripeModule.getStripeClient()).toThrow(
+				"STRIPE_SECRET_LIVE_KEY (or STRIPE_SECRET_KEY) is not set in environment variables",
+			);
+		});
 	});
 
 	it("creates a payment intent", async () => {

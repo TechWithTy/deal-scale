@@ -1,7 +1,10 @@
 import { act } from "@testing-library/react";
 
 // Helper for absolute URLs
-import { describeIfExternal, skipExternalTest } from "../../../testHelpers/external";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 defineTestEnv();
 function defineTestEnv() {
 	process.env.API_BASE_URL = "http://localhost:3000";
