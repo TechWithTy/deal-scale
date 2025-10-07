@@ -1,0 +1,32 @@
+name = "dealscale"
+compatibility_date = "2024-01-01"
+
+[build]
+command = "pnpm build"
+cwd = "."
+watch_dir = "src"
+
+[build.upload]
+format = "modules"
+
+[[build.upload.rules]]
+type = "ESModule"
+globs = ["**/*.js"]
+
+# Exclude content folders from deployment
+exclude = [
+  "content/**",
+  "strapi-export/**",
+  "**/_docs/**",
+  "**/_depr/**"
+]
+
+# Environment variables for Cloudflare Pages
+[vars]
+NODE_ENV = "production"
+NEXTAUTH_URL = "https://your-domain.pages.dev"
+
+# Secrets (set with wrangler secret put)
+# DATABASE_URL = "your-database-url"
+# NEXTAUTH_SECRET = "your-secret"
+# REDIS_URL = "your-redis-url"
