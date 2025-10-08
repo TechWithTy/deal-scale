@@ -1,0 +1,72 @@
+{
+  "id": "abtest-002",
+  "name": "AI Conversation Credits",
+  "description": "A/B test for outcome-driven messaging highlighting AI automation and credit-based sales enablement.",
+  "variants": [
+    {
+      "name": "Outcome-Focused Copy",
+      "percentage": 50,
+      "copy": {
+        "cta": "Power Up Your AI & Automate Your Deal Flow",
+        "buttonCta": "Get AI Credits Now",
+        "tagline": "Your AI Agent is Ready to Close Deals. Don't Let It Run Out of Fuel.",
+        "subtitle": "Instantly add AI Conversation Credits to keep your automated lead generation, nurturing, and outreach running 24/7.",
+        "description": "Keep your real estate pipeline on full autopilot. AI Conversation Credits power your AI Virtual Agents to make calls, send texts, and nurture leads from first touch to close. Each credit fuels a critical interaction, ensuring no lead goes cold and your deal flow never stops. Top up anytime and choose a bundle with bulk discounts to maximize your ROI.",
+        "whatsInItForMe": "This is how you scale effortlessly: Your AI Virtual Agent works around the clock, engaging leads, sending follow-ups, and scheduling calls so you don't have to. More credits mean more automated outreach, a shorter sales cycle, and more closed deals in your pipeline—all without adding headcount.",
+        "target_audience": "Growth-focused real estate investors, wholesalers, and flippers who want to use AI automation to scale their business, find more off-market deals, and eliminate tedious manual outreach.",
+        "pain_point": "Your deal pipeline stalls when manual follow-up becomes overwhelming. You're losing deals because you can't engage every lead instantly and consistently. Scaling your outreach means hiring more staff, which increases overhead and complexity.",
+        "solution": "AI Conversation Credits fuel your automated sales force. They enable your AI Virtual Agent to handle thousands of interactions—calls, texts, and emails—autonomously. This ensures every lead is nurtured instantly, keeping your pipeline full and allowing you to scale outreach infinitely without adding to your payroll.",
+        "highlights": [
+          "Keep Your Pipeline on Autopilot: Never miss a follow-up or a new lead opportunity.",
+          "Scale Without Scaling Headcount: Automate thousands of outreach tasks instantly.",
+          "Close Deals Faster: Engage and qualify leads 24/7 to shorten your sales cycle."
+        ],
+        "highlighted_words": [
+          "Automate",
+          "Instantly",
+          "Scale"
+        ]
+      },
+      "variant_description": "Emphasizes outcome-driven automation and the value of AI Conversation Credits.",
+      "kpis": [
+        {
+          "name": "CTR",
+          "value": 0,
+          "goal": 5,
+          "unit": "%"
+        },
+        {
+          "name": "Conversion Rate",
+          "value": 0,
+          "goal": 3,
+          "unit": "%"
+        }
+      ]
+    }
+  ],
+  "startDate": "2025-06-01T00:00:00.000Z",
+  "isActive": true,
+  "facebookPixelUsers": [],
+  "targetAudience": "Growth-focused real estate investors, wholesalers, and flippers",
+  "kpis": [
+    {
+      "name": "Overall CTR",
+      "value": 0,
+      "goal": 5,
+      "unit": "%"
+    },
+    {
+      "name": "Overall Conversion Rate",
+      "value": 0,
+      "goal": 3,
+      "unit": "%"
+    }
+  ],
+  "tags": [
+    "sales",
+    "copy",
+    "abtest",
+    "automation",
+    "ai-credits"
+  ]
+}

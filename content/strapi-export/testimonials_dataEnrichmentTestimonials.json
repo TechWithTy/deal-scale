@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Marcus Thorne",
+    "role": "Lead Wholesaler",
+    "content": "We bought a list of 1,000 'vacant' properties that was basically just addresses. Instead of manually skip tracing, we ran the whole list through the Reverse Address API. In about 10 minutes, we had owner names and phone numbers for over 80% of them. That one action filled our pipeline for the entire quarter.",
+    "problem": "We had high-potential property addresses but no efficient way to find the owner's contact information at scale.",
+    "solution": "The Data Enrichment Suite's Reverse Address API allowed us to enrich an entire list of addresses in minutes, saving us hundreds of hours of manual work and generating immediate leads.",
+    "image": "/images/testimonials/marcus-thorne.jpg",
+    "rating": 5,
+    "company": "Apex Property Ventures",
+    "companyLogo": "/images/logos/apex-logo.svg"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Sarah L.",
+    "role": "CEO",
+    "company": "Keystone Real Estate Group",
+    "content": "I was absolutely blown away by Deal Scale's voice cloning technology! It's genuinely my voice on the AI, and the way leads are responding is incredible. It feels like I'm personally reaching out to each one, building trust from the first word.",
+    "problem": "Our automated outreach felt impersonal and was not converting as well as we hoped. Leads were hesitant to engage with a generic AI voice.",
+    "solution": "Deal Scale's Proprietary AI Voice Cloning allowed us to use my actual voice for AI interactions. This created an immediate sense of familiarity and trust, significantly boosting lead engagement and our appointment setting rates.",
+    "image": "/testimonials/sarah-l.jpg",
+    "rating": 5,
+    "companyLogo": "/company-logos/keystone-real-estate-group-logo.svg"
+  },
+  {
+    "id": 2,
+    "name": "Michael B.",
+    "role": "Lead Wholesaler",
+    "company": "Apex Property Finders",
+    "content": "Deal Scale's AI Voice Cloning is a total game-changer for us. Our automated outreach now carries my personal, authentic touch because it *is* my voice. The trust and rapport it builds instantly are invaluable and have significantly boosted our appointment rates.",
+    "problem": "We struggled to scale personalized outreach. Generic AI voices didn't reflect our brand's personal touch, leading to lower trust and connection with potential sellers.",
+    "solution": "By cloning my voice with Deal Scale's technology, our AI agents now sound exactly like me. This has made our outreach feel incredibly personal, even at scale, dramatically improving rapport and the number of qualified leads willing to schedule a call.",
+    "image": "/testimonials/michael-b.jpg",
+    "rating": 5,
+    "companyLogo": "/company-logos/apex-property-finders-logo.svg"
+  },
+  {
+    "id": 3,
+    "name": "Jessica Y.",
+    "role": "Head of Investor Relations",
+    "company": "Momentum Capital Ventures",
+    "content": "The authenticity that Deal Scale's voice cloning brings to our AI communication is unparalleled. Our investors have commented on the personal touch, even from automated updates. It's truly next-level.",
+    "problem": "Keeping a large investor base personally updated was time-consuming, and generic automated messages lacked the warmth our brand strives for.",
+    "solution": "Deal Scale's Voice Cloning allowed our AI to deliver updates and engage with investors using our managing partner's voice. This maintained a high level of personalization and trust, even with automated communications, strengthening investor relations.",
+    "image": "/testimonials/jessica-y.jpg",
+    "rating": 4,
+    "companyLogo": "/company-logos/momentum-capital-logo.svg"
+  }
+]

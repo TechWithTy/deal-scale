@@ -1,0 +1,46 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Analyze Market",
+    "subtitle": "Enter a Zip Code or Address",
+    "description": "Instantly pull a detailed analysis for any US zip code, including rent averages, historical trends, and property type composition.",
+    "icon": "Search",
+    "label": "Run Analysis",
+    "positionLabel": "left-[-45px] top-[45px]",
+    "payload": [],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Chat with Data",
+    "subtitle": "Ask Questions in Plain English",
+    "description": "Instead of just viewing charts, ask our AI specific questions about the market data, like 'What are the average rents for 3-bedroom houses?'",
+    "icon": "MessageSquare",
+    "label": "AI Chat Interface",
+    "positionLabel": "left-[125px] top-[-5px]",
+    "payload": [],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Generate Report",
+    "subtitle": "Create Branded Reports",
+    "description": "With one click, generate a professional PDF or online report with your company's branding to share with clients or partners.",
+    "icon": "FileText",
+    "label": "Export Report",
+    "positionLabel": "left-[-40px] top-[50px]",
+    "payload": [],
+    "indicator": "dashed"
+  },
+  {
+    "stepNumber": 4,
+    "title": "Arm Your Agents",
+    "subtitle": "Feed Insights to Your AI Team",
+    "description": "Pass the market analysis to your AI Sales Agents. They will intelligently weave these stats into their conversations to build authority and create compelling arguments.",
+    "icon": "BrainCircuit",
+    "label": "Empower AI Agents",
+    "positionLabel": "left-[130px] top-[10px]",
+    "payload": [],
+    "indicator": "dot"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Connect Your Accounts",
+    "subtitle": "Securely link your Facebook & Instagram business pages.",
+    "description": "With a few clicks, authorize Deal Scale to manage your messages and comments through Meta's official API. Your account remains secure and compliant.",
+    "icon": "Share",
+    "label": "Step 1: Connect Accounts",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "Design Your Conversation",
+    "subtitle": "Build your automated qualification flow visually.",
+    "description": "Define keyword triggers (like 'info' or 'price') and map out the entire conversation, including your qualifying questions, multiple-choice answers, and data capture points.",
+    "icon": "Pencil",
+    "label": "Step 2: Build Flow",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "AI Engages Instantly",
+    "subtitle": "The agent responds to all comments and DMs 24/7.",
+    "description": "The moment a lead comments on your ad or sends a DM, the AI agent instantly engages them, starting the exact qualification conversation you designed, any time of day or night.",
+    "icon": "MessageSquare",
+    "label": "Step 3: AI Engages Leads",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "Qualify & Book",
+    "subtitle": "The AI qualifies leads and takes the next logical step.",
+    "description": "The agent gathers crucial information and, once a lead is qualified, it can automatically send them a link to your calendar to book a call, seamlessly converting a social interaction into a sales appointment.",
+    "icon": "CalendarCheck",
+    "label": "Step 4: Qualify & Book",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]

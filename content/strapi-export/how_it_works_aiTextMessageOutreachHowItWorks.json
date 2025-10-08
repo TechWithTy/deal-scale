@@ -1,0 +1,52 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Import & Segment Lists",
+    "subtitle": "Upload your contact lists and define target segments.",
+    "description": "Easily import your prospect lists. Use Deal Scale's smart segmentation tools to group contacts based on criteria like property interest, lead source, or engagement history for targeted campaigns.",
+    "icon": "Users",
+    "label": "Step 1: List Management",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "Craft AI-Powered Campaigns",
+    "subtitle": "Design your SMS messaging strategy with AI assistance.",
+    "description": "Develop your SMS templates with AI suggestions for personalization tokens (like name, property address). Define conversation flows and how the AI should respond to different keyword triggers or questions.",
+    "icon": "Pencil",
+    "label": "Step 2: Campaign Design",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "Automated & Compliant Sending",
+    "subtitle": "Launch your personalized SMS campaigns at scale.",
+    "description": "Schedule your campaigns or trigger them based on specific actions. Our AI ensures messages are personalized and sent in a compliant manner, respecting quiet hours and managing opt-outs automatically.",
+    "icon": "MessageSquare",
+    "label": "Step 3: Launch Campaign",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "AI-Managed Two-Way Conversations",
+    "subtitle": "AI handles initial replies and qualifies leads.",
+    "description": "When prospects reply, our AI engages in natural, two-way SMS conversations. It can answer FAQs, gather more information, qualify leads based on your criteria, and identify buying/selling intent.",
+    "icon": "MessageSquare",
+    "label": "Step 4: AI Conversation",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 5,
+    "title": "Actionable Insights & Handoff",
+    "subtitle": "Monitor results and escalate hot leads.",
+    "description": "Track campaign performance, delivery rates, and engagement. Hot leads identified by the AI can be automatically flagged, synced to your CRM, or trigger notifications for your team to take over with a call or personalized follow-up.",
+    "icon": "PieChart",
+    "label": "Step 5: Analytics & Conversion",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]

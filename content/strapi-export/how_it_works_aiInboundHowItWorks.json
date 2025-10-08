@@ -1,0 +1,42 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Configure Your Agent",
+    "subtitle": "Define your qualification script and business rules in minutes.",
+    "description": "Use our simple interface to customize the questions your AI will ask, define what makes a lead qualified, and set rules for call routing and appointment booking.",
+    "icon": "SlidersHorizontal",
+    "label": "Step 1: Configure Agent",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "AI Answers 24/7",
+    "subtitle": "Your AI Agent instantly answers every inbound call.",
+    "description": "The moment a call comes in to your dedicated Deal Scale number, the AI answers. It works 24/7/365, ensuring you never miss a lead, even after hours or on weekends.",
+    "icon": "Phone",
+    "label": "Step 2: AI Answers Calls",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "Conversational Qualification",
+    "subtitle": "The AI engages the caller to determine their needs.",
+    "description": "The agent engages in a natural, two-way conversation, asking your pre-defined questions to understand the caller's needs, motivation, and timeline, just like a human assistant would.",
+    "icon": "BrainCircuit",
+    "label": "Step 3: AI Qualifies",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "Book, Transfer, or Log",
+    "subtitle": "The AI takes the appropriate next step automatically.",
+    "description": "If the caller is qualified, the AI books an appointment directly on your calendar. If they need to speak to a human, it can initiate a hot transfer. All call details and transcripts are logged in your CRM.",
+    "icon": "CalendarCheck",
+    "label": "Step 4: Take Action",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Input Number(s)",
+    "subtitle": "Enter or Upload Phone Numbers",
+    "description": "Copy and paste a single U.S. phone number, or upload a CSV file with multiple numbers, into the Phone Number Hunter tool on your dashboard.",
+    "icon": "Phone",
+    "label": "Enter or Upload",
+    "positionLabel": "left-[-45px] top-[45px]",
+    "payload": [],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Initiate Search",
+    "subtitle": "One-Click Analysis",
+    "description": "With a single click, our system queries multiple OSINT and public data sources in real-time for every number submitted.",
+    "icon": "Search",
+    "label": "Run Search",
+    "positionLabel": "left-[125px] top-[-5px]",
+    "payload": [],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Review Report(s)",
+    "subtitle": "Get Instant Insights",
+    "description": "In seconds, view a complete report for each number—detailing the owner's name, carrier, line type, location, spam score, and more.",
+    "icon": "ShieldCheck",
+    "label": "Analyze Data",
+    "positionLabel": "left-[-40px] top-[50px]",
+    "payload": [],
+    "indicator": "dashed"
+  },
+  {
+    "stepNumber": 4,
+    "title": "Qualify & Act",
+    "subtitle": "Make Data-Driven Decisions",
+    "description": "Use the enriched data to instantly qualify or disqualify leads, whether working one number at a time or in bulk.",
+    "icon": "Zap",
+    "label": "Take Action",
+    "positionLabel": "left-[130px] top-[10px]",
+    "payload": [],
+    "indicator": "dot"
+  }
+]

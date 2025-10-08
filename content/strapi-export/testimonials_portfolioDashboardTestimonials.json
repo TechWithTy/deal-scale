@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Casey Lange",
+    "role": "Partner, Oceanview Property Group",
+    "content": "We recently started tracking our clients' portfolios with Deal Scale and have been blown away. The dashboard helps us better understand local market trends and proactively plan future rent increases. Our clients are impressed with the new level of reporting we can provide.",
+    "problem": "Needed a scalable solution to track hundreds of properties for multiple clients and provide professional, data-driven performance reports.",
+    "solution": "The Enterprise Portfolio Dashboard allowed them to centralize all portfolio data, automate rent optimization, and generate white-labeled reports that increased client satisfaction and retention.",
+    "image": "/testimonials/casey-lange.jpg",
+    "rating": 5,
+    "company": "Oceanview Property Group",
+    "companyLogo": "/logos/oceanview-logo.svg"
+  }
+]

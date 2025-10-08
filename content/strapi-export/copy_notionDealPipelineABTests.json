@@ -1,0 +1,55 @@
+[
+  {
+    "id": "ab-test-notion-pipeline-v1",
+    "name": "Notion Deal Pipeline Copy Test",
+    "description": "Testing copy variants (Visual Tracking vs. Closing Faster) for the Notion Deal Pipeline to optimize sales.",
+    "variants": [
+      {
+        "name": "V1 - Visual Tracking",
+        "percentage": 50,
+        "copy": {
+          "cta": "Visualize Your Pipeline",
+          "buttonCta": "Get the Board",
+          "tagline": "See Your Entire Deal Flow.",
+          "subtitle": "A clear, Kanban-style board in Notion to visually track every deal from lead to close.",
+          "whatsInItForMe": "Get a high-level view of your entire pipeline in seconds, so you instantly know where every deal stands.",
+          "target_audience": "Founders and sales teams who want a simple, visual way to manage their opportunities.",
+          "pain_point": "Deals are falling through the cracks because you can't easily see the status of your entire pipeline.",
+          "solution": "Our Kanban-style board gives you a crystal-clear, visual overview of your deal stages, ensuring nothing gets missed.",
+          "highlights": [
+            "Visualize every deal",
+            "Drag-and-drop simplicity",
+            "Never lose a lead again"
+          ]
+        }
+      },
+      {
+        "name": "V2 - Closing Faster",
+        "percentage": 50,
+        "copy": {
+          "cta": "Close Deals Faster",
+          "buttonCta": "Get the Pipeline",
+          "tagline": "Move Deals from Lead to Close.",
+          "subtitle": "The streamlined Notion pipeline board designed to help you increase sales velocity and close more deals.",
+          "whatsInItForMe": "This template helps you identify bottlenecks and focus your efforts, shortening your sales cycle and increasing revenue.",
+          "target_audience": "Sales-focused teams and founders who want to improve their sales process and increase revenue.",
+          "pain_point": "A disorganized sales process leads to a slow sales cycle and lost revenue.",
+          "solution": "This streamlined pipeline provides the structure needed to manage deals efficiently, reduce friction, and accelerate your sales cycle.",
+          "highlights": [
+            "Shorten your sales cycle",
+            "Identify and fix bottlenecks",
+            "Increase sales velocity"
+          ]
+        }
+      }
+    ],
+    "startDate": "2023-11-01T09:00:00.000Z",
+    "isActive": true,
+    "tags": [
+      "Notion",
+      "Sales",
+      "Pipeline",
+      "Copywriting"
+    ]
+  }
+]

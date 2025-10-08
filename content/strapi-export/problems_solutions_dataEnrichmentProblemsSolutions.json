@@ -1,0 +1,18 @@
+[
+  {
+    "problem": "My contact lists are full of old, disconnected phone numbers, leading to wasted time and effort in my outreach.",
+    "solution": "Use our Phone Validation API to instantly scrub your lists, identify and remove disconnected numbers, and improve your connection rates."
+  },
+  {
+    "problem": "I have a property address, but no idea who the owner is or how to contact them.",
+    "solution": "Our Reverse Address API enriches a physical address with current owner names, phone numbers, and email addresses."
+  },
+  {
+    "problem": "An inbound call comes from an unknown number, and I have to answer blind without any context.",
+    "solution": "The Caller Identification API automatically displays the name of the individual or business calling, allowing you to answer with confidence."
+  },
+  {
+    "problem": "My data on a lead is incomplete. I have a name but no current phone or address.",
+    "solution": "The Find Person API takes a name and last known location to find up-to-date contact information, including verified phones, emails, and addresses."
+  }
+]

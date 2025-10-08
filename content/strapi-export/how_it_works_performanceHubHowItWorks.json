@@ -1,0 +1,46 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Visualize Your Pipeline",
+    "subtitle": "See Every Deal in Motion",
+    "description": "Your entire deal flow is on a visual Kanban board. Drag-and-drop leads from 'New' to 'Appointment Set' to 'Closed'.",
+    "icon": "LayoutGrid",
+    "label": "Manage Pipeline",
+    "positionLabel": "left-[-45px] top-[45px]",
+    "payload": [],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "AI Proactively Adds Tasks",
+    "subtitle": "Automated Opportunity Detection",
+    "description": "The AI monitors your board 24/7. When it spots a key opportunity (e.g., a lead is inactive for 3 days), it *automatically creates and assigns a new task* for you.",
+    "icon": "BrainCircuit",
+    "label": "AI Adds Tasks",
+    "positionLabel": "left-[125px] top-[-5px]",
+    "payload": [],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "You Manually Add Tasks",
+    "subtitle": "Create Your Own To-Dos",
+    "description": "Create any custom task for yourself or your team, like 'Send comps to Jane Doe' or 'Prepare offer for 123 Main St'.",
+    "icon": "CheckSquare",
+    "label": "Create Manual Tasks",
+    "positionLabel": "left-[-40px] top-[50px]",
+    "payload": [],
+    "indicator": "dashed"
+  },
+  {
+    "stepNumber": 4,
+    "title": "AI Offers to Complete Them",
+    "subtitle": "Automate Your Workflow",
+    "description": "Our AI instantly reads the manual tasks you create. If it detects a task it can perform, it will ask for your permission to complete it automatically.",
+    "icon": "Sparkles",
+    "label": "AI Automates Your Work",
+    "positionLabel": "left-[130px] top-[10px]",
+    "payload": [],
+    "indicator": "dot"
+  }
+]

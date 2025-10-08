@@ -1,0 +1,52 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Customize & Configure",
+    "subtitle": "Tailor the chatbot's appearance, greeting, and qualification script.",
+    "description": "Use the Deal Scale dashboard to customize your chatbot's branding, welcome messages, and the specific questions it will ask to pre-qualify visitors based on your business needs (e.g., budget, timeline, property type).",
+    "icon": "Palette",
+    "label": "Step 1: Customize Chatbot",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "Embed on Your Website",
+    "subtitle": "Easily add the chatbot to any page with a simple code snippet.",
+    "description": "Generate a unique embed code from Deal Scale and paste it into your website's HTML. No complex coding required – your AI chatbot will be live in minutes.",
+    "icon": "Code",
+    "label": "Step 2: Embed Code",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "AI-Powered Visitor Engagement",
+    "subtitle": "Chatbot proactively engages and interacts with website visitors.",
+    "description": "Once live, the AI chatbot greets visitors, answers their questions based on its configured knowledge base, and guides them through the pre-qualification process using natural conversation.",
+    "icon": "MessageSquare",
+    "label": "Step 3: AI Engagement",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "Intelligent Lead Pre-Qualification",
+    "subtitle": "Chatbot asks your key questions to identify hot leads.",
+    "description": "The AI asks your pre-defined qualifying questions. Based on responses, it scores and segments leads, identifying those who are sales-ready or require further nurturing.",
+    "icon": "CheckSquare",
+    "label": "Step 4: Lead Qualification",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 5,
+    "title": "Seamless Deal Scale Integration & Handoff",
+    "subtitle": "Qualified leads are synced, booked, or transferred.",
+    "description": "Qualified leads and their conversation history are automatically synced to your Deal Scale CRM. The chatbot can book appointments directly into your integrated calendar or notify your sales team for an immediate live chat takeover or call back.",
+    "icon": "Share",
+    "label": "Step 5: Integration & Conversion",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]

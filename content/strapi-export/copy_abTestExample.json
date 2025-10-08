@@ -1,0 +1,107 @@
+{
+  "id": "abtest-001",
+  "name": "Product Sales Copy Test",
+  "description": "A/B test for optimizing product sales copy messaging for modern creators.",
+  "variants": [
+    {
+      "name": "Variant A",
+      "percentage": 50,
+      "copy": {
+        "cta": "Shop Now & Save!",
+        "buttonCta": "Shop Now",
+        "tagline": "Engineered for Everyday Excellence",
+        "subtitle": "A new standard in comfort and durability.",
+        "description": "Our premium tees are designed for creators, makers, and innovators who demand more from their basics.",
+        "whatsInItForMe": "Feel confident and comfortable updatedx, whether you're at work or play.",
+        "target_audience": "Modern Creators",
+        "pain_point": "Uncomfotbale Shirts",
+        "solution": "Comfortable Shirts",
+        "highlights": [
+          "Ultra-soft 100% cotton",
+          "Hand cut and sewn locally",
+          "Pre-washed & pre-shrunk",
+          "Dyed with our proprietary colors"
+        ],
+        "highlighted_words": [
+          "comfortable",
+          "durability"
+        ],
+        "additionalInfo": "Limited-time offer: Free shipping on your first order!"
+      },
+      "variant_description": "Current best-performing copy.",
+      "kpis": [
+        {
+          "name": "CTR",
+          "value": 4.2,
+          "goal": 5,
+          "unit": "%"
+        },
+        {
+          "name": "Conversion Rate",
+          "value": 2.1,
+          "goal": 3,
+          "unit": "%"
+        }
+      ]
+    },
+    {
+      "name": "Variant B",
+      "percentage": 50,
+      "copy": {
+        "pain_point": "Uncomfotbale Shirts",
+        "solution": "Comfortable Shirts",
+        "cta": "Unlock Your Potential Today!",
+        "tagline": "Performance Meets Comfort",
+        "subtitle": "Next-level basics for next-level people.",
+        "description": "Experience the difference with our advanced fabric blend and ergonomic fit.",
+        "whatsInItForMe": "Upgrade your daily comfort and style.",
+        "target_audience": "Ambitious Professionals",
+        "highlights": [
+          "Moisture-wicking tech",
+          "Sustainable materials",
+          "Reinforced seams",
+          "Modern tailored fit"
+        ],
+        "additionalInfo": "Try risk-free for 30 days!"
+      },
+      "variant_description": "Challenger copy focusing on performance and sustainability.",
+      "kpis": [
+        {
+          "name": "CTR",
+          "value": 3.8,
+          "goal": 5,
+          "unit": "%"
+        },
+        {
+          "name": "Conversion Rate",
+          "value": 1.9,
+          "goal": 3,
+          "unit": "%"
+        }
+      ]
+    }
+  ],
+  "startDate": "2025-05-01T00:00:00.000Z",
+  "isActive": true,
+  "facebookPixelUsers": [],
+  "targetAudience": "Modern Creators, Ambitious Professionals",
+  "kpis": [
+    {
+      "name": "Overall CTR",
+      "value": 4,
+      "goal": 5,
+      "unit": "%"
+    },
+    {
+      "name": "Overall Conversion Rate",
+      "value": 2,
+      "goal": 3,
+      "unit": "%"
+    }
+  ],
+  "tags": [
+    "sales",
+    "copy",
+    "abtest"
+  ]
+}

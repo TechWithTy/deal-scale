@@ -1,0 +1,52 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Lead List & Campaign Setup",
+    "subtitle": "Import leads and define your qualification & scheduling rules.",
+    "description": "Upload your outbound lead lists. Configure your ideal prospect profile, key qualification questions, AI conversation scripts (for calls & SMS), and rules for appointment scheduling or hot transfers.",
+    "icon": "UploadCloud",
+    "label": "Step 1: Configure Campaign",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "Automated AI Outreach",
+    "subtitle": "AI agent initiates contact via intelligent calls & SMS.",
+    "description": "Deal Scale's AI agent begins outbound communication with your leads using AI-powered voice calls and personalized text messages, tailored to your campaign goals.",
+    "icon": "Phone",
+    "label": "Step 2: AI Initiates Contact",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "Conversational Pre-Qualification",
+    "subtitle": "AI engages leads to assess interest and fit.",
+    "description": "The AI engages in natural, two-way conversations (voice & SMS), asking your defined qualifying questions, understanding responses, and identifying lead intent and suitability.",
+    "icon": "MessageSquare",
+    "label": "Step 3: AI Qualifies",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "Intelligent Action: Schedule or Transfer",
+    "subtitle": "Qualified leads are either booked or hot-transferred.",
+    "description": "Based on the qualification outcome and your rules: sales-ready leads are automatically scheduled into your team's calendar, OR the AI initiates an immediate hot transfer to connect the lead with a live sales agent.",
+    "icon": "CalendarCheck",
+    "label": "Step 4: Book or Transfer",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 5,
+    "title": "Sync & Report",
+    "subtitle": "All activities are logged, and performance is tracked.",
+    "description": "Lead status, conversation summaries, appointments, and transfer details are automatically synced to your Deal Scale CRM. Monitor campaign performance through detailed analytics.",
+    "icon": "BarChart",
+    "label": "Step 5: Track & Optimize",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]
