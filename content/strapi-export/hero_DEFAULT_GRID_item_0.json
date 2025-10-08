@@ -1,0 +1,11 @@
+{
+  "src": "products/workflows.png",
+  "alt": "Automated Real Estate Workflow",
+  "label": "Motivated Seller Workflows",
+  "categoryId": "workflows",
+  "description": "Automate your outreach and find motivated sellers faster.",
+  "link": "/products/motivated-seller-workflows",
+  "ariaLabel": "Explore Motivated Seller Workflows",
+  "colSpan": 2,
+  "rowSpan": 2
+}

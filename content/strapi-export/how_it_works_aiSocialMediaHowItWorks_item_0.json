@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Connect Your Accounts",
+  "subtitle": "Securely link your Facebook & Instagram business pages.",
+  "description": "With a few clicks, authorize Deal Scale to manage your messages and comments through Meta's official API. Your account remains secure and compliant.",
+  "icon": "Share",
+  "label": "Step 1: Connect Accounts",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,22 @@
+{
+  "stepNumber": 1,
+  "title": "Supercharge Your CRM",
+  "subtitle": "Enhance Your Existing Tech Stack",
+  "description": "Deal Scale integrates with your workflow, acting as the action-oriented engine that your passive CRM lacks.",
+  "icon": "Network",
+  "label": "Integrate CRM",
+  "positionLabel": "left-[-40px] top-[30px]",
+  "payload": [
+    {
+      "name": "CRM Sync",
+      "value": 98,
+      "fill": "hsl(var(--primary))"
+    },
+    {
+      "name": "Integration Depth",
+      "value": 94,
+      "fill": "hsl(var(--secondary))"
+    }
+  ],
+  "indicator": "dot"
+}

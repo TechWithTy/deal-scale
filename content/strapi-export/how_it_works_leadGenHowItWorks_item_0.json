@@ -1,0 +1,22 @@
+{
+  "stepNumber": 1,
+  "title": "Define",
+  "subtitle": "Set Your Ideal Criteria",
+  "description": "Specify your ideal investment criteria using our intuitive interface. Filter by location, property type, keywords, owner information, and more.",
+  "icon": "Search",
+  "label": "Define Audience",
+  "positionLabel": "left-[-45px] top-[45px]",
+  "payload": [
+    {
+      "name": "Filters Applied",
+      "value": 100,
+      "fill": "hsl(var(--primary))"
+    },
+    {
+      "name": "Target Area",
+      "value": 90,
+      "fill": "hsl(var(--secondary))"
+    }
+  ],
+  "indicator": "dot"
+}

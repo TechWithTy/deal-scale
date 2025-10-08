@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Import & Configure",
+  "subtitle": "Upload your lead list and customize the conversation.",
+  "description": "Import your contacts and use our visual editor to define your qualification script, key questions, and desired outcomes for the AI to follow.",
+  "icon": "SlidersHorizontal",
+  "label": "Step 1: Configure Campaign",
+  "positionLabel": "bottom",
+  "payload": []
+}

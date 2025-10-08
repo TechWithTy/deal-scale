@@ -1,0 +1,10 @@
+{
+  "stepNumber": 2,
+  "title": "Automated AI Outreach",
+  "subtitle": "AI agent initiates contact via intelligent calls & SMS.",
+  "description": "Deal Scale's AI agent begins outbound communication with your leads using AI-powered voice calls and personalized text messages, tailored to your campaign goals.",
+  "icon": "Phone",
+  "label": "Step 2: AI Initiates Contact",
+  "positionLabel": "bottom",
+  "payload": []
+}

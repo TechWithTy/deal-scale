@@ -1,0 +1,12 @@
+{
+  "title": "Sign Up For Our Newsletter",
+  "href": "/newsletter",
+  "icon": {},
+  "image": "/sales/offerings/re_investors_guide_financial_freedom.png",
+  "ctaTitle": "RE Launchpad",
+  "ctaSubtitle": "Get started with AI-powered real estate tools.",
+  "ctaButton": {
+    "label": "See Tools",
+    "href": "/blogs?tag=dev-tools"
+  }
+}

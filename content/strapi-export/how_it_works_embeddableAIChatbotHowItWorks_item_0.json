@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Customize & Configure",
+  "subtitle": "Tailor the chatbot's appearance, greeting, and qualification script.",
+  "description": "Use the Deal Scale dashboard to customize your chatbot's branding, welcome messages, and the specific questions it will ask to pre-qualify visitors based on your business needs (e.g., budget, timeline, property type).",
+  "icon": "Palette",
+  "label": "Step 1: Customize Chatbot",
+  "positionLabel": "bottom",
+  "payload": []
+}

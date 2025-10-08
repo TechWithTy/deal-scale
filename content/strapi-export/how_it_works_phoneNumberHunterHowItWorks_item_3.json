@@ -1,0 +1,11 @@
+{
+  "stepNumber": 4,
+  "title": "Qualify & Act",
+  "subtitle": "Make Data-Driven Decisions",
+  "description": "Use the enriched data to instantly qualify or disqualify leads, whether working one number at a time or in bulk.",
+  "icon": "Zap",
+  "label": "Take Action",
+  "positionLabel": "left-[130px] top-[10px]",
+  "payload": [],
+  "indicator": "dot"
+}

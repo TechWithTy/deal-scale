@@ -1,0 +1,22 @@
+{
+  "stepNumber": 2,
+  "title": "Drive Down Acquisition Costs",
+  "subtitle": "Lower Your Cost-Per-Lead",
+  "description": "The AI works 24/7 to nurture leads, dramatically reducing the man-hours and operational costs required to produce a sales-ready appointment.",
+  "icon": "ChartBar",
+  "label": "Reduce Costs",
+  "positionLabel": "left-[120px] top-[5px]",
+  "payload": [
+    {
+      "name": "Cost Reduction",
+      "value": 94,
+      "fill": "hsl(var(--accent))"
+    },
+    {
+      "name": "Lead Nurturing",
+      "value": 96,
+      "fill": "hsl(var(--muted))"
+    }
+  ],
+  "indicator": "line"
+}

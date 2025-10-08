@@ -1,0 +1,10 @@
+{
+  "stepNumber": 3,
+  "title": "Conversational Pre-Qualification",
+  "subtitle": "AI engages leads to assess interest and fit.",
+  "description": "The AI engages in natural, two-way conversations (voice & SMS), asking your defined qualifying questions, understanding responses, and identifying lead intent and suitability.",
+  "icon": "MessageSquare",
+  "label": "Step 3: AI Qualifies",
+  "positionLabel": "bottom",
+  "payload": []
+}

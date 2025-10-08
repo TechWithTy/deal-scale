@@ -1,0 +1,22 @@
+{
+  "title": "Team Expansion",
+  "description": "Grew to a global, diverse team.",
+  "date": "2022-06-01",
+  "achievements": [
+    "10+ team members",
+    "Multinational hiring"
+  ],
+  "tags": [
+    "team",
+    "growth"
+  ],
+  "icon": "Users",
+  "kpis": [
+    {
+      "name": "Team Size",
+      "value": 12,
+      "unit": "members",
+      "target": 10
+    }
+  ]
+}

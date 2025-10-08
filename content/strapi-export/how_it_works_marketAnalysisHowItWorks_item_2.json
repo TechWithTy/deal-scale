@@ -1,0 +1,11 @@
+{
+  "stepNumber": 3,
+  "title": "Generate Report",
+  "subtitle": "Create Branded Reports",
+  "description": "With one click, generate a professional PDF or online report with your company's branding to share with clients or partners.",
+  "icon": "FileText",
+  "label": "Export Report",
+  "positionLabel": "left-[-40px] top-[50px]",
+  "payload": [],
+  "indicator": "dashed"
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 5,
+  "title": "Sync & Report",
+  "subtitle": "All activities are logged, and performance is tracked.",
+  "description": "Lead status, conversation summaries, appointments, and transfer details are automatically synced to your Deal Scale CRM. Monitor campaign performance through detailed analytics.",
+  "icon": "BarChart",
+  "label": "Step 5: Track & Optimize",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 2,
+  "title": "Monitor Key KPIs",
+  "subtitle": "View your entire portfolio from a high-level dashboard.",
+  "description": "Track critical, real-time KPIs across your entire portfolio, such as total estimated value, gross rent potential, occupancy rates, and market-level performance.",
+  "icon": "PieChart",
+  "label": "Step 2: Monitor KPIs",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Lead Exclusivity",
+  "value": 90,
+  "fill": "hsl(var(--chart-2))"
+}
