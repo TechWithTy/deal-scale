@@ -1,3 +1,4 @@
+import type { AgentConfig } from "../agents";
 import type { ABTest } from "../testing";
 import type { ProductShippingInfo } from "./shipping";
 
@@ -62,15 +63,16 @@ export interface ProductFaq {
 }
 
 export enum ProductCategory {
-	Credits = "credits",
-	Workflows = "workflows",
-	Essentials = "essentials",
-	Notion = "notion",
-	Leads = "leads",
-	Data = "data",
-	Monetize = "monetize",
-	Automation = "automation",
-	AddOn = "add-on",
+        Credits = "credits",
+        Workflows = "workflows",
+        Essentials = "essentials",
+        Notion = "notion",
+        Leads = "leads",
+        Data = "data",
+        Monetize = "monetize",
+        Automation = "automation",
+        AddOn = "add-on",
+        Agents = "agents",
 }
 
 export interface ProductType {
@@ -98,10 +100,12 @@ export interface ProductType {
 		value: string;
 		class: string;
 	}>;
-	sizes: Array<{
-		name: string;
-		value: string;
-		inStock: boolean;
-	}>;
-	faqs?: ProductFaq[];
+        sizes: Array<{
+                name: string;
+                value: string;
+                inStock: boolean;
+        }>;
+        faqs?: ProductFaq[];
+        /** Optional embedded agent configuration when the product represents a Deal Scale agent. */
+        agent?: AgentConfig;
 }
