@@ -1,0 +1,46 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Enter Domain",
+    "subtitle": "Start With a Website",
+    "description": "Enter the domain name of any company you want to investigate (e.g., 'oakridgeproperties.com').",
+    "icon": "Globe",
+    "label": "Enter Domain",
+    "positionLabel": "left-[-45px] top-[45px]",
+    "payload": [],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Select Search Depth",
+    "subtitle": "Choose Free or Premium",
+    "description": "Choose a 'Standard' search using public sources, or a 'Deep Recon' search which uses Skip Trace Credits to query our premium, API-integrated data sources.",
+    "icon": "SlidersHorizontal",
+    "label": "Set Depth",
+    "positionLabel": "left-[125px] top-[-5px]",
+    "payload": [],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Aggregate Intelligence",
+    "subtitle": "Scan Dozens of Sources",
+    "description": "Our system gathers all discoverable emails, names, subdomains, IPs, and technologies associated with the domain.",
+    "icon": "Search",
+    "label": "Gather Intel",
+    "positionLabel": "left-[-40px] top-[50px]",
+    "payload": [],
+    "indicator": "dashed"
+  },
+  {
+    "stepNumber": 4,
+    "title": "Review Dossier",
+    "subtitle": "Get Your Full Report",
+    "description": "Analyze the comprehensive intelligence report to identify key contacts, understand their digital footprint, and plan your outreach.",
+    "icon": "FileText",
+    "label": "View Report",
+    "positionLabel": "left-[130px] top-[10px]",
+    "payload": [],
+    "indicator": "dot"
+  }
+]

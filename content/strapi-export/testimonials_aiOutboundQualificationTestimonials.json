@@ -1,0 +1,26 @@
+[
+  {
+    "id": 501,
+    "name": "Richard Bell",
+    "role": "Sales Manager",
+    "company": "Momentum Investment Group",
+    "content": "Deal Scale's AI Outbound Agent is like having a team of super-efficient SDRs. It calls and texts our cold leads, pre-qualifies them, and either books them straight into our closers' calendars or hot-transfers the really eager ones. Our sales team's productivity has skyrocketed!",
+    "problem": "Our sales team was spending 70% of their time on cold outreach with very low success rates, trying to find and qualify leads themselves.",
+    "solution": "The AI now handles all the front-end outbound work. It filters out the unqualified leads and delivers either booked appointments or live warm transfers. Our closers can now focus purely on selling to interested prospects.",
+    "image": "/testimonials/richard-bell.jpg",
+    "rating": 5,
+    "companyLogo": "/company-logos/momentum-group-logo.svg"
+  },
+  {
+    "id": 502,
+    "name": "Chloe Davis",
+    "role": "Business Development Lead",
+    "company": "Apex Commercial Real Estate",
+    "content": "The ability of the AI to not just qualify but also intelligently decide whether to book an appointment or attempt a hot transfer is incredible. It ensures we connect with hot leads instantly. The AI calls sound very natural too.",
+    "problem": "We struggled with timely follow-up on outbound leads and often missed the window when a prospect was most interested. Scheduling was also a manual pain point.",
+    "solution": "Deal Scale's AI acts immediately. It qualifies leads through natural AI calls and texts. If a lead is highly qualified and ready to talk, we get a hot transfer. Otherwise, it's a booked meeting. It’s a perfect system.",
+    "image": "/testimonials/chloe-davis.jpg",
+    "rating": 5,
+    "companyLogo": "/company-logos/apex-commercial-logo.svg"
+  }
+]

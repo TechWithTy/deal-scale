@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Maria Garcia",
+    "role": "Acquisitions Manager",
+    "content": "We get leads from website forms, and it's hard to know who's real. With the Email Intelligence tool, I plugged in an email and immediately saw it was linked to an active Instagram and professional LinkedIn profile. This told me it was a real person and gave me instant context about their background before my call. It's a huge confidence booster.",
+    "problem": "We were wasting time on outreach to unverified email addresses and lacked the context to personalize our messages effectively.",
+    "solution": "The Email Intelligence tool allows us to instantly verify a lead's digital footprint by finding their social accounts, saving time and dramatically improving our ability to build rapport.",
+    "image": "/images/testimonials/maria-garcia.jpg",
+    "rating": 5,
+    "company": "Keystone Acquisitions",
+    "companyLogo": "/images/logos/keystone-logo.svg"
+  }
+]

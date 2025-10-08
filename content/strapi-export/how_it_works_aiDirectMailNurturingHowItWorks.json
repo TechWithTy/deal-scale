@@ -1,0 +1,52 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Target & Segment Leads",
+    "subtitle": "Identify prime candidates for direct mail nurturing in Deal Scale.",
+    "description": "Use your Deal Scale CRM to segment leads ideal for a high-touch direct mail campaign (e.g., unresponsive high-value leads, specific farm areas, probate leads).",
+    "icon": "Users",
+    "label": "Step 1: Select Audience",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "AI-Personalized Design",
+    "subtitle": "Craft compelling mailers with AI-suggested personalization.",
+    "description": "Choose from proven templates (postcards, letters) or upload your own. Deal Scale's AI helps personalize content with recipient data, property specifics, or tailored messaging based on lead status.",
+    "icon": "Palette",
+    "label": "Step 2: Design & Personalize",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "Automate Campaign & Triggers",
+    "subtitle": "Schedule one-off drops or integrate into automated nurture sequences.",
+    "description": "Set up your direct mail campaign for a one-time send or as a step in a longer automated multi-channel nurture flow within Deal Scale, triggered by specific lead behaviors or time intervals.",
+    "icon": "CalendarCheck",
+    "label": "Step 3: Schedule & Automate",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "Deal Scale Print & Mail Fulfillment",
+    "subtitle": "Our integrated network handles all printing and mailing logistics.",
+    "description": "Once your campaign is approved, Deal Scale's robust backend infrastructure (our whitelabeled print & mail network) manages the high-quality printing, addressing, and timely mailing of your personalized pieces.",
+    "icon": "User",
+    "label": "Step 4: Automated Fulfillment",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 5,
+    "title": "Track Responses & ROI",
+    "subtitle": "Monitor engagement and measure campaign success within Deal Scale.",
+    "description": "Incorporate unique QR codes, personalized URLs (PURLs), or specific call-to-actions to track responses. View delivery statuses and analyze campaign effectiveness directly in your Deal Scale dashboard.",
+    "icon": "BarChart",
+    "label": "Step 5: Track & Optimize",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]

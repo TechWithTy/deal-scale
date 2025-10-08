@@ -1,0 +1,32 @@
+[
+  {
+    "label": "XS",
+    "value": "XS",
+    "measurement": "Chest",
+    "unit": "in"
+  },
+  {
+    "label": "S",
+    "value": "S",
+    "measurement": "Chest",
+    "unit": "in"
+  },
+  {
+    "label": "M",
+    "value": "M",
+    "measurement": "Chest",
+    "unit": "in"
+  },
+  {
+    "label": "L",
+    "value": "L",
+    "measurement": "Chest",
+    "unit": "in"
+  },
+  {
+    "label": "XL",
+    "value": "XL",
+    "measurement": "Chest",
+    "unit": "in"
+  }
+]

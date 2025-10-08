@@ -1,0 +1,46 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Select Your Data",
+    "subtitle": "Choose a Lead or a List",
+    "description": "Select a single lead or an entire list from your Deal Scale CRM that you want to enrich or validate.",
+    "icon": "Users",
+    "label": "Select Data",
+    "positionLabel": "left-[-45px] top-[45px]",
+    "payload": [],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Choose Enrichment Action",
+    "subtitle": "Select a Premium Tool",
+    "description": "Choose the specific action you want to perform, such as 'Reverse Address Lookup' or 'Validate Phone Numbers'.",
+    "icon": "CheckSquare",
+    "label": "Select Action",
+    "positionLabel": "left-[125px] top-[-5px]",
+    "payload": [],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Consume Credits & Run",
+    "subtitle": "Query Premium Data Sources",
+    "description": "The system securely queries our enterprise-grade data partners, debiting the required Skip Tracing Credits from your account.",
+    "icon": "DatabaseZap",
+    "label": "Query Databases",
+    "positionLabel": "left-[-40px] top-[50px]",
+    "payload": [],
+    "indicator": "dashed"
+  },
+  {
+    "stepNumber": 4,
+    "title": "Get Enriched Results",
+    "subtitle": "Update Your CRM Automatically",
+    "description": "The new, validated information is automatically appended to your lead records, giving you a complete and accurate dataset to work with.",
+    "icon": "FileCheck",
+    "label": "View Enriched Data",
+    "positionLabel": "left-[130px] top-[10px]",
+    "payload": [],
+    "indicator": "dot"
+  }
+]

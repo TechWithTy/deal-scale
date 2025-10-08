@@ -1,0 +1,18 @@
+[
+  {
+    "problem": "Bulk SMS blasting is impersonal, often ignored, and can damage brand reputation due to its spammy nature.",
+    "solution": "Our AI Text Message Outreach crafts personalized, context-aware SMS messages that resonate with recipients, significantly improving engagement and response rates over generic blasts."
+  },
+  {
+    "problem": "Manually sending individual texts to a large list of prospects is extremely time-consuming and not scalable for consistent outreach.",
+    "solution": "Deal Scale's AI automates the entire SMS outreach process, from list segmentation and message personalization to sending and reply management, freeing up your valuable time."
+  },
+  {
+    "problem": "Ensuring SMS compliance (like TCPA, opt-outs) while running campaigns can be complex and risky if not managed properly.",
+    "solution": "Our platform has built-in compliance features, including automated opt-out management and adherence to messaging regulations, allowing you to text with confidence."
+  },
+  {
+    "problem": "Following up effectively via text and nurturing leads through SMS conversations requires timely and intelligent responses.",
+    "solution": "The AI can handle initial two-way SMS conversations, answer common questions, qualify leads based on responses, and alert you when manual intervention is needed for hot prospects."
+  }
+]

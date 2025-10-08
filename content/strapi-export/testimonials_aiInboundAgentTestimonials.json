@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "David Chen",
+    "role": "Co-Founder",
+    "content": "We launched a big direct mail campaign and the AI Inbound Agent was our secret weapon. The phone would ring at all hours, and every time, the AI was there to handle it. The best part? Waking up to my calendar already populated with qualified seller appointments that came in overnight. It feels like we have a 24/7 acquisitions team.",
+    "problem": "We couldn't scale our marketing because we didn't have the manpower to handle the inbound call volume, leading to missed calls and lost deals.",
+    "solution": "The AI Inbound Agent became our automated front desk, handling 100% of our inbound calls, qualifying leads perfectly, and booking appointments, which allowed us to scale our marketing confidently.",
+    "image": "/images/testimonials/david-chen.jpg",
+    "rating": 5,
+    "company": "Momentum Home Buyers",
+    "companyLogo": "/images/logos/momentum-logo.svg"
+  }
+]

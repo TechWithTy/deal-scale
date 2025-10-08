@@ -1,0 +1,52 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Connect & Strategize",
+    "subtitle": "Link social accounts and choose your engagement playbooks.",
+    "description": "Securely connect your social profiles. Select from our library of proven outreach scripts (or customize your own) and define when dynamic AI messaging should be employed.",
+    "icon": "User",
+    "label": "Step 1: Setup & Strategy",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "AI Interaction Monitoring",
+    "subtitle": "AI detects engagement signals like comments and DMs.",
+    "description": "Deal Scale's AI actively monitors your connected social profiles for engagement triggers such as comments on posts, direct messages, or specific keyword mentions you define.",
+    "icon": "Database",
+    "label": "Step 2: Monitor Interactions",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "Automated Smart Engagement",
+    "subtitle": "AI initiates conversations using preset scripts or dynamic AI.",
+    "description": "Based on the trigger and your strategy, our AI (powered by our proprietary messaging engine) engages prospects by sending an initial DM, replying to comments, using approved scripts for common scenarios, or crafting unique AI-generated messages for nuanced interactions.",
+    "icon": "MessageSquare",
+    "label": "Step 3: AI Engagement",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "Intelligent Qualification & Nurturing",
+    "subtitle": "AI qualifies leads through conversation and follow-ups.",
+    "description": "The AI continues the conversation, asking qualifying questions from your scripts, providing information, and nurturing the lead. It can handle objections and follow up based on predefined logic or AI understanding.",
+    "icon": "BrainCircuit",
+    "label": "Step 4: Qualify & Nurture",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 5,
+    "title": "Conversion to Appointment/Call",
+    "subtitle": "Qualified leads are booked or hot-transferred.",
+    "description": "Once a lead is qualified and sales-ready, the AI seamlessly schedules an appointment on your calendar or can initiate a live hot-transfer call directly to you or your sales team.",
+    "icon": "CalendarCheck",
+    "label": "Step 5: Convert to Sales",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]

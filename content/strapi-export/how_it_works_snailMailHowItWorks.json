@@ -1,0 +1,46 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Select List & Campaign",
+    "subtitle": "Choose Your Targets",
+    "description": "Select any lead list from your Deal Scale CRM and choose one of our proven, multi-touch campaign sequences.",
+    "icon": "Users",
+    "label": "Select Audience",
+    "positionLabel": "left-[-45px] top-[45px]",
+    "payload": [],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Launch Initial Contact",
+    "subtitle": "The First Touchpoint",
+    "description": "With one click, our system sends the first piece of mail—typically a high-response 'Yellow Letter'—to every lead through our national print and mail network.",
+    "icon": "Mail",
+    "label": "Send First Mailer",
+    "positionLabel": "left-[125px] top-[-5px]",
+    "payload": [],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Automated Follow-Up",
+    "subtitle": "Nurture on Autopilot",
+    "description": "The system automatically sends postcards and professional letters at proven 3-4 week intervals, but only to leads who haven't responded yet.",
+    "icon": "RefreshCw",
+    "label": "Automated Sequence",
+    "positionLabel": "left-[-40px] top-[50px]",
+    "payload": [],
+    "indicator": "dashed"
+  },
+  {
+    "stepNumber": 4,
+    "title": "AI Call Handling",
+    "subtitle": "Convert Inbound Calls to Deals",
+    "description": "When a prospect calls the unique number on the mailer, your AI Sales Agent answers 24/7. It qualifies the seller, and if they're a fit, it automatically books a meeting on your calendar or hot-transfers the live call directly to you.",
+    "icon": "RocketLaunch",
+    "label": "AI Secures Appointment",
+    "positionLabel": "left-[130px] top-[10px]",
+    "payload": [],
+    "indicator": "dot"
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Engage",
+    "subtitle": "Instant Lead Engagement",
+    "description": "The moment a lead shows interest, our AI Virtual Agent initiates a dynamic, personalized conversation via call or text, ensuring zero delay.",
+    "icon": "Bolt",
+    "label": "Start Conversation",
+    "positionLabel": "left-[-40px] top-[30px]",
+    "payload": [
+      {
+        "name": "Response Speed",
+        "value": 99,
+        "fill": "hsl(var(--primary))"
+      },
+      {
+        "name": "Personalization",
+        "value": 95,
+        "fill": "hsl(var(--secondary))"
+      }
+    ],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Qualify",
+    "subtitle": "Intelligent Qualification",
+    "description": "The AI agent nurtures the conversation, asking key qualifying questions and adapting based on real-time responses to gauge motivation and readiness.",
+    "icon": "Network",
+    "label": "Qualification",
+    "positionLabel": "left-[120px] top-[5px]",
+    "payload": [
+      {
+        "name": "Qualification Accuracy",
+        "value": 96,
+        "fill": "hsl(var(--accent))"
+      },
+      {
+        "name": "Engagement Depth",
+        "value": 91,
+        "fill": "hsl(var(--muted))"
+      }
+    ],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Handoff",
+    "subtitle": "Seamless Handoff",
+    "description": "Once a lead is qualified, the AI either schedules them directly on your calendar or initiates a live 'hot-transfer' to an available agent for immediate closing.",
+    "icon": "ShieldCheck",
+    "label": "Schedule or Transfer",
+    "positionLabel": "left-[-35px] top-[55px]",
+    "payload": [
+      {
+        "name": "Booking Rate",
+        "value": 93,
+        "fill": "hsl(var(--chart-1))"
+      },
+      {
+        "name": "Transfer Success",
+        "value": 89,
+        "fill": "hsl(var(--chart-2))"
+      }
+    ],
+    "indicator": "dashed"
+  }
+]

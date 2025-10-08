@@ -1,0 +1,42 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Onboard Your Portfolio",
+    "subtitle": "Bulk import your properties via CSV or API.",
+    "description": "Seamlessly import hundreds or thousands of properties at once. Our system will automatically enrich them with real-time market and property data.",
+    "icon": "UploadCloud",
+    "label": "Step 1: Bulk Import",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 2,
+    "title": "Monitor Key KPIs",
+    "subtitle": "View your entire portfolio from a high-level dashboard.",
+    "description": "Track critical, real-time KPIs across your entire portfolio, such as total estimated value, gross rent potential, occupancy rates, and market-level performance.",
+    "icon": "PieChart",
+    "label": "Step 2: Monitor KPIs",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 3,
+    "title": "Automate Rent Optimization",
+    "subtitle": "Set proactive alerts to maximize rental income.",
+    "description": "Our system monitors market conditions for every property and sends you an alert when rents are below market rate, highlighting specific opportunities to increase cash flow.",
+    "icon": "Sparkles",
+    "label": "Step 3: Get Alerts",
+    "positionLabel": "bottom",
+    "payload": []
+  },
+  {
+    "stepNumber": 4,
+    "title": "Generate Stakeholder Reports",
+    "subtitle": "Create custom-branded reports for clients or partners.",
+    "description": "Generate beautiful, comprehensive reports for your entire portfolio or specific property groups. Add your own branding to provide a white-labeled experience for your clients.",
+    "icon": "FileText",
+    "label": "Step 4: Report & Share",
+    "positionLabel": "bottom",
+    "payload": []
+  }
+]

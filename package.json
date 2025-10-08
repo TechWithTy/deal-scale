@@ -29,7 +29,7 @@
 		"seed:products": "STRAPI_COLLECTION=products pnpm run seed:generic",
 		"seed:services": "STRAPI_COLLECTION=services pnpm run seed:generic",
 		"seed:company": "STRAPI_COLLECTION=company pnpm run seed:generic",
-		"export:all": "pnpm run export:categories && pnpm run export:products && pnpm run export:services && pnpm run export:company",
+		"export:all": "node scripts/run-ts.js scripts/strapi/export-all.ts",
 		"seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company"
 	},
         "lint-staged": {

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 101,
+    "name": "David Chen",
+    "role": "Broker/Owner",
+    "company": "MetroConnect Realty",
+    "content": "Deal Scale's AI Social Outreach is a beast! It takes comments on our posts and turns them into booked appointments. The blend of scripted responses and smart AI messages is incredibly effective.",
+    "problem": "We were getting social media engagement but struggled to convert those interactions into actual meetings. It was a manual and leaky funnel.",
+    "solution": "The AI now handles all the initial DMs and qualification. We just see appointments appear on our calendar from genuinely interested leads found on LinkedIn. It's brilliant!",
+    "image": "/testimonials/david-chen.jpg",
+    "rating": 5,
+    "companyLogo": "/company-logos/metroconnect-realty-logo.svg"
+  },
+  {
+    "id": 102,
+    "name": "Linda Rodriguez",
+    "role": "Real Estate Investor",
+    "company": "LR Property Ventures",
+    "content": "I'm amazed how Deal Scale converts Facebook comments into qualified seller leads and even sets the initial call. The AI knows what to say, whether it's a script or its own response.",
+    "problem": "My Facebook engagement was high, but I had no time to personally DM and qualify everyone. Leads were slipping through the cracks.",
+    "solution": "Deal Scale's AI jumps on comments immediately, uses smart scripts to qualify, and I get notified for a hot transfer or see a call booked. It's like having a top-tier ISA for social media.",
+    "image": "/testimonials/linda-rodriguez.jpg",
+    "rating": 5,
+    "companyLogo": "/company-logos/lr-property-ventures-logo.svg"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Samantha Jones",
+    "role": "Wholesaler & Team Lead",
+    "content": "This is two tools in one. First, I logged in and the AI had already added three 'First Contact' tasks for my new hire. Then, I added my own task: 'Send follow-up email to the lead from 123 Main St'. A second later, a button appeared: 'Let AI do this?'. I clicked yes, and it was done. It not only tells me what to do, it does the work for me.",
+    "problem": "My day was a mix of strategic planning and being bogged down by repetitive administrative tasks.",
+    "solution": "The AI Command Center acts as both a strategist—creating tasks for my team—and an assistant—automating the manual tasks I create for myself. It has fundamentally changed how I spend my time.",
+    "image": "/images/testimonials/samantha-jones.jpg",
+    "rating": 5,
+    "company": "Bluebird Properties",
+    "companyLogo": "/images/logos/bluebird-logo.svg"
+  }
+]
