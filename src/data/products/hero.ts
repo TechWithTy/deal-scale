@@ -59,7 +59,19 @@ export const DEFAULT_GRID: HeroGridItem[] = [
 		ariaLabel: "Discover Notion templates for real estate",
 		colSpan: 1,
 		rowSpan: 2,
-	},
+        },
+        {
+                src: "products/workflows.png",
+                alt: "AI Agents for Real Estate",
+                label: "AI Agents",
+                categoryId: "agents",
+                description:
+                        "Launch pre-configured Deal Scale agents with ready-to-go scripts and monetization.",
+                link: "/products/atlas-voice-concierge",
+                ariaLabel: "Explore marketplace-ready AI agents",
+                colSpan: 1,
+                rowSpan: 1,
+        },
 ];
 export const defaultHeroProps: ProductHeroProps = {
 	headline: "The Deal Scale ",
