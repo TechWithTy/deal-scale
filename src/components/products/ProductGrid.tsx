@@ -21,15 +21,16 @@ import WorkflowCreateModal from "./workflow/WorkflowCreateModal";
 
 // * Category pretty labels for ProductCategory enum
 const CATEGORY_LABELS: Record<ProductCategory, string> = {
-	credits: "Credits",
-	workflows: "Workflows",
-	essentials: "Essentials",
-	notion: "Notion",
-	leads: "Leads",
-	data: "Data",
-	monetize: "Monetize",
-	automation: "Automation",
-	"add-on": "Add-On",
+        credits: "Credits",
+        workflows: "Workflows",
+        essentials: "Essentials",
+        notion: "Notion",
+        leads: "Leads",
+        data: "Data",
+        monetize: "Monetize",
+        automation: "Automation",
+        "add-on": "Add-On",
+        agents: "Agents",
 };
 
 interface ProductGridProps {
