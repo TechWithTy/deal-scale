@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Import & Segment Lists",
+  "subtitle": "Upload your contact lists and define target segments.",
+  "description": "Easily import your prospect lists. Use Deal Scale's smart segmentation tools to group contacts based on criteria like property interest, lead source, or engagement history for targeted campaigns.",
+  "icon": "Users",
+  "label": "Step 1: List Management",
+  "positionLabel": "bottom",
+  "payload": []
+}

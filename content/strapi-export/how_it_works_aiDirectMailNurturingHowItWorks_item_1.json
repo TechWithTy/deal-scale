@@ -1,0 +1,10 @@
+{
+  "stepNumber": 2,
+  "title": "AI-Personalized Design",
+  "subtitle": "Craft compelling mailers with AI-suggested personalization.",
+  "description": "Choose from proven templates (postcards, letters) or upload your own. Deal Scale's AI helps personalize content with recipient data, property specifics, or tailored messaging based on lead status.",
+  "icon": "Palette",
+  "label": "Step 2: Design & Personalize",
+  "positionLabel": "bottom",
+  "payload": []
+}

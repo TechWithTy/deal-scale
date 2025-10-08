@@ -1,0 +1,11 @@
+{
+  "stepNumber": 1,
+  "title": "Analyze Market",
+  "subtitle": "Enter a Zip Code or Address",
+  "description": "Instantly pull a detailed analysis for any US zip code, including rent averages, historical trends, and property type composition.",
+  "icon": "Search",
+  "label": "Run Analysis",
+  "positionLabel": "left-[-45px] top-[45px]",
+  "payload": [],
+  "indicator": "dot"
+}

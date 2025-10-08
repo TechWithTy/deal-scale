@@ -1,0 +1,22 @@
+{
+  "stepNumber": 2,
+  "title": "Discover",
+  "subtitle": "Access Quality Data",
+  "description": "Tap into a vast, constantly updated database of real estate opportunities. Use advanced filters to zero in on the best deals for your business.",
+  "icon": "Search",
+  "label": "Discover Deals",
+  "positionLabel": "left-[120px] top-[5px]",
+  "payload": [
+    {
+      "name": "Data Coverage",
+      "value": 98,
+      "fill": "hsl(var(--accent))"
+    },
+    {
+      "name": "Filter Options",
+      "value": 93,
+      "fill": "hsl(var(--muted))"
+    }
+  ],
+  "indicator": "line"
+}

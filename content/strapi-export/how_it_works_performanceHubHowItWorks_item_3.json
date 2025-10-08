@@ -1,0 +1,11 @@
+{
+  "stepNumber": 4,
+  "title": "AI Offers to Complete Them",
+  "subtitle": "Automate Your Workflow",
+  "description": "Our AI instantly reads the manual tasks you create. If it detects a task it can perform, it will ask for your permission to complete it automatically.",
+  "icon": "Sparkles",
+  "label": "AI Automates Your Work",
+  "positionLabel": "left-[130px] top-[10px]",
+  "payload": [],
+  "indicator": "dot"
+}

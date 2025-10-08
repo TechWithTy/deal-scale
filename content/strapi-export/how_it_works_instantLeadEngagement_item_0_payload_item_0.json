@@ -1,0 +1,5 @@
+{
+  "name": "Response Speed",
+  "value": 99,
+  "fill": "hsl(var(--primary))"
+}

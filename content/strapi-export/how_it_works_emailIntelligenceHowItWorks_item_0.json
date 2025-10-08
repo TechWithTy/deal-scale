@@ -1,0 +1,11 @@
+{
+  "stepNumber": 1,
+  "title": "Input Clue",
+  "subtitle": "Start With a Name or Email",
+  "description": "Enter an email address to find social profiles, OR enter a name and company domain to generate likely email combinations.",
+  "icon": "Search",
+  "label": "Enter Data",
+  "positionLabel": "left-[-45px] top-[45px]",
+  "payload": [],
+  "indicator": "dot"
+}

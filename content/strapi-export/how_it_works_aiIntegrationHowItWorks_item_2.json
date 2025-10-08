@@ -1,0 +1,22 @@
+{
+  "stepNumber": 3,
+  "title": "Increase Team Productivity",
+  "subtitle": "Focus Humans on High-Value Tasks",
+  "description": "By delivering only qualified opportunities, your sales team's productivity soars, as they focus entirely on closing deals instead of searching for them.",
+  "icon": "ShieldCheck",
+  "label": "Boost Productivity",
+  "positionLabel": "left-[-35px] top-[55px]",
+  "payload": [
+    {
+      "name": "Qualified Leads",
+      "value": 95,
+      "fill": "hsl(var(--chart-1))"
+    },
+    {
+      "name": "Productivity Boost",
+      "value": 98,
+      "fill": "hsl(var(--chart-2))"
+    }
+  ],
+  "indicator": "dashed"
+}

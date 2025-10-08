@@ -1,0 +1,22 @@
+{
+  "stepNumber": 3,
+  "title": "Secure Exclusive Appointments",
+  "subtitle": "Find Motivated Sellers First",
+  "description": "The AI identifies and qualifies motivated sellers, booking appointments directly on your calendar, giving you first access to exclusive, off-market opportunities.",
+  "icon": "ShieldCheck",
+  "label": "Book Appointments",
+  "positionLabel": "left-[-35px] top-[55px]",
+  "payload": [
+    {
+      "name": "Appointment Rate",
+      "value": 93,
+      "fill": "hsl(var(--chart-1))"
+    },
+    {
+      "name": "Lead Exclusivity",
+      "value": 90,
+      "fill": "hsl(var(--chart-2))"
+    }
+  ],
+  "indicator": "dashed"
+}

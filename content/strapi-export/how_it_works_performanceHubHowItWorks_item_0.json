@@ -1,0 +1,11 @@
+{
+  "stepNumber": 1,
+  "title": "Visualize Your Pipeline",
+  "subtitle": "See Every Deal in Motion",
+  "description": "Your entire deal flow is on a visual Kanban board. Drag-and-drop leads from 'New' to 'Appointment Set' to 'Closed'.",
+  "icon": "LayoutGrid",
+  "label": "Manage Pipeline",
+  "positionLabel": "left-[-45px] top-[45px]",
+  "payload": [],
+  "indicator": "dot"
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Search Any Zip Code",
+  "subtitle": "Enter a zip code to view its rental market report.",
+  "description": "Instantly generate a comprehensive market report for any of the 38,000+ zip codes across the United States.",
+  "icon": "Search",
+  "label": "Step 1: Search Market",
+  "positionLabel": "bottom",
+  "payload": []
+}

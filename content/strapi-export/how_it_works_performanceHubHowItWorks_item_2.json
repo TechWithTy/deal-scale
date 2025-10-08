@@ -1,0 +1,11 @@
+{
+  "stepNumber": 3,
+  "title": "You Manually Add Tasks",
+  "subtitle": "Create Your Own To-Dos",
+  "description": "Create any custom task for yourself or your team, like 'Send comps to Jane Doe' or 'Prepare offer for 123 Main St'.",
+  "icon": "CheckSquare",
+  "label": "Create Manual Tasks",
+  "positionLabel": "left-[-40px] top-[50px]",
+  "payload": [],
+  "indicator": "dashed"
+}

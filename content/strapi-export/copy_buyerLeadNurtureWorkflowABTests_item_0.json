@@ -1,0 +1,53 @@
+{
+  "id": "ab-test-buyer-lead-nurture-workflow-v1",
+  "name": "Buyer Lead Nurture Workflow Copy Test",
+  "description": "Testing copy variants (Conversion Rate vs. Client Experience) for the Buyer Lead Nurture Workflow to optimize sales.",
+  "variants": [
+    {
+      "name": "V1 - Maximize Conversions",
+      "percentage": 50,
+      "copy": {
+        "cta": "Convert More Buyer Leads",
+        "buttonCta": "Get the Workflow",
+        "tagline": "Turn More Leads into Commissions.",
+        "subtitle": "The automated workflow designed to nurture your buyer leads and maximize your conversion rates.",
+        "whatsInItForMe": "This system ensures no lead is forgotten, increasing your appointment-set rate and directly boosting your commission income.",
+        "target_audience": "Real estate agents and teams focused on maximizing revenue from their lead spend.",
+        "pain_point": "You're paying for buyer leads, but a low conversion rate is killing your ROI because you can't follow up with all of them effectively.",
+        "solution": "This workflow automates the follow-up and nurturing process, systematically turning your expensive leads into closed deals.",
+        "highlights": [
+          "Maximize lead ROI",
+          "Increase appointment-set rate",
+          "Automate drip campaigns"
+        ]
+      }
+    },
+    {
+      "name": "V2 - Perfect Client Experience",
+      "percentage": 50,
+      "copy": {
+        "cta": "Deliver a 5-Star Experience",
+        "buttonCta": "Install Workflow",
+        "tagline": "Never Drop the Ball on a Lead.",
+        "subtitle": "Give every buyer lead a professional, 5-star experience with automated follow-ups and appointment scheduling.",
+        "whatsInItForMe": "This workflow ensures every lead receives prompt, professional communication, building trust and setting you apart from the competition.",
+        "target_audience": "Agents and teams who want to build a reputation for excellent customer service.",
+        "pain_point": "Being too busy means leads get ignored, making you look unprofessional and damaging your reputation.",
+        "solution": "Automate your follow-up process to guarantee every single lead receives timely, helpful communication, creating happy clients from day one.",
+        "highlights": [
+          "Build trust with buyers",
+          "Professional communication, automated",
+          "Schedule appointments effortlessly"
+        ]
+      }
+    }
+  ],
+  "startDate": "2023-11-01T09:00:00.000Z",
+  "isActive": true,
+  "tags": [
+    "Workflows",
+    "Automation",
+    "Buyer Leads",
+    "Copywriting"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 2,
+  "title": "Embed on Your Website",
+  "subtitle": "Easily add the chatbot to any page with a simple code snippet.",
+  "description": "Generate a unique embed code from Deal Scale and paste it into your website's HTML. No complex coding required – your AI chatbot will be live in minutes.",
+  "icon": "Code",
+  "label": "Step 2: Embed Code",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,11 @@
+{
+  "stepNumber": 3,
+  "title": "Intelligent Qualification",
+  "subtitle": "Asking the Right Questions",
+  "description": "The AI engages the caller in a conversation, asking key qualifying questions about their property, timeline, and motivation.",
+  "icon": "BrainCircuit",
+  "label": "Qualify Lead",
+  "positionLabel": "left-[-40px] top-[50px]",
+  "payload": [],
+  "indicator": "dashed"
+}

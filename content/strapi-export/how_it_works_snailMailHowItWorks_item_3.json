@@ -1,0 +1,11 @@
+{
+  "stepNumber": 4,
+  "title": "AI Call Handling",
+  "subtitle": "Convert Inbound Calls to Deals",
+  "description": "When a prospect calls the unique number on the mailer, your AI Sales Agent answers 24/7. It qualifies the seller, and if they're a fit, it automatically books a meeting on your calendar or hot-transfers the live call directly to you.",
+  "icon": "RocketLaunch",
+  "label": "AI Secures Appointment",
+  "positionLabel": "left-[130px] top-[10px]",
+  "payload": [],
+  "indicator": "dot"
+}
