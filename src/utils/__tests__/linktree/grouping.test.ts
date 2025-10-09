@@ -44,6 +44,6 @@ describe("groupItems", () => {
 		const r = groupItems(items);
 		const cat = r.normalEntries.find(([c]) => c === "Cat");
 		expect(cat).toBeTruthy();
-		expect(cat![1][0].slug).toBe("a");
+		expect(cat?.[1][0].slug).toBe("a");
 	});
 });
