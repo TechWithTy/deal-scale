@@ -15,19 +15,19 @@ export type HeroGridItem = {
 };
 
 export const DEFAULT_GRID: HeroGridItem[] = [
-	{
-		src: "products/workflows.png",
-		alt: "Automated Real Estate Workflow",
-		label: "Motivated Seller Workflows",
-		categoryId: "workflows",
-		description: "Automate your outreach and find motivated sellers faster.",
-		link: "/products/motivated-seller-workflows",
-		ariaLabel: "Explore Motivated Seller Workflows",
-		colSpan: 2,
-		rowSpan: 2,
-	},
-	{
-		src: "products/coins.png",
+        {
+                src: "products/essentials.png",
+                alt: "Free Deal Scale resources",
+                label: "Free Resource Library",
+                categoryId: "free-resources",
+                description: "Instant access to downloadable playbooks, scripts, and templates.",
+                link: "/products#category=free-resources",
+                ariaLabel: "Explore free resources",
+                colSpan: 2,
+                rowSpan: 2,
+        },
+        {
+                src: "products/coins.png",
 		alt: "AI , Lead & Skip Tracing Credits for Real Estate",
 		label: "Credits (AI & Skip Tracing)",
 		categoryId: "credits",
@@ -47,18 +47,29 @@ export const DEFAULT_GRID: HeroGridItem[] = [
 		ariaLabel: "Explore exclusive deals on agent essentials",
 		colSpan: 1,
 		rowSpan: 1,
-	},
-	{
-		src: "/products/notion-2.png",
-		alt: "Notion Templates for Real Estate",
-		label: "Notion Templates",
-		categoryId: "notion",
-		description:
-			"Streamline your workflow with ready-to-use Notion templates tailored for real estate professionals.",
-		link: "/products/notion-templates",
-		ariaLabel: "Discover Notion templates for real estate",
-		colSpan: 1,
-		rowSpan: 2,
+        },
+        {
+                src: "/products/notion-2.png",
+                alt: "Notion Templates for Real Estate",
+                label: "Notion Templates",
+                categoryId: "notion",
+                description:
+                        "Streamline your workflow with ready-to-use Notion templates tailored for real estate professionals.",
+                link: "/products/notion-templates",
+                ariaLabel: "Discover Notion templates for real estate",
+                colSpan: 1,
+                rowSpan: 2,
+        },
+        {
+                src: "products/workflows.png",
+                alt: "Automated Real Estate Workflow",
+                label: "Motivated Seller Workflows",
+                categoryId: "workflows",
+                description: "Automate your outreach and find motivated sellers faster.",
+                link: "/products/motivated-seller-workflows",
+                ariaLabel: "Explore Motivated Seller Workflows",
+                colSpan: 1,
+                rowSpan: 1,
         },
         {
                 src: "products/workflows.png",

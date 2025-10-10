@@ -5,13 +5,14 @@
 "use client";
 import { useAuthModal } from "@/components/auth/use-auth-store";
 import { usePagination } from "@/hooks/use-pagination";
-import type { ProductCategory, ProductType } from "@/types/products";
+import { ProductCategory, type ProductType } from "@/types/products";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useMemo, useState } from "react";
 import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ProductCardNew from "./product/ProductCardNew";
+import FreeResourceCard from "./product/FreeResourceCard";
 import ProductFilter from "./product/ProductFilter";
 import type { ProductCategoryOption } from "./product/ProductFilter";
 import ProductHero from "./product/ProductHero";
@@ -31,6 +32,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
         automation: "Automation",
         "add-on": "Add-On",
         agents: "Agents",
+        "free-resources": "Free Resources",
 };
 
 interface ProductGridProps {
@@ -39,10 +41,11 @@ interface ProductGridProps {
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
-	const { data: session } = useSession();
-	const { open: openAuthModal } = useAuthModal();
-	const [showWorkflowModal, setShowWorkflowModal] = useState(false);
-	const [activeCategory, setActiveCategory] = useState<string>("all");
+        const { data: session } = useSession();
+        const { open: openAuthModal } = useAuthModal();
+        const [showWorkflowModal, setShowWorkflowModal] = useState(false);
+        const [activeCategory, setActiveCategory] = useState<string>("all");
+        const freeResourceCategory = ProductCategory.FreeResources;
 
 	// On mount, check for #category=... in the hash and set activeCategory
 	useEffect(() => {
@@ -79,28 +82,65 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 	const gridRef = React.useRef<HTMLDivElement>(null);
 
 	// Filter products by category and search
-	const filteredProducts = useMemo(() => {
-		let filtered = products;
-		if (activeCategory !== "all") {
-			filtered = filtered.filter(
-				(p) =>
-					Array.isArray(p.categories) &&
-					p.categories
-						.map(String)
-						.map((s) => s.toLowerCase())
-						.includes(activeCategory),
-			);
-		}
-		if (searchTerm.trim()) {
-			const term = searchTerm.trim().toLowerCase();
-			filtered = filtered.filter(
-				(p) =>
-					p.name.toLowerCase().includes(term) ||
-					p.description.toLowerCase().includes(term),
-			);
-		}
-		return filtered;
-	}, [products, activeCategory, searchTerm]);
+        const filteredFreeResources = useMemo(() => {
+                const term = searchTerm.trim().toLowerCase();
+                return products.filter((product) => {
+                        const isFreeResource = product.categories.includes(
+                                freeResourceCategory,
+                        );
+
+                        if (!isFreeResource) {
+                                return false;
+                        }
+
+                        if (
+                                activeCategory !== "all" &&
+                                activeCategory !== freeResourceCategory
+                        ) {
+                                return false;
+                        }
+
+                        if (!term) {
+                                return true;
+                        }
+
+                        return (
+                                product.name.toLowerCase().includes(term) ||
+                                product.description.toLowerCase().includes(term)
+                        );
+                });
+        }, [products, searchTerm, activeCategory, freeResourceCategory]);
+
+        const filteredProducts = useMemo(() => {
+                let filtered = products;
+                if (activeCategory !== "all") {
+                        filtered = filtered.filter((p) =>
+                                Array.isArray(p.categories) &&
+                                p.categories
+                                        .map(String)
+                                        .map((s) => s.toLowerCase())
+                                        .includes(activeCategory),
+                        );
+                }
+                if (searchTerm.trim()) {
+                        const term = searchTerm.trim().toLowerCase();
+                        filtered = filtered.filter(
+                                (p) =>
+                                        p.name.toLowerCase().includes(term) ||
+                                        p.description.toLowerCase().includes(term),
+                        );
+                }
+                if (activeCategory === "all" || activeCategory === freeResourceCategory) {
+                        filtered = filtered.filter(
+                                (product) =>
+                                        !product.categories.includes(freeResourceCategory),
+                        );
+                }
+                return filtered;
+        }, [products, activeCategory, searchTerm, freeResourceCategory]);
+
+        const shouldShowEmptyState =
+                filteredProducts.length === 0 && filteredFreeResources.length === 0;
 
 	// Pagination
 	const {
@@ -137,43 +177,55 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 						onSearch={setSearchTerm}
 						onCategoryChange={setActiveCategory}
 					/>
-					{filteredProducts.length === 0 ? (
-						<div className="py-16 text-center">
-							<p className="text-black dark:text-white/70">
-								No products found for your criteria.
-							</p>
-						</div>
-					) : (
-						<>
-							<div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
-								{/* + Create Workflow Card (only for workflows category) */}
-								{activeCategory === "workflows" && (
-									<>
-										<MonetizeCard
-											onClick={() => {
-												if (session) {
-													setShowWorkflowModal(true);
-												} else {
-													openAuthModal("signin", () =>
-														setShowWorkflowModal(true),
-													);
-												}
-											}}
-										/>
-										<WorkflowCreateModal
-											open={showWorkflowModal}
-											onClose={() => setShowWorkflowModal(false)}
-										/>
-									</>
-								)}
-								{paginatedProducts.map((product) => (
-									<ProductCardNew
-										key={product.sku}
-										{...product}
-										callbackUrl={callbackUrl}
-									/>
-								))}
-							</div>
+                                        {shouldShowEmptyState ? (
+                                                <div className="py-16 text-center">
+                                                        <p className="text-black dark:text-white/70">
+                                                                No products found for your criteria.
+                                                        </p>
+                                                </div>
+                                        ) : (
+                                                <>
+                                                        {filteredFreeResources.length > 0 && (
+                                                                <div className="mb-10 flex w-full flex-col gap-6">
+                                                                        {filteredFreeResources.map((product) => (
+                                                                                <FreeResourceCard
+                                                                                        key={`free-resource-${product.sku}`}
+                                                                                        product={product}
+                                                                                />
+                                                                        ))}
+                                                                </div>
+                                                        )}
+                                                        {(filteredProducts.length > 0 || activeCategory === "workflows") && (
+                                                                <div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+                                                                        {/* + Create Workflow Card (only for workflows category) */}
+                                                                        {activeCategory === "workflows" && (
+                                                                                <>
+                                                                                        <MonetizeCard
+                                                                                                onClick={() => {
+                                                                                                        if (session) {
+                                                                                                                setShowWorkflowModal(true);
+                                                                                                        } else {
+                                                                                                                openAuthModal("signin", () =>
+                                                                                                                        setShowWorkflowModal(true),
+                                                                                                                );
+                                                                                                        }
+                                                                                                }}
+                                                                                        />
+                                                                                        <WorkflowCreateModal
+                                                                                                open={showWorkflowModal}
+                                                                                                onClose={() => setShowWorkflowModal(false)}
+                                                                                        />
+                                                                                </>
+                                                                        )}
+                                                                        {paginatedProducts.map((product) => (
+                                                                                <ProductCardNew
+                                                                                        key={product.sku}
+                                                                                        {...product}
+                                                                                        callbackUrl={callbackUrl}
+                                                                                />
+                                                                        ))}
+                                                                </div>
+                                                        )}
 							{/* Pagination Controls */}
 							{(canShowPagination || canShowShowMore || canShowShowLess) && (
 								<nav
