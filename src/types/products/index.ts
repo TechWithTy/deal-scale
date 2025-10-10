@@ -73,6 +73,21 @@ export enum ProductCategory {
         Automation = "automation",
         AddOn = "add-on",
         Agents = "agents",
+        FreeResources = "free-resources",
+}
+
+/** Metadata describing an associated downloadable file or external free resource. */
+export interface ProductResource {
+        /** Determines whether the resource should be downloaded or opened in a new tab. */
+        type: "download" | "external";
+        /** Destination URL for the resource or file. */
+        url: string;
+        /** Optional human-readable filename presented to users for downloads. */
+        fileName?: string;
+        /** Optional formatted file size (e.g. "12 MB"). */
+        fileSize?: string;
+        /** Optional walkthrough or Supademo URL rendered in a modal. */
+        demoUrl?: string;
 }
 
 export interface ProductType {
@@ -108,4 +123,6 @@ export interface ProductType {
         faqs?: ProductFaq[];
         /** Optional embedded agent configuration when the product represents a Deal Scale agent. */
         agent?: AgentConfig;
+        /** Optional metadata for linked or downloadable free resources. */
+        resource?: ProductResource;
 }
