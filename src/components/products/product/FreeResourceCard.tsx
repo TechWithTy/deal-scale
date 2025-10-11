@@ -29,12 +29,13 @@ const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
         const resource = product.resource;
         const [isDemoOpen, setIsDemoOpen] = useState(false);
         const productHref = useMemo(() => {
-                if (!product.slug) {
+                if (!product.slug && !product.sku) {
                         return null;
                 }
 
-                return `/products/${product.slug}`;
-        }, [product.slug]);
+                const slugOrSku = product.slug ?? product.sku;
+                return `/products/${slugOrSku}`;
+        }, [product.slug, product.sku]);
 
         if (!resource) {
                 return null;
