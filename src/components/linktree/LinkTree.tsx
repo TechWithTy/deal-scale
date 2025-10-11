@@ -2,7 +2,7 @@
 import { NewsletterFooter } from "@/components/contact/newsletter/NewsletterFooter";
 import type { LinkTreeItem } from "@/utils/linktree-redis";
 import * as React from "react";
-import { LinkCard } from "./LinkCard";
+import LinkCard from "./LinkCard";
 import { groupItems } from "./tree/grouping";
 import { resolveLink } from "./tree/linkResolution";
 
