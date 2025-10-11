@@ -3,6 +3,12 @@ import {
         type ProductResource,
         type ProductType,
 } from "@/types/products";
+import {
+        coldOutreachMessagePackABTest,
+        dealAnalyzerWorkbookABTest,
+        investProsHandbookABTest,
+        marketMetricsSnapshotABTest,
+} from "./free-resource-copy";
 
 const defaultTypes: ProductType["types"] = [
         { name: "Download", value: "download", price: 0 },
@@ -72,6 +78,8 @@ export const freeResourceProducts: ProductType[] = [
                         },
                 ],
                 resource: workbookResource,
+                abTest: dealAnalyzerWorkbookABTest,
+                isFeaturedFreeResource: true,
         },
         {
                 id: "cold-outreach-message-pack",
@@ -104,6 +112,8 @@ export const freeResourceProducts: ProductType[] = [
                         },
                 ],
                 resource: outreachResource,
+                abTest: coldOutreachMessagePackABTest,
+                isFeaturedFreeResource: true,
         },
         {
                 id: "tinthe-investpros-handbook",
@@ -136,6 +146,7 @@ export const freeResourceProducts: ProductType[] = [
                         },
                 ],
                 resource: investProsHandbookResource,
+                abTest: investProsHandbookABTest,
         },
         {
                 id: "market-metrics-snapshot",
@@ -168,6 +179,7 @@ export const freeResourceProducts: ProductType[] = [
                         },
                 ],
                 resource: marketSnapshotResource,
+                abTest: marketMetricsSnapshotABTest,
         },
 ].map((product) => ({
         ...product,
