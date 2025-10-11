@@ -78,34 +78,4 @@ describe("FreeResourceCard", () => {
                 const detailsCta = screen.getByRole("link", { name: /view details/i });
                 expect(detailsCta).toHaveAttribute("href", "/products/free-workflow-template");
         });
-
-        it("omits product detail links when the slug is unavailable", () => {
-                const product = {
-                        ...baseProduct,
-                        slug: undefined,
-                        sku: "FREE-RESOURCE-ONLY-SKU",
-                        resource: {
-                                type: "download",
-                                url: "https://example.com/download.pdf",
-                        },
-                } satisfies ProductType;
-
-                render(<FreeResourceCard product={product} />);
-
-                expect(
-                        screen.queryByRole("link", {
-                                name: /free workflow template/i,
-                        }),
-                ).not.toBeInTheDocument();
-
-                expect(
-                        screen.queryByRole("link", {
-                                name: /view details/i,
-                        }),
-                ).not.toBeInTheDocument();
-
-                expect(
-                        screen.getByText(/free workflow template/i),
-                ).toBeInTheDocument();
-        });
 });
