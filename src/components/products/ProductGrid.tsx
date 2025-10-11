@@ -82,14 +82,14 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 	const gridRef = React.useRef<HTMLDivElement>(null);
 
 	// Filter products by category and search
-        const filteredFreeResources = useMemo(() => {
+        const featuredFreeResources = useMemo(() => {
                 const term = searchTerm.trim().toLowerCase();
                 return products.filter((product) => {
                         const isFreeResource = product.categories.includes(
                                 freeResourceCategory,
                         );
 
-                        if (!isFreeResource) {
+                        if (!isFreeResource || !product.isFeaturedFreeResource) {
                                 return false;
                         }
 
@@ -130,17 +130,30 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
                                         p.description.toLowerCase().includes(term),
                         );
                 }
-                if (activeCategory === "all" || activeCategory === freeResourceCategory) {
+                if (activeCategory === freeResourceCategory) {
+                        filtered = filtered.filter((product) =>
+                                product.categories.includes(freeResourceCategory),
+                        );
+                }
+
+                const shouldExcludeFeaturedFreebies =
+                        activeCategory === "all" || activeCategory === freeResourceCategory;
+
+                if (shouldExcludeFeaturedFreebies) {
                         filtered = filtered.filter(
                                 (product) =>
-                                        !product.categories.includes(freeResourceCategory),
+                                        !(
+                                                product.categories.includes(
+                                                        freeResourceCategory,
+                                                ) && product.isFeaturedFreeResource
+                                        ),
                         );
                 }
                 return filtered;
         }, [products, activeCategory, searchTerm, freeResourceCategory]);
 
         const shouldShowEmptyState =
-                filteredProducts.length === 0 && filteredFreeResources.length === 0;
+                filteredProducts.length === 0 && featuredFreeResources.length === 0;
 
 	// Pagination
 	const {
@@ -185,9 +198,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
                                                 </div>
                                         ) : (
                                                 <>
-                                                        {filteredFreeResources.length > 0 && (
+                                                        {featuredFreeResources.length > 0 && (
                                                                 <div className="mb-10 flex w-full flex-col gap-6">
-                                                                        {filteredFreeResources.map((product) => (
+                                                                        {featuredFreeResources.map((product) => (
                                                                                 <FreeResourceCard
                                                                                         key={`free-resource-${product.sku}`}
                                                                                         product={product}
@@ -196,7 +209,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
                                                                 </div>
                                                         )}
                                                         {(filteredProducts.length > 0 || activeCategory === "workflows") && (
-                                                                <div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+                                                                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                                                                         {/* + Create Workflow Card (only for workflows category) */}
                                                                         {activeCategory === "workflows" && (
                                                                                 <>
@@ -221,6 +234,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
                                                                                 <ProductCardNew
                                                                                         key={product.sku}
                                                                                         {...product}
+                                                                                        className="h-full w-full"
                                                                                         callbackUrl={callbackUrl}
                                                                                 />
                                                                         ))}
