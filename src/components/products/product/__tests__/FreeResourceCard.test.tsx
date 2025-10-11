@@ -9,6 +9,7 @@ describe("FreeResourceCard", () => {
                 description: "A starter template you can download immediately.",
                 price: 0,
                 sku: "FREE-RESOURCE-1",
+                slug: "free-workflow-template",
                 images: ["/products/workflows.png"],
                 reviews: [],
                 categories: [ProductCategory.FreeResources],
@@ -26,24 +27,19 @@ describe("FreeResourceCard", () => {
                                 demoUrl: "https://example.com/demo",
                         },
                 } satisfies ProductType;
-                const openSpy = jest.fn();
-                const originalOpen = window.open;
-                // @ts-expect-error - jsdom defines window.open as function | undefined
-                window.open = openSpy;
-
                 render(<FreeResourceCard product={product} />);
 
-                fireEvent.click(screen.getByRole("button", { name: /get resource/i }));
-                expect(openSpy).toHaveBeenCalledWith("https://example.com/resource", "_blank", "noopener,noreferrer");
+                const visitLink = screen.getByRole("link", { name: /visit resource/i });
+                expect(visitLink).toHaveAttribute("href", "https://example.com/resource");
+                expect(visitLink).toHaveAttribute("target", "_blank");
+                expect(visitLink).toHaveAttribute("rel", "noopener noreferrer");
 
-                fireEvent.click(screen.getByRole("button", { name: /watch demo/i }));
+                fireEvent.click(screen.getByRole("button", { name: /view demo/i }));
                 expect(screen.getByRole("dialog")).toBeInTheDocument();
                 expect(screen.getByTitle(/free workflow template demo/i)).toHaveAttribute(
                         "src",
                         "https://example.com/demo",
                 );
-
-                window.open = originalOpen;
         });
 
         it("provides download links for downloadable resources", () => {
@@ -61,5 +57,25 @@ describe("FreeResourceCard", () => {
                 const downloadLink = screen.getByRole("link", { name: /download resource/i });
                 expect(downloadLink).toHaveAttribute("href", "https://example.com/download.pdf");
                 expect(downloadLink).toHaveAttribute("download", "download.pdf");
+        });
+
+        it("links to the product detail page for seo visibility", () => {
+                const product = {
+                        ...baseProduct,
+                        resource: {
+                                type: "download",
+                                url: "https://example.com/download.pdf",
+                        },
+                } satisfies ProductType;
+
+                render(<FreeResourceCard product={product} />);
+
+                const titleLink = screen.getByRole("link", {
+                        name: /free workflow template/i,
+                });
+                expect(titleLink).toHaveAttribute("href", "/products/free-workflow-template");
+
+                const detailsCta = screen.getByRole("link", { name: /view details/i });
+                expect(detailsCta).toHaveAttribute("href", "/products/free-workflow-template");
         });
 });
