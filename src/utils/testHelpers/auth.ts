@@ -23,14 +23,22 @@ export function createSession(overrides: Partial<Session> = {}): Session {
 	};
 }
 
+type FetchMock = typeof global.fetch & {
+        mockResolvedValueOnce: (value: Response) => unknown;
+        mockRejectedValueOnce: (error: unknown) => unknown;
+        mockReset: () => unknown;
+};
+
+const getFetchMock = () => global.fetch as FetchMock;
+
 /**
  * Sets the global fetch mock to return a resolved response with the provided payload.
  */
 export function mockFetchResponse({
-	status = 200,
-	json,
-	text,
-	headers = {},
+        status = 200,
+        json,
+        text,
+        headers = {},
 }: MockFetchResponseOptions) {
 	const bodyJson = json;
 	const bodyText = text ?? (json ? JSON.stringify(json) : "");
@@ -56,14 +64,14 @@ export function mockFetchResponse({
 		redirected: false,
 	};
 
-	(global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse as Response);
+        getFetchMock().mockResolvedValueOnce(mockResponse as Response);
 }
 
 /**
  * Sets the global fetch mock to reject with an error.
  */
 export function mockFetchReject(error: Error) {
-	(global.fetch as jest.Mock).mockRejectedValueOnce(error);
+        getFetchMock().mockRejectedValueOnce(error);
 }
 
 /**
@@ -77,5 +85,5 @@ export function createRequest(url: string, init?: RequestInit) {
  * Resets shared mocks between tests.
  */
 export function resetMocks() {
-	(global.fetch as jest.Mock).mockReset();
+        getFetchMock().mockReset();
 }
