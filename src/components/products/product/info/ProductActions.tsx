@@ -1,8 +1,16 @@
 import { SocialShare } from "@/components/common/social/SocialShare";
 import { Button } from "@/components/ui/button";
+import {
+        Dialog,
+        DialogContent,
+        DialogDescription,
+        DialogHeader,
+        DialogTitle,
+        DialogTrigger,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/useCartStore";
-import type { ProductType } from "@/types/products";
+import { ProductCategory, type ProductType } from "@/types/products";
 import { Heart, Loader2, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -21,26 +29,34 @@ export interface ProductActionsProps {
 }
 
 export default function ProductActions({
-	onCheckout,
-	checkoutLoading,
-	stripeLoaded,
-	ctaText,
-	product,
-	enableAddToCart = true,
-	variantId,
+        onCheckout,
+        checkoutLoading,
+        stripeLoaded,
+        ctaText,
+        product,
+        enableAddToCart = true,
+        variantId,
 }: ProductActionsProps) {
-	const [isAddingToCart, setIsAddingToCart] = useState(false);
-	const { addItem } = useCartStore();
+        const [isAddingToCart, setIsAddingToCart] = useState(false);
+        const [isDemoOpen, setIsDemoOpen] = useState(false);
+        const { addItem } = useCartStore();
 
-	// Get the first variant's AB test copy if available, otherwise use a default
-	const abTestCopy =
-		product.abTest?.variants[0]?.copy?.whatsInItForMe ||
-		`Check out this ${product.name}`;
+        // Get the first variant's AB test copy if available, otherwise use a default
+        const abTestCopy =
+                product.abTest?.variants[0]?.copy?.whatsInItForMe ||
+                `Check out this ${product.name}`;
 
-	const handleAddToCart = async () => {
-		try {
-			setIsAddingToCart(true);
-			const selectedType = variantId
+        const resource = product.resource;
+        const isFreeResource =
+                Boolean(resource) && product.categories?.includes(ProductCategory.FreeResources);
+
+        const getPrimaryCtaLabel = () =>
+                resource?.type === "external" ? "Visit Resource" : "Download Resource";
+
+        const handleAddToCart = async () => {
+                try {
+                        setIsAddingToCart(true);
+                        const selectedType = variantId
 				? product.types?.find((t) => t.value === variantId)
 				: undefined;
 
@@ -72,15 +88,58 @@ export default function ProductActions({
 		} finally {
 			setIsAddingToCart(false);
 		}
-	};
-	return (
-		<>
-			<div className="mt-10 flex flex-col gap-4">
-				{enableAddToCart && (
-					<div className="flex flex-col gap-4 sm:flex-row">
-						<Button
-							size="lg"
-							className={cn(
+        };
+        return (
+                <>
+                        <div className="mt-10 flex flex-col gap-4">
+                                {isFreeResource && resource ? (
+                                        <>
+                                                <Button asChild size="lg">
+                                                        <a
+                                                                href={resource.url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                {...(resource.type === "download"
+                                                                        ? { download: resource.fileName ?? true }
+                                                                        : {})}
+                                                        >
+                                                                {getPrimaryCtaLabel()}
+                                                        </a>
+                                                </Button>
+                                                {resource.demoUrl && (
+                                                        <Dialog open={isDemoOpen} onOpenChange={setIsDemoOpen}>
+                                                                <DialogTrigger asChild>
+                                                                        <Button variant="outline" size="lg" type="button">
+                                                                                View Demo
+                                                                        </Button>
+                                                                </DialogTrigger>
+                                                                <DialogContent className="sm:max-w-3xl">
+                                                                        <DialogHeader>
+                                                                                <DialogTitle>{product.name} Demo</DialogTitle>
+                                                                                <DialogDescription>
+                                                                                        See how to get the most value from this resource in just a couple of
+                                                                                        minutes.
+                                                                                </DialogDescription>
+                                                                        </DialogHeader>
+                                                                        <div className="aspect-video w-full overflow-hidden rounded-xl">
+                                                                                <iframe
+                                                                                        title={`${product.name} demo`}
+                                                                                        src={resource.demoUrl}
+                                                                                        className="h-full w-full"
+                                                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                        allowFullScreen
+                                                                                />
+                                                                        </div>
+                                                                </DialogContent>
+                                                        </Dialog>
+                                                )}
+                                        </>
+                                ) : (
+                                        enableAddToCart && (
+                                                <div className="flex flex-col gap-4 sm:flex-row">
+                                                        <Button
+                                                                size="lg"
+                                                                className={cn(
 								"flex-1 items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 font-medium text-base text-primary-foreground",
 								"hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
 								"transition-colors duration-200",
@@ -135,15 +194,16 @@ export default function ProductActions({
 								<span className="sr-only">Add to favorites</span>
 							</Button>
 						)}
-					</div>
-				)}
+                                                </div>
+                                        )
+                                )}
 
-				{!enableAddToCart && (
-					<Button
-						size="lg"
-						variant={enableAddToCart ? "outline" : "default"}
-						className={cn(
-							"flex w-full items-center justify-center rounded-md border font-medium",
+                                {!isFreeResource && !enableAddToCart && (
+                                        <Button
+                                                size="lg"
+                                                variant={enableAddToCart ? "outline" : "default"}
+                                                className={cn(
+                                                        "flex w-full items-center justify-center rounded-md border font-medium",
 							enableAddToCart
 								? "border-input bg-background text-foreground hover:bg-muted/60"
 								: "border-transparent bg-primary text-primary-foreground hover:bg-primary/90",
@@ -160,11 +220,11 @@ export default function ProductActions({
 						) : (
 							ctaText || "Checkout"
 						)}
-					</Button>
-				)}
-			</div>
-			<div className="my-6">
-				<SocialShare
+                                        </Button>
+                                )}
+                        </div>
+                        <div className="my-6">
+                                <SocialShare
 					showLabels
 					size="sm"
 					variant="ghost"

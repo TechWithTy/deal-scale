@@ -1,24 +1,26 @@
-import type { ProductType } from "@/types/products";
+import type { ProductCategory, ProductType } from "@/types/products";
+import type { ABTest } from "@/types/testing";
 
 export interface ProductCardProps
-	extends Pick<
-		ProductType,
-		| "name"
-		| "description"
-		| "price"
-		| "images"
-		| "salesIncentive"
-		| "sku"
-		| "reviews"
-		| "types"
-		| "colors"
-		| "sizes"
-		| "categories"
-	> {
-	className?: string;
-	showBanner?: boolean;
-	bannerText?: string;
-	bannerColor?: string;
+        extends Pick<
+                ProductType,
+                | "name"
+                | "description"
+                | "price"
+                | "images"
+                | "salesIncentive"
+                | "sku"
+                | "reviews"
+                | "types"
+                | "colors"
+                | "sizes"
+                | "categories"
+                | "abTest"
+        > {
+        className?: string;
+        showBanner?: boolean;
+        bannerText?: string;
+        bannerColor?: string;
 	onSale?: boolean;
 	slug?: string;
 	callbackUrl?: string;
@@ -31,11 +33,17 @@ export interface ProductImageProps {
 }
 
 export interface ProductHeaderProps {
-	id: string;
-	name: string;
-	salesIncentive?: {
-		discountPercent?: number;
-	};
+        id: string;
+        slug?: string;
+        name: string;
+        salesIncentive?: {
+                discountPercent?: number;
+        };
+}
+
+export interface ProductSummaryProps {
+        description?: string;
+        abTest?: ABTest;
 }
 
 export interface ProductMetadataProps {
@@ -44,12 +52,10 @@ export interface ProductMetadataProps {
 }
 
 export interface ProductActionsProps {
-	onAddToCart: () => void;
-	onPurchase: () => void;
-	isLoading: boolean;
+        onAddToCart: () => void;
+        onPurchase: () => void;
+        isLoading: boolean;
 }
-
-import type { ProductCategory } from "@/types/products";
 
 export interface CheckoutDialogProps {
 	isOpen: boolean;
