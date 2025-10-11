@@ -32,4 +32,20 @@ describe("free resource catalog", () => {
                 const values = Object.values(ProductCategory) as string[];
                 expect(values).toContain("free-resources");
         });
+
+        it("includes the latest download and external spotlight resources", () => {
+                const handbook = freeResourceProducts.find(
+                        (product) => product.slug === "tinthe-investpros-handbook",
+                );
+                expect(handbook).toBeDefined();
+                expect(handbook?.resource?.type).toBe("download");
+                expect(handbook?.resource?.url).toContain("tinthe-investpros-handbook.pdf");
+
+                const marketSnapshot = freeResourceProducts.find(
+                        (product) => product.slug === "market-metrics-snapshot",
+                );
+                expect(marketSnapshot).toBeDefined();
+                expect(marketSnapshot?.resource?.type).toBe("external");
+                expect(marketSnapshot?.resource?.url).toContain("Market-Metrics-Snapshot-Toolkit");
+        });
 });
