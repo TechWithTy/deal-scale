@@ -13,6 +13,7 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
+		"types": ["@testing-library/jest-dom"],
 		"noImplicitAny": false,
 		"noUnusedParameters": false,
 		"skipLibCheck": true,
@@ -42,7 +43,8 @@
 		"**/*.ts",
 		"**/*.tsx",
 		"next.config.ts",
-		"src/utils/__tests__/metadata/caonical/index.test.ts"
+		"src/utils/__tests__/metadata/caonical/index.test.ts",
+		"src/types/jest-dom.d.ts"
 	],
 	"exclude": [
 		"node_modules",
