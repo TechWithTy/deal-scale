@@ -26,6 +26,20 @@ const outreachResource: ProductResource = {
         demoUrl: "https://app.supademo.com/embed/7L5Q3VA",
 };
 
+const investProsHandbookResource: ProductResource = {
+        type: "download",
+        url: "https://assets.dealscale.ai/free-resources/tinthe-investpros-handbook.pdf",
+        fileName: "tinthe-investpros-handbook.pdf",
+        fileSize: "6.1 MB",
+        demoUrl: "https://app.supademo.com/embed/1A2B3C4",
+};
+
+const marketSnapshotResource: ProductResource = {
+        type: "external",
+        url: "https://dealscale.notion.site/Market-Metrics-Snapshot-Toolkit-2f712b49d74d4c7a983fe43b0af552a7",
+        demoUrl: "https://app.supademo.com/embed/5D6E7F8",
+};
+
 export const freeResourceProducts: ProductType[] = [
         {
                 id: "deal-analyzer-workbook",
@@ -90,6 +104,70 @@ export const freeResourceProducts: ProductType[] = [
                         },
                 ],
                 resource: outreachResource,
+        },
+        {
+                id: "tinthe-investpros-handbook",
+                name: "Tinthe InvestPros Handbook",
+                description:
+                        "Download the full Tinthe InvestPros operating handbook covering acquisition frameworks, marketing playbooks, and team rituals for scaling deal flow.",
+                price: 0,
+                sku: "FREE-RESOURCE-HANDBOOK-001",
+                slug: "tinthe-investpros-handbook",
+                categories: [
+                        ProductCategory.FreeResources,
+                        ProductCategory.Essentials,
+                        ProductCategory.Workflows,
+                ],
+                images: ["/products/essentials.png"],
+                types: defaultTypes,
+                reviews: [],
+                colors: defaultColors,
+                sizes: defaultSizes,
+                faqs: [
+                        {
+                                question: "What topics does the handbook cover?",
+                                answer:
+                                        "The handbook walks through Tinthe's deal sourcing funnels, investor reporting cadences, and standard operating procedures for acquisitions teams.",
+                        },
+                        {
+                                question: "How often is the handbook updated?",
+                                answer:
+                                        "We refresh the handbook each quarter with new scripts, checklist updates, and lessons learned from recent portfolio wins.",
+                        },
+                ],
+                resource: investProsHandbookResource,
+        },
+        {
+                id: "market-metrics-snapshot",
+                name: "Market Metrics Snapshot Toolkit",
+                description:
+                        "Access Tinthe's live market metrics dashboard that curates up-to-date KPIs, comps, and neighborhood insights for new acquisitions.",
+                price: 0,
+                sku: "FREE-RESOURCE-MARKET-001",
+                slug: "market-metrics-snapshot",
+                categories: [
+                        ProductCategory.FreeResources,
+                        ProductCategory.Data,
+                        ProductCategory.Automation,
+                ],
+                images: ["/products/workflows.png"],
+                types: defaultTypes,
+                reviews: [],
+                colors: defaultColors,
+                sizes: defaultSizes,
+                faqs: [
+                        {
+                                question: "What data sources power the dashboard?",
+                                answer:
+                                        "The toolkit blends MLS pulls, census data, and Tinthe's proprietary deal database to highlight emerging opportunities.",
+                        },
+                        {
+                                question: "Does the snapshot update automatically?",
+                                answer:
+                                        "Yes, the embedded Notion dashboard refreshes weekly with new comps, rent trends, and absorption data for your saved markets.",
+                        },
+                ],
+                resource: marketSnapshotResource,
         },
 ].map((product) => ({
         ...product,

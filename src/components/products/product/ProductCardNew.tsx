@@ -7,12 +7,13 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import {
-	ProductCard as Card,
-	type ProductCardProps as CardProps,
-	CheckoutDialog,
-	ProductHeader,
-	ProductImage,
-	ProductMetadata,
+        ProductCard as Card,
+        type ProductCardProps as CardProps,
+        CheckoutDialog,
+        ProductHeader,
+        ProductImage,
+        ProductMetadata,
+        ProductSummary,
 } from "./card";
 
 // Re-export types for convenience
@@ -25,17 +26,18 @@ export type { CardProps as ProductCardProps };
 const ProductCardNew = (props: CardProps) => {
 	const {
 		name,
-		description,
-		price,
-		images = [],
-		salesIncentive,
-		className,
-		slug,
-		sku,
-		reviews = [],
-		categories = [],
-		callbackUrl,
-	} = props;
+                description,
+                price,
+                images = [],
+                salesIncentive,
+                className,
+                slug,
+                sku,
+                reviews = [],
+                categories = [],
+                callbackUrl,
+                abTest,
+        } = props;
 
 	const shouldReduceMotion = useReducedMotion();
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -74,11 +76,11 @@ const ProductCardNew = (props: CardProps) => {
 		toast.success(`${name} added to cart`);
 	}, [addToCart, props]);
 
-	const handleInitiateCheckout = async () => {
-		if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-			toast.error("Stripe is not configured. Cannot proceed to checkout.");
-			return;
-		}
+        const handleInitiateCheckout = async () => {
+                if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+                        toast.error("Stripe is not configured. Cannot proceed to checkout.");
+                        return;
+                }
 
 		setIsCheckoutLoading(true);
 		try {
@@ -120,7 +122,8 @@ const ProductCardNew = (props: CardProps) => {
 		}
 	};
 
-	const imageUrl = images?.[0] || "/placeholder-product.png";
+        const imageUrl = images?.[0] || "/placeholder-product.png";
+        const productSlug = slug ?? sku;
 
 	return (
 		<motion.div
@@ -133,13 +136,18 @@ const ProductCardNew = (props: CardProps) => {
 			whileHover={{ scale: shouldReduceMotion ? 1 : 1.03 }}
 			transition={{ type: "spring", stiffness: 300, damping: 20 }}
 		>
-			<ProductImage imageUrl={imageUrl} alt={name} slug={slug} />
+                        <ProductImage imageUrl={imageUrl} alt={name} slug={productSlug} />
 
-			<div className="mt-4 flex-1">
-				<ProductHeader id={sku} name={name} salesIncentive={salesIncentive} />
-
-				<ProductMetadata price={price} reviews={reviews} />
-			</div>
+                        <div className="mt-4 flex-1">
+                                <ProductHeader
+                                        id={sku}
+                                        slug={productSlug}
+                                        name={name}
+                                        salesIncentive={salesIncentive}
+                                />
+                                <ProductSummary description={description} abTest={abTest} />
+                                <ProductMetadata price={price} reviews={reviews} />
+                        </div>
 
 			{/* Buttons Row */}
 			<div className="mt-6 flex w-full flex-col space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
