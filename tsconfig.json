@@ -13,7 +13,7 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"types": ["@testing-library/jest-dom"],
+                "types": ["@testing-library/jest-dom", "jest"],
 		"noImplicitAny": false,
 		"noUnusedParameters": false,
 		"skipLibCheck": true,
