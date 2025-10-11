@@ -8,6 +8,40 @@ export type FileMeta = {
 	expiry?: string;
 };
 
+type NotionPropertyValue =
+	| { type: "rich_text"; rich_text?: Array<{ plain_text?: string }> }
+	| { type: "title"; title?: Array<{ plain_text?: string }> }
+	| { type: "url"; url?: string }
+	| { type: "checkbox"; checkbox?: boolean }
+	| { type: "select"; select?: { name?: string } }
+	| { type: "status"; status?: { name?: string } }
+	| { type: "files"; files?: Array<NotionFileObject> }
+	| Record<string, never>; // For other property types
+
+type NotionFileObject =
+	| { type: "file"; file?: { url?: string; expiry_time?: string }; name?: string }
+	| { type: "external"; external?: { url?: string }; name?: string };
+
+type NotionPage = {
+	properties?: Record<string, NotionPropertyValue>;
+	icon?: { emoji?: string };
+	cover?: { external?: { url?: string } };
+};
+
+type RedisCampaignData = {
+	linkTreeEnabled?: unknown;
+	destination?: unknown;
+	title?: unknown;
+	description?: unknown;
+	details?: unknown;
+	iconEmoji?: unknown;
+	imageUrl?: unknown;
+	category?: unknown;
+	pinned?: unknown;
+	videoUrl?: unknown;
+	files?: unknown;
+};
+
 export type LinkTreeItem = {
 	pageId?: string;
 	slug: string;
@@ -42,36 +76,36 @@ async function fetchFromRedis(): Promise<LinkTreeItem[]> {
 
 	for (const key of keys) {
 		const slug = key.replace("campaign:", "");
-		const data = await redis.hgetall<Record<string, unknown>>(key);
+		const data = await redis.hgetall<RedisCampaignData>(key);
 		if (!data) continue;
-		const enabled = coerceBool((data as any).linkTreeEnabled);
+		const enabled = coerceBool(data.linkTreeEnabled);
 		if (!enabled) continue;
 
-		const destination = String((data as any).destination ?? "");
+		const destination = String(data.destination ?? "");
 		if (!destination) continue;
 
-		const title = (data as any).title ? String((data as any).title) : slug;
-		const description = (data as any).description
-			? String((data as any).description)
+		const title = data.title ? String(data.title) : slug;
+		const description = data.description
+			? String(data.description)
 			: undefined;
-		const details = (data as any).details
-			? String((data as any).details)
+		const details = data.details
+			? String(data.details)
 			: undefined;
-		const iconEmoji = (data as any).iconEmoji
-			? String((data as any).iconEmoji)
+		const iconEmoji = data.iconEmoji
+			? String(data.iconEmoji)
 			: undefined;
-		let imageUrl = (data as any).imageUrl
-			? String((data as any).imageUrl)
+		let imageUrl = data.imageUrl
+			? String(data.imageUrl)
 			: undefined;
-		const category = (data as any).category
-			? String((data as any).category)
+		const category = data.category
+			? String(data.category)
 			: undefined;
-		const pinned = coerceBool((data as any).pinned);
-		let videoUrl = (data as any).videoUrl
-			? String((data as any).videoUrl)
+		const pinned = coerceBool(data.pinned);
+		let videoUrl = data.videoUrl
+			? String(data.videoUrl)
 			: undefined;
 		let files: FileMeta[] | undefined;
-		const filesRaw = (data as any).files;
+		const filesRaw = data.files;
 		if (Array.isArray(filesRaw)) {
 			files = filesRaw as FileMeta[];
 		} else if (typeof filesRaw === "string") {
@@ -149,7 +183,7 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 			.replace(/[^a-z0-9]+/g, "-")
 			.replace(/^-+|-+$/g, "")}`;
 
-	const readRichText = (prop: any): string | undefined => {
+	const readRichText = (prop: NotionPropertyValue | undefined): string | undefined => {
 		try {
 			if (!prop) return undefined;
 			if (prop.type === "rich_text") {
@@ -177,14 +211,62 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		}
 	};
 
+	// Type guard functions for safe property access
+	const isCheckboxProperty = (prop: NotionPropertyValue): prop is { type: "checkbox"; checkbox: boolean } => {
+		return prop.type === "checkbox";
+	};
+
+	const isSelectProperty = (prop: NotionPropertyValue): prop is { type: "select"; select: { name?: string } } => {
+		return prop.type === "select";
+	};
+
+	const isUrlProperty = (prop: NotionPropertyValue): prop is { type: "url"; url: string } => {
+		return prop.type === "url";
+	};
+
+	const isFilesProperty = (prop: NotionPropertyValue): prop is { type: "files"; files: Array<NotionFileObject> } => {
+		return prop.type === "files";
+	};
+
+	const getSelectValue = (prop: NotionPropertyValue | undefined): string | undefined => {
+		if (!prop || !isSelectProperty(prop)) return undefined;
+		return prop.select?.name;
+	};
+
+	const getCheckboxValue = (prop: NotionPropertyValue | undefined): boolean | undefined => {
+		if (!prop || !isCheckboxProperty(prop)) return undefined;
+		return prop.checkbox;
+	};
+
+	const getUrlValue = (prop: NotionPropertyValue | undefined): string | undefined => {
+		if (!prop || !isUrlProperty(prop)) return undefined;
+		return prop.url;
+	};
+
+	const inferKind = (
+		nameOrUrl: string,
+	): { kind: "image" | "video" | "other"; ext?: string } => {
+		try {
+			const m = /\.([a-z0-9]+)(?:$|\?|#)/i.exec(nameOrUrl);
+			const ext = m ? m[1].toLowerCase() : undefined;
+			const img = ["jpg", "jpeg", "png", "gif", "webp", "avif", "svg"];
+			const vid = ["mp4", "webm", "ogg", "mov", "m4v"];
+			if (ext && img.includes(ext)) return { kind: "image", ext };
+			if (ext && vid.includes(ext)) return { kind: "video", ext };
+			return { kind: "other", ext };
+		} catch {
+			return { kind: "other" } as const;
+		}
+	};
+
 	const results: LinkTreeItem[] = [];
-	for (const page of data.results ?? []) {
+	for (const page of (data.results ?? []) as NotionPage[]) {
 		const props = page.properties ?? {};
-		let slug = readRichText((props as any)?.Slug);
-		let destination = readRichText((props as any)?.Destination);
+		let slug = readRichText(props?.Slug);
+		let destination = readRichText(props?.Destination);
 		if (destination && destination.trim().toLowerCase() === "none")
 			destination = "";
-		const titleFromTitle = readRichText((props as any)?.Title);
+		const titleFromTitle = readRichText(props?.Title);
 		const title = titleFromTitle || slug || "";
 		// Fallback: derive slug from Title when Slug is absent
 		if (!slug && titleFromTitle) {
@@ -206,79 +288,64 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 			slug = kebab(titleFromTitle);
 		}
 		const description =
-			readRichText((props as any)?.Description) ??
-			readRichText((props as any)?.Desc);
+			readRichText(props?.Description) ??
+			readRichText(props?.Desc);
 		const details =
-			readRichText((props as any)?.Details) ??
-			readRichText((props as any)?.Detail);
+			readRichText(props?.Details) ??
+			readRichText(props?.Detail);
 		const iconEmoji = page?.icon?.emoji as string | undefined;
 
 		// Image from explicit props or cover
 		let imageUrl: string | undefined;
-		const imageProp = (props as any)?.Image || (props as any)?.Thumbnail;
-		if (imageProp?.type === "url")
-			imageUrl = imageProp.url as string | undefined;
-		if (!imageUrl && imageProp?.type === "rich_text")
-			imageUrl = imageProp.rich_text?.[0]?.plain_text as string | undefined;
-		if (!imageUrl && (page as any)?.cover?.external?.url)
-			imageUrl = (page as any).cover.external.url as string;
+		const imageProp = props?.Image || props?.Thumbnail;
+		if (imageProp && isUrlProperty(imageProp)) {
+			imageUrl = imageProp.url;
+		} else if (imageProp && (imageProp.type === "rich_text" || imageProp.type === "title")) {
+			imageUrl = readRichText(imageProp);
+		}
+		if (!imageUrl && page.cover?.external?.url) {
+			imageUrl = page.cover.external.url;
+		}
 
 		// Link Tree Enabled can be a checkbox or a select with values like "True"/"Yes"/"Enabled"
 		let linkTreeEnabled = false;
-		const lte = props?.["Link Tree Enabled"] as any;
-		if (lte?.type === "checkbox") {
-			linkTreeEnabled = Boolean(lte.checkbox);
-		} else if (lte?.type === "select") {
-			const name = (lte.select?.name ?? "").toString().toLowerCase();
-			linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
-		} else if (lte?.type === "status" && lte.status?.name) {
-			const name = (lte.status.name ?? "").toString().toLowerCase();
-			linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
-		} else if (lte?.type === "rich_text" || lte?.type === "title") {
-			const txt = readRichText(lte) ?? "";
-			const name = txt.toLowerCase();
-			linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
+		const lte = props?.["Link Tree Enabled"];
+		if (lte) {
+			if (isCheckboxProperty(lte)) {
+				linkTreeEnabled = Boolean(lte.checkbox);
+			} else if (isSelectProperty(lte) || (lte.type === "status" && (lte as { status?: { name?: string } }).status?.name)) {
+				const name = isSelectProperty(lte) 
+					? lte.select?.name 
+					: (lte as { status?: { name?: string } }).status?.name;
+				const nameStr = name?.toString().toLowerCase() ?? "";
+				linkTreeEnabled = nameStr === "true" || nameStr === "yes" || nameStr === "enabled";
+			} else if (lte.type === "rich_text" || lte.type === "title") {
+				const txt = readRichText(lte) ?? "";
+				const name = txt.toLowerCase();
+				linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
+			}
 		}
-		if (!linkTreeEnabled && props?.Type?.select?.name === "LinkTree") {
+		if (!linkTreeEnabled && getSelectValue(props?.Type) === "LinkTree") {
 			linkTreeEnabled = true;
 		}
 
 		// Optional metadata
-		const category = props?.Category?.select?.name as string | undefined;
+		const category = getSelectValue(props?.Category);
 		const pinned = Boolean(
-			(props?.Pinned?.checkbox as boolean | undefined) ||
-				(props?.Pinned as any)?.select?.name?.toString().toLowerCase() ===
-					"true",
+			getCheckboxValue(props?.Pinned) ||
+				(getSelectValue(props?.Pinned)?.toLowerCase() === "true")
 		);
 		// Redirect Type: Internal/External
-		const redirectType = (props as any)?.["Redirect Type"]?.select?.name as
-			| string
-			| undefined;
+		const redirectType = getSelectValue(props?.["Redirect Type"]);
 		const redirectExternal =
 			(redirectType ?? "").toString().toLowerCase() === "external";
-		let videoUrl = (props as any)?.Video?.url as string | undefined;
+		let videoUrl = getUrlValue(props?.Video);
 		// Files (support Notion files property named "Media" or "Files")
 		let files: FileMeta[] | undefined;
-		const filesProp =
-			(props as any)?.Media || (props as any)?.Files || (props as any)?.File;
-		const inferKind = (
-			nameOrUrl: string,
-		): { kind: "image" | "video" | "other"; ext?: string } => {
-			try {
-				const m = /\.([a-z0-9]+)(?:$|\?|#)/i.exec(nameOrUrl);
-				const ext = m ? m[1].toLowerCase() : undefined;
-				const img = ["jpg", "jpeg", "png", "gif", "webp", "avif", "svg"];
-				const vid = ["mp4", "webm", "ogg", "mov", "m4v"];
-				if (ext && img.includes(ext)) return { kind: "image", ext };
-				if (ext && vid.includes(ext)) return { kind: "video", ext };
-				return { kind: "other", ext };
-			} catch {
-				return { kind: "other" } as const;
-			}
-		};
-		if (filesProp?.type === "files" && Array.isArray(filesProp.files)) {
+		const filesProp = props?.Media || props?.Files || props?.File;
+		if (filesProp && isFilesProperty(filesProp) && Array.isArray(filesProp.files)) {
 			files = filesProp.files
-				.map((f: any) => {
+				.map((f: NotionFileObject) => {
 					if (f.type === "file") {
 						const url = f.file?.url as string;
 						const meta = inferKind(f.name || url);
