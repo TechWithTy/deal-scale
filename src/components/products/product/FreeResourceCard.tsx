@@ -9,9 +9,10 @@ import {
         DialogTrigger,
 } from "@/components/ui/dialog";
 import type { ProductResource, ProductType } from "@/types/products";
+import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import type { FC } from "react";
-import { useCallback, useState } from "react";
+import { useMemo, useState } from "react";
 
 /** Props for rendering the highlighted free resource card. */
 export interface FreeResourceCardProps {
@@ -20,28 +21,25 @@ export interface FreeResourceCardProps {
 }
 
 const CTA_DOWNLOAD_LABEL = "Download Resource";
-const CTA_EXTERNAL_LABEL = "Get Resource";
-const CTA_DEMO_LABEL = "Watch Demo";
+const CTA_EXTERNAL_LABEL = "Visit Resource";
+const CTA_DEMO_LABEL = "View Demo";
+const CTA_DETAILS_LABEL = "View Details";
 
 const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
         const resource = product.resource;
         const [isDemoOpen, setIsDemoOpen] = useState(false);
+        const productHref = useMemo(() => {
+                if (!product.slug && !product.sku) {
+                        return null;
+                }
+
+                const slugOrSku = product.slug ?? product.sku;
+                return `/products/${slugOrSku}`;
+        }, [product.slug, product.sku]);
 
         if (!resource) {
                 return null;
         }
-
-        const openExternalResource = useCallback(() => {
-                if (resource.type !== "external") {
-                        return;
-                }
-
-                if (typeof window === "undefined") {
-                        return;
-                }
-
-                window.open(resource.url, "_blank", "noopener,noreferrer");
-        }, [resource]);
 
         const renderPrimaryCta = (resourceMeta: ProductResource) => {
                 if (resourceMeta.type === "download") {
@@ -60,13 +58,14 @@ const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
                 }
 
                 return (
-                        <Button
-                                size="lg"
-                                className="w-full"
-                                onClick={openExternalResource}
-                                type="button"
-                        >
-                                {CTA_EXTERNAL_LABEL}
+                        <Button asChild size="lg" className="w-full">
+                                <a
+                                        href={resourceMeta.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                >
+                                        {CTA_EXTERNAL_LABEL}
+                                </a>
                         </Button>
                 );
         };
@@ -83,7 +82,13 @@ const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
                                                 </Badge>
                                         </div>
                                         <h3 className="mb-3 font-semibold text-3xl text-primary">
-                                                {product.name}
+                                                {productHref ? (
+                                                        <Link href={productHref} className="transition hover:text-primary/80">
+                                                                {product.name}
+                                                        </Link>
+                                                ) : (
+                                                        product.name
+                                                )}
                                         </h3>
                                         <p className="max-w-2xl text-base text-foreground/80">
                                                 {product.description}
@@ -121,6 +126,11 @@ const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
                                                                 </div>
                                                         </DialogContent>
                                                 </Dialog>
+                                        )}
+                                        {productHref && (
+                                                <Button variant="ghost" size="lg" asChild>
+                                                        <Link href={productHref}>{CTA_DETAILS_LABEL}</Link>
+                                                </Button>
                                         )}
                                 </div>
                         </div>
