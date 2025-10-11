@@ -125,4 +125,6 @@ export interface ProductType {
         agent?: AgentConfig;
         /** Optional metadata for linked or downloadable free resources. */
         resource?: ProductResource;
+        /** When true, the product should appear in the featured free-resource rail. */
+        isFeaturedFreeResource?: boolean;
 }
