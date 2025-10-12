@@ -71,6 +71,33 @@ export async function GET(request: NextRequest) {
 		};
 		const dayKeyUTC = (ms: number) => new Date(ms).toISOString().slice(0, 10); // YYYY-MM-DD
 		const isFutureByDay = (ms: number) => dayKeyUTC(ms) > dayKeyUTC(Date.now());
+                const ensurePublishedAt = <T extends Record<string, unknown>>(post: T): T => {
+                        if (!post || typeof post !== "object") return post;
+                        const typed = post as Record<string, unknown> & {
+                                published_at?: unknown;
+                                publish_date?: unknown;
+                                displayed_date?: unknown;
+                                created?: unknown;
+                        };
+                        const current = typed.published_at;
+                        if (
+                                current !== undefined &&
+                                current !== null &&
+                                `${current}`.length > 0
+                        ) {
+                                return post;
+                        }
+                        const fallbackSource =
+                                typed.publish_date ?? typed.displayed_date ?? typed.created;
+                        const ms = toTime(fallbackSource);
+                        if (ms > 0) {
+                                return {
+                                        ...post,
+                                        published_at: new Date(ms).toISOString(),
+                                } as T;
+                        }
+                        return post;
+                };
 		// Debug: print today's timestamp in Beehiiv format (unix seconds)
 		try {
 			const todayUnixSeconds = Math.floor(Date.now() / 1000);
@@ -142,10 +169,15 @@ export async function GET(request: NextRequest) {
 					const isFuture = isFutureByDay(ts);
 					return s !== "draft" && !hidden && (includeScheduled || !isFuture);
 				});
+				const normalizedVisible = visiblePosts.map((post) =>
+					ensurePublishedAt(post as Record<string, unknown>),
+				);
 				if (limit && Number.isFinite(limit) && limit > 0) {
-					const sliced = visiblePosts.slice(0, limit);
-					const sorted = (sliced as any[]).sort(
-						(a, b) => toTime(b?.published_at) - toTime(a?.published_at),
+					const sliced = normalizedVisible.slice(0, limit);
+					const sorted = [...sliced].sort(
+						(a, b) =>
+							toTime((b as any)?.published_at) -
+							toTime((a as any)?.published_at),
 					);
 					return NextResponse.json({
 						data: sorted,
@@ -175,8 +207,12 @@ export async function GET(request: NextRequest) {
 				const isFuture = isFutureByDay(ts);
 				return s !== "draft" && !hidden && (includeScheduled || !isFuture);
 			});
-			const sorted = filtered.sort(
-				(a, b) => toTime(b?.published_at) - toTime(a?.published_at),
+			const normalized = filtered.map((post) =>
+				ensurePublishedAt(post as Record<string, unknown>),
+			);
+			const sorted = [...normalized].sort(
+				(a, b) =>
+					toTime((b as any)?.published_at) - toTime((a as any)?.published_at),
 			);
 			return NextResponse.json({
 				data: sorted,
@@ -271,7 +307,11 @@ export async function GET(request: NextRequest) {
 					const isFuture = isFutureByDay(ts);
 					return s !== "draft" && !hidden && (includeScheduled || !isFuture);
 				});
-				filteredStream.push(...visible);
+				filteredStream.push(
+					...visible.map((post) =>
+						ensurePublishedAt(post as Record<string, unknown>),
+					),
+				);
 				// Once we have enough to fill the requested page, we can stop early
 				if (filteredStream.length >= desiredEnd) break;
 				// Stop if we've reached the end
@@ -284,18 +324,20 @@ export async function GET(request: NextRequest) {
 				if (pagesTotal && p >= pagesTotal) break;
 			}
 
-			const pageSlice = filteredStream
-				.slice(desiredStart, desiredEnd)
-				.sort((a, b) => toTime(b?.published_at) - toTime(a?.published_at));
+			const pageSlice = filteredStream.slice(desiredStart, desiredEnd);
+			const sortedSlice = [...pageSlice].sort(
+				(a, b) =>
+					toTime((b as any)?.published_at) - toTime((a as any)?.published_at),
+			);
 
 			// If total_pages known, compute visible total pages based on filtered count (approx unless we fetched all pages)
 			const visibleTotal = filteredStream.length; // note: could be undercount if we stopped early before the requested page far ahead
 			const meta = {
-				total: pageSlice.length,
+				total: sortedSlice.length,
 				total_pages: total_pages,
 				total_results: visibleTotal,
 			};
-			return NextResponse.json({ data: pageSlice, meta });
+			return NextResponse.json({ data: sortedSlice, meta });
 		}
 	} catch (error) {
 		console.error("[API] Error fetching Beehiiv posts:", error);
