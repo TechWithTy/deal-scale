@@ -84,6 +84,14 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 		3: "md:row-span-3",
 	};
 
+	const clampSpan = (span: number | undefined, max: number) => {
+		if (!span || span < 1) {
+			return 1;
+		}
+
+		return span > max ? max : span;
+	};
+
 	const heroGrid = grid.length > 0 ? grid : DEFAULT_GRID;
 
 	return (
@@ -98,86 +106,55 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 				{subheadline}
 			</p>
 			{/* Bento Grid Layout */}
-			<div className="mb-0 grid grid-cols-1 gap-4 sm:auto-rows-[minmax(220px,1fr)] sm:grid-cols-2 md:auto-rows-[minmax(0,1fr)] md:grid-cols-4 lg:auto-rows-[minmax(0,1.1fr)] lg:gap-5 xl:auto-rows-[minmax(0,1.15fr)] md:[grid-template-rows:repeat(2,minmax(0,1fr))]">
-				{/* First 4 items: Bento layout with col/row span */}
-				{heroGrid.slice(0, 4).map((item) => (
-					<button
-						key={item.label}
-						className={cn(
-							"group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-							"aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
-							colSpanClassMap[item.colSpan ?? 1],
-							rowSpanClassMap[item.rowSpan ?? 1],
-						)}
-						onClick={() => handleCategorySelect(item.categoryId)}
-						type="button"
-						aria-label={item.ariaLabel || item.label}
-						tabIndex={0}
-						onKeyDown={handleKeyDown(item.link)}
-						data-hero-card
-					>
-						<img
-							src={item.src}
-							alt={item.alt}
-							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-							draggable={false}
-						/>
-						<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4">
-							<div className="text-white">
-								<h3
-									className="mb-1.5 font-bold text-lg leading-tight transition-colors duration-200 [text-shadow:0_2px_4px_rgba(0,0,0,0.5)] hover:text-accent md:text-xl"
-									title={
-										categories.some((c) => c.id === item.categoryId)
-											? `Filter by ${item.label}`
-											: `No category '${item.label}'`
-									}
-								>
-									{item.label}
-								</h3>
-								{item.description && (
-									<p className="text-sm text-white/95 leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.8)] md:text-base">
-										{item.description}
-									</p>
-								)}
+			<div className="mb-0 grid grid-flow-dense grid-cols-1 gap-4 sm:auto-rows-[minmax(220px,1fr)] sm:grid-cols-2 md:auto-rows-[minmax(240px,1fr)] md:grid-cols-4 lg:auto-rows-[minmax(260px,1fr)] lg:gap-5 xl:auto-rows-[minmax(280px,1fr)]">
+				{heroGrid.map((item) => {
+					const normalizedColSpan = clampSpan(item.colSpan, 4);
+					const normalizedRowSpan = clampSpan(item.rowSpan, 3);
+
+					return (
+						<button
+							key={item.label}
+							className={cn(
+								"group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+								"aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
+								colSpanClassMap[normalizedColSpan],
+								rowSpanClassMap[normalizedRowSpan],
+							)}
+							onClick={() => handleCategorySelect(item.categoryId)}
+							type="button"
+							aria-label={item.ariaLabel || item.label}
+							tabIndex={0}
+							onKeyDown={handleKeyDown(item.link)}
+							data-hero-card
+						>
+							<img
+								src={item.src}
+								alt={item.alt}
+								className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+								draggable={false}
+							/>
+							<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4">
+								<div className="text-white">
+									<h3
+										className="mb-1.5 font-bold text-lg leading-tight transition-colors duration-200 [text-shadow:0_2px_4px_rgba(0,0,0,0.5)] hover:text-accent md:text-xl"
+										title={
+											categories.some((c) => c.id === item.categoryId)
+												? `Filter by ${item.label}`
+												: `No category '${item.label}'`
+										}
+									>
+										{item.label}
+									</h3>
+									{item.description && (
+										<p className="text-sm text-white/95 leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.8)] md:text-base">
+											{item.description}
+										</p>
+									)}
+								</div>
 							</div>
-						</div>
-					</button>
-				))}
-				{/* Remaining items: Standard 1x1 grid squares */}
-				{heroGrid.slice(4).map((item) => (
-					<button
-						key={item.label}
-						className={cn(
-							"group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-							"aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
-						)}
-						onClick={() => handleCategorySelect(item.categoryId)}
-						type="button"
-						aria-label={item.ariaLabel || item.label}
-						tabIndex={0}
-						onKeyDown={handleKeyDown(item.link)}
-						data-hero-card
-					>
-						<img
-							src={item.src}
-							alt={item.alt}
-							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-							draggable={false}
-						/>
-						<div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 opacity-100 transition-opacity duration-300">
-							<div className="w-full">
-								<h3 className="mb-1.5 font-bold text-lg text-white [text-shadow:0_2px_4px_rgba(0,0,0,0.5)] md:text-xl">
-									{item.label}
-								</h3>
-								{item.description && (
-									<p className="text-sm text-white/95 [text-shadow:0_1px_2px_rgba(0,0,0,0.8)] md:text-base">
-										{item.description}
-									</p>
-								)}
-							</div>
-						</div>
-					</button>
-				))}
+						</button>
+					);
+				})}
 			</div>
 
 			<div className="glow relative mx-auto my-5 max-w-2xl overflow-hidden rounded-2xl bg-card p-8 text-card-foreground shadow-lg">
