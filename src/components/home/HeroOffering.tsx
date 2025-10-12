@@ -1,5 +1,6 @@
 import SafeMotionDiv from "@/components/ui/SafeMotionDiv";
 import SplineModel from "@/components/ui/spline-model";
+import { cn } from "@/lib/utils";
 import Image, { type StaticImageData } from "next/image";
 import type React from "react";
 
@@ -22,23 +23,21 @@ export const HeroOffering: React.FC<HeroOfferingProps> = ({
 	isMobile,
 	className,
 }) => {
-	// Helper: type guard for Next.js <Image /> src
 	const isImageSrc = (img: unknown): img is string | StaticImageData =>
 		typeof img === "string" ||
 		(typeof img === "object" && img !== null && "src" in img);
 
 	return (
 		<div
-			className={[
+			className={cn(
+				"flex w-full items-center justify-center",
 				isMobile
-					? "flex items-center justify-center sm:h-[400px] md:h-[450px]"
-					: "flex h-[350px] items-center justify-center sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]",
+					? "py-6"
+					: "min-h-[340px] sm:min-h-[400px] md:min-h-[460px] lg:min-h-[520px]",
 				className,
-			]
-				.filter(Boolean)
-				.join(" ")}
+			)}
 		>
-			<div className="flex h-full w-full items-center justify-center">
+			<div className="relative mx-auto flex h-full w-full max-w-[18rem] items-center justify-center sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl">
 				{image ? (
 					isImageSrc(image) ? (
 						<SafeMotionDiv
@@ -51,19 +50,18 @@ export const HeroOffering: React.FC<HeroOfferingProps> = ({
 								duration: 0.8,
 							}}
 						>
-							<div className="flex items-center justify-center p-0">
-								<Image
-									src={image}
-									alt={imageAlt || "Hero Offering"}
-									className="h-[340px] w-[340px] rounded-xl object-contain sm:h-[500px] sm:w-[500px] md:h-[600px] md:w-[600px] lg:h-[700px] lg:w-[700px] xl:h-[800px] xl:w-[800px] 2xl:h-[900px] 2xl:w-[900px]"
-									style={{
-										filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
-									}}
-									width={800}
-									height={800}
-									priority
-								/>
-							</div>
+							<Image
+								src={image}
+								alt={imageAlt || "Hero Offering"}
+								className="h-auto w-full rounded-xl object-contain"
+								style={{
+									filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
+								}}
+								sizes="(min-width: 1280px) 40vw, (min-width: 768px) 55vw, 90vw"
+								width={800}
+								height={800}
+								priority
+							/>
 						</SafeMotionDiv>
 					) : (
 						<SafeMotionDiv
