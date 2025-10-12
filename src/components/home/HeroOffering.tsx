@@ -50,18 +50,19 @@ export const HeroOffering: React.FC<HeroOfferingProps> = ({
 								duration: 0.8,
 							}}
 						>
-							<Image
-								src={image}
-								alt={imageAlt || "Hero Offering"}
-								className="h-auto w-full rounded-xl object-contain"
-								style={{
-									filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
-								}}
-								sizes="(min-width: 1280px) 40vw, (min-width: 768px) 55vw, 90vw"
-								width={800}
-								height={800}
-								priority
-							/>
+                                <div className="flex w-full max-w-sm items-center justify-center p-0 sm:max-w-md md:max-w-lg">
+                                        <Image
+                                                src={image}
+                                                alt={imageAlt || "Hero Offering"}
+                                                className="h-auto w-full max-w-xs rounded-xl object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl"
+                                                style={{
+                                                        filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
+                                                }}
+									width={800}
+									height={800}
+									priority
+								/>
+							</div>
 						</SafeMotionDiv>
 					) : (
 						<SafeMotionDiv
