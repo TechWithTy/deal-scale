@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Search Any Property",
+  "subtitle": "Enter any US address to get started.",
+  "description": "Look up any single-family home, condo, or multi-family building in our nationwide database of over 140 million properties.",
+  "icon": "Search",
+  "label": "Step 1: Search Property",
+  "positionLabel": "bottom",
+  "payload": []
+}

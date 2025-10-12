@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Configure Your Agent",
+  "subtitle": "Define your qualification script and business rules in minutes.",
+  "description": "Use our simple interface to customize the questions your AI will ask, define what makes a lead qualified, and set rules for call routing and appointment booking.",
+  "icon": "SlidersHorizontal",
+  "label": "Step 1: Configure Agent",
+  "positionLabel": "bottom",
+  "payload": []
+}

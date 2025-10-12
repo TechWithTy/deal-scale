@@ -1,0 +1,10 @@
+{
+  "stepNumber": 5,
+  "title": "Actionable Insights & Handoff",
+  "subtitle": "Monitor results and escalate hot leads.",
+  "description": "Track campaign performance, delivery rates, and engagement. Hot leads identified by the AI can be automatically flagged, synced to your CRM, or trigger notifications for your team to take over with a call or personalized follow-up.",
+  "icon": "PieChart",
+  "label": "Step 5: Analytics & Conversion",
+  "positionLabel": "bottom",
+  "payload": []
+}

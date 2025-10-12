@@ -22,3 +22,6 @@ lerna-debug.log*
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
+
+# Ignore content folder (generated data)
+**/content/**

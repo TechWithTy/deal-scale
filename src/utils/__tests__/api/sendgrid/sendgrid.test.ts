@@ -1,3 +1,8 @@
+jest.mock("@/lib/externalRequests/sendgrid", () => ({
+	sendMail: jest.fn().mockResolvedValue(202),
+	sendMailHtml: jest.fn().mockResolvedValue(202),
+}));
+
 import * as sendgrid from "@/lib/externalRequests/sendgrid";
 import sgMail from "@sendgrid/mail";
 

@@ -1,0 +1,16 @@
+{
+  "id": 4,
+  "name": "Charming Victorian House",
+  "address": "101 Pine St, Boulder, CO",
+  "price": 850000,
+  "bedrooms": 3,
+  "bathrooms": 2.5,
+  "sqft": 2200,
+  "lat": 40.015,
+  "lng": -105.2705,
+  "zipcode": "80302",
+  "rent": 4000,
+  "propertyType": "Single Family",
+  "yearBuilt": 1905,
+  "hoaFee": null
+}

@@ -30,8 +30,8 @@ export type LinkCardProps = {
 };
 
 export function LinkCard({
-	title,
-	href,
+        title,
+        href,
 	description,
 	iconEmoji,
 	imageUrl,
@@ -129,3 +129,5 @@ export function LinkCard({
 		</a>
 	);
 }
+
+export default LinkCard;

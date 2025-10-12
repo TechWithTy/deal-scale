@@ -1,0 +1,10 @@
+{
+  "stepNumber": 2,
+  "title": "Craft AI-Powered Campaigns",
+  "subtitle": "Design your SMS messaging strategy with AI assistance.",
+  "description": "Develop your SMS templates with AI suggestions for personalization tokens (like name, property address). Define conversation flows and how the AI should respond to different keyword triggers or questions.",
+  "icon": "Pencil",
+  "label": "Step 2: Campaign Design",
+  "positionLabel": "bottom",
+  "payload": []
+}

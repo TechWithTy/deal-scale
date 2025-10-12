@@ -15,12 +15,12 @@ import {
 	signUpFormFields,
 	signUpSchema,
 } from "@/data/contact/authFormFields";
+import { fetchUserDisplayName } from "@/lib/auth/user-display-name";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { fetchUserDisplayName } from "@/lib/auth/user-display-name";
 import { createFieldProps, renderFormField } from "./formFieldHelpers";
 
 /**

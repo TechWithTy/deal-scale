@@ -1,0 +1,53 @@
+{
+  "id": "ab-test-doc-pack-v1",
+  "name": "Document Template Pack Copy Test",
+  "description": "Testing copy variants (Speed vs. Security) for the Document Template Pack to optimize for downloads.",
+  "variants": [
+    {
+      "name": "V1 - Speed & Efficiency",
+      "percentage": 50,
+      "copy": {
+        "cta": "Get Your Templates Now",
+        "buttonCta": "Instant Download",
+        "tagline": "Stop Drafting. Start Closing.",
+        "subtitle": "Get instant access to all the real estate contracts and letters you need to close deals faster.",
+        "whatsInItForMe": "This saves you hours of frustrating guesswork and expensive legal fees. Use professional-grade documents immediately.",
+        "target_audience": "Investors and agents who need to create legally-sound documents without delays.",
+        "pain_point": "Creating contracts from scratch is slow, risky, and a major bottleneck to closing a deal.",
+        "solution": "Our template pack provides instant access to a complete set of customizable documents, letting you secure deals in minutes, not days.",
+        "highlights": [
+          "Close deals faster",
+          "Save on legal fees",
+          "Fully customizable templates"
+        ]
+      }
+    },
+    {
+      "name": "V2 - Professional & Secure",
+      "percentage": 50,
+      "copy": {
+        "cta": "Secure Your Deals Today",
+        "buttonCta": "Get Protected",
+        "tagline": "Close Deals with Confidence.",
+        "subtitle": "Use our complete set of real estate contracts to look professional and protect your interests in every transaction.",
+        "whatsInItForMe": "This ensures you look credible and are legally protected, giving you peace of mind in every deal you make.",
+        "target_audience": "Investors who want to ensure they are legally protected and look professional to sellers and partners.",
+        "pain_point": "Using unprofessional or incomplete documents undermines your credibility and exposes you to unnecessary legal risks.",
+        "solution": "Our comprehensive template pack ensures you have the right, professional document for every situation, safeguarding your business.",
+        "highlights": [
+          "Protect your business",
+          "Look credible & professional",
+          "Includes all essential contracts"
+        ]
+      }
+    }
+  ],
+  "startDate": "2023-11-01T09:00:00.000Z",
+  "isActive": true,
+  "tags": [
+    "Essentials",
+    "Digital Product",
+    "Copywriting",
+    "Contracts"
+  ]
+}

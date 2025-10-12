@@ -13,8 +13,10 @@ describe("getServiceSeo", () => {
 
 		const seo = getServiceSeo(mockService);
 
-		expect(seo.title).toBe("AI Inbound Agent | Features | Deal Scale");
-		expect(seo.description).toBe("AI Inbound Agent | Features | Deal Scale");
+		expect(seo.title).toBe("AI Inbound Agent | Services | Deal Scale");
+		expect(seo.description).toBe(
+			mockService.description ?? defaultSeo.description,
+		);
 		expect(seo.canonical).toBe(
 			"https://dealscale.io/features/ai-inbound-agent",
 		);

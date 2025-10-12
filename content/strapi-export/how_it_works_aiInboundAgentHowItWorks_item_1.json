@@ -1,0 +1,11 @@
+{
+  "stepNumber": 2,
+  "title": "AI Answers Inbound Calls",
+  "subtitle": "Instant, 24/7 Call Pickup",
+  "description": "When a lead calls your number, the AI Inbound Agent answers immediately using a natural, human-like voice.",
+  "icon": "Phone",
+  "label": "AI Answers 24/7",
+  "positionLabel": "left-[125px] top-[-5px]",
+  "payload": [],
+  "indicator": "line"
+}

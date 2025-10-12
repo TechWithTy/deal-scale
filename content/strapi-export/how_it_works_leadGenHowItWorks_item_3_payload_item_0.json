@@ -1,0 +1,5 @@
+{
+  "name": "Campaign Automation",
+  "value": 100,
+  "fill": "hsl(var(--success))"
+}

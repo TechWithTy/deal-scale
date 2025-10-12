@@ -5,6 +5,10 @@
 import { getTestBaseUrl } from "@/utils/env";
 import axios from "axios";
 import { AxiosError } from "axios";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 
 // Helper to get the base URL for testing
 const BASE_URL = getTestBaseUrl();
@@ -104,7 +108,8 @@ async function deleteIntent(intentId: string) {
 	}
 }
 
-describe("[E2E] Stripe Payment Intent CRUD Flow", () => {
+skipExternalTest("[E2E] Stripe Payment Intent CRUD Flow");
+describeIfExternal("[E2E] Stripe Payment Intent CRUD Flow", () => {
 	let intentId: string;
 	const testPrice = 1234;
 	const updatedPrice = 2345;

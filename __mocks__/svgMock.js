@@ -1,2 +1,5 @@
-module.exports = "SvgMock";
-module.exports.ReactComponent = "svg";
+module.exports = {
+        __esModule: true,
+        default: "SvgMock",
+        ReactComponent: "svg",
+};

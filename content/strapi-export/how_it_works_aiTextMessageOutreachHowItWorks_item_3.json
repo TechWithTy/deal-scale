@@ -1,0 +1,10 @@
+{
+  "stepNumber": 4,
+  "title": "AI-Managed Two-Way Conversations",
+  "subtitle": "AI handles initial replies and qualifies leads.",
+  "description": "When prospects reply, our AI engages in natural, two-way SMS conversations. It can answer FAQs, gather more information, qualify leads based on your criteria, and identify buying/selling intent.",
+  "icon": "MessageSquare",
+  "label": "Step 4: AI Conversation",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 4,
+  "title": "Intelligent Action: Schedule or Transfer",
+  "subtitle": "Qualified leads are either booked or hot-transferred.",
+  "description": "Based on the qualification outcome and your rules: sales-ready leads are automatically scheduled into your team's calendar, OR the AI initiates an immediate hot transfer to connect the lead with a live sales agent.",
+  "icon": "CalendarCheck",
+  "label": "Step 4: Book or Transfer",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 3,
+  "title": "Analyze Market Trends",
+  "subtitle": "Understand the health of the local rental market.",
+  "description": "Go deeper by viewing historical rent trends, average days on market, and key statistics for the property's zip code to validate your investment strategy.",
+  "icon": "PieChart",
+  "label": "Step 3: Analyze Market",
+  "positionLabel": "bottom",
+  "payload": []
+}

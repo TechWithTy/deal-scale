@@ -1,0 +1,12 @@
+{
+  "id": 1,
+  "name": "David Chen",
+  "role": "Acquisitions Manager",
+  "content": "We were losing deals to voicemail after 5 PM. The AI bot now catches them all. It qualified a seller at 9 PM on a Tuesday, and the appointment was on my calendar when I woke up. That single deal paid for the service for years to come.",
+  "problem": "Our team couldn't answer calls 24/7, causing high-value leads from our marketing to go to voicemail and get lost after business hours.",
+  "solution": "Deal Scale's AI answers every call, day or night. It successfully captured and qualified a motivated seller lead late in the evening, directly leading to a closed deal we would have otherwise missed.",
+  "image": "/testimonials/david-chen.jpg",
+  "rating": 5,
+  "company": "Prime Equity Partners",
+  "companyLogo": "/logos/prime-equity-logo.svg"
+}

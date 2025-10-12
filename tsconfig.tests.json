@@ -1,0 +1,24 @@
+{
+        "extends": "./tsconfig.app.json",
+        "compilerOptions": {
+                "types": ["jest", "@testing-library/jest-dom"],
+                "noEmit": true
+        },
+        "include": [
+                "src",
+                "tests",
+                "**/__tests__/**/*.ts",
+                "**/__tests__/**/*.tsx",
+                "**/__tests__/**/*.mts",
+                "**/__tests__/**/*.cts",
+                "**/*.test.ts",
+                "**/*.test.tsx",
+                "**/*.spec.ts",
+                "**/*.spec.tsx",
+                "src/types/jest-dom.d.ts",
+                "jest.config.js",
+                "jest.setup.js",
+                "jest.env.js"
+        ],
+        "exclude": []
+}

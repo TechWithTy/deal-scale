@@ -1,7 +1,14 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pause, Play } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from "react";
 import type { MutableRefObject } from "react";
 import type React from "react";
 import FeatureCard from "./FeatureCard";
@@ -54,7 +61,11 @@ const FeaturesList = ({
 	});
 
 	const manualHold = useMemo(
-		() => holdReasons.hover || holdReasons.pointer || holdReasons.touch || holdReasons.details,
+		() =>
+			holdReasons.hover ||
+			holdReasons.pointer ||
+			holdReasons.touch ||
+			holdReasons.details,
 		[holdReasons],
 	);
 
@@ -64,7 +75,9 @@ const FeaturesList = ({
 
 	const updateHoldReason = useCallback(
 		(reason: keyof typeof holdReasons, value: boolean) => {
-			setHoldReasons((prev) => (prev[reason] === value ? prev : { ...prev, [reason]: value }));
+			setHoldReasons((prev) =>
+				prev[reason] === value ? prev : { ...prev, [reason]: value },
+			);
 		},
 		[],
 	);

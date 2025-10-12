@@ -1,0 +1,11 @@
+{
+  "src": "products/coins.png",
+  "alt": "AI , Lead & Skip Tracing Credits for Real Estate",
+  "label": "Credits (AI & Skip Tracing)",
+  "categoryId": "credits",
+  "description": "Power your AI agents and instantly find owner contact info.",
+  "link": "/products/credits",
+  "ariaLabel": "View all credits for AI and skip tracing",
+  "colSpan": 2,
+  "rowSpan": 1
+}

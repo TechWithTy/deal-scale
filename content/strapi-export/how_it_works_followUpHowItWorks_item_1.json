@@ -1,0 +1,22 @@
+{
+  "stepNumber": 2,
+  "title": "Automate the Follow-Up",
+  "subtitle": "Solve the #1 Tech Challenge",
+  "description": "Our AI agents take over the entire lead nurturing process, ensuring every lead gets persistent, intelligent, and timely follow-up without any manual work.",
+  "icon": "RefreshCw",
+  "label": "AI Follow-Up",
+  "positionLabel": "left-[120px] top-[5px]",
+  "payload": [
+    {
+      "name": "Follow-Up Rate",
+      "value": 97,
+      "fill": "hsl(var(--accent))"
+    },
+    {
+      "name": "Timeliness",
+      "value": 92,
+      "fill": "hsl(var(--muted))"
+    }
+  ],
+  "indicator": "line"
+}

@@ -3,13 +3,18 @@ jest.setTimeout(20000); // * Increase timeout for slow integration tests
 import { useNewsletterSubscribers } from "@/hooks/beehiiv/use-news-letter-subscribers";
 import type { Subscriber } from "@/types/behiiv";
 import { act, renderHook } from "@testing-library/react";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 process.env.API_BASE_URL = "http://localhost:3000";
 /**
  * Integration test for exercising the full CRUD flow of Beehiiv subscribers.
  * This test will create a real subscriber via the API, read it, update it (if possible), delete it, and confirm deletion.
  * Only run this in a safe test environment!
  */
-describe("Beehiiv CRUD flow (integration)", () => {
+skipExternalTest("Beehiiv CRUD flow (integration)");
+describeIfExternal("Beehiiv CRUD flow (integration)", () => {
 	// Use a unique test email to avoid conflicts
 	const testEmail = `test-e2e+${Date.now()}@example.com`;
 	let subscriberId: string | null = null;

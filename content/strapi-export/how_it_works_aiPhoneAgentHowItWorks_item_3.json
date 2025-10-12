@@ -1,0 +1,11 @@
+{
+  "stepNumber": 4,
+  "title": "Get Sales-Ready Appointments",
+  "subtitle": "Appointments & Hot Transfers",
+  "description": "Once a lead is qualified, the AI either books an appointment directly on your calendar or initiates a live hot-transfer phone call to you.",
+  "icon": "RocketLaunch",
+  "label": "Secure Appointment",
+  "positionLabel": "left-[130px] top-[10px]",
+  "payload": [],
+  "indicator": "dot"
+}

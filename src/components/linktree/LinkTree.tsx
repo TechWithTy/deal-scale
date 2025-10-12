@@ -1,7 +1,8 @@
 "use client";
+import { NewsletterFooter } from "@/components/contact/newsletter/NewsletterFooter";
 import type { LinkTreeItem } from "@/utils/linktree-redis";
 import * as React from "react";
-import { LinkCard } from "./LinkCard";
+import LinkCard from "./LinkCard";
 import { groupItems } from "./tree/grouping";
 import { resolveLink } from "./tree/linkResolution";
 
@@ -136,12 +137,12 @@ export function LinkTree({
 				/>
 			</div>
 
-			{displayItems.length === 0 ? (
-				<div className="rounded-xl border bg-card p-6 text-center text-card-foreground">
-					<p className="font-medium">No links yet</p>
-					<p className="mt-1 text-muted-foreground text-sm">
-						Links marked as "Link Tree Enabled" will appear here after syncing.
-					</p>
+                        {displayItems.length === 0 ? (
+                                <div className="rounded-xl border bg-card p-6 text-center text-card-foreground">
+                                        <p className="font-medium">No links yet</p>
+                                        <p className="mt-1 text-muted-foreground text-sm">
+                                                Links marked as "Link Tree Enabled" will appear here after syncing.
+                                        </p>
 				</div>
 			) : (
 				<div className="max-h-[70vh] overflow-y-auto pr-1">
@@ -210,10 +211,17 @@ export function LinkTree({
 									})}
 								</div>
 							</section>
-						))}
-					</div>
-				</div>
-			)}
-		</div>
-	);
+                                                ))}
+                                        </div>
+                                </div>
+                        )}
+
+                        <section className="mt-10 space-y-4">
+                                <h2 className="text-center font-semibold text-xl">
+                                        Subscribe to our newsletter
+                                </h2>
+                                <NewsletterFooter />
+                        </section>
+                </div>
+        );
 }

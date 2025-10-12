@@ -1,0 +1,19 @@
+{
+  "name": "V1 - Visual Tracking",
+  "percentage": 50,
+  "copy": {
+    "cta": "Visualize Your Pipeline",
+    "buttonCta": "Get the Board",
+    "tagline": "See Your Entire Deal Flow.",
+    "subtitle": "A clear, Kanban-style board in Notion to visually track every deal from lead to close.",
+    "whatsInItForMe": "Get a high-level view of your entire pipeline in seconds, so you instantly know where every deal stands.",
+    "target_audience": "Founders and sales teams who want a simple, visual way to manage their opportunities.",
+    "pain_point": "Deals are falling through the cracks because you can't easily see the status of your entire pipeline.",
+    "solution": "Our Kanban-style board gives you a crystal-clear, visual overview of your deal stages, ensuring nothing gets missed.",
+    "highlights": [
+      "Visualize every deal",
+      "Drag-and-drop simplicity",
+      "Never lose a lead again"
+    ]
+  }
+}

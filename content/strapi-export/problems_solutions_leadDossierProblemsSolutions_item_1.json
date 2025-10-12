@@ -1,0 +1,4 @@
+{
+  "problem": "I found a lead's social profile, but it's sparse on actionable information.",
+  "solution": "Our tool doesn't just find profiles; it parses the page content, extracting personal info, links to other websites, and other key details to enrich the lead profile."
+}

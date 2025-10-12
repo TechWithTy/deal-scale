@@ -1,0 +1,4 @@
+{
+  "problem": "A lead uses different usernames across different platforms, making it impossible to see their full picture.",
+  "solution": "Our system's recursive search connects the dots. It finds a new username on one profile and automatically starts a new search for that name, linking disparate accounts together."
+}

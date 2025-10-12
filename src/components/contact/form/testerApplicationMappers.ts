@@ -16,7 +16,9 @@ const sanitizeArray = (values?: string[] | null): string[] => {
 	if (!Array.isArray(values)) {
 		return [];
 	}
-	return values.map((value) => value.trim()).filter((value) => value.length > 0);
+	return values
+		.map((value) => value.trim())
+		.filter((value) => value.length > 0);
 };
 
 export const mapBetaTesterApplication = (

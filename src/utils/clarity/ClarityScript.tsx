@@ -25,14 +25,39 @@ export function MicrosoftClarityScript({ projectId }: { projectId?: string }) {
 
 	// Initialize via official package API once on mount
 	useEffect(() => {
-		try {
-			Clarity.init(id);
-		} catch (e) {
-			if (process.env.NODE_ENV !== "production") {
-				// eslint-disable-next-line no-console
-				console.warn("Clarity: init failed", e);
+		let cancelled = false;
+
+		const initialize = () => {
+			if (cancelled) return;
+			try {
+				Clarity.init(id);
+			} catch (e) {
+				if (process.env.NODE_ENV !== "production") {
+					// eslint-disable-next-line no-console
+					console.warn("Clarity: init failed", e);
+				}
+			}
+		};
+
+		if (typeof window !== "undefined") {
+			if ("requestIdleCallback" in window) {
+				window.requestIdleCallback(initialize, { timeout: 1500 });
+			} else {
+				// Use type assertion to handle browser vs Node.js differences
+				(globalThis as typeof globalThis & { __clarityTimeout?: number }).__clarityTimeout =
+					globalThis.setTimeout(initialize, 800) as unknown as number;
 			}
 		}
+
+		return () => {
+			cancelled = true;
+			if (typeof window !== "undefined") {
+				const timeout = (globalThis as any).__clarityTimeout;
+				if (timeout) {
+					window.clearTimeout(timeout);
+				}
+			}
+		};
 	}, [id]);
 
 	return null;

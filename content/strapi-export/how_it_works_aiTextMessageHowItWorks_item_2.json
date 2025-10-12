@@ -1,0 +1,10 @@
+{
+  "stepNumber": 3,
+  "title": "Two-Way Conversation",
+  "subtitle": "The AI engages leads in natural, back-and-forth dialogue.",
+  "description": "This isn't a simple auto-responder. The AI understands responses, asks follow-up questions, and intelligently navigates the conversation to qualify the lead based on your script.",
+  "icon": "BrainCircuit",
+  "label": "Step 3: AI Qualifies",
+  "positionLabel": "bottom",
+  "payload": []
+}

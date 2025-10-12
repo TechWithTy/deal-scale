@@ -1,0 +1,16 @@
+{
+  "id": 2,
+  "name": "Spacious Suburban Home",
+  "address": "456 Oak Ave, Aurora, CO",
+  "price": 650000,
+  "bedrooms": 4,
+  "bathrooms": 3,
+  "sqft": 2500,
+  "lat": 39.7294,
+  "lng": -104.8319,
+  "zipcode": "80012",
+  "rent": 3200,
+  "propertyType": "Single Family",
+  "yearBuilt": 1998,
+  "hoaFee": null
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 1,
+  "title": "Lead List & Campaign Setup",
+  "subtitle": "Import leads and define your qualification & scheduling rules.",
+  "description": "Upload your outbound lead lists. Configure your ideal prospect profile, key qualification questions, AI conversation scripts (for calls & SMS), and rules for appointment scheduling or hot transfers.",
+  "icon": "UploadCloud",
+  "label": "Step 1: Configure Campaign",
+  "positionLabel": "bottom",
+  "payload": []
+}

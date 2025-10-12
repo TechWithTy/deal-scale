@@ -183,10 +183,14 @@ export const authOptions: NextAuthOptions = {
 
 			const baseUrl =
 				process.env.NEXTAUTH_URL ??
-				(process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+				(process.env.VERCEL_URL
+					? `https://${process.env.VERCEL_URL}`
+					: undefined);
 
 			if (!baseUrl) {
-				console.warn("Missing NEXTAUTH_URL or VERCEL_URL; skipping social credential sync");
+				console.warn(
+					"Missing NEXTAUTH_URL or VERCEL_URL; skipping social credential sync",
+				);
 				return;
 			}
 

@@ -1,0 +1,22 @@
+{
+  "stepNumber": 1,
+  "title": "Engage",
+  "subtitle": "Instant Lead Engagement",
+  "description": "The moment a lead shows interest, our AI Virtual Agent initiates a dynamic, personalized conversation via call or text, ensuring zero delay.",
+  "icon": "Bolt",
+  "label": "Start Conversation",
+  "positionLabel": "left-[-40px] top-[30px]",
+  "payload": [
+    {
+      "name": "Response Speed",
+      "value": 99,
+      "fill": "hsl(var(--primary))"
+    },
+    {
+      "name": "Personalization",
+      "value": 95,
+      "fill": "hsl(var(--secondary))"
+    }
+  ],
+  "indicator": "dot"
+}

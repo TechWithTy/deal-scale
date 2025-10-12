@@ -1,0 +1,36 @@
+{
+  "name": "Variant B",
+  "percentage": 50,
+  "copy": {
+    "pain_point": "Uncomfotbale Shirts",
+    "solution": "Comfortable Shirts",
+    "cta": "Unlock Your Potential Today!",
+    "tagline": "Performance Meets Comfort",
+    "subtitle": "Next-level basics for next-level people.",
+    "description": "Experience the difference with our advanced fabric blend and ergonomic fit.",
+    "whatsInItForMe": "Upgrade your daily comfort and style.",
+    "target_audience": "Ambitious Professionals",
+    "highlights": [
+      "Moisture-wicking tech",
+      "Sustainable materials",
+      "Reinforced seams",
+      "Modern tailored fit"
+    ],
+    "additionalInfo": "Try risk-free for 30 days!"
+  },
+  "variant_description": "Challenger copy focusing on performance and sustainability.",
+  "kpis": [
+    {
+      "name": "CTR",
+      "value": 3.8,
+      "goal": 5,
+      "unit": "%"
+    },
+    {
+      "name": "Conversion Rate",
+      "value": 1.9,
+      "goal": 3,
+      "unit": "%"
+    }
+  ]
+}

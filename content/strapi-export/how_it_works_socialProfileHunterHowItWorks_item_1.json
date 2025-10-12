@@ -1,0 +1,11 @@
+{
+  "stepNumber": 2,
+  "title": "Launch Comprehensive Search",
+  "subtitle": "Scan 600+ Platforms",
+  "description": "Our proprietary system queries over 600 social media, forum, and online platforms in real-time to find matching accounts.",
+  "icon": "Globe",
+  "label": "Run Search",
+  "positionLabel": "left-[125px] top-[-5px]",
+  "payload": [],
+  "indicator": "line"
+}

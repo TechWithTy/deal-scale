@@ -1,0 +1,10 @@
+{
+  "stepNumber": 5,
+  "title": "Conversion to Appointment/Call",
+  "subtitle": "Qualified leads are booked or hot-transferred.",
+  "description": "Once a lead is qualified and sales-ready, the AI seamlessly schedules an appointment on your calendar or can initiate a live hot-transfer call directly to you or your sales team.",
+  "icon": "CalendarCheck",
+  "label": "Step 5: Convert to Sales",
+  "positionLabel": "bottom",
+  "payload": []
+}

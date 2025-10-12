@@ -141,7 +141,10 @@ export default function ContactPilotForm({
 					const responseBody = await testerResponse.json();
 					testerMessage = responseBody?.error ?? testerMessage;
 				} catch (error) {
-					console.error("[ContactPilotForm] Failed to parse tester error", error);
+					console.error(
+						"[ContactPilotForm] Failed to parse tester error",
+						error,
+					);
 				}
 				toast.error(testerMessage);
 				return;

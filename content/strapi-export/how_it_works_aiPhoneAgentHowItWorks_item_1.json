@@ -1,0 +1,11 @@
+{
+  "stepNumber": 2,
+  "title": "AI Initiates Calls",
+  "subtitle": "Tireless Outbound Dialing",
+  "description": "Your agent begins calling leads from your unique local number, using our proven, human-like conversation scripts,or your custom sales script.",
+  "icon": "Phone",
+  "label": "AI Starts Calling",
+  "positionLabel": "left-[125px] top-[-5px]",
+  "payload": [],
+  "indicator": "line"
+}

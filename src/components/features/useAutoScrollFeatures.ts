@@ -18,7 +18,11 @@ function isMobileDevice() {
 export function useAutoScrollFeatures(
 	scrollRef: RefObject<HTMLDivElement>,
 	pausedRef: MutableRefObject<boolean>,
-	options?: { scrollAmount?: number; intervalMs?: number; manualHold?: boolean },
+	options?: {
+		scrollAmount?: number;
+		intervalMs?: number;
+		manualHold?: boolean;
+	},
 ) {
 	if (isMobileDevice()) return; // No-op on mobile
 	const timerRef = useRef<number | null>(null);
@@ -37,7 +41,9 @@ export function useAutoScrollFeatures(
 
 	const pointerActiveRef = useRef(false);
 	const resumeTimeoutRef = useRef<number | null>(null);
-	const resumeDelay = options?.intervalMs ? Math.min(Math.max(options.intervalMs / 2, 400), 3000) : 600;
+	const resumeDelay = options?.intervalMs
+		? Math.min(Math.max(options.intervalMs / 2, 400), 3000)
+		: 600;
 
 	const clearResumeTimeout = useCallback(() => {
 		if (resumeTimeoutRef.current) {

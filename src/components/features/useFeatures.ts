@@ -7,7 +7,9 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import type { FeatureHookReturn } from "./hooks/featureTypes";
 import type { FeatureRequest } from "./types";
 
-const deriveCategoriesFromFeatures = (features: FeatureRequest[]): Category[] => {
+const deriveCategoriesFromFeatures = (
+	features: FeatureRequest[],
+): Category[] => {
 	const categoryMap = new Map<string, Category>();
 	for (const feature of features) {
 		if (!categoryMap.has(feature.categoryId)) {
@@ -23,24 +25,28 @@ const deriveCategoriesFromFeatures = (features: FeatureRequest[]): Category[] =>
 };
 
 export const useFeatures = (): FeatureHookReturn => {
-	const [allFeatures, setAllFeatures] = useState<FeatureRequest[]>(mockFeatures);
+	const [allFeatures, setAllFeatures] =
+		useState<FeatureRequest[]>(mockFeatures);
 	const [loading] = useState(false);
 	const voteInProgressRef = useRef<Record<string, boolean>>({});
 	const [voteStatus, setVoteStatus] = useState<Record<string, boolean>>({});
 	const { data: session } = useSession();
 	const openAuthModal = useAuthModal((state) => state.open);
 
-	const setVoteInProgress = useCallback((featureId: string, inProgress: boolean) => {
-		voteInProgressRef.current[featureId] = inProgress;
-		setVoteStatus((prev) => {
-			if (inProgress) {
-				return { ...prev, [featureId]: true };
-			}
-			const next = { ...prev };
-			delete next[featureId];
-			return next;
-		});
-	}, []);
+	const setVoteInProgress = useCallback(
+		(featureId: string, inProgress: boolean) => {
+			voteInProgressRef.current[featureId] = inProgress;
+			setVoteStatus((prev) => {
+				if (inProgress) {
+					return { ...prev, [featureId]: true };
+				}
+				const next = { ...prev };
+				delete next[featureId];
+				return next;
+			});
+		},
+		[],
+	);
 
 	const categories = useMemo(
 		() => deriveCategoriesFromFeatures(allFeatures),
@@ -53,7 +59,9 @@ export const useFeatures = (): FeatureHookReturn => {
 		if (activeCategory === "all" || activeCategory === "") {
 			return allFeatures;
 		}
-		return allFeatures.filter((feature) => feature.categoryId === activeCategory);
+		return allFeatures.filter(
+			(feature) => feature.categoryId === activeCategory,
+		);
 	}, [activeCategory, allFeatures]);
 
 	const handleVote = useCallback(
@@ -69,7 +77,9 @@ export const useFeatures = (): FeatureHookReturn => {
 				return false;
 			}
 
-			const currentFeature = allFeatures.find((feature) => feature.id === featureId);
+			const currentFeature = allFeatures.find(
+				(feature) => feature.id === featureId,
+			);
 			if (!currentFeature) {
 				console.warn(`[useFeatures] Feature ${featureId} not found.`);
 				return false;
@@ -90,10 +100,12 @@ export const useFeatures = (): FeatureHookReturn => {
 					method: isUpVote ? "POST" : "DELETE",
 					headers: isUpVote
 						? {
-							"Content-Type": "application/json",
-						}
+								"Content-Type": "application/json",
+							}
 						: undefined,
-					body: isUpVote ? JSON.stringify({ feature_id: featureId }) : undefined,
+					body: isUpVote
+						? JSON.stringify({ feature_id: featureId })
+						: undefined,
 				});
 
 				if (response.status === 401) {
@@ -121,17 +133,20 @@ export const useFeatures = (): FeatureHookReturn => {
 					prev.map((feature) =>
 						feature.id === featureId
 							? {
-								...feature,
-								upvotes: nextUpvotes,
-								userVote: isUpVote ? "up" : null,
-							}
+									...feature,
+									upvotes: nextUpvotes,
+									userVote: isUpVote ? "up" : null,
+								}
 							: feature,
 					),
 				);
 
 				return true;
 			} catch (error) {
-				console.error(`[useFeatures] Failed to process ${voteType} vote`, error);
+				console.error(
+					`[useFeatures] Failed to process ${voteType} vote`,
+					error,
+				);
 				return false;
 			} finally {
 				setVoteInProgress(featureId, false);
