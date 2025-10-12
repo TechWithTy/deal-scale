@@ -75,16 +75,16 @@ export interface BeehiivPost {
 	slug?: string;
 	thumbnail_url?: string;
 	web_url?: string;
-	audience?: string;
-	platform?: string;
+        audience?: string;
+        platform?: string;
         content_tags?: string[];
         hidden_from_feed?: boolean;
-        published_at?: number | string;
+        published_at?: number | string | Date | null;
         publish_date?: number;
         displayed_date?: number;
-	meta_default_description?: string;
-	meta_default_title?: string;
-	content?: BeehiivPostContent;
+        meta_default_description?: string;
+        meta_default_title?: string;
+        content?: BeehiivPostContent;
 	stats?: BeehiivPostStats;
 	[key: string]: unknown;
 }

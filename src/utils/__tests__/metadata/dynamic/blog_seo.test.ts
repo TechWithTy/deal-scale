@@ -7,20 +7,19 @@ const mockPosts: BeehiivPost[] = [
                 id: "test-blog-id",
                 title: "Test Blog Post",
                 author: "John Doe",
-		subtitle: "An in-depth look at our test subject",
-		categories: ["Technology"],
-		content: {
-			free: { web: "A summary of the test blog post." },
-			premium: { web: "Premium summary" },
-		},
-		description: "A summary of the test blog post.",
-		enclosure: {},
-		link: "https://medium.com/test-blog-post",
-		pubDate: "2025-04-16T00:00:00Z",
+                subtitle: "An in-depth look at our test subject",
+                categories: ["Technology"],
+                content: {
+                        free: { web: "A summary of the test blog post." },
+                        premium: { web: "Premium summary" },
+                },
+                description: "A summary of the test blog post.",
+                enclosure: {},
+                link: "https://medium.com/test-blog-post",
+                pubDate: "2025-04-16T00:00:00Z",
                 meta_default_description: "A summary of the test blog post.",
                 thumbnail_url: "https://example.com/image.jpg",
                 web_url: "https://dealscale.io/p/test-blog-post",
-                publish_date: undefined,
                 published_at: "2025-04-16T00:00:00Z",
                 displayed_date: Date.parse("2025-04-16T00:00:00Z"),
                 content_tags: ["Technology", "AI"],
@@ -130,6 +129,29 @@ describe("getBlogMetadata", () => {
                 expect(meta.priority).toBe(0.7);
                 expect(meta.changeFrequency).toBe("weekly");
                 expect(meta.datePublished).toBe("2025-04-16T00:00:00.000Z");
+                expect(meta.dateModified).toBe("2025-04-16T00:00:00.000Z");
+        });
+
+        it("uses published_at when publish_date is not provided", async () => {
+                const postWithoutPublishDate: BeehiivPost = {
+                        ...mockPosts[0],
+                        id: "published-at-only",
+                        publish_date: undefined,
+                        published_at: "2026-02-01T12:00:00Z",
+                        displayed_date: undefined,
+                };
+
+                (global.fetch as jest.Mock).mockResolvedValueOnce({
+                        ok: true,
+                        status: 200,
+                        json: async () => ({ data: [postWithoutPublishDate] }),
+                        text: async () => JSON.stringify({ data: [postWithoutPublishDate] }),
+                } as unknown as Response);
+
+                const meta = await getSeoMetadataForPost(postWithoutPublishDate.id);
+
+                expect(meta.datePublished).toBe("2026-02-01T12:00:00.000Z");
+                expect(meta.dateModified).toBeUndefined();
         });
 
 	it("returns not found metadata if post is undefined", async () => {
