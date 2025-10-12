@@ -51,14 +51,14 @@ export const HeroOffering: React.FC<HeroOfferingProps> = ({
 								duration: 0.8,
 							}}
 						>
-							<div className="flex items-center justify-center p-0">
-								<Image
-									src={image}
-									alt={imageAlt || "Hero Offering"}
-									className="h-[340px] w-[340px] rounded-xl object-contain sm:h-[500px] sm:w-[500px] md:h-[600px] md:w-[600px] lg:h-[700px] lg:w-[700px] xl:h-[800px] xl:w-[800px] 2xl:h-[900px] 2xl:w-[900px]"
-									style={{
-										filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
-									}}
+                                <div className="flex w-full max-w-sm items-center justify-center p-0 sm:max-w-md md:max-w-lg">
+                                        <Image
+                                                src={image}
+                                                alt={imageAlt || "Hero Offering"}
+                                                className="h-auto w-full max-w-xs rounded-xl object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl"
+                                                style={{
+                                                        filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
+                                                }}
 									width={800}
 									height={800}
 									priority
