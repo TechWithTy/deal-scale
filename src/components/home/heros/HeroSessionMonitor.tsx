@@ -199,9 +199,9 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			</div>
 
 			{/* Session Monitor Carousel */}
-			<div className="relative flex w-full max-w-4xl items-stretch justify-center">
-				<div className="relative flex w-full max-w-4xl items-stretch">
-					<div className="flex min-h-[420px] w-full items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur lg:min-h-[480px] dark:border-white/5">
+                        <div className="relative flex w-full items-stretch justify-center md:max-w-4xl">
+                                <div className="relative flex w-full items-stretch md:max-w-4xl">
+                                        <div className="flex min-h-[420px] w-full items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur lg:min-h-[480px] dark:border-white/5">
 						<DemoTabs />
 					</div>
 				</div>
