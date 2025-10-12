@@ -67,7 +67,7 @@ const DemoTabs = () => {
 
 	return (
 		<Tabs defaultValue="rental-market-analysis" className="w-full py-8">
-			<div className="group relative">
+                        <div className="group relative w-full">
 				<ScrollButton
 					direction="left"
 					aria-label="Scroll left"
