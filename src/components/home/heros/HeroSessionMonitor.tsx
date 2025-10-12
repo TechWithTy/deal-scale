@@ -128,12 +128,12 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 		},
 	);
 	return (
-		<section
-			className={cn(
-				"mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-6 px-4 sm:mt-24 sm:mb-16 sm:px-6 lg:my-16 lg:grid-cols-2 lg:gap-8 lg:px-8",
-				"min-h-[640px] lg:min-h-[720px]",
-				className,
-			)}
+                <section
+                        className={cn(
+                                "mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-8 px-4 sm:mt-24 sm:mb-16 sm:px-6 lg:my-16 lg:grid-cols-2 lg:gap-10 lg:px-8",
+                                "lg:min-h-[640px] xl:min-h-[720px]",
+                                className,
+                        )}
 			aria-labelledby="hero-heading"
 		>
 			{/* Text Content */}
@@ -199,13 +199,13 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			</div>
 
 			{/* Session Monitor Carousel */}
-			<div className="relative flex w-full max-w-4xl items-stretch justify-center">
-				<div className="relative flex w-full max-w-4xl items-stretch">
-					<div className="flex min-h-[420px] w-full items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur lg:min-h-[480px] dark:border-white/5">
-						<DemoTabs />
-					</div>
-				</div>
-			</div>
+                        <div className="relative flex w-full items-stretch justify-center px-1 sm:px-2 md:px-0">
+                                <div className="relative flex w-full items-stretch md:max-w-4xl">
+                                        <div className="flex min-h-[360px] w-full items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-3 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur sm:min-h-[400px] sm:p-4 md:p-6 lg:min-h-[480px] dark:border-white/5">
+                                                <DemoTabs />
+                                        </div>
+                                </div>
+                        </div>
 		</section>
 	);
 };
