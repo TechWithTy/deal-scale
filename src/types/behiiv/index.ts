@@ -77,10 +77,11 @@ export interface BeehiivPost {
 	web_url?: string;
 	audience?: string;
 	platform?: string;
-	content_tags?: string[];
-	hidden_from_feed?: boolean;
-	publish_date?: number;
-	displayed_date?: number;
+        content_tags?: string[];
+        hidden_from_feed?: boolean;
+        published_at?: number | string;
+        publish_date?: number;
+        displayed_date?: number;
 	meta_default_description?: string;
 	meta_default_title?: string;
 	content?: BeehiivPostContent;
