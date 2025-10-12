@@ -1,5 +1,5 @@
 // ProductHero.tsx
-// * Hero section for the products page: bold headline, subtitle, bento image grid
+// * Hero section for the products page: bold headline, subtitle, horizontally scrolling hero cards
 // ! Follows DRY, SOLID, and type-safe best practices
 
 import { BorderBeam } from "@/components/magicui/border-beam";
