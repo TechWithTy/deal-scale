@@ -69,7 +69,6 @@ export interface BeehiivPost {
 	authors?: string[];
 	created?: number;
 	status?: string;
-	published_at?: string | number;
 	split_tested?: boolean;
 	subject_line?: string;
 	preview_text?: string;
