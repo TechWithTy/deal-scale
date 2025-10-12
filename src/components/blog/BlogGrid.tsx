@@ -1,8 +1,10 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import FeaturedBlogCard from "./FeaturedBlogCard";
-const BlogCard = React.lazy(() =>
+const BlogCard = lazy(() =>
 	import("./BlogCard").then((mod) => ({ default: mod.BlogCard })),
 );
 
