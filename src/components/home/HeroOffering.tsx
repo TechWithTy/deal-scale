@@ -1,5 +1,8 @@
+"use client";
+
 import SafeMotionDiv from "@/components/ui/SafeMotionDiv";
 import SplineModel from "@/components/ui/spline-model";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import Image, { type StaticImageData } from "next/image";
 import type React from "react";
@@ -17,13 +20,15 @@ export interface HeroOfferingProps {
  * - Otherwise, falls back to SplineModel.
  */
 export const HeroOffering: React.FC<HeroOfferingProps> = ({
-	image,
-	imageAlt,
-	className,
+        image,
+        imageAlt,
+        className,
 }) => {
-	const isImageSrc = (img: unknown): img is string | StaticImageData =>
-		typeof img === "string" ||
-		(typeof img === "object" && img !== null && "src" in img);
+        const isMobile = useIsMobile();
+
+        const isImageSrc = (img: unknown): img is string | StaticImageData =>
+                typeof img === "string" ||
+                (typeof img === "object" && img !== null && "src" in img);
 
 	return (
 		<div
