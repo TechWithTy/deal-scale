@@ -7,7 +7,6 @@ import type React from "react";
 export interface HeroOfferingProps {
 	image?: string | StaticImageData | React.ReactNode;
 	imageAlt?: string;
-	isMobile?: boolean;
 	className?: string;
 }
 
@@ -20,7 +19,6 @@ export interface HeroOfferingProps {
 export const HeroOffering: React.FC<HeroOfferingProps> = ({
 	image,
 	imageAlt,
-	isMobile,
 	className,
 }) => {
 	const isImageSrc = (img: unknown): img is string | StaticImageData =>
