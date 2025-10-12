@@ -71,10 +71,31 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 		}
 	};
 
-        const heroGrid = grid.length > 0 ? grid : DEFAULT_GRID;
+	const colSpanClassMap: Record<number, string> = {
+		1: "md:col-span-1",
+		2: "md:col-span-2",
+		3: "md:col-span-3",
+		4: "md:col-span-4",
+	};
 
-        return (
-                <div className="mx-auto my-5 max-w-6xl px-4 text-center sm:px-6 lg:px-8">
+	const rowSpanClassMap: Record<number, string> = {
+		1: "md:row-span-1",
+		2: "md:row-span-2",
+		3: "md:row-span-3",
+	};
+
+	const clampSpan = (span: number | undefined, max: number) => {
+		if (!span || span < 1) {
+			return 1;
+		}
+
+		return span > max ? max : span;
+	};
+
+	const heroGrid = grid.length > 0 ? grid : DEFAULT_GRID;
+
+	return (
+		<div className="mx-auto my-5 max-w-6xl px-4 text-center sm:px-6 lg:px-8">
 			<h1 className="mb-8 font-bold text-5xl text-primary md:text-7xl">
 				{headline}{" "}
 				<span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -84,61 +105,57 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 			<p className="mx-auto mb-16 max-w-2xl text-foreground/80 text-xl">
 				{subheadline}
 			</p>
-                        {/* Horizontal Scroll Layout */}
-                        <div
-                                className="-mx-4 overflow-hidden pb-2 sm:-mx-6 lg:-mx-8"
-                                aria-label="Featured product categories"
-                        >
-                                <div
-                                        className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 sm:px-6 lg:px-8"
-                                        role="list"
-                                >
-                                        {heroGrid.map((item) => (
-                                                <button
-                                                        key={item.label}
-                                                        className={cn(
-                                                                "group glow glow-hover relative flex h-full min-h-[260px] min-w-0 flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-                                                                "aspect-[4/3] sm:aspect-[5/4] md:aspect-[4/3]",
-                                                                "snap-start sm:min-h-[280px] md:min-h-[300px]",
-                                                                "basis-full md:basis-1/2 lg:basis-1/3",
-                                                        )}
-                                                        onClick={() => handleCategorySelect(item.categoryId)}
-                                                        type="button"
-                                                        aria-label={item.ariaLabel || item.label}
-                                                        tabIndex={0}
-                                                        onKeyDown={handleKeyDown(item.link)}
-                                                        data-hero-card
-                                                        role="listitem"
-                                                >
-                                                        <img
-                                                                src={item.src}
-                                                                alt={item.alt}
-                                                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                                draggable={false}
-                                                        />
-                                                        <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4">
-                                                                <div className="text-white">
-                                                                        <h3
-                                                                                className="mb-1.5 font-bold text-lg leading-tight transition-colors duration-200 [text-shadow:0_2px_4px_rgba(0,0,0,0.5)] hover:text-accent md:text-xl"
-                                                                                title={
-                                                                                        categories.some((c) => c.id === item.categoryId)
-                                                                                                ? `Filter by ${item.label}`
-                                                                                                : `No category '${item.label}'`
-                                                                                }
-                                                                        >
-                                                                                {item.label}
-                                                                        </h3>
-                                                                        {item.description && (
-                                                                                <p className="text-sm text-white/95 leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.8)] md:text-base">
-                                                                                        {item.description}
-                                                                                </p>
-                                                                        )}
-                                                                </div>
-                                                        </div>
-                                                </button>
-                                        ))}
-                                </div>
-                        </div>
+			{/* Bento Grid Layout */}
+			<div className="mb-0 grid grid-flow-dense grid-cols-1 gap-4 sm:auto-rows-[minmax(220px,1fr)] sm:grid-cols-2 md:auto-rows-[minmax(240px,1fr)] md:grid-cols-4 lg:auto-rows-[minmax(260px,1fr)] lg:gap-5 xl:auto-rows-[minmax(280px,1fr)]">
+				{heroGrid.map((item) => {
+					const normalizedColSpan = clampSpan(item.colSpan, 4);
+					const normalizedRowSpan = clampSpan(item.rowSpan, 3);
+
+					return (
+						<button
+							key={item.label}
+							className={cn(
+								"group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+								"aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
+								colSpanClassMap[normalizedColSpan],
+								rowSpanClassMap[normalizedRowSpan],
+							)}
+							onClick={() => handleCategorySelect(item.categoryId)}
+							type="button"
+							aria-label={item.ariaLabel || item.label}
+							tabIndex={0}
+							onKeyDown={handleKeyDown(item.link)}
+							data-hero-card
+						>
+							<img
+								src={item.src}
+								alt={item.alt}
+								className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+								draggable={false}
+							/>
+							<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4">
+								<div className="text-white">
+									<h3
+										className="mb-1.5 font-bold text-lg leading-tight transition-colors duration-200 [text-shadow:0_2px_4px_rgba(0,0,0,0.5)] hover:text-accent md:text-xl"
+										title={
+											categories.some((c) => c.id === item.categoryId)
+												? `Filter by ${item.label}`
+												: `No category '${item.label}'`
+										}
+									>
+										{item.label}
+									</h3>
+									{item.description && (
+										<p className="text-sm text-white/95 leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.8)] md:text-base">
+											{item.description}
+										</p>
+									)}
+								</div>
+							</div>
+						</button>
+					);
+				})}
+			</div>
 
 			<div className="glow relative mx-auto my-5 max-w-2xl overflow-hidden rounded-2xl bg-card p-8 text-card-foreground shadow-lg">
 				<BorderBeam duration={8} size={100} />
