@@ -1,0 +1,11 @@
+{
+  "stepNumber": 2,
+  "title": "Initiate Search",
+  "subtitle": "One-Click Analysis",
+  "description": "With a single click, our system queries multiple OSINT and public data sources in real-time for every number submitted.",
+  "icon": "Search",
+  "label": "Run Search",
+  "positionLabel": "left-[125px] top-[-5px]",
+  "payload": [],
+  "indicator": "line"
+}

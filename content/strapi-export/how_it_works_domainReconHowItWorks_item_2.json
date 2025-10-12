@@ -1,0 +1,11 @@
+{
+  "stepNumber": 3,
+  "title": "Aggregate Intelligence",
+  "subtitle": "Scan Dozens of Sources",
+  "description": "Our system gathers all discoverable emails, names, subdomains, IPs, and technologies associated with the domain.",
+  "icon": "Search",
+  "label": "Gather Intel",
+  "positionLabel": "left-[-40px] top-[50px]",
+  "payload": [],
+  "indicator": "dashed"
+}

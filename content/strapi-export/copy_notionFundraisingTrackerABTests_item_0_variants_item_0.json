@@ -1,0 +1,19 @@
+{
+  "name": "V1 - Stay Organized",
+  "percentage": 50,
+  "copy": {
+    "cta": "Organize Your Fundraise",
+    "buttonCta": "Get Tracker",
+    "tagline": "Run a Stress-Free Fundraise.",
+    "subtitle": "Track investor outreach, commitments, and follow-ups in one clean Notion dashboard.",
+    "whatsInItForMe": "This template brings calm to the chaos of fundraising, ensuring you stay on top of every detail and run a professional process.",
+    "target_audience": "Founders who are currently or about to start fundraising.",
+    "pain_point": "Fundraising is a chaotic and stressful process where it's easy to drop the ball on critical follow-ups.",
+    "solution": "Our tracker provides a clear, simple system to manage every aspect of your raise, so nothing gets overlooked.",
+    "highlights": [
+      "Track every conversation",
+      "Manage your investor pipeline",
+      "Run a professional process"
+    ]
+  }
+}

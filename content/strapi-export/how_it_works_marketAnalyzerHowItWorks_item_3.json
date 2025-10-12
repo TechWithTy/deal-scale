@@ -1,0 +1,10 @@
+{
+  "stepNumber": 4,
+  "title": "Generate & Share Reports",
+  "subtitle": "Create professional, custom-branded market reports.",
+  "description": "With one click, generate a beautiful PDF or online report with your company's branding to share with clients, partners, or your team.",
+  "icon": "FileText",
+  "label": "Step 4: Create Reports",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -4,17 +4,20 @@ import {
 	uploadFile,
 	uploadImage,
 } from "@/lib/externalRequests/cloudinary";
-import cloudinary from "cloudinary";
-
-jest.mock("cloudinary", () => ({
-	v2: {
-		uploader: {
-			upload: jest.fn(),
-			destroy: jest.fn(),
+jest.mock("cloudinary", () => {
+	const uploader = {
+		upload: jest.fn(),
+		destroy: jest.fn(),
+	};
+	return {
+		v2: {
+			uploader,
+			config: jest.fn(),
 		},
-		config: jest.fn(),
-	},
-}));
+	};
+});
+
+import { v2 as cloudinary } from "cloudinary";
 
 /**
  * Tests for Cloudinary upload and delete functions.
@@ -26,7 +29,7 @@ describe("Cloudinary integration", () => {
 	});
 
 	it("uploads a file", async () => {
-		(cloudinary.v2.uploader.upload as jest.Mock).mockResolvedValue({
+		(cloudinary.uploader.upload as jest.Mock).mockResolvedValue({
 			public_id: "mock_id",
 		});
 		const res = await uploadFile("mock_file");
@@ -34,7 +37,7 @@ describe("Cloudinary integration", () => {
 	});
 
 	it("deletes a file", async () => {
-		(cloudinary.v2.uploader.destroy as jest.Mock).mockResolvedValue({
+		(cloudinary.uploader.destroy as jest.Mock).mockResolvedValue({
 			result: "ok",
 		});
 		const res = await deleteFile("mock_id");
@@ -42,7 +45,7 @@ describe("Cloudinary integration", () => {
 	});
 
 	it("uploads an image", async () => {
-		(cloudinary.v2.uploader.upload as jest.Mock).mockResolvedValue({
+		(cloudinary.uploader.upload as jest.Mock).mockResolvedValue({
 			public_id: "img_id",
 		});
 		const res = await uploadImage("img_file");
@@ -50,7 +53,7 @@ describe("Cloudinary integration", () => {
 	});
 
 	it("deletes an image", async () => {
-		(cloudinary.v2.uploader.destroy as jest.Mock).mockResolvedValue({
+		(cloudinary.uploader.destroy as jest.Mock).mockResolvedValue({
 			result: "ok",
 		});
 		const res = await deleteImage("img_id");

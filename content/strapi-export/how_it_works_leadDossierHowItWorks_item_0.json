@@ -1,0 +1,11 @@
+{
+  "stepNumber": 1,
+  "title": "Input Username",
+  "subtitle": "Start With a Single Clue",
+  "description": "Enter a single username you want to build a dossier on. Our tool uses this as the starting point for the investigation.",
+  "icon": "User",
+  "label": "Enter Username",
+  "positionLabel": "left-[-45px] top-[45px]",
+  "payload": [],
+  "indicator": "dot"
+}

@@ -1,0 +1,1988 @@
+create a marodkown file  of our perfromance issues for us to fix them@performance.md  in hjer MetricsExpand view
+
+First Contentful Paint
+1.9 s
+
+Largest Contentful Paint
+17.8 s
+
+Total Blocking Time
+1,400 ms
+
+Cumulative Layout Shift
+0.999
+
+Speed Index
+9.6 s
+Captured at Sep 29, 2025, 11:10 AM MDT
+Emulated Moto G Power with Lighthouse 12.8.2
+Single page session
+Initial page load
+Slow 4G throttling
+Using HeadlessChromium 137.0.7151.119 with lr
+Later this year, insights will replace performance audits. Learn more and provide feedback here.
+Show audits relevant to:AllFCPLCPTBTCLS
+Insights
+Use efficient cache lifetimes Est savings of 242 KiB
+
+A long cache lifetime can speed up repeat visits to your page. Learn more.LCPFCP
+
+
+Request
+Cache TTL
+Transfer Size
+Stripe
+utility
+216 KiB
+/basil/stripe.js
+(js.stripe.com)
+1m
+201 KiB
+/out-4.5.45.js
+(m.stripe.network)
+5m
+14 KiB
+Clarity
+utility
+32 KiB
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+1d
+32 KiB
+thebuyoutcompany.com
+9 KiB
+…09/Thebuyoutcompanylogo.png
+(thebuyoutcompany.com)
+None
+9 KiB
+crosscountrymortgage.com
+6 KiB
+…images/CCM_logo.svg
+(crosscountrymortgage.com)
+4h
+6 KiB
+onepercenthomesale.com
+27 KiB
+…images/image01.png?v=84001c8d
+(onepercenthomesale.com)
+7d
+27 KiB
+Use efficient cache lifetimes Est savings of 242 KiB
+
+A long cache lifetime can speed up repeat visits to your page. Learn more.LCPFCP
+
+
+Request
+Cache TTL
+Transfer Size
+Stripe
+utility
+216 KiB
+/basil/stripe.js
+(js.stripe.com)
+1m
+201 KiB
+/out-4.5.45.js
+(m.stripe.network)
+5m
+14 KiB
+Clarity
+utility
+32 KiB
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+1d
+32 KiB
+thebuyoutcompany.com
+9 KiB
+…09/Thebuyoutcompanylogo.png
+(thebuyoutcompany.com)
+None
+9 KiB
+crosscountrymortgage.com
+6 KiB
+…images/CCM_logo.svg
+(crosscountrymortgage.com)
+4h
+6 KiB
+onepercenthomesale.com
+27 KiB
+…images/image01.png?v=84001c8d
+(onepercenthomesale.com)
+7d
+27 KiB
+Legacy JavaScript Est savings of 11 KiB
+
+Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile Baseline features, unless you know you must support older browsers. Learn why most sites can deploy ES6+ code without transpilingLCPFCP
+
+
+URL
+Wasted bytes
+dealscale.io
+1st party
+11.5 KiB
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+11.5 KiB
+…chunks/1684-6a96b1ee39b01a66.js:1:106511
+(www.dealscale.io)
+Array.prototype.at
+…chunks/1684-6a96b1ee39b01a66.js:1:105899
+(www.dealscale.io)
+Array.prototype.flat
+…chunks/1684-6a96b1ee39b01a66.js:1:106012
+(www.dealscale.io)
+Array.prototype.flatMap
+…chunks/1684-6a96b1ee39b01a66.js:1:106388
+(www.dealscale.io)
+Object.fromEntries
+…chunks/1684-6a96b1ee39b01a66.js:1:106646
+(www.dealscale.io)
+Object.hasOwn
+…chunks/1684-6a96b1ee39b01a66.js:1:105641
+(www.dealscale.io)
+String.prototype.trimEnd
+…chunks/1684-6a96b1ee39b01a66.js:1:105556
+(www.dealscale.io)
+String.prototype.trimStart
+Legacy JavaScript Est savings of 11 KiB
+
+Polyfills and transforms enable older browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile Baseline features, unless you know you must support older browsers. Learn why most sites can deploy ES6+ code without transpilingLCPFCP
+
+
+URL
+Wasted bytes
+dealscale.io
+1st party
+11.5 KiB
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+11.5 KiB
+…chunks/1684-6a96b1ee39b01a66.js:1:106511
+(www.dealscale.io)
+Array.prototype.at
+…chunks/1684-6a96b1ee39b01a66.js:1:105899
+(www.dealscale.io)
+Array.prototype.flat
+…chunks/1684-6a96b1ee39b01a66.js:1:106012
+(www.dealscale.io)
+Array.prototype.flatMap
+…chunks/1684-6a96b1ee39b01a66.js:1:106388
+(www.dealscale.io)
+Object.fromEntries
+…chunks/1684-6a96b1ee39b01a66.js:1:106646
+(www.dealscale.io)
+Object.hasOwn
+…chunks/1684-6a96b1ee39b01a66.js:1:105641
+(www.dealscale.io)
+String.prototype.trimEnd
+…chunks/1684-6a96b1ee39b01a66.js:1:105556
+(www.dealscale.io)
+String.prototype.trimStart
+Layout shift culprits
+
+Layout shifts occur when elements move absent any user interaction. Investigate the causes of layout shifts, such as elements being added, removed, or their fonts changing as the page loads.CLS
+
+
+Element
+Layout shift score
+Total
+0.999
+
+
+
+AI Powered Seller Lead Qualification & Appointment Setting Tired of Chasing Dea…
+<div class="mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-6 px-4 sm:mt…">
+0.999
+Layout shift culprits
+
+Layout shifts occur when elements move absent any user interaction. Investigate the causes of layout shifts, such as elements being added, removed, or their fonts changing as the page loads.CLS
+
+Element
+Layout shift score
+Total
+0.999
+
+
+
+AI Powered Seller Lead Qualification & Appointment Setting Tired of Chasing Dea…
+<div class="mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-6 px-4 sm:mt…">
+0.999
+Layout shift culprits
+
+Layout shifts occur when elements move absent any user interaction. Investigate the causes of layout shifts, such as elements being added, removed, or their fonts changing as the page loads.CLS
+
+
+Element
+Layout shift score
+Total
+0.999
+
+
+
+AI Powered Seller Lead Qualification & Appointment Setting Tired of Chasing Dea…
+<div class="mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-6 px-4 sm:mt…">
+0.999
+Forced reflow
+
+A forced reflow occurs when JavaScript queries geometric properties (such as offsetWidth) after styles have been invalidated by a change to the DOM state. This can result in poor performance. Learn more about forced reflows and possible mitigations.
+
+
+Top function call
+Total reflow time
+…chunks/1684-6a96b1ee39b01a66.js:2:51381
+(www.dealscale.io)
+224 ms
+Source
+Total reflow time
+[unattributed]
+356 ms
+…chunks/9607-6672649d68cf0eb7.js:1:1842
+(www.dealscale.io)
+7 ms
+…app/layout-ec7f14474c5a49a7.js:1:141181
+(www.dealscale.io)
+101 ms
+…chunks/8053-06133d55cd9e6eeb.js:1:81514
+(www.dealscale.io)
+1 ms
+…chunks/3062-23392768d3f02ab1.js:1:3518
+(www.dealscale.io)
+88 ms
+…chunks/5115-be50fdfd1c43da06.js:1:4975
+(www.dealscale.io)
+27 ms
+…chunks/6545-8b76b7dc2b1e2faf.js:1:80670
+(www.dealscale.io)
+1 ms
+Forced reflow
+
+A forced reflow occurs when JavaScript queries geometric properties (such as offsetWidth) after styles have been invalidated by a change to the DOM state. This can result in poor performance. Learn more about forced reflows and possible mitigations.
+
+
+Top function call
+Total reflow time
+…chunks/1684-6a96b1ee39b01a66.js:2:51381
+(www.dealscale.io)
+224 ms
+Source
+Total reflow time
+[unattributed]
+356 ms
+…chunks/9607-6672649d68cf0eb7.js:1:1842
+(www.dealscale.io)
+7 ms
+…app/layout-ec7f14474c5a49a7.js:1:141181
+(www.dealscale.io)
+101 ms
+…chunks/8053-06133d55cd9e6eeb.js:1:81514
+(www.dealscale.io)
+1 ms
+…chunks/3062-23392768d3f02ab1.js:1:3518
+(www.dealscale.io)
+88 ms
+…chunks/5115-be50fdfd1c43da06.js:1:4975
+(www.dealscale.io)
+27 ms
+…chunks/6545-8b76b7dc2b1e2faf.js:1:80670
+(www.dealscale.io)
+1 ms
+Network dependency tree
+
+Avoid chaining critical requests by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.LCP
+
+
+Maximum critical path latency: 751 ms
+Initial Navigation
+https://www.dealscale.io
+- 540 ms, 44.61 KiB
+…css/bc18c020bcedcb37.css
+(www.dealscale.io)
+- 751 ms, 25.54 KiB
+Preconnected origins
+preconnect hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.
+no origins were preconnected
+Preconnect candidates
+Add preconnect hints to your most important origins, but try to use no more than 4.
+Origin
+Est LCP savings
+https://js.zohocdn.com
+300 ms
+https://js.stripe.com
+300 ms
+https://m.stripe.network
+300 ms
+Network dependency tree
+
+Avoid chaining critical requests by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.LCP
+
+
+Maximum critical path latency: 751 ms
+Initial Navigation
+https://www.dealscale.io
+- 540 ms, 44.61 KiB
+…css/bc18c020bcedcb37.css
+(www.dealscale.io)
+- 751 ms, 25.54 KiB
+Preconnected origins
+preconnect hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.
+no origins were preconnected
+Preconnect candidates
+Add preconnect hints to your most important origins, but try to use no more than 4.
+Origin
+Est LCP savings
+https://js.zohocdn.com
+300 ms
+https://js.stripe.com
+300 ms
+https://m.stripe.network
+300 ms
+Improve image delivery Est savings of 122 KiB
+
+Reducing the download time of images can improve the perceived load time of the page and LCP. Learn more about optimizing image sizeLCPFCP
+
+
+URL
+Resource Size
+Est Savings
+dealscale.io
+1st party
+111.7 KiB
+86.6 KiB
+/_next/image?url=%2Fcase-studies%2Foff-market-36.png&w=750&q=75
+(www.dealscale.io)
+55.6 KiB
+44.0 KiB
+Increasing the image compression factor could improve this image's download size.
+7.2 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+42.2 KiB
+/_next/image?url=%2Fcase-studies%2F72-wasted-time.png&w=750&q=75
+(www.dealscale.io)
+38.4 KiB
+29.2 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+29.2 KiB
+/_next/image?url=%2Fcase-studies%2F5-minuete-rule.png&w=750&q=75
+(www.dealscale.io)
+17.7 KiB
+13.4 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+13.4 KiB
+onepercenthomesale.com
+27.1 KiB
+26.6 KiB
+…images/image01.png?v=84001c8d
+(onepercenthomesale.com)
+27.1 KiB
+26.6 KiB
+This image file is larger than it needs to be (437x435) for its displayed dimensions (56x56). Use responsive images to reduce the image download size.
+26.6 KiB
+thebuyoutcompany.com
+9.0 KiB
+8.8 KiB
+…09/Thebuyoutcompanylogo.png
+(thebuyoutcompany.com)
+9.0 KiB
+8.8 KiB
+Using a modern image format (WebP, AVIF) or increasing the image compression could improve this image's download size.
+7.2 KiB
+This image file is larger than it needs to be (200x55) for its displayed dimensions (56x15). Use responsive images to reduce the image download size.
+8.3 KiB
+Improve image delivery Est savings of 122 KiB
+
+Reducing the download time of images can improve the perceived load time of the page and LCP. Learn more about optimizing image sizeLCPFCP
+
+URL
+Resource Size
+Est Savings
+dealscale.io
+1st party
+111.7 KiB
+86.6 KiB
+/_next/image?url=%2Fcase-studies%2Foff-market-36.png&w=750&q=75
+(www.dealscale.io)
+55.6 KiB
+44.0 KiB
+Increasing the image compression factor could improve this image's download size.
+7.2 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+42.2 KiB
+/_next/image?url=%2Fcase-studies%2F72-wasted-time.png&w=750&q=75
+(www.dealscale.io)
+38.4 KiB
+29.2 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+29.2 KiB
+/_next/image?url=%2Fcase-studies%2F5-minuete-rule.png&w=750&q=75
+(www.dealscale.io)
+17.7 KiB
+13.4 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+13.4 KiB
+onepercenthomesale.com
+27.1 KiB
+26.6 KiB
+…images/image01.png?v=84001c8d
+(onepercenthomesale.com)
+27.1 KiB
+26.6 KiB
+This image file is larger than it needs to be (437x435) for its displayed dimensions (56x56). Use responsive images to reduce the image download size.
+26.6 KiB
+thebuyoutcompany.com
+9.0 KiB
+8.8 KiB
+…09/Thebuyoutcompanylogo.png
+(thebuyoutcompany.com)
+9.0 KiB
+8.8 KiB
+Using a modern image format (WebP, AVIF) or increasing the image compression could improve this image's download size.
+7.2 KiB
+This image file is larger than it needs to be (200x55) for its displayed dimensions (56x15). Use responsive images to reduce the image download size.
+8.3 KiB
+Improve image delivery Est savings of 122 KiB
+
+Reducing the download time of images can improve the perceived load time of the page and LCP. Learn more about optimizing image sizeLCPFCP
+
+
+URL
+Resource Size
+Est Savings
+dealscale.io
+1st party
+111.7 KiB
+86.6 KiB
+/_next/image?url=%2Fcase-studies%2Foff-market-36.png&w=750&q=75
+(www.dealscale.io)
+55.6 KiB
+44.0 KiB
+Increasing the image compression factor could improve this image's download size.
+7.2 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+42.2 KiB
+/_next/image?url=%2Fcase-studies%2F72-wasted-time.png&w=750&q=75
+(www.dealscale.io)
+38.4 KiB
+29.2 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+29.2 KiB
+/_next/image?url=%2Fcase-studies%2F5-minuete-rule.png&w=750&q=75
+(www.dealscale.io)
+17.7 KiB
+13.4 KiB
+This image file is larger than it needs to be (750x397) for its displayed dimensions (362x197). Use responsive images to reduce the image download size.
+13.4 KiB
+onepercenthomesale.com
+27.1 KiB
+26.6 KiB
+…images/image01.png?v=84001c8d
+(onepercenthomesale.com)
+27.1 KiB
+26.6 KiB
+This image file is larger than it needs to be (437x435) for its displayed dimensions (56x56). Use responsive images to reduce the image download size.
+26.6 KiB
+thebuyoutcompany.com
+9.0 KiB
+8.8 KiB
+…09/Thebuyoutcompanylogo.png
+(thebuyoutcompany.com)
+9.0 KiB
+8.8 KiB
+Using a modern image format (WebP, AVIF) or increasing the image compression could improve this image's download size.
+7.2 KiB
+This image file is larger than it needs to be (200x55) for its displayed dimensions (56x15). Use responsive images to reduce the image download size.
+8.3 KiB
+Render blocking requests
+
+Requests are blocking the page's initial render, which may delay LCP. Deferring or inlining can move these network requests out of the critical path.LCPFCP
+
+
+URL
+Transfer Size
+Duration
+dealscale.io
+1st party
+25.5 KiB
+180 ms
+…css/bc18c020bcedcb37.css
+(www.dealscale.io)
+25.5 KiB
+180 ms
+Render blocking requests
+
+Requests are blocking the page's initial render, which may delay LCP. Deferring or inlining can move these network requests out of the critical path.LCPFCP
+
+
+URL
+Transfer Size
+Duration
+dealscale.io
+1st party
+25.5 KiB
+180 ms
+…css/bc18c020bcedcb37.css
+(www.dealscale.io)
+25.5 KiB
+180 ms
+Optimize DOM size
+
+A large DOM can increase the duration of style calculations and layout reflows, impacting page responsiveness. A large DOM will also increase memory usage. Learn how to avoid an excessive DOM size.
+
+
+Statistic
+Element
+Value
+Total elements
+4,355
+Most children
+div.flex > div.h-40 > svg > defs
+<defs>
+82
+DOM depth
+
+
+
+g > g > g > path
+<path fill="rgb(255,255,255)" fill-opacity="1" d=" M111.65399932861328,173.98300170898438 C111.65399932861328,173.9830017089…">
+31
+Optimize DOM size
+
+A large DOM can increase the duration of style calculations and layout reflows, impacting page responsiveness. A large DOM will also increase memory usage. Learn how to avoid an excessive DOM size.
+
+Statistic
+Element
+Value
+Total elements
+4,355
+Most children
+div.flex > div.h-40 > svg > defs
+<defs>
+82
+DOM depth
+
+
+
+g > g > g > path
+<path fill="rgb(255,255,255)" fill-opacity="1" d=" M111.65399932861328,173.98300170898438 C111.65399932861328,173.9830017089…">
+31
+Optimize DOM size
+
+A large DOM can increase the duration of style calculations and layout reflows, impacting page responsiveness. A large DOM will also increase memory usage. Learn how to avoid an excessive DOM size.
+
+
+Statistic
+Element
+Value
+Total elements
+4,355
+Most children
+div.flex > div.h-40 > svg > defs
+<defs>
+82
+DOM depth
+
+
+
+g > g > g > path
+<path fill="rgb(255,255,255)" fill-opacity="1" d=" M111.65399932861328,173.98300170898438 C111.65399932861328,173.9830017089…">
+31
+LCP breakdown
+
+Each subpart has specific improvement strategies. Ideally, most of the LCP time should be spent on loading the resources, not within delays.LCP
+
+
+Subpart
+Duration
+Time to first byte
+0 ms
+Element render delay
+4,970 ms
+
+
+
+Stop cold calling all day and start taking appointments from sales-ready home s…
+<p class="mx-auto mb-6 max-w-md text-base text-black sm:mb-10 sm:text-lg lg:max-w-xl…">
+LCP breakdown
+
+Each subpart has specific improvement strategies. Ideally, most of the LCP time should be spent on loading the resources, not within delays.LCP
+
+Subpart
+Duration
+Time to first byte
+0 ms
+Element render delay
+4,970 ms
+
+
+
+Stop cold calling all day and start taking appointments from sales-ready home s…
+<p class="mx-auto mb-6 max-w-md text-base text-black sm:mb-10 sm:text-lg lg:max-w-xl…">
+LCP breakdown
+
+Each subpart has specific improvement strategies. Ideally, most of the LCP time should be spent on loading the resources, not within delays.LCP
+
+
+Subpart
+Duration
+Time to first byte
+0 ms
+Element render delay
+4,970 ms
+
+
+
+Stop cold calling all day and start taking appointments from sales-ready home s…
+<p class="mx-auto mb-6 max-w-md text-base text-black sm:mb-10 sm:text-lg lg:max-w-xl…">
+3rd parties
+
+3rd party code can significantly impact load performance. Reduce and defer loading of 3rd party code to prioritize your page's content.
+
+
+3rd party
+Transfer size
+Main thread time
+Stripe
+utility
+219 KiB
+286 ms
+/basil/stripe.js
+(js.stripe.com)
+201 KiB
+172 ms
+/inner.html
+(m.stripe.network)
+0 KiB
+86 ms
+/out-4.5.45.js
+(m.stripe.network)
+14 KiB
+26 ms
+…js/trusted-types-checker-efd8cf4….js
+(js.stripe.com)
+1 KiB
+1 ms
+/inner.html
+(m.stripe.network)
+2 KiB
+1 ms
+/6
+(m.stripe.com)
+1 KiB
+0 ms
+Google Tag Manager
+tag-manager
+137 KiB
+153 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+137 KiB
+153 ms
+Clarity
+utility
+34 KiB
+134 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+32 KiB
+133 ms
+/tag/sttpn4xwgd?ref=npm
+(www.clarity.ms)
+1 KiB
+1 ms
+/collect
+(e.clarity.ms)
+1 KiB
+0 ms
+/c.gif?ctsa=…
+(c.clarity.ms)
+1 KiB
+0 ms
+zohopublic.com
+18 KiB
+2 ms
+/widget?wc=siq7b1a5f3…
+(salesiq.zohopublic.com)
+3 KiB
+2 ms
+…channels/website?widgetcode=…
+(salesiq.zohopublic.com)
+15 KiB
+0 ms
+…5b52af7d-4324-4a40-8fbf-db2adb125cf1/triggers
+(salesiq.zohopublic.com)
+1 KiB
+0 ms
+zohocdn.com
+49 KiB
+2 ms
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+40 KiB
+2 ms
+…css/float.xCDhMjdtH….css
+(css.zohocdn.com)
+6 KiB
+0 ms
+…fonts/siq_woVkg….ttf
+(css.zohocdn.com)
+3 KiB
+0 ms
+cdn-website.com
+14 KiB
+0 ms
+…opt/vertical-326w.png
+(lirp.cdn-website.com)
+14 KiB
+0 ms
+squarespace-cdn.com
+3 KiB
+0 ms
+…4174ee79-b0b4-468b-898c-028b20807057/fcfcc0a4-737e-4a7b-….jpg?…
+(images.squarespace-cdn.com)
+3 KiB
+0 ms
+crosscountrymortgage.com
+6 KiB
+0 ms
+…images/CCM_logo.svg
+(crosscountrymortgage.com)
+6 KiB
+0 ms
+newwestern.com
+14 KiB
+0 ms
+…nw/nw-logo-black.svg
+(www.newwestern.com)
+14 KiB
+0 ms
+dwellist.com
+26 KiB
+0 ms
+…10/Untitled-design-41.png
+(www.dwellist.com)
+26 KiB
+0 ms
+onepercenthomesale.com
+27 KiB
+0 ms
+…images/image01.png?v=84001c8d
+(onepercenthomesale.com)
+27 KiB
+0 ms
+thebuyoutcompany.com
+9 KiB
+0 ms
+…09/Thebuyoutcompanylogo.png
+(thebuyoutcompany.com)
+9 KiB
+0 ms
+Google Analytics
+analytics
+1 KiB
+0 ms
+/g/collect?v=…
+(www.google-analytics.com)
+1 KiB
+0 ms
+3rd parties
+
+3rd party code can significantly impact load performance. Reduce and defer loading of 3rd party code to prioritize your page's content.
+
+
+3rd party
+Transfer size
+Main thread time
+Stripe
+utility
+219 KiB
+286 ms
+/basil/stripe.js
+(js.stripe.com)
+201 KiB
+172 ms
+/inner.html
+(m.stripe.network)
+0 KiB
+86 ms
+/out-4.5.45.js
+(m.stripe.network)
+14 KiB
+26 ms
+…js/trusted-types-checker-efd8cf4….js
+(js.stripe.com)
+1 KiB
+1 ms
+/inner.html
+(m.stripe.network)
+2 KiB
+1 ms
+/6
+(m.stripe.com)
+1 KiB
+0 ms
+Google Tag Manager
+tag-manager
+137 KiB
+153 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+137 KiB
+153 ms
+Clarity
+utility
+34 KiB
+134 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+32 KiB
+133 ms
+/tag/sttpn4xwgd?ref=npm
+(www.clarity.ms)
+1 KiB
+1 ms
+/collect
+(e.clarity.ms)
+1 KiB
+0 ms
+/c.gif?ctsa=…
+(c.clarity.ms)
+1 KiB
+0 ms
+zohopublic.com
+18 KiB
+2 ms
+/widget?wc=siq7b1a5f3…
+(salesiq.zohopublic.com)
+3 KiB
+2 ms
+…channels/website?widgetcode=…
+(salesiq.zohopublic.com)
+15 KiB
+0 ms
+…5b52af7d-4324-4a40-8fbf-db2adb125cf1/triggers
+(salesiq.zohopublic.com)
+1 KiB
+0 ms
+zohocdn.com
+49 KiB
+2 ms
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+40 KiB
+2 ms
+…css/float.xCDhMjdtH….css
+(css.zohocdn.com)
+6 KiB
+0 ms
+…fonts/siq_woVkg….ttf
+(css.zohocdn.com)
+3 KiB
+0 ms
+cdn-website.com
+14 KiB
+0 ms
+…opt/vertical-326w.png
+(lirp.cdn-website.com)
+14 KiB
+0 ms
+squarespace-cdn.com
+3 KiB
+0 ms
+…4174ee79-b0b4-468b-898c-028b20807057/fcfcc0a4-737e-4a7b-….jpg?…
+(images.squarespace-cdn.com)
+3 KiB
+0 ms
+crosscountrymortgage.com
+6 KiB
+0 ms
+…images/CCM_logo.svg
+(crosscountrymortgage.com)
+6 KiB
+0 ms
+newwestern.com
+14 KiB
+0 ms
+…nw/nw-logo-black.svg
+(www.newwestern.com)
+14 KiB
+0 ms
+dwellist.com
+26 KiB
+0 ms
+…10/Untitled-design-41.png
+(www.dwellist.com)
+26 KiB
+0 ms
+onepercenthomesale.com
+27 KiB
+0 ms
+…images/image01.png?v=84001c8d
+(onepercenthomesale.com)
+27 KiB
+0 ms
+thebuyoutcompany.com
+9 KiB
+0 ms
+…09/Thebuyoutcompanylogo.png
+(thebuyoutcompany.com)
+9 KiB
+0 ms
+Google Analytics
+analytics
+1 KiB
+0 ms
+/g/collect?v=…
+(www.google-analytics.com)
+1 KiB
+0 ms
+These insights are also available in the Chrome DevTools Performance Panel - record a trace to view more detailed information.
+Diagnostics
+Minimize main-thread work 9.4 s
+
+Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. Learn how to minimize main-thread workTBT
+
+
+Category
+Time Spent
+Script Evaluation
+3,928 ms
+Style & Layout
+2,231 ms
+Other
+1,553 ms
+Rendering
+674 ms
+Script Parsing & Compilation
+540 ms
+Garbage Collection
+442 ms
+Parse HTML & CSS
+43 ms
+Minimize main-thread work 9.4 s
+
+Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. Learn how to minimize main-thread workTBT
+
+
+Category
+Time Spent
+Script Evaluation
+3,928 ms
+Style & Layout
+2,231 ms
+Other
+1,553 ms
+Rendering
+674 ms
+Script Parsing & Compilation
+540 ms
+Garbage Collection
+442 ms
+Parse HTML & CSS
+43 ms
+Reduce JavaScript execution time 4.0 s
+
+Consider reducing the time spent parsing, compiling, and executing JS. You may find delivering smaller JS payloads helps with this. Learn how to reduce Javascript execution time.TBT
+
+
+URL
+Total CPU Time
+Script Evaluation
+Script Parse
+dealscale.io
+1st party
+7,832 ms
+3,090 ms
+216 ms
+https://www.dealscale.io
+2,546 ms
+12 ms
+12 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+1,762 ms
+1,154 ms
+17 ms
+…chunks/6545-8b76b7dc2b1e2faf.js
+(www.dealscale.io)
+1,612 ms
+281 ms
+13 ms
+…chunks/dc112a36-18909a95e93ec969.js
+(www.dealscale.io)
+1,041 ms
+1,009 ms
+32 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+333 ms
+227 ms
+17 ms
+…chunks/6165-1df6348f8f7d85c8.js
+(www.dealscale.io)
+225 ms
+224 ms
+0 ms
+…chunks/9156-008a860….js
+(www.dealscale.io)
+180 ms
+178 ms
+1 ms
+…chunks/8573-cfddcb34319b5d0b.js
+(www.dealscale.io)
+80 ms
+1 ms
+75 ms
+…chunks/7368-dfc591541dad3238.js
+(www.dealscale.io)
+53 ms
+4 ms
+49 ms
+Stripe
+utility
+369 ms
+257 ms
+87 ms
+/basil/stripe.js
+(js.stripe.com)
+258 ms
+148 ms
+87 ms
+/inner.html
+(m.stripe.network)
+111 ms
+109 ms
+0 ms
+Unattributable
+367 ms
+8 ms
+0 ms
+Unattributable
+367 ms
+8 ms
+0 ms
+Google Tag Manager
+tag-manager
+185 ms
+124 ms
+61 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+185 ms
+124 ms
+61 ms
+Clarity
+utility
+133 ms
+121 ms
+10 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+133 ms
+121 ms
+10 ms
+zohocdn.com
+61 ms
+44 ms
+13 ms
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+61 ms
+44 ms
+13 ms
+Reduce JavaScript execution time 4.0 s
+
+Consider reducing the time spent parsing, compiling, and executing JS. You may find delivering smaller JS payloads helps with this. Learn how to reduce Javascript execution time.TBT
+
+URL
+Total CPU Time
+Script Evaluation
+Script Parse
+dealscale.io
+1st party
+7,832 ms
+3,090 ms
+216 ms
+https://www.dealscale.io
+2,546 ms
+12 ms
+12 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+1,762 ms
+1,154 ms
+17 ms
+…chunks/6545-8b76b7dc2b1e2faf.js
+(www.dealscale.io)
+1,612 ms
+281 ms
+13 ms
+…chunks/dc112a36-18909a95e93ec969.js
+(www.dealscale.io)
+1,041 ms
+1,009 ms
+32 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+333 ms
+227 ms
+17 ms
+…chunks/6165-1df6348f8f7d85c8.js
+(www.dealscale.io)
+225 ms
+224 ms
+0 ms
+…chunks/9156-008a860….js
+(www.dealscale.io)
+180 ms
+178 ms
+1 ms
+…chunks/8573-cfddcb34319b5d0b.js
+(www.dealscale.io)
+80 ms
+1 ms
+75 ms
+…chunks/7368-dfc591541dad3238.js
+(www.dealscale.io)
+53 ms
+4 ms
+49 ms
+Stripe
+utility
+369 ms
+257 ms
+87 ms
+/basil/stripe.js
+(js.stripe.com)
+258 ms
+148 ms
+87 ms
+/inner.html
+(m.stripe.network)
+111 ms
+109 ms
+0 ms
+Unattributable
+367 ms
+8 ms
+0 ms
+Unattributable
+367 ms
+8 ms
+0 ms
+Google Tag Manager
+tag-manager
+185 ms
+124 ms
+61 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+185 ms
+124 ms
+61 ms
+Clarity
+utility
+133 ms
+121 ms
+10 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+133 ms
+121 ms
+10 ms
+zohocdn.com
+61 ms
+44 ms
+13 ms
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+61 ms
+44 ms
+13 ms
+Reduce JavaScript execution time 4.0 s
+
+Consider reducing the time spent parsing, compiling, and executing JS. You may find delivering smaller JS payloads helps with this. Learn how to reduce Javascript execution time.TBT
+
+
+URL
+Total CPU Time
+Script Evaluation
+Script Parse
+dealscale.io
+1st party
+7,832 ms
+3,090 ms
+216 ms
+https://www.dealscale.io
+2,546 ms
+12 ms
+12 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+1,762 ms
+1,154 ms
+17 ms
+…chunks/6545-8b76b7dc2b1e2faf.js
+(www.dealscale.io)
+1,612 ms
+281 ms
+13 ms
+…chunks/dc112a36-18909a95e93ec969.js
+(www.dealscale.io)
+1,041 ms
+1,009 ms
+32 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+333 ms
+227 ms
+17 ms
+…chunks/6165-1df6348f8f7d85c8.js
+(www.dealscale.io)
+225 ms
+224 ms
+0 ms
+…chunks/9156-008a860….js
+(www.dealscale.io)
+180 ms
+178 ms
+1 ms
+…chunks/8573-cfddcb34319b5d0b.js
+(www.dealscale.io)
+80 ms
+1 ms
+75 ms
+…chunks/7368-dfc591541dad3238.js
+(www.dealscale.io)
+53 ms
+4 ms
+49 ms
+Stripe
+utility
+369 ms
+257 ms
+87 ms
+/basil/stripe.js
+(js.stripe.com)
+258 ms
+148 ms
+87 ms
+/inner.html
+(m.stripe.network)
+111 ms
+109 ms
+0 ms
+Unattributable
+367 ms
+8 ms
+0 ms
+Unattributable
+367 ms
+8 ms
+0 ms
+Google Tag Manager
+tag-manager
+185 ms
+124 ms
+61 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+185 ms
+124 ms
+61 ms
+Clarity
+utility
+133 ms
+121 ms
+10 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+133 ms
+121 ms
+10 ms
+zohocdn.com
+61 ms
+44 ms
+13 ms
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+61 ms
+44 ms
+13 ms
+Reduce unused JavaScript Est savings of 281 KiB
+
+Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. Learn how to reduce unused JavaScript.LCPFCP
+
+
+URL
+Transfer Size
+Est Savings
+Stripe
+utility
+200.6 KiB
+132.4 KiB
+/basil/stripe.js
+(js.stripe.com)
+200.6 KiB
+132.4 KiB
+dealscale.io
+1st party
+116.8 KiB
+72.0 KiB
+…chunks/dc112a36-18909a95e93ec969.js
+(www.dealscale.io)
+77.9 KiB
+41.4 KiB
+…chunks/6734-d312337b167ce8ff.js
+(www.dealscale.io)
+39.0 KiB
+30.6 KiB
+Google Tag Manager
+tag-manager
+136.8 KiB
+53.6 KiB
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+136.8 KiB
+53.6 KiB
+zohocdn.com
+39.2 KiB
+22.9 KiB
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+39.2 KiB
+22.9 KiB
+Reduce unused JavaScript Est savings of 281 KiB
+
+Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. Learn how to reduce unused JavaScript.LCPFCP
+
+URL
+Transfer Size
+Est Savings
+Stripe
+utility
+200.6 KiB
+132.4 KiB
+/basil/stripe.js
+(js.stripe.com)
+200.6 KiB
+132.4 KiB
+dealscale.io
+1st party
+116.8 KiB
+72.0 KiB
+…chunks/dc112a36-18909a95e93ec969.js
+(www.dealscale.io)
+77.9 KiB
+41.4 KiB
+…chunks/6734-d312337b167ce8ff.js
+(www.dealscale.io)
+39.0 KiB
+30.6 KiB
+Google Tag Manager
+tag-manager
+136.8 KiB
+53.6 KiB
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+136.8 KiB
+53.6 KiB
+zohocdn.com
+39.2 KiB
+22.9 KiB
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+39.2 KiB
+22.9 KiB
+Reduce unused JavaScript Est savings of 281 KiB
+
+Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. Learn how to reduce unused JavaScript.LCPFCP
+
+
+URL
+Transfer Size
+Est Savings
+Stripe
+utility
+200.6 KiB
+132.4 KiB
+/basil/stripe.js
+(js.stripe.com)
+200.6 KiB
+132.4 KiB
+dealscale.io
+1st party
+116.8 KiB
+72.0 KiB
+…chunks/dc112a36-18909a95e93ec969.js
+(www.dealscale.io)
+77.9 KiB
+41.4 KiB
+…chunks/6734-d312337b167ce8ff.js
+(www.dealscale.io)
+39.0 KiB
+30.6 KiB
+Google Tag Manager
+tag-manager
+136.8 KiB
+53.6 KiB
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+136.8 KiB
+53.6 KiB
+zohocdn.com
+39.2 KiB
+22.9 KiB
+…js/float~plain~modern.4OXEhr5U7….js
+(js.zohocdn.com)
+39.2 KiB
+22.9 KiB
+Defer offscreen images Est savings of 23 KiB
+
+Consider lazy-loading offscreen and hidden images after all critical resources have finished loading to lower time to interactive. Learn how to defer offscreen images.LCPFCP
+
+
+URL
+Resource Size
+Est Savings
+dealscale.io
+1st party
+22.9 KiB
+22.9 KiB
+
+
+
+About our company illustration
+<img alt="About our company illustration" decoding="async" data-nimg="fill" class="object-cover object-center" style="position: absolute; height: 100%; width: 100%; inset: 0px;" sizes="(max-width: 640px) 256px, 320px" srcset="/_next/image?url=https%3A%2F%2Fi.imgur.com%2FWbQnbas.png&amp;w=16&amp;q=75 16w, /_…" src="https://www.dealscale.io/_next/image?url=https%3A%2F%2Fi.imgur.com%2FWbQnb…">
+/_next/image?url=…
+(www.dealscale.io)
+13.3 KiB
+13.3 KiB
+Deal Scale
+<img alt="Deal Scale" width="300" height="76" decoding="async" data-nimg="1" class="hidden h-auto w-full dark:block" style="color:transparent" srcset="/_next/image?url=%2Fcompany%2Flogos%2FDeal_Scale_Horizontal_White.png&amp;w=38…" src="/_next/image?url=%2Fcompany%2Flogos%2FDeal_Scale_Horizontal_White.png&amp;w=64…">
+/_next/image?url=%2Fcompany%2Flogos%2FDeal_Sc….png&w=640&q=75
+(www.dealscale.io)
+4.9 KiB
+4.9 KiB
+Deal Scale
+<img alt="Deal Scale" width="300" height="76" decoding="async" data-nimg="1" class="block h-auto w-full dark:hidden" style="color:transparent" srcset="/_next/image?url=%2Fcompany%2Flogos%2FDealScale_Horizontal_Black.png&amp;w=384…" src="/_next/image?url=%2Fcompany%2Flogos%2FDealScale_Horizontal_Black.png&amp;w=640…">
+/_next/image?url=%2Fcompany%2Flogos%2FDealSca….png&w=640&q=75
+(www.dealscale.io)
+4.7 KiB
+4.7 KiB
+Defer offscreen images Est savings of 23 KiB
+
+Consider lazy-loading offscreen and hidden images after all critical resources have finished loading to lower time to interactive. Learn how to defer offscreen images.LCPFCP
+
+URL
+Resource Size
+Est Savings
+dealscale.io
+1st party
+22.9 KiB
+22.9 KiB
+
+
+
+About our company illustration
+<img alt="About our company illustration" decoding="async" data-nimg="fill" class="object-cover object-center" style="position: absolute; height: 100%; width: 100%; inset: 0px;" sizes="(max-width: 640px) 256px, 320px" srcset="/_next/image?url=https%3A%2F%2Fi.imgur.com%2FWbQnbas.png&amp;w=16&amp;q=75 16w, /_…" src="https://www.dealscale.io/_next/image?url=https%3A%2F%2Fi.imgur.com%2FWbQnb…">
+/_next/image?url=…
+(www.dealscale.io)
+13.3 KiB
+13.3 KiB
+Deal Scale
+<img alt="Deal Scale" width="300" height="76" decoding="async" data-nimg="1" class="hidden h-auto w-full dark:block" style="color:transparent" srcset="/_next/image?url=%2Fcompany%2Flogos%2FDeal_Scale_Horizontal_White.png&amp;w=38…" src="/_next/image?url=%2Fcompany%2Flogos%2FDeal_Scale_Horizontal_White.png&amp;w=64…">
+/_next/image?url=%2Fcompany%2Flogos%2FDeal_Sc….png&w=640&q=75
+(www.dealscale.io)
+4.9 KiB
+4.9 KiB
+Deal Scale
+<img alt="Deal Scale" width="300" height="76" decoding="async" data-nimg="1" class="block h-auto w-full dark:hidden" style="color:transparent" srcset="/_next/image?url=%2Fcompany%2Flogos%2FDealScale_Horizontal_Black.png&amp;w=384…" src="/_next/image?url=%2Fcompany%2Flogos%2FDealScale_Horizontal_Black.png&amp;w=640…">
+/_next/image?url=%2Fcompany%2Flogos%2FDealSca….png&w=640&q=75
+(www.dealscale.io)
+4.7 KiB
+4.7 KiB
+Defer offscreen images Est savings of 23 KiB
+
+Consider lazy-loading offscreen and hidden images after all critical resources have finished loading to lower time to interactive. Learn how to defer offscreen images.LCPFCP
+
+
+URL
+Resource Size
+Est Savings
+dealscale.io
+1st party
+22.9 KiB
+22.9 KiB
+
+
+
+About our company illustration
+<img alt="About our company illustration" decoding="async" data-nimg="fill" class="object-cover object-center" style="position: absolute; height: 100%; width: 100%; inset: 0px;" sizes="(max-width: 640px) 256px, 320px" srcset="/_next/image?url=https%3A%2F%2Fi.imgur.com%2FWbQnbas.png&amp;w=16&amp;q=75 16w, /_…" src="https://www.dealscale.io/_next/image?url=https%3A%2F%2Fi.imgur.com%2FWbQnb…">
+/_next/image?url=…
+(www.dealscale.io)
+13.3 KiB
+13.3 KiB
+Deal Scale
+<img alt="Deal Scale" width="300" height="76" decoding="async" data-nimg="1" class="hidden h-auto w-full dark:block" style="color:transparent" srcset="/_next/image?url=%2Fcompany%2Flogos%2FDeal_Scale_Horizontal_White.png&amp;w=38…" src="/_next/image?url=%2Fcompany%2Flogos%2FDeal_Scale_Horizontal_White.png&amp;w=64…">
+/_next/image?url=%2Fcompany%2Flogos%2FDeal_Sc….png&w=640&q=75
+(www.dealscale.io)
+4.9 KiB
+4.9 KiB
+Deal Scale
+<img alt="Deal Scale" width="300" height="76" decoding="async" data-nimg="1" class="block h-auto w-full dark:hidden" style="color:transparent" srcset="/_next/image?url=%2Fcompany%2Flogos%2FDealScale_Horizontal_Black.png&amp;w=384…" src="/_next/image?url=%2Fcompany%2Flogos%2FDealScale_Horizontal_Black.png&amp;w=640…">
+/_next/image?url=%2Fcompany%2Flogos%2FDealSca….png&w=640&q=75
+(www.dealscale.io)
+4.7 KiB
+4.7 KiB
+Avoid serving legacy JavaScript to modern browsers Est savings of 12 KiB
+
+Polyfills and transforms enable legacy browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile Baseline features, unless you know you must support legacy browsers. Learn why most sites can deploy ES6+ code without transpilingLCPFCP
+
+
+URL
+Est Savings
+dealscale.io
+1st party
+11.6 KiB
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+11.3 KiB
+…chunks/1684-6a96b1ee39b01a66.js:1:106511
+(www.dealscale.io)
+Array.prototype.at
+…chunks/1684-6a96b1ee39b01a66.js:1:105899
+(www.dealscale.io)
+Array.prototype.flat
+…chunks/1684-6a96b1ee39b01a66.js:1:106012
+(www.dealscale.io)
+Array.prototype.flatMap
+…chunks/1684-6a96b1ee39b01a66.js:1:106388
+(www.dealscale.io)
+Object.fromEntries
+…chunks/1684-6a96b1ee39b01a66.js:1:106646
+(www.dealscale.io)
+Object.hasOwn
+…chunks/1684-6a96b1ee39b01a66.js:1:105641
+(www.dealscale.io)
+String.prototype.trimEnd
+…chunks/1684-6a96b1ee39b01a66.js:1:105556
+(www.dealscale.io)
+String.prototype.trimStart
+…chunks/7824-e4c3ba67c153694d.js
+(www.dealscale.io)
+0.3 KiB
+…chunks/7824-e4c3ba67c153694d.js:1:135
+(www.dealscale.io)
+@babel/plugin-transform-classes
+…chunks/7824-e4c3ba67c153694d.js:1:24087
+(www.dealscale.io)
+@babel/plugin-transform-regenerator
+Avoid serving legacy JavaScript to modern browsers Est savings of 12 KiB
+
+Polyfills and transforms enable legacy browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile Baseline features, unless you know you must support legacy browsers. Learn why most sites can deploy ES6+ code without transpilingLCPFCP
+
+URL
+Est Savings
+dealscale.io
+1st party
+11.6 KiB
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+11.3 KiB
+…chunks/1684-6a96b1ee39b01a66.js:1:106511
+(www.dealscale.io)
+Array.prototype.at
+…chunks/1684-6a96b1ee39b01a66.js:1:105899
+(www.dealscale.io)
+Array.prototype.flat
+…chunks/1684-6a96b1ee39b01a66.js:1:106012
+(www.dealscale.io)
+Array.prototype.flatMap
+…chunks/1684-6a96b1ee39b01a66.js:1:106388
+(www.dealscale.io)
+Object.fromEntries
+…chunks/1684-6a96b1ee39b01a66.js:1:106646
+(www.dealscale.io)
+Object.hasOwn
+…chunks/1684-6a96b1ee39b01a66.js:1:105641
+(www.dealscale.io)
+String.prototype.trimEnd
+…chunks/1684-6a96b1ee39b01a66.js:1:105556
+(www.dealscale.io)
+String.prototype.trimStart
+…chunks/7824-e4c3ba67c153694d.js
+(www.dealscale.io)
+0.3 KiB
+…chunks/7824-e4c3ba67c153694d.js:1:135
+(www.dealscale.io)
+@babel/plugin-transform-classes
+…chunks/7824-e4c3ba67c153694d.js:1:24087
+(www.dealscale.io)
+@babel/plugin-transform-regenerator
+Avoid serving legacy JavaScript to modern browsers Est savings of 12 KiB
+
+Polyfills and transforms enable legacy browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile Baseline features, unless you know you must support legacy browsers. Learn why most sites can deploy ES6+ code without transpilingLCPFCP
+
+
+URL
+Est Savings
+dealscale.io
+1st party
+11.6 KiB
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+11.3 KiB
+…chunks/1684-6a96b1ee39b01a66.js:1:106511
+(www.dealscale.io)
+Array.prototype.at
+…chunks/1684-6a96b1ee39b01a66.js:1:105899
+(www.dealscale.io)
+Array.prototype.flat
+…chunks/1684-6a96b1ee39b01a66.js:1:106012
+(www.dealscale.io)
+Array.prototype.flatMap
+…chunks/1684-6a96b1ee39b01a66.js:1:106388
+(www.dealscale.io)
+Object.fromEntries
+…chunks/1684-6a96b1ee39b01a66.js:1:106646
+(www.dealscale.io)
+Object.hasOwn
+…chunks/1684-6a96b1ee39b01a66.js:1:105641
+(www.dealscale.io)
+String.prototype.trimEnd
+…chunks/1684-6a96b1ee39b01a66.js:1:105556
+(www.dealscale.io)
+String.prototype.trimStart
+…chunks/7824-e4c3ba67c153694d.js
+(www.dealscale.io)
+0.3 KiB
+…chunks/7824-e4c3ba67c153694d.js:1:135
+(www.dealscale.io)
+@babel/plugin-transform-classes
+…chunks/7824-e4c3ba67c153694d.js:1:24087
+(www.dealscale.io)
+@babel/plugin-transform-regenerator
+Reduce unused CSS Est savings of 19 KiB
+
+Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. Learn how to reduce unused CSS.LCPFCP
+
+
+URL
+Transfer Size
+Est Savings
+dealscale.io
+1st party
+24.9 KiB
+19.1 KiB
+…css/bc18c020bcedcb37.css
+(www.dealscale.io)
+24.9 KiB
+19.1 KiB
+Reduce unused CSS Est savings of 19 KiB
+
+Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. Learn how to reduce unused CSS.LCPFCP
+
+
+URL
+Transfer Size
+Est Savings
+dealscale.io
+1st party
+24.9 KiB
+19.1 KiB
+…css/bc18c020bcedcb37.css
+(www.dealscale.io)
+24.9 KiB
+19.1 KiB
+Avoid long main-thread tasks 18 long tasks found
+
+Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. Learn how to avoid long main-thread tasksTBT
+
+
+URL
+Start Time
+Duration
+dealscale.io
+1st party
+1,846 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+10,208 ms
+469 ms
+…chunks/6165-1df6348f8f7d85c8.js
+(www.dealscale.io)
+9,758 ms
+224 ms
+https://www.dealscale.io
+1,269 ms
+219 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+3,456 ms
+201 ms
+…chunks/9156-008a860….js
+(www.dealscale.io)
+14,908 ms
+180 ms
+…chunks/6545-8b76b7dc2b1e2faf.js
+(www.dealscale.io)
+4,519 ms
+123 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+13,075 ms
+120 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+3,773 ms
+95 ms
+https://www.dealscale.io
+1,130 ms
+85 ms
+…chunks/8573-cfddcb34319b5d0b.js
+(www.dealscale.io)
+9,008 ms
+76 ms
+…chunks/7368-dfc591541dad3238.js
+(www.dealscale.io)
+16,687 ms
+54 ms
+Stripe
+utility
+342 ms
+/basil/stripe.js
+(js.stripe.com)
+14,116 ms
+214 ms
+/out-4.5.45.js
+(m.stripe.network)
+18,764 ms
+128 ms
+Google Tag Manager
+tag-manager
+180 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+9,084 ms
+97 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+9,181 ms
+83 ms
+Unattributable
+151 ms
+Unattributable
+1,607 ms
+83 ms
+Unattributable
+1,502 ms
+68 ms
+Clarity
+utility
+74 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+12,798 ms
+74 ms
+Avoid long main-thread tasks 18 long tasks found
+
+Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. Learn how to avoid long main-thread tasksTBT
+
+URL
+Start Time
+Duration
+dealscale.io
+1st party
+1,846 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+10,208 ms
+469 ms
+…chunks/6165-1df6348f8f7d85c8.js
+(www.dealscale.io)
+9,758 ms
+224 ms
+https://www.dealscale.io
+1,269 ms
+219 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+3,456 ms
+201 ms
+…chunks/9156-008a860….js
+(www.dealscale.io)
+14,908 ms
+180 ms
+…chunks/6545-8b76b7dc2b1e2faf.js
+(www.dealscale.io)
+4,519 ms
+123 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+13,075 ms
+120 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+3,773 ms
+95 ms
+https://www.dealscale.io
+1,130 ms
+85 ms
+…chunks/8573-cfddcb34319b5d0b.js
+(www.dealscale.io)
+9,008 ms
+76 ms
+…chunks/7368-dfc591541dad3238.js
+(www.dealscale.io)
+16,687 ms
+54 ms
+Stripe
+utility
+342 ms
+/basil/stripe.js
+(js.stripe.com)
+14,116 ms
+214 ms
+/out-4.5.45.js
+(m.stripe.network)
+18,764 ms
+128 ms
+Google Tag Manager
+tag-manager
+180 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+9,084 ms
+97 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+9,181 ms
+83 ms
+Unattributable
+151 ms
+Unattributable
+1,607 ms
+83 ms
+Unattributable
+1,502 ms
+68 ms
+Clarity
+utility
+74 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+12,798 ms
+74 ms
+Avoid long main-thread tasks 18 long tasks found
+
+Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. Learn how to avoid long main-thread tasksTBT
+
+
+URL
+Start Time
+Duration
+dealscale.io
+1st party
+1,846 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+10,208 ms
+469 ms
+…chunks/6165-1df6348f8f7d85c8.js
+(www.dealscale.io)
+9,758 ms
+224 ms
+https://www.dealscale.io
+1,269 ms
+219 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+3,456 ms
+201 ms
+…chunks/9156-008a860….js
+(www.dealscale.io)
+14,908 ms
+180 ms
+…chunks/6545-8b76b7dc2b1e2faf.js
+(www.dealscale.io)
+4,519 ms
+123 ms
+…chunks/1684-6a96b1ee39b01a66.js
+(www.dealscale.io)
+13,075 ms
+120 ms
+…chunks/4bd1b696-248fe5b72b6936e5.js
+(www.dealscale.io)
+3,773 ms
+95 ms
+https://www.dealscale.io
+1,130 ms
+85 ms
+…chunks/8573-cfddcb34319b5d0b.js
+(www.dealscale.io)
+9,008 ms
+76 ms
+…chunks/7368-dfc591541dad3238.js
+(www.dealscale.io)
+16,687 ms
+54 ms
+Stripe
+utility
+342 ms
+/basil/stripe.js
+(js.stripe.com)
+14,116 ms
+214 ms
+/out-4.5.45.js
+(m.stripe.network)
+18,764 ms
+128 ms
+Google Tag Manager
+tag-manager
+180 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+9,084 ms
+97 ms
+/gtag/js?id=G-100HCZG6N5&l=ga4DataLayer
+(www.googletagmanager.com)
+9,181 ms
+83 ms
+Unattributable
+151 ms
+Unattributable
+1,607 ms
+83 ms
+Unattributable
+1,502 ms
+68 ms
+Clarity
+utility
+74 ms
+/0.8.30/clarity.js
+(scripts.clarity.ms)
+12,798 ms
+74 ms
+User Timing marks and measures 1 user timing
+
+Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. Learn more about User Timing marks.
+
+
+Name
+Type
+Start Time
+Duration
+stripe.js:init
+Mark
+1,773.90 ms
+User Timing marks and measures 1 user timing
+
+Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. Learn more about User Timing marks.
+
+Name
+Type
+Start Time
+Duration
+stripe.js:init
+Mark
+1,773.90 ms

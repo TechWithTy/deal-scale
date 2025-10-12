@@ -2,12 +2,17 @@ import {
 	type Publication,
 	usePublications,
 } from "@/hooks/beehiiv/use-publications";
-// ! Integration test for Beehiiv publications hook
-// * Run only in a safe test environment (real API calls)
 import { act, renderHook } from "@testing-library/react";
 import { waitFor } from "@testing-library/react";
+// ! Integration test for Beehiiv publications hook
+// * Run only in a safe test environment (real API calls)
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 
-describe("Beehiiv Publications integration", () => {
+skipExternalTest("Beehiiv Publications integration");
+describeIfExternal("Beehiiv Publications integration", () => {
 	it("fetches all publications with stats", async () => {
 		const { result } = renderHook(() => usePublications());
 		// Wait for loading to become false (max 8s)

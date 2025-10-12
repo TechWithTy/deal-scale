@@ -1,0 +1,28 @@
+{
+  "title": "First Product Launch",
+  "description": "Released our first AI-powered web tool.",
+  "date": "2021-10-05",
+  "achievements": [
+    "Product shipped",
+    "First 100 users"
+  ],
+  "tags": [
+    "product",
+    "launch"
+  ],
+  "icon": "Sparkles",
+  "kpis": [
+    {
+      "name": "Users",
+      "value": 100,
+      "unit": "users",
+      "target": 100
+    }
+  ],
+  "externalLinks": [
+    {
+      "label": "Product Page",
+      "url": "https://cyberoni.com/products/ai-tool"
+    }
+  ]
+}

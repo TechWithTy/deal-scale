@@ -1,0 +1,5 @@
+{
+  "name": "Growth Potential",
+  "value": 100,
+  "fill": "hsl(var(--success))"
+}

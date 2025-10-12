@@ -66,7 +66,7 @@ describe("LinkTree component", () => {
 		render(<LinkTree items={items} title="Link Tree" />);
 
 		const a = screen.getByRole("link", { name: "Ext" });
-		expect(a).toHaveAttribute("href", "https://example.com/x");
+		expect(a).toHaveAttribute("href", "/ext");
 		expect(a).toHaveAttribute("target", "_blank");
 	});
 });

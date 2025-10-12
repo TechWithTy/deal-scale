@@ -1,0 +1,22 @@
+{
+  "stepNumber": 1,
+  "title": "Automate High-Cost Functions",
+  "subtitle": "Deploy AI for Sales & Service",
+  "description": "Implement AI agents to automate the most labor-intensive tasks in sales: outbound prospecting and inbound lead qualification.",
+  "icon": "Bolt",
+  "label": "AI Automation",
+  "positionLabel": "left-[-40px] top-[30px]",
+  "payload": [
+    {
+      "name": "Automated Tasks",
+      "value": 97,
+      "fill": "hsl(var(--primary))"
+    },
+    {
+      "name": "Coverage",
+      "value": 92,
+      "fill": "hsl(var(--secondary))"
+    }
+  ],
+  "indicator": "dot"
+}

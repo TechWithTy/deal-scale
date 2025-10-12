@@ -1,0 +1,10 @@
+{
+  "stepNumber": 4,
+  "title": "Generate Stakeholder Reports",
+  "subtitle": "Create custom-branded reports for clients or partners.",
+  "description": "Generate beautiful, comprehensive reports for your entire portfolio or specific property groups. Add your own branding to provide a white-labeled experience for your clients.",
+  "icon": "FileText",
+  "label": "Step 4: Report & Share",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,18 @@
+{
+  "id": "1",
+  "speaker": "ai",
+  "text": "This is the cloned voice after processing. Notice the clarity and consistent tone. This is perfect for scalable outreach.",
+  "startTime": 1000,
+  "duration": 7000,
+  "status": "pending",
+  "animations": [
+    {
+      "type": "fadeIn",
+      "startAt": 0,
+      "duration": 500
+    }
+  ],
+  "metadata": {
+    "emotion": "happy"
+  }
+}

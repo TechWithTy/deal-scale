@@ -1,13 +1,11 @@
 "use client";
 
-import DemoTabs from "@/components/deal_scale/demo/tabs/DemoTabs";
 import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
 import type { Transcript } from "@/types/transcript";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
 import type { StaticImageData } from "next/image";
-import { useEffect, useState } from "react";
 
 // Define words to highlight with their corresponding gradient colors
 const HIGHLIGHT_WORDS = [
@@ -17,84 +15,43 @@ const HIGHLIGHT_WORDS = [
 	{ word: "monitor", gradient: "from-emerald-500 to-teal-400" },
 ];
 
+// Animation variants for framer-motion
+const BADGE_ANIMATION_PROPS = {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, delay: 0.1 },
+} as const;
+
+const CTA_ANIMATION_PROPS = {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, delay: 0.4 },
+} as const;
+
 export interface HeroSessionMonitorProps {
-	transcript?: Transcript;
-	className?: string;
-	headline: string;
-	subheadline: string;
+        transcript?: Transcript;
+        className?: string;
+        headline?: string;
+        subheadline?: string;
 	highlight?: string;
 	highlightWords?: Array<{ word: string; gradient: string }>;
 	ctaLabel?: string;
 	ctaLabel2?: string;
 	onCtaClick?: () => void;
 	onCtaClick2?: () => void;
-	onTransfer?: () => void;
 	onCallEnd?: () => void;
+	onTransfer?: () => void;
 	onSessionReset?: (resetFn: () => void) => void;
 	badge?: string;
 	isMobile?: boolean;
-	backgroundImage?: string | StaticImageData;
+	backgroundImage?: StaticImageData;
 }
-
-// Helper component to render text with highlighted words
-const HighlightedText: React.FC<{
-	text: string;
-	highlightWords: Array<{ word: string; gradient: string }>;
-}> = ({ text, highlightWords }) => {
-	// Split text into parts and apply highlights
-	const parts: (string | JSX.Element)[] = [text];
-
-	for (const { word, gradient } of highlightWords) {
-		const regex = new RegExp(`\\b${word}\\b`, "gi");
-		const newParts: (string | JSX.Element)[] = [];
-
-		for (const part of parts) {
-			if (typeof part !== "string") {
-				newParts.push(part);
-				continue;
-			}
-
-			let lastIndex = 0;
-			let match: RegExpExecArray | null = null;
-
-			// biome-ignore lint/suspicious/noAssignInExpressions: Required for regex iteration
-			while ((match = regex.exec(part)) !== null) {
-				// Add text before the match
-				if (match.index > lastIndex) {
-					newParts.push(part.substring(lastIndex, match.index));
-				}
-
-				// Add the highlighted word
-				newParts.push(
-					<span
-						key={`${word}-${match.index}`}
-						className={`bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
-					>
-						{match[0]}
-					</span>,
-				);
-
-				lastIndex = match.index + match[0].length;
-			}
-
-			// Add remaining text
-			if (lastIndex < part.length) {
-				newParts.push(part.substring(lastIndex));
-			}
-		}
-
-		parts.length = 0;
-		parts.push(...newParts);
-	}
-
-	return <>{parts.length > 0 ? parts : text}</>;
-};
 
 const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	transcript = demoTranscript,
 	className,
 	headline,
-	subheadline,
+        subheadline = "",
 	highlight = "Appointments Delivered",
 	highlightWords = HIGHLIGHT_WORDS,
 	ctaLabel = "Get Started",
@@ -109,41 +66,92 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	isMobile = false,
 	backgroundImage,
 }) => {
-	const { theme } = useTheme();
-	const [mounted, setMounted] = useState(false);
+	// Helper component to render text with highlighted words
+	const HighlightedText: React.FC<{
+		text: string;
+		highlightWords: Array<{ word: string; gradient: string }>;
+	}> = ({ text, highlightWords }) => {
+		// Split text into parts and apply highlights
+		const parts: (string | JSX.Element)[] = [text];
 
-	// Only render on client to avoid hydration mismatch
-	useEffect(() => {
-		setMounted(true);
-	}, []);
+		for (const { word, gradient } of highlightWords) {
+			const regex = new RegExp(`\\b${word}\\b`, "gi");
+			const newParts: (string | JSX.Element)[] = [];
 
-	if (!mounted) {
-		return (
-			<div className={cn("relative overflow-hidden", className)}>
-				<div className="h-[500px] w-full animate-pulse bg-muted/20" />
-			</div>
-		);
-	}
+			for (const part of parts) {
+				if (typeof part !== "string") {
+					newParts.push(part);
+					continue;
+				}
+
+				let lastIndex = 0;
+				let match: RegExpExecArray | null = null;
+
+				// biome-ignore lint/suspicious/noAssignInExpressions: Required for regex iteration
+				while ((match = regex.exec(part)) !== null) {
+					// Add text before the match
+					if (match.index > lastIndex) {
+						newParts.push(part.substring(lastIndex, match.index));
+					}
+
+					// Add the highlighted word
+					newParts.push(
+						<span
+							key={`${word}-${match.index}`}
+							className={`bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
+						>
+							{match[0]}
+						</span>,
+					);
+
+					lastIndex = match.index + match[0].length;
+				}
+
+				// Add remaining text
+				if (lastIndex < part.length) {
+					newParts.push(part.substring(lastIndex));
+				}
+			}
+
+			parts.length = 0;
+			parts.push(...newParts);
+		}
+
+		return <>{parts.length > 0 ? parts : text}</>;
+	};
+
+	const DemoTabs = dynamic(
+		() => import("@/components/deal_scale/demo/tabs/DemoTabs"),
+		{
+			loading: () => <HeroDemoSkeleton />,
+			ssr: false,
+		},
+	);
 	return (
-		<div
+		<section
 			className={cn(
 				"mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-6 px-4 sm:mt-24 sm:mb-16 sm:px-6 lg:my-16 lg:grid-cols-2 lg:gap-8 lg:px-8",
+				"min-h-[640px] lg:min-h-[720px]",
 				className,
 			)}
+			aria-labelledby="hero-heading"
 		>
 			{/* Text Content */}
-			<div className="text-center sm:text-left md:mt-2">
-				{badge && (
-					<motion.span
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.4, delay: 0.1 }}
-						className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
-					>
-						{badge}
-					</motion.span>
-				)}
-				<h1 className="mx-auto animate-fade-in font-bold text-3xl text-glow sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
+			<div className="flex h-full flex-col justify-center text-center sm:text-left md:mt-2">
+                                {badge && (
+                                        <motion.span
+                                                initial={BADGE_ANIMATION_PROPS.initial}
+                                                animate={BADGE_ANIMATION_PROPS.animate}
+                                                transition={BADGE_ANIMATION_PROPS.transition}
+                                                className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
+                                        >
+                                                {badge}
+                                        </motion.span>
+                                )}
+				<h1
+					id="hero-heading"
+					className="mx-auto font-bold text-3xl text-glow sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl"
+				>
 					{headline}
 				</h1>
 				<span className="mx-auto my-2 block bg-gradient-to-r from-primary to-focus bg-clip-text py-2 font-bold text-3xl text-transparent sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
@@ -153,13 +161,13 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 				<p className="mx-auto mb-6 max-w-md text-base text-black sm:mb-10 sm:text-lg lg:max-w-xl lg:text-xl xl:max-w-2xl dark:text-white/70">
 					<HighlightedText text={subheadline} highlightWords={highlightWords} />
 				</p>
-				{(onCtaClick || onCtaClick2) && (
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.4, delay: 0.4 }}
-						className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
-					>
+                                {(onCtaClick || onCtaClick2) && (
+                                        <motion.div
+                                                initial={CTA_ANIMATION_PROPS.initial}
+                                                animate={CTA_ANIMATION_PROPS.animate}
+                                                transition={CTA_ANIMATION_PROPS.transition}
+                                                className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
+                                        >
 						{onCtaClick && (
 							<button
 								onClick={onCtaClick}
@@ -191,11 +199,33 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			</div>
 
 			{/* Session Monitor Carousel */}
-			<div className="relative w-full max-w-4xl">
-				<DemoTabs />
+			<div className="relative flex w-full max-w-4xl items-stretch justify-center">
+				<div className="relative flex w-full max-w-4xl items-stretch">
+					<div className="flex min-h-[420px] w-full items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur lg:min-h-[480px] dark:border-white/5">
+						<DemoTabs />
+					</div>
+				</div>
 			</div>
-		</div>
+		</section>
 	);
 };
 
 export default HeroSessionMonitor;
+
+function HeroDemoSkeleton() {
+	return (
+		<div className="flex h-full w-full flex-col items-center justify-center gap-4">
+			<div className="h-12 w-full max-w-lg animate-pulse rounded-full bg-white/5" />
+			<div className="flex w-full max-w-3xl flex-col gap-3">
+				{Array.from({ length: 4 }).map((_, index) => (
+					<div
+						// biome-ignore lint/suspicious/noArrayIndexKey: static placeholder content
+						key={index}
+						className="h-10 animate-pulse rounded-lg bg-white/5"
+					/>
+				))}
+			</div>
+			<div className="h-64 w-full max-w-3xl animate-pulse rounded-2xl bg-white/5" />
+		</div>
+	);
+}

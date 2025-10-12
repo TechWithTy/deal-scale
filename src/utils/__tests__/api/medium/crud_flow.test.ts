@@ -1,7 +1,12 @@
 import type { MediumArticle } from "@/data/medium/post";
 import { getAllPosts, getPostByGuid } from "@/lib/medium/get";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 
-describe("Medium Blog API Integration Tests", () => {
+skipExternalTest("Medium Blog API Integration Tests");
+describeIfExternal("Medium Blog API Integration Tests", () => {
 	let consoleErrorSpy: jest.SpyInstance;
 
 	beforeAll(() => {

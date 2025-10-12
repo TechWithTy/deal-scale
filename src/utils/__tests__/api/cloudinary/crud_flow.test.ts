@@ -1,13 +1,18 @@
 import { act } from "@testing-library/react";
 
 // Helper for absolute URLs
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 defineTestEnv();
 function defineTestEnv() {
 	process.env.API_BASE_URL = "http://localhost:3000";
 }
 const apiUrl = (path: string) => `${process.env.API_BASE_URL}${path}`;
 
-describe("Cloudinary CRUD flow (integration)", () => {
+skipExternalTest("Cloudinary CRUD flow (integration)");
+describeIfExternal("Cloudinary CRUD flow (integration)", () => {
 	// Use a real public PNG image URL for testing
 	const testFile =
 		"https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png";

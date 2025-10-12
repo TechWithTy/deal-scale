@@ -1,0 +1,22 @@
+{
+  "stepNumber": 4,
+  "title": "Launch",
+  "subtitle": "Start Automated Outreach",
+  "description": "Seamlessly push your high-potential leads into automated outreach and nurturing campaigns to start conversations instantly.",
+  "icon": "Rocket",
+  "label": "Launch Campaigns",
+  "positionLabel": "left-[130px] top-[10px]",
+  "payload": [
+    {
+      "name": "Campaign Automation",
+      "value": 100,
+      "fill": "hsl(var(--success))"
+    },
+    {
+      "name": "Lead Engagement",
+      "value": 88,
+      "fill": "hsl(var(--info))"
+    }
+  ],
+  "indicator": "dot"
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 4,
+  "title": "Book, Transfer, or Log",
+  "subtitle": "The AI takes the appropriate next step automatically.",
+  "description": "If the caller is qualified, the AI books an appointment directly on your calendar. If they need to speak to a human, it can initiate a hot transfer. All call details and transcripts are logged in your CRM.",
+  "icon": "CalendarCheck",
+  "label": "Step 4: Take Action",
+  "positionLabel": "bottom",
+  "payload": []
+}

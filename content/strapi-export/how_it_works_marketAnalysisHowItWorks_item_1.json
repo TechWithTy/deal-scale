@@ -1,0 +1,11 @@
+{
+  "stepNumber": 2,
+  "title": "Chat with Data",
+  "subtitle": "Ask Questions in Plain English",
+  "description": "Instead of just viewing charts, ask our AI specific questions about the market data, like 'What are the average rents for 3-bedroom houses?'",
+  "icon": "MessageSquare",
+  "label": "AI Chat Interface",
+  "positionLabel": "left-[125px] top-[-5px]",
+  "payload": [],
+  "indicator": "line"
+}

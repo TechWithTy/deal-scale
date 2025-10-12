@@ -5,6 +5,10 @@
 import { usePosts } from "@/hooks/beehiiv/use-posts";
 import type { BeehiivPost } from "@/types/behiiv";
 import { act, renderHook } from "@testing-library/react";
+import {
+	describeIfExternal,
+	skipExternalTest,
+} from "../../../testHelpers/external";
 
 import { getTestBaseUrl } from "@/utils/env";
 
@@ -17,7 +21,8 @@ const TEST_POSTS_ENDPOINT = `${baseUrl}/api/beehiiv/subscribe/posts`;
 // * Increase timeout for slow integration tests
 jest.setTimeout(20000);
 
-describe("Beehiiv Posts CRUD flow (integration)", () => {
+skipExternalTest("Beehiiv Posts CRUD flow (integration)");
+describeIfExternal("Beehiiv Posts CRUD flow (integration)", () => {
 	it("performs full CRUD flow for posts", async () => {
 		// * Setup
 		const API_KEY = process.env.BEEHIIV_API_KEY;

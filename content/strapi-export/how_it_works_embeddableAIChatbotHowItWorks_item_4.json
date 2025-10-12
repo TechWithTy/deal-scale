@@ -1,0 +1,10 @@
+{
+  "stepNumber": 5,
+  "title": "Seamless Deal Scale Integration & Handoff",
+  "subtitle": "Qualified leads are synced, booked, or transferred.",
+  "description": "Qualified leads and their conversation history are automatically synced to your Deal Scale CRM. The chatbot can book appointments directly into your integrated calendar or notify your sales team for an immediate live chat takeover or call back.",
+  "icon": "Share",
+  "label": "Step 5: Integration & Conversion",
+  "positionLabel": "bottom",
+  "payload": []
+}

@@ -1,0 +1,4 @@
+{
+  "problem": "My data on a lead is incomplete. I have a name but no current phone or address.",
+  "solution": "The Find Person API takes a name and last known location to find up-to-date contact information, including verified phones, emails, and addresses."
+}

@@ -1,0 +1,10 @@
+{
+  "stepNumber": 4,
+  "title": "Intelligent Qualification & Nurturing",
+  "subtitle": "AI qualifies leads through conversation and follow-ups.",
+  "description": "The AI continues the conversation, asking qualifying questions from your scripts, providing information, and nurturing the lead. It can handle objections and follow up based on predefined logic or AI understanding.",
+  "icon": "BrainCircuit",
+  "label": "Step 4: Qualify & Nurture",
+  "positionLabel": "bottom",
+  "payload": []
+}

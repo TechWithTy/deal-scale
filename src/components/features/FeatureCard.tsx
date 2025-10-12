@@ -1,9 +1,10 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
 import {
 	ArrowDown,
 	ArrowUp,
@@ -17,7 +18,6 @@ import {
 	Users,
 	Zap,
 } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
 import { type MouseEvent, useState } from "react";
 import type { FeatureRequest } from "./types";
 
@@ -114,7 +114,8 @@ const FeatureCard = ({
 		});
 	};
 
-	const handleVoteClick = (voteType: "up" | "down") =>
+	const handleVoteClick =
+		(voteType: "up" | "down") =>
 		async (event: React.MouseEvent<HTMLButtonElement>) => {
 			event.preventDefault();
 			event.stopPropagation();

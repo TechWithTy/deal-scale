@@ -1,0 +1,40 @@
+{
+  "id": "ab-test-skip-trace-credits-v1",
+  "name": "A/B Test for Skip Trace Credits",
+  "description": "Testing two copy variants (Speed vs. Connection) for the Skip Trace Credits product page to optimize for 'Add to Cart' clicks.",
+  "variants": [
+    {
+      "name": "V1 - Speed Focus",
+      "percentage": 50,
+      "copy": {
+        "cta": "Get Owner Contact Info Now",
+        "buttonCta": "Get Skip Trace Credits",
+        "tagline": "Turn an Address Into a Deal.",
+        "subtitle": "Instantly find verified phone numbers and emails for property owners. Stop searching, start connecting.",
+        "description": "Your list of properties is worthless without contact info. Use Skip Trace Credits to instantly uncover accurate phone numbers and emails, transforming your dead list into an actionable outreach campaign. Connect with motivated sellers before your competition does.",
+        "whatsInItForMe": "Get the direct phone numbers and emails you need to contact property owners. This lets you bypass gatekeepers, start real conversations, and be the first to make an offer on valuable off-market properties.",
+        "target_audience": "Real estate wholesalers and flippers with lists of potential properties who need accurate contact information to initiate outreach.",
+        "pain_point": "Having a list of promising properties but no way to contact the owners, leading to missed opportunities and wasted time on manual searches.",
+        "solution": "Our credits provide instant access to verified phone numbers and email addresses for property owners, turning your list of addresses into a high-value, actionable outreach list in seconds.",
+        "highlights": [
+          "Instantly Find Owner Phone Numbers",
+          "Uncover Verified Email Addresses",
+          "Accelerate Your Direct Outreach"
+        ],
+        "highlighted_words": [
+          "Instantly",
+          "Accurate",
+          "Direct"
+        ]
+      }
+    }
+  ],
+  "startDate": "2023-11-01T09:00:00.000Z",
+  "isActive": true,
+  "tags": [
+    "Product Page",
+    "Credits",
+    "Copywriting",
+    "Skip Trace"
+  ]
+}

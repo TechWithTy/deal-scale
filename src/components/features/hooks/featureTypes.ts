@@ -1,6 +1,6 @@
 import type { Category } from "@/types/case-study";
-import type { FeatureRequest } from "../types";
 import type { JSX } from "react";
+import type { FeatureRequest } from "../types";
 
 export interface FeatureVote {
 	feature_id: string;

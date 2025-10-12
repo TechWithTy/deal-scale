@@ -12,6 +12,16 @@ type MockFetchResponseOptions = {
 	headers?: Record<string, string>;
 };
 
+type FetchMock = ((...args: Parameters<typeof fetch>) => ReturnType<typeof fetch>) & {
+	mockResolvedValueOnce: (value: unknown) => unknown;
+	mockRejectedValueOnce: (error: unknown) => unknown;
+	mockReset: () => unknown;
+};
+
+function getFetchMock() {
+	return global.fetch as unknown as FetchMock;
+}
+
 /**
  * Creates a mock session object with DealScale tokens.
  */
@@ -34,7 +44,9 @@ export function mockFetchResponse({
 }: MockFetchResponseOptions) {
 	const bodyJson = json;
 	const bodyText = text ?? (json ? JSON.stringify(json) : "");
-	(global.fetch as jest.Mock).mockResolvedValueOnce({
+
+	// Create a proper mock response with minimal required properties
+	const mockResponse = {
 		ok: status >= 200 && status < 300,
 		status,
 		headers: {
@@ -42,14 +54,26 @@ export function mockFetchResponse({
 		},
 		json: async () => bodyJson,
 		text: async () => bodyText,
-	} satisfies Response);
+		// Add other required Response properties as no-ops or undefined
+		arrayBuffer: async () => new ArrayBuffer(0),
+		blob: async () => new Blob(),
+		clone: () => mockResponse,
+		body: null,
+		bodyUsed: false,
+		formData: async () => new FormData(),
+		type: 'basic' as const,
+		url: '',
+		redirected: false,
+	};
+
+	getFetchMock().mockResolvedValueOnce(mockResponse as Response);
 }
 
 /**
  * Sets the global fetch mock to reject with an error.
  */
 export function mockFetchReject(error: Error) {
-	(global.fetch as jest.Mock).mockRejectedValueOnce(error);
+	getFetchMock().mockRejectedValueOnce(error);
 }
 
 /**
@@ -63,5 +87,5 @@ export function createRequest(url: string, init?: RequestInit) {
  * Resets shared mocks between tests.
  */
 export function resetMocks() {
-	(global.fetch as jest.Mock).mockReset();
+	getFetchMock().mockReset();
 }

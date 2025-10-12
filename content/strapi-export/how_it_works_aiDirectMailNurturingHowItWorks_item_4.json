@@ -1,0 +1,10 @@
+{
+  "stepNumber": 5,
+  "title": "Track Responses & ROI",
+  "subtitle": "Monitor engagement and measure campaign success within Deal Scale.",
+  "description": "Incorporate unique QR codes, personalized URLs (PURLs), or specific call-to-actions to track responses. View delivery statuses and analyze campaign effectiveness directly in your Deal Scale dashboard.",
+  "icon": "BarChart",
+  "label": "Step 5: Track & Optimize",
+  "positionLabel": "bottom",
+  "payload": []
+}

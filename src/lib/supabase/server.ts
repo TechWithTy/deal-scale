@@ -1,5 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/_postgresql/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 /**
  * Creates a Supabase service-role client for server-side use.

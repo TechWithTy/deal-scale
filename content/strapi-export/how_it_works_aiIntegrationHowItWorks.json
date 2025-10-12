@@ -1,0 +1,68 @@
+[
+  {
+    "stepNumber": 1,
+    "title": "Automate High-Cost Functions",
+    "subtitle": "Deploy AI for Sales & Service",
+    "description": "Implement AI agents to automate the most labor-intensive tasks in sales: outbound prospecting and inbound lead qualification.",
+    "icon": "Bolt",
+    "label": "AI Automation",
+    "positionLabel": "left-[-40px] top-[30px]",
+    "payload": [
+      {
+        "name": "Automated Tasks",
+        "value": 97,
+        "fill": "hsl(var(--primary))"
+      },
+      {
+        "name": "Coverage",
+        "value": 92,
+        "fill": "hsl(var(--secondary))"
+      }
+    ],
+    "indicator": "dot"
+  },
+  {
+    "stepNumber": 2,
+    "title": "Drive Down Acquisition Costs",
+    "subtitle": "Lower Your Cost-Per-Lead",
+    "description": "The AI works 24/7 to nurture leads, dramatically reducing the man-hours and operational costs required to produce a sales-ready appointment.",
+    "icon": "ChartBar",
+    "label": "Reduce Costs",
+    "positionLabel": "left-[120px] top-[5px]",
+    "payload": [
+      {
+        "name": "Cost Reduction",
+        "value": 94,
+        "fill": "hsl(var(--accent))"
+      },
+      {
+        "name": "Lead Nurturing",
+        "value": 96,
+        "fill": "hsl(var(--muted))"
+      }
+    ],
+    "indicator": "line"
+  },
+  {
+    "stepNumber": 3,
+    "title": "Increase Team Productivity",
+    "subtitle": "Focus Humans on High-Value Tasks",
+    "description": "By delivering only qualified opportunities, your sales team's productivity soars, as they focus entirely on closing deals instead of searching for them.",
+    "icon": "ShieldCheck",
+    "label": "Boost Productivity",
+    "positionLabel": "left-[-35px] top-[55px]",
+    "payload": [
+      {
+        "name": "Qualified Leads",
+        "value": 95,
+        "fill": "hsl(var(--chart-1))"
+      },
+      {
+        "name": "Productivity Boost",
+        "value": 98,
+        "fill": "hsl(var(--chart-2))"
+      }
+    ],
+    "indicator": "dashed"
+  }
+]

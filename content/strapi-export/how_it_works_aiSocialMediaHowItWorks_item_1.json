@@ -1,0 +1,10 @@
+{
+  "stepNumber": 2,
+  "title": "Design Your Conversation",
+  "subtitle": "Build your automated qualification flow visually.",
+  "description": "Define keyword triggers (like 'info' or 'price') and map out the entire conversation, including your qualifying questions, multiple-choice answers, and data capture points.",
+  "icon": "Pencil",
+  "label": "Step 2: Build Flow",
+  "positionLabel": "bottom",
+  "payload": []
+}
