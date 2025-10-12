@@ -1,6 +1,5 @@
 "use client";
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import type { StaticImageData } from "next/image";
 import type React from "react";
 import { HeroOffering } from "../HeroOffering";
@@ -42,8 +41,6 @@ const Hero: React.FC<HeroProps> = ({
 	image,
 	imageAlt,
 }) => {
-	const isMobile = useIsMobile();
-
 	return (
 		<div className="relative flex flex-col overflow-hidden px-4 pt-12 sm:px-6 lg:px-8 lg:pt-20 xl:px-12">
 			<div className="absolute inset-0 bg-grid-lines opacity-20" />
@@ -53,7 +50,6 @@ const Hero: React.FC<HeroProps> = ({
 				<HeroOffering
 					image={image}
 					imageAlt={imageAlt}
-					isMobile={isMobile}
 					className="order-1 md:order-2"
 				/>
 				<HeroCta
