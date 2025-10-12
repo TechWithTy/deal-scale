@@ -71,21 +71,23 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 		}
 	};
 
-        const colSpanClassMap: Record<number, string> = {
-                1: "md:col-span-1",
-                2: "md:col-span-2",
-                3: "md:col-span-3",
-                4: "md:col-span-4",
-        };
+	const colSpanClassMap: Record<number, string> = {
+		1: "md:col-span-1",
+		2: "md:col-span-2",
+		3: "md:col-span-3",
+		4: "md:col-span-4",
+	};
 
-        const rowSpanClassMap: Record<number, string> = {
-                1: "md:row-span-1",
-                2: "md:row-span-2",
-                3: "md:row-span-3",
-        };
+	const rowSpanClassMap: Record<number, string> = {
+		1: "md:row-span-1",
+		2: "md:row-span-2",
+		3: "md:row-span-3",
+	};
 
-        return (
-                <div className="mx-auto my-5 max-w-6xl px-4 text-center sm:px-6 lg:px-8">
+	const heroGrid = grid.length > 0 ? grid : DEFAULT_GRID;
+
+	return (
+		<div className="mx-auto my-5 max-w-6xl px-4 text-center sm:px-6 lg:px-8">
 			<h1 className="mb-8 font-bold text-5xl text-primary md:text-7xl">
 				{headline}{" "}
 				<span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -96,29 +98,30 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 				{subheadline}
 			</p>
 			{/* Bento Grid Layout */}
-                        <div className="mb-0 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:auto-rows-[200px] lg:auto-rows-[240px] xl:auto-rows-[260px]">
-                                {/* First 4 items: Bento layout with col/row span */}
-                                {grid.slice(0, 4).map((item) => (
-                                        <button
-                                                key={item.label}
-                                                className={cn(
-                                                        "group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-                                                        "aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
-                                                        colSpanClassMap[item.colSpan ?? 1],
-                                                        rowSpanClassMap[item.rowSpan ?? 1],
-                                                )}
-                                                onClick={() => handleCategorySelect(item.categoryId)}
-                                                type="button"
-                                                aria-label={item.ariaLabel || item.label}
-                                                tabIndex={0}
-                                                onKeyDown={handleKeyDown(item.link)}
-                                        >
-                                                <img
-                                                        src={item.src}
-                                                        alt={item.alt}
-                                                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                        draggable={false}
-                                                />
+			<div className="mb-0 grid grid-cols-1 gap-4 sm:auto-rows-[minmax(220px,1fr)] sm:grid-cols-2 md:auto-rows-[minmax(0,1fr)] md:grid-cols-4 lg:auto-rows-[minmax(0,1.1fr)] lg:gap-5 xl:auto-rows-[minmax(0,1.15fr)] md:[grid-template-rows:repeat(2,minmax(0,1fr))]">
+				{/* First 4 items: Bento layout with col/row span */}
+				{heroGrid.slice(0, 4).map((item) => (
+					<button
+						key={item.label}
+						className={cn(
+							"group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+							"aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
+							colSpanClassMap[item.colSpan ?? 1],
+							rowSpanClassMap[item.rowSpan ?? 1],
+						)}
+						onClick={() => handleCategorySelect(item.categoryId)}
+						type="button"
+						aria-label={item.ariaLabel || item.label}
+						tabIndex={0}
+						onKeyDown={handleKeyDown(item.link)}
+						data-hero-card
+					>
+						<img
+							src={item.src}
+							alt={item.alt}
+							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+							draggable={false}
+						/>
 						<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4">
 							<div className="text-white">
 								<h3
@@ -141,18 +144,19 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 					</button>
 				))}
 				{/* Remaining items: Standard 1x1 grid squares */}
-                                {grid.slice(4).map((item) => (
-                                        <button
-                                                key={item.label}
-                                                className={cn(
-                                                        "group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-                                                        "aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
-                                                )}
-                                                onClick={() => handleCategorySelect(item.categoryId)}
-                                                type="button"
-                                                aria-label={item.ariaLabel || item.label}
-                                                tabIndex={0}
+				{heroGrid.slice(4).map((item) => (
+					<button
+						key={item.label}
+						className={cn(
+							"group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+							"aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
+						)}
+						onClick={() => handleCategorySelect(item.categoryId)}
+						type="button"
+						aria-label={item.ariaLabel || item.label}
+						tabIndex={0}
 						onKeyDown={handleKeyDown(item.link)}
+						data-hero-card
 					>
 						<img
 							src={item.src}
