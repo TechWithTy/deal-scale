@@ -90,7 +90,8 @@ export async function getLatestBeehiivPosts(
 			const summary = posts.map((p: any) => ({
 				id: p?.id,
 				title: p?.title,
-				published_at: p?.published_at,
+				published_at:
+					p?.published_at ?? p?.publish_date ?? p?.displayed_date ?? null,
 			}));
 			console.log(
 				`[getLatestBeehiivPosts] Received ${posts.length} post(s). Full summary:`,
