@@ -3,6 +3,7 @@ import type { BeehiivPost } from "@/types/behiiv";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { getTestBaseUrl } from "@/utils/env";
 
+import { resolveBeehiivDate } from "@/utils/seo/seo";
 import type { SeoMeta } from "@/utils/seo/seo";
 
 function toIsoDate(value: unknown): string | undefined {
