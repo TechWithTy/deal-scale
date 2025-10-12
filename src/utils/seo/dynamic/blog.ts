@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { getTestBaseUrl } from "@/utils/env";
 
+import { resolveBeehiivDate } from "@/utils/seo/seo";
 import type { SeoMeta } from "@/utils/seo/seo";
 
 export async function getSeoMetadataForPost(id: string): Promise<SeoMeta> {
@@ -45,22 +46,28 @@ export async function getSeoMetadataForPost(id: string): Promise<SeoMeta> {
 	// Images: use thumbnail_url if present
 	const images = post.thumbnail_url ? [post.thumbnail_url] : [];
 
-	return {
-		title: post.title,
-		description,
-		canonical: pageUrl,
-		keywords,
-		image: images[0] || "",
-		type: "article",
-		datePublished:
-			typeof post.publish_date === "number"
-				? new Date(post.publish_date).toISOString()
-				: undefined,
-		dateModified:
-			typeof post.displayed_date === "number"
-				? new Date(post.displayed_date).toISOString()
-				: undefined,
-		priority: 0.7, // * or customize per post
-		changeFrequency: "weekly", // * or customize per post
-	};
+        const datePublished = resolveBeehiivDate(
+                post.published_at,
+                post.publish_date,
+                post.displayed_date,
+        );
+        const dateModified =
+                resolveBeehiivDate(
+                        post.displayed_date,
+                        post.publish_date,
+                        post.published_at,
+                ) || datePublished;
+
+        return {
+                title: post.title,
+                description,
+                canonical: pageUrl,
+                keywords,
+                image: images[0] || "",
+                type: "article",
+                datePublished,
+                dateModified,
+                priority: 0.7, // * or customize per post
+                changeFrequency: "weekly", // * or customize per post
+        };
 }
