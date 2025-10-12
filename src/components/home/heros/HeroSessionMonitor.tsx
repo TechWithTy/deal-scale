@@ -128,12 +128,12 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 		},
 	);
 	return (
-		<section
-			className={cn(
-				"mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-6 px-4 sm:mt-24 sm:mb-16 sm:px-6 lg:my-16 lg:grid-cols-2 lg:gap-8 lg:px-8",
-				"min-h-[640px] lg:min-h-[720px]",
-				className,
-			)}
+                <section
+                        className={cn(
+                                "mx-auto mt-16 mb-8 grid w-full max-w-[90rem] items-center gap-8 px-4 sm:mt-24 sm:mb-16 sm:px-6 lg:my-16 lg:grid-cols-2 lg:gap-10 lg:px-8",
+                                "lg:min-h-[640px] xl:min-h-[720px]",
+                                className,
+                        )}
 			aria-labelledby="hero-heading"
 		>
 			{/* Text Content */}

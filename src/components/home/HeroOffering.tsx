@@ -1,5 +1,6 @@
 import SafeMotionDiv from "@/components/ui/SafeMotionDiv";
 import SplineModel from "@/components/ui/spline-model";
+import { cn } from "@/lib/utils";
 import Image, { type StaticImageData } from "next/image";
 import type React from "react";
 
@@ -22,23 +23,21 @@ export const HeroOffering: React.FC<HeroOfferingProps> = ({
 	isMobile,
 	className,
 }) => {
-	// Helper: type guard for Next.js <Image /> src
 	const isImageSrc = (img: unknown): img is string | StaticImageData =>
 		typeof img === "string" ||
 		(typeof img === "object" && img !== null && "src" in img);
 
 	return (
 		<div
-			className={[
+			className={cn(
+				"flex w-full items-center justify-center",
 				isMobile
-					? "flex items-center justify-center sm:h-[400px] md:h-[450px]"
-					: "flex h-[350px] items-center justify-center sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]",
+					? "py-6"
+					: "min-h-[340px] sm:min-h-[400px] md:min-h-[460px] lg:min-h-[520px]",
 				className,
-			]
-				.filter(Boolean)
-				.join(" ")}
+			)}
 		>
-			<div className="flex h-full w-full items-center justify-center">
+			<div className="relative mx-auto flex h-full w-full max-w-[18rem] items-center justify-center sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl">
 				{image ? (
 					isImageSrc(image) ? (
 						<SafeMotionDiv
