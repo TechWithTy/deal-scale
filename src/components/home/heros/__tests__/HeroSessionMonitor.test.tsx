@@ -62,11 +62,25 @@ describe("HeroSessionMonitor", () => {
                 const section = container.querySelector("section");
 
                 expect(section).not.toBeNull();
-                expect(section).not.toHaveClass("w-full");
-                expect(section).toHaveClass("max-w-xs");
+                expect(section).toHaveClass("mx-auto");
+                expect(section).toHaveClass("w-full");
+                expect(section).toHaveClass("max-w-[calc(100vw-2rem)]");
                 expect(section).toHaveClass("sm:max-w-2xl");
+                expect(section).toHaveClass("md:max-w-3xl");
                 expect(section).toHaveClass("lg:max-w-5xl");
                 expect(section).toHaveClass("items-center");
+        });
+
+        it("does not clamp the hero to the old extra-small width", () => {
+                const { container } = render(
+                        <HeroSessionMonitor headline="Viewport friendly headline" subheadline="" />,
+                );
+
+                const section = container.querySelector("section");
+
+                expect(section).not.toBeNull();
+                expect(section).not.toHaveClass("max-w-xs");
+                expect(section).toHaveClass("max-w-[calc(100vw-2rem)]");
         });
 
         it("allows the session monitor carousel to shrink on mobile while expanding responsively", () => {
