@@ -64,7 +64,7 @@ describe("HeroSessionMonitor", () => {
                 expect(section).not.toBeNull();
                 expect(section).toHaveClass("mx-auto");
                 expect(section).toHaveClass("w-full");
-                expect(section).toHaveClass("max-w-[calc(100vw-2rem)]");
+                expect(section).toHaveClass("max-w-[calc(100vw-3rem)]");
                 expect(section).toHaveClass("sm:max-w-2xl");
                 expect(section).toHaveClass("md:max-w-3xl");
                 expect(section).toHaveClass("lg:max-w-5xl");
@@ -80,7 +80,7 @@ describe("HeroSessionMonitor", () => {
 
                 expect(section).not.toBeNull();
                 expect(section).not.toHaveClass("max-w-xs");
-                expect(section).toHaveClass("max-w-[calc(100vw-2rem)]");
+                expect(section).toHaveClass("max-w-[calc(100vw-3rem)]");
         });
 
         it("allows the session monitor carousel to shrink on mobile while expanding responsively", () => {
@@ -90,7 +90,8 @@ describe("HeroSessionMonitor", () => {
 
                 expect(carousel).toHaveClass("mx-auto");
                 expect(carousel).toHaveClass("w-full");
-                expect(carousel).toHaveClass("max-w-[calc(100vw-2rem)]");
+                expect(carousel).toHaveClass("max-w-[calc(100vw-3rem)]");
+                expect(carousel).toHaveClass("sm:max-w-[calc(100vw-4rem)]");
                 expect(carousel).toHaveClass("md:max-w-4xl");
 
                 const track = carousel.firstElementChild as HTMLElement | null;
@@ -98,7 +99,8 @@ describe("HeroSessionMonitor", () => {
                 expect(track).not.toBeNull();
                 const trackEl = track as HTMLElement;
                 expect(trackEl).toHaveClass("w-full");
-                expect(trackEl).toHaveClass("max-w-[calc(100vw-2rem)]");
+                expect(trackEl).toHaveClass("max-w-[calc(100vw-3rem)]");
+                expect(trackEl).toHaveClass("sm:max-w-[calc(100vw-4rem)]");
                 expect(trackEl).toHaveClass("md:max-w-4xl");
 
                 const card = trackEl.firstElementChild as HTMLElement | null;
@@ -106,7 +108,7 @@ describe("HeroSessionMonitor", () => {
                 expect(card).not.toBeNull();
                 const cardEl = card as HTMLElement;
                 expect(cardEl).toHaveClass("w-full");
-                expect(cardEl).toHaveClass("max-w-[calc(100vw-2rem)]");
+                expect(cardEl).toHaveClass("max-w-[calc(100vw-3rem)]");
                 expect(cardEl).toHaveClass("sm:max-w-md");
                 expect(cardEl).toHaveClass("md:max-w-4xl");
         });
