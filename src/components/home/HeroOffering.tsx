@@ -2,7 +2,7 @@
 
 import SafeMotionDiv from "@/components/ui/SafeMotionDiv";
 import SplineModel from "@/components/ui/spline-model";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import Image, { type StaticImageData } from "next/image";
 import type React from "react";
@@ -12,7 +12,6 @@ export interface HeroOfferingProps {
 	imageAlt?: string;
 	className?: string;
 }
-	const isMobile = useMediaQuery("(max-width: 768px)");
 
 /**
  * HeroOffering: animated product/visual/3D offering for Hero layouts.
