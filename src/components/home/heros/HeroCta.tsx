@@ -52,12 +52,12 @@ export const HeroCta: React.FC<HeroCtaProps> = ({
 				.join(" ")}
 		>
 			{/* Badge */}
-			<div className="mb-6 inline-flex w-fit items-center justify-center rounded-full border border-primary/20 bg-background-dark/70 px-4 py-1.5 backdrop-blur-md">
-				<span className="mr-2 font-medium text-primary text-sm lg:text-base">
+			<div className="mb-6 inline-flex w-fit items-center justify-center rounded-full border border-border/50 bg-background/80 px-4 py-1.5 backdrop-blur-md">
+				<span className="mr-2 font-medium text-foreground text-sm lg:text-base">
 					{badgeLeft}
 				</span>
-				<div className="mx-1 h-0.5 w-2 rounded-full bg-primary/50" />
-				<span className="ml-1 font-medium text-primary text-sm lg:text-base">
+				<div className="mx-1 h-0.5 w-2 rounded-full bg-border" />
+				<span className="ml-1 font-medium text-foreground text-sm lg:text-base">
 					{badgeRight}
 				</span>
 			</div>
@@ -83,14 +83,14 @@ export const HeroCta: React.FC<HeroCtaProps> = ({
 					<>
 						<Button
 							onClick={ctaOnClick || handleTalkToSales}
-							className="glow mx-auto h-12 w-[70%] bg-gradient-to-r from-primary to-focus px-6 text-base text-black transition-opacity hover:opacity-90 sm:mx-0 sm:w-auto lg:h-14 lg:px-8 lg:text-lg dark:text-white"
+							className="glow mx-auto h-12 w-[70%] bg-gradient-to-r from-primary to-focus px-6 text-base text-white shadow-lg transition-all hover:opacity-90 hover:shadow-xl sm:mx-0 sm:w-auto lg:h-14 lg:px-8 lg:text-lg"
 						>
 							{ctaLabel} <ArrowRight className="ml-2 h-4 w-4 lg:h-5 lg:w-5" />
 						</Button>
 						{showLearnMore && (
 							<Button
 								variant="outline"
-								className="mx-auto h-12 w-[70%] border-white/20 bg-white/5 px-6 text-base hover:bg-white/10 sm:mx-0 sm:w-auto lg:h-14 lg:px-8 lg:text-lg"
+								className="mx-auto h-12 w-[70%] border-border bg-background/50 px-6 text-base text-foreground backdrop-blur-sm transition-all hover:bg-accent hover:text-accent-foreground sm:mx-0 sm:w-auto lg:h-14 lg:px-8 lg:text-lg"
 							>
 								Learn More
 							</Button>
