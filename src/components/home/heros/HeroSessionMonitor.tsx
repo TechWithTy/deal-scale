@@ -128,9 +128,9 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 		},
 	);
 	return (
-                <section
-                        className={cn(
-                                "mx-auto mt-16 mb-8 grid max-w-xs items-center gap-8 px-4 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:grid-cols-2 lg:gap-10 lg:max-w-5xl lg:px-8 xl:max-w-6xl 2xl:max-w-7xl",
+		<section
+			className={cn(
+				"mx-auto mt-16 mb-8 grid w-full max-w-[calc(100vw-3rem)] items-center gap-8 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:grid-cols-2 lg:gap-10 lg:max-w-5xl lg:px-8 xl:max-w-6xl 2xl:max-w-7xl",
                                 "lg:min-h-[640px] xl:min-h-[720px]",
                                 className,
                         )}
@@ -199,12 +199,12 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			</div>
 
 			{/* Session Monitor Carousel */}
-                        <div
-                                data-testid="session-monitor-carousel"
-                                className="relative mx-auto flex w-full max-w-[calc(100vw-2rem)] items-stretch justify-center sm:max-w-[calc(100vw-3rem)] md:max-w-4xl"
-                        >
-                                <div className="relative flex w-full max-w-[calc(100vw-2rem)] items-stretch justify-center sm:max-w-[calc(100vw-3rem)] md:max-w-4xl">
-                                        <div className="flex min-h-[420px] w-full max-w-[calc(100vw-2rem)] items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur sm:max-w-md md:max-w-4xl lg:min-h-[480px] dark:border-white/5">
+			<div
+				data-testid="session-monitor-carousel"
+				className="relative mx-auto flex w-full max-w-[calc(100vw-3rem)] items-stretch justify-center sm:max-w-[calc(100vw-4rem)] md:max-w-4xl"
+			>
+				<div className="relative flex w-full max-w-[calc(100vw-3rem)] items-stretch justify-center sm:max-w-[calc(100vw-4rem)] md:max-w-4xl">
+					<div className="flex min-h-[420px] w-full max-w-[calc(100vw-3rem)] items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur sm:max-w-md md:max-w-4xl lg:min-h-[480px] dark:border-white/5">
                                                 <DemoTabs />
                                         </div>
                                 </div>

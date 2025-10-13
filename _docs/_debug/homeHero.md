@@ -23,3 +23,10 @@
 - **Method:** Launched `pnpm dev` locally, resized Chromium dev tools to 320 px, 768 px, and 1024 px widths, and confirmed that the card remains fully visible without horizontal scrolling or clipping.
 - **Result:** The hero card now respects the viewport width at 320 px, while preserving the existing sm/md breakpoint behavior and the large-screen two-column layout.
 - **Notes:** Fonts and remote data fallbacks remain unchanged from previous runs; no hydration mismatches observed.
+
+## 2025-02-17 – Mobile Hero Padding Alignment
+
+- **Context:** The hero card still felt visually off-center on mobile because the container was clamped to `calc(100vw - 2rem)` while the navbar and sticky beta banner use 1.5 rem side padding. This mismatch left the card shifted relative to the chrome.
+- **Method:** Matched the hero container and carousel wrappers to a `calc(100vw - 3rem)` clamp, removed the extra base `px-6` to avoid double padding under 640 px, updated Jest assertions, and manually spot-checked responsive behavior at 320 px, 360 px, and 768 px viewports.
+- **Result:** Hero content now lines up with the navbar/beta banner edges while still shrink-wrapping below 360 px and expanding to the existing md/lg breakpoints without reintroducing horizontal clipping.
+- **Notes:** Jest integration suite still requires SendGrid/Next request mocks; relevant hero tests were updated and pass locally when those suites are skipped.
