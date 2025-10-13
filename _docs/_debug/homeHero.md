@@ -23,3 +23,10 @@
 - **Method:** Launched `pnpm dev` locally, resized Chromium dev tools to 320 px, 768 px, and 1024 px widths, and confirmed that the card remains fully visible without horizontal scrolling or clipping.
 - **Result:** The hero card now respects the viewport width at 320 px, while preserving the existing sm/md breakpoint behavior and the large-screen two-column layout.
 - **Notes:** Fonts and remote data fallbacks remain unchanged from previous runs; no hydration mismatches observed.
+
+## 2025-02-17 – Carousel Auto-Width Regression Investigation
+
+- **Context:** User feedback indicated the hero card was still clipping on ultra-narrow devices, so the carousel wrappers were updated to rely on intrinsic widths at the base breakpoint while retaining `md:w-full` for the larger layouts.
+- **Method:** Ran `pnpm dev` and inspected the hero in Chromium dev tools at 320 px, 375 px, 768 px, and 1024 px widths, focusing on horizontal overflow and scroll behavior while toggling between both hero variants.
+- **Result:** The session monitor card now shrink-wraps without forcing full-bleed width below 375 px, and no horizontal scrollbars appear while moving between hero variants. Tablet and desktop breakpoints continue to honor the two-column layout.
+- **Notes:** Remote font and newsletter API fallbacks persist; they do not affect the observed layout.

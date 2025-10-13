@@ -201,10 +201,10 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			{/* Session Monitor Carousel */}
                         <div
                                 data-testid="session-monitor-carousel"
-                                className="relative mx-auto flex w-full max-w-[calc(100vw-2rem)] items-stretch justify-center sm:max-w-[calc(100vw-3rem)] md:max-w-4xl"
+                                className="relative mx-auto flex max-w-[calc(100vw-2rem)] items-center justify-center sm:max-w-[calc(100vw-3rem)] md:w-full md:max-w-4xl"
                         >
-                                <div className="relative flex w-full max-w-[calc(100vw-2rem)] items-stretch justify-center sm:max-w-[calc(100vw-3rem)] md:max-w-4xl">
-                                        <div className="flex min-h-[420px] w-full max-w-[calc(100vw-2rem)] items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur sm:max-w-md md:max-w-4xl lg:min-h-[480px] dark:border-white/5">
+                                <div className="relative flex max-w-[calc(100vw-2rem)] items-center justify-center sm:max-w-[calc(100vw-3rem)] md:w-full md:max-w-4xl">
+                                        <div className="flex min-h-[420px] max-w-[calc(100vw-2rem)] items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur sm:max-w-md md:w-full md:max-w-4xl lg:min-h-[480px] dark:border-white/5">
                                                 <DemoTabs />
                                         </div>
                                 </div>
