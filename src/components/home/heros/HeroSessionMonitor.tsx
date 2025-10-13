@@ -130,7 +130,7 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	return (
                 <section
                         className={cn(
-                                "mx-auto mt-16 mb-8 grid max-w-xs items-center gap-8 px-4 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:grid-cols-2 lg:gap-10 lg:max-w-5xl lg:px-8 xl:max-w-6xl 2xl:max-w-7xl",
+                                "mx-auto mt-16 mb-8 grid w-full max-w-[calc(100vw-2rem)] items-center gap-8 px-4 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:grid-cols-2 lg:gap-10 lg:max-w-5xl lg:px-8 xl:max-w-6xl 2xl:max-w-7xl",
                                 "lg:min-h-[640px] xl:min-h-[720px]",
                                 className,
                         )}
