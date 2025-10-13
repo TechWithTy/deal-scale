@@ -3,12 +3,21 @@
 // ! Follows DRY, SOLID, and type-safe best practices
 
 import { BorderBeam } from "@/components/magicui/border-beam";
+import {
+        Carousel,
+        type CarouselApi,
+        CarouselContent,
+        CarouselItem,
+        CarouselNext,
+        CarouselPrevious,
+} from "@/components/ui/carousel";
 import type { HeroGridItem } from "@/data/products/hero";
 import { DEFAULT_GRID, defaultHeroProps } from "@/data/products/hero";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type React from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export type ProductHeroProps = {
 	headline?: string;
@@ -29,19 +38,23 @@ interface ProductHeroExtendedProps extends ProductHeroProps {
 
 const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 	const router = useRouter();
-	const {
-		headline = "",
-		highlight = "",
-		subheadline = "",
-		grid = [],
-		testimonial,
-		categories = [],
-		setActiveCategory = () => {},
-		gridRef,
-	} = {
-		...defaultHeroProps,
-		...props,
-	};
+        const {
+                headline = "",
+                highlight = "",
+                subheadline = "",
+                grid = [],
+                testimonial,
+                categories = [],
+                setActiveCategory = () => {},
+                gridRef,
+        } = {
+                ...defaultHeroProps,
+                ...props,
+        };
+
+        const [heroCarouselApi, setHeroCarouselApi] = useState<CarouselApi | null>(null);
+        const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+        const [heroSlideCount, setHeroSlideCount] = useState(0);
 
 	// Helper for keyboard accessibility
 	const handleKeyDown =
@@ -71,28 +84,39 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 		}
 	};
 
-	const colSpanClassMap: Record<number, string> = {
-		1: "md:col-span-1",
-		2: "md:col-span-2",
-		3: "md:col-span-3",
-		4: "md:col-span-4",
-	};
+        const rowHeightClassMap: Record<number, string> = {
+                1: "h-[240px] md:h-[280px] lg:h-[300px]",
+                2: "h-[320px] md:h-[360px] lg:h-[380px]",
+                3: "h-[380px] md:h-[420px] lg:h-[450px]",
+        };
 
-	const rowSpanClassMap: Record<number, string> = {
-		1: "md:row-span-1",
-		2: "md:row-span-2",
-		3: "md:row-span-3",
-	};
+        const clampSpan = (span: number | undefined, max: number) => {
+                if (!span || span < 1) {
+                        return 1;
+                }
 
-	const clampSpan = (span: number | undefined, max: number) => {
-		if (!span || span < 1) {
-			return 1;
-		}
+                return span > max ? max : span;
+        };
 
-		return span > max ? max : span;
-	};
+        const heroGrid = useMemo(() => (grid.length > 0 ? grid : DEFAULT_GRID), [grid]);
 
-	const heroGrid = grid.length > 0 ? grid : DEFAULT_GRID;
+        useEffect(() => {
+                if (!heroCarouselApi) {
+                        return;
+                }
+
+                const handleSelect = () => {
+                        setActiveHeroSlide(heroCarouselApi.selectedScrollSnap());
+                };
+
+                setHeroSlideCount(heroCarouselApi.scrollSnapList().length);
+                handleSelect();
+                heroCarouselApi.on("select", handleSelect);
+
+                return () => {
+                        heroCarouselApi.off("select", handleSelect);
+                };
+        }, [heroCarouselApi, heroGrid.length]);
 
 	return (
 		<div className="mx-auto my-5 max-w-6xl px-4 text-center sm:px-6 lg:px-8">
@@ -105,57 +129,83 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 			<p className="mx-auto mb-16 max-w-2xl text-foreground/80 text-xl">
 				{subheadline}
 			</p>
-			{/* Bento Grid Layout */}
-			<div className="mb-0 grid grid-flow-dense grid-cols-1 gap-4 sm:auto-rows-[minmax(220px,1fr)] sm:grid-cols-2 md:auto-rows-[minmax(240px,1fr)] md:grid-cols-4 lg:auto-rows-[minmax(260px,1fr)] lg:gap-5 xl:auto-rows-[minmax(280px,1fr)]">
-				{heroGrid.map((item) => {
-					const normalizedColSpan = clampSpan(item.colSpan, 4);
-					const normalizedRowSpan = clampSpan(item.rowSpan, 3);
+                        <Carousel
+                                opts={{ align: "start" }}
+                                className="group relative"
+                                setApi={setHeroCarouselApi}
+                        >
+                                <CarouselContent className="ml-0 flex min-w-0 gap-4 snap-x sm:gap-6">
+                                        {heroGrid.map((item) => {
+                                                const normalizedRowSpan = clampSpan(item.rowSpan, 3);
 
-					return (
-						<button
-							key={item.label}
-							className={cn(
-								"group glow glow-hover relative col-span-1 row-span-1 flex h-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-								"aspect-[4/3] sm:aspect-[5/4] md:aspect-auto",
-								colSpanClassMap[normalizedColSpan],
-								rowSpanClassMap[normalizedRowSpan],
-							)}
-							onClick={() => handleCategorySelect(item.categoryId)}
-							type="button"
-							aria-label={item.ariaLabel || item.label}
-							tabIndex={0}
-							onKeyDown={handleKeyDown(item.link)}
-							data-hero-card
-						>
-							<img
-								src={item.src}
-								alt={item.alt}
-								className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-								draggable={false}
-							/>
-							<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4">
-								<div className="text-white">
-									<h3
-										className="mb-1.5 font-bold text-lg leading-tight transition-colors duration-200 [text-shadow:0_2px_4px_rgba(0,0,0,0.5)] hover:text-accent md:text-xl"
-										title={
-											categories.some((c) => c.id === item.categoryId)
-												? `Filter by ${item.label}`
-												: `No category '${item.label}'`
-										}
-									>
-										{item.label}
-									</h3>
-									{item.description && (
-										<p className="text-sm text-white/95 leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.8)] md:text-base">
-											{item.description}
-										</p>
-									)}
-								</div>
-							</div>
-						</button>
-					);
-				})}
-			</div>
+                                                return (
+                                                        <CarouselItem
+                                                                key={item.label}
+                                                                className="min-w-0 basis-full pl-1 sm:basis-1/2 sm:pl-2 lg:basis-1/3 lg:pl-3"
+                                                        >
+                                                                <button
+                                                                        className={cn(
+                                                                                "group glow glow-hover relative flex h-full w-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+                                                                                rowHeightClassMap[normalizedRowSpan],
+                                                                        )}
+                                                                        onClick={() => handleCategorySelect(item.categoryId)}
+                                                                        type="button"
+                                                                        aria-label={item.ariaLabel || item.label}
+                                                                        tabIndex={0}
+                                                                        onKeyDown={handleKeyDown(item.link)}
+                                                                        data-hero-card
+                                                                >
+                                                                        <img
+                                                                                src={item.src}
+                                                                                alt={item.alt}
+                                                                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                                                draggable={false}
+                                                                        />
+                                                                        <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4">
+                                                                                <div className="text-white">
+                                                                                        <h3
+                                                                                                className="mb-1.5 font-bold text-lg leading-tight transition-colors duration-200 [text-shadow:0_2px_4px_rgba(0,0,0,0.5)] hover:text-accent md:text-xl"
+                                                                                                title={
+                                                                                                        categories.some((c) => c.id === item.categoryId)
+                                                                                                                ? `Filter by ${item.label}`
+                                                                                                                : `No category '${item.label}'`
+                                                                                                }
+                                                                                        >
+                                                                                                {item.label}
+                                                                                        </h3>
+                                                                                        {item.description && (
+                                                                                                <p className="text-sm text-white/95 leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.8)] md:text-base">
+                                                                                                        {item.description}
+                                                                                                </p>
+                                                                                        )}
+                                                                                </div>
+                                                                        </div>
+                                                                </button>
+                                                        </CarouselItem>
+                                                );
+                                        })}
+                                </CarouselContent>
+                                <CarouselPrevious className="absolute -left-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 rounded-full border-primary/40 bg-background/80 text-primary backdrop-blur focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus hover:bg-primary/10 md:flex" />
+                                <CarouselNext className="absolute -right-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 rounded-full border-primary/40 bg-background/80 text-primary backdrop-blur focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus hover:bg-primary/10 md:flex" />
+                        </Carousel>
+                        {heroSlideCount > 1 && (
+                                <div className="mt-6 flex justify-center gap-2">
+                                        {Array.from({ length: heroSlideCount }).map((_, index) => (
+                                                <button
+                                                        key={`hero-dot-${index.toString()}`}
+                                                        type="button"
+                                                        className={cn(
+                                                                "h-2.5 w-2.5 rounded-full border border-primary/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+                                                                activeHeroSlide === index
+                                                                        ? "bg-primary"
+                                                                        : "bg-primary/20 hover:bg-primary/40",
+                                                        )}
+                                                        onClick={() => heroCarouselApi?.scrollTo(index)}
+                                                        aria-label={`Go to hero slide ${index + 1}`}
+                                                />
+                                        ))}
+                                </div>
+                        )}
 
 			<div className="glow relative mx-auto my-5 max-w-2xl overflow-hidden rounded-2xl bg-card p-8 text-card-foreground shadow-lg">
 				<BorderBeam duration={8} size={100} />
