@@ -85,9 +85,9 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 	};
 
         const rowHeightClassMap: Record<number, string> = {
-                1: "h-[240px] md:h-[280px] lg:h-[300px]",
+                1: "h-[320px] md:h-[360px] lg:h-[380px]",
                 2: "h-[320px] md:h-[360px] lg:h-[380px]",
-                3: "h-[380px] md:h-[420px] lg:h-[450px]",
+                3: "h-[320px] md:h-[360px] lg:h-[380px]",
         };
 
         const clampSpan = (span: number | undefined, max: number) => {
@@ -134,7 +134,7 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
                                 className="group relative"
                                 setApi={setHeroCarouselApi}
                         >
-                                <CarouselContent className="ml-0 flex min-w-0 gap-4 snap-x sm:gap-6">
+                                <CarouselContent className="ml-0 flex min-w-0 items-start gap-4 snap-x sm:gap-6">
                                         {heroGrid.map((item) => {
                                                 const normalizedRowSpan = clampSpan(item.rowSpan, 3);
 
@@ -145,7 +145,7 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
                                                         >
                                                                 <button
                                                                         className={cn(
-                                                                                "group glow glow-hover relative flex h-full w-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+                                                                                "group glow glow-hover relative flex h-auto w-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
                                                                                 rowHeightClassMap[normalizedRowSpan],
                                                                         )}
                                                                         onClick={() => handleCategorySelect(item.categoryId)}
