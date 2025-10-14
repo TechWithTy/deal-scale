@@ -1,6 +1,6 @@
 const DEFAULT_CANONICAL = "https://dealscale.io";
 
-function resolveCanonicalBase(): string {
+export function resolveCanonicalBase(): string {
         const fromEnv = process.env.SITEMAP_CANONICAL_BASE?.trim();
         if (fromEnv) {
                 return fromEnv.replace(/\/$/, "");
@@ -8,7 +8,7 @@ function resolveCanonicalBase(): string {
         return DEFAULT_CANONICAL;
 }
 
-function resolveSitemapUrls(base: string): string[] {
+export function resolveSitemapUrls(base: string): string[] {
         const raw = process.env.SITEMAP_PATHS?.split(",").map((entry) => entry.trim()).filter(Boolean);
         const paths = raw && raw.length > 0 ? raw : ["sitemap.xml"];
         return paths.map((path) => {
@@ -38,7 +38,19 @@ const SEARCH_ENGINES: Engine[] = [
         },
 ];
 
-async function submitSitemaps(): Promise<number> {
+type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+
+function resolveFetch(): FetchFn {
+        if (typeof globalThis.fetch === "function") {
+                return globalThis.fetch.bind(globalThis);
+        }
+
+        throw new Error(
+                "[sitemap] Global fetch implementation is unavailable. Provide a polyfill before running submissions.",
+        );
+}
+
+export async function submitSitemaps(): Promise<number> {
         if (process.env.SITEMAP_SUBMIT_DISABLE === "1") {
                 console.log("[sitemap] Submission disabled via SITEMAP_SUBMIT_DISABLE.");
                 return 0;
@@ -53,9 +65,7 @@ async function submitSitemaps(): Promise<number> {
         const sitemapUrls = resolveSitemapUrls(canonicalBase);
         console.log(`[sitemap] Submitting ${sitemapUrls.length} sitemap(s) for ${canonicalBase}.`);
 
-        const fetchFn = typeof fetch === "function"
-                ? fetch
-                : (await import("node-fetch")).default as typeof fetch;
+        const fetchFn = resolveFetch();
 
         let failureCount = 0;
         for (const sitemapUrl of sitemapUrls) {
@@ -92,7 +102,7 @@ async function submitSitemaps(): Promise<number> {
         return failureCount;
 }
 
-(async () => {
+async function run(): Promise<void> {
         try {
                 const failures = await submitSitemaps();
                 if (failures > 0) {
@@ -102,4 +112,10 @@ async function submitSitemaps(): Promise<number> {
                 console.warn("[sitemap] Unexpected error during submission:", error);
                 process.exitCode = 0;
         }
-})();
+}
+
+if (typeof require !== "undefined" && typeof module !== "undefined" && require.main === module) {
+        void run();
+}
+
+export { run };
