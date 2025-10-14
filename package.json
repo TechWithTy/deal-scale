@@ -9,9 +9,10 @@
 	"scripts": {
 		"dev": "next dev ",
 		"dev-turbo": "next dev  --turbopack",
-		"build": "next build",
-		"start": "next start",
-		"test": "pnpm exec jest src/utils/__tests__",
+                "build": "next build",
+                "postbuild": "pnpm run submit:sitemap",
+                "start": "next start",
+                "test": "pnpm exec jest src/utils/__tests__",
 		"test-crud-api": "pnpm exec jest src/utils/__tests__/api --testPathIgnorePatterns=mock",
 		"test-metadata": "pnpm exec jest src/utils/__tests__/metadata",
 		"lint": "biome check --fix src",
@@ -28,11 +29,12 @@
 		"export:company": "node scripts/run-ts.js scripts/strapi/export-company.ts",
 		"seed:products": "STRAPI_COLLECTION=products pnpm run seed:generic",
 		"seed:services": "STRAPI_COLLECTION=services pnpm run seed:generic",
-		"seed:company": "STRAPI_COLLECTION=company pnpm run seed:generic",
-		"export:all": "node scripts/run-ts.js scripts/strapi/export-all.ts",
-		"test:export": "node scripts/run-ts.js scripts/strapi/test-export.ts",
-		"seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company"
-	},
+                "seed:company": "STRAPI_COLLECTION=company pnpm run seed:generic",
+                "export:all": "node scripts/run-ts.js scripts/strapi/export-all.ts",
+                "test:export": "node scripts/run-ts.js scripts/strapi/test-export.ts",
+                "seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company",
+                "submit:sitemap": "node tools/deploy/submit-sitemap.js"
+        },
         "lint-staged": {
                 "**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
                         "biome format --write"

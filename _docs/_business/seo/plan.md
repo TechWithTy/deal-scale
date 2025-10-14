@@ -8,10 +8,10 @@
 ## Roadmap Overview
 
 ### Phase 1 – Infrastructure Hardening (Weeks 1-2)
-- Update `robots.ts` with explicit allow/disallow rules and bot-specific directives.
-- Extend `sitemap.ts` to cover `/events`, `/partners`, `/careers`, and case-study slugs with priority metadata.
-- Introduce automated sitemap submission hooks within deployment scripts.
-- Add regression tests in `src/utils/__tests__/metadata/static` to snapshot robots and sitemap outputs.
+- [x] Update `robots.ts` with explicit allow/disallow rules and bot-specific directives. *(2025-02-14)*
+- [x] Extend `sitemap.ts` to cover `/events`, `/partners`, and case-study slugs with priority metadata; `/careers` remains excluded while it redirects to Zoho Recruit. *(2025-02-14, updated 2025-02-15)*
+- [x] Introduce automated sitemap submission hooks within deployment scripts. *(2025-02-14)*
+- [x] Add regression tests in `src/utils/__tests__/metadata/static` to snapshot robots and sitemap outputs. *(2025-02-14)*
 
 ### Phase 2 – Schema Core & Global Entity (Weeks 2-3)
 - Create `src/utils/seo/schema` module exporting JSON-LD builders and `SchemaInjector` component.

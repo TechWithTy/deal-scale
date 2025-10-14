@@ -164,24 +164,52 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 		],
 		image: DEFAULT_SEO.image,
 	},
-	"/portfolio": {
-		title: "Portfolio | Deal Scale",
-		description:
-			"Browse Deal Scale's portfolio to see AI-powered real estate solutions in action.",
-		canonical: "https://dealscale.io/portfolio",
-		keywords: [
-			"deal scale portfolio",
-			"real estate case studies",
-			"AI real estate success",
-			...DEFAULT_SEO.keywords,
-		],
-		image: DEFAULT_SEO.image,
-	},
+        "/portfolio": {
+                title: "Portfolio | Deal Scale",
+                description:
+                        "Browse Deal Scale's portfolio to see AI-powered real estate solutions in action.",
+                canonical: "https://dealscale.io/portfolio",
+                keywords: [
+                        "deal scale portfolio",
+                        "real estate case studies",
+                        "AI real estate success",
+                        ...DEFAULT_SEO.keywords,
+                ],
+                image: DEFAULT_SEO.image,
+        },
 
-	"/faqs": {
-		title: "FAQs | Deal Scale",
-		description:
-			"Find answers to common questions about Deal Scale's services and AI-powered real estate solutions.",
+        "/partners": {
+                title: "Partners | Deal Scale",
+                description:
+                        "Meet Deal Scale's technology and channel partners powering AI-driven real estate growth.",
+                canonical: "https://dealscale.io/partners",
+                keywords: [
+                        "deal scale partners",
+                        "real estate technology partners",
+                        "ai integrations",
+                        ...DEFAULT_SEO.keywords,
+                ],
+                image: DEFAULT_SEO.image,
+        },
+
+        "/careers": {
+                title: "Careers | Deal Scale",
+                description:
+                        "Explore open roles at Deal Scale and help build AI automation for modern real estate teams.",
+                canonical: "https://dealscale.zohorecruit.com/jobs/Careers",
+                keywords: [
+                        "deal scale careers",
+                        "real estate ai jobs",
+                        "proptech roles",
+                        ...DEFAULT_SEO.keywords,
+                ],
+                image: DEFAULT_SEO.image,
+        },
+
+        "/faqs": {
+                title: "FAQs | Deal Scale",
+                description:
+                        "Find answers to common questions about Deal Scale's services and AI-powered real estate solutions.",
 		canonical: "https://dealscale.io/faq",
 		keywords: DEFAULT_SEO.keywords,
 		image: DEFAULT_SEO.image,

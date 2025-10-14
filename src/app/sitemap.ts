@@ -34,22 +34,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = normalize(defaultSeo.canonical || getTestBaseUrl());
 	// Static pages with SEO metadata for sitemap
 
-	const staticPaths = [
-		"/",
-		"/privacy",
-		"/blogs",
-		"/case-studies",
-		"/contact",
-		"/contact-pilot",
-		"/cookies",
-		"/events",
-		"/faqs",
-		"/pricing",
-		"/portfolio",
-		"/features",
-		"/tos",
-		"/products",
-	];
+        const staticPaths = [
+                "/",
+                "/privacy",
+                "/blogs",
+                "/case-studies",
+                "/contact",
+                "/contact-pilot",
+                "/cookies",
+                "/events",
+                "/partners",
+                "/faqs",
+                "/pricing",
+                "/portfolio",
+                "/features",
+                "/tos",
+                "/products",
+        ];
+        // ! /careers is intentionally excluded because the Next.js redirect points to Zoho Recruit.
 
 	const staticPages = staticPaths.map((path) => {
 		// Get SEO data for the path, fallback to empty object with SeoMeta type
