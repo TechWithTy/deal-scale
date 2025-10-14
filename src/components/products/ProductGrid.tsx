@@ -15,9 +15,9 @@ import {
 import { usePagination } from "@/hooks/use-pagination";
 import { ProductCategory, type ProductType } from "@/types/products";
 import { useSession } from "next-auth/react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React from "react";
+import { useMemo, useState } from "react";
+import { useEffect } from "react";
 import ProductCardNew from "./product/ProductCardNew";
 import FreeResourceCard from "./product/FreeResourceCard";
 import ProductFilter from "./product/ProductFilter";
