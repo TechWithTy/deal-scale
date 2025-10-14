@@ -1,6 +1,10 @@
 const DEFAULT_CANONICAL = "https://dealscale.io";
 
-export function resolveCanonicalBase(): string {
+/**
+ * Resolve the canonical base URL for sitemap submissions.
+ * @returns {string}
+ */
+function resolveCanonicalBase() {
         const fromEnv = process.env.SITEMAP_CANONICAL_BASE?.trim();
         if (fromEnv) {
                 return fromEnv.replace(/\/$/, "");
@@ -8,8 +12,15 @@ export function resolveCanonicalBase(): string {
         return DEFAULT_CANONICAL;
 }
 
-export function resolveSitemapUrls(base: string): string[] {
-        const raw = process.env.SITEMAP_PATHS?.split(",").map((entry) => entry.trim()).filter(Boolean);
+/**
+ * Build fully qualified sitemap URLs.
+ * @param {string} base
+ * @returns {string[]}
+ */
+function resolveSitemapUrls(base) {
+        const raw = process.env.SITEMAP_PATHS?.split(",")
+                .map((entry) => entry.trim())
+                .filter(Boolean);
         const paths = raw && raw.length > 0 ? raw : ["sitemap.xml"];
         return paths.map((path) => {
                 if (/^https?:\/\//i.test(path)) {
@@ -20,12 +31,7 @@ export function resolveSitemapUrls(base: string): string[] {
         });
 }
 
-type Engine = {
-        name: string;
-        buildPingUrl: (sitemapUrl: string) => string;
-};
-
-const SEARCH_ENGINES: Engine[] = [
+const SEARCH_ENGINES = [
         {
                 name: "google",
                 buildPingUrl: (sitemapUrl) =>
@@ -38,9 +44,7 @@ const SEARCH_ENGINES: Engine[] = [
         },
 ];
 
-type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
-
-function resolveFetch(): FetchFn {
+function resolveFetch() {
         if (typeof globalThis.fetch === "function") {
                 return globalThis.fetch.bind(globalThis);
         }
@@ -50,7 +54,7 @@ function resolveFetch(): FetchFn {
         );
 }
 
-export async function submitSitemaps(): Promise<number> {
+async function submitSitemaps() {
         if (process.env.SITEMAP_SUBMIT_DISABLE === "1") {
                 console.log("[sitemap] Submission disabled via SITEMAP_SUBMIT_DISABLE.");
                 return 0;
@@ -102,11 +106,11 @@ export async function submitSitemaps(): Promise<number> {
         return failureCount;
 }
 
-async function run(): Promise<void> {
+async function run() {
         try {
                 const failures = await submitSitemaps();
                 if (failures > 0) {
-                        process.exitCode = 0; // Log warnings without failing build
+                        process.exitCode = 0;
                 }
         } catch (error) {
                 console.warn("[sitemap] Unexpected error during submission:", error);
@@ -118,4 +122,10 @@ if (typeof require !== "undefined" && typeof module !== "undefined" && require.m
         void run();
 }
 
-export { run };
+module.exports = {
+        DEFAULT_CANONICAL,
+        resolveCanonicalBase,
+        resolveSitemapUrls,
+        submitSitemaps,
+        run,
+};
