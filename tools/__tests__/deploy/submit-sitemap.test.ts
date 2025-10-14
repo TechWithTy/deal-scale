@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 
-import { submitSitemaps } from "../../deploy/submit-sitemap";
+import { submitSitemaps } from "../../deploy/submit-sitemap.js";
 
 type FetchMock = jest.MockedFunction<typeof fetch>;
 

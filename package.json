@@ -33,8 +33,8 @@
                 "export:all": "node scripts/run-ts.js scripts/strapi/export-all.ts",
                 "test:export": "node scripts/run-ts.js scripts/strapi/test-export.ts",
                 "seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company",
-                "submit:sitemap": "pnpm exec tsx tools/deploy/submit-sitemap.ts"
-	},
+                "submit:sitemap": "node tools/deploy/submit-sitemap.js"
+        },
         "lint-staged": {
                 "**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
                         "biome format --write"
