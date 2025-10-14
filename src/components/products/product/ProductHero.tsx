@@ -84,20 +84,6 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 		}
 	};
 
-        const rowHeightClassMap: Record<number, string> = {
-                1: "h-[320px] md:h-[360px] lg:h-[380px]",
-                2: "h-[320px] md:h-[360px] lg:h-[380px]",
-                3: "h-[320px] md:h-[360px] lg:h-[380px]",
-        };
-
-        const clampSpan = (span: number | undefined, max: number) => {
-                if (!span || span < 1) {
-                        return 1;
-                }
-
-                return span > max ? max : span;
-        };
-
         const heroGrid = useMemo(() => (grid.length > 0 ? grid : DEFAULT_GRID), [grid]);
 
         useEffect(() => {
@@ -135,26 +121,21 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
                                 setApi={setHeroCarouselApi}
                         >
                                 <CarouselContent className="ml-0 flex min-w-0 items-start gap-4 snap-x sm:gap-6">
-                                        {heroGrid.map((item) => {
-                                                const normalizedRowSpan = clampSpan(item.rowSpan, 3);
-
-                                                return (
-                                                        <CarouselItem
-                                                                key={item.label}
-                                                                className="min-w-0 basis-full pl-1 sm:basis-1/2 sm:pl-2 lg:basis-1/3 lg:pl-3"
+                                        {heroGrid.map((item) => (
+                                                <CarouselItem
+                                                        key={item.label}
+                                                        className="min-w-0 basis-full pl-1 sm:basis-1/2 sm:pl-2 lg:basis-1/3 lg:pl-3"
+                                                >
+                                                        <button
+                                                                className="group glow glow-hover relative block w-full cursor-pointer rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                                                                onClick={() => handleCategorySelect(item.categoryId)}
+                                                                type="button"
+                                                                aria-label={item.ariaLabel || item.label}
+                                                                tabIndex={0}
+                                                                onKeyDown={handleKeyDown(item.link)}
+                                                                data-hero-card
                                                         >
-                                                                <button
-                                                                        className={cn(
-                                                                                "group glow glow-hover relative flex h-auto w-full cursor-pointer overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-                                                                                rowHeightClassMap[normalizedRowSpan],
-                                                                        )}
-                                                                        onClick={() => handleCategorySelect(item.categoryId)}
-                                                                        type="button"
-                                                                        aria-label={item.ariaLabel || item.label}
-                                                                        tabIndex={0}
-                                                                        onKeyDown={handleKeyDown(item.link)}
-                                                                        data-hero-card
-                                                                >
+                                                                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-[3/2] lg:aspect-[5/4]">
                                                                         <img
                                                                                 src={item.src}
                                                                                 alt={item.alt}
@@ -180,10 +161,10 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
                                                                                         )}
                                                                                 </div>
                                                                         </div>
-                                                                </button>
-                                                        </CarouselItem>
-                                                );
-                                        })}
+                                                                </div>
+                                                        </button>
+                                                </CarouselItem>
+                                        ))}
                                 </CarouselContent>
                                 <CarouselPrevious className="absolute -left-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 rounded-full border-primary/40 bg-background/80 text-primary backdrop-blur focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus hover:bg-primary/10 md:flex" />
                                 <CarouselNext className="absolute -right-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 rounded-full border-primary/40 bg-background/80 text-primary backdrop-blur focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus hover:bg-primary/10 md:flex" />
