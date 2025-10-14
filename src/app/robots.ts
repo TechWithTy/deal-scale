@@ -20,7 +20,7 @@ const DISALLOWED_PATHS = [
         "/sandbox/",
 ];
 
-type RobotsRule = NonNullable<MetadataRoute.Robots["rules"]> extends Array<infer Rule>
+type RobotsRule = Extract<MetadataRoute.Robots["rules"], Array<unknown>> extends Array<infer Rule>
         ? Rule
         : never;
 
