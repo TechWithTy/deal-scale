@@ -1,13 +1,12 @@
 import { events as fallbackEvents } from "@/data/events";
 import type { NormalizedEvent } from "@/lib/events/eventSchemas";
 
+import { EVENTS_REVALIDATE_SECONDS } from "./constants";
 import {
         EventRecordSchema,
         EventsResponseSchema,
         normalizeEvent,
 } from "./eventSchemas";
-
-export const EVENTS_REVALIDATE_SECONDS = 1800;
 
 function buildEventsEndpoint(): string {
         const apiBase = process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";

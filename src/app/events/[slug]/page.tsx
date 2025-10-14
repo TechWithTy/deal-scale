@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Separator } from "@/components/ui/separator";
-import { EVENTS_REVALIDATE_SECONDS, fetchEvents } from "@/lib/events/fetchEvents";
+import { fetchEvents } from "@/lib/events/fetchEvents";
 import type { NormalizedEvent } from "@/lib/events/eventSchemas";
 import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
@@ -14,11 +14,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Calendar, Clock, ExternalLink, MapPin } from "lucide-react";
 
-export const revalidate = EVENTS_REVALIDATE_SECONDS;
-
-interface EventPageParams {
-        params: { slug: string };
-}
+export const revalidate = 1800;
+// ! Keep this value in sync with EVENTS_REVALIDATE_SECONDS in src/lib/events/constants.ts
 
 async function getEventBySlug(slug: string): Promise<NormalizedEvent | undefined> {
         const events = await fetchEvents();
@@ -30,7 +27,11 @@ export async function generateStaticParams() {
         return events.map((event) => ({ slug: event.slug }));
 }
 
-export async function generateMetadata({ params }: EventPageParams): Promise<Metadata> {
+export async function generateMetadata({
+        params,
+}: {
+        params: { slug: string };
+}): Promise<Metadata> {
         const event = await getEventBySlug(params.slug);
         if (!event) {
                 notFound();
@@ -61,7 +62,11 @@ export async function generateMetadata({ params }: EventPageParams): Promise<Met
         };
 }
 
-export default async function EventDetailPage({ params }: EventPageParams) {
+export default async function EventDetailPage({
+        params,
+}: {
+        params: { slug: string };
+}) {
         const event = await getEventBySlug(params.slug);
         if (!event) {
                 notFound();
