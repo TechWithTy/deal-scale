@@ -1,42 +1,48 @@
 "use client";
 
 import { CTASection } from "@/components/common/CTASection";
-import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
 import EventsFilter from "@/components/events/EventsFilter";
 import EventsGrid from "@/components/events/EventsGrid";
-import Hero from "@/components/home/heros/Hero";
-import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
-import { Separator } from "@/components/ui/separator";
-import { events } from "@/data/events";
-import { staticSeoMeta } from "@/utils/seo/staticSeo";
-import { useState } from "react";
+import type { NormalizedEvent } from "@/lib/events/eventSchemas";
+import { useMemo, useState } from "react";
 
-export default function Events() {
-	const [searchTerm, setSearchTerm] = useState("");
-	const [activeCategory, setActiveCategory] = useState("all");
+interface EventsClientProps {
+        events: NormalizedEvent[];
+}
 
-	const filteredEvents = events.filter((event) => {
-		const matchesCategory =
-			activeCategory === "all" || event.category === activeCategory;
-		const matchesSearch =
-			event.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			event.description?.toLowerCase().includes(searchTerm.toLowerCase());
-		return matchesCategory && matchesSearch;
-	});
+export default function Events({ events }: EventsClientProps) {
+        const [searchTerm, setSearchTerm] = useState("");
+        const [activeCategory, setActiveCategory] = useState("all");
 
-	const categories = [
-		{ id: "all", name: "All Events" },
-		...Array.from(new Set(events.map((event) => event.category)))
-			.filter(Boolean)
-			.map((category) => ({
-				id: category,
-				name: category.charAt(0).toUpperCase() + category.slice(1),
-			})),
-	];
+        const categories = useMemo(() => {
+                const uniqueCategories = Array.from(new Set(events.map((event) => event.category)));
+                return [
+                        { id: "all", name: "All Events" },
+                        ...uniqueCategories
+                                .filter(Boolean)
+                                .map((category) => ({
+                                        id: category,
+                                        name: category.charAt(0).toUpperCase() + category.slice(1),
+                                })),
+                ];
+        }, [events]);
 
-	return (
-		<>
-			<div className=" ">
+        const filteredEvents = useMemo(() => {
+                const normalizedSearch = searchTerm.toLowerCase();
+                return events.filter((event) => {
+                        const matchesCategory =
+                                activeCategory === "all" || event.category === activeCategory;
+                        const matchesSearch =
+                                event.title?.toLowerCase().includes(normalizedSearch) ||
+                                event.description?.toLowerCase().includes(normalizedSearch) ||
+                                event.location?.toLowerCase().includes(normalizedSearch);
+                        return matchesCategory && matchesSearch;
+                });
+        }, [activeCategory, events, searchTerm]);
+
+        return (
+                <>
+                        <div className=" ">
 				{/* <HeroSessionMonitorClientWithModal /> */}
 
 				<EventsFilter
@@ -45,7 +51,10 @@ export default function Events() {
 					onSearch={setSearchTerm}
 					onCategoryChange={setActiveCategory}
 				/>
-				<EventsGrid events={filteredEvents} />
+                                <EventsGrid
+                                        events={filteredEvents}
+                                        isCategoryFiltered={activeCategory !== "all"}
+                                />
 				<CTASection
 					title="Want to attend our events?"
 					description="Join us for exciting discussions and networking opportunities."
