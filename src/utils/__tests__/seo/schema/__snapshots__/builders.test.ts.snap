@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`schema builders builds a product schema 1`] = `
+{
+  "@context": "https://schema.org",
+  "@id": "https://dealscale.io/products/ai-lead-nurture-toolkit#product",
+  "@type": "Product",
+  "brand": {
+    "@type": "Brand",
+    "name": "CyberOni",
+  },
+  "description": "A comprehensive toolkit for managing AI-assisted lead nurture workflows.",
+  "image": undefined,
+  "manufacturer": {
+    "@id": "https://dealscale.io#organization",
+  },
+  "name": "AI Lead Nurture Toolkit",
+  "offers": {
+    "@type": "Offer",
+    "price": 199,
+    "priceCurrency": "USD",
+    "url": undefined,
+  },
+  "sku": "AI-LEAD-001",
+  "url": "https://dealscale.io/products/ai-lead-nurture-toolkit",
+}
+`;
+
+exports[`schema builders builds a service schema 1`] = `
+{
+  "@context": "https://schema.org",
+  "@id": "https://dealscale.io/services/ai-appointment-setting#service",
+  "@type": "Service",
+  "areaServed": undefined,
+  "category": "AI Services",
+  "description": "Done-for-you lead qualification powered by Deal Scale's AI agents.",
+  "name": "AI Appointment Setting",
+  "offers": undefined,
+  "provider": {
+    "@id": "https://dealscale.io#organization",
+  },
+  "serviceType": "Lead Generation",
+  "url": "https://dealscale.io/services/ai-appointment-setting",
+}
+`;
+
+exports[`schema builders builds the organization schema 1`] = `
+{
+  "@context": "https://schema.org",
+  "@id": "https://dealscale.io#organization",
+  "@type": "Organization",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Denver",
+    "addressRegion": "CO",
+    "streetAddress": "3700 Quebec St",
+  },
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "availableLanguage": [
+        "en",
+      ],
+      "contactType": "customer service",
+      "telephone": "+1 (720) 258-6576",
+    },
+    {
+      "@type": "ContactPoint",
+      "availableLanguage": [
+        "en",
+      ],
+      "contactType": "sales",
+      "email": "sam.scaler@dealscale.io",
+    },
+  ],
+  "description": "Deal Scale provides AI-Powered Agents that deliver sales-ready appointments, not just leads. We automate the repetitive, time-consuming work of prospecting and nurturing so real estate investors and wholesalers can focus on what matters most: closing deals. Our mission is to build a consistent, predictable pipeline for every client.",
+  "legalName": "CyberOni",
+  "logo": "https://dealscale.io/banners/main.png",
+  "name": "CyberOni",
+  "sameAs": [
+    "https://www.linkedin.com/company/deal-scale/",
+    "https://www.facebook.com/profile.php?id=61576707389189",
+    "https://www.instagram.com/deal_scale/",
+    "https://medium.com/@dealscale",
+  ],
+  "url": "https://dealscale.io",
+}
+`;
+
+exports[`schema builders builds the website schema 1`] = `
+{
+  "@context": "https://schema.org",
+  "@id": "https://dealscale.io#website",
+  "@type": "WebSite",
+  "description": "Expert AI-powered solutions for real estate agents, investors and wholesalers. Automate lead generation, qualification, and outreach to close more deals.",
+  "name": "Deal Scale | AI-Powered Real Estate Solutions",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "query-input": "required name=search_term_string",
+    "target": "https://dealscale.io/search?q={search_term_string}",
+  },
+  "publisher": {
+    "@id": "https://dealscale.io#organization",
+  },
+  "url": "https://dealscale.io",
+}
+`;
