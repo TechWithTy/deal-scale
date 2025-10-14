@@ -20,10 +20,11 @@ const DISALLOWED_PATHS = [
         "/sandbox/",
 ];
 
-function createRule(
-        userAgent: string,
-        crawlDelay?: number,
-): MetadataRoute.Robots["rules"][number] {
+type RobotsRule = NonNullable<MetadataRoute.Robots["rules"]> extends Array<infer Rule>
+        ? Rule
+        : never;
+
+function createRule(userAgent: string, crawlDelay?: number): RobotsRule {
         return {
                 userAgent,
                 allow: ALLOWED_ROUTES,
