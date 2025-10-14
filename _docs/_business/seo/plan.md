@@ -14,9 +14,9 @@
 - [x] Add regression tests in `src/utils/__tests__/metadata/static` to snapshot robots and sitemap outputs. *(2025-02-14)*
 
 ### Phase 2 – Schema Core & Global Entity (Weeks 2-3)
-- Create `src/utils/seo/schema` module exporting JSON-LD builders and `SchemaInjector` component.
-- Implement Organization + WebSite schema injection in the root head component with canonical `@id` and `sameAs` references.
-- Add Jest tests for each schema builder (Organization, WebSite, Service, Product).
+- [x] Create `src/utils/seo/schema` module exporting JSON-LD builders and `SchemaInjector` component. *(2025-10-14)*
+- [x] Implement Organization + WebSite schema injection in the root head component with canonical `@id` and `sameAs` references. *(2025-10-14)*
+- [x] Add Jest tests for each schema builder (Organization, WebSite, Service, Product). *(2025-10-14)*
 
 ### Phase 3 – Route Upgrades (Weeks 3-5)
 - **/events**
