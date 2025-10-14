@@ -4,12 +4,19 @@
 
 "use client";
 import { useAuthModal } from "@/components/auth/use-auth-store";
+import {
+        Carousel,
+        type CarouselApi,
+        CarouselContent,
+        CarouselItem,
+        CarouselNext,
+        CarouselPrevious,
+} from "@/components/ui/carousel";
 import { usePagination } from "@/hooks/use-pagination";
 import { ProductCategory, type ProductType } from "@/types/products";
 import { useSession } from "next-auth/react";
-import React from "react";
-import { useMemo, useState } from "react";
-import { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ProductCardNew from "./product/ProductCardNew";
 import FreeResourceCard from "./product/FreeResourceCard";
@@ -46,6 +53,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
         const [showWorkflowModal, setShowWorkflowModal] = useState(false);
         const [activeCategory, setActiveCategory] = useState<string>("all");
         const freeResourceCategory = ProductCategory.FreeResources;
+        const [productCarouselApi, setProductCarouselApi] = useState<CarouselApi | null>(null);
+        const [activeProductSlide, setActiveProductSlide] = useState(0);
+        const [productSlideCount, setProductSlideCount] = useState(0);
 
 	// On mount, check for #category=... in the hash and set activeCategory
 	useEffect(() => {
@@ -155,8 +165,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
         const shouldShowEmptyState =
                 filteredProducts.length === 0 && featuredFreeResources.length === 0;
 
-	// Pagination
-	const {
+        // Pagination
+        const {
 		pagedItems: paginatedProducts,
 		page,
 		totalPages,
@@ -166,13 +176,62 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 		canShowPagination,
 		canShowShowMore,
 		canShowShowLess,
-		showMore,
-		showLess,
-	} = usePagination(filteredProducts, {
-		itemsPerPage: 6,
-		initialPage: 1,
-		enableShowAll: true,
-	});
+                showMore,
+                showLess,
+        } = usePagination(filteredProducts, {
+                itemsPerPage: 6,
+                initialPage: 1,
+                enableShowAll: true,
+        });
+
+        const handleWorkflowClick = useCallback(() => {
+                if (session) {
+                        setShowWorkflowModal(true);
+                        return;
+                }
+
+                openAuthModal("signin", () => setShowWorkflowModal(true));
+        }, [openAuthModal, session, setShowWorkflowModal]);
+
+        const sliderItems = useMemo(() => {
+                const items: { key: string; node: ReactNode }[] = paginatedProducts.map((product) => ({
+                        key: product.sku,
+                        node: (
+                                <ProductCardNew
+                                        {...product}
+                                        className="h-full w-full"
+                                        callbackUrl={callbackUrl}
+                                />
+                        ),
+                }));
+
+                if (activeCategory === "workflows") {
+                        items.unshift({
+                                key: "workflow-monetize",
+                                node: <MonetizeCard onClick={handleWorkflowClick} />,
+                        });
+                }
+
+                return items;
+        }, [paginatedProducts, callbackUrl, activeCategory, handleWorkflowClick]);
+
+        useEffect(() => {
+                if (!productCarouselApi) {
+                        return;
+                }
+
+                const handleSelect = () => {
+                        setActiveProductSlide(productCarouselApi.selectedScrollSnap());
+                };
+
+                setProductSlideCount(productCarouselApi.scrollSnapList().length);
+                handleSelect();
+                productCarouselApi.on("select", handleSelect);
+
+                return () => {
+                        productCarouselApi.off("select", handleSelect);
+                };
+        }, [productCarouselApi, sliderItems.length]);
 
 	return (
 		<>
@@ -208,43 +267,59 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
                                                                         ))}
                                                                 </div>
                                                         )}
-                                                        {(filteredProducts.length > 0 || activeCategory === "workflows") && (
-                                                                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                                                                        {/* + Create Workflow Card (only for workflows category) */}
-                                                                        {activeCategory === "workflows" && (
-                                                                                <>
-                                                                                        <MonetizeCard
-                                                                                                onClick={() => {
-                                                                                                        if (session) {
-                                                                                                                setShowWorkflowModal(true);
-                                                                                                        } else {
-                                                                                                                openAuthModal("signin", () =>
-                                                                                                                        setShowWorkflowModal(true),
-                                                                                                                );
-                                                                                                        }
-                                                                                                }}
-                                                                                        />
-                                                                                        <WorkflowCreateModal
-                                                                                                open={showWorkflowModal}
-                                                                                                onClose={() => setShowWorkflowModal(false)}
-                                                                                        />
-                                                                                </>
-                                                                        )}
-                                                                        {paginatedProducts.map((product) => (
-                                                                                <ProductCardNew
-                                                                                        key={product.sku}
-                                                                                        {...product}
-                                                                                        className="h-full w-full"
-                                                                                        callbackUrl={callbackUrl}
-                                                                                />
-                                                                        ))}
-                                                                </div>
+                                                        {(filteredProducts.length > 0 || activeCategory === "workflows") &&
+                                                                sliderItems.length > 0 && (
+                                                                        <div className="relative">
+                                                                                <Carousel
+                                                                                        opts={{ align: "start" }}
+                                                                                        className="group w-full touch-pan-x"
+                                                                                        setApi={setProductCarouselApi}
+                                                                                >
+                                                                                        <CarouselContent className="ml-0 flex min-w-0 gap-4 snap-x sm:gap-6">
+                                                                                                {sliderItems.map((item) => (
+                                                                                                        <CarouselItem
+                                                                                                                key={item.key}
+                                                                                                                className="min-w-0 basis-full pl-1 sm:basis-1/2 sm:pl-2 lg:basis-1/3 lg:pl-3"
+                                                                                                        >
+                                                                                                                <div className="h-full">
+                                                                                                                        {item.node}
+                                                                                                                </div>
+                                                                                                        </CarouselItem>
+                                                                                                ))}
+                                                                                        </CarouselContent>
+                                                                                        <CarouselPrevious className="absolute -left-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 rounded-full border-primary/40 bg-background/80 text-primary backdrop-blur focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus hover:bg-primary/10 md:flex" />
+                                                                                        <CarouselNext className="absolute -right-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 rounded-full border-primary/40 bg-background/80 text-primary backdrop-blur focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus hover:bg-primary/10 md:flex" />
+                                                                                </Carousel>
+                                                                                {productSlideCount > 1 && (
+                                                                                        <div className="mt-6 flex justify-center gap-2">
+                                                                                                {Array.from({ length: productSlideCount }).map((_, index) => (
+                                                                                                        <button
+                                                                                                                key={`product-dot-${index.toString()}`}
+                                                                                                                type="button"
+                                                                                                                className={`h-2.5 w-2.5 rounded-full border border-primary/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus ${
+                                                                                                                        activeProductSlide === index
+                                                                                                                                ? "bg-primary"
+                                                                                                                                : "bg-primary/20 hover:bg-primary/40"
+                                                                                                                }`}
+                                                                                                                onClick={() => productCarouselApi?.scrollTo(index)}
+                                                                                                                aria-label={`Go to product slide ${index + 1}`}
+                                                                                                        />
+                                                                                                ))}
+                                                                                        </div>
+                                                                                )}
+                                                                        </div>
+                                                                )}
+                                                        {activeCategory === "workflows" && (
+                                                                <WorkflowCreateModal
+                                                                        open={showWorkflowModal}
+                                                                        onClose={() => setShowWorkflowModal(false)}
+                                                                />
                                                         )}
-							{/* Pagination Controls */}
-							{(canShowPagination || canShowShowMore || canShowShowLess) && (
-								<nav
-									className="mt-8 flex flex-col items-center justify-center gap-2"
-									aria-label="Pagination"
+                                                        {/* Pagination Controls */}
+                                                        {(canShowPagination || canShowShowMore || canShowShowLess) && (
+                                                                <nav
+                                                                        className="mt-8 flex flex-col items-center justify-center gap-2"
+                                                                        aria-label="Pagination"
 								>
 									{canShowShowMore && (
 										<button
