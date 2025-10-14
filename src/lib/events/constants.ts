@@ -1,0 +1,1 @@
+export const EVENTS_REVALIDATE_SECONDS = 1800;
