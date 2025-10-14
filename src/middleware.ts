@@ -73,20 +73,11 @@ function parseDevRedirects(): Record<string, string> {
 	return out;
 }
 
-function getPlain(prop: unknown): string | undefined {
-	const p = prop as { type?: string; [k: string]: any } | undefined;
-	if (!p) return undefined;
-	if (!prop) return undefined;
-	// rich_text
-	if (p.type === "rich_text")
-		return p.rich_text?.[0]?.plain_text as string | undefined;
-	// title
-	if (p.type === "title") return p.title?.[0]?.plain_text as string | undefined;
-	// url
-	if (p.type === "url") return p.url as string | undefined;
-	// select
-	if (p.type === "select") return p.select?.name as string | undefined;
-	return undefined;
+function getNumberProp(props: Record<string, unknown>, propertyName: string): number | undefined {
+	const prop = props[propertyName];
+	if (!prop || typeof prop !== 'object') return undefined;
+	const p = prop as { type?: string; number?: number };
+	return typeof p.number === 'number' ? p.number : undefined;
 }
 
 function getDestinationStrict(prop: unknown): string | undefined {
@@ -211,9 +202,7 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 			const utm_redirect_url = redirectUrlRaw
 				? sanitizeUrlLike(redirectUrlRaw)
 				: undefined;
-			const callsProp = (props as any)?.["Redirects (Calls)"];
-			const current =
-				typeof callsProp?.number === "number" ? callsProp.number : 0;
+			const current = getNumberProp(props, "Redirects (Calls)") ?? 0;
 			const nextCalls = current + 1;
 			const result: Found = {
 				destination,
