@@ -1,4 +1,7 @@
 import { companyData } from "@/data/company";
+import type { BeehiivPost } from "@/types/behiiv";
+import type { CaseStudy } from "@/types/case-study";
+import type { FAQItem } from "@/types/faq";
 import { defaultSeo } from "@/utils/seo/staticSeo";
 
 import {
@@ -11,14 +14,38 @@ import {
         WEBSITE_ID,
 } from "./helpers";
 import type {
+        BlogPostingSchema,
+        BlogSchema,
+        CreativeWorkSchema,
+        FAQPageSchema,
         OfferSchema,
         ProductSchema,
         ProductSchemaInput,
+        ReviewSchema,
         ServiceSchema,
         ServiceSchemaInput,
         WebSiteSchema,
         OrganizationSchema,
 } from "./types";
+
+type BuildCaseStudySchemaOptions = {
+        canonicalUrl?: string;
+        relatedCaseStudies?: CaseStudy[];
+};
+
+type BuildFAQPageSchemaOptions = {
+        canonicalUrl: string;
+        name: string;
+        description?: string;
+        faqs: FAQItem[];
+};
+
+type BuildBlogSchemaOptions = {
+        canonicalUrl: string;
+        name: string;
+        description?: string;
+        posts: BeehiivPost[];
+};
 
 export const buildOrganizationSchema = (): OrganizationSchema => ({
         "@context": SCHEMA_CONTEXT,
@@ -111,3 +138,232 @@ export const buildProductSchema = (
                 "@id": ORGANIZATION_ID,
         },
 });
+
+const normalizeIsoDate = (value?: number | string | Date | null): string | undefined => {
+        if (value === undefined || value === null) {
+                return undefined;
+        }
+
+        if (value instanceof Date) {
+                return Number.isNaN(value.getTime()) ? undefined : value.toISOString();
+        }
+
+        if (typeof value === "number") {
+                const milliseconds = value > 1_000_000_000_000 ? value : value * 1000;
+                const dateFromNumber = new Date(milliseconds);
+
+                return Number.isNaN(dateFromNumber.getTime())
+                        ? undefined
+                        : dateFromNumber.toISOString();
+        }
+
+        const parsed = new Date(value);
+
+        return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
+};
+
+const buildCaseStudyReviews = (
+        caseStudy: CaseStudy,
+        caseStudyUrl: string,
+): ReviewSchema[] => {
+        const baseDate = normalizeIsoDate(caseStudy.lastModified);
+
+        const outcomeReviews = (caseStudy.businessOutcomes ?? []).map((outcome) => ({
+                "@type": "Review" as const,
+                name: outcome.title,
+                reviewBody: outcome.subtitle,
+                datePublished: baseDate,
+                author: {
+                        "@type": "Organization",
+                        name: caseStudy.clientName,
+                },
+                itemReviewed: {
+                        "@id": `${caseStudyUrl}#case-study`,
+                },
+        }));
+
+        const resultReviews = (caseStudy.results ?? []).map((result) => {
+                const ratingValue = typeof result.value === "string"
+                        ? Number.parseFloat(result.value.replace(/[^\d.]/g, ""))
+                        : Number.NaN;
+
+                const review: ReviewSchema = {
+                        "@type": "Review",
+                        name: result.title,
+                        reviewBody: `${result.title}: ${result.value}`.trim(),
+                        datePublished: baseDate,
+                        author: {
+                                "@type": "Organization",
+                                name: caseStudy.clientName,
+                        },
+                        itemReviewed: {
+                                "@id": `${caseStudyUrl}#case-study`,
+                        },
+                };
+
+                if (Number.isFinite(ratingValue)) {
+                        review.reviewRating = {
+                                "@type": "Rating",
+                                ratingValue,
+                        };
+
+                        if (typeof result.value === "string" && result.value.includes("%")) {
+                                review.reviewRating.bestRating = 100;
+                                review.reviewRating.worstRating = 0;
+                        }
+                }
+
+                return review;
+        });
+
+        return [...outcomeReviews, ...resultReviews].filter(
+                (review) => Boolean(review.reviewBody?.trim()),
+        );
+};
+
+export const buildCaseStudyCreativeWorkSchema = (
+        caseStudy: CaseStudy,
+        options: BuildCaseStudySchemaOptions = {},
+): CreativeWorkSchema => {
+        const canonicalUrl = options.canonicalUrl
+                ? options.canonicalUrl
+                : buildAbsoluteUrl(`/case-studies/${caseStudy.slug}`);
+        const related = (options.relatedCaseStudies ?? []).map((relatedCaseStudy) => {
+                const relatedUrl = buildAbsoluteUrl(`/case-studies/${relatedCaseStudy.slug}`);
+
+                return {
+                        "@type": "CreativeWork" as const,
+                        "@id": `${relatedUrl}#case-study`,
+                        url: relatedUrl,
+                        name: relatedCaseStudy.title,
+                };
+        });
+
+        const isoDate = normalizeIsoDate(caseStudy.lastModified);
+
+        return {
+                "@context": SCHEMA_CONTEXT,
+                "@type": "CreativeWork",
+                "@id": `${canonicalUrl}#case-study`,
+                url: canonicalUrl,
+                name: caseStudy.title,
+                headline: caseStudy.subtitle,
+                description: caseStudy.description,
+                datePublished: isoDate,
+                dateModified: isoDate,
+                inLanguage: "en",
+                author: {
+                        "@type": "Organization",
+                        "@id": ORGANIZATION_ID,
+                        name: companyData.companyName,
+                },
+                mainEntityOfPage: {
+                        "@type": "WebPage",
+                        "@id": canonicalUrl,
+                },
+                citation: caseStudy.referenceLink,
+                image: caseStudy.featuredImage
+                        ? buildAbsoluteUrl(caseStudy.featuredImage)
+                        : undefined,
+                keywords: caseStudy.tags,
+                about: caseStudy.categories,
+                review: buildCaseStudyReviews(caseStudy, canonicalUrl),
+                isRelatedTo: related.length > 0 ? related : undefined,
+        };
+};
+
+export const buildFAQPageSchema = ({
+        canonicalUrl,
+        name,
+        description,
+        faqs,
+}: BuildFAQPageSchemaOptions): FAQPageSchema => ({
+        "@context": SCHEMA_CONTEXT,
+        "@type": "FAQPage",
+        "@id": `${canonicalUrl}#faq`,
+        url: canonicalUrl,
+        name,
+        description,
+        mainEntity: faqs.map((faq) => ({
+                "@type": "Question" as const,
+                name: faq.question,
+                acceptedAnswer: {
+                        "@type": "Answer" as const,
+                        text: faq.answer,
+                },
+        })),
+});
+
+const buildBlogPostingSchema = (post: BeehiivPost): BlogPostingSchema => {
+        const resolvedUrl = post.web_url
+                ? post.web_url
+                : buildAbsoluteUrl(`/blogs/${post.slug ?? post.id}`);
+        const isoDate =
+                normalizeIsoDate(post.published_at) ??
+                normalizeIsoDate(post.publish_date) ??
+                normalizeIsoDate(post.displayed_date);
+        const keywordTags = Array.isArray(post.content_tags)
+                ? post.content_tags.filter(
+                                (tag): tag is string => typeof tag === "string" && tag.trim().length > 0,
+                        )
+                : undefined;
+
+        return {
+                "@context": SCHEMA_CONTEXT,
+                "@type": "BlogPosting",
+                "@id": `${resolvedUrl}#blog-post`,
+                url: resolvedUrl,
+                mainEntityOfPage: {
+                        "@type": "WebPage",
+                        "@id": resolvedUrl,
+                },
+                headline: post.title,
+                description: post.meta_default_description ?? post.subtitle,
+                datePublished: isoDate,
+                dateModified: isoDate,
+                image: post.thumbnail_url,
+                keywords: keywordTags,
+                articleSection: keywordTags,
+                author:
+                        post.authors && post.authors.length > 0
+                                ? {
+                                          "@type": "Person",
+                                          name: post.authors[0] ?? companyData.companyName,
+                                  }
+                                : {
+                                          "@type": "Organization",
+                                          "@id": ORGANIZATION_ID,
+                                          name: companyData.companyName,
+                                  },
+                publisher: {
+                        "@id": ORGANIZATION_ID,
+                },
+                inLanguage: "en",
+        };
+};
+
+export const buildBlogSchema = ({
+        canonicalUrl,
+        name,
+        description,
+        posts,
+}: BuildBlogSchemaOptions): BlogSchema => {
+        const uniquePosts = posts.filter(
+                (post): post is BeehiivPost => Boolean(post && post.title && (post.web_url || post.slug)),
+        );
+
+        const blogPosts = uniquePosts.map((post) => buildBlogPostingSchema(post));
+
+        return {
+                "@context": SCHEMA_CONTEXT,
+                "@type": "Blog",
+                "@id": `${canonicalUrl}#blog`,
+                url: canonicalUrl,
+                name,
+                description,
+                publisher: {
+                        "@id": ORGANIZATION_ID,
+                },
+                blogPost: blogPosts.length > 0 ? blogPosts : undefined,
+        };
+};
