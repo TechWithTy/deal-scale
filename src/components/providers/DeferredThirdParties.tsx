@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 // Debug logging function (reduced verbosity)
 const debugLog = (message: string, data?: unknown) => {
-	console.log(`[DeferredThirdParties] ${message}`, data || '');
+	console.log(`[DeferredThirdParties] ${message}`, data || "");
 };
 
 const Analytics = dynamic(
@@ -82,15 +82,30 @@ function useDeferredLoad() {
 			}
 		};
 
+		const isBrowser = (): boolean => typeof window !== "undefined";
+
+		const idle = () => {
+			debugLog("useDeferredLoad: Idle callback triggered");
+			if (isBrowser() && "requestIdleCallback" in window) {
+				window.requestIdleCallback(() => enable(), { timeout: 2000 });
+			} else if (isBrowser()) {
+				globalThis.setTimeout(() => enable(), 1200);
+			}
+		};
+
+		if (document.readyState === "complete") {
+			debugLog("useDeferredLoad: Document ready, calling idle");
+			idle();
+		} else {
+			debugLog("useDeferredLoad: Adding load event listener");
+			window.addEventListener("load", idle, { once: true });
+		}
+
 		// Define the event handler outside the loop for cleanup
 		const handleEvent = (event: Event) => {
 			debugLog(`useDeferredLoad: Event fired: ${event.type}`);
 			enable();
 		};
-
-		// Load immediately for testing
-		debugLog("useDeferredLoad: Loading immediately");
-		enable();
 
 		// Keep interaction events as backup
 		for (const eventName of INTERACTION_EVENTS) {
@@ -107,6 +122,7 @@ function useDeferredLoad() {
 		return () => {
 			debugLog("useDeferredLoad: Cleaning up");
 			cancelled = true;
+			window.removeEventListener("load", idle);
 			for (const eventName of INTERACTION_EVENTS) {
 				window.removeEventListener(eventName, handleEvent);
 			}
