@@ -2,6 +2,7 @@ import type { ProductType } from "@/types/products";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProductClient from "./ProductClient";
+import { SchemaInjector, buildProductJsonLd } from "@/utils/seo/schema";
 
 // Next.js 15+ Dynamic Route Compatibility Pattern
 export async function generateMetadata({
@@ -73,9 +74,9 @@ export default async function ProductPage({
 	searchParams,
 }: ProductPageProps) {
 	const { slug } = await params;
-	const resolvedSearchParams = searchParams ? await searchParams : {};
-	const product = await fetchProduct(slug);
-	if (!product) return notFound();
+        const resolvedSearchParams = searchParams ? await searchParams : {};
+        const product = await fetchProduct(slug);
+        if (!product) return notFound();
 
 	// Handle callbackUrl from resolvedSearchParams
 	const callbackUrl = resolvedSearchParams.callbackUrl
@@ -84,5 +85,12 @@ export default async function ProductPage({
 			: resolvedSearchParams.callbackUrl
 		: undefined;
 
-	return <ProductClient product={product} callbackUrl={callbackUrl} />;
+        const productSchema = buildProductJsonLd(product);
+
+        return (
+                <>
+                        <SchemaInjector schema={productSchema} />
+                        <ProductClient product={product} callbackUrl={callbackUrl} />
+                </>
+        );
 }

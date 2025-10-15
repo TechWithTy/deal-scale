@@ -17,12 +17,13 @@ console.log(
 	process.env.SENDGRID_TEST_API_KEY?.slice(0, 10) ?? "",
 );
 
-let addToSendGridImpl: typeof import(
-	"@/lib/externalRequests/sendgrid",
-).addToSendGrid;
+type AddToSendGridFn = typeof import("@/lib/externalRequests/sendgrid")
+        ["addToSendGrid"];
+
+let addToSendGridImpl: AddToSendGridFn | undefined;
 if (isExternalIntegrationEnabled) {
-	({
-		addToSendGrid: addToSendGridImpl,
+        ({
+                addToSendGrid: addToSendGridImpl,
 	} = require("@/lib/externalRequests/sendgrid"));
 }
 
