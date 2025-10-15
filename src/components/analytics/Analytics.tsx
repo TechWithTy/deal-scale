@@ -2,18 +2,23 @@
 
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
-export function Analytics() {
-	const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS;
-	const gtmId = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
+import type { AnalyticsConfig } from "@/lib/analytics/config";
 
-	if (!gaId && !gtmId) {
-		return null;
-	}
+interface AnalyticsProps {
+        config: Pick<AnalyticsConfig, "gaId" | "gtmId">;
+}
 
-	return (
-		<>
-			{gaId && <GoogleAnalytics gaId={gaId} />}
-			{gtmId && <GoogleTagManager gtmId={gtmId} />}
-		</>
-	);
+export function Analytics({ config }: AnalyticsProps) {
+        const { gaId, gtmId } = config;
+
+        if (!gaId && !gtmId) {
+                return null;
+        }
+
+        return (
+                <>
+                        {gaId && <GoogleAnalytics gaId={gaId} />}
+                        {gtmId && <GoogleTagManager gtmId={gtmId} />}
+                </>
+        );
 }

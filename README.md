@@ -39,17 +39,26 @@ DealScale is a cutting-edge platform that leverages AI to transform business ope
    ```
 
 3. **Set up environment variables**
-   Create a `.env.local` file in the root directory and add your configuration:
+   Create a `.env.local` file in the root directory and add your configuration. The analytics loaders now expect the secure env vars first and fall back to the legacy `NEXT_PUBLIC_*` names only during development:
    ```env
-   NEXT_PUBLIC_API_URL=your_api_url_here
-   # Add other environment variables as needed
+   CLARITY_PROJECT_ID=your_clarity_project_id
+   GOOGLE_ANALYTICS_ID=your_ga_measurement_id
+   GOOGLE_TAG_MANAGER_ID=your_gtm_container_id
+   ZOHO_SALES_IQ_WIDGET_CODE=your_zoho_salesiq_widget_code
+
+   # Optional dev fallbacks
+   NEXT_PUBLIC_CLARITY_PROJECT_ID=your_dev_clarity_id
+   NEXT_PUBLIC_GOOGLE_ANALYTICS=your_dev_ga_id
+   NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID=your_dev_gtm_id
+   NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE=your_dev_zoho_code
    ```
+   The `_docs/_debug/deferred_third_parties_debug.md` guide contains a full checklist plus troubleshooting notes.
 
 4. **Start the development server**
    ```bash
    pnpm dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+   The `tools/checks/check-analytics-env.ts` helper runs automatically and will highlight any missing analytics configuration before Next.js boots. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🚀 Deployment
 
@@ -59,7 +68,7 @@ Deploy your own instance of DealScale with Vercel:
 
 ## 📖 Documentation
 
-For detailed documentation, please visit our [Documentation Portal](https://docs.dealscale.com).
+For detailed documentation, please visit our [Documentation Portal](https://docs.dealscale.com). Internal debug notes for the analytics loaders live in [`_docs/_debug/deferred_third_parties_debug.md`](./_docs/_debug/deferred_third_parties_debug.md).
 
 ## 📄 License
 
