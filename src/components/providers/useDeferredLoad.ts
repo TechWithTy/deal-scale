@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
 
-declare global {
-        interface Window {
-                requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
-                cancelIdleCallback?: (handle: number) => void;
-        }
-}
-
 const DEFAULT_MAX_WAIT_MS = 5000;
 
 export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
