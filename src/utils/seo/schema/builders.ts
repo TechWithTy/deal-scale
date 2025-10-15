@@ -168,19 +168,21 @@ const buildCaseStudyReviews = (
 ): ReviewSchema[] => {
         const baseDate = normalizeIsoDate(caseStudy.lastModified);
 
-        const outcomeReviews = (caseStudy.businessOutcomes ?? []).map((outcome) => ({
-                "@type": "Review" as const,
-                name: outcome.title,
-                reviewBody: outcome.subtitle,
-                datePublished: baseDate,
-                author: {
-                        "@type": "Organization",
-                        name: caseStudy.clientName,
-                },
-                itemReviewed: {
-                        "@id": `${caseStudyUrl}#case-study`,
-                },
-        }));
+        const outcomeReviews = (caseStudy.businessOutcomes ?? []).map(
+                (outcome): ReviewSchema => ({
+                        "@type": "Review",
+                        name: outcome.title,
+                        reviewBody: outcome.subtitle,
+                        datePublished: baseDate,
+                        author: {
+                                "@type": "Organization",
+                                name: caseStudy.clientName,
+                        },
+                        itemReviewed: {
+                                "@id": `${caseStudyUrl}#case-study`,
+                        },
+                }),
+        );
 
         const resultReviews = (caseStudy.results ?? []).map((result) => {
                 const ratingValue = typeof result.value === "string"
