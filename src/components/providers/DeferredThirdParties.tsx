@@ -1,241 +1,237 @@
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-// Debug logging function (reduced verbosity)
-const debugLog = (message: string, data?: unknown) => {
-	console.log(`[DeferredThirdParties] ${message}`, data || '');
-	console.log('[DeferredThirdParties Debug Note] Sometimes works but glitchy - env vars loading inconsistently');
-};
+import type {
+        AnalyticsConfig,
+        AnalyticsField,
+        AnalyticsIssue,
+} from "@/lib/analytics/config";
+
+import { useDeferredLoad } from "./useDeferredLoad";
 
 const Analytics = dynamic(
-	() =>
-		import("@/components/analytics/Analytics").then((mod) => ({
-			default: mod.Analytics,
-		})),
-	{
-		ssr: false,
-		loading: () => null,
-	},
+        () =>
+                import("@/components/analytics/Analytics").then((mod) => ({
+                        default: mod.Analytics,
+                })),
+        {
+                ssr: false,
+                loading: () => null,
+        },
 );
 
-const GAAnalyticsProvider = () => null;
-const MicrosoftClarityScript = ({ projectId }: { projectId?: string }) => {
-	useEffect(() => {
-		debugLog("Clarity: Starting effect", { projectId });
-		if (!projectId || typeof window === "undefined") {
-			debugLog("Clarity: Skipping - no projectId or not in browser");
-			return;
-		}
+declare global {
+        interface Window {
+                $zoho?: {
+                        salesiq?: {
+                                widgetcode?: string;
+                                values?: Record<string, unknown>;
+                                ready?: () => void;
+                        };
+                };
+        }
+}
 
-		if (document.getElementById("clarity-script")) {
-			debugLog("Clarity: Script already exists, skipping");
-			return;
-		}
+const DEFAULT_RETRY_DELAY_MS = 2000;
+const DEFAULT_MAX_RETRIES = 3;
 
-		debugLog("Clarity: Injecting script");
-		const script = document.createElement("script");
-		script.id = "clarity-script";
-		script.type = "text/javascript";
-		script.innerHTML = `
-			(function(c,l,a,r,i,t,y){
-				c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-				t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-			})(window, document, "clarity", "script", "${projectId}");
-		`;
-		document.head.appendChild(script);
-		debugLog("Clarity: Script injected successfully");
-
-		return () => {
-			const scriptElement = document.getElementById("clarity-script");
-			if (scriptElement) {
-				scriptElement.remove();
-				debugLog("Clarity: Script removed on cleanup");
-			}
-		};
-	}, [projectId]);
-
-	return null;
+const warnLog = (message: string, data?: unknown) => {
+        console.warn("DeferredThirdParties", message, data);
 };
 
-const INTERACTION_EVENTS: Array<keyof WindowEventMap> = [
-	"scroll",
-	"pointerdown",
-	"keydown",
-];
+const MicrosoftClarityScript = ({ projectId }: { projectId?: string }) => {
+        useEffect(() => {
+                if (!projectId || typeof window === "undefined") {
+                        return;
+                }
 
-function useDeferredLoad() {
-	const [shouldLoad, setShouldLoad] = useState(false);
+                if (document.getElementById("clarity-script")) {
+                        return;
+                }
 
-	useEffect(() => {
-		debugLog("useDeferredLoad: Effect started", { shouldLoad });
-		if (shouldLoad || typeof window === "undefined") {
-			debugLog("useDeferredLoad: Already loaded or not in browser, returning");
-			return;
-		}
+                const script = document.createElement("script");
+                script.id = "clarity-script";
+                script.type = "text/javascript";
+                script.innerHTML = `
+                        (function(c,l,a,r,i,t,y){
+                                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                        })(window, document, "clarity", "script", "${projectId}");
+                `;
+                document.head.appendChild(script);
 
-		let cancelled = false;
+                return () => {
+                        document.getElementById("clarity-script")?.remove();
+                };
+        }, [projectId]);
 
-		const enable = () => {
-			if (!cancelled) {
-				debugLog("useDeferredLoad: Enabling load");
-				setShouldLoad(true);
-			}
-		};
+        return null;
+};
 
-		const isBrowser = (): boolean => typeof window !== "undefined";
+function useZohoLoader(enabled: boolean, zohoCode?: string) {
+        useEffect(() => {
+                if (!enabled || !zohoCode || typeof window === "undefined") {
+                        return;
+                }
 
-		const idle = () => {
-			debugLog("useDeferredLoad: Idle callback triggered");
-			if (isBrowser() && "requestIdleCallback" in window) {
-				window.requestIdleCallback(() => enable(), { timeout: 2000 });
-			} else if (isBrowser()) {
-				globalThis.setTimeout(() => enable(), 1200);
-			}
-		};
+                if (document.getElementById("zsiqscript")) {
+                        return;
+                }
 
-		if (document.readyState === "complete") {
-			debugLog("useDeferredLoad: Document ready, calling idle");
-			idle();
-		} else {
-			debugLog("useDeferredLoad: Adding load event listener");
-			window.addEventListener("load", idle, { once: true });
-		}
+                window.$zoho = window.$zoho || {};
+                window.$zoho.salesiq = window.$zoho.salesiq || {
+                        widgetcode: "",
+                        values: {},
+                        ready: () => undefined,
+                };
 
-		// Define the event handler outside the loop for cleanup
-		const handleEvent = (event: Event) => {
-			debugLog(`useDeferredLoad: Event fired: ${event.type}`);
-			enable();
-		};
+                const script = document.createElement("script");
+                script.id = "zsiqscript";
+                script.src = `https://salesiq.zohopublic.com/widget?wc=${zohoCode}`;
+                script.async = true;
+                script.defer = true;
+                document.body.appendChild(script);
 
-		// Keep interaction events as backup
-		for (const eventName of INTERACTION_EVENTS) {
-			debugLog(`useDeferredLoad: Adding listener for ${eventName}`);
-			window.addEventListener(eventName, handleEvent, {
-				once: true,
-				passive: true,
-			});
-		}
+                return () => {
+                        document.getElementById("zsiqscript")?.remove();
+                };
+        }, [enabled, zohoCode]);
+}
 
-		// Add manual logging for scroll to ensure it's firing
-		debugLog("useDeferredLoad: Listeners added, waiting for events");
-
-		return () => {
-			debugLog("useDeferredLoad: Cleaning up");
-			cancelled = true;
-			window.removeEventListener("load", idle);
-			for (const eventName of INTERACTION_EVENTS) {
-				window.removeEventListener(eventName, handleEvent);
-			}
-		};
-	}, [shouldLoad]);
-
-	debugLog("useDeferredLoad: Returning shouldLoad", { shouldLoad });
-	return shouldLoad;
+interface ProviderResponse extends AnalyticsConfig {
+        warnings?: AnalyticsIssue[];
+        fallbacksUsed?: Partial<Record<AnalyticsField, boolean>>;
 }
 
 interface DeferredThirdPartiesProps {
-	clarityProjectId?: string;
-	zohoWidgetCode?: string;
+        clarityProjectId?: string;
+        zohoWidgetCode?: string;
+        retryDelayMs?: number;
+        maxRetries?: number;
+        maxWaitMs?: number;
 }
 
 export function DeferredThirdParties({
-	clarityProjectId,
-	zohoWidgetCode,
+        clarityProjectId,
+        zohoWidgetCode,
+        retryDelayMs = DEFAULT_RETRY_DELAY_MS,
+        maxRetries = DEFAULT_MAX_RETRIES,
+        maxWaitMs,
 }: DeferredThirdPartiesProps) {
-	debugLog("DeferredThirdParties: Component rendered", {
-		clarityProjectId,
-		zohoWidgetCode,
-	});
-	const [providerData, setProviderData] = useState<{
-		clarityId?: string;
-		zohoCode?: string;
-	} | null>(null);
-	const shouldLoad = useDeferredLoad();
+        const shouldLoad = useDeferredLoad(maxWaitMs);
+        const [providerData, setProviderData] = useState<ProviderResponse | null>(null);
+        const [attempt, setAttempt] = useState(0);
+        const retryTimerRef = useRef<number | null>(null);
+        const hasPreconfiguredIds = Boolean(clarityProjectId || zohoWidgetCode);
+        const activated = shouldLoad || hasPreconfiguredIds;
 
-	// Fetch provider config from API to avoid exposing IDs in client bundle
-	useEffect(() => {
-		if (!shouldLoad) return;
+        useEffect(() => {
+                return () => {
+                        if (retryTimerRef.current) {
+                                window.clearTimeout(retryTimerRef.current);
+                                retryTimerRef.current = null;
+                        }
+                };
+        }, []);
 
-		const fetchProviders = async () => {
-			try {
-				const response = await fetch("/api/init-providers");
-				const data = await response.json();
-				setProviderData(data);
-				debugLog("DeferredThirdParties: Fetched provider data", data);
-			} catch (error) {
-				debugLog("DeferredThirdParties: Error fetching providers", error);
-			}
-		};
+        useEffect(() => {
+                if (activated) {
+                        setAttempt(0);
+                }
+        }, [activated]);
 
-		fetchProviders();
-	}, [shouldLoad]);
+        const scheduleRetry = useCallback(() => {
+                if (typeof window === "undefined") {
+                        return;
+                }
 
-	// Use fetched data or props
-	const clarityId = providerData?.clarityId || clarityProjectId;
-	const zohoCode = providerData?.zohoCode || zohoWidgetCode;
-	debugLog("DeferredThirdParties: Using IDs", { clarityId, zohoCode });
+                if (retryTimerRef.current) {
+                        window.clearTimeout(retryTimerRef.current);
+                }
 
-	// Load immediately if env vars are set
-	const hasRequiredVars = clarityId || zohoCode;
-	const shouldLoadWithVars = Boolean(hasRequiredVars) || shouldLoad;
-	debugLog("DeferredThirdParties: shouldLoad set to", {
-		shouldLoadWithVars,
-		hasRequiredVars,
-	});
+                retryTimerRef.current = window.setTimeout(() => {
+                        setAttempt((prev) => {
+                                if (prev >= maxRetries) {
+                                        return prev;
+                                }
 
-	useEffect(() => {
-		console.log("DeferredThirdParties: Zoho useEffect running");
-		debugLog("DeferredThirdParties: Zoho useEffect started", {
-			shouldLoadWithVars,
-			zohoCode,
-		});
-		if (!shouldLoadWithVars || !zohoCode || typeof window === "undefined") {
-			debugLog("DeferredThirdParties: Zoho skipping - conditions not met");
-			return;
-		}
+                                return prev + 1;
+                        });
+                        retryTimerRef.current = null;
+                }, retryDelayMs);
+        }, [maxRetries, retryDelayMs]);
 
-		if (document.getElementById("zsiqscript")) {
-			debugLog("DeferredThirdParties: Zoho script already exists, skipping");
-			return;
-		}
+        useEffect(() => {
+                if (!activated || providerData || attempt > maxRetries) {
+                        return;
+                }
 
-		debugLog("DeferredThirdParties: Injecting Zoho script");
-		window.$zoho = window.$zoho || {};
-		window.$zoho.salesiq = window.$zoho.salesiq || {
-			widgetcode: "",
-			values: {},
-			ready: () => undefined,
-		};
+                let isCancelled = false;
+                const controller = new AbortController();
 
-		const script = document.createElement("script");
-		script.id = "zsiqscript";
-		script.src = `https://salesiq.zohopublic.com/widget?wc=${zohoCode}`;
-		script.async = true;
-		script.defer = true;
-		document.body.appendChild(script);
-		debugLog("DeferredThirdParties: Zoho script injected");
+                const fetchProviders = async () => {
+                        try {
+                                const response = await fetch("/api/init-providers", {
+                                        cache: "no-store",
+                                        signal: controller.signal,
+                                });
+                                const payload = await response.json();
 
-		return () => {
-			const scriptElement = document.getElementById("zsiqscript");
-			if (scriptElement) {
-				scriptElement.remove();
-				debugLog("DeferredThirdParties: Zoho script removed on cleanup");
-			}
-		};
-	}, [shouldLoadWithVars, zohoCode]);
+                                if (!response.ok || payload.error) {
+                                        throw { status: response.status, body: payload };
+                                }
 
-	if (!shouldLoadWithVars) {
-		debugLog("DeferredThirdParties: Not loading yet, returning null");
-		return null;
-	}
+                                if (isCancelled) {
+                                        return;
+                                }
 
-	debugLog("DeferredThirdParties: Rendering providers");
-	return (
-		<>
-			<Analytics />
-			<GAAnalyticsProvider />
-			<MicrosoftClarityScript projectId={clarityId} />
-		</>
-	);
+                                setProviderData(payload as ProviderResponse);
+
+                                if (Array.isArray(payload.warnings)) {
+                                        for (const issue of payload.warnings) {
+                                                warnLog(issue.message, issue);
+                                        }
+                                }
+                        } catch (error) {
+                                if (isCancelled) {
+                                        return;
+                                }
+
+                                warnLog("Failed to load provider configuration.", error);
+                                if (attempt < maxRetries) {
+                                        scheduleRetry();
+                                }
+                        }
+                };
+
+                fetchProviders();
+
+                return () => {
+                        isCancelled = true;
+                        controller.abort();
+                };
+        }, [activated, attempt, maxRetries, providerData, scheduleRetry]);
+
+        const clarityId = providerData?.clarityId ?? clarityProjectId;
+        const zohoCode = providerData?.zohoCode ?? zohoWidgetCode;
+        const analyticsConfig = useMemo<Pick<AnalyticsConfig, "gaId" | "gtmId">>(() => ({
+                gaId: providerData?.gaId,
+                gtmId: providerData?.gtmId,
+        }), [providerData?.gaId, providerData?.gtmId]);
+
+        const shouldRender = Boolean(analyticsConfig.gaId || analyticsConfig.gtmId || clarityId || zohoCode);
+
+        useZohoLoader(shouldRender, zohoCode);
+
+        if (!shouldRender) {
+                return null;
+        }
+
+        return (
+                <>
+                        <Analytics config={analyticsConfig} />
+                        <MicrosoftClarityScript projectId={clarityId} />
+                </>
+        );
 }
