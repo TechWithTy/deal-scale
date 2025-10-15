@@ -18,12 +18,13 @@ console.log(
 );
 console.log("CONTACT_EMAIL:", process.env.CONTACT_EMAIL);
 
-let addToSendGridImpl: typeof import(
-	"@/lib/externalRequests/sendgrid",
-).addToSendGrid;
+type AddToSendGridFn = typeof import("@/lib/externalRequests/sendgrid")
+        ["addToSendGrid"];
+
+let addToSendGridImpl: AddToSendGridFn | undefined;
 if (isExternalIntegrationEnabled) {
-	({
-		addToSendGrid: addToSendGridImpl,
+        ({
+                addToSendGrid: addToSendGridImpl,
 	} = require("@/lib/externalRequests/sendgrid"));
 }
 
