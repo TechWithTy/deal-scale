@@ -1,13 +1,31 @@
-import { GET } from "@/app/api/auth/oauth/credentials/route";
 /**
  * @jest-environment node
  */
+import fetch, {
+        Request as NodeFetchRequest,
+        Response as NodeFetchResponse,
+} from "node-fetch";
+import { GET } from "@/app/api/auth/oauth/credentials/route";
 import { NextResponse } from "next/server";
 import {
-	createSession,
-	mockFetchResponse,
-	resetMocks,
+        createSession,
+        mockFetchResponse,
+        resetMocks,
 } from "../../../testHelpers/auth";
+
+const globalAny = global as typeof globalThis & Record<string, unknown>;
+
+if (!globalAny.Request) {
+        globalAny.Request = NodeFetchRequest;
+}
+
+if (!globalAny.Response) {
+        globalAny.Response = NodeFetchResponse;
+}
+
+if (!globalAny.fetch) {
+        globalAny.fetch = fetch;
+}
 
 jest.mock("next-auth", () => ({
 	getServerSession: jest.fn(),

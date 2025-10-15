@@ -32,7 +32,11 @@ describe("schema builders", () => {
 
                 expect(schema["@type"]).toBe("Event");
                 expect(schema.name).toBe(baseEvent.title);
-                expect(schema.startDate).toBe("2025-03-10T09:00:00.000Z");
+                const expectedStartDate = new Date(
+                        `${baseEvent.date}T${baseEvent.time}`,
+                ).toISOString();
+
+                expect(schema.startDate).toBe(expectedStartDate);
                 expect(schema.location).toEqual(
                         expect.objectContaining({
                                 address: expect.objectContaining({
