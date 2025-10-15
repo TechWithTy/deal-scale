@@ -8,7 +8,7 @@ import type { NormalizedEvent } from "@/lib/events/eventSchemas";
 import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 import { formatDate } from "@/utils/date-formatter";
-import type { Metadata } from "next";
+import type { Metadata, PageProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -27,12 +27,15 @@ export async function generateStaticParams() {
         return events.map((event) => ({ slug: event.slug }));
 }
 
-export async function generateMetadata({
-        params,
-}: {
-        params: { slug: string };
-}): Promise<Metadata> {
-        const event = await getEventBySlug(params.slug);
+type EventPageProps = PageProps<{ slug: string }>;
+
+export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
+        const resolvedParams = params ? await params : undefined;
+        if (!resolvedParams?.slug) {
+                notFound();
+        }
+
+        const event = await getEventBySlug(resolvedParams.slug);
         if (!event) {
                 notFound();
         }
@@ -62,12 +65,13 @@ export async function generateMetadata({
         };
 }
 
-export default async function EventDetailPage({
-        params,
-}: {
-        params: { slug: string };
-}) {
-        const event = await getEventBySlug(params.slug);
+export default async function EventDetailPage({ params }: EventPageProps) {
+        const resolvedParams = params ? await params : undefined;
+        if (!resolvedParams?.slug) {
+                notFound();
+        }
+
+        const event = await getEventBySlug(resolvedParams.slug);
         if (!event) {
                 notFound();
         }
