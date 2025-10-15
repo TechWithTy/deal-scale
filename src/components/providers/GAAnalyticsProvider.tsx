@@ -5,12 +5,6 @@ import Analytics from "analytics";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
-declare global {
-	interface Window {
-		__analytics?: ReturnType<typeof Analytics>;
-	}
-}
-
 /**
  * Google Analytics 4 provider using `analytics` + `@analytics/google-analytics`.
  *

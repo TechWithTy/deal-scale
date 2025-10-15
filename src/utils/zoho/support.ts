@@ -41,20 +41,3 @@ export function ZohoSupportScript() {
 	}, []);
 	return null;
 }
-
-declare global {
-	interface Window {
-		$zoho?: {
-			salesiq?: {
-				widgetcode: string;
-				values: Record<string, unknown>;
-				ready: () => void;
-			};
-			support?: {
-				widgetcode: string;
-				values: Record<string, unknown>;
-				ready: () => void;
-			};
-		};
-	}
-}
