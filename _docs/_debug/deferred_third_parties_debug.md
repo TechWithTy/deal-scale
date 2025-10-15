@@ -25,7 +25,7 @@ This debug log documents the troubleshooting session for the DeferredThirdPartie
 - **Deferral Logic**: Reverted to wait for page load or user interaction (scroll, click, keydown) with idle callback/setTimeout backup.
 - **Security**: Uses server-side API for ID fetching.
 - **Performance**: Loads scripts only after user engagement, improving initial page load.
-- **Debugging**: Logging indicates glitchy env var loading, likely due to server restart issues.
+- **Debugging**: Logging indicates glitchy env var loading, likely due to server restart issues. **Resolved by restarting the dev server after `.env` updates**.
 
 ## Key Logs and Insights
 - **Env Vars Undefined**: `envClarityId: undefined, envZohoCode: undefined` - Fixed by adding to `.env` and restarting server.
