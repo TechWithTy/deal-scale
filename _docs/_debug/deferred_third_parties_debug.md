@@ -6,7 +6,7 @@ This debug log documents the troubleshooting session for the DeferredThirdPartie
 ## Issues Encountered
 1. **Undefined Environment Variables**: `NEXT_PUBLIC_*` vars were not loading in client-side code, causing scripts to not initialize.
 2. **Deferral Logic Not Triggering**: Scripts were not loading even after page load or user interaction due to deferral issues.
-3. **Inconsistent Loading**: Env vars loaded sometimes but glitchy, leading to unreliable script injection.
+3. **Inconsistent Loading**: Env vars loaded sometimes but glitchy, leading to unreliable script injection. Sometimes the API returns "No providers configured" when vars are undefined, indicating server-side loading issues.
 
 ## Root Causes
 - **Env Vars Not Set**: Initially, vars were missing from `.env` file.
@@ -32,6 +32,7 @@ This debug log documents the troubleshooting session for the DeferredThirdPartie
 - **Deferral Trigger**: `useDeferredLoad: Enabling load` after interaction or load event.
 - **Script Injection**: `Clarity: Script injected successfully` after conditions met.
 - **Glitchy Note**: Added to debug log: "Sometimes works but glitchy - env vars loading inconsistently".
+- **Inconsistent API Response**: `Fetched provider data { error: "No providers configured" }` when vars are undefined server-side, indicating reload issues.
 
 ## Recommendations
 1. **Always Restart Server**: After updating `.env`, stop and restart `npm run dev`.
