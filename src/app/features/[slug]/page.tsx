@@ -2,6 +2,7 @@ import ServicePageClient from "@/components/services/ServicePageClient";
 import { services as allServicesRaw } from "@/data/service/services";
 import type { ServiceItemData } from "@/types/service/services";
 import { getSeoMetadataForService } from "@/utils/seo/dynamic/services";
+import { SchemaInjector, buildServiceJsonLd } from "@/utils/seo/schema";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -25,9 +26,16 @@ export default async function ServicePage(props: unknown) {
 	const { params } = props as { params: { slug: string } };
 	const allServices: ServiceItemData[] = Object.values(allServicesRaw).flatMap(
 		(category) => Object.values(category),
-	);
-	const service =
-		allServices.find((s) => s.slugDetails.slug === params.slug) || null;
-	if (!service) return notFound();
-	return <ServicePageClient service={service} />;
+        );
+        const service =
+                allServices.find((s) => s.slugDetails.slug === params.slug) || null;
+        if (!service) return notFound();
+        const serviceSchema = buildServiceJsonLd(service);
+
+        return (
+                <>
+                        <SchemaInjector schema={serviceSchema} />
+                        <ServicePageClient service={service} />
+                </>
+        );
 }

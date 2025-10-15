@@ -5,6 +5,7 @@
 import type { ProductType } from "@/types/products";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
+import { SchemaInjector, buildProductListJsonLd } from "@/utils/seo/schema";
 import type { Metadata } from "next";
 import ProductsClient from "./ProductsClient";
 
@@ -26,13 +27,23 @@ export default async function ProductsPage({
 	searchParams,
 }: ProductsPageProps) {
 	const resolvedSearchParams = await searchParams;
-	const callbackUrl = resolvedSearchParams.callbackUrl
-		? Array.isArray(resolvedSearchParams.callbackUrl)
-			? resolvedSearchParams.callbackUrl[0]
-			: resolvedSearchParams.callbackUrl
-		: undefined;
-	const products = await fetchProducts();
-	return (
-		<ProductsClient initialProducts={products} callbackUrl={callbackUrl} />
-	);
+        const callbackUrl = resolvedSearchParams.callbackUrl
+                ? Array.isArray(resolvedSearchParams.callbackUrl)
+                        ? resolvedSearchParams.callbackUrl[0]
+                        : resolvedSearchParams.callbackUrl
+                : undefined;
+        const products = await fetchProducts();
+        const productSchemas = buildProductListJsonLd(products);
+
+        return (
+                <>
+                        {productSchemas.length > 0 && (
+                                <SchemaInjector schema={productSchemas} />
+                        )}
+                        <ProductsClient
+                                initialProducts={products}
+                                callbackUrl={callbackUrl}
+                        />
+                </>
+        );
 }
