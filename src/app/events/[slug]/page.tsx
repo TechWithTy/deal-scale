@@ -74,15 +74,15 @@ export async function generateMetadata({
 		alternates: {
 			canonical,
 		},
-		openGraph: {
-			title: `${event.title} | DealScale Events`,
-			description: event.description,
-			url: canonical,
-			type: "event",
-			images: event.thumbnailImage
-				? [{ url: event.thumbnailImage, alt: event.title }]
-				: undefined,
-		},
+                openGraph: {
+                        title: `${event.title} | DealScale Events`,
+                        description: event.description,
+                        url: canonical,
+                        type: "website",
+                        images: event.thumbnailImage
+                                ? [{ url: event.thumbnailImage, alt: event.title }]
+                                : undefined,
+                },
 		twitter: {
 			card: "summary_large_image",
 			title: `${event.title} | DealScale Events`,
