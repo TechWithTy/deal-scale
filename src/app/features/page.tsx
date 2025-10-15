@@ -1,4 +1,9 @@
+import { faqItems } from "@/data/faq/default";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
+import {
+        SchemaInjector,
+        buildFAQPageSchema,
+} from "@/utils/seo/schema";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import ServiceHomeClient from "./ServiceHomeClient";
@@ -10,5 +15,18 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ServicesPage() {
-	return <ServiceHomeClient />;
+        const seo = getStaticSeo("/features");
+        const schema = buildFAQPageSchema({
+                canonicalUrl: seo.canonical,
+                name: `${seo.title ?? "Deal Scale Features"} FAQs`,
+                description: seo.description,
+                faqs: faqItems.slice(0, 8),
+        });
+
+        return (
+                <>
+                        <SchemaInjector schema={schema} />
+                        <ServiceHomeClient />
+                </>
+        );
 }
