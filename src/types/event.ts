@@ -1,7 +1,8 @@
 export interface Event {
-	id: string;
-	title: string;
-	date: string; // ISO date string
+        id: string;
+        slug?: string;
+        title: string;
+        date: string; // ISO date string
 	time: string;
 	description: string;
 	thumbnailImage?: string;
