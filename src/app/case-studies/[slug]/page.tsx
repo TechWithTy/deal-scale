@@ -4,6 +4,11 @@ import {
 } from "@/lib/caseStudies/case-studies";
 import type { CaseStudy } from "@/types/case-study";
 import { getSeoMetadataForCaseStudy } from "@/utils/seo/dynamic/case-studies";
+import { getTestBaseUrl } from "@/utils/env";
+import {
+        SchemaInjector,
+        buildCaseStudyCreativeWorkSchema,
+} from "@/utils/seo/schema";
 import CaseStudyPageClient from "./CaseStudyPageClient";
 
 // Next.js 15+ Dynamic Route Compatibility Workaround
@@ -18,9 +23,9 @@ export async function generateMetadata({
 }
 
 export default async function CaseStudyPage(props: unknown) {
-	const { params } = props as { params: { slug: string } };
-	const caseStudy = await getCaseStudyBySlug(params.slug);
-	let relatedCaseStudies: CaseStudy[] = [];
+        const { params } = props as { params: { slug: string } };
+        const caseStudy = await getCaseStudyBySlug(params.slug);
+        let relatedCaseStudies: CaseStudy[] = [];
 
 	if (caseStudy) {
 		const allStudies = await getAllCaseStudies();
@@ -34,10 +39,22 @@ export default async function CaseStudyPage(props: unknown) {
 			.slice(0, 3);
 	}
 
-	return (
-		<CaseStudyPageClient
-			caseStudy={caseStudy}
-			relatedCaseStudies={relatedCaseStudies}
-		/>
-	);
+        const baseUrl = getTestBaseUrl();
+        const canonicalUrl = `${baseUrl}/case-studies/${params.slug}`;
+        const schema = caseStudy
+                ? buildCaseStudyCreativeWorkSchema(caseStudy, {
+                          canonicalUrl,
+                          relatedCaseStudies,
+                  })
+                : undefined;
+
+        return (
+                <>
+                        {schema ? <SchemaInjector schema={schema} /> : null}
+                        <CaseStudyPageClient
+                                caseStudy={caseStudy}
+                                relatedCaseStudies={relatedCaseStudies}
+                        />
+                </>
+        );
 }
