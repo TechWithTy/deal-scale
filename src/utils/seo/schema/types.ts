@@ -120,3 +120,123 @@ export type ProductSchema = {
                 reviewCount: number;
         };
 };
+
+export type ReviewRatingSchema = {
+        "@type": "Rating";
+        ratingValue: number;
+        bestRating?: number;
+        worstRating?: number;
+        ratingExplanation?: string;
+};
+
+export type ReviewSchema = {
+        "@type": "Review";
+        name: string;
+        reviewBody: string;
+        datePublished?: string;
+        itemReviewed?: {
+                "@id"?: string;
+                "@type"?: string;
+                name?: string;
+        };
+        author?: {
+                "@type": "Organization" | "Person";
+                name: string;
+                "@id"?: string;
+        };
+        reviewRating?: ReviewRatingSchema;
+};
+
+export type CreativeWorkSchema = {
+        "@context": SchemaContext;
+        "@type": "CreativeWork";
+        "@id": string;
+        url: string;
+        name: string;
+        headline: string;
+        description?: string;
+        datePublished?: string;
+        dateModified?: string;
+        inLanguage?: string;
+        author: {
+                "@type": "Organization";
+                "@id": string;
+                name: string;
+        };
+        mainEntityOfPage?: {
+                "@type": "WebPage";
+                "@id": string;
+        };
+        citation?: string;
+        image?: string;
+        keywords?: string[];
+        about?: string[];
+        review?: ReviewSchema[];
+        isRelatedTo?: Array<{
+                "@type": "CreativeWork";
+                "@id": string;
+                url: string;
+                name: string;
+        }>;
+};
+
+export type AnswerSchema = {
+        "@type": "Answer";
+        text: string;
+};
+
+export type QuestionSchema = {
+        "@type": "Question";
+        name: string;
+        acceptedAnswer: AnswerSchema;
+};
+
+export type FAQPageSchema = {
+        "@context": SchemaContext;
+        "@type": "FAQPage";
+        "@id": string;
+        url: string;
+        name: string;
+        description?: string;
+        mainEntity: QuestionSchema[];
+};
+
+export type BlogPostingSchema = {
+        "@context": SchemaContext;
+        "@type": "BlogPosting";
+        "@id": string;
+        url: string;
+        mainEntityOfPage?: {
+                "@type": "WebPage";
+                "@id": string;
+        };
+        headline: string;
+        description?: string;
+        datePublished?: string;
+        dateModified?: string;
+        image?: string;
+        keywords?: string[];
+        articleSection?: string[];
+        author?: {
+                "@type": "Person" | "Organization";
+                name: string;
+                "@id"?: string;
+        };
+        publisher?: {
+                "@id": string;
+        };
+        inLanguage?: string;
+};
+
+export type BlogSchema = {
+        "@context": SchemaContext;
+        "@type": "Blog";
+        "@id": string;
+        url: string;
+        name: string;
+        description?: string;
+        blogPost?: BlogPostingSchema[];
+        publisher: {
+                "@id": string;
+        };
+};
