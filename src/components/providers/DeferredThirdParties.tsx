@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 
 // Debug logging function (reduced verbosity)
 const debugLog = (message: string, data?: unknown) => {
-	console.log(`[DeferredThirdParties] ${message}`, data || "");
+	console.log(`[DeferredThirdParties] ${message}`, data || '');
+	console.log('[DeferredThirdParties Debug Note] Sometimes works but glitchy - env vars loading inconsistently');
 };
 
 const Analytics = dynamic(
