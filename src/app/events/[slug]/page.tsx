@@ -8,7 +8,7 @@ import type { NormalizedEvent } from "@/lib/events/eventSchemas";
 import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 import { formatDate } from "@/utils/date-formatter";
-import type { Metadata, PageProps } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -27,7 +27,11 @@ export async function generateStaticParams() {
         return events.map((event) => ({ slug: event.slug }));
 }
 
-type EventPageProps = PageProps<{ slug: string }>;
+type EventPageParams = { slug: string };
+
+type EventPageProps = {
+        params: EventPageParams | Promise<EventPageParams>;
+};
 
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
         const resolvedParams = params ? await params : undefined;
