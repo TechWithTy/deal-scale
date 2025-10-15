@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 
-type SchemaPayload = Record<string, unknown>;
+type SchemaNode = Record<string, unknown>;
+type SchemaPayload = SchemaNode | SchemaNode[];
 
 interface SchemaInjectorProps<TSchema extends SchemaPayload> {
         schema: TSchema;
