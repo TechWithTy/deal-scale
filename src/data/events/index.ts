@@ -3,9 +3,10 @@ import type { Event } from "@/types/event";
 const currentDate = new Date();
 
 export const events: Event[] = [
-	{
-		id: "1",
-		title: "Midwest Real Estate Investor Conference",
+        {
+                id: "1",
+                slug: "midwest-real-estate-investor-conference",
+                title: "Midwest Real Estate Investor Conference",
 		date: "2025-04-24",
 		time: "09:00 - 17:00",
 		description:
@@ -17,9 +18,10 @@ export const events: Event[] = [
 		location: "Grand Rapids, MI",
 		isFeatured: true,
 	},
-	{
-		id: "2",
-		title:
+        {
+                id: "2",
+                slug: "imn-winter-forum-on-real-estate-opportunity-private-fund-investing",
+                title:
 			"IMN Winter Forum on Real Estate Opportunity & Private Fund Investing",
 		date: "2025-01-22",
 		time: "09:00 - 18:00",
@@ -33,9 +35,10 @@ export const events: Event[] = [
 		location: "Laguna Beach, CA",
 		isFeatured: true,
 	},
-	{
-		id: "3",
-		title: "RETCON: Real Estate Technology & Innovation",
+        {
+                id: "3",
+                slug: "retcon-real-estate-technology-innovation",
+                title: "RETCON: Real Estate Technology & Innovation",
 		date: "2025-03-10",
 		time: "10:00 - 18:00",
 		description:
@@ -47,9 +50,10 @@ export const events: Event[] = [
 		location: "Las Vegas, NV",
 		isFeatured: true,
 	},
-	{
-		id: "4",
-		title: "Opal Group Real Estate Investment Summit",
+        {
+                id: "4",
+                slug: "opal-group-real-estate-investment-summit",
+                title: "Opal Group Real Estate Investment Summit",
 		date: "2025-04-06",
 		time: "09:00 - 17:00",
 		description:
@@ -62,9 +66,10 @@ export const events: Event[] = [
 		location: "West Palm Beach, FL",
 		isFeatured: false,
 	},
-	{
-		id: "5",
-		title: "Inman Connect New York",
+        {
+                id: "5",
+                slug: "inman-connect-new-york",
+                title: "Inman Connect New York",
 		date: "2025-01-22",
 		time: "09:30 - 17:30",
 		description:
@@ -76,9 +81,10 @@ export const events: Event[] = [
 		location: "New York, NY",
 		isFeatured: true,
 	},
-	{
-		id: "6",
-		title: "NAREIT REITweek: Investor Conference",
+        {
+                id: "6",
+                slug: "nareit-reitweek-investor-conference",
+                title: "NAREIT REITweek: Investor Conference",
 		date: "2025-06-02",
 		time: "09:00 - 17:00",
 		description:
@@ -91,9 +97,10 @@ export const events: Event[] = [
 		location: "New York, NY",
 		isFeatured: false,
 	},
-	{
-		id: "7",
-		title: "The Multifamily Investor Network Conference",
+        {
+                id: "7",
+                slug: "multifamily-investor-network-conference",
+                title: "The Multifamily Investor Network Conference",
 		date: "2025-02-01",
 		time: "08:00 - 18:00",
 		description:
@@ -105,9 +112,10 @@ export const events: Event[] = [
 		location: "Houston, TX",
 		isFeatured: false,
 	},
-	{
-		id: "8",
-		title: "CREtech New York",
+        {
+                id: "8",
+                slug: "cretech-new-york",
+                title: "CREtech New York",
 		date: "2025-10-21",
 		time: "09:00 - 18:00",
 		description:
