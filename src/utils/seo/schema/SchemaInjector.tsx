@@ -14,6 +14,7 @@ export function SchemaInjector<TSchema extends SchemaPayload>({
         if (result.ok) {
                 return (
                         <script
+                                suppressHydrationWarning
                                 type="application/ld+json"
                                 dangerouslySetInnerHTML={{ __html: result.json }}
                         />
