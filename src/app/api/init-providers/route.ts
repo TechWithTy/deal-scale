@@ -1,17 +1,37 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+
+import { getAnalyticsConfig } from "@/lib/analytics/config";
 
 export async function GET() {
-  // Server-side: Use env vars here (not exposed to client)
-  const clarityId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
-  const zohoCode = process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE;
+        const { config, warnings, fallbacksUsed, errors, hasErrors } = getAnalyticsConfig();
 
-  if (!clarityId && !zohoCode) {
-    return NextResponse.json({ error: 'No providers configured' }, { status: 200 });
-  }
+        if (hasErrors) {
+                console.error("[init-providers] Analytics misconfiguration detected", errors);
+                return NextResponse.json(
+                        {
+                                error: "Analytics providers are misconfigured.",
+                                details: errors,
+                        },
+                        {
+                                status: 503,
+                                headers: { "Cache-Control": "no-store" },
+                        },
+                );
+        }
 
-  // Return config for client to use (IDs not exposed in bundle)
-  return NextResponse.json({
-    clarityId,
-    zohoCode,
-  });
+        const sanitizedConfig = Object.fromEntries(
+                Object.entries(config).filter(([, value]) => Boolean(value)),
+        );
+
+        return NextResponse.json(
+                {
+                        ...sanitizedConfig,
+                        warnings,
+                        fallbacksUsed,
+                },
+                {
+                        status: 200,
+                        headers: { "Cache-Control": "no-store" },
+                },
+        );
 }

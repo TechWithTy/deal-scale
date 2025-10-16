@@ -62,21 +62,3 @@ export function ZohoSalesIQScript() {
 	}, []);
 	return null;
 }
-
-// Type declarations
-declare global {
-	interface Window {
-		$zoho?: {
-			salesiq?: {
-				widgetcode: string;
-				values: Record<string, unknown>;
-				ready: () => void;
-			};
-			support?: {
-				widgetcode: string;
-				values: Record<string, unknown>;
-				ready: () => void;
-			};
-		};
-	}
-}
