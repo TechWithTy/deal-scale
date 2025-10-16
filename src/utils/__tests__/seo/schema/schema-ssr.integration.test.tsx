@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server.node";
 
 import { caseStudies } from "@/data/caseStudy/caseStudies";
 import { mockProducts } from "@/data/products";
+import { services as serviceCatalog } from "@/data/service/services";
 
 const eventFixture = {
         id: "event-1",
@@ -255,6 +256,30 @@ describe("JSON-LD SSR integration", () => {
                 const schema = JSON.parse(script ?? "{}");
                 expect(schema["@type"]).toBe("Product");
                 expect(schema.name).toBe(product.name);
+        });
+
+        it("renders service schema for a service detail page", async () => {
+                const { default: ServicePage } = await import("@/app/features/[slug]/page");
+                const services = Object.values(serviceCatalog).flatMap((category) =>
+                        Object.values(category),
+                );
+                const service = services[0];
+                expect(service).toBeDefined();
+
+                const [script] = extractJsonLdScripts(
+                        await renderAsync(
+                                await ServicePage({
+                                        params: { slug: service.slugDetails.slug },
+                                }),
+                        ),
+                );
+
+                expect(script).toBeDefined();
+                expect(script ?? "").not.toContain("</script>");
+                const schema = JSON.parse(script ?? "{}");
+                expect(schema["@type"]).toBe("Service");
+                expect(schema.name).toBe(service.title);
+                expect(schema.url).toContain(service.slugDetails.slug);
         });
 
         it("renders events item list schema on the events index", async () => {
