@@ -40,6 +40,49 @@ jest.mock("@/app/case-studies/[slug]/CaseStudyPageClient", nullComponentMock);
 jest.mock("@/components/common/CTASection", () => ({
         CTASection: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
+const simpleDivMocks: Array<[string, string]> = [
+        ["@/components/about/AboutUsSection", "AboutUsSection"],
+        ["@/components/case-studies/CaseStudyGrid", "CaseStudyGrid"],
+        ["@/components/contact/form/ContactForm", "ContactForm"],
+        ["@/components/contact/utils/TrustedByScroller", "TrustedByScroller"],
+        ["@/components/faq", "Faq"],
+        ["@/components/home/ClientBento", "ClientBento"],
+        ["@/components/home/FeatureVote", "UpcomingFeatures"],
+        ["@/components/home/Pricing", "Pricing"],
+        ["@/components/home/Services", "Services"],
+        ["@/components/home/Testimonials", "Testimonials"],
+        ["@/components/home/heros/HeroSessionMonitorClientWithModal", "HeroSessionMonitor"],
+];
+
+for (const [modulePath, label] of simpleDivMocks) {
+        jest.mock(modulePath, () => ({
+                __esModule: true,
+                default: () => <div>{label}</div>,
+        }));
+}
+
+jest.mock("@/components/common/ViewportLazy", () => {
+        const PassThrough = ({ children }: { children?: ReactNode }) => <>{children}</>;
+        return {
+                __esModule: true,
+                ViewportLazy: PassThrough,
+                default: PassThrough,
+        };
+});
+
+jest.mock("@/components/home/BlogPreview", () => {
+        const Mock = () => <div>BlogPreview</div>;
+        return { __esModule: true, BlogPreview: Mock, default: Mock };
+});
+
+jest.mock("@/components/ui/separator", () => {
+        const Separator = () => <hr />;
+        return { __esModule: true, Separator, default: Separator };
+});
+jest.mock("lottie-react", () => ({
+        __esModule: true,
+        default: () => null,
+}));
 jest.mock("@/lib/beehiiv/getPosts", () => ({
         getLatestBeehiivPosts: jest.fn().mockResolvedValue([
                 {
@@ -68,6 +111,14 @@ jest.mock("next/navigation", () => ({
         notFound: () => {
                 throw new Error("next.notFound");
         },
+        useRouter: () => ({
+                back: jest.fn(),
+                forward: jest.fn(),
+                prefetch: jest.fn(),
+                push: jest.fn(),
+                refresh: jest.fn(),
+                replace: jest.fn(),
+        }),
 }));
 jest.mock("next/image", () => ({
         __esModule: true,
@@ -116,6 +167,27 @@ describe("JSON-LD SSR integration", () => {
                 expect(scripts).toHaveLength(2);
                 expect(JSON.parse(scripts[0])["@type"]).toBe("Organization");
                 expect(JSON.parse(scripts[1])["@type"]).toBe("WebSite");
+        });
+
+        it("keeps JSON-LD scripts in the SSR response for the homepage", async () => {
+                const { default: RootLayout } = await import("@/app/layout");
+                const { default: HomePage } = await import("@/app/page");
+
+                const homeContent = await HomePage();
+                const html = renderToStaticMarkup(
+                        <RootLayout>
+                                {homeContent}
+                        </RootLayout>,
+                );
+
+                const scripts = extractJsonLdScripts(html);
+
+                expect(scripts).toHaveLength(2);
+
+                const parsed = scripts.map((json) => JSON.parse(json));
+
+                expect(parsed[0]["@type"]).toBe("Organization");
+                expect(parsed[1]["@type"]).toBe("WebSite");
         });
 
         it.each([
