@@ -11,7 +11,7 @@ export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
                 }
 
                 let resolved = false;
-                const timers: Array<ReturnType<typeof setTimeout>> = [];
+                const timers: Array<ReturnType<typeof globalThis.setTimeout>> = [];
                 const cleanupFns: Array<() => void> = [];
 
                 const enable = () => {
@@ -30,7 +30,7 @@ export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
                                 const idleId = window.requestIdleCallback(() => enable(), { timeout: 2000 });
                                 cleanupFns.push(() => window.cancelIdleCallback?.(idleId));
                         } else {
-                                timers.push(setTimeout(enable, 1200));
+                                timers.push(globalThis.setTimeout(enable, 1200));
                         }
                 };
 
@@ -61,12 +61,12 @@ export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
                 registerWindowEvent("pageshow");
                 registerDocumentEvent("visibilitychange");
 
-                timers.push(setTimeout(enable, maxWaitMs));
+                timers.push(globalThis.setTimeout(enable, maxWaitMs));
 
                 return () => {
                         resolved = true;
                         for (const timer of timers) {
-                                clearTimeout(timer);
+                                globalThis.clearTimeout(timer);
                         }
                         for (const cleanup of cleanupFns) {
                                 cleanup();
