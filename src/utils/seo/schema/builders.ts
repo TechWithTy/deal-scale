@@ -52,7 +52,7 @@ export const buildOrganizationSchema = (): OrganizationSchema => ({
         "@type": "Organization",
         "@id": ORGANIZATION_ID,
         name: companyData.companyName,
-        legalName: companyData.companyName,
+        legalName: companyData.companyLegalName,
         url: defaultSeo.canonical,
         description: companyData.companyDescription,
         sameAs: buildSocialProfiles(),
