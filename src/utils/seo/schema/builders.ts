@@ -57,6 +57,7 @@ export const buildOrganizationSchema = (): OrganizationSchema => ({
         description: companyData.companyDescription,
         sameAs: buildSocialProfiles(),
         logo: buildAbsoluteUrl(defaultSeo.image),
+        image: "https://dealscale.io/banners/main.png",
         contactPoint: buildContactPoints(),
         address: buildPostalAddress(),
 });
@@ -351,7 +352,7 @@ export const buildBlogSchema = ({
         posts,
 }: BuildBlogSchemaOptions): BlogSchema => {
         const uniquePosts = posts.filter(
-                (post): post is BeehiivPost => Boolean(post && post.title && (post.web_url || post.slug)),
+                (post): post is BeehiivPost => Boolean(post?.title && (post.web_url || post.slug)),
         );
 
         const blogPosts = uniquePosts.map((post) => buildBlogPostingSchema(post));

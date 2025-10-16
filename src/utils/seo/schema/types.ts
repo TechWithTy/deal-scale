@@ -40,6 +40,7 @@ export type OrganizationSchema = {
         description: string;
         sameAs: string[];
         logo: string;
+        image?: string | string[];
         contactPoint: ContactPointSchema[];
         address?: PostalAddressSchema;
 };
