@@ -51,3 +51,11 @@ export type {
         PostalAddressSchema,
         SchemaContext,
 } from "./types";
+export {
+        getServerSideJsonLd,
+        type SchemaNode,
+        type SchemaPayload,
+        type ServerSideJsonLdResult,
+        type ServerSideJsonLdError,
+        type ServerSideJsonLdSuccess,
+} from "./server";
