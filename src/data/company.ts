@@ -1,7 +1,7 @@
 import type { FooterProps } from "@/components/layout/Footer";
 
 export const companyData: FooterProps = {
-	companyName: "CyberOni",
+	companyName: "Deal Scale",
 	companyDescription:
 		"Deal Scale provides AI-Powered Agents that deliver sales-ready appointments, not just leads. We automate the repetitive, time-consuming work of prospecting and nurturing so real estate investors and wholesalers can focus on what matters most: closing deals. Our mission is to build a consistent, predictable pipeline for every client.",
 	socialLinks: {
@@ -20,7 +20,7 @@ export const companyData: FooterProps = {
 	contactInfo: {
 		email: "sam.scaler@dealscale.io",
 		phone: "+1 (720) 258-6576",
-		address: "3700 Quebec St\nDenver, CO",
+		address: "3700 Quebec St\nDenver, CO 80207\nUSA",
 	},
 	supportLink: "https://dealscale.zohodesk.com/portal/en/home",
 	careersLink: "https://dealscale.zohorecruit.com/jobs/Careers",

@@ -64,15 +64,18 @@ export const buildPostalAddress = (): PostalAddressSchema | undefined => {
                 return undefined;
         }
 
-        const [street = "", localityLine = ""] = address.split("\n");
+        const [street = "", localityLine = "", countryLine = ""] = address.split("\n");
         const [addressLocality, addressRegion] = localityLine
                 .split(",")
                 .map((segment) => segment.trim());
+        const postalCode = localityLine.match(/(\d{5}(-\d{4})?)$/)?.[1] || "";
 
         return {
                 "@type": "PostalAddress",
                 streetAddress: street,
                 addressLocality,
                 addressRegion,
+                postalCode,
+                addressCountry: countryLine.trim(),
         };
 };
