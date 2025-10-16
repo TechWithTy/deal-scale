@@ -2,6 +2,7 @@ import type { FooterProps } from "@/components/layout/Footer";
 
 export const companyData: FooterProps = {
 	companyName: "Deal Scale",
+	companyLegalName: "Deal Scale LLC",
 	companyDescription:
 		"Deal Scale provides AI-Powered Agents that deliver sales-ready appointments, not just leads. We automate the repetitive, time-consuming work of prospecting and nurturing so real estate investors and wholesalers can focus on what matters most: closing deals. Our mission is to build a consistent, predictable pipeline for every client.",
 	socialLinks: {

@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export interface FooterProps {
 	companyName: string;
+	companyLegalName?: string;
 	companyDescription: string;
 	socialLinks: {
 		github?: string;
@@ -41,6 +42,7 @@ export interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({
 	companyName,
+	companyLegalName,
 	companyDescription,
 	socialLinks,
 	quickLinks,
