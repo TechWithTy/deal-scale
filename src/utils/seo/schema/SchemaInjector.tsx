@@ -11,18 +11,22 @@ export function SchemaInjector<TSchema extends SchemaPayload>({
 }: SchemaInjectorProps<TSchema>): ReactElement | null {
         const result = getServerSideJsonLd({ schema });
 
-        if (!result.ok) {
-                if (process.env.NODE_ENV !== "production") {
-                        console.error("Failed to render JSON-LD schema", result.error);
-                }
-
-                return null;
+        if (result.ok) {
+                return (
+                        <script
+                                type="application/ld+json"
+                                dangerouslySetInnerHTML={{ __html: result.json }}
+                        />
+                );
         }
 
-        return (
-                <script
-                        type="application/ld+json"
-                        dangerouslySetInnerHTML={{ __html: result.json }}
-                />
-        );
+        if (process.env.NODE_ENV !== "production") {
+                if ("error" in result) {
+                        console.error("Failed to render JSON-LD schema", result.error);
+                } else {
+                        console.error("Failed to render JSON-LD schema");
+                }
+        }
+
+        return null;
 }
