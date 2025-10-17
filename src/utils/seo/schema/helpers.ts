@@ -25,8 +25,8 @@ export const buildSocialProfiles = (): string[] => {
                 socialLinks.linkedin,
                 socialLinks.facebook,
                 socialLinks.instagram,
-                socialLinks.mediumUsername
-                        ? `https://medium.com/@${socialLinks.mediumUsername}`
+                socialLinks.mediumUsername && socialLinks.mediumUsername.trim().length > 0
+                        ? `https://medium.com/@${socialLinks.mediumUsername.trim()}`
                         : undefined,
         ].filter((link): link is string => Boolean(link));
 
