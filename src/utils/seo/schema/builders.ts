@@ -47,20 +47,25 @@ type BuildBlogSchemaOptions = {
         posts: BeehiivPost[];
 };
 
-export const buildOrganizationSchema = (): OrganizationSchema => ({
-        "@context": SCHEMA_CONTEXT,
-        "@type": "Organization",
-        "@id": ORGANIZATION_ID,
-        name: companyData.companyName,
-        legalName: companyData.companyLegalName,
-        url: defaultSeo.canonical,
-        description: companyData.companyDescription,
-        sameAs: buildSocialProfiles(),
-        logo: buildAbsoluteUrl(defaultSeo.image),
-        image: "https://dealscale.io/banners/main.png",
-        contactPoint: buildContactPoints(),
-        address: buildPostalAddress(),
-});
+export const buildOrganizationSchema = (): OrganizationSchema => {
+        const address = buildPostalAddress();
+        const logo = defaultSeo.image ? buildAbsoluteUrl(defaultSeo.image) : undefined;
+
+        return {
+                "@context": SCHEMA_CONTEXT,
+                "@type": "Organization",
+                "@id": ORGANIZATION_ID,
+                name: companyData.companyName,
+                legalName: companyData.companyLegalName,
+                url: defaultSeo.canonical,
+                description: companyData.companyDescription,
+                sameAs: buildSocialProfiles(),
+                logo,
+                image: "https://dealscale.io/banners/main.png",
+                contactPoint: buildContactPoints(),
+                ...(address && { address }),
+        };
+};
 
 export const buildWebSiteSchema = (): WebSiteSchema => ({
         "@context": SCHEMA_CONTEXT,
