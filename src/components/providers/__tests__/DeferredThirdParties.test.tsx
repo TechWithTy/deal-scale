@@ -126,4 +126,36 @@ describe("DeferredThirdParties", () => {
                         expect(globalThis.fetch).toHaveBeenCalledTimes(2);
                 });
         });
+
+        it("uses initial analytics config without hitting the providers endpoint", async () => {
+                const { DeferredThirdParties } = await import("../DeferredThirdParties");
+
+                render(
+                        <DeferredThirdParties
+                                initialConfig={{
+                                        clarityId: "clarity-id",
+                                        gaId: "ga-id",
+                                        gtmId: "gtm-id",
+                                        zohoCode: "zoho-id",
+                                }}
+                        />,
+                );
+
+                act(() => {
+                        fireEvent.pointerMove(window);
+                });
+
+                await waitFor(() => {
+                        expect(document.getElementById("clarity-script")).not.toBeNull();
+                });
+
+                expect(analyticsSpy).toHaveBeenCalledWith({
+                        config: {
+                                gaId: "ga-id",
+                                gtmId: "gtm-id",
+                        },
+                });
+
+                expect(globalThis.fetch).not.toHaveBeenCalled();
+        });
 });
