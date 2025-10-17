@@ -9,7 +9,16 @@ import type {
 
 import { useDeferredLoad } from "./useDeferredLoad";
 
-const ANALYTICS_FIELDS: AnalyticsField[] = ["clarityId", "gaId", "gtmId", "zohoCode"];
+const ANALYTICS_FIELDS: AnalyticsField[] = [
+        "clarityId",
+        "gaId",
+        "gtmId",
+        "zohoCode",
+        "plausibleDomain",
+        "plausibleEndpoint",
+];
+
+const DEFAULT_PLAUSIBLE_ENDPOINT = "https://plausible.io/api/event";
 
 const Analytics = dynamic(
         () =>
@@ -59,6 +68,47 @@ const MicrosoftClarityScript = ({ projectId }: { projectId?: string }) => {
         return null;
 };
 
+const PlausibleScript = ({
+        domain,
+        endpoint,
+}: {
+        domain?: string;
+        endpoint?: string;
+}) => {
+        useEffect(() => {
+                if (!domain || typeof window === "undefined") {
+                        return;
+                }
+
+                let isMounted = true;
+
+                const load = async () => {
+                        try {
+                                const { init } = await import("@plausible-analytics/tracker");
+                                if (!isMounted) {
+                                        return;
+                                }
+                                init({
+                                        domain,
+                                        endpoint: endpoint || DEFAULT_PLAUSIBLE_ENDPOINT,
+                                        autoCapturePageviews: true,
+                                        captureOnLocalhost: false,
+                                });
+                        } catch (error) {
+                                warnLog("Failed to initialize Plausible Analytics.", error);
+                        }
+                };
+
+                void load();
+
+                return () => {
+                        isMounted = false;
+                };
+        }, [domain, endpoint]);
+
+        return null;
+};
+
 function useZohoLoader(enabled: boolean, zohoCode?: string) {
         useEffect(() => {
                 if (!enabled || !zohoCode || typeof window === "undefined") {
@@ -97,6 +147,8 @@ interface ProviderResponse extends AnalyticsConfig {
 interface DeferredThirdPartiesProps {
         clarityProjectId?: string;
         zohoWidgetCode?: string;
+        plausibleDomain?: string;
+        plausibleEndpoint?: string;
         retryDelayMs?: number;
         maxRetries?: number;
         maxWaitMs?: number;
@@ -106,6 +158,8 @@ interface DeferredThirdPartiesProps {
 export function DeferredThirdParties({
         clarityProjectId,
         zohoWidgetCode,
+        plausibleDomain,
+        plausibleEndpoint,
         retryDelayMs = DEFAULT_RETRY_DELAY_MS,
         maxRetries = DEFAULT_MAX_RETRIES,
         maxWaitMs,
@@ -127,10 +181,12 @@ export function DeferredThirdParties({
                 apply({
                         clarityId: clarityProjectId,
                         zohoCode: zohoWidgetCode,
+                        plausibleDomain,
+                        plausibleEndpoint,
                 });
 
                 return base;
-        }, [clarityProjectId, initialConfig, zohoWidgetCode]);
+        }, [clarityProjectId, initialConfig, plausibleDomain, plausibleEndpoint, zohoWidgetCode]);
 
         const shouldLoad = useDeferredLoad(maxWaitMs);
         const [providerData, setProviderData] = useState<ProviderResponse | null>(null);
@@ -241,6 +297,18 @@ export function DeferredThirdParties({
 
         const clarityId = providerData?.clarityId ?? config.clarityId;
         const zohoCode = providerData?.zohoCode ?? config.zohoCode;
+        const plausibleConfig = useMemo(
+                () => ({
+                        domain: providerData?.plausibleDomain ?? config.plausibleDomain,
+                        endpoint: providerData?.plausibleEndpoint ?? config.plausibleEndpoint,
+                }),
+                [
+                        config.plausibleDomain,
+                        config.plausibleEndpoint,
+                        providerData?.plausibleDomain,
+                        providerData?.plausibleEndpoint,
+                ],
+        );
         const analyticsConfig = useMemo<Pick<AnalyticsConfig, "gaId" | "gtmId">>(
                 () => ({
                         gaId: providerData?.gaId ?? config.gaId,
@@ -249,7 +317,13 @@ export function DeferredThirdParties({
                 [config.gaId, config.gtmId, providerData?.gaId, providerData?.gtmId],
         );
 
-        const shouldRender = Boolean(analyticsConfig.gaId || analyticsConfig.gtmId || clarityId || zohoCode);
+        const shouldRender = Boolean(
+                analyticsConfig.gaId ||
+                        analyticsConfig.gtmId ||
+                        clarityId ||
+                        zohoCode ||
+                        plausibleConfig.domain,
+        );
 
         useZohoLoader(shouldRender, zohoCode);
 
@@ -261,6 +335,10 @@ export function DeferredThirdParties({
                 <>
                         <Analytics config={analyticsConfig} />
                         <MicrosoftClarityScript projectId={clarityId} />
+                        <PlausibleScript
+                                domain={plausibleConfig.domain}
+                                endpoint={plausibleConfig.endpoint}
+                        />
                 </>
         );
 }
