@@ -8,19 +8,20 @@ jest.mock("lottie-react", () => ({
 }));
 
 describe("exportLandingData", () => {
-        let tempDir: string;
+        let tempRoot: string;
         let exportLandingData: typeof import("../../../../tools/strapi/export-landing")["exportLandingData"];
 
         beforeAll(async () => {
                 ({ exportLandingData } = await import("../../../../tools/strapi/export-landing"));
-                tempDir = await mkdtemp(path.join(os.tmpdir(), "landing-export-"));
+                tempRoot = await mkdtemp(path.join(os.tmpdir(), "landing-export-"));
         });
 
         afterAll(async () => {
-                await rm(tempDir, { recursive: true, force: true });
+                await rm(tempRoot, { recursive: true, force: true });
         });
 
         it("writes the landing JSON payloads to disk", async () => {
+                const tempDir = await mkdtemp(path.join(tempRoot, "all-"));
                 const summary = await exportLandingData({ outDir: tempDir, silent: true });
 
                 expect(summary.files).toEqual(
@@ -34,5 +35,21 @@ describe("exportLandingData", () => {
                 const servicesRaw = await readFile(path.join(tempDir, "services.json"), "utf8");
                 const services = JSON.parse(servicesRaw) as Record<string, unknown>;
                 expect(Object.keys(services)).not.toHaveLength(0);
+        });
+
+        it("filters exports when entities are provided", async () => {
+                const tempDir = await mkdtemp(path.join(tempRoot, "filtered-"));
+                const summary = await exportLandingData({
+                        outDir: tempDir,
+                        silent: true,
+                        entities: ["pricing-plans"],
+                });
+
+                expect(summary.files).toEqual([path.join(tempDir, "pricing-plans.json")]);
+
+                const pricingRaw = await readFile(path.join(tempDir, "pricing-plans.json"), "utf8");
+                const pricing = JSON.parse(pricingRaw);
+                expect(Array.isArray(pricing)).toBe(true);
+                expect(pricing.length).toBeGreaterThan(0);
         });
 });

@@ -17,7 +17,8 @@ Build a repeatable pipeline that converts the current landing-page content livin
 | Partner logos | `src/data/service/slug_data/trustedCompanies.ts` | Logo metadata and partner descriptions. |
 | Case studies | `src/data/caseStudy/caseStudies.ts` | Contains large bodies of copy, stats, and images for grid and detail pages. |
 | FAQ content | `src/data/faq/default.ts` | Question/answer sets used by `<FAQ />`. |
-| Bento features | `src/data/bento/main.ts` | Titles, body copy, CTA labels, and media references. |
+| Bento features | `src/data/bento/main.tsx` (UI), `src/data/bento/landingSnapshot.ts` (export seed) | Titles, body copy, CTA labels, and media references. |
+| Landing copy gaps | `src/data/landing/strapiLandingContent.ts` | Centralizes hero, services header, CTA, and section copy used as Strapi seeds. |
 | Blog metadata | `src/data/medium/posts.ts` (fallback) | Serves as seed content if Beehiiv fetch fails. |
 | Contact form schemas | `src/data/contact/formFields.ts` | Field definitions, dropdown options, copy. |
 | SEO defaults | `src/data/constants/seo.ts` | Landing metadata consumed via `getStaticSeo`. |
@@ -40,11 +41,11 @@ Build a repeatable pipeline that converts the current landing-page content livin
    - Translate the above mapping into Strapi builder definitions.
    - Commit schema JSON to the Strapi repo under `src/api/*`.
 2. **Extend export script**
-   - Update `scripts/export-data.ts` (or create `scripts/export-landing-data.ts`) to:
+   - Use `tools/strapi/export-landing.ts` (invoked via `pnpm run export:landing`) to:
      - Traverse the `src/data` modules listed above.
      - Flatten nested records into the structure expected by Strapi importers.
      - Emit JSON into `content/strapi-export/landing/*` grouped by entity.
-   - Add CLI flags for `--landing` to isolate landing content.
+   - Accept optional CLI flags (for example `--outDir`) passed through the runner to isolate landing content if needed.
 3. **Normalize IDs**
    - Reuse the existing hash-based dedupe logic described in `_docs/strapi-export-guide.md`.
    - Ensure slug consistency (e.g., `caseStudies` already exposes `slug`).
@@ -57,7 +58,7 @@ Build a repeatable pipeline that converts the current landing-page content livin
      - Relationship IDs correspond to actual objects.
      - File count matches expectation (snapshot).
 6. **Automation**
-   - Register a `pnpm run export:landing` script in `package.json`.
+   - Leverage the committed `pnpm run export:landing` script in `package.json`.
    - Hook into CI (GitHub Actions) to ensure exports stay in sync with data commits.
 
 ## Migration Checklist
