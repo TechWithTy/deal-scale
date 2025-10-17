@@ -13,7 +13,9 @@ module.exports = {
         },
         moduleNameMapper: {
                 "^@/(.*)$": "<rootDir>/src/$1",
+                "\\.(css|scss|sass)$": "<rootDir>/__mocks__/fileMock.js",
                 "\\.(svg)$": "<rootDir>/__mocks__/svgMock.js",
                 "^@upstash/redis$": "<rootDir>/__mocks__/@upstash/redis.js",
+                "^server-only$": "<rootDir>/__mocks__/server-only.ts",
         },
 };
