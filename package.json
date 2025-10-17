@@ -34,7 +34,8 @@
                 "export:all": "node scripts/run-ts.js scripts/strapi/export-all.ts",
                 "test:export": "node scripts/run-ts.js scripts/strapi/test-export.ts",
                 "seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company",
-                "submit:sitemap": "node tools/deploy/submit-sitemap.js"
+                "submit:sitemap": "node tools/deploy/submit-sitemap.js",
+                "export:landing": "node tools/run-ts.js tools/strapi/export-landing.ts"
         },
         "lint-staged": {
                 "**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
