@@ -1,12 +1,20 @@
 import { z } from "zod";
 
-export type AnalyticsField = "clarityId" | "gaId" | "gtmId" | "zohoCode";
+export type AnalyticsField =
+        | "clarityId"
+        | "gaId"
+        | "gtmId"
+        | "zohoCode"
+        | "plausibleDomain"
+        | "plausibleEndpoint";
 
 export interface AnalyticsConfig {
         clarityId?: string;
         gaId?: string;
         gtmId?: string;
         zohoCode?: string;
+        plausibleDomain?: string;
+        plausibleEndpoint?: string;
 }
 
 export interface AnalyticsIssue {
@@ -43,6 +51,16 @@ const analyticsSchema = z.object({
                 .trim()
                 .min(1, "Zoho SalesIQ widget code must be a non-empty string")
                 .optional(),
+        plausibleDomain: z
+                .string()
+                .trim()
+                .min(1, "Plausible domain must be a non-empty string")
+                .optional(),
+        plausibleEndpoint: z
+                .string()
+                .trim()
+                .min(1, "Plausible endpoint must be a non-empty string")
+                .optional(),
 });
 
 interface EnvDescriptor {
@@ -71,6 +89,16 @@ const fieldDescriptors: EnvDescriptor[] = [
                 field: "zohoCode",
                 primary: process.env.ZOHO_SALES_IQ_WIDGET_CODE,
                 fallback: process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE,
+        },
+        {
+                field: "plausibleDomain",
+                primary: process.env.PLAUSIBLE_DOMAIN,
+                fallback: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
+        },
+        {
+                field: "plausibleEndpoint",
+                primary: process.env.PLAUSIBLE_ENDPOINT,
+                fallback: process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT,
         },
 ];
 

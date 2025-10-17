@@ -18,12 +18,17 @@ const zohoWidgetCode =
         process.env.ZOHO_SALES_IQ_WIDGET_CODE ??
         process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE ??
         process.env.ZOHOSALESIQ_WIDGETCODE;
+const plausibleDomain = process.env.PLAUSIBLE_DOMAIN ?? process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+const plausibleEndpoint =
+        process.env.PLAUSIBLE_ENDPOINT ?? process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT;
 
 const initialAnalyticsConfig = {
         clarityId: clarityProjectId,
         gaId: googleAnalyticsId,
         gtmId: googleTagManagerId,
         zohoCode: zohoWidgetCode,
+        plausibleDomain,
+        plausibleEndpoint,
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -35,6 +40,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                                 <AppProviders
                                         clarityProjectId={clarityProjectId}
                                         zohoWidgetCode={zohoWidgetCode}
+                                        plausibleDomain={plausibleDomain}
+                                        plausibleEndpoint={plausibleEndpoint}
                                         initialAnalyticsConfig={initialAnalyticsConfig}
                                 >
                                         {children}
