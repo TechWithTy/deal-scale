@@ -20,6 +20,8 @@ interface AppProvidersProps {
         children: ReactNode;
         clarityProjectId?: string;
         zohoWidgetCode?: string;
+        plausibleDomain?: string;
+        plausibleEndpoint?: string;
         initialAnalyticsConfig?: Partial<AnalyticsConfig>;
 }
 
@@ -29,6 +31,8 @@ export function AppProviders({
         children,
         clarityProjectId,
         zohoWidgetCode,
+        plausibleDomain,
+        plausibleEndpoint,
         initialAnalyticsConfig,
 }: AppProvidersProps) {
         return (
@@ -46,6 +50,8 @@ export function AppProviders({
                         <DeferredThirdParties
                                 clarityProjectId={clarityProjectId}
                                 zohoWidgetCode={zohoWidgetCode}
+                                plausibleDomain={plausibleDomain}
+                                plausibleEndpoint={plausibleEndpoint}
                                 initialConfig={initialAnalyticsConfig}
                         />
                 </ThemeProvider>

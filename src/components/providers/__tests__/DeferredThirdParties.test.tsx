@@ -1,5 +1,7 @@
 import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
+import { init as plausibleInit } from "@plausible-analytics/tracker";
+import { createElement } from "react";
 import type { ComponentType } from "react";
 
 jest.mock("next/dynamic", () => ({
@@ -8,7 +10,7 @@ jest.mock("next/dynamic", () => ({
                 const module = require("@/components/analytics/Analytics") as {
                         Analytics: ComponentType<any>;
                 };
-                return (props: Record<string, unknown>) => <module.Analytics {...props} />;
+                return module.Analytics;
         },
 }));
 
@@ -17,9 +19,17 @@ const analyticsSpy = jest.fn();
 jest.mock("@/components/analytics/Analytics", () => ({
         Analytics: (props: { config: Record<string, unknown> }) => {
                 analyticsSpy(props);
-                return <div data-testid="analytics" />;
+                return createElement("div", { "data-testid": "analytics" });
         },
 }));
+
+jest.mock(
+        "@plausible-analytics/tracker",
+        () => ({
+                init: jest.fn(),
+        }),
+        { virtual: true },
+);
 
 jest.useFakeTimers();
 
@@ -29,6 +39,7 @@ describe("DeferredThirdParties", () => {
 
         beforeEach(() => {
                 analyticsSpy.mockClear();
+                plausibleInit.mockClear();
                 globalThis.fetch = jest.fn() as unknown as typeof fetch;
                 console.warn = jest.fn();
                 document.body.innerHTML = "";
@@ -80,6 +91,53 @@ describe("DeferredThirdParties", () => {
                                 gtmId: "gtm-id",
                         },
                 });
+        });
+
+        it("initializes Plausible when a domain is configured", async () => {
+                const { DeferredThirdParties } = await import("../DeferredThirdParties");
+
+                render(
+                        <DeferredThirdParties
+                                initialConfig={{
+                                        plausibleDomain: "example.com",
+                                }}
+                        />,
+                );
+
+                act(() => {
+                        fireEvent.pointerMove(window);
+                });
+
+                await waitFor(() => {
+                        expect(plausibleInit).toHaveBeenCalledWith({
+                                domain: "example.com",
+                                endpoint: "https://plausible.io/api/event",
+                                autoCapturePageviews: true,
+                                captureOnLocalhost: false,
+                        });
+                });
+        });
+
+        it("does not initialize Plausible when domain is missing", async () => {
+                const { DeferredThirdParties } = await import("../DeferredThirdParties");
+
+                render(
+                        <DeferredThirdParties
+                                initialConfig={{
+                                        plausibleEndpoint: "https://proxy.example.com/event",
+                                }}
+                        />,
+                );
+
+                act(() => {
+                        fireEvent.pointerMove(window);
+                });
+
+                await act(async () => {
+                        await Promise.resolve();
+                });
+
+                expect(plausibleInit).not.toHaveBeenCalled();
         });
 
         it("logs a warning and retries when the providers endpoint returns an error", async () => {
@@ -137,6 +195,8 @@ describe("DeferredThirdParties", () => {
                                         gaId: "ga-id",
                                         gtmId: "gtm-id",
                                         zohoCode: "zoho-id",
+                                        plausibleDomain: "example.com",
+                                        plausibleEndpoint: "https://plausible.io/api/event",
                                 }}
                         />,
                 );
