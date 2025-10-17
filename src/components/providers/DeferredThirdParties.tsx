@@ -9,6 +9,8 @@ import type {
 
 import { useDeferredLoad } from "./useDeferredLoad";
 
+const ANALYTICS_FIELDS: AnalyticsField[] = ["clarityId", "gaId", "gtmId", "zohoCode"];
+
 const Analytics = dynamic(
         () =>
                 import("@/components/analytics/Analytics").then((mod) => ({
@@ -98,6 +100,7 @@ interface DeferredThirdPartiesProps {
         retryDelayMs?: number;
         maxRetries?: number;
         maxWaitMs?: number;
+        initialConfig?: Partial<AnalyticsConfig>;
 }
 
 export function DeferredThirdParties({
@@ -106,13 +109,44 @@ export function DeferredThirdParties({
         retryDelayMs = DEFAULT_RETRY_DELAY_MS,
         maxRetries = DEFAULT_MAX_RETRIES,
         maxWaitMs,
+        initialConfig,
 }: DeferredThirdPartiesProps) {
+        const mergedInitialConfig = useMemo<AnalyticsConfig>(() => {
+                const base: AnalyticsConfig = {};
+
+                const apply = (config?: Partial<AnalyticsConfig>) => {
+                        for (const field of ANALYTICS_FIELDS) {
+                                const value = config?.[field];
+                                if (value) {
+                                        base[field] = value;
+                                }
+                        }
+                };
+
+                apply(initialConfig);
+                apply({
+                        clarityId: clarityProjectId,
+                        zohoCode: zohoWidgetCode,
+                });
+
+                return base;
+        }, [clarityProjectId, initialConfig, zohoWidgetCode]);
+
         const shouldLoad = useDeferredLoad(maxWaitMs);
         const [providerData, setProviderData] = useState<ProviderResponse | null>(null);
+        const [config, setConfig] = useState<AnalyticsConfig>(mergedInitialConfig);
         const [attempt, setAttempt] = useState(0);
         const retryTimerRef = useRef<number | null>(null);
-        const hasPreconfiguredIds = Boolean(clarityProjectId || zohoWidgetCode);
-        const activated = shouldLoad || hasPreconfiguredIds;
+        const errorLoggedRef = useRef(false);
+
+        useEffect(() => {
+                setConfig((prev) => ({ ...mergedInitialConfig, ...prev }));
+        }, [mergedInitialConfig]);
+
+        const needsServerConfig = useMemo(
+                () => ANALYTICS_FIELDS.some((field) => !config[field]),
+                [config],
+        );
 
         useEffect(() => {
                 return () => {
@@ -124,10 +158,10 @@ export function DeferredThirdParties({
         }, []);
 
         useEffect(() => {
-                if (activated) {
+                if (shouldLoad && needsServerConfig) {
                         setAttempt(0);
                 }
-        }, [activated]);
+        }, [needsServerConfig, shouldLoad]);
 
         const scheduleRetry = useCallback(() => {
                 if (typeof window === "undefined") {
@@ -151,7 +185,7 @@ export function DeferredThirdParties({
         }, [maxRetries, retryDelayMs]);
 
         useEffect(() => {
-                if (!activated || providerData || attempt > maxRetries) {
+                if (!shouldLoad || providerData || attempt > maxRetries || !needsServerConfig) {
                         return;
                 }
 
@@ -175,6 +209,7 @@ export function DeferredThirdParties({
                                 }
 
                                 setProviderData(payload as ProviderResponse);
+                                setConfig((prev) => ({ ...prev, ...payload }));
 
                                 if (Array.isArray(payload.warnings)) {
                                         for (const issue of payload.warnings) {
@@ -186,7 +221,10 @@ export function DeferredThirdParties({
                                         return;
                                 }
 
-                                warnLog("Failed to load provider configuration.", error);
+                                if (!errorLoggedRef.current) {
+                                        warnLog("Failed to load provider configuration.", error);
+                                        errorLoggedRef.current = true;
+                                }
                                 if (attempt < maxRetries) {
                                         scheduleRetry();
                                 }
@@ -199,14 +237,17 @@ export function DeferredThirdParties({
                         isCancelled = true;
                         controller.abort();
                 };
-        }, [activated, attempt, maxRetries, providerData, scheduleRetry]);
+        }, [attempt, maxRetries, needsServerConfig, providerData, scheduleRetry, shouldLoad]);
 
-        const clarityId = providerData?.clarityId ?? clarityProjectId;
-        const zohoCode = providerData?.zohoCode ?? zohoWidgetCode;
-        const analyticsConfig = useMemo<Pick<AnalyticsConfig, "gaId" | "gtmId">>(() => ({
-                gaId: providerData?.gaId,
-                gtmId: providerData?.gtmId,
-        }), [providerData?.gaId, providerData?.gtmId]);
+        const clarityId = providerData?.clarityId ?? config.clarityId;
+        const zohoCode = providerData?.zohoCode ?? config.zohoCode;
+        const analyticsConfig = useMemo<Pick<AnalyticsConfig, "gaId" | "gtmId">>(
+                () => ({
+                        gaId: providerData?.gaId ?? config.gaId,
+                        gtmId: providerData?.gtmId ?? config.gtmId,
+                }),
+                [config.gaId, config.gtmId, providerData?.gaId, providerData?.gtmId],
+        );
 
         const shouldRender = Boolean(analyticsConfig.gaId || analyticsConfig.gtmId || clarityId || zohoCode);
 
