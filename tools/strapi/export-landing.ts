@@ -16,6 +16,7 @@ interface ExportLandingOptions {
         outDir?: string;
         clean?: boolean;
         silent?: boolean;
+        entities?: string[];
 }
 
 interface ExportRecord {
@@ -108,8 +109,29 @@ const replacer = (_key: string, value: unknown) => {
         return value;
 };
 
+const resolveExportRecords = (entities?: string[]): ExportRecord[] => {
+        if (!entities || entities.length === 0) {
+                return EXPORT_DEFINITIONS;
+        }
+
+        const requested = new Set(entities);
+        const selected = EXPORT_DEFINITIONS.filter((record) => requested.has(record.name));
+
+        if (selected.length !== requested.size) {
+                const missing = [...requested].filter(
+                        (entity) => !EXPORT_DEFINITIONS.some((record) => record.name === entity),
+                );
+
+                throw new Error(`Unknown export entities: ${missing.join(", ")}`);
+        }
+
+        return selected;
+};
+
 export async function exportLandingData(options: ExportLandingOptions = {}): Promise<ExportSummary> {
-        const { outDir = DEFAULT_OUTPUT, clean = true, silent = false } = options;
+        const { outDir = DEFAULT_OUTPUT, clean = true, silent = false, entities } = options;
+
+        const records = resolveExportRecords(entities);
 
         if (clean) {
                 await rm(outDir, { recursive: true, force: true });
@@ -119,7 +141,7 @@ export async function exportLandingData(options: ExportLandingOptions = {}): Pro
 
         const writtenFiles: string[] = [];
 
-        for (const record of EXPORT_DEFINITIONS) {
+        for (const record of records) {
                 const destination = path.join(outDir, record.filename);
                 const sanitized = JSON.parse(JSON.stringify(record.payload, replacer));
                 await writeFile(destination, `${JSON.stringify(sanitized, null, 2)}\n`, "utf8");
@@ -134,9 +156,103 @@ export async function exportLandingData(options: ExportLandingOptions = {}): Pro
         return { destination: outDir, files: writtenFiles };
 }
 
-export default async function run(): Promise<void> {
-        await exportLandingData();
+interface CliContext {
+        args?: string[];
 }
+
+interface ParsedCliOptions {
+        helpRequested: boolean;
+        options: ExportLandingOptions;
+}
+
+const parseCliArgs = (rawArgs: string[]): ParsedCliOptions => {
+        const options: ExportLandingOptions = {};
+        const entities: string[] = [];
+        let helpRequested = false;
+
+        const consumeValue = (index: number, current: string): [number, string] => {
+                const [, value] = current.split("=", 2);
+
+                if (value) {
+                        return [index, value];
+                }
+
+                const nextValue = rawArgs[index + 1];
+
+                if (!nextValue) {
+                        throw new Error(`Missing value for ${current}`);
+                }
+
+                return [index + 1, nextValue];
+        };
+
+        for (let index = 0; index < rawArgs.length; index += 1) {
+                const arg = rawArgs[index];
+
+                if (arg === "--") {
+                        continue;
+                }
+
+                switch (true) {
+                        case arg === "--help" || arg === "-h": {
+                                helpRequested = true;
+                                break;
+                        }
+                        case arg.startsWith("--outDir") || arg === "-o": {
+                                const [nextIndex, value] = consumeValue(index, arg);
+                                options.outDir = value;
+                                index = nextIndex;
+                                break;
+                        }
+                        case arg.startsWith("--entity") || arg === "-e": {
+                                const [nextIndex, value] = consumeValue(index, arg);
+                                entities.push(value);
+                                index = nextIndex;
+                                break;
+                        }
+                        case arg === "--no-clean": {
+                                options.clean = false;
+                                break;
+                        }
+                        case arg === "--clean": {
+                                options.clean = true;
+                                break;
+                        }
+                        case arg === "--silent" || arg === "-s": {
+                                options.silent = true;
+                                break;
+                        }
+                        default: {
+                                throw new Error(`Unknown argument: ${arg}`);
+                        }
+                }
+        }
+
+        if (entities.length > 0) {
+                options.entities = entities;
+        }
+
+        return { helpRequested, options };
+};
+
+const printCliUsage = () => {
+        // eslint-disable-next-line no-console -- CLI feedback
+        console.log(`Usage: pnpm export:landing [options]\n\nOptions:\n  -o, --outDir <path>     Destination directory for export files\n  -e, --entity <name>     Export only the matching dataset (can be repeated)\n      --clean             Remove the destination directory before exporting (default)\n      --no-clean          Keep existing files in the destination directory\n  -s, --silent            Suppress success log output\n  -h, --help              Show this help message`);
+};
+
+export async function run(context: CliContext = {}): Promise<void> {
+        const rawArgs = context.args ?? process.argv.slice(2);
+        const { helpRequested, options } = parseCliArgs(rawArgs);
+
+        if (helpRequested) {
+                printCliUsage();
+                return;
+        }
+
+        await exportLandingData(options);
+}
+
+export default run;
 
 if (require.main === module) {
         run().catch((error) => {
