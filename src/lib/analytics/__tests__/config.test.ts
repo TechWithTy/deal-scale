@@ -81,7 +81,7 @@ describe("getAnalyticsConfig", () => {
                 ]);
         });
 
-        it("reports errors when neither private nor public vars exist", async () => {
+        it("reports warnings when neither private nor public vars exist", async () => {
                 delete process.env.CLARITY_PROJECT_ID;
                 delete process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
                 delete process.env.GOOGLE_ANALYTICS_ID;
@@ -96,23 +96,25 @@ describe("getAnalyticsConfig", () => {
 
                 expect(result.config).toEqual({});
                 expect(result.fallbacksUsed).toEqual({});
-                expect(result.errors).toEqual([
+                expect(result.errors).toEqual([]);
+                expect(result.warnings).toEqual([
                         {
                                 field: "clarityId",
-                                message: "Missing analytics configuration for clarityId.",
+                                message: "Analytics provider clarityId is not configured.",
                         },
                         {
                                 field: "gaId",
-                                message: "Missing analytics configuration for gaId.",
+                                message: "Analytics provider gaId is not configured.",
                         },
                         {
                                 field: "gtmId",
-                                message: "Missing analytics configuration for gtmId.",
+                                message: "Analytics provider gtmId is not configured.",
                         },
                         {
                                 field: "zohoCode",
-                                message: "Missing analytics configuration for zohoCode.",
+                                message: "Analytics provider zohoCode is not configured.",
                         },
                 ]);
+                expect(result.hasErrors).toBe(false);
         });
 });

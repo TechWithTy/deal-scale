@@ -105,17 +105,17 @@ export function getAnalyticsConfig(): AnalyticsConfigResult {
                         continue;
                 }
 
-                if (!trimmedFallback) {
-                        errors.push({
+                if (trimmedFallback && !allowFallback) {
+                        warnings.push({
                                 field: descriptor.field,
-                                message: `Missing analytics configuration for ${descriptor.field}.`,
-                        });
-                } else {
-                        errors.push({
-                                field: descriptor.field,
-                                message: `Cannot use NEXT_PUBLIC fallback for ${descriptor.field} outside development.`,
+                                message: `Ignoring NEXT_PUBLIC fallback for ${descriptor.field} outside development.`,
                         });
                 }
+
+                warnings.push({
+                        field: descriptor.field,
+                        message: `Analytics provider ${descriptor.field} is not configured.`,
+                });
         }
 
         const parsed = analyticsSchema.safeParse(config);
