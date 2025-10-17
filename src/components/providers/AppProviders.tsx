@@ -9,6 +9,8 @@ import { Toaster } from "@/components/ui/toaster";
 import BodyThemeSync from "@/contexts/BodyThemeSync";
 import { ThemeProvider } from "@/contexts/theme-context";
 
+import type { AnalyticsConfig } from "@/lib/analytics/config";
+
 import { DeferredThirdParties } from "./DeferredThirdParties";
 import NextAuthProvider from "./NextAuthProvider";
 import { PerformanceMonitor } from "./PerformanceMonitor";
@@ -18,6 +20,7 @@ interface AppProvidersProps {
         children: ReactNode;
         clarityProjectId?: string;
         zohoWidgetCode?: string;
+        initialAnalyticsConfig?: Partial<AnalyticsConfig>;
 }
 
 const queryClient = new QueryClient();
@@ -26,6 +29,7 @@ export function AppProviders({
         children,
         clarityProjectId,
         zohoWidgetCode,
+        initialAnalyticsConfig,
 }: AppProvidersProps) {
         return (
                 <ThemeProvider>
@@ -42,6 +46,7 @@ export function AppProviders({
                         <DeferredThirdParties
                                 clarityProjectId={clarityProjectId}
                                 zohoWidgetCode={zohoWidgetCode}
+                                initialConfig={initialAnalyticsConfig}
                         />
                 </ThemeProvider>
         );
