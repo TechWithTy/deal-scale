@@ -2,34 +2,30 @@ import "../index.css";
 import type { ReactNode } from "react";
 
 import { AppProviders } from "@/components/providers/AppProviders";
+import type { AnalyticsConfig } from "@/lib/analytics/config";
+import { getAnalyticsConfig } from "@/lib/analytics/config";
 import { monoFont, sansFont } from "@/styles/fonts";
 import { SchemaInjector, buildOrganizationSchema, buildWebSiteSchema } from "@/utils/seo/schema";
 
 const ORGANIZATION_SCHEMA = buildOrganizationSchema();
 const WEBSITE_SCHEMA = buildWebSiteSchema();
 
-const clarityProjectId =
-        process.env.CLARITY_PROJECT_ID ?? process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
-const googleAnalyticsId =
-        process.env.GOOGLE_ANALYTICS_ID ?? process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS;
-const googleTagManagerId =
-        process.env.GOOGLE_TAG_MANAGER_ID ?? process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
-const zohoWidgetCode =
-        process.env.ZOHO_SALES_IQ_WIDGET_CODE ??
-        process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE ??
-        process.env.ZOHOSALESIQ_WIDGETCODE;
-const plausibleDomain = process.env.PLAUSIBLE_DOMAIN ?? process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
-const plausibleEndpoint =
-        process.env.PLAUSIBLE_ENDPOINT ?? process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT;
+const analyticsResult = getAnalyticsConfig();
 
-const initialAnalyticsConfig = {
+if (analyticsResult.warnings.length > 0) {
+        // * Surface configuration issues early in the server logs.
+        console.warn("[layout] Analytics configuration warnings", analyticsResult.warnings);
+}
+
+const initialAnalyticsConfig: AnalyticsConfig = analyticsResult.config;
+const {
         clarityId: clarityProjectId,
         gaId: googleAnalyticsId,
         gtmId: googleTagManagerId,
         zohoCode: zohoWidgetCode,
         plausibleDomain,
         plausibleEndpoint,
-};
+} = initialAnalyticsConfig;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
         return (
