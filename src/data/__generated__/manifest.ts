@@ -82,6 +82,10 @@ export type DataModuleLoaders = {
         "worklow/dsl": () => Promise<typeof import("../worklow/dsl")>;
 };
 
+export type DataModuleModules = {
+        [K in DataModuleKey]: Awaited<ReturnType<DataModuleLoaders[K]>>;
+};
+
 export type DataManifestEntry<K extends DataModuleKey = DataModuleKey> = {
         readonly key: K;
         readonly importPath: string;
@@ -174,5 +178,5 @@ export type DataManifest = typeof dataManifest;
 
 export type DataModuleLoader<K extends DataModuleKey = DataModuleKey> = DataModuleLoaders[K];
 
-export type DataModuleModule<K extends DataModuleKey = DataModuleKey> = Awaited<ReturnType<DataModuleLoader<K>>>;
+export type DataModuleModule<K extends DataModuleKey = DataModuleKey> = DataModuleModules[K];
 
