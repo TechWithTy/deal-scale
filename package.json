@@ -35,6 +35,7 @@
                 "test:export": "node scripts/run-ts.js scripts/strapi/test-export.ts",
                 "seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company",
                 "submit:sitemap": "node tools/deploy/submit-sitemap.js",
+                "generate:data": "pnpm exec tsx tools/data/generate-data-manifest.ts",
                 "export:landing": "node tools/run-ts.js tools/strapi/export-landing.ts"
         },
         "lint-staged": {
@@ -175,6 +176,7 @@
                 "@vitejs/plugin-react-swc": "^3.9.0",
                 "dotenv": "^16.5.0",
                 "eslint": "^9.9.0",
+                "fast-glob": "^3.3.2",
                 "eslint-plugin-react-hooks": "^5.1.0-rc.0",
                 "eslint-plugin-react-refresh": "^0.4.9",
                 "globals": "^15.9.0",
