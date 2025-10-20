@@ -1,0 +1,52 @@
+{
+  "headline": "Tired of Chasing ",
+  "subheadline": "Stop cold calling all day and start taking appointments from sales-ready home sellers! Deal Scale’s AI suite does the grunt work, so you can focus on what you do best: closing deals.",
+  "badge": "AI Powered Seller Lead Qualification & Appointment Setting",
+  "highlight": "Dead-End Leads?",
+  "highlightWords": [
+    {
+      "word": "AI suite does the grunt work",
+      "gradient": "from-violet-600 to-blue-500 dark:from-primary dark:to-accent"
+    },
+    {
+      "word": "closing deals",
+      "gradient": "from-emerald-600 to-cyan-500 dark:from-secondary dark:to-accent"
+    }
+  ],
+  "primaryCta": {
+    "label": "Become Beta Tester",
+    "href": "/contact",
+    "action": "navigate"
+  },
+  "secondaryCta": {
+    "label": "Get Free Ai Call Credits",
+    "action": "openModal"
+  },
+  "modalVariantLabels": {
+    "complete": "Call Complete",
+    "transfer": "Transfer"
+  },
+  "fallbacks": {
+    "highlight": "Appointments Delivered",
+    "ctaLabel": "Get Started",
+    "ctaLabelSecondary": "Get Started",
+    "highlightWords": [
+      {
+        "word": "real-time",
+        "gradient": "from-primary to-focus"
+      },
+      {
+        "word": "insights",
+        "gradient": "from-blue-500 to-cyan-400"
+      },
+      {
+        "word": "analytics",
+        "gradient": "from-purple-500 to-pink-500"
+      },
+      {
+        "word": "monitor",
+        "gradient": "from-emerald-500 to-teal-400"
+      }
+    ]
+  }
+}
