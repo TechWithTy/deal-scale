@@ -363,6 +363,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: ^0.4.9
         version: 0.4.20(eslint@9.29.0(jiti@1.21.7))
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.3
       globals:
         specifier: ^15.9.0
         version: 15.15.0
