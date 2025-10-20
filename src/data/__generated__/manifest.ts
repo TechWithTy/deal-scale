@@ -1,9 +1,91 @@
 export type DataModuleKey = "about/hero" | "about/marquee" | "about/milestones" | "about/team" | "about/timeline" | "affiliate" | "auth/formFields" | "auth/resetPassword" | "auth/signIn" | "auth/signUp" | "bento/caseStudy" | "bento/landingSnapshot" | "bento/main" | "caseStudy/caseStudies" | "caseStudy/slugDetails/copy" | "caseStudy/slugDetails/testimonials" | "categories" | "company" | "constants/booking" | "constants/legal/cookies" | "constants/legal/GDPR" | "constants/legal/hippa" | "constants/legal/PII" | "constants/legal/privacy" | "constants/legal/tcpCompliance" | "constants/legal/terms" | "constants/seo" | "contact/affiliate" | "contact/authFormFields" | "contact/formFields" | "contact/pilotFormFields" | "discount" | "discount/mockDiscountCodes" | "events" | "faq/default" | "features" | "features/deal_scales_timeline" | "features/feature_timeline" | "landing/strapiLandingContent" | "layout/nav" | "legal/legalDocuments" | "medium/post" | "mlsProperties" | "partners" | "portfolio" | "products" | "products/agents" | "products/copy" | "products/credits" | "products/essentials" | "products/free-resource-copy" | "products/free-resources" | "products/hero" | "products/license" | "products/notion" | "products/reviews" | "products/sizingChart" | "products/workflow" | "projects" | "service/services" | "service/slug_data/consultationSteps" | "service/slug_data/copyright" | "service/slug_data/faq" | "service/slug_data/how_it_works" | "service/slug_data/integrations" | "service/slug_data/methodologies" | "service/slug_data/pricing" | "service/slug_data/pricing/other" | "service/slug_data/problems_solutions" | "service/slug_data/testimonials" | "service/slug_data/trustedCompanies" | "shipping" | "skiptTraceExample" | "social/share" | "transcripts" | "transcripts/voiceCloningAfter" | "transcripts/voiceCloningBefore" | "values" | "worklow/dsl";
 
+export type DataModuleLoaders = {
+        "about/hero": () => Promise<typeof import("../about/hero")>;
+        "about/marquee": () => Promise<typeof import("../about/marquee")>;
+        "about/milestones": () => Promise<typeof import("../about/milestones")>;
+        "about/team": () => Promise<typeof import("../about/team")>;
+        "about/timeline": () => Promise<typeof import("../about/timeline")>;
+        "affiliate": () => Promise<typeof import("../affiliate/index")>;
+        "auth/formFields": () => Promise<typeof import("../auth/formFields")>;
+        "auth/resetPassword": () => Promise<typeof import("../auth/resetPassword")>;
+        "auth/signIn": () => Promise<typeof import("../auth/signIn")>;
+        "auth/signUp": () => Promise<typeof import("../auth/signUp")>;
+        "bento/caseStudy": () => Promise<typeof import("../bento/caseStudy")>;
+        "bento/landingSnapshot": () => Promise<typeof import("../bento/landingSnapshot")>;
+        "bento/main": () => Promise<typeof import("../bento/main")>;
+        "caseStudy/caseStudies": () => Promise<typeof import("../caseStudy/caseStudies")>;
+        "caseStudy/slugDetails/copy": () => Promise<typeof import("../caseStudy/slugDetails/copy")>;
+        "caseStudy/slugDetails/testimonials": () => Promise<typeof import("../caseStudy/slugDetails/testimonials")>;
+        "categories": () => Promise<typeof import("../categories")>;
+        "company": () => Promise<typeof import("../company")>;
+        "constants/booking": () => Promise<typeof import("../constants/booking")>;
+        "constants/legal/cookies": () => Promise<typeof import("../constants/legal/cookies")>;
+        "constants/legal/GDPR": () => Promise<typeof import("../constants/legal/GDPR")>;
+        "constants/legal/hippa": () => Promise<typeof import("../constants/legal/hippa")>;
+        "constants/legal/PII": () => Promise<typeof import("../constants/legal/PII")>;
+        "constants/legal/privacy": () => Promise<typeof import("../constants/legal/privacy")>;
+        "constants/legal/tcpCompliance": () => Promise<typeof import("../constants/legal/tcpCompliance")>;
+        "constants/legal/terms": () => Promise<typeof import("../constants/legal/terms")>;
+        "constants/seo": () => Promise<typeof import("../constants/seo")>;
+        "contact/affiliate": () => Promise<typeof import("../contact/affiliate")>;
+        "contact/authFormFields": () => Promise<typeof import("../contact/authFormFields")>;
+        "contact/formFields": () => Promise<typeof import("../contact/formFields")>;
+        "contact/pilotFormFields": () => Promise<typeof import("../contact/pilotFormFields")>;
+        "discount": () => Promise<typeof import("../discount/index")>;
+        "discount/mockDiscountCodes": () => Promise<typeof import("../discount/mockDiscountCodes")>;
+        "events": () => Promise<typeof import("../events/index")>;
+        "faq/default": () => Promise<typeof import("../faq/default")>;
+        "features": () => Promise<typeof import("../features/index")>;
+        "features/deal_scales_timeline": () => Promise<typeof import("../features/deal_scales_timeline")>;
+        "features/feature_timeline": () => Promise<typeof import("../features/feature_timeline")>;
+        "landing/strapiLandingContent": () => Promise<typeof import("../landing/strapiLandingContent")>;
+        "layout/nav": () => Promise<typeof import("../layout/nav")>;
+        "legal/legalDocuments": () => Promise<typeof import("../legal/legalDocuments")>;
+        "medium/post": () => Promise<typeof import("../medium/post")>;
+        "mlsProperties": () => Promise<typeof import("../mlsProperties")>;
+        "partners": () => Promise<typeof import("../partners/index")>;
+        "portfolio": () => Promise<typeof import("../portfolio/index")>;
+        "products": () => Promise<typeof import("../products/index")>;
+        "products/agents": () => Promise<typeof import("../products/agents")>;
+        "products/copy": () => Promise<typeof import("../products/copy")>;
+        "products/credits": () => Promise<typeof import("../products/credits")>;
+        "products/essentials": () => Promise<typeof import("../products/essentials")>;
+        "products/free-resource-copy": () => Promise<typeof import("../products/free-resource-copy")>;
+        "products/free-resources": () => Promise<typeof import("../products/free-resources")>;
+        "products/hero": () => Promise<typeof import("../products/hero")>;
+        "products/license": () => Promise<typeof import("../products/license")>;
+        "products/notion": () => Promise<typeof import("../products/notion")>;
+        "products/reviews": () => Promise<typeof import("../products/reviews")>;
+        "products/sizingChart": () => Promise<typeof import("../products/sizingChart")>;
+        "products/workflow": () => Promise<typeof import("../products/workflow")>;
+        "projects": () => Promise<typeof import("../projects")>;
+        "service/services": () => Promise<typeof import("../service/services")>;
+        "service/slug_data/consultationSteps": () => Promise<typeof import("../service/slug_data/consultationSteps")>;
+        "service/slug_data/copyright": () => Promise<typeof import("../service/slug_data/copyright")>;
+        "service/slug_data/faq": () => Promise<typeof import("../service/slug_data/faq")>;
+        "service/slug_data/how_it_works": () => Promise<typeof import("../service/slug_data/how_it_works")>;
+        "service/slug_data/integrations": () => Promise<typeof import("../service/slug_data/integrations")>;
+        "service/slug_data/methodologies": () => Promise<typeof import("../service/slug_data/methodologies/index")>;
+        "service/slug_data/pricing": () => Promise<typeof import("../service/slug_data/pricing")>;
+        "service/slug_data/pricing/other": () => Promise<typeof import("../service/slug_data/pricing/other")>;
+        "service/slug_data/problems_solutions": () => Promise<typeof import("../service/slug_data/problems_solutions")>;
+        "service/slug_data/testimonials": () => Promise<typeof import("../service/slug_data/testimonials")>;
+        "service/slug_data/trustedCompanies": () => Promise<typeof import("../service/slug_data/trustedCompanies")>;
+        "shipping": () => Promise<typeof import("../shipping/index")>;
+        "skiptTraceExample": () => Promise<typeof import("../skiptTraceExample/index")>;
+        "social/share": () => Promise<typeof import("../social/share")>;
+        "transcripts": () => Promise<typeof import("../transcripts/index")>;
+        "transcripts/voiceCloningAfter": () => Promise<typeof import("../transcripts/voiceCloningAfter")>;
+        "transcripts/voiceCloningBefore": () => Promise<typeof import("../transcripts/voiceCloningBefore")>;
+        "values": () => Promise<typeof import("../values/index")>;
+        "worklow/dsl": () => Promise<typeof import("../worklow/dsl")>;
+};
+
 export type DataManifestEntry<K extends DataModuleKey = DataModuleKey> = {
         readonly key: K;
         readonly importPath: string;
-        readonly loader: () => Promise<unknown>;
+        readonly loader: DataModuleLoaders[K];
 };
 
 export const dataManifest = {
@@ -90,7 +172,7 @@ export const dataManifest = {
 
 export type DataManifest = typeof dataManifest;
 
-export type DataModuleLoader<K extends DataModuleKey = DataModuleKey> = DataManifest[K]["loader"];
+export type DataModuleLoader<K extends DataModuleKey = DataModuleKey> = DataModuleLoaders[K];
 
 export type DataModuleModule<K extends DataModuleKey = DataModuleKey> = Awaited<ReturnType<DataModuleLoader<K>>>;
 
