@@ -37,11 +37,14 @@ describe("generateDataManifest", () => {
                 await generateDataManifest({ cwd: tempDir });
 
                 const manifestPath = path.join(tempDir, "src/data/__generated__/manifest.ts");
+                const modulesPath = path.join(tempDir, "src/data/__generated__/modules.ts");
                 const storePath = path.join(tempDir, "src/stores/__generated__/dataStores.ts");
 
                 const manifestContent = await fs.readFile(manifestPath, "utf8");
+                const modulesContent = await fs.readFile(modulesPath, "utf8");
                 const storeContent = await fs.readFile(storePath, "utf8");
                 const manifestSnapshot = manifestContent.trim();
+                const modulesSnapshot = modulesContent.trim();
                 const storeSnapshot = storeContent.trim();
                 const expectedManifest = [
                         'export type DataModuleKey = "alpha" | "nested" | "nested/beta";',
@@ -50,6 +53,10 @@ describe("generateDataManifest", () => {
                         '        "alpha": () => Promise<typeof import("../alpha")>;',
                         '        "nested": () => Promise<typeof import("../nested/index")>;',
                         '        "nested/beta": () => Promise<typeof import("../nested/beta")>;',
+                        '};',
+                        '',
+                        'export type DataModuleModules = {',
+                        '        [K in DataModuleKey]: Awaited<ReturnType<DataModuleLoaders[K]>>;',
                         '};',
                         '',
                         'export type DataManifestEntry<K extends DataModuleKey = DataModuleKey> = {',
@@ -68,7 +75,28 @@ describe("generateDataManifest", () => {
                         '',
                         'export type DataModuleLoader<K extends DataModuleKey = DataModuleKey> = DataModuleLoaders[K];',
                         '',
-                        'export type DataModuleModule<K extends DataModuleKey = DataModuleKey> = Awaited<ReturnType<DataModuleLoader<K>>>;',
+                        'export type DataModuleModule<K extends DataModuleKey = DataModuleKey> = DataModuleModules[K];',
+                ].join('\n');
+
+                const expectedModules = [
+                        'import type { DataModuleKey, DataModuleModule } from "@/data/__generated__/manifest";',
+                        'import * as alphaModule from "../alpha";',
+                        'import * as nestedModule from "../nested/index";',
+                        'import * as nestedBetaModule from "../nested/beta";',
+                        '',
+                        'export const dataModules = {',
+                        '        alpha: alphaModule,',
+                        '        nested: nestedModule,',
+                        '        "nested/beta": nestedBetaModule,',
+                        '} as const satisfies { [K in DataModuleKey]: DataModuleModule<K> };',
+                        '',
+                        'export type DataModules = typeof dataModules;',
+                        '',
+                        'export const dataModuleKeys = Object.keys(dataModules) as DataModuleKey[];',
+                        '',
+                        'export function getDataModule<K extends DataModuleKey>(key: K): DataModuleModule<K> {',
+                        '        return dataModules[key];',
+                        '}',
                 ].join('\n');
 
                 const expectedStore = [
@@ -85,6 +113,7 @@ describe("generateDataManifest", () => {
                 ].join('\n');
 
                 expect(manifestSnapshot).toBe(expectedManifest);
+                expect(modulesSnapshot).toBe(expectedModules);
                 expect(storeSnapshot).toBe(expectedStore);
         });
 
