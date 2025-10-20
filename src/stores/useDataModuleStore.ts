@@ -57,7 +57,7 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                         currentLoad = entry
                                 .loader()
                                 .then((module) => {
-                                        set({ status: 'ready', data: module as DataModuleModule<K>, error: undefined });
+                                        set({ status: 'ready', data: module, error: undefined });
                                 })
                                 .catch((error: unknown) => {
                                         set({ status: 'error', data: undefined, error });

@@ -132,10 +132,26 @@ function buildManifestContent(modules: ManifestModule[]): string {
 
         lines.push(`export type DataModuleKey = ${keyUnion};`);
         lines.push("");
+
+        if (modules.length === 0) {
+                lines.push("export type DataModuleLoaders = Record<never, () => Promise<never>>;");
+        } else {
+                lines.push("export type DataModuleLoaders = {");
+                for (const mod of modules) {
+                        const literalKey = JSON.stringify(mod.key);
+                        const importPath = JSON.stringify(mod.importPath);
+                        lines.push(
+                                `${INDENT}${literalKey}: () => Promise<typeof import(${importPath})>;`,
+                        );
+                }
+                lines.push("};");
+        }
+
+        lines.push("");
         lines.push("export type DataManifestEntry<K extends DataModuleKey = DataModuleKey> = {");
         lines.push(`${INDENT}readonly key: K;`);
         lines.push(`${INDENT}readonly importPath: string;`);
-        lines.push(`${INDENT}readonly loader: () => Promise<unknown>;`);
+        lines.push(`${INDENT}readonly loader: DataModuleLoaders[K];`);
         lines.push("};");
         lines.push("");
 
@@ -159,7 +175,7 @@ function buildManifestContent(modules: ManifestModule[]): string {
         lines.push("");
         lines.push("export type DataManifest = typeof dataManifest;");
         lines.push("");
-        lines.push('export type DataModuleLoader<K extends DataModuleKey = DataModuleKey> = DataManifest[K]["loader"];');
+        lines.push('export type DataModuleLoader<K extends DataModuleKey = DataModuleKey> = DataModuleLoaders[K];');
         lines.push("");
         lines.push('export type DataModuleModule<K extends DataModuleKey = DataModuleKey> = Awaited<ReturnType<DataModuleLoader<K>>>;');
         lines.push("");
