@@ -14,9 +14,9 @@ import type {
 
 type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
 
-const manifestEntriesByKey = dataManifest as {
+const manifestEntriesByKey: {
         readonly [K in DataModuleKey]: DataManifestEntry<K>;
-};
+} = dataManifest;
 
 function getManifestEntry<K extends DataModuleKey>(key: K): DataManifestEntry<K> {
         const entry = manifestEntriesByKey[key];
@@ -28,13 +28,11 @@ function getManifestEntry<K extends DataModuleKey>(key: K): DataManifestEntry<K>
         return entry;
 }
 
-async function loadModule<K extends DataModuleKey>(key: K): Promise<DataModuleModule<K>> {
+function loadModule<K extends DataModuleKey>(key: K): Promise<DataModuleModule<K>> {
         const entry = getManifestEntry(key);
         const loader: DataModuleLoader<K> = entry.loader;
 
-        const module = await loader();
-
-        return module;
+        return loader();
 }
 
 export interface DataModuleState<K extends DataModuleKey> {
@@ -75,12 +73,12 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
 
                         currentLoad = loadModule(key)
                                 .then((module) => {
-                                        const nextState: Partial<DataModuleState<K>> = {
+                                        set((state) => ({
+                                                ...state,
                                                 status: 'ready',
                                                 data: module,
                                                 error: undefined,
-                                        };
-                                        set(nextState);
+                                        }));
                                 })
                                 .catch((error: unknown) => {
                                         set({
