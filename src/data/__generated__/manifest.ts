@@ -172,7 +172,7 @@ export const dataManifest = {
         "transcripts/voiceCloningBefore": { key: "transcripts/voiceCloningBefore", importPath: "../transcripts/voiceCloningBefore", loader: () => import("../transcripts/voiceCloningBefore") },
         values: { key: "values", importPath: "../values/index", loader: () => import("../values/index") },
         "worklow/dsl": { key: "worklow/dsl", importPath: "../worklow/dsl", loader: () => import("../worklow/dsl") },
-} as const satisfies Record<DataModuleKey, DataManifestEntry<DataModuleKey>>;
+} as const satisfies { readonly [K in DataModuleKey]: DataManifestEntry<K> };
 
 export type DataManifest = typeof dataManifest;
 
