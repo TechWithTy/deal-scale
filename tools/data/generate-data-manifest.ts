@@ -172,7 +172,7 @@ function buildManifestContent(modules: ManifestModule[]): string {
 
         if (modules.length === 0) {
                 lines.push(
-                        "export const dataManifest = {} as const satisfies Record<DataModuleKey, DataManifestEntry<DataModuleKey>>;",
+                        "export const dataManifest = {} as const satisfies { readonly [K in DataModuleKey]: DataManifestEntry<K> };",
                 );
         } else {
                 lines.push("export const dataManifest = {");
@@ -184,7 +184,9 @@ function buildManifestContent(modules: ManifestModule[]): string {
                                 `${INDENT}${objectKey}: { key: ${literalKey}, importPath: ${importPath}, loader: () => import(${importPath}) },`,
                         );
                 }
-                lines.push("} as const satisfies Record<DataModuleKey, DataManifestEntry<DataModuleKey>>;");
+                lines.push(
+                        "} as const satisfies { readonly [K in DataModuleKey]: DataManifestEntry<K> };",
+                );
         }
 
         lines.push("");
