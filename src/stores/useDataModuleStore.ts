@@ -5,7 +5,12 @@ import { create } from 'zustand';
 import type { StoreApi, UseBoundStore } from 'zustand';
 
 import { dataManifest } from '@/data/__generated__/manifest';
-import type { DataModuleKey, DataModuleModule } from '@/data/__generated__/manifest';
+import type {
+        DataManifestEntry,
+        DataModuleKey,
+        DataModuleLoader,
+        DataModuleModule,
+} from '@/data/__generated__/manifest';
 
 type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -45,7 +50,7 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                                 return currentLoad;
                         }
 
-                        const entry = dataManifest[key];
+                        const entry: DataManifestEntry<K> | undefined = dataManifest[key];
                         if (!entry) {
                                 const error = new Error(`Unknown data module key: ${key}`);
                                 set({ status: 'error', error });
@@ -54,13 +59,15 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
 
                         set({ status: 'loading', data: undefined, error: undefined });
 
-                        currentLoad = entry
-                                .loader()
+                        const loader: DataModuleLoader<K> = entry.loader;
+
+                        currentLoad = loader()
                                 .then((module) => {
+                                        const typedModule: DataModuleModule<K> = module;
                                         set((state) => ({
                                                 ...state,
                                                 status: 'ready',
-                                                data: module,
+                                                data: typedModule,
                                                 error: undefined,
                                         }));
                                 })
