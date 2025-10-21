@@ -50,7 +50,7 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                                 return currentLoad;
                         }
 
-                        const entry: DataManifestEntry<K> | undefined = dataManifest[key];
+                        const entry = dataManifest[key];
                         if (!entry) {
                                 const error = new Error(`Unknown data module key: ${key}`);
                                 set({ status: 'error', error });
@@ -59,15 +59,15 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
 
                         set({ status: 'loading', data: undefined, error: undefined });
 
-                        const loader: DataModuleLoader<K> = entry.loader;
+                        const typedEntry = entry as DataManifestEntry<K>;
+                        const loader: DataModuleLoader<K> = typedEntry.loader;
 
                         currentLoad = loader()
                                 .then((module) => {
-                                        const typedModule: DataModuleModule<K> = module;
                                         set((state) => ({
                                                 ...state,
                                                 status: 'ready',
-                                                data: typedModule,
+                                                data: module,
                                                 error: undefined,
                                         }));
                                 })
