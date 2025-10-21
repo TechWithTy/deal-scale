@@ -12,6 +12,7 @@
 ## What Didn't Work
 - **Attempt 1 – Commit e14dbb6 (04:36 UTC build window):** TypeScript type checking failed with TS2322 at `src/stores/useDataModuleStore.ts:53:31`. Casting `dataManifest[key]` to `DataManifestEntry<K>` widened the `key` literal to unrelated entries, breaking assignability.
 - **Attempt 2 – Commit b756f92 (07:17 UTC build window):** TypeScript type checking failed with TS2322 at `src/stores/useDataModuleStore.ts:67:45`. The loader result remained typed as `typeof import("/src/data/medium/post")`, which TypeScript refused to assign to `DataModuleModule<K>` while updating the store in the `.then` branch.
+- **Attempt 3 – Commit d2d0516 (11:29 UTC build window):** TypeScript type checking failed with TS2322 at `src/stores/useDataModuleStore.ts:72:47`. Even after narrowing the manifest entry, the resolved module still surfaced as `typeof import("/src/data/medium/post")` when stored, leaving the Zustand `set` call unable to accept it as `DataModuleModule<K>`.
 
 ## Follow-up Actions
 - Replace the direct cast on `dataManifest[key]` with a helper that returns `DataManifestEntry<K>` to preserve key-specific loader types.
