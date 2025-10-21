@@ -14,6 +14,20 @@ import type {
 
 type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
 
+const manifestEntriesByKey = dataManifest as {
+        readonly [K in DataModuleKey]: DataManifestEntry<K>;
+};
+
+function getManifestEntry<K extends DataModuleKey>(key: K): DataManifestEntry<K> {
+        const entry = manifestEntriesByKey[key];
+
+        if (!entry) {
+                throw new Error(`Unknown data module key: ${key}`);
+        }
+
+        return entry;
+}
+
 export interface DataModuleState<K extends DataModuleKey> {
         readonly key: K;
         readonly status: DataModuleStatus;
@@ -34,9 +48,7 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                 return cached as UseBoundStore<StoreApi<DataModuleState<K>>>;
         }
 
-        if (!dataManifest[key]) {
-                throw new Error(`Unknown data module key: ${key}`);
-        }
+        getManifestEntry(key);
 
         let currentLoad: Promise<void> | undefined;
 
@@ -50,34 +62,26 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                                 return currentLoad;
                         }
 
-                        const entry = dataManifest[key];
-                        if (!entry) {
-                                const error = new Error(`Unknown data module key: ${key}`);
-                                set({ status: 'error', error });
-                                return Promise.reject(error);
-                        }
-
+                        const entry = getManifestEntry(key);
                         set({ status: 'loading', data: undefined, error: undefined });
 
-                        const typedEntry = entry as DataManifestEntry<K>;
-                        const loader: DataModuleLoader<K> = typedEntry.loader;
+                        const loader: DataModuleLoader<K> = entry.loader;
 
                         currentLoad = loader()
                                 .then((module) => {
-                                        set((state) => ({
-                                                ...state,
+                                        const nextState: Partial<DataModuleState<K>> = {
                                                 status: 'ready',
                                                 data: module,
                                                 error: undefined,
-                                        }));
+                                        };
+                                        set(nextState);
                                 })
                                 .catch((error: unknown) => {
-                                        set((state) => ({
-                                                ...state,
+                                        set({
                                                 status: 'error',
                                                 data: undefined,
                                                 error,
-                                        }));
+                                        });
                                         throw error;
                                 })
                                 .finally(() => {
