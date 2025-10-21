@@ -69,7 +69,7 @@ describe("generateDataManifest", () => {
                         '        alpha: { key: "alpha", importPath: "../alpha", loader: () => import("../alpha") },',
                         '        nested: { key: "nested", importPath: "../nested/index", loader: () => import("../nested/index") },',
                         '        "nested/beta": { key: "nested/beta", importPath: "../nested/beta", loader: () => import("../nested/beta") },',
-                        '} as const satisfies Record<DataModuleKey, DataManifestEntry<DataModuleKey>>;',
+                        '} as const satisfies { readonly [K in DataModuleKey]: DataManifestEntry<K> };',
                         '',
                         'export type DataManifest = typeof dataManifest;',
                         '',
