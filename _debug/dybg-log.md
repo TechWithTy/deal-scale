@@ -18,6 +18,8 @@
 - **Attempt 5 – Commit 267b5f0 (16:37 UTC build window):** TypeScript type checking failed with TS2322 at `src/stores/useDataModuleStore.ts:35:9`. Returning the loader promise directly preserved the literal import type (`typeof import("/src/data/medium/post")`), which the compiler still refused to treat as `DataModuleModule<K>`.
 - **Attempt 6 – Working tree (current run):** Type checking now succeeds, but `next/font` cannot download Google Fonts (`JetBrains Mono`, `Manrope`) inside the build environment, causing `next build` to exit with webpack errors.
 - **Attempt 7 – Working tree (subsequent run):** Loader typing remains stable, yet `next build` still aborts while trying to fetch the same Google Fonts, blocking the pipeline before post-build scripts run.
+- **Attempt 8 – Commit 4c7d8ab (18:20 UTC build window):** TypeScript validation regressed with TS2322 at `src/stores/useDataModuleStore.ts:78:47`. The awaited loader result was inferred as a union of every module instead of the specific `K`, so assigning it to `DataModuleModule<K>` during the ready-state update failed.
+- **Attempt 9 – Working tree (current run):** Updated loader helper casts the manifest entry's `loader` to return `Promise<DataModuleModule<K>>`, restoring key-specific inference during store updates. `next build` now reaches the font download stage before failing with the usual Google Fonts fetch errors.
 
 ## Follow-up Actions
 - Monitor the next Vercel build to confirm the loader typing helpers keep `DataModuleModule<K>` inference intact.
