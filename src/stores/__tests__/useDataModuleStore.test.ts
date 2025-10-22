@@ -139,4 +139,37 @@ describe("useDataModuleStore", () => {
 
                 expect(result.current.data).toEqual({ default: "alpha" });
         });
+
+        it("accepts custom equality functions for selected data", async () => {
+                const store = createDataModuleStore("alpha");
+                const renderValues: Array<string | null> = [];
+
+                const { result } = renderHook(() => {
+                        const selected = useDataModule(
+                                "alpha",
+                                (state) => state.data?.default ?? null,
+                                (a, b) => a === b,
+                        );
+
+                        renderValues.push(selected);
+
+                        return selected;
+                });
+
+                await waitFor(() => {
+                        expect(result.current).toBe("alpha");
+                });
+
+                const rendersBeforeUpdate = renderValues.length;
+
+                act(() => {
+                        store.setState((prev) => ({
+                                ...prev,
+                                status: "ready",
+                                data: { default: "alpha" },
+                        }));
+                });
+
+                expect(renderValues.length).toBe(rendersBeforeUpdate);
+        });
 });
