@@ -17,23 +17,23 @@ Use this action plan to track the migration from direct data imports to the stan
 ## Action Tracks
 
 ### Refactor server routes to consume manifest-driven modules
-- [ ] In `src/app/page.tsx`, `src/app/pricing/page.tsx`, and `src/app/features/page.tsx`, replace direct `/data/**` imports with `import { dataModules } from '@/data/__generated__/modules';`.
-- [ ] Within each component, destructure the required exports from the appropriate `dataModules[...]` entries and propagate them to child props or schema builders.
-- [ ] Remove unused legacy imports (e.g., `MainBentoFeatures` on the home page) and ensure TypeScript types reflect the module namespace.
-- [ ] Verify render paths handle the loaded objects synchronously (server modules resolve immediately) and that metadata builders source data from the manifest payloads.
+- [x] In `src/app/page.tsx`, `src/app/pricing/page.tsx`, and `src/app/features/page.tsx`, replace direct `/data/**` imports with `import { dataModules } from '@/data/__generated__/modules';`.
+- [x] Within each component, destructure the required exports from the appropriate `dataModules[...]` entries and propagate them to child props or schema builders.
+- [x] Remove unused legacy imports (e.g., `MainBentoFeatures` on the home page) and ensure TypeScript types reflect the module namespace.
+- [x] Verify render paths handle the loaded objects synchronously (server modules resolve immediately) and that metadata builders source data from the manifest payloads.
 
 ### Adopt useDataModule across marketing client components
-- [ ] Import `useDataModule` (and `createDataModuleStore` where prefetching helps) into `ServiceHomeClient`, `ClientBento`, `Services`, `CaseStudyGrid`, `AboutHero`, `AboutTeam`, `AboutTimeline`, and `NewsletterClient`.
-- [ ] Replace direct `/data/**` usage with store selectors, showing loading or fallback UI until `status === 'ready'`; propagate hydrated data through existing props.
-- [ ] Memoize derived values (e.g., category lists, feature arrays) to avoid recomputation on re-renders, and share selectors for nested props where appropriate.
-- [ ] When props permit overriding (e.g., optional `features` arrays), retain the override path while defaulting to store-backed data.
-- [ ] After refactors, update Storybook/consumer usage to provide data via props or rely on the same stores for consistency.
+- [x] Import `useDataModule` (and `createDataModuleStore` where prefetching helps) into `ServiceHomeClient`, `ClientBento`, `Services`, `CaseStudyGrid`, `AboutHero`, `AboutTeam`, `AboutTimeline`, and `NewsletterClient`.
+- [x] Replace direct `/data/**` usage with store selectors, showing loading or fallback UI until `status === 'ready'`; propagate hydrated data through existing props.
+- [x] Memoize derived values (e.g., category lists, feature arrays) to avoid recomputation on re-renders, and share selectors for nested props where appropriate.
+- [x] When props permit overriding (e.g., optional `features` arrays), retain the override path while defaulting to store-backed data.
+- [x] After refactors, update Storybook/consumer usage to provide data via props or rely on the same stores for consistency.
 
 ### Decouple TrustedByScroller types from data module implementation
-- [ ] Create `src/types/service/trusted-companies.ts` (or reuse an existing domain types file) with exported interfaces for `CompanyPartner` and `CompanyLogoDict`.
-- [ ] Update `TrustedByScroller` to import these types from the new types file and accept its `items` prop via callers hydrated through `useDataModule`.
-- [ ] Adjust any other consumers that referenced the data module for typing to use the new shared types.
-- [ ] Confirm ESLint/Biome pass and that the component still renders with manifest-fed props.
+- [x] Create `src/types/service/trusted-companies.ts` (or reuse an existing domain types file) with exported interfaces for `CompanyPartner` and `CompanyLogoDict`.
+- [x] Update `TrustedByScroller` to import these types from the new types file and accept its `items` prop via callers hydrated through `useDataModule`.
+- [x] Adjust any other consumers that referenced the data module for typing to use the new shared types.
+- [x] Confirm ESLint/Biome pass and that the component still renders with manifest-fed props.
 
 ### Regenerate data manifest and validate targeted suites
 - [ ] Run `pnpm run generate:data` from the repo root to refresh `src/data/__generated__/manifest.ts`, `modules.ts`, and `src/stores/__generated__/dataStores.ts`.
