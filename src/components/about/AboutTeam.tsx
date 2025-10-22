@@ -8,9 +8,7 @@ interface AboutTeamProps {
         team?: TeamMember[];
 }
 
-export default function AboutTeam({
-        team,
-}: AboutTeamProps) {
+export default function AboutTeam({ team }: AboutTeamProps) {
         const { status, teamMembers, error } = useDataModule(
                 "about/team",
                 ({ status: moduleStatus, data, error: moduleError }) => ({
@@ -20,11 +18,15 @@ export default function AboutTeam({
                 }),
         );
 
-        const resolvedTeam = team && team.length > 0 ? team : teamMembers;
+        const hasProvidedTeam = Array.isArray(team) && team.length > 0;
+        const resolvedTeam = hasProvidedTeam ? team : teamMembers;
+        const hasResolvedTeam = resolvedTeam.length > 0;
+        const isLoadingFromStore = !hasProvidedTeam && (status === "idle" || status === "loading");
+        const isErroredFromStore = !hasProvidedTeam && status === "error";
 
-        if ((!team || team.length === 0) && status === "loading") {
+        if (isLoadingFromStore) {
                 return (
-                        <section className=" ">
+                        <section>
                                 <div className="mx-auto max-w-4xl text-center">
                                         <Header title="Our Team" subtitle="" />
                                         <div className="py-12 text-muted-foreground">Loading team…</div>
@@ -33,22 +35,33 @@ export default function AboutTeam({
                 );
         }
 
-        if ((!team || team.length === 0) && status === "error") {
-                        console.error("[AboutTeam] Failed to load team", error);
-                        return (
-                                <section className=" ">
-                                        <div className="mx-auto max-w-4xl text-center">
-                                                <Header title="Our Team" subtitle="" />
-                                                <div className="py-12 text-destructive">
-                                                        Unable to load team members right now.
-                                                </div>
+        if (isErroredFromStore) {
+                console.error("[AboutTeam] Failed to load team", error);
+                return (
+                        <section>
+                                <div className="mx-auto max-w-4xl text-center">
+                                        <Header title="Our Team" subtitle="" />
+                                        <div className="py-12 text-destructive">
+                                                Unable to load team members right now.
                                         </div>
-                                </section>
-                        );
+                                </div>
+                        </section>
+                );
+        }
+
+        if (!hasResolvedTeam) {
+                return (
+                        <section>
+                                <div className="mx-auto max-w-4xl text-center">
+                                        <Header title="Our Team" subtitle="" />
+                                        <div className="py-12 text-muted-foreground">Team information is coming soon.</div>
+                                </div>
+                        </section>
+                );
         }
 
         return (
-                <section className=" ">
+                <section>
                         {/* Uses theme bg-card as per Templating.md */}
                         <div className="mx-auto max-w-4xl text-center">
                                 <Header title="Our Team" subtitle="" />
