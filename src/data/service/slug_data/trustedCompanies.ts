@@ -1,13 +1,7 @@
-export type CompanyPartner = {
-	name: string;
-	logo: string;
-	link?: string;
-	description?: string;
-};
-
-export type CompanyLogoDictType = {
-	[key: string]: CompanyPartner;
-};
+import type {
+        CompanyLogoDictType,
+        CompanyPartner,
+} from "@/types/service/trusted-companies";
 
 export const companyLogos: CompanyLogoDictType = {
 	crosscountrymortgage: {
