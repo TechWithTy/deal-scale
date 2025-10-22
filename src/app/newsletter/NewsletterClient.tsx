@@ -34,10 +34,16 @@ export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
                 }),
         );
 
-        const showTestimonialsLoading = testimonialsStatus === "loading" && testimonials.length === 0;
-        const showTestimonialsError = testimonialsStatus === "error" && testimonials.length === 0;
-        const showLogosLoading = logosStatus === "loading" && Object.keys(companyLogos).length === 0;
-        const showLogosError = logosStatus === "error" && Object.keys(companyLogos).length === 0;
+        const hasTestimonials = testimonials.length > 0;
+        const showTestimonialsLoading =
+                (testimonialsStatus === "idle" || testimonialsStatus === "loading") && !hasTestimonials;
+        const showTestimonialsError = testimonialsStatus === "error" && !hasTestimonials;
+        const showTestimonialsReady = testimonialsStatus === "ready" && hasTestimonials;
+        const showTestimonialsEmptyReady = testimonialsStatus === "ready" && !hasTestimonials;
+        const hasLogos = Object.keys(companyLogos).length > 0;
+        const showLogosLoading = (logosStatus === "idle" || logosStatus === "loading") && !hasLogos;
+        const showLogosError = logosStatus === "error" && !hasLogos;
+        const showLogosEmptyReady = logosStatus === "ready" && !hasLogos;
 
         if (showTestimonialsError) {
                 console.error("[NewsletterClient] Failed to load testimonials", testimonialsError);
@@ -69,9 +75,13 @@ export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
                                 <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
                                         Loading trusted partners…
                                 </div>
-                        ) : (
+                        ) : hasLogos ? (
                                 <TrustedByScroller variant="secondary" items={companyLogos} />
-                        )}
+                        ) : showLogosEmptyReady ? (
+                                <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
+                                        Trusted partners coming soon.
+                                </div>
+                        ) : null}
                         {showTestimonialsError ? (
                                 <div className="mx-auto my-12 max-w-5xl text-center text-destructive">
                                         Unable to load testimonials.
@@ -80,7 +90,7 @@ export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
                                 <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
                                         Loading testimonials…
                                 </div>
-                        ) : (
+                        ) : showTestimonialsReady ? (
                                 <Testimonials
                                         testimonials={testimonials}
                                         title={"What Our Clients Say"}
@@ -88,7 +98,11 @@ export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
                                                 "Hear from our clients about their experiences with our services"
                                         }
                                 />
-                        )}
+                        ) : showTestimonialsEmptyReady ? (
+                                <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
+                                        Testimonials coming soon.
+                                </div>
+                        ) : null}
 			{/* Fetch and show latest 3 Beehiiv posts */}
 			{/* todo: move to a custom hook or SWR for better client caching if needed */}
 			<BlogPreview title="Latest Blogs" posts={posts} />
