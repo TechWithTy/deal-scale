@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { create } from 'zustand';
+import { useStoreWithEqualityFn } from 'zustand/traditional';
 import type { StoreApi, UseBoundStore } from 'zustand';
 
 import { dataManifest } from '@/data/__generated__/manifest';
@@ -121,7 +122,9 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 ): S {
         const store = createDataModuleStore(key);
         const derivedSelector = (selector ?? (identity as (state: DataModuleState<K>) => S));
-        const selectedState = store(derivedSelector, equality);
+        const selectedState = equality
+                ? useStoreWithEqualityFn(store, derivedSelector, equality)
+                : store(derivedSelector);
 
         useEffect(() => {
                 if (store.getState().status === 'idle') {

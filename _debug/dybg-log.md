@@ -9,6 +9,8 @@
 - Next.js `next build` compiled application bundles without runtime compilation errors before type checking.
 - Jest unit suite (`pnpm exec jest src/stores/__tests__/useDataModuleStore.test.ts`) passed locally, confirming runtime store behavior under mocked manifest entries.
 - Latest iterations clear TypeScript validation for `src/stores/useDataModuleStore.ts` locally before the font download failure occurs.
+- Latest iterations clear TypeScript validation for `src/stores/useDataModuleStore.ts` locally before the font download failure occurs.
+- Switching to `useStoreWithEqualityFn` for selectors that need a comparator keeps the hook compatible with Zustand v5's typings.
 
 ## What Didn't Work
 - **Attempt 1 – Commit e14dbb6 (04:36 UTC build window):** TypeScript type checking failed with TS2322 at `src/stores/useDataModuleStore.ts:53:31`. Casting `dataManifest[key]` to `DataManifestEntry<K>` widened the `key` literal to unrelated entries, breaking assignability.
@@ -20,6 +22,7 @@
 - **Attempt 7 – Working tree (subsequent run):** Loader typing remains stable, yet `next build` still aborts while trying to fetch the same Google Fonts, blocking the pipeline before post-build scripts run.
 - **Attempt 8 – Commit 4c7d8ab (18:20 UTC build window):** TypeScript validation regressed with TS2322 at `src/stores/useDataModuleStore.ts:78:47`. The awaited loader result was inferred as a union of every module instead of the specific `K`, so assigning it to `DataModuleModule<K>` during the ready-state update failed.
 - **Attempt 9 – Working tree (current run):** Updated loader helper casts the manifest entry's `loader` to return `Promise<DataModuleModule<K>>`, restoring key-specific inference during store updates. `next build` now reaches the font download stage before failing with the usual Google Fonts fetch errors.
+- **Attempt 10 – Latest branch tip (18:51 UTC build window):** TypeScript validation failed with TS2554 at `src/stores/useDataModuleStore.ts:124:54`. Passing a selector and equality function directly to the bound store hook is no longer supported in Zustand v5; the build environment flagged the extra argument.
 
 ## Follow-up Actions
 - Monitor the next Vercel build to confirm the loader typing helpers keep `DataModuleModule<K>` inference intact.
