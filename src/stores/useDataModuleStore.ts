@@ -2,12 +2,38 @@
 
 import { useEffect } from 'react';
 import { create } from 'zustand';
+import { useStoreWithEqualityFn } from 'zustand/traditional';
 import type { StoreApi, UseBoundStore } from 'zustand';
 
 import { dataManifest } from '@/data/__generated__/manifest';
-import type { DataModuleKey, DataModuleModule } from '@/data/__generated__/manifest';
+import type {
+        DataManifestEntry,
+        DataModuleKey,
+        DataModuleModule,
+} from '@/data/__generated__/manifest';
 
 type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
+
+const manifestEntriesByKey: {
+        readonly [K in DataModuleKey]: DataManifestEntry<K>;
+} = dataManifest;
+
+function getManifestEntry<K extends DataModuleKey>(key: K): DataManifestEntry<K> {
+        const entry = manifestEntriesByKey[key];
+
+        if (!entry) {
+                throw new Error(`Unknown data module key: ${key}`);
+        }
+
+        return entry;
+}
+
+function loadModule<K extends DataModuleKey>(key: K): Promise<DataModuleModule<K>> {
+        const entry = getManifestEntry(key);
+        const loader = entry.loader as () => Promise<DataModuleModule<K>>;
+
+        return loader();
+}
 
 export interface DataModuleState<K extends DataModuleKey> {
         readonly key: K;
@@ -29,9 +55,7 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                 return cached as UseBoundStore<StoreApi<DataModuleState<K>>>;
         }
 
-        if (!dataManifest[key]) {
-                throw new Error(`Unknown data module key: ${key}`);
-        }
+        getManifestEntry(key);
 
         let currentLoad: Promise<void> | undefined;
 
@@ -45,32 +69,27 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                                 return currentLoad;
                         }
 
-                        const entry = dataManifest[key];
-                        if (!entry) {
-                                const error = new Error(`Unknown data module key: ${key}`);
-                                set({ status: 'error', error });
-                                return Promise.reject(error);
-                        }
-
                         set({ status: 'loading', data: undefined, error: undefined });
 
-                        currentLoad = entry
-                                .loader()
+                        currentLoad = loadModule(key)
                                 .then((module) => {
-                                        set((state) => ({
-                                                ...state,
-                                                status: 'ready',
-                                                data: module,
-                                                error: undefined,
-                                        }));
+                                        set((state) => {
+                                                const nextState: DataModuleState<K> = {
+                                                        ...state,
+                                                        status: 'ready',
+                                                        data: module,
+                                                        error: undefined,
+                                                };
+
+                                                return nextState;
+                                        });
                                 })
                                 .catch((error: unknown) => {
-                                        set((state) => ({
-                                                ...state,
+                                        set({
                                                 status: 'error',
                                                 data: undefined,
                                                 error,
-                                        }));
+                                        });
                                         throw error;
                                 })
                                 .finally(() => {
@@ -103,7 +122,9 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 ): S {
         const store = createDataModuleStore(key);
         const derivedSelector = (selector ?? (identity as (state: DataModuleState<K>) => S));
-        const selectedState = store(derivedSelector, equality);
+        const selectedState = equality
+                ? useStoreWithEqualityFn(store, derivedSelector, equality)
+                : store(derivedSelector);
 
         useEffect(() => {
                 if (store.getState().status === 'idle') {
