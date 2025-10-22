@@ -1,5 +1,4 @@
-import { PricingPlans } from "@/data/service/slug_data/pricing";
-import { leadGenFAQ } from "@/data/service/slug_data/faq";
+import { dataModules } from "@/data/__generated__/modules";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import {
         SchemaInjector,
@@ -22,6 +21,8 @@ export default function PricingPage() {
         });
 
         const seo = getStaticSeo("/pricing");
+        const { PricingPlans } = dataModules["service/slug_data/pricing"];
+        const { leadGenFAQ } = dataModules["service/slug_data/faq"];
         const schema = buildFAQPageSchema({
                 canonicalUrl: seo.canonical,
                 name: `${seo.title ?? "Deal Scale Pricing"} FAQs`,
