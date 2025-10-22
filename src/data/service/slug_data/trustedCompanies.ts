@@ -3,6 +3,11 @@ import type {
         CompanyPartner,
 } from "@/types/service/trusted-companies";
 
+export type {
+        CompanyLogoDictType,
+        CompanyPartner,
+} from "@/types/service/trusted-companies";
+
 export const companyLogos: CompanyLogoDictType = {
 	crosscountrymortgage: {
 		name: "Cross Country Mortgage",
