@@ -12,12 +12,7 @@ import Services from "@/components/home/Services";
 import Testimonials from "@/components/home/Testimonials";
 import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
 import { Separator } from "@/components/ui/separator";
-import { MainBentoFeatures } from "@/data/bento/main";
-import { caseStudies } from "@/data/caseStudy/caseStudies";
-import { faqItems } from "@/data/faq/default";
-import { PricingPlans } from "@/data/service/slug_data/pricing";
-import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
-import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import { dataModules } from "@/data/__generated__/modules";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
@@ -78,11 +73,18 @@ const Index = async ({
 	const currentPage = pageParam ? Number.parseInt(pageParam, 10) || 1 : 1;
 
 	// Paginate the case studies
-	const paginatedCaseStudies = paginate(
-		caseStudies,
-		currentPage,
-		CASE_STUDY_PAGE_SIZE,
-	);
+        const { caseStudies } = dataModules["caseStudy/caseStudies"];
+        const { faqItems } = dataModules["faq/default"];
+        const { PricingPlans } = dataModules["service/slug_data/pricing"];
+        const { generalDealScaleTestimonials } =
+                dataModules["service/slug_data/testimonials"];
+        const { companyLogos } = dataModules["service/slug_data/trustedCompanies"];
+
+        const paginatedCaseStudies = paginate(
+                caseStudies,
+                currentPage,
+                CASE_STUDY_PAGE_SIZE,
+        );
 
 	const posts = await getLatestBeehiivPosts();
 	return (
