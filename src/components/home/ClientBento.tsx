@@ -32,7 +32,11 @@ export default function ClientBento({
                 return moduleFeatures;
         }, [features, moduleFeatures]);
 
-        if (!features && status === "loading") {
+        const isLoadingFromStore = !features && (status === "idle" || status === "loading");
+        const isErroredFromStore = !features && status === "error";
+        const hasResolvedFeatures = resolvedFeatures.length > 0;
+
+        if (isLoadingFromStore) {
                 return (
                         <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-black/20 p-10 text-white/70">
                                 <span className="animate-pulse text-sm">Loading feature highlights…</span>
@@ -40,11 +44,19 @@ export default function ClientBento({
                 );
         }
 
-        if (!features && status === "error") {
+        if (isErroredFromStore) {
                 console.error("[ClientBento] Failed to load bento features", error);
                 return (
                         <div className="flex items-center justify-center rounded-2xl border border-destructive/20 bg-destructive/10 p-10 text-destructive-foreground">
                                 <span className="text-sm">Unable to load feature highlights right now.</span>
+                        </div>
+                );
+        }
+
+        if (!features && status === "ready" && !hasResolvedFeatures) {
+                return (
+                        <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-black/20 p-10 text-white/70">
+                                <span className="text-sm">Feature highlights coming soon.</span>
                         </div>
                 );
         }

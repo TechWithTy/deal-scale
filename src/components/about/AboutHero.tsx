@@ -24,7 +24,9 @@ export default function AboutHero({
         const resolvedTitle = title ?? hero?.title ?? "About Deal Scale";
         const resolvedSubtitle = subtitle ?? hero?.subtitle ?? "";
 
-        if (!title && !hero && status === "loading") {
+        const isStoreLoading = !title && !hero && (status === "idle" || status === "loading");
+
+        if (isStoreLoading) {
                 return (
                         <section className="relative flex items-center justify-center bg-background py-20 md:py-32">
                                 <div className="text-muted-foreground">Loading story…</div>
