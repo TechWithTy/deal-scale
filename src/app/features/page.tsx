@@ -1,4 +1,4 @@
-import { faqItems } from "@/data/faq/default";
+import { dataModules } from "@/data/__generated__/modules";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import {
         SchemaInjector,
@@ -16,6 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function ServicesPage() {
         const seo = getStaticSeo("/features");
+        const { faqItems } = dataModules["faq/default"];
         const schema = buildFAQPageSchema({
                 canonicalUrl: seo.canonical,
                 name: `${seo.title ?? "Deal Scale Features"} FAQs`,

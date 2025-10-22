@@ -4,20 +4,20 @@ import ServiceCard from "@/components/services/ServiceCard";
 import ServiceFilter from "@/components/services/ServiceFilter";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getServicesByCategory, services } from "@/data/service/services";
 import { usePagination } from "@/hooks/use-pagination";
 import { useHasMounted } from "@/hooks/useHasMounted";
+import { useDataModule } from "@/stores/useDataModuleStore";
 import {
-	SERVICE_CATEGORIES,
-	type ServiceCategoryValue,
-	type ServiceItemData,
+        SERVICE_CATEGORIES,
+        type ServiceCategoryValue,
+        type ServiceItemData,
+        type ServicesData,
 } from "@/types/service/services";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Header from "../common/Header";
-import { SectionHeading } from "../ui/section-heading";
 
 interface ServicesSectionProps {
 	title?: string;
@@ -46,31 +46,66 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		onTabChange,
 	} = props;
 
-	const hasMounted = useHasMounted();
-	const currentPathname = usePathname();
-	const [internalActiveTab, setInternalActiveTab] =
-		useState<ServiceCategoryValue>(showTabs[0]);
-	// Pagination state now handled by usePagination
+        const hasMounted = useHasMounted();
+        const currentPathname = usePathname();
+        const [internalActiveTab, setInternalActiveTab] =
+                useState<ServiceCategoryValue>(showTabs[0]);
+        // Pagination state now handled by usePagination
 
-	const [searchTerm, setSearchTerm] = useState("");
-	const [activeCategory, setActiveCategory] = useState<
-		ServiceCategoryValue | ""
-	>("");
-	const [cardsPerPage, setCardsPerPage] = useState(getCardsPerPage()); // Responsive, passed to hook below
-	// Define filterServices above its first usage
+        const [searchTerm, setSearchTerm] = useState("");
+        const [activeCategory, setActiveCategory] = useState<
+                ServiceCategoryValue | ""
+        >("");
+        const [cardsPerPage, setCardsPerPage] = useState(getCardsPerPage()); // Responsive, passed to hook below
+        // Define filterServices above its first usage
 
-	const activeTab =
-		activeTabProp !== undefined ? activeTabProp : internalActiveTab;
+        const activeTab =
+                activeTabProp !== undefined ? activeTabProp : internalActiveTab;
 
-	const filterServices = (categoryValue: ServiceCategoryValue) => {
-		const categoryServices = services[categoryValue];
-		if (!categoryServices) return [];
-		let filtered = Object.entries(categoryServices);
-		if (activeCategory) {
-			filtered = filtered.filter(([_, s]) =>
-				s.categories.includes(activeCategory),
-			);
-		}
+        const {
+                status: servicesStatus,
+                services: servicesData,
+                getServicesByCategory: servicesByCategoryFn,
+                error: servicesError,
+        } = useDataModule(
+                "service/services",
+                ({ status, data, error }) => ({
+                        status,
+                        services: (data?.services ?? {}) as ServicesData,
+                        getServicesByCategory: data?.getServicesByCategory,
+                        error,
+                }),
+        );
+
+        const getCategoryEntries = (categoryValue: ServiceCategoryValue) => {
+                if (typeof servicesByCategoryFn === "function") {
+                        const categoryServices = servicesByCategoryFn(categoryValue) ?? {};
+                        return Object.entries(categoryServices) as Array<
+                                [string, ServiceItemData]
+                        >;
+                }
+
+                const categoryServices = servicesData[categoryValue];
+                if (!categoryServices) {
+                        return [];
+                }
+
+                return Object.entries(categoryServices) as Array<
+                        [string, ServiceItemData]
+                >;
+        };
+
+        const filterServices = (categoryValue: ServiceCategoryValue) => {
+                const categoryEntries = getCategoryEntries(categoryValue);
+                if (categoryEntries.length === 0) {
+                        return [];
+                }
+                let filtered = categoryEntries;
+                if (activeCategory) {
+                        filtered = filtered.filter(([_, s]) =>
+                                s.categories.includes(activeCategory),
+                        );
+                }
 		if (searchTerm) {
 			const term = searchTerm.toLowerCase();
 			filtered = filtered.filter(
@@ -81,8 +116,8 @@ const ServicesSection = (props: ServicesSectionProps) => {
 			);
 		}
 		return filtered;
-	};
-	const filteredEntries = filterServices(activeTab);
+        };
+        const filteredEntries = filterServices(activeTab);
 
 	// Call usePagination ONCE at the top level
 	const {
@@ -131,16 +166,26 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	};
 
 	// Gather all unique categories from all services
-	const allServices = Object.values(services).flatMap((cat) =>
-		Object.values(cat),
-	);
-	const uniqueCategories = Array.from(
-		new Set(allServices.flatMap((s) => s.categories)),
-	);
-	const categoryOptions = uniqueCategories.map((cat) => ({
-		id: cat,
-		name: cat,
-	}));
+        const allServices = useMemo(
+                () =>
+                        Object.values(servicesData).flatMap((cat) =>
+                                Object.values(cat ?? {}),
+                        ),
+                [servicesData],
+        );
+        const categoryOptions = useMemo(() => {
+                const unique = new Set<string>();
+                for (const service of allServices) {
+                        for (const category of service.categories) {
+                                unique.add(category);
+                        }
+                }
+
+                return Array.from(unique).map((cat) => ({
+                        id: cat,
+                        name: cat,
+                }));
+        }, [allServices]);
 
 	// * Helper to convert category enum to human-friendly label
 	const getTabLabel = (tab: ServiceCategoryValue) => {
@@ -169,122 +214,147 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		return 6; // SSR fallback
 	}
 
-	const renderCardsForCategory = (categoryValue: ServiceCategoryValue) => {
-		return (
-			<>
-				<ServiceFilter
-					categories={categoryOptions}
-					activeCategory={activeCategory}
-					searchTerm={searchTerm}
-					onSearch={(term) => {
-						setSearchTerm(term);
-					}}
-					onCategoryChange={(cat) => {
-						setActiveCategory(cat);
-					}}
-					showSearch={showSearch}
-					showCategories={showCategories}
-				/>
-				{filteredEntries.length === 0 ? (
-					<div className="py-12 text-center font-semibold text-black text-lg dark:text-white/60">
-						No results found. Try a different tab.
-					</div>
-				) : (
-					<>
-						<div className="grid min-h-0 grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-3">
-							{pagedItems.map(
-								([serviceKey, serviceData]: [string, ServiceItemData]) => (
-									<ServiceCard
-										id={serviceData.id}
-										key={serviceData.slugDetails.slug}
-										iconName={serviceData.iconName}
-										title={serviceData.title}
-										description={serviceData.description}
-										features={serviceData.features || []}
-										slugDetails={serviceData.slugDetails}
-										categories={serviceData.categories}
-										price={serviceData.price}
-										onSale={serviceData.onSale}
-										showBanner={serviceData.showBanner}
-										bannerText={serviceData.bannerText}
-										bannerColor={serviceData.bannerColor}
-										className="flex flex-col"
-									/>
-								),
-							)}
-						</div>
-						<div className="mt-12 flex w-full flex-col items-center justify-center gap-6">
-							{canShowPagination && (
-								<>
-									{/* Show More button at the top */}
-									{canShowShowMore && (
-										<div className="flex w-full justify-center">
-											<button
-												className="flex items-center justify-center rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
-												onClick={showMore}
-												type="button"
-											>
-												Show More Services
-											</button>
-										</div>
-									)}
+        const renderCardsForCategory = (categoryValue: ServiceCategoryValue) => {
+                const isLoading = ["idle", "loading"].includes(servicesStatus);
+                const hasEntries = filteredEntries.length > 0;
+                const encounteredError = servicesStatus === "error" && !hasEntries;
 
-									{/* Pagination controls */}
-									<div className="flex items-center justify-center gap-2">
-										<button
-											className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-											onClick={prevPage}
-											disabled={page === 1}
-											type="button"
-											aria-label="Previous page"
-										>
-											Prev
-										</button>
-										{/* Page numbers */}
-										{Array.from({ length: totalPages }, (_, i) => (
-											<button
-												key={uuidv4()}
-												className={`rounded-lg px-4 py-2 transition-colors ${
-													page === i + 1
-														? "bg-primary text-primary-foreground"
-														: "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-												}`}
-												onClick={() => setPage(i + 1)}
-												type="button"
-												aria-label={`Page ${i + 1}`}
-											>
-												{i + 1}
-											</button>
-										))}
-										<button
-											className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-											onClick={nextPage}
-											disabled={page === totalPages}
-											type="button"
-											aria-label="Next page"
-										>
-											Next
-										</button>
-									</div>
+                const filterControls = (
+                        <ServiceFilter
+                                categories={categoryOptions}
+                                activeCategory={activeCategory}
+                                searchTerm={searchTerm}
+                                onSearch={(term) => {
+                                        setSearchTerm(term);
+                                }}
+                                onCategoryChange={(cat) => {
+                                        setActiveCategory(cat);
+                                }}
+                                showSearch={showSearch}
+                                showCategories={showCategories}
+                        />
+                );
 
-									{/* Show Less button at the bottom */}
-									{canShowShowLess && (
-										<button
-											className="mt-2 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground"
-											onClick={showLess}
-											type="button"
-										>
-											Show Less Services
-										</button>
-									)}
-								</>
-							)}
-						</div>
-					</>
-				)}
-			</>
-		);
-	};
+                if (isLoading && !hasEntries) {
+                        return (
+                                <>
+                                        {filterControls}
+                                        <div className="py-12 text-center text-muted-foreground">
+                                                Loading services…
+                                        </div>
+                                </>
+                        );
+                }
+
+                if (encounteredError) {
+                        console.error("[ServicesSection] Failed to load services", servicesError);
+                        return (
+                                <>
+                                        {filterControls}
+                                        <div className="py-12 text-center text-destructive">
+                                                Unable to load services right now.
+                                        </div>
+                                </>
+                        );
+                }
+
+                return (
+                        <>
+                                {filterControls}
+                                {filteredEntries.length === 0 ? (
+                                        <div className="py-12 text-center font-semibold text-black text-lg dark:text-white/60">
+                                                No results found. Try a different tab.
+                                        </div>
+                                ) : (
+                                        <>
+                                                <div className="grid min-h-0 grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-3">
+                                                        {pagedItems.map(
+                                                                ([serviceKey, serviceData]: [string, ServiceItemData]) => (
+                                                                        <ServiceCard
+                                                                                id={serviceData.id}
+                                                                                key={serviceData.slugDetails.slug ?? serviceKey}
+                                                                                iconName={serviceData.iconName}
+                                                                                title={serviceData.title}
+                                                                                description={serviceData.description}
+                                                                                features={serviceData.features || []}
+                                                                                slugDetails={serviceData.slugDetails}
+                                                                                categories={serviceData.categories}
+                                                                                price={serviceData.price}
+                                                                                onSale={serviceData.onSale}
+                                                                                showBanner={serviceData.showBanner}
+                                                                                bannerText={serviceData.bannerText}
+                                                                                bannerColor={serviceData.bannerColor}
+                                                                                className="flex flex-col"
+                                                                        />
+                                                                ),
+                                                        )}
+                                                </div>
+                                                <div className="mt-12 flex w-full flex-col items-center justify-center gap-6">
+                                                        {canShowPagination && (
+                                                                <>
+                                                                        {canShowShowMore && (
+                                                                                <div className="flex w-full justify-center">
+                                                                                        <button
+                                                                                                className="flex items-center justify-center rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
+                                                                                                onClick={showMore}
+                                                                                                type="button"
+                                                                                        >
+                                                                                                Show More Services
+                                                                                        </button>
+                                                                                </div>
+                                                                        )}
+                                                                        <div className="flex items-center justify-center gap-2">
+                                                                                <button
+                                                                                        className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                                                                                        onClick={prevPage}
+                                                                                        disabled={page === 1}
+                                                                                        type="button"
+                                                                                        aria-label="Previous page"
+                                                                                >
+                                                                                        Prev
+                                                                                </button>
+                                                                                {Array.from({ length: totalPages }, (_, i) => (
+                                                                                        <button
+                                                                                                key={uuidv4()}
+                                                                                                className={`rounded-lg px-4 py-2 transition-colors ${
+                                                                                                        page === i + 1
+                                                                                                                ? "bg-primary text-primary-foreground"
+                                                                                                                : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                                                                                                }`}
+                                                                                                onClick={() => setPage(i + 1)}
+                                                                                                type="button"
+                                                                                                aria-label={`Page ${i + 1}`}
+                                                                                        >
+                                                                                                {i + 1}
+                                                                                        </button>
+                                                                                ))}
+                                                                                <button
+                                                                                        className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                                                                                        onClick={nextPage}
+                                                                                        disabled={page === totalPages}
+                                                                                        type="button"
+                                                                                        aria-label="Next page"
+                                                                                >
+                                                                                        Next
+                                                                                </button>
+                                                                        </div>
+                                                                        {canShowShowLess && (
+                                                                                <button
+                                                                                        className="mt-2 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground"
+                                                                                        onClick={showLess}
+                                                                                        type="button"
+                                                                                >
+                                                                                        Show Less Services
+                                                                                </button>
+                                                                        )}
+                                                                </>
+                                                        )}
+                                                </div>
+                                        </>
+                                )}
+                        </>
+                );
+        };
 
 	return (
 		<section id="services" className="px-4 py-6 md:px-6 md:py-16 lg:px-8">
