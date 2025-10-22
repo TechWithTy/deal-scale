@@ -1,4 +1,6 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
+import type { DataModuleModule } from "@/data/__generated__/manifest";
+import type { DataModuleKey } from "@/data/__generated__/manifest";
 
 jest.mock("@/data/__generated__/manifest", () => {
         const loaderAlpha = jest.fn(async () => ({ default: "alpha" }));
@@ -25,6 +27,31 @@ jest.mock("@/data/__generated__/manifest", () => {
 
 import { clearDataModuleStores, createDataModuleStore, useDataModule } from "../useDataModuleStore";
 import { dataManifest } from "@/data/__generated__/manifest";
+
+type Expect<T extends true> = T;
+type Equal<A, B> = (<G>() => G extends A ? 1 : 2) extends (<G>() => G extends B ? 1 : 2) ? true : false;
+
+type MediumPostStore = ReturnType<typeof createDataModuleStore<"medium/post">>;
+type MediumPostState = ReturnType<MediumPostStore["getState"]>;
+type MediumPostModule = DataModuleModule<"medium/post">;
+type ValuesModule = DataModuleModule<"values">;
+
+type LoaderModuleExtendsDataModule<K extends DataModuleKey> = Awaited<
+        ReturnType<(typeof dataManifest)[K]["loader"]>
+> extends DataModuleModule<K>
+        ? true
+        : false;
+
+type MediumPostLoaderExtends = LoaderModuleExtendsDataModule<"medium/post">;
+
+type MediumPostDataMatchesManifest = Expect<
+        Equal<MediumPostState["data"], MediumPostModule | undefined>
+>;
+type MediumPostLoaderMatchesManifest = Expect<Equal<MediumPostLoaderExtends, true>>;
+// @ts-expect-error Medium post data should not accept the values module shape.
+type MediumPostDataDoesNotMatchValues = Expect<
+        Equal<MediumPostState["data"], ValuesModule | undefined>
+>;
 
 describe("useDataModuleStore", () => {
         beforeEach(() => {
@@ -111,5 +138,38 @@ describe("useDataModuleStore", () => {
                 });
 
                 expect(result.current.data).toEqual({ default: "alpha" });
+        });
+
+        it("accepts custom equality functions for selected data", async () => {
+                const store = createDataModuleStore("alpha");
+                const renderValues: Array<string | null> = [];
+
+                const { result } = renderHook(() => {
+                        const selected = useDataModule(
+                                "alpha",
+                                (state) => state.data?.default ?? null,
+                                (a, b) => a === b,
+                        );
+
+                        renderValues.push(selected);
+
+                        return selected;
+                });
+
+                await waitFor(() => {
+                        expect(result.current).toBe("alpha");
+                });
+
+                const rendersBeforeUpdate = renderValues.length;
+
+                act(() => {
+                        store.setState((prev) => ({
+                                ...prev,
+                                status: "ready",
+                                data: { default: "alpha" },
+                        }));
+                });
+
+                expect(renderValues.length).toBe(rendersBeforeUpdate);
         });
 });
