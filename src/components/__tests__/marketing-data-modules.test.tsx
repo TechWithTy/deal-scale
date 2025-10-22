@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 jest.mock("@/data/bento/main", () => ({
         MainBentoFeatures: [],
@@ -188,6 +188,29 @@ describe("marketing components use data modules", () => {
                         BentoPageMock.mock.calls[BentoPageMock.mock.calls.length - 1] ?? [];
                 const [bentoProps] = bentoCall;
                 expect(bentoProps).toMatchObject({ features: mockFeatures });
+        });
+
+        it("treats idle module status as a loading state for ClientBento", () => {
+                const { default: ClientBento } = require("../home/ClientBento");
+
+                useDataModuleMock.mockImplementation((key: string, selector: (value: any) => any) => {
+                        if (key === "bento/main") {
+                                return selector({
+                                        status: "idle",
+                                        data: undefined,
+                                        error: undefined,
+                                });
+                        }
+
+                        return selector({ status: "ready", data: {}, error: undefined });
+                });
+
+                render(<ClientBento />);
+
+                expect(
+                        screen.getByText(/Loading feature highlights/i),
+                ).toBeInTheDocument();
+                expect(BentoPageMock).not.toHaveBeenCalled();
         });
 
         it("hydrates service marketing clients via data modules", () => {

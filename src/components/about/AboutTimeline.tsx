@@ -22,7 +22,11 @@ export default function AboutTimeline({
 
         const resolvedTimeline = milestones && milestones.length > 0 ? milestones : timeline;
 
-        if ((!milestones || milestones.length === 0) && status === "loading") {
+        const isStoreLoading = (!milestones || milestones.length === 0) && (status === "idle" || status === "loading");
+        const isStoreErrored = (!milestones || milestones.length === 0) && status === "error";
+        const hasResolvedTimeline = resolvedTimeline.length > 0;
+
+        if (isStoreLoading) {
                 return (
                         <section className=" my-5 ">
                                 <Header title="Our Journey" subtitle="" />
@@ -33,13 +37,24 @@ export default function AboutTimeline({
                 );
         }
 
-        if ((!milestones || milestones.length === 0) && status === "error") {
+        if (isStoreErrored) {
                 console.error("[AboutTimeline] Failed to load timeline", error);
                 return (
                         <section className=" my-5 ">
                                 <Header title="Our Journey" subtitle="" />
                                 <div className="py-12 text-center text-destructive">
                                         Unable to load timeline right now.
+                                </div>
+                        </section>
+                );
+        }
+
+        if ((!milestones || milestones.length === 0) && status === "ready" && !hasResolvedTimeline) {
+                return (
+                        <section className=" my-5 ">
+                                <Header title="Our Journey" subtitle="" />
+                                <div className="py-12 text-center text-muted-foreground">
+                                        Timeline coming soon.
                                 </div>
                         </section>
                 );

@@ -36,8 +36,14 @@ Use this action plan to track the migration from direct data imports to the stan
 - [x] Confirm ESLint/Biome pass and that the component still renders with manifest-fed props.
 
 ### Regenerate data manifest and validate targeted suites
-- [ ] Run `pnpm run generate:data` from the repo root to refresh `src/data/__generated__/manifest.ts`, `modules.ts`, and `src/stores/__generated__/dataStores.ts`.
-- [ ] Execute `pnpm exec jest src/data/__tests__/generate-data-manifest.test.ts src/stores/__tests__/useDataModuleStore.test.ts --runInBand` to verify manifest/store behaviour across platforms.
-- [ ] Commit regenerated artifacts alongside source updates to keep CI deterministic.
+- [x] Run `pnpm run generate:data` from the repo root to refresh `src/data/__generated__/manifest.ts`, `modules.ts`, and `src/stores/__generated__/dataStores.ts`.
+- [x] Execute `pnpm exec jest src/data/__tests__/generate-data-manifest.test.ts src/stores/__tests__/useDataModuleStore.test.ts --runInBand` to verify manifest/store behaviour across platforms.
+- [x] Commit regenerated artifacts alongside source updates to keep CI deterministic.
+
+### Idle/loading guard convention
+- Treat both `status === "idle"` and `status === "loading"` as non-rendering phases for any UI that depends on store-provided data. Render skeleton text or placeholder surfaces until the store resolves to `"ready"`.
+- When `status === "error"`, log a namespaced console error (e.g., `[ComponentName] Failed to load …`) and surface a friendly message instead of attempting to render the data-dependent component.
+- For `status === "ready"` without data, render an "coming soon"-style placeholder so prerendering never attempts to access undefined collections. This keeps marketing surfaces deterministic during manifest cache warm-ups.
+- Reuse the pattern introduced in `NewsletterClient`, `ClientBento`, and the contact experience (hero/info/newsletter) to ensure future `useDataModule` consumers align with the guard checklist.
 
 Update progress checkpoints as scopes advance to maintain shared visibility across the team.
