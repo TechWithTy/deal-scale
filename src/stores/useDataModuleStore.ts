@@ -30,7 +30,7 @@ function getManifestEntry<K extends DataModuleKey>(key: K): DataManifestEntry<K>
         return entry;
 }
 
-function loadModule<K extends DataModuleKey>(key: K): ReturnType<DataModuleLoader<K>> {
+function loadModule<K extends DataModuleKey>(key: K) {
         const entry = getManifestEntry(key);
         const loader: DataModuleLoader<K> = entry.loader;
 
