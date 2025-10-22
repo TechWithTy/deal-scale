@@ -8,7 +8,6 @@ import { dataManifest } from '@/data/__generated__/manifest';
 import type {
         DataManifestEntry,
         DataModuleKey,
-        DataModuleLoader,
         DataModuleModule,
 } from '@/data/__generated__/manifest';
 
@@ -17,8 +16,6 @@ type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
 const manifestEntriesByKey: {
         readonly [K in DataModuleKey]: DataManifestEntry<K>;
 } = dataManifest;
-
-type LoaderResult<K extends DataModuleKey> = Awaited<ReturnType<DataModuleLoader<K>>>;
 
 function getManifestEntry<K extends DataModuleKey>(key: K): DataManifestEntry<K> {
         const entry = manifestEntriesByKey[key];
@@ -30,9 +27,9 @@ function getManifestEntry<K extends DataModuleKey>(key: K): DataManifestEntry<K>
         return entry;
 }
 
-function loadModule<K extends DataModuleKey>(key: K) {
+function loadModule<K extends DataModuleKey>(key: K): Promise<DataModuleModule<K>> {
         const entry = getManifestEntry(key);
-        const loader: DataModuleLoader<K> = entry.loader;
+        const loader = entry.loader as () => Promise<DataModuleModule<K>>;
 
         return loader();
 }
@@ -74,15 +71,17 @@ export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBound
                         set({ status: 'loading', data: undefined, error: undefined });
 
                         currentLoad = loadModule(key)
-                                .then((module: LoaderResult<K>) => {
-                                        const resolvedModule: DataModuleModule<K> = module;
+                                .then((module) => {
+                                        set((state) => {
+                                                const nextState: DataModuleState<K> = {
+                                                        ...state,
+                                                        status: 'ready',
+                                                        data: module,
+                                                        error: undefined,
+                                                };
 
-                                        set((state) => ({
-                                                ...state,
-                                                status: 'ready',
-                                                data: resolvedModule,
-                                                error: undefined,
-                                        }));
+                                                return nextState;
+                                        });
                                 })
                                 .catch((error: unknown) => {
                                         set({
