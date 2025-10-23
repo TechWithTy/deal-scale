@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { create } from 'zustand';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import type { StoreApi, UseBoundStore } from 'zustand';
@@ -152,7 +152,7 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
                 }
         }, [store]);
 
-        return selectedState;
+        return stableSelectionRef.current;
 }
 
 /**

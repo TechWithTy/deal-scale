@@ -5,6 +5,7 @@ import ServiceFilter from "@/components/services/ServiceFilter";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePagination } from "@/hooks/use-pagination";
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useDataModule } from "@/stores/useDataModuleStore";
 import {
@@ -118,6 +119,23 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		return filtered;
         };
         const filteredEntries = filterServices(activeTab);
+        const guardDetail = useMemo(
+                () => ({
+                        activeTab,
+                        activeCategory: activeCategory || undefined,
+                        searchTerm: searchTerm || undefined,
+                }),
+                [activeCategory, activeTab, searchTerm],
+        );
+
+        useDataModuleGuardTelemetry({
+                key: "service/services",
+                surface: "home/ServicesSection",
+                status: servicesStatus,
+                hasData: filteredEntries.length > 0,
+                error: servicesError,
+                detail: guardDetail,
+        });
 
 	// Call usePagination ONCE at the top level
 	const {
