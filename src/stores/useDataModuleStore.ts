@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { create } from 'zustand';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import type { StoreApi, UseBoundStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 import { dataManifest } from '@/data/__generated__/manifest';
 import type {
@@ -12,7 +13,7 @@ import type {
         DataModuleModule,
 } from '@/data/__generated__/manifest';
 
-type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
+export type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 const manifestEntriesByKey: {
         readonly [K in DataModuleKey]: DataManifestEntry<K>;
@@ -48,6 +49,26 @@ export interface DataModuleState<K extends DataModuleKey> {
 const storeCache = new Map<DataModuleKey, UseBoundStore<StoreApi<DataModuleState<DataModuleKey>>>>();
 
 const identity = <T>(value: T) => value;
+
+function defaultEquality<T>(a: T, b: T): boolean {
+        if (Object.is(a, b)) {
+                return true;
+        }
+
+        if (
+                typeof a === 'object' &&
+                a !== null &&
+                typeof b === 'object' &&
+                b !== null
+        ) {
+                return shallow(
+                        a as unknown as Record<string, unknown>,
+                        b as unknown as Record<string, unknown>,
+                );
+        }
+
+        return false;
+}
 
 export function createDataModuleStore<K extends DataModuleKey>(key: K): UseBoundStore<StoreApi<DataModuleState<K>>> {
         const cached = storeCache.get(key);
@@ -122,9 +143,8 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 ): S {
         const store = createDataModuleStore(key);
         const derivedSelector = (selector ?? (identity as (state: DataModuleState<K>) => S));
-        const selectedState = equality
-                ? useStoreWithEqualityFn(store, derivedSelector, equality)
-                : store(derivedSelector);
+        const equalityFn = equality ?? (defaultEquality as (a: S, b: S) => boolean);
+        const selectedState = useStoreWithEqualityFn(store, derivedSelector, equalityFn);
 
         useEffect(() => {
                 if (store.getState().status === 'idle') {
