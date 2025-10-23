@@ -61,44 +61,10 @@ function defaultEquality<T>(a: T, b: T): boolean {
                 typeof b === 'object' &&
                 b !== null
         ) {
-                const valueA = a as Record<string, unknown>;
-                const valueB = b as Record<string, unknown>;
-                const keysA = Object.keys(valueA);
-                const keysB = Object.keys(valueB);
-
-                if (keysA.length !== keysB.length) {
-                        return false;
-                }
-
-                for (const key of keysA) {
-                        if (!Object.prototype.hasOwnProperty.call(valueB, key)) {
-                                return false;
-                        }
-
-                        const nestedA = valueA[key];
-                        const nestedB = valueB[key];
-
-                        if (Object.is(nestedA, nestedB)) {
-                                continue;
-                        }
-
-                        if (
-                                typeof nestedA === 'object' &&
-                                nestedA !== null &&
-                                typeof nestedB === 'object' &&
-                                nestedB !== null &&
-                                shallow(
-                                        nestedA as Record<string, unknown>,
-                                        nestedB as Record<string, unknown>,
-                                )
-                        ) {
-                                continue;
-                        }
-
-                        return false;
-                }
-
-                return true;
+                return shallow(
+                        a as unknown as Record<string, unknown>,
+                        b as unknown as Record<string, unknown>,
+                );
         }
 
         return false;
@@ -179,19 +145,6 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
         const derivedSelector = (selector ?? (identity as (state: DataModuleState<K>) => S));
         const equalityFn = equality ?? (defaultEquality as (a: S, b: S) => boolean);
         const selectedState = useStoreWithEqualityFn(store, derivedSelector, equalityFn);
-        const previousSelectionRef = useRef<S | undefined>(undefined);
-        const stableSelectionRef = useRef<S>(selectedState);
-
-        const equalityMatched =
-                previousSelectionRef.current !== undefined &&
-                equalityFn(previousSelectionRef.current, selectedState);
-
-        if (equalityMatched) {
-                stableSelectionRef.current = previousSelectionRef.current;
-        } else {
-                previousSelectionRef.current = selectedState;
-                stableSelectionRef.current = selectedState;
-        }
 
         useEffect(() => {
                 if (store.getState().status === 'idle') {
