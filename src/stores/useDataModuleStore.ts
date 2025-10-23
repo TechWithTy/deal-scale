@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { create } from 'zustand';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import type { StoreApi, UseBoundStore } from 'zustand';
@@ -61,44 +61,10 @@ function defaultEquality<T>(a: T, b: T): boolean {
                 typeof b === 'object' &&
                 b !== null
         ) {
-                const valueA = a as Record<string, unknown>;
-                const valueB = b as Record<string, unknown>;
-                const keysA = Object.keys(valueA);
-                const keysB = Object.keys(valueB);
-
-                if (keysA.length !== keysB.length) {
-                        return false;
-                }
-
-                for (const key of keysA) {
-                        if (!Object.prototype.hasOwnProperty.call(valueB, key)) {
-                                return false;
-                        }
-
-                        const nestedA = valueA[key];
-                        const nestedB = valueB[key];
-
-                        if (Object.is(nestedA, nestedB)) {
-                                continue;
-                        }
-
-                        if (
-                                typeof nestedA === 'object' &&
-                                nestedA !== null &&
-                                typeof nestedB === 'object' &&
-                                nestedB !== null &&
-                                shallow(
-                                        nestedA as Record<string, unknown>,
-                                        nestedB as Record<string, unknown>,
-                                )
-                        ) {
-                                continue;
-                        }
-
-                        return false;
-                }
-
-                return true;
+                return shallow(
+                        a as unknown as Record<string, unknown>,
+                        b as unknown as Record<string, unknown>,
+                );
         }
 
         return false;
@@ -178,38 +144,7 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
         const store = createDataModuleStore(key);
         const derivedSelector = (selector ?? (identity as (state: DataModuleState<K>) => S));
         const equalityFn = equality ?? (defaultEquality as (a: S, b: S) => boolean);
-        const selectorRef = useRef(derivedSelector);
-        const equalityRef = useRef(equalityFn);
-        const lastSelectionRef = useRef<S | undefined>(undefined);
-
-        selectorRef.current = derivedSelector;
-        equalityRef.current = equalityFn;
-
-        const stableSelector = useCallback(
-                (state: DataModuleState<K>) => {
-                        const nextSelection = selectorRef.current(state);
-                        const previousSelection = lastSelectionRef.current;
-
-                        if (
-                                previousSelection !== undefined &&
-                                equalityRef.current(previousSelection, nextSelection)
-                        ) {
-                                return previousSelection;
-                        }
-
-                        lastSelectionRef.current = nextSelection;
-                        return nextSelection;
-                },
-                [],
-        );
-
-        const stableEquality = useCallback((a: S, b: S) => equalityRef.current(a, b), []);
-
-        const resolvedSelection = useStoreWithEqualityFn(
-                store,
-                stableSelector,
-                stableEquality,
-        );
+        const selectedState = useStoreWithEqualityFn(store, derivedSelector, equalityFn);
 
         useEffect(() => {
                 if (store.getState().status === 'idle') {
@@ -217,7 +152,7 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
                 }
         }, [store]);
 
-        return resolvedSelection;
+        return stableSelectionRef.current;
 }
 
 /**
