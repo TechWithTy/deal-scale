@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { create } from 'zustand';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import type { StoreApi, UseBoundStore } from 'zustand';
@@ -178,16 +178,38 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
         const store = createDataModuleStore(key);
         const derivedSelector = (selector ?? (identity as (state: DataModuleState<K>) => S));
         const equalityFn = equality ?? (defaultEquality as (a: S, b: S) => boolean);
-        const selectedState = useStoreWithEqualityFn(store, derivedSelector, equalityFn);
-        const previousSelectionRef = useRef<S | undefined>(undefined);
-        const previousSelection = previousSelectionRef.current;
-        const equalityMatched =
-                previousSelection !== undefined &&
-                equalityFn(previousSelection, selectedState);
+        const selectorRef = useRef(derivedSelector);
+        const equalityRef = useRef(equalityFn);
+        const lastSelectionRef = useRef<S | undefined>(undefined);
 
-        const resolvedSelection = equalityMatched ? previousSelection : selectedState;
+        selectorRef.current = derivedSelector;
+        equalityRef.current = equalityFn;
 
-        previousSelectionRef.current = resolvedSelection;
+        const stableSelector = useCallback(
+                (state: DataModuleState<K>) => {
+                        const nextSelection = selectorRef.current(state);
+                        const previousSelection = lastSelectionRef.current;
+
+                        if (
+                                previousSelection !== undefined &&
+                                equalityRef.current(previousSelection, nextSelection)
+                        ) {
+                                return previousSelection;
+                        }
+
+                        lastSelectionRef.current = nextSelection;
+                        return nextSelection;
+                },
+                [],
+        );
+
+        const stableEquality = useCallback((a: S, b: S) => equalityRef.current(a, b), []);
+
+        const resolvedSelection = useStoreWithEqualityFn(
+                store,
+                stableSelector,
+                stableEquality,
+        );
 
         useEffect(() => {
                 if (store.getState().status === 'idle') {
