@@ -86,4 +86,27 @@ describe("useDataModule", () => {
 
                 expect(renderSpy.mock.calls.length).toBe(rendersWhenReady);
         });
+
+        it("reuses cached selector snapshots across passive re-renders", async () => {
+                const selectorSpy = jest.fn(({ status, data }) => ({
+                        status,
+                        hasData: Boolean(data),
+                }));
+
+                const { result, rerender } = renderHook(() =>
+                        useDataModule("service/services", selectorSpy),
+                );
+
+                await waitFor(() => {
+                        expect(result.current.status).toBe("ready");
+                });
+
+                const callsAfterReady = selectorSpy.mock.calls.length;
+
+                act(() => {
+                        rerender();
+                });
+
+                expect(selectorSpy.mock.calls.length).toBe(callsAfterReady);
+        });
 });
