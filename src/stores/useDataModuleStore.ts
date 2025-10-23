@@ -13,6 +13,8 @@ import type {
 	DataModuleModule,
 } from "@/data/__generated__/manifest";
 
+import { createSelectionCache } from "./selectionCache";
+
 export type DataModuleStatus = "idle" | "loading" | "ready" | "error";
 
 const manifestEntriesByKey: {
@@ -195,12 +197,17 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 	const equalityFn = equality ?? (defaultEquality as (a: S, b: S) => boolean);
 	const selectorRef = useRef(derivedSelector);
 	const equalityRef = useRef(equalityFn);
+	const selectionCacheRef = useRef(createSelectionCache<S>());
 
 	selectorRef.current = derivedSelector;
 	equalityRef.current = equalityFn;
 
 	const stableSelector = useCallback(
-		(state: DataModuleState<K>) => selectorRef.current(state),
+		(state: DataModuleState<K>) =>
+			selectionCacheRef.current.read(
+				selectorRef.current(state),
+				equalityRef.current,
+			),
 		[],
 	);
 
@@ -215,24 +222,13 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 		stableEquality,
 	);
 
-	/**
-	 * Maintains a stable current value for the selected state across renders.
-	 * Returned from `useDataModule` so downstream consumers keep a consistent
-	 * reference unless the equality comparator reports a change.
-	 */
-	const stableSelectionRef = useRef(selection);
-
-	if (!equalityRef.current(stableSelectionRef.current, selection)) {
-		stableSelectionRef.current = selection;
-	}
-
 	useEffect(() => {
 		if (store.getState().status === "idle") {
 			void store.getState().load();
 		}
 	}, [store]);
 
-	return stableSelectionRef.current;
+	return selection;
 }
 
 /**
