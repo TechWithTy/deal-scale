@@ -21,6 +21,8 @@ import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
+
 // * Centralized SEO for /contact using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/contact");
@@ -203,6 +205,10 @@ const Contact = () => {
                 }),
         );
 
+        const logosDetail = useMemo(() => ({ segment: "trusted-companies" }), []);
+        const testimonialsDetail = useMemo(() => ({ segment: "testimonials" }), []);
+        const stepsDetail = useMemo(() => ({ segment: "consultation-steps" }), []);
+
         const isLogosLoading = logosStatus === "idle" || logosStatus === "loading";
         const isLogosError = logosStatus === "error";
         const hasLogos = Object.keys(companyLogos).length > 0;
@@ -214,6 +220,33 @@ const Contact = () => {
         const isStepsLoading = stepsStatus === "idle" || stepsStatus === "loading";
         const isStepsError = stepsStatus === "error";
         const hasSteps = steps.length > 0;
+
+        useDataModuleGuardTelemetry({
+                key: "service/slug_data/trustedCompanies",
+                surface: "ContactClient",
+                status: logosStatus,
+                hasData: hasLogos,
+                error: logosError,
+                detail: logosDetail,
+        });
+
+        useDataModuleGuardTelemetry({
+                key: "service/slug_data/testimonials",
+                surface: "ContactClient",
+                status: testimonialsStatus,
+                hasData: hasTestimonials,
+                error: testimonialsError,
+                detail: testimonialsDetail,
+        });
+
+        useDataModuleGuardTelemetry({
+                key: "service/slug_data/consultationSteps",
+                surface: "ContactClient",
+                status: stepsStatus,
+                hasData: hasSteps,
+                error: stepsError,
+                detail: stepsDetail,
+        });
 
         if (isLogosError) {
                 console.error("[ContactClient] Failed to load trusted companies", logosError);

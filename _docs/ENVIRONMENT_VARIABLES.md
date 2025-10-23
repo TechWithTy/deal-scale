@@ -88,6 +88,15 @@ Set the following environment variables in your deployment platform:
 5. Request permissions for: `email`, `public_profile`
 6. Copy App ID and App Secret to environment variables
 
+### Observability Telemetry
+```bash
+# Optional: webhook that receives guard telemetry payloads from the frontend
+DATA_GUARD_WEBHOOK=https://observability.example.com/data-guards
+
+# Optional: override the client endpoint that sends guard telemetry
+NEXT_PUBLIC_DATA_GUARD_ENDPOINT=https://your-domain.com/api/internal/data-guards
+```
+
 ## Security Notes
 
 - **Never commit environment variables to version control**
