@@ -79,6 +79,14 @@ clearDataModuleStores();
 - **Underscore Prefix:** Files starting with `_` are ignored intentionally so you can keep WIP data without polluting production builds.
 - **Concurrent Loads:** Zustand caches the in-flight promise, so multiple components requesting the same module share one network/disk fetch.
 
+## Idle/loading guard checklist
+
+- Treat both `status === "idle"` and `status === "loading"` as non-rendering phases. Show skeletons or placeholder copy until the store resolves to `"ready"`.
+- When `status === "error"`, log a namespaced console error (e.g., `[CaseStudyGrid] Failed to load …`), surface a friendly message, and avoid reading from `state.data`.
+- For `status === "ready"` without data, render a “coming soon” placeholder so prerendered routes never crash on undefined collections.
+- Emit telemetry for these fallbacks by calling `useDataModuleGuardTelemetry({ key, surface, status, hasData, error })`. The hook reports into `/api/internal/data-guards`, enabling dashboards to spot chronic loading or error states in production.
+- Include stable `detail` fields (like `{ segment: "trusted-companies" }`) when reporting so downstream alerts can filter by surface.
+
 ## Contributing Checklist
 
 - [ ] Update or add data files under `src/data/**`.
