@@ -12,7 +12,7 @@ import type {
         DataModuleModule,
 } from '@/data/__generated__/manifest';
 
-type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
+export type DataModuleStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 const manifestEntriesByKey: {
         readonly [K in DataModuleKey]: DataManifestEntry<K>;
