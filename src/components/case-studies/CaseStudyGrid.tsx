@@ -5,9 +5,11 @@ import { motion } from "framer-motion";
 import { ChevronRight, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 
 // Accepts caseStudies and categoryFilter as props
 import { useCategoryFilter } from "@/hooks/use-category-filter";
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
 import { useDataModule } from "@/stores/useDataModuleStore";
 import Header from "../common/Header";
 
@@ -56,6 +58,21 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
                 }),
         );
 
+        const hasModuleCaseStudies = moduleCaseStudies.length > 0;
+        const guardDetail = useMemo(
+                () => ({ providedViaProp: caseStudies.length > 0 }),
+                [caseStudies.length],
+        );
+
+        useDataModuleGuardTelemetry({
+                key: "caseStudy/caseStudies",
+                surface: "CaseStudyGrid",
+                status: caseStudyStatus,
+                hasData: hasModuleCaseStudies,
+                error: caseStudyError,
+                detail: guardDetail,
+        });
+
         const resolvedCaseStudies = caseStudies.length > 0
                 ? caseStudies
                 : moduleCaseStudies;
@@ -92,7 +109,10 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
                 showViewAll = showViewAllButton && filteredStudies.length > 0;
         }
 
-        if (resolvedCaseStudies.length === 0 && caseStudyStatus === "loading") {
+        if (
+                resolvedCaseStudies.length === 0 &&
+                (caseStudyStatus === "idle" || caseStudyStatus === "loading")
+        ) {
                 return (
                         <section className="bg-background-dark px-6 py-20 lg:px-8">
                                 <div className="mx-auto mb-10 max-w-4xl text-center">
@@ -122,6 +142,23 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
                                 </div>
                                 <div className="py-16 text-center text-destructive">
                                         Unable to load case studies right now.
+                                </div>
+                        </section>
+                );
+        }
+
+        if (resolvedCaseStudies.length === 0 && caseStudyStatus === "ready") {
+                return (
+                        <section className="bg-background-dark px-6 py-20 lg:px-8">
+                                <div className="mx-auto mb-10 max-w-4xl text-center">
+                                        <Header
+                                                title={title}
+                                                subtitle={subtitle}
+                                                size="lg"
+                                        />
+                                </div>
+                                <div className="py-16 text-center text-muted-foreground">
+                                        Case studies coming soon.
                                 </div>
                         </section>
                 );
