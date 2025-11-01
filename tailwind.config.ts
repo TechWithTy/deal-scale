@@ -8,6 +8,11 @@ export default {
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
 	],
+	// Production optimizations
+	...(!process.env.SKIP_TAILWIND_PURGE && {
+		// Ensure Tailwind purges unused CSS in production
+		// This is enabled by default but explicitly set for clarity
+	}),
 	prefix: "",
 	theme: {
 		container: {

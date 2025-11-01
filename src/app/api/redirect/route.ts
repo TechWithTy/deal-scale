@@ -74,6 +74,32 @@ export async function GET(req: Request) {
 			}
 		}
 
+		// 2) Preserve query parameters from the redirect request if the destination URL doesn't have them
+		// This allows incoming UTMs and other tracking parameters to be passed through
+		try {
+			// Only preserve params for absolute URLs (relative paths should use middleware logic)
+			if (/^https?:/i.test(location)) {
+				const destUrl = new URL(location);
+				const requestParams = url.searchParams;
+				
+				// Preserve any query params from the incoming request (except 'to', 'pageId', 'slug', 'isFile')
+				// Priority: Destination URL params > Incoming request params
+				for (const [key, value] of requestParams.entries()) {
+					if (key !== "to" && key !== "pageId" && key !== "slug" && key !== "isFile") {
+						// Only add if destination URL doesn't already have this parameter
+						if (!destUrl.searchParams.has(key)) {
+							destUrl.searchParams.set(key, value);
+						}
+					}
+				}
+				
+				// Update location with preserved params
+				location = destUrl.toString();
+			}
+		} catch {
+			// If parsing fails, continue with original location
+		}
+
 		// 2) Normalize forms
 		// protocol-relative -> https
 		if (/^\/\//.test(location)) {

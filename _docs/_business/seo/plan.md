@@ -25,8 +25,19 @@
   - Provide fallbacks for offline fetch scenarios.
 - **/partners**
   - Render partner list server-side and inject ItemList schema referencing organization nodes.
+- **/linktree**
+  - ✅ **Complete**: Dynamic resource hub fetching links from Notion database
+  - ✅ **Complete**: Added ItemList schema for all links with structured data
+  - ✅ **Complete**: SEO metadata (title, description, OpenGraph) configured
+  - ✅ **Complete**: Included in sitemap with daily changeFrequency (links update frequently)
+  - Data source: `/api/linktree` queries Notion database (`NOTION_REDIRECTS_ID`)
+  - Revalidation: 300 seconds (5 minutes) for fresh content
 - **/careers**
-  - Integrate Zoho Recruit API via `/api/jobs`, normalize data, and render JobPosting schema.
+  - ✅ **Phase 1 Complete**: Added careers URL to Organization schema `sameAs` array
+  - ✅ **Phase 1 Complete**: Enabled indexing on careers page with proper metadata
+  - ✅ **Phase 1 Complete**: Changed redirect to permanent (301) to pass link equity
+  - ✅ **Phase 1 Complete**: Added careers to sitemap for discoverability
+  - 🔄 **Phase 2 Pending**: Integrate Zoho Recruit API via `/api/jobs`, normalize data, and render JobPosting schema (see `_docs/_business/seo/careers-integration-plan.md` for details)
   - Document required environment variables and caching strategy.
 
 ### Phase 4 – Content Schema Expansion (Weeks 5-6)

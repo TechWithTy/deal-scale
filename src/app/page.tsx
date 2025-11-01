@@ -1,23 +1,95 @@
-import AboutUsSection from "@/components/about/AboutUsSection";
-import CaseStudyGrid from "@/components/case-studies/CaseStudyGrid";
 import { ViewportLazy } from "@/components/common/ViewportLazy";
-import ContactForm from "@/components/contact/form/ContactForm";
-import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
-import Faq from "@/components/faq";
-import { BlogPreview } from "@/components/home/BlogPreview";
-import ClientBento from "@/components/home/ClientBento";
-import UpcomingFeatures from "@/components/home/FeatureVote";
-import Pricing from "@/components/home/Pricing";
-import Services from "@/components/home/Services";
-import Testimonials from "@/components/home/Testimonials";
-import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
 import { Separator } from "@/components/ui/separator";
-import { MainBentoFeatures } from "@/data/bento/main";
-import { caseStudies } from "@/data/caseStudy/caseStudies";
-import { faqItems } from "@/data/faq/default";
-import { PricingPlans } from "@/data/service/slug_data/pricing";
-import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
-import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import dynamic from "next/dynamic";
+
+import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
+import Services from "@/components/home/Services";
+// Above-the-fold components (eager load for LCP)
+import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
+
+// Below-the-fold components (lazy load with dynamic imports for code splitting)
+const AboutUsSection = dynamic(
+	() => import("@/components/about/AboutUsSection"),
+	{
+		loading: () => (
+			<div className="flex h-96 items-center justify-center">
+				<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+			</div>
+		),
+	},
+);
+const CaseStudyGrid = dynamic(
+	() => import("@/components/case-studies/CaseStudyGrid"),
+	{
+		loading: () => (
+			<div className="flex h-96 items-center justify-center">
+				<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+			</div>
+		),
+	},
+);
+const ContactForm = dynamic(
+	() => import("@/components/contact/form/ContactForm"),
+	{
+		loading: () => (
+			<div className="flex h-96 items-center justify-center">
+				<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+			</div>
+		),
+	},
+);
+const Faq = dynamic(() => import("@/components/faq"), {
+	loading: () => (
+		<div className="flex h-96 items-center justify-center">
+			<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+		</div>
+	),
+});
+const BlogPreview = dynamic(
+	() =>
+		import("@/components/home/BlogPreview").then((mod) => ({
+			default: mod.BlogPreview,
+		})),
+	{
+		loading: () => (
+			<div className="flex h-96 items-center justify-center">
+				<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+			</div>
+		),
+	},
+);
+const ClientBento = dynamic(() => import("@/components/home/ClientBento"), {
+	loading: () => (
+		<div className="flex h-96 items-center justify-center">
+			<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+		</div>
+	),
+});
+const UpcomingFeatures = dynamic(
+	() => import("@/components/home/FeatureVote"),
+	{
+		loading: () => (
+			<div className="flex h-96 items-center justify-center">
+				<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+			</div>
+		),
+	},
+);
+const Pricing = dynamic(() => import("@/components/home/Pricing"), {
+	loading: () => (
+		<div className="flex h-96 items-center justify-center">
+			<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+		</div>
+	),
+});
+const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
+	loading: () => (
+		<div className="flex h-96 items-center justify-center">
+			<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+		</div>
+	),
+});
+import { dataModules } from "@/data/__generated__/modules";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
@@ -78,6 +150,13 @@ const Index = async ({
 	const currentPage = pageParam ? Number.parseInt(pageParam, 10) || 1 : 1;
 
 	// Paginate the case studies
+	const { caseStudies } = dataModules["caseStudy/caseStudies"];
+	const { faqItems } = dataModules["faq/default"];
+	const { PricingPlans } = dataModules["service/slug_data/pricing"];
+	const { generalDealScaleTestimonials } =
+		dataModules["service/slug_data/testimonials"];
+	const { companyLogos } = dataModules["service/slug_data/trustedCompanies"];
+
 	const paginatedCaseStudies = paginate(
 		caseStudies,
 		currentPage,

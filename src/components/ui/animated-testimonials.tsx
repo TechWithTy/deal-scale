@@ -8,17 +8,25 @@ import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 export const AnimatedTestimonials = ({
-	testimonials,
-	autoplay = false,
+        testimonials,
+        autoplay = false,
 }: {
-	testimonials: TeamMember[];
-	autoplay?: boolean;
+        testimonials: TeamMember[];
+        autoplay?: boolean;
 }) => {
-	const [active, setActive] = useState(0);
+        const [active, setActive] = useState(0);
 
-	const handleNext = () => {
-		setActive((prev) => (prev + 1) % testimonials.length);
-	};
+        if (testimonials.length === 0) {
+                return (
+                        <div className="mx-auto max-w-sm px-4 py-20 text-center font-sans text-muted-foreground antialiased md:max-w-4xl md:px-8 lg:px-12">
+                                Team information is coming soon.
+                        </div>
+                );
+        }
+
+        const handleNext = () => {
+                setActive((prev) => (prev + 1) % testimonials.length);
+        };
 
 	const handlePrev = () => {
 		setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);

@@ -280,18 +280,32 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 		image: DEFAULT_SEO.image,
 		keywords: DEFAULT_SEO.keywords,
 	},
-	"/legal": {
-		title: "Legal Center | Deal Scale",
-		description:
-			"Access all of Deal Scale's legal documents including Privacy Policy, Terms of Service, and compliance information in one place.",
-		canonical: "https://dealscale.io/legal",
-		keywords: [
-			"Legal Documents",
-			"Compliance Center",
-			"Legal Information",
-			"Company Policies",
-			...DEFAULT_SEO.keywords,
-		],
-		image: DEFAULT_SEO.image,
-	},
+        "/legal": {
+                title: "Legal Center | Deal Scale",
+                description:
+                        "Access all of Deal Scale's legal documents including Privacy Policy, Terms of Service, and compliance information in one place.",
+                canonical: "https://dealscale.io/legal",
+                keywords: [
+                        "Legal Documents",
+                        "Compliance Center",
+                        "Legal Information",
+                        "Company Policies",
+                        ...DEFAULT_SEO.keywords,
+                ],
+                image: DEFAULT_SEO.image,
+        },
+        "/linktree": {
+                title: "Link Tree | Deal Scale",
+                description:
+                        "Quick access to DealScale's most important links, resources, and pages. Browse our products, services, blog posts, events, case studies, and more in one convenient place.",
+                canonical: "https://dealscale.io/linktree",
+                keywords: [
+                        "deal scale links",
+                        "deal scale resources",
+                        "real estate resources",
+                        "quick links",
+                        ...DEFAULT_SEO.keywords,
+                ],
+                image: DEFAULT_SEO.image,
+        },
 };

@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { ChevronRight, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 
-import { caseStudyCategories } from "@/data/caseStudy/caseStudies";
 // Accepts caseStudies and categoryFilter as props
 import { useCategoryFilter } from "@/hooks/use-category-filter";
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
+import { useDataModule } from "@/stores/useDataModuleStore";
 import Header from "../common/Header";
 
 interface CaseStudyGridProps {
@@ -41,42 +43,133 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 	showViewAllButton = false,
 	showCategoryFilter = true,
 }) => {
-	const { activeCategory, setActiveCategory, CategoryFilter } =
-		useCategoryFilter(caseStudyCategories);
+        const {
+                status: caseStudyStatus,
+                categories: moduleCategories,
+                caseStudies: moduleCaseStudies,
+                error: caseStudyError,
+        } = useDataModule(
+                "caseStudy/caseStudies",
+                ({ status, data, error }) => ({
+                        status,
+                        categories: data?.caseStudyCategories ?? [],
+                        caseStudies: data?.caseStudies ?? [],
+                        error,
+                }),
+        );
+
+        const hasModuleCaseStudies = moduleCaseStudies.length > 0;
+        const guardDetail = useMemo(
+                () => ({ providedViaProp: caseStudies.length > 0 }),
+                [caseStudies.length],
+        );
+
+        useDataModuleGuardTelemetry({
+                key: "caseStudy/caseStudies",
+                surface: "CaseStudyGrid",
+                status: caseStudyStatus,
+                hasData: hasModuleCaseStudies,
+                error: caseStudyError,
+                detail: guardDetail,
+        });
+
+        const resolvedCaseStudies = caseStudies.length > 0
+                ? caseStudies
+                : moduleCaseStudies;
+
+        const { activeCategory, setActiveCategory, CategoryFilter } =
+                useCategoryFilter(moduleCategories);
 
 	// * If limit is set, ignore category filtering and show latest case studies
 	let visibleStudies: CaseStudy[];
 	let showViewAll = false;
 
-	if (typeof limit === "number") {
-		// todo: If caseStudies have a 'date' or 'createdAt', sort by newest first. Otherwise, use array order.
-		visibleStudies = [...caseStudies]
-			// .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Uncomment if date exists
-			.slice(0, limit);
-		showViewAll = showViewAllButton && caseStudies.length > limit;
-	} else {
-		// * Filter by category if no limit
-		// * Robust filtering: show all if no category, 'All' (any case), empty string, or empty array
-		const isAll =
-			!activeCategory ||
+        if (typeof limit === "number") {
+                // todo: If caseStudies have a 'date' or 'createdAt', sort by newest first. Otherwise, use array order.
+                visibleStudies = [...resolvedCaseStudies]
+                        // .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Uncomment if date exists
+                        .slice(0, limit);
+                showViewAll = showViewAllButton && resolvedCaseStudies.length > limit;
+        } else {
+                // * Filter by category if no limit
+                // * Robust filtering: show all if no category, 'All' (any case), empty string, or empty array
+                const isAll =
+                        !activeCategory ||
 			(typeof activeCategory === "string" &&
 				activeCategory.toLowerCase() === "all") ||
 			activeCategory === "" ||
 			(Array.isArray(activeCategory) && activeCategory.length === 0);
 
-		const filteredStudies = isAll
-			? caseStudies
-			: caseStudies.filter((cs) => cs.categories.includes(activeCategory));
-		visibleStudies = filteredStudies;
-		showViewAll = showViewAllButton && filteredStudies.length > 0;
-	}
+                const filteredStudies = isAll
+                        ? resolvedCaseStudies
+                        : resolvedCaseStudies.filter((cs) =>
+                                  cs.categories.includes(activeCategory),
+                          );
+                visibleStudies = filteredStudies;
+                showViewAll = showViewAllButton && filteredStudies.length > 0;
+        }
 
-	return (
-		<section className="bg-background-dark px-6 py-20 lg:px-8">
-			{/* Title and subtitle header */}
-			<div className="mx-auto mb-10 max-w-4xl text-center">
-				<Header
-					title={title}
+        if (
+                resolvedCaseStudies.length === 0 &&
+                (caseStudyStatus === "idle" || caseStudyStatus === "loading")
+        ) {
+                return (
+                        <section className="bg-background-dark px-6 py-20 lg:px-8">
+                                <div className="mx-auto mb-10 max-w-4xl text-center">
+                                        <Header
+                                                title={title}
+                                                subtitle={subtitle}
+                                                size="lg"
+                                        />
+                                </div>
+                                <div className="py-16 text-center text-muted-foreground">
+                                        Loading case studies…
+                                </div>
+                        </section>
+                );
+        }
+
+        if (resolvedCaseStudies.length === 0 && caseStudyStatus === "error") {
+                console.error("[CaseStudyGrid] Failed to load case studies", caseStudyError);
+                return (
+                        <section className="bg-background-dark px-6 py-20 lg:px-8">
+                                <div className="mx-auto mb-10 max-w-4xl text-center">
+                                        <Header
+                                                title={title}
+                                                subtitle={subtitle}
+                                                size="lg"
+                                        />
+                                </div>
+                                <div className="py-16 text-center text-destructive">
+                                        Unable to load case studies right now.
+                                </div>
+                        </section>
+                );
+        }
+
+        if (resolvedCaseStudies.length === 0 && caseStudyStatus === "ready") {
+                return (
+                        <section className="bg-background-dark px-6 py-20 lg:px-8">
+                                <div className="mx-auto mb-10 max-w-4xl text-center">
+                                        <Header
+                                                title={title}
+                                                subtitle={subtitle}
+                                                size="lg"
+                                        />
+                                </div>
+                                <div className="py-16 text-center text-muted-foreground">
+                                        Case studies coming soon.
+                                </div>
+                        </section>
+                );
+        }
+
+        return (
+                <section className="bg-background-dark px-6 py-20 lg:px-8">
+                        {/* Title and subtitle header */}
+                        <div className="mx-auto mb-10 max-w-4xl text-center">
+                                <Header
+                                        title={title}
 					subtitle={subtitle}
 					size="lg" // or "sm", "md", "xl"
 				/>
@@ -85,10 +178,10 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 			<div className="mx-auto max-w-7xl">
 				{/* Optionally render the category filter */}
 				{showCategoryFilter && CategoryFilter && <CategoryFilter />}
-				<div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
-					{visibleStudies.map((study) => (
-						<motion.div
-							key={study.id}
+                                <div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+                                        {visibleStudies.map((study) => (
+                                                <motion.div
+                                                        key={study.id}
 							initial={{ opacity: 0, y: 20 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5 }}

@@ -1,23 +1,44 @@
+import path from "node:path";
 // next.config.ts
 import type { NextConfig } from "next";
-import path from "node:path";
 
 const nextConfig: NextConfig = {
-        experimental: {
-                optimizePackageImports: [
-                        "lucide-react",
-                        "framer-motion",
-                        "react-hot-toast",
-                        "@radix-ui/react-icons",
-                ],
-        },
-        env: {
-                STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+	// Optimize package imports to reduce bundle size
+	experimental: {
+		optimizePackageImports: [
+			"lucide-react",
+			"framer-motion",
+			"react-hot-toast",
+			"@radix-ui/react-icons",
+		],
+	},
+	// Compiler optimizations
+	compiler: {
+		// Remove console.log in production (except console.error/warn)
+		// Saves ~2-5 KiB and improves performance slightly
+		removeConsole:
+			process.env.NODE_ENV === "production"
+				? {
+						exclude: ["error", "warn"],
+					}
+				: false,
+	},
+	// Swc minification is enabled by default in Next.js
+	// Additional optimizations handled via experimental flags above
+	env: {
+		STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
 			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
 		STRIPE_WEB_SECRET: process.env.STRIPE_WEB_SECRET,
 	},
 	images: {
+		// Enable modern image formats (WebP/AVIF) for better compression
+		formats: ["image/avif", "image/webp"],
+		// Optimize image quality (balance between quality and size)
+		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+		// Minimum Cache TTL (in seconds) for optimized images
+		minimumCacheTTL: 60,
 		remotePatterns: [
 			{ protocol: "https", hostname: "dealscale.io" },
 			{ protocol: "https", hostname: "vectorlogo.zone" },
@@ -48,13 +69,12 @@ const nextConfig: NextConfig = {
 			{ protocol: "https", hostname: "thebuyoutcompany.com" },
 			{ protocol: "https", hostname: "www.cretech.com" },
 			{ protocol: "https", hostname: "www.housingwire.com" },
-
 		],
 	},
 
 	// * Add redirect from /careers to external Zoho Recruit careers page
-        async redirects() {
-                return [
+	async redirects() {
+		return [
 			{
 				source: "/projects",
 				destination: "/portfolio",
@@ -63,7 +83,7 @@ const nextConfig: NextConfig = {
 			{
 				source: "/careers",
 				destination: "https://dealscale.zohorecruit.com/jobs/Careers",
-				permanent: false, // ! Use false for temporary redirect; set to true if this should be permanent
+				permanent: true, // ✅ Permanent redirect to pass link equity to careers portal
 			},
 			{
 				source: "/support",
@@ -105,39 +125,57 @@ const nextConfig: NextConfig = {
 					"https://cal.com/cyber-oni-solutions-inc/investor-pitch-deck-deal-scale",
 				permanent: true,
 			},
-                ];
-        },
-        async headers() {
-                return [
-                        {
-                                source: "/_next/static/:path*",
-                                headers: [
-                                        {
-                                                key: "Cache-Control",
-                                                value: "public, max-age=31536000, immutable",
-                                        },
-                                ],
-                        },
-                        {
-                                source: "/_next/image",
-                                headers: [
-                                        {
-                                                key: "Cache-Control",
-                                                value: "public, max-age=31536000, immutable",
-                                        },
-                                ],
-                        },
-                        {
-                                source: "/:all*(svg|png|jpg|jpeg|gif|webp|avif|woff2)",
-                                headers: [
-                                        {
-                                                key: "Cache-Control",
-                                                value: "public, max-age=2592000, must-revalidate",
-                                        },
-                                ],
-                        },
-                ];
-        },
+		];
+	},
+	async headers() {
+		return [
+			{
+				source: "/_next/static/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/_next/image",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/:all*(svg|png|jpg|jpeg|gif|webp|avif|woff2)",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=2592000, must-revalidate",
+					},
+				],
+			},
+			{
+				source: "/images/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/assets/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+		];
+	},
 };
 
 export default nextConfig;

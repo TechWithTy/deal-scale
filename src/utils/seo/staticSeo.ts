@@ -186,6 +186,15 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		image: STATIC_SEO_META["/legal"].image,
 		keywords: DEFAULT_SEO.keywords,
 	},
+	"/linktree": {
+		title: STATIC_SEO_META["/linktree"].title,
+		description: STATIC_SEO_META["/linktree"].description,
+		canonical: STATIC_SEO_META["/linktree"].canonical,
+		image: STATIC_SEO_META["/linktree"].image,
+		keywords: STATIC_SEO_META["/linktree"].keywords || DEFAULT_SEO.keywords,
+		priority: 0.7,
+		changeFrequency: "daily", // Links update frequently from Notion
+	},
 };
 
 export function getStaticSeo(path: string): SeoMeta {
