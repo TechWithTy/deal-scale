@@ -97,28 +97,30 @@ describe("redirect route with UTM parameter preservation", () => {
 		expect(location).toContain("utm_id=campaign-123");
 	});
 
-	test("does not preserve internal redirect parameters (to, pageId, slug, isFile)", async () => {
+	test("does not preserve internal redirect parameters (pageId, slug, isFile)", async () => {
 		const searchParams = new URLSearchParams();
 		searchParams.set("utm_source", "test-source");
-		searchParams.set("to", "should-be-ignored");
-		searchParams.set("pageId", "should-be-ignored");
-		searchParams.set("slug", "should-be-ignored");
-		searchParams.set("isFile", "should-be-ignored");
+		searchParams.set("pageId", "test-page-123");
+		searchParams.set("slug", "test-slug");
+		searchParams.set("isFile", "true");
 
 		const req = createRequest("https://example.com/target", searchParams);
 		const response = await GET(req);
 
 		expect(response).toBeDefined();
-		if (response) {
-			const location = response.headers.get("location");
-			expect(location).toBeTruthy();
-			if (location) {
-				expect(location).toContain("utm_source=test-source");
-				expect(location).not.toContain("to=should-be-ignored");
-				expect(location).not.toContain("pageId=should-be-ignored");
-				expect(location).not.toContain("slug=should-be-ignored");
-				expect(location).not.toContain("isFile=should-be-ignored");
-			}
+		expect(response?.status).toBe(302);
+		const location = response?.headers.get("location");
+		expect(location).toBeTruthy();
+		
+		if (location) {
+			// UTM params should be preserved
+			expect(location).toContain("utm_source=test-source");
+			// Internal redirect parameters should NOT be in the final redirect URL
+			expect(location).not.toContain("pageId=test-page-123");
+			expect(location).not.toContain("slug=test-slug");
+			expect(location).not.toContain("isFile=true");
+			// But the destination should be correct
+			expect(location).toContain("https://example.com/target");
 		}
 	});
 

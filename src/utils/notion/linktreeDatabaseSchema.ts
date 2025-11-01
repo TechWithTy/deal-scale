@@ -7,6 +7,38 @@
  * Last updated: 2025-11-01T13:46:45.528Z
  */
 
+import type {
+	NotionFilesProperty,
+	NotionRichTextProperty,
+	NotionTitleProperty,
+	NotionUrlProperty,
+	NotionSelectProperty,
+} from "./notionTypes";
+
+// Additional Notion property types not in notionTypes.ts
+export type NotionStatusProperty = {
+	type: "status";
+	status: {
+		id: string;
+		name: string;
+		color: string;
+	} | null;
+};
+
+export type NotionDateProperty = {
+	type: "date";
+	date: {
+		start: string;
+		end: string | null;
+		time_zone: string | null;
+	} | null;
+};
+
+export type NotionNumberProperty = {
+	type: "number";
+	number: number | null;
+};
+
 export interface LinkTreeNotionDatabaseProperties {
 	// Property: "Video" (files)
 	"Video": NotionFilesProperty;

@@ -19,7 +19,11 @@ type NotionPropertyValue =
 	| Record<string, never>; // For other property types
 
 type NotionFileObject =
-	| { type: "file"; file?: { url?: string; expiry_time?: string }; name?: string }
+	| {
+			type: "file";
+			file?: { url?: string; expiry_time?: string };
+			name?: string;
+	  }
 	| { type: "external"; external?: { url?: string }; name?: string };
 
 type NotionPage = {
@@ -92,25 +96,13 @@ async function fetchFromRedis(): Promise<LinkTreeItem[]> {
 		if (!destination) continue;
 
 		const title = data.title ? String(data.title) : slug;
-		const description = data.description
-			? String(data.description)
-			: undefined;
-		const details = data.details
-			? String(data.details)
-			: undefined;
-		const iconEmoji = data.iconEmoji
-			? String(data.iconEmoji)
-			: undefined;
-		let imageUrl = data.imageUrl
-			? String(data.imageUrl)
-			: undefined;
-		const category = data.category
-			? String(data.category)
-			: undefined;
+		const description = data.description ? String(data.description) : undefined;
+		const details = data.details ? String(data.details) : undefined;
+		const iconEmoji = data.iconEmoji ? String(data.iconEmoji) : undefined;
+		let imageUrl = data.imageUrl ? String(data.imageUrl) : undefined;
+		const category = data.category ? String(data.category) : undefined;
 		const pinned = coerceBool(data.pinned);
-		let videoUrl = data.videoUrl
-			? String(data.videoUrl)
-			: undefined;
+		let videoUrl = data.videoUrl ? String(data.videoUrl) : undefined;
 		let files: FileMeta[] | undefined;
 		const filesRaw = data.files;
 		if (Array.isArray(filesRaw)) {
@@ -190,7 +182,9 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 			.replace(/[^a-z0-9]+/g, "-")
 			.replace(/^-+|-+$/g, "")}`;
 
-	const readRichText = (prop: NotionPropertyValue | undefined): string | undefined => {
+	const readRichText = (
+		prop: NotionPropertyValue | undefined,
+	): string | undefined => {
 		try {
 			if (!prop) return undefined;
 			if (prop.type === "rich_text") {
@@ -219,35 +213,69 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 	};
 
 	// Type guard functions for safe property access
-	const isCheckboxProperty = (prop: NotionPropertyValue): prop is { type: "checkbox"; checkbox: boolean } => {
+	const isCheckboxProperty = (
+		prop: NotionPropertyValue,
+	): prop is { type: "checkbox"; checkbox: boolean } => {
 		return prop.type === "checkbox";
 	};
 
-	const isSelectProperty = (prop: NotionPropertyValue): prop is { type: "select"; select: { name?: string } } => {
+	const isSelectProperty = (
+		prop: NotionPropertyValue,
+	): prop is { type: "select"; select: { name?: string } } => {
 		return prop.type === "select";
 	};
 
-	const isUrlProperty = (prop: NotionPropertyValue): prop is { type: "url"; url: string } => {
+	const isUrlProperty = (
+		prop: NotionPropertyValue,
+	): prop is { type: "url"; url: string } => {
 		return prop.type === "url";
 	};
 
-	const isFilesProperty = (prop: NotionPropertyValue): prop is { type: "files"; files: Array<NotionFileObject> } => {
+	const isFilesProperty = (
+		prop: NotionPropertyValue,
+	): prop is { type: "files"; files: Array<NotionFileObject> } => {
 		return prop.type === "files";
 	};
 
-	const getSelectValue = (prop: NotionPropertyValue | undefined): string | undefined => {
+	const getSelectValue = (
+		prop: NotionPropertyValue | undefined,
+	): string | undefined => {
 		if (!prop || !isSelectProperty(prop)) return undefined;
 		return prop.select?.name;
 	};
 
-	const getCheckboxValue = (prop: NotionPropertyValue | undefined): boolean | undefined => {
+	const getCheckboxValue = (
+		prop: NotionPropertyValue | undefined,
+	): boolean | undefined => {
 		if (!prop || !isCheckboxProperty(prop)) return undefined;
 		return prop.checkbox;
 	};
 
-	const getUrlValue = (prop: NotionPropertyValue | undefined): string | undefined => {
+	const getUrlValue = (
+		prop: NotionPropertyValue | undefined,
+	): string | undefined => {
 		if (!prop || !isUrlProperty(prop)) return undefined;
 		return prop.url;
+	};
+
+	// Extract UTM value from Notion property (supports select and rich_text for flexibility)
+	const getUtmValue = (
+		prop: NotionPropertyValue | undefined,
+	): string | undefined => {
+		if (!prop) return undefined;
+		// Try select first (most common for UTM parameters)
+		if (isSelectProperty(prop)) {
+			return prop.select?.name;
+		}
+		// Fallback to rich_text for flexibility
+		if (prop.type === "rich_text" && Array.isArray(prop.rich_text)) {
+			const text = prop.rich_text
+				.map((t) => t.plain_text ?? "")
+				.join("")
+				.trim();
+			return text || undefined;
+		}
+		return undefined;
 	};
 
 	const inferKind = (
@@ -295,11 +323,8 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 			slug = kebab(titleFromTitle);
 		}
 		const description =
-			readRichText(props?.Description) ??
-			readRichText(props?.Desc);
-		const details =
-			readRichText(props?.Details) ??
-			readRichText(props?.Detail);
+			readRichText(props?.Description) ?? readRichText(props?.Desc);
+		const details = readRichText(props?.Details) ?? readRichText(props?.Detail);
 		const iconEmoji = page?.icon?.emoji as string | undefined;
 
 		// Image from explicit props or cover
@@ -307,7 +332,10 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		const imageProp = props?.Image || props?.Thumbnail;
 		if (imageProp && isUrlProperty(imageProp)) {
 			imageUrl = imageProp.url;
-		} else if (imageProp && (imageProp.type === "rich_text" || imageProp.type === "title")) {
+		} else if (
+			imageProp &&
+			(imageProp.type === "rich_text" || imageProp.type === "title")
+		) {
 			imageUrl = readRichText(imageProp);
 		}
 		if (!imageUrl && page.cover?.external?.url) {
@@ -320,16 +348,22 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		if (lte) {
 			if (isCheckboxProperty(lte)) {
 				linkTreeEnabled = Boolean(lte.checkbox);
-			} else if (isSelectProperty(lte) || (lte.type === "status" && (lte as { status?: { name?: string } }).status?.name)) {
-				const name = isSelectProperty(lte) 
-					? lte.select?.name 
+			} else if (
+				isSelectProperty(lte) ||
+				(lte.type === "status" &&
+					(lte as { status?: { name?: string } }).status?.name)
+			) {
+				const name = isSelectProperty(lte)
+					? lte.select?.name
 					: (lte as { status?: { name?: string } }).status?.name;
 				const nameStr = name?.toString().toLowerCase() ?? "";
-				linkTreeEnabled = nameStr === "true" || nameStr === "yes" || nameStr === "enabled";
+				linkTreeEnabled =
+					nameStr === "true" || nameStr === "yes" || nameStr === "enabled";
 			} else if (lte.type === "rich_text" || lte.type === "title") {
 				const txt = readRichText(lte) ?? "";
 				const name = txt.toLowerCase();
-				linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
+				linkTreeEnabled =
+					name === "true" || name === "yes" || name === "enabled";
 			}
 		}
 		if (!linkTreeEnabled && getSelectValue(props?.Type) === "LinkTree") {
@@ -340,7 +374,7 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		const category = getSelectValue(props?.Category);
 		const pinned = Boolean(
 			getCheckboxValue(props?.Pinned) ||
-				(getSelectValue(props?.Pinned)?.toLowerCase() === "true")
+				getSelectValue(props?.Pinned)?.toLowerCase() === "true",
 		);
 		// Redirect Type: Internal/External
 		const redirectType = getSelectValue(props?.["Redirect Type"]);
@@ -350,7 +384,11 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		// Files (support Notion files property named "Media" or "Files")
 		let files: FileMeta[] | undefined;
 		const filesProp = props?.Media || props?.Files || props?.File;
-		if (filesProp && isFilesProperty(filesProp) && Array.isArray(filesProp.files)) {
+		if (
+			filesProp &&
+			isFilesProperty(filesProp) &&
+			Array.isArray(filesProp.files)
+		) {
 			files = filesProp.files
 				.map((f: NotionFileObject) => {
 					if (f.type === "file") {
@@ -395,7 +433,7 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		}
 
 		const hasFiles = Array.isArray(files) && files.length > 0;
-		
+
 		// Extract UTM parameters from Notion
 		// Handle "UTM Campaign (Relation)" property name - use it if available, otherwise fallback to "UTM Campaign"
 		const utmCampaignRelation = getUtmValue(props?.["UTM Campaign (Relation)"]);
