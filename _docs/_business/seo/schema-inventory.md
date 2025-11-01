@@ -19,6 +19,7 @@ requirements.
 | Features index | `src/app/features/page.tsx` | `buildFAQPageSchema({ ... })` | SEO metadata via `getStaticSeo("/features")`; FAQ data from `faqItems`. |
 | Feature detail | `src/app/features/[slug]/page.tsx` | `buildServiceJsonLd(service)` | Service entity aggregated from `@/data/service/services` collections. |
 | Case study detail | `src/app/case-studies/[slug]/page.tsx` | `buildCaseStudyCreativeWorkSchema(caseStudy, { ... })` | Case study resolved via `getCaseStudyBySlug`; related studies from `getAllCaseStudies()`; canonical derived using `getTestBaseUrl()`. |
+| LinkTree | `src/app/linktree/page.tsx` | `buildLinkTreeItemListSchema(items)` | Link items fetched from `/api/linktree` (sources data from Notion database via `NOTION_REDIRECTS_ID`); revalidates every 300 seconds. |
 
 ## Notes
 

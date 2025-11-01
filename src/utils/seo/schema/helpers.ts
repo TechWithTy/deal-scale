@@ -21,6 +21,9 @@ export const buildAbsoluteUrl = (pathOrUrl: string): string => {
 
 export const buildSocialProfiles = (): string[] => {
         const { socialLinks } = companyData;
+        // Include careers page URL in sameAs for entity linking
+        const CAREERS_URL = "https://dealscale.zohorecruit.com/jobs/Careers";
+        
         const socialUrls = [
                 socialLinks.linkedin,
                 socialLinks.facebook,
@@ -28,6 +31,7 @@ export const buildSocialProfiles = (): string[] => {
                 socialLinks.mediumUsername && socialLinks.mediumUsername.trim().length > 0
                         ? `https://medium.com/@${socialLinks.mediumUsername.trim()}`
                         : undefined,
+                CAREERS_URL, // Add careers URL to Organization schema sameAs array
         ].filter((link): link is string => Boolean(link));
 
         return socialUrls;

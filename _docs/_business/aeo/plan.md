@@ -16,6 +16,7 @@
 - Extend schema utilities with FAQPage, HowTo, SoftwareApplication, and Person/Audience builders.
 - Create reusable content snippets (short, medium, long summaries) for features, events, partners, and jobs.
 - Map Zoho Recruit job fields to conversational answers (benefits, application process, hiring timeline).
+- ✅ **Careers Integration**: Added Zoho Recruit careers URL (`https://dealscale.zohorecruit.com/jobs/Careers`) to Organization schema `sameAs` array for entity linking.
 
 ### Milestone 3 – Conversational Surface Development (Weeks 4-6)
 - Launch FAQ components on `/features` and `/pricing`, exposing structured Q&A data for assistants.
