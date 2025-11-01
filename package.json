@@ -36,7 +36,9 @@
                 "seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company",
                 "submit:sitemap": "node tools/deploy/submit-sitemap.js",
                 "generate:data": "pnpm exec tsx tools/data/generate-data-manifest.ts",
-                "export:landing": "node tools/run-ts.js tools/strapi/export-landing.ts"
+                "export:landing": "node tools/run-ts.js tools/strapi/export-landing.ts",
+                "notion:schema": "node scripts/run-ts.js scripts/notion/fetchLinktreeSchema.ts",
+                "notion:schema:write": "node scripts/run-ts.js scripts/notion/fetchLinktreeSchema.ts --write"
         },
         "lint-staged": {
                 "**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
