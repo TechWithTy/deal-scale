@@ -44,20 +44,29 @@ export function usePagination<T>(
 	items: T[],
 	options: UsePaginationOptions = {},
 ): UsePaginationResult<T> {
+	console.log("[usePagination] Hook starting", { itemsLength: items.length, options });
 	const { itemsPerPage = 8, initialPage = 1, enableShowAll = true } = options;
+	console.log("[usePagination] Hook 1: useState(page)");
 	const [page, setPage] = useState(initialPage);
+	console.log("[usePagination] Hook 2: useState(showAll)");
 	const [showAll, setShowAll] = useState(false);
 
+	console.log("[usePagination] Hook 3: useMemo(totalPages)");
 	const totalPages = useMemo(
-		() => (itemsPerPage > 0 ? Math.ceil(items.length / itemsPerPage) : 1),
+		() => {
+			const result = itemsPerPage > 0 ? Math.ceil(items.length / itemsPerPage) : 1;
+			console.log("[usePagination] totalPages computed", { result, itemsLength: items.length, itemsPerPage });
+			return result;
+		},
 		[items.length, itemsPerPage],
 	);
 
 	// Slice items for current page
+	console.log("[usePagination] Hook 4: useMemo(pagedItems)");
 	const pagedItems = useMemo(() => {
-		if (showAll || !itemsPerPage) return items;
-		const start = (page - 1) * itemsPerPage;
-		return items.slice(start, start + itemsPerPage);
+		const result = showAll || !itemsPerPage ? items : items.slice((page - 1) * itemsPerPage, (page - 1) * itemsPerPage + itemsPerPage);
+		console.log("[usePagination] pagedItems computed", { resultLength: result.length, showAll, page, itemsPerPage });
+		return result;
 	}, [items, page, itemsPerPage, showAll]);
 
 	// Helpers for UI
@@ -70,24 +79,36 @@ export function usePagination<T>(
 	const canShowShowLess = enableShowAll && showAll;
 
 	// Navigation
+	console.log("[usePagination] Hook 5: useCallback(nextPage)");
 	const nextPage = useCallback(
 		() => setPage((p) => Math.min(totalPages, p + 1)),
 		[totalPages],
 	);
+	console.log("[usePagination] Hook 6: useCallback(prevPage)");
 	const prevPage = useCallback(() => setPage((p) => Math.max(1, p - 1)), []);
 	// Show More: show all items and reset to first page
+	console.log("[usePagination] Hook 7: useCallback(showMore)");
 	const showMore = useCallback(() => {
 		setShowAll(true);
 		setPage(1);
 	}, []);
 
 	// Show Less: return to paginated mode and reset to first page
+	console.log("[usePagination] Hook 8: useCallback(showLess)");
 	const showLess = useCallback(() => {
 		setShowAll(false);
 		setPage(1);
 	}, []);
 
 	const reset = showLess; // alias for backward compatibility
+
+	console.log("[usePagination] Hook COMPLETE", {
+		page,
+		totalPages,
+		pagedItemsLength: pagedItems.length,
+		showAll,
+		canShowPagination: !showAll && totalPages > 1,
+	});
 
 	return {
 		page,

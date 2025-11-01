@@ -60,9 +60,13 @@ export function useDataModuleGuardTelemetry({
         error,
         detail,
 }: GuardOptions): void {
+        console.log(`[useDataModuleGuardTelemetry] Hook starting for key: "${key}", surface: "${surface}"`);
+        console.log(`[useDataModuleGuardTelemetry] Hook 1: useRef(lastSignature)`);
         const lastSignature = useRef<string | null>(null);
 
+        console.log(`[useDataModuleGuardTelemetry] Hook 2: useEffect`);
         useEffect(() => {
+                console.log(`[useDataModuleGuardTelemetry] useEffect executing for key: "${key}"`, { status, hasData });
                 const errorMessage = toErrorMessage(error);
                 const shouldReport =
                         status === "error" ||
@@ -73,14 +77,17 @@ export function useDataModuleGuardTelemetry({
                 const signature = createSignature({ status, hasData, errorMessage, detail });
 
                 if (!shouldReport) {
+                        console.log(`[useDataModuleGuardTelemetry] Skipping report for key: "${key}" (shouldReport=false)`);
                         lastSignature.current = signature;
                         return;
                 }
 
                 if (lastSignature.current === signature) {
+                        console.log(`[useDataModuleGuardTelemetry] Skipping report for key: "${key}" (signature unchanged)`);
                         return;
                 }
 
+                console.log(`[useDataModuleGuardTelemetry] Reporting guard for key: "${key}"`, { signature });
                 reportDataModuleGuard({
                         key,
                         surface,
