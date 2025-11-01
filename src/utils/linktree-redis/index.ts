@@ -521,6 +521,20 @@ export function withUtm(
 			return url;
 		}
 
+		// If Notion UTMs are provided, remove all existing UTM parameters first
+		// to ensure clean replacement and avoid conflicts
+		if (notionUtms) {
+			const utmKeysToDelete: string[] = [];
+			for (const [key] of u.searchParams.entries()) {
+				if (key.startsWith("utm_")) {
+					utmKeysToDelete.push(key);
+				}
+			}
+			for (const key of utmKeysToDelete) {
+				u.searchParams.delete(key);
+			}
+		}
+
 		// Use Notion UTM values if provided, otherwise use defaults
 		if (notionUtms?.utm_source) {
 			u.searchParams.set("utm_source", notionUtms.utm_source);
