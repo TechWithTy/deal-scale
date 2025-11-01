@@ -1,8 +1,9 @@
+import path from "node:path";
 // next.config.ts
 import type { NextConfig } from "next";
-import path from "node:path";
 
 const nextConfig: NextConfig = {
+	// Optimize package imports to reduce bundle size
 	experimental: {
 		optimizePackageImports: [
 			"lucide-react",
@@ -11,6 +12,19 @@ const nextConfig: NextConfig = {
 			"@radix-ui/react-icons",
 		],
 	},
+	// Compiler optimizations
+	compiler: {
+		// Remove console.log in production (except console.error/warn)
+		// Saves ~2-5 KiB and improves performance slightly
+		removeConsole:
+			process.env.NODE_ENV === "production"
+				? {
+						exclude: ["error", "warn"],
+					}
+				: false,
+	},
+	// Swc minification is enabled by default in Next.js
+	// Additional optimizations handled via experimental flags above
 	env: {
 		STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
@@ -18,6 +32,13 @@ const nextConfig: NextConfig = {
 		STRIPE_WEB_SECRET: process.env.STRIPE_WEB_SECRET,
 	},
 	images: {
+		// Enable modern image formats (WebP/AVIF) for better compression
+		formats: ["image/avif", "image/webp"],
+		// Optimize image quality (balance between quality and size)
+		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+		// Minimum Cache TTL (in seconds) for optimized images
+		minimumCacheTTL: 60,
 		remotePatterns: [
 			{ protocol: "https", hostname: "dealscale.io" },
 			{ protocol: "https", hostname: "vectorlogo.zone" },
@@ -132,6 +153,24 @@ const nextConfig: NextConfig = {
 					{
 						key: "Cache-Control",
 						value: "public, max-age=2592000, must-revalidate",
+					},
+				],
+			},
+			{
+				source: "/images/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/assets/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
 					},
 				],
 			},

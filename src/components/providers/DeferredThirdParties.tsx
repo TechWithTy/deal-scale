@@ -2,343 +2,409 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type {
-        AnalyticsConfig,
-        AnalyticsField,
-        AnalyticsIssue,
+	AnalyticsConfig,
+	AnalyticsField,
+	AnalyticsIssue,
 } from "@/lib/analytics/config";
 
 import { useDeferredLoad } from "./useDeferredLoad";
 
 const ANALYTICS_FIELDS: AnalyticsField[] = [
-        "clarityId",
-        "gaId",
-        "gtmId",
-        "zohoCode",
-        "plausibleDomain",
-        "plausibleEndpoint",
+	"clarityId",
+	"gaId",
+	"gtmId",
+	"zohoCode",
+	"facebookPixelId",
+	"plausibleDomain",
+	"plausibleEndpoint",
 ];
 
 const DEFAULT_PLAUSIBLE_ENDPOINT = "https://plausible.io/api/event";
 
 const Analytics = dynamic(
-        () =>
-                import("@/components/analytics/Analytics").then((mod) => ({
-                        default: mod.Analytics,
-                })),
-        {
-                ssr: false,
-                loading: () => null,
-        },
+	() =>
+		import("@/components/analytics/Analytics").then((mod) => ({
+			default: mod.Analytics,
+		})),
+	{
+		ssr: false,
+		loading: () => null,
+	},
 );
 
 const DEFAULT_RETRY_DELAY_MS = 2000;
 const DEFAULT_MAX_RETRIES = 3;
 
 const warnLog = (message: string, data?: unknown) => {
-        console.warn("DeferredThirdParties", message, data);
+	console.warn("DeferredThirdParties", message, data);
 };
 
 const MicrosoftClarityScript = ({ projectId }: { projectId?: string }) => {
-        useEffect(() => {
-                if (!projectId || typeof window === "undefined") {
-                        return;
-                }
+	useEffect(() => {
+		if (!projectId || typeof window === "undefined") {
+			return;
+		}
 
-                if (document.getElementById("clarity-script")) {
-                        return;
-                }
+		if (document.getElementById("clarity-script")) {
+			return;
+		}
 
-                const script = document.createElement("script");
-                script.id = "clarity-script";
-                script.type = "text/javascript";
-                script.innerHTML = `
+		const script = document.createElement("script");
+		script.id = "clarity-script";
+		script.type = "text/javascript";
+		script.innerHTML = `
                         (function(c,l,a,r,i,t,y){
                                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
                         })(window, document, "clarity", "script", "${projectId}");
                 `;
-                document.head.appendChild(script);
+		document.head.appendChild(script);
 
-                return () => {
-                        document.getElementById("clarity-script")?.remove();
-                };
-        }, [projectId]);
+		return () => {
+			document.getElementById("clarity-script")?.remove();
+		};
+	}, [projectId]);
 
-        return null;
+	return null;
 };
 
 const PlausibleScript = ({
-        domain,
-        endpoint,
+	domain,
+	endpoint,
 }: {
-        domain?: string;
-        endpoint?: string;
+	domain?: string;
+	endpoint?: string;
 }) => {
-        useEffect(() => {
-                if (!domain || typeof window === "undefined") {
-                        return;
-                }
+	useEffect(() => {
+		if (!domain || typeof window === "undefined") {
+			return;
+		}
 
-                let isMounted = true;
+		let isMounted = true;
 
-                const load = async () => {
-                        try {
-                                const { init } = await import("@plausible-analytics/tracker");
-                                if (!isMounted) {
-                                        return;
-                                }
-                                init({
-                                        domain,
-                                        endpoint: endpoint || DEFAULT_PLAUSIBLE_ENDPOINT,
-                                        autoCapturePageviews: true,
-                                        captureOnLocalhost: false,
-                                });
-                        } catch (error) {
-                                warnLog("Failed to initialize Plausible Analytics.", error);
-                        }
-                };
+		const load = async () => {
+			try {
+				const { init } = await import("@plausible-analytics/tracker");
+				if (!isMounted) {
+					return;
+				}
+				init({
+					domain,
+					endpoint: endpoint || DEFAULT_PLAUSIBLE_ENDPOINT,
+					autoCapturePageviews: true,
+					captureOnLocalhost: false,
+				});
+			} catch (error) {
+				warnLog("Failed to initialize Plausible Analytics.", error);
+			}
+		};
 
-                void load();
+		void load();
 
-                return () => {
-                        isMounted = false;
-                };
-        }, [domain, endpoint]);
+		return () => {
+			isMounted = false;
+		};
+	}, [domain, endpoint]);
 
-        return null;
+	return null;
+};
+
+const FacebookPixelScript = ({ pixelId }: { pixelId?: string }) => {
+	useEffect(() => {
+		if (!pixelId || typeof window === "undefined") {
+			return;
+		}
+
+		if (window.fbq) {
+			// Already initialized
+			return;
+		}
+
+		let isMounted = true;
+
+		const load = async () => {
+			try {
+				const ReactPixel = await import("react-facebook-pixel");
+				if (!isMounted) {
+					return;
+				}
+				ReactPixel.default.init(pixelId);
+				// Track initial page view
+				ReactPixel.default.pageView();
+			} catch (error) {
+				warnLog("Failed to initialize Facebook Pixel.", error);
+			}
+		};
+
+		void load();
+
+		return () => {
+			isMounted = false;
+		};
+	}, [pixelId]);
+
+	return null;
 };
 
 function useZohoLoader(enabled: boolean, zohoCode?: string) {
-        useEffect(() => {
-                if (!enabled || !zohoCode || typeof window === "undefined") {
-                        return;
-                }
+	useEffect(() => {
+		if (!enabled || !zohoCode || typeof window === "undefined") {
+			return;
+		}
 
-                if (document.getElementById("zsiqscript")) {
-                        return;
-                }
+		if (document.getElementById("zsiqscript")) {
+			return;
+		}
 
-                window.$zoho = window.$zoho || {};
-                window.$zoho.salesiq = window.$zoho.salesiq || {
-                        widgetcode: "",
-                        values: {},
-                        ready: () => undefined,
-                };
+		window.$zoho = window.$zoho || {};
+		window.$zoho.salesiq = window.$zoho.salesiq || {
+			widgetcode: "",
+			values: {},
+			ready: () => undefined,
+		};
 
-                const script = document.createElement("script");
-                script.id = "zsiqscript";
-                script.src = `https://salesiq.zohopublic.com/widget?wc=${zohoCode}`;
-                script.async = true;
-                script.defer = true;
-                document.body.appendChild(script);
+		const script = document.createElement("script");
+		script.id = "zsiqscript";
+		script.src = `https://salesiq.zohopublic.com/widget?wc=${zohoCode}`;
+		script.async = true;
+		script.defer = true;
+		document.body.appendChild(script);
 
-                return () => {
-                        document.getElementById("zsiqscript")?.remove();
-                };
-        }, [enabled, zohoCode]);
+		return () => {
+			document.getElementById("zsiqscript")?.remove();
+		};
+	}, [enabled, zohoCode]);
 }
 
 interface ProviderResponse extends AnalyticsConfig {
-        warnings?: AnalyticsIssue[];
-        fallbacksUsed?: Partial<Record<AnalyticsField, boolean>>;
+	warnings?: AnalyticsIssue[];
+	fallbacksUsed?: Partial<Record<AnalyticsField, boolean>>;
 }
 
 interface DeferredThirdPartiesProps {
-        clarityProjectId?: string;
-        zohoWidgetCode?: string;
-        plausibleDomain?: string;
-        plausibleEndpoint?: string;
-        retryDelayMs?: number;
-        maxRetries?: number;
-        maxWaitMs?: number;
-        initialConfig?: Partial<AnalyticsConfig>;
+	clarityProjectId?: string;
+	zohoWidgetCode?: string;
+	facebookPixelId?: string;
+	plausibleDomain?: string;
+	plausibleEndpoint?: string;
+	retryDelayMs?: number;
+	maxRetries?: number;
+	maxWaitMs?: number;
+	initialConfig?: Partial<AnalyticsConfig>;
 }
 
 export function DeferredThirdParties({
-        clarityProjectId,
-        zohoWidgetCode,
-        plausibleDomain,
-        plausibleEndpoint,
-        retryDelayMs = DEFAULT_RETRY_DELAY_MS,
-        maxRetries = DEFAULT_MAX_RETRIES,
-        maxWaitMs,
-        initialConfig,
+	clarityProjectId,
+	zohoWidgetCode,
+	facebookPixelId,
+	plausibleDomain,
+	plausibleEndpoint,
+	retryDelayMs = DEFAULT_RETRY_DELAY_MS,
+	maxRetries = DEFAULT_MAX_RETRIES,
+	maxWaitMs,
+	initialConfig,
 }: DeferredThirdPartiesProps) {
-        const mergedInitialConfig = useMemo<AnalyticsConfig>(() => {
-                const base: AnalyticsConfig = {};
+	const mergedInitialConfig = useMemo<AnalyticsConfig>(() => {
+		const base: AnalyticsConfig = {};
 
-                const apply = (config?: Partial<AnalyticsConfig>) => {
-                        for (const field of ANALYTICS_FIELDS) {
-                                const value = config?.[field];
-                                if (value) {
-                                        base[field] = value;
-                                }
-                        }
-                };
+		const apply = (config?: Partial<AnalyticsConfig>) => {
+			for (const field of ANALYTICS_FIELDS) {
+				const value = config?.[field];
+				if (value) {
+					base[field] = value;
+				}
+			}
+		};
 
-                apply(initialConfig);
-                apply({
-                        clarityId: clarityProjectId,
-                        zohoCode: zohoWidgetCode,
-                        plausibleDomain,
-                        plausibleEndpoint,
-                });
+		apply(initialConfig);
+		apply({
+			clarityId: clarityProjectId,
+			zohoCode: zohoWidgetCode,
+			facebookPixelId,
+			plausibleDomain,
+			plausibleEndpoint,
+		});
 
-                return base;
-        }, [clarityProjectId, initialConfig, plausibleDomain, plausibleEndpoint, zohoWidgetCode]);
+		return base;
+	}, [
+		clarityProjectId,
+		initialConfig,
+		facebookPixelId,
+		plausibleDomain,
+		plausibleEndpoint,
+		zohoWidgetCode,
+	]);
 
-        const shouldLoad = useDeferredLoad(maxWaitMs);
-        const [providerData, setProviderData] = useState<ProviderResponse | null>(null);
-        const [config, setConfig] = useState<AnalyticsConfig>(mergedInitialConfig);
-        const [attempt, setAttempt] = useState(0);
-        const retryTimerRef = useRef<number | null>(null);
-        const errorLoggedRef = useRef(false);
+	const shouldLoad = useDeferredLoad(maxWaitMs);
+	const [providerData, setProviderData] = useState<ProviderResponse | null>(
+		null,
+	);
+	const [config, setConfig] = useState<AnalyticsConfig>(mergedInitialConfig);
+	const [attempt, setAttempt] = useState(0);
+	const retryTimerRef = useRef<number | null>(null);
+	const errorLoggedRef = useRef(false);
 
-        useEffect(() => {
-                setConfig((prev) => ({ ...mergedInitialConfig, ...prev }));
-        }, [mergedInitialConfig]);
+	useEffect(() => {
+		setConfig((prev) => ({ ...mergedInitialConfig, ...prev }));
+	}, [mergedInitialConfig]);
 
-        const needsServerConfig = useMemo(
-                () => ANALYTICS_FIELDS.some((field) => !config[field]),
-                [config],
-        );
+	const needsServerConfig = useMemo(
+		() => ANALYTICS_FIELDS.some((field) => !config[field]),
+		[config],
+	);
 
-        useEffect(() => {
-                return () => {
-                        if (retryTimerRef.current) {
-                                window.clearTimeout(retryTimerRef.current);
-                                retryTimerRef.current = null;
-                        }
-                };
-        }, []);
+	useEffect(() => {
+		return () => {
+			if (retryTimerRef.current) {
+				window.clearTimeout(retryTimerRef.current);
+				retryTimerRef.current = null;
+			}
+		};
+	}, []);
 
-        useEffect(() => {
-                if (shouldLoad && needsServerConfig) {
-                        setAttempt(0);
-                }
-        }, [needsServerConfig, shouldLoad]);
+	useEffect(() => {
+		if (shouldLoad && needsServerConfig) {
+			setAttempt(0);
+		}
+	}, [needsServerConfig, shouldLoad]);
 
-        const scheduleRetry = useCallback(() => {
-                if (typeof window === "undefined") {
-                        return;
-                }
+	const scheduleRetry = useCallback(() => {
+		if (typeof window === "undefined") {
+			return;
+		}
 
-                if (retryTimerRef.current) {
-                        window.clearTimeout(retryTimerRef.current);
-                }
+		if (retryTimerRef.current) {
+			window.clearTimeout(retryTimerRef.current);
+		}
 
-                retryTimerRef.current = window.setTimeout(() => {
-                        setAttempt((prev) => {
-                                if (prev >= maxRetries) {
-                                        return prev;
-                                }
+		retryTimerRef.current = window.setTimeout(() => {
+			setAttempt((prev) => {
+				if (prev >= maxRetries) {
+					return prev;
+				}
 
-                                return prev + 1;
-                        });
-                        retryTimerRef.current = null;
-                }, retryDelayMs);
-        }, [maxRetries, retryDelayMs]);
+				return prev + 1;
+			});
+			retryTimerRef.current = null;
+		}, retryDelayMs);
+	}, [maxRetries, retryDelayMs]);
 
-        useEffect(() => {
-                if (!shouldLoad || providerData || attempt > maxRetries || !needsServerConfig) {
-                        return;
-                }
+	useEffect(() => {
+		if (
+			!shouldLoad ||
+			providerData ||
+			attempt > maxRetries ||
+			!needsServerConfig
+		) {
+			return;
+		}
 
-                let isCancelled = false;
-                const controller = new AbortController();
+		let isCancelled = false;
+		const controller = new AbortController();
 
-                const fetchProviders = async () => {
-                        try {
-                                const response = await fetch("/api/init-providers", {
-                                        cache: "no-store",
-                                        signal: controller.signal,
-                                });
-                                const payload = await response.json();
+		const fetchProviders = async () => {
+			try {
+				const response = await fetch("/api/init-providers", {
+					cache: "no-store",
+					signal: controller.signal,
+				});
+				const payload = await response.json();
 
-                                if (!response.ok || payload.error) {
-                                        throw { status: response.status, body: payload };
-                                }
+				if (!response.ok || payload.error) {
+					throw { status: response.status, body: payload };
+				}
 
-                                if (isCancelled) {
-                                        return;
-                                }
+				if (isCancelled) {
+					return;
+				}
 
-                                setProviderData(payload as ProviderResponse);
-                                setConfig((prev) => ({ ...prev, ...payload }));
+				setProviderData(payload as ProviderResponse);
+				setConfig((prev) => ({ ...prev, ...payload }));
 
-                                if (Array.isArray(payload.warnings)) {
-                                        for (const issue of payload.warnings) {
-                                                warnLog(issue.message, issue);
-                                        }
-                                }
-                        } catch (error) {
-                                if (isCancelled) {
-                                        return;
-                                }
+				if (Array.isArray(payload.warnings)) {
+					for (const issue of payload.warnings) {
+						warnLog(issue.message, issue);
+					}
+				}
+			} catch (error) {
+				if (isCancelled) {
+					return;
+				}
 
-                                if (!errorLoggedRef.current) {
-                                        warnLog("Failed to load provider configuration.", error);
-                                        errorLoggedRef.current = true;
-                                }
-                                if (attempt < maxRetries) {
-                                        scheduleRetry();
-                                }
-                        }
-                };
+				if (!errorLoggedRef.current) {
+					warnLog("Failed to load provider configuration.", error);
+					errorLoggedRef.current = true;
+				}
+				if (attempt < maxRetries) {
+					scheduleRetry();
+				}
+			}
+		};
 
-                fetchProviders();
+		fetchProviders();
 
-                return () => {
-                        isCancelled = true;
-                        controller.abort();
-                };
-        }, [attempt, maxRetries, needsServerConfig, providerData, scheduleRetry, shouldLoad]);
+		return () => {
+			isCancelled = true;
+			controller.abort();
+		};
+	}, [
+		attempt,
+		maxRetries,
+		needsServerConfig,
+		providerData,
+		scheduleRetry,
+		shouldLoad,
+	]);
 
-        const clarityId = providerData?.clarityId ?? config.clarityId;
-        const zohoCode = providerData?.zohoCode ?? config.zohoCode;
-        const plausibleConfig = useMemo(
-                () => ({
-                        domain: providerData?.plausibleDomain ?? config.plausibleDomain,
-                        endpoint: providerData?.plausibleEndpoint ?? config.plausibleEndpoint,
-                }),
-                [
-                        config.plausibleDomain,
-                        config.plausibleEndpoint,
-                        providerData?.plausibleDomain,
-                        providerData?.plausibleEndpoint,
-                ],
-        );
-        const analyticsConfig = useMemo<Pick<AnalyticsConfig, "gaId" | "gtmId">>(
-                () => ({
-                        gaId: providerData?.gaId ?? config.gaId,
-                        gtmId: providerData?.gtmId ?? config.gtmId,
-                }),
-                [config.gaId, config.gtmId, providerData?.gaId, providerData?.gtmId],
-        );
+	const clarityId = providerData?.clarityId ?? config.clarityId;
+	const zohoCode = providerData?.zohoCode ?? config.zohoCode;
+	const resolvedFacebookPixelId =
+		providerData?.facebookPixelId ?? config.facebookPixelId;
+	const plausibleConfig = useMemo(
+		() => ({
+			domain: providerData?.plausibleDomain ?? config.plausibleDomain,
+			endpoint: providerData?.plausibleEndpoint ?? config.plausibleEndpoint,
+		}),
+		[
+			config.plausibleDomain,
+			config.plausibleEndpoint,
+			providerData?.plausibleDomain,
+			providerData?.plausibleEndpoint,
+		],
+	);
+	const analyticsConfig = useMemo<Pick<AnalyticsConfig, "gaId" | "gtmId">>(
+		() => ({
+			gaId: providerData?.gaId ?? config.gaId,
+			gtmId: providerData?.gtmId ?? config.gtmId,
+		}),
+		[config.gaId, config.gtmId, providerData?.gaId, providerData?.gtmId],
+	);
 
-        const shouldRender = Boolean(
-                analyticsConfig.gaId ||
-                        analyticsConfig.gtmId ||
-                        clarityId ||
-                        zohoCode ||
-                        plausibleConfig.domain,
-        );
+	const shouldRender = Boolean(
+		analyticsConfig.gaId ||
+			analyticsConfig.gtmId ||
+			clarityId ||
+			zohoCode ||
+			resolvedFacebookPixelId ||
+			plausibleConfig.domain,
+	);
 
-        useZohoLoader(shouldRender, zohoCode);
+	useZohoLoader(shouldRender, zohoCode);
 
-        if (!shouldRender) {
-                return null;
-        }
+	if (!shouldRender) {
+		return null;
+	}
 
-        return (
-                <>
-                        <Analytics config={analyticsConfig} />
-                        <MicrosoftClarityScript projectId={clarityId} />
-                        <PlausibleScript
-                                domain={plausibleConfig.domain}
-                                endpoint={plausibleConfig.endpoint}
-                        />
-                </>
-        );
+	return (
+		<>
+			<Analytics config={analyticsConfig} />
+			<MicrosoftClarityScript projectId={clarityId} />
+			<FacebookPixelScript pixelId={resolvedFacebookPixelId} />
+			<PlausibleScript
+				domain={plausibleConfig.domain}
+				endpoint={plausibleConfig.endpoint}
+			/>
+		</>
+	);
 }

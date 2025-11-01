@@ -14,7 +14,13 @@ declare global {
 		};
 		__analytics?: ReturnType<typeof Analytics>;
 		fbq?: (...args: unknown[]) => void;
+		// GTM dataLayer - compatible with Next.js third-parties/google types
+		// biome-ignore lint/complexity/noBannedTypes: Must match Next.js third-parties/google type definition
+		dataLayer?: Object[];
+		gtag?: (...args: unknown[]) => void;
 	}
 }
 
-export {};
+// Export type to make this a module for global augmentation
+type WindowAugmentation = Window;
+export type { WindowAugmentation };
