@@ -189,29 +189,63 @@ Compare to baseline:
 
 ## 🎬 Step-by-Step Testing Guide
 
-### Test 1: Initial Page Load
+### Test 1: Initial Page Load ⚠️ **IMPORTANT: Workaround for Reload Issue**
 
-1. Open React DevTools Profiler
-2. Click "Record"
-3. Reload page (`Ctrl+R` or `Cmd+R`)
-4. Wait for page to fully load
-5. Click "Stop"
+**Problem:** React DevTools reloads with the page, making it hard to capture initial load.
+
+**Solution - Method 1: Record Before Navigation (Recommended)**
+1. **Start with page already loaded** (any page on your site)
+2. Open React DevTools Profiler tab
+3. Click **"Record"** (red circle) - recording should start
+4. **Navigate to the page you want to test** (e.g., type `http://localhost:3000` in address bar and press Enter)
+   - OR use browser navigation to go to a different route
+5. Wait for page to fully load
+6. Click **"Stop"** to end recording
+
+**Solution - Method 2: Quick Reload**
+1. Open React DevTools Profiler tab
+2. Click **"Record"** immediately (as fast as possible)
+3. **Quickly press `Ctrl+R` or `Cmd+R`** to reload
+4. The Profiler should capture the reload
+5. Wait for page to fully load
+6. Click **"Stop"**
+
+**Solution - Method 3: Use Browser Performance Tab (Best for Initial Load)**
+1. Open browser DevTools (F12)
+2. Go to **"Performance"** tab (NOT React Profiler)
+3. Click **"Record"** (circle icon)
+4. Reload page (`Ctrl+R` or `Cmd+R`)
+5. Wait for page to fully load
+6. Click **"Stop"**
+7. This shows overall page load including React renders
+
+**Solution - Method 4: Record Multiple Commits**
+1. Start recording
+2. Reload page
+3. Let it record for 2-3 seconds after load
+4. Stop recording
+5. In the timeline, click on the **first commit** (leftmost) to see initial render
 
 **Expected Results:**
 - Only above-the-fold components render initially
 - Total commit time < 100ms (ideal)
-- Components like `AboutUsSection`, `Pricing`, `ContactForm` should NOT appear
+- Components like `AboutUsSection`, `Pricing`, `ContactForm` should NOT appear in the first commit
 
 ### Test 2: Scroll to Load Lazy Components
 
-1. Start recording
-2. Scroll down the page slowly
-3. Stop after scrolling past all sections
+1. **First, let the page fully load** (wait 2-3 seconds after initial load)
+2. Open React DevTools Profiler
+3. Click **"Record"**
+4. Scroll down the page slowly (at normal scroll speed)
+5. Stop after scrolling past all sections
 
 **Expected Results:**
 - Components appear as you scroll (triggered by `ViewportLazy`)
 - Each component loads separately (code splitting working)
+- New commits appear in timeline as components enter viewport
 - No unnecessary re-renders of already-loaded components
+
+**Tip:** You can see when components load by watching the commit timeline at the bottom - new commits appear as you scroll.
 
 ### Test 3: Interaction Testing
 
@@ -258,12 +292,47 @@ Compare to baseline:
 After running the Profiler, verify:
 
 - [ ] Initial load shows only `HeroSessionMonitorClientWithModal`, `Services`, `TrustedByScroller`
+  - **Check:** Look at the first commit in the timeline after reload
+  - **Filter:** Search for `AboutUsSection` - should NOT appear in first commit
 - [ ] Below-the-fold components (`AboutUsSection`, `CaseStudyGrid`, etc.) load on scroll
+  - **Check:** Scroll during recording - see new commits appear in timeline
 - [ ] Total commit time on initial load < 100ms
+  - **Check:** Bottom of Profiler shows total time for selected commit
 - [ ] No unnecessary re-renders when scrolling
+  - **Check:** Components should only render once when entering viewport
 - [ ] Components wrapped in `ViewportLazy` only render when in viewport
+  - **Check:** Components appear in timeline when scrolled into view, not before
 - [ ] Dynamic imports work (components load asynchronously)
+  - **Check:** Components appear in separate commits, not all at once
 - [ ] Memoized components don't re-render with same props
+  - **Check:** Click component, see "Why did this render?" - should not show unnecessary renders
+
+## 💡 Pro Tips for Load Testing
+
+### Tip 1: Use the Timeline
+- After recording, the timeline at the bottom shows all commits
+- **Click on the first commit** (leftmost) to see initial render
+- This is easier than trying to catch the reload
+
+### Tip 2: Filter Components
+- Use the search box to filter for specific components
+- Type `AboutUsSection` to see if it appears in first commit (it shouldn't)
+
+### Tip 3: Compare Commits
+- Click through different commits in the timeline
+- Compare first commit (initial load) vs later commits (after scroll)
+- First commit should have fewer components
+
+### Tip 4: Use Browser Performance Tab for Overall Load
+- Browser's Performance tab (not React Profiler) is better for:
+  - Overall page load time
+  - Network requests
+  - JavaScript execution time
+  - React Profiler is better for component-level analysis
+
+### Tip 5: Clear Cache Between Tests
+- Use `Ctrl+Shift+R` (or `Cmd+Shift+R`) for hard reload
+- This ensures you're testing fresh load, not cached resources
 
 ---
 
