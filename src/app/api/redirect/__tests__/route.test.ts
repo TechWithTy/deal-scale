@@ -3,10 +3,7 @@
  */
 
 // Import node-fetch Request/Response
-import {
-	Request as NodeRequest,
-	Response as NodeResponse,
-} from "node-fetch";
+import { Request as NodeRequest, Response as NodeResponse } from "node-fetch";
 
 // Mock NextResponse BEFORE importing route
 jest.mock("next/server", () => ({
@@ -22,9 +19,10 @@ jest.mock("next/server", () => ({
 			}),
 		redirect: (url: string | URL, status = 302) => {
 			const redirectUrl = typeof url === "string" ? url : url.toString();
-			const headers = new Headers();
-			headers.set("location", redirectUrl);
-			return new NodeResponse(null, {
+			const headers: Record<string, string> = {
+				location: redirectUrl,
+			};
+			return new NodeResponse(undefined, {
 				status,
 				headers,
 			});
@@ -37,12 +35,13 @@ global.fetch = jest.fn();
 
 // Make Request/Response available globally for Next.js imports
 if (typeof global.Request === "undefined") {
-	global.Request = NodeRequest as typeof Request;
+	global.Request = NodeRequest as unknown as typeof Request;
 }
 if (typeof global.Response === "undefined") {
-	global.Response = NodeResponse as typeof Response;
+	global.Response = NodeResponse as unknown as typeof Response;
 }
 
+// @ts-expect-error - TypeScript excludes test files, but module resolution works at runtime
 import { GET } from "@/app/api/redirect/route";
 
 // Mock environment variables
@@ -52,7 +51,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-	delete process.env.NOTION_KEY;
+	process.env.NOTION_KEY = undefined;
 });
 
 describe("redirect route with UTM parameter preservation", () => {
@@ -68,7 +67,7 @@ describe("redirect route with UTM parameter preservation", () => {
 			});
 		}
 		// Create Request from node-fetch which is available in Jest environment
-		return new NodeRequest(url.toString());
+		return new NodeRequest(url.toString()) as unknown as Request;
 	};
 
 	test("preserves UTM parameters for absolute URLs", async () => {
@@ -111,7 +110,7 @@ describe("redirect route with UTM parameter preservation", () => {
 		expect(response?.status).toBe(302);
 		const location = response?.headers.get("location");
 		expect(location).toBeTruthy();
-		
+
 		if (location) {
 			// UTM params should be preserved
 			expect(location).toContain("utm_source=test-source");
@@ -180,7 +179,9 @@ describe("redirect route with UTM parameter preservation", () => {
 
 		const location = response.headers.get("location");
 		// URLSearchParams encodes spaces as + (both %20 and + are valid)
-		expect(location).toMatch(/utm_source=test[\s+%20]source[\s+%20]with[\s+%20]spaces/);
+		expect(location).toMatch(
+			/utm_source=test[\s+%20]source[\s+%20]with[\s+%20]spaces/,
+		);
 		expect(location).toContain("utm_campaign=campaign%26special%3Dchars");
 	});
 
@@ -213,15 +214,15 @@ describe("redirect route with UTM parameter preservation", () => {
 
 		// Verify increment was called
 		expect(global.fetch).toHaveBeenCalled();
-		const incrementCall = (global.fetch as jest.Mock).mock.calls.find(
-			(call) => call[0]?.includes("pages/test-page-id"),
+		const incrementCall = (global.fetch as jest.Mock).mock.calls.find((call) =>
+			call[0]?.includes("pages/test-page-id"),
 		);
 		expect(incrementCall).toBeDefined();
 	});
 
 	test("handles missing 'to' parameter", async () => {
 		const url = new URL("https://example.com/api/redirect");
-		const req = new Request(url.toString());
+		const req = new NodeRequest(url.toString()) as unknown as Request;
 
 		const response = await GET(req);
 		const json = await response.json();
