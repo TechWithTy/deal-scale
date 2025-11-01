@@ -15,6 +15,7 @@
     <objective>Enable SSR/ISR for /events, including dynamic slug pages.</objective>
     <objective>Integrate dynamic Schema.org JSON-LD injection across routes using a shared seo-core library.</objective>
     <objective>Add /partners and /careers (Zoho Recruit integration) with structured data.</objective>
+    <objective>Add /linktree (Notion-powered resource hub) with ItemList schema for discoverability.</objective>
     <objective>Ensure AI and search engines can parse all public pages for entity context.</objective>
     <objective>Keep app.dealscale.io private yet contextually indexed as a SoftwareApplication schema.</objective>
   </objectives>
@@ -124,6 +125,32 @@
           }
         </json>
       </example>
+    </task>
+  </phase>
+
+  <phase id="linktree" title="LinkTree Resource Hub Integration">
+    <task>
+      <title>Setup /linktree Route with SEO</title>
+      <path>src/app/linktree/page.tsx</path>
+      <description>
+        ✅ Complete: Dynamic resource hub that fetches links from Notion database.
+        - Added ItemList schema for structured data
+        - Added SEO metadata (title, description, OpenGraph)
+        - Included in sitemap for discoverability
+        - Fetches from `/api/linktree` which queries Notion database (NOTION_REDIRECTS_ID)
+        - Revalidates every 300 seconds for fresh content
+        - Links include UTM tracking and click analytics
+      </description>
+    </task>
+
+    <task>
+      <title>ItemList Schema for LinkTree</title>
+      <path>src/lib/linktree/schemaBuilders.ts</path>
+      <description>
+        ✅ Complete: Created `buildLinkTreeItemListSchema()` that generates ItemList schema
+        for all links in the linktree. Each link includes position, URL, name, description,
+        and nested WebPage item for richer structured data.
+      </description>
     </task>
   </phase>
 
@@ -237,6 +264,7 @@
       <details>
         Submit new sitemaps (www + careers).
         Enable job posting monitoring under Google Index > Job listings.
+        ✅ **Careers Integration Complete**: Added Zoho Recruit careers URL to Organization schema and enabled indexing.
       </details>
     </task>
   </phase>

@@ -3,16 +3,16 @@ import type { NextConfig } from "next";
 import path from "node:path";
 
 const nextConfig: NextConfig = {
-        experimental: {
-                optimizePackageImports: [
-                        "lucide-react",
-                        "framer-motion",
-                        "react-hot-toast",
-                        "@radix-ui/react-icons",
-                ],
-        },
-        env: {
-                STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+	experimental: {
+		optimizePackageImports: [
+			"lucide-react",
+			"framer-motion",
+			"react-hot-toast",
+			"@radix-ui/react-icons",
+		],
+	},
+	env: {
+		STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
 			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
 		STRIPE_WEB_SECRET: process.env.STRIPE_WEB_SECRET,
@@ -48,13 +48,12 @@ const nextConfig: NextConfig = {
 			{ protocol: "https", hostname: "thebuyoutcompany.com" },
 			{ protocol: "https", hostname: "www.cretech.com" },
 			{ protocol: "https", hostname: "www.housingwire.com" },
-
 		],
 	},
 
 	// * Add redirect from /careers to external Zoho Recruit careers page
-        async redirects() {
-                return [
+	async redirects() {
+		return [
 			{
 				source: "/projects",
 				destination: "/portfolio",
@@ -63,7 +62,7 @@ const nextConfig: NextConfig = {
 			{
 				source: "/careers",
 				destination: "https://dealscale.zohorecruit.com/jobs/Careers",
-				permanent: false, // ! Use false for temporary redirect; set to true if this should be permanent
+				permanent: true, // ✅ Permanent redirect to pass link equity to careers portal
 			},
 			{
 				source: "/support",
@@ -105,39 +104,39 @@ const nextConfig: NextConfig = {
 					"https://cal.com/cyber-oni-solutions-inc/investor-pitch-deck-deal-scale",
 				permanent: true,
 			},
-                ];
-        },
-        async headers() {
-                return [
-                        {
-                                source: "/_next/static/:path*",
-                                headers: [
-                                        {
-                                                key: "Cache-Control",
-                                                value: "public, max-age=31536000, immutable",
-                                        },
-                                ],
-                        },
-                        {
-                                source: "/_next/image",
-                                headers: [
-                                        {
-                                                key: "Cache-Control",
-                                                value: "public, max-age=31536000, immutable",
-                                        },
-                                ],
-                        },
-                        {
-                                source: "/:all*(svg|png|jpg|jpeg|gif|webp|avif|woff2)",
-                                headers: [
-                                        {
-                                                key: "Cache-Control",
-                                                value: "public, max-age=2592000, must-revalidate",
-                                        },
-                                ],
-                        },
-                ];
-        },
+		];
+	},
+	async headers() {
+		return [
+			{
+				source: "/_next/static/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/_next/image",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/:all*(svg|png|jpg|jpeg|gif|webp|avif|woff2)",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=2592000, must-revalidate",
+					},
+				],
+			},
+		];
+	},
 };
 
 export default nextConfig;

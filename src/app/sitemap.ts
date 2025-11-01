@@ -50,8 +50,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 "/features",
                 "/tos",
                 "/products",
+                "/careers", // ✅ Include careers for SEO signals (redirects to Zoho Recruit)
+                "/linktree", // ✅ Include linktree for discoverability (fetches from Notion)
         ];
-        // ! /careers is intentionally excluded because the Next.js redirect points to Zoho Recruit.
+        // ! /careers redirects to Zoho Recruit but is included for SEO discoverability
+        // ! /linktree is a dynamic resource hub that fetches links from Notion database
 
 	const staticPages = staticPaths.map((path) => {
 		// Get SEO data for the path, fallback to empty object with SeoMeta type
