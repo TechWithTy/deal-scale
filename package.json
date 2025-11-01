@@ -51,7 +51,9 @@
                         "edge >= 90",
                         "firefox >= 90",
                         "safari >= 15",
-                        "supports es6-module"
+                        "supports es6-module",
+                        "supports async-functions",
+                        "supports object-values"
                 ],
                 "development": [
                         "last 1 chrome version",
