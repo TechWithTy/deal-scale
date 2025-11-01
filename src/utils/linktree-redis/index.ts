@@ -60,6 +60,13 @@ export type LinkTreeItem = {
 	highlighted?: boolean;
 	// Derived from Notion 'Redirect Type' single select: External => true
 	redirectExternal?: boolean;
+	// UTM parameters from Notion
+	utm_source?: string;
+	utm_medium?: string;
+	utm_campaign?: string;
+	utm_content?: string;
+	utm_term?: string;
+	utm_offer?: string;
 };
 
 function coerceBool(v: unknown): boolean {
@@ -388,6 +395,13 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		}
 
 		const hasFiles = Array.isArray(files) && files.length > 0;
+		
+		// Extract UTM parameters from Notion
+		// Handle "UTM Campaign (Relation)" property name - use it if available, otherwise fallback to "UTM Campaign"
+		const utmCampaignRelation = getUtmValue(props?.["UTM Campaign (Relation)"]);
+		const utmCampaignRegular = getUtmValue(props?.["UTM Campaign"]);
+		const utm_campaign = utmCampaignRelation || utmCampaignRegular;
+
 		if (slug && linkTreeEnabled && (Boolean(destination) || hasFiles)) {
 			results.push({
 				slug,
@@ -403,6 +417,13 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 				files,
 				linkTreeEnabled,
 				redirectExternal,
+				// UTM parameters from Notion
+				utm_source: getUtmValue(props?.["UTM Source"]),
+				utm_medium: getUtmValue(props?.["UTM Medium"]),
+				utm_campaign,
+				utm_content: getUtmValue(props?.["UTM Content"]),
+				utm_term: getUtmValue(props?.["UTM Term"]),
+				utm_offer: getUtmValue(props?.["UTM Offer"]),
 			});
 		}
 	}
@@ -422,7 +443,25 @@ export async function fetchLinkTreeItems(): Promise<LinkTreeItem[]> {
 	return fetchFromNotion();
 }
 
-export function withUtm(url: string, slug: string): string {
+/**
+ * Adds UTM parameters to a URL, using Notion UTM values if provided, otherwise defaults.
+ * @param url - The destination URL
+ * @param slug - The slug (used as default campaign if no Notion UTM campaign)
+ * @param notionUtms - Optional UTM parameters from Notion
+ * @returns URL with UTM parameters added
+ */
+export function withUtm(
+	url: string,
+	slug: string,
+	notionUtms?: {
+		utm_source?: string;
+		utm_medium?: string;
+		utm_campaign?: string;
+		utm_content?: string;
+		utm_term?: string;
+		utm_offer?: string;
+	},
+): string {
 	try {
 		const u = new URL(url, "http://dummy.base");
 		// Internal path: do not alter
@@ -444,10 +483,35 @@ export function withUtm(url: string, slug: string): string {
 			return url;
 		}
 
-		if (!u.searchParams.get("utm_source"))
+		// Use Notion UTM values if provided, otherwise use defaults
+		if (notionUtms?.utm_source) {
+			u.searchParams.set("utm_source", notionUtms.utm_source);
+		} else if (!u.searchParams.get("utm_source")) {
 			u.searchParams.set("utm_source", sourceHost);
-		if (!u.searchParams.get("utm_campaign"))
+		}
+
+		if (notionUtms?.utm_campaign) {
+			u.searchParams.set("utm_campaign", notionUtms.utm_campaign);
+		} else if (!u.searchParams.get("utm_campaign")) {
 			u.searchParams.set("utm_campaign", slug);
+		}
+
+		if (notionUtms?.utm_medium && !u.searchParams.get("utm_medium")) {
+			u.searchParams.set("utm_medium", notionUtms.utm_medium);
+		}
+
+		if (notionUtms?.utm_content && !u.searchParams.get("utm_content")) {
+			u.searchParams.set("utm_content", notionUtms.utm_content);
+		}
+
+		if (notionUtms?.utm_term && !u.searchParams.get("utm_term")) {
+			u.searchParams.set("utm_term", notionUtms.utm_term);
+		}
+
+		if (notionUtms?.utm_offer && !u.searchParams.get("utm_offer")) {
+			u.searchParams.set("utm_offer", notionUtms.utm_offer);
+		}
+
 		return u.toString();
 	} catch {
 		return url;

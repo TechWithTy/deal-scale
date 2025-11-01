@@ -54,9 +54,18 @@ export default async function LinkTreePage() {
 	}
 	const data = (await resp.json()) as { ok: boolean; items?: LinkTreeItem[] };
 	const raw: LinkTreeItem[] = Array.isArray(data.items) ? data.items : [];
-	// Build counted redirect hrefs
+	// Build counted redirect hrefs with UTM parameters from Notion
 	const items: LinkTreeItem[] = raw.map((it) => {
-		const target = withUtm(it.destination, it.slug);
+		// Pass Notion UTM values to withUtm function
+		const notionUtms = {
+			utm_source: it.utm_source,
+			utm_medium: it.utm_medium,
+			utm_campaign: it.utm_campaign,
+			utm_content: it.utm_content,
+			utm_term: it.utm_term,
+			utm_offer: it.utm_offer,
+		};
+		const target = withUtm(it.destination, it.slug, notionUtms);
 		const to = encodeURIComponent(target);
 		const pid = it.pageId ? `&pageId=${encodeURIComponent(it.pageId)}` : "";
 		const s = it.slug ? `&slug=${encodeURIComponent(it.slug)}` : "";

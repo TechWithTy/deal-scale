@@ -33,6 +33,13 @@ export type MappedLinkTree = {
 	}>;
 	linkTreeEnabled?: boolean;
 	highlighted?: boolean;
+	// UTM parameters from Notion
+	utm_source?: string;
+	utm_medium?: string;
+	utm_campaign?: string;
+	utm_content?: string;
+	utm_term?: string;
+	utm_offer?: string;
 };
 
 export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
@@ -300,6 +307,19 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		}
 	}
 
+	// Extract UTM parameters from Notion properties
+	const getSelectValue = (prop: unknown): string | undefined => {
+		const sel = prop as NotionSelectProperty | undefined;
+		return sel?.type === "select" ? sel.select?.name : undefined;
+	};
+
+	// Handle "UTM Campaign (Relation)" property name - use it if available, otherwise fallback to "UTM Campaign"
+	const utmCampaignRelation = getSelectValue(
+		props["UTM Campaign (Relation)"],
+	);
+	const utmCampaignRegular = getSelectValue(props["UTM Campaign"]);
+	const utm_campaign = utmCampaignRelation || utmCampaignRegular;
+
 	return {
 		pageId: page.id,
 		slug,
@@ -316,5 +336,12 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		files,
 		linkTreeEnabled,
 		highlighted,
+		// UTM parameters from Notion
+		utm_source: getSelectValue(props["UTM Source"]),
+		utm_medium: getSelectValue(props["UTM Medium"]),
+		utm_campaign,
+		utm_content: getSelectValue(props["UTM Content"]),
+		utm_term: getSelectValue(props["UTM Term"]),
+		utm_offer: getSelectValue(props["UTM Offer"]),
 	};
 }
