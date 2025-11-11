@@ -9,6 +9,12 @@
 
 DealScale is a cutting-edge platform that leverages AI to transform business operations, providing intelligent solutions for deal management, customer engagement, and data-driven decision making.
 
+## 📚 DeepWiki Documentation
+
+For full architecture details, setup notes, and AI workflow patterns for our sales automation stack, see:
+
+[DealScale – Deal Scale Startup Marketing Front End (DeepWiki)](https://deepwiki.com/TechWithTy/deal-scale)
+
 ## ✨ Features
 
 - **AI-Powered Analytics**: Get actionable insights from your business data
