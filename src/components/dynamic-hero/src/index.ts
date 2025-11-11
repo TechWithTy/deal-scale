@@ -1,0 +1,12 @@
+export * from "./components/hero-video-dialog";
+export * from "./components/hero-video-preview";
+export * from "./components/hero-aurora";
+export * from "./components/hero-headline";
+export * from "./components/text-flip-highlight";
+export { default as PersonaCTA } from "./components/PersonaCTA";
+export * from "./fixtures/social-proof";
+export * from "./types/copy";
+export * from "./types/video";
+export * from "./types/social-proof";
+export * from "./utils/copy";
+export * from "./utils/video";

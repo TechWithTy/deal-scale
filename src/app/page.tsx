@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
 import Services from "@/components/home/Services";
 // Above-the-fold components (eager load for LCP)
-import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
+import LiveDynamicHero from "@/components/home/heros/live-dynamic-hero-demo/page";
 
 // Below-the-fold components (lazy load with dynamic imports for code splitting)
 const AboutUsSection = dynamic(
@@ -166,7 +166,7 @@ const Index = async ({
 	const posts = await getLatestBeehiivPosts();
 	return (
 		<>
-			<HeroSessionMonitorClientWithModal />
+			<LiveDynamicHero />
 			<TrustedByScroller variant="default" items={companyLogos} />
 			{/* Separator for mobile only with half margin */}
 			<div className="sm:hidden">

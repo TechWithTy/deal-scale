@@ -1,0 +1,22 @@
+{
+  "title": "AI Inbound Agent FAQs",
+  "subtitle": "Your questions about our automated inbound call agent.",
+  "faqItems": [
+    {
+      "question": "How do I get a phone number for my campaign?",
+      "answer": "Within your Deal Scale dashboard, you can instantly provision a unique local phone number for any marketing campaign. This allows you to track the performance of each channel."
+    },
+    {
+      "question": "What if the caller is a solicitor or not a real lead?",
+      "answer": "The AI is trained to recognize and politely disengage from non-relevant calls, like solicitations. This acts as a powerful filter, ensuring you only spend your time and credits on genuine prospects."
+    },
+    {
+      "question": "Can the AI handle multiple calls at once?",
+      "answer": "Yes. Unlike a human receptionist, the AI can handle a virtually unlimited number of simultaneous inbound calls, making it perfect for handling the response spike from a large marketing campaign."
+    },
+    {
+      "question": "Can I listen to the calls the AI handles?",
+      "answer": "Yes. Every call is recorded and transcribed directly in your CRM. You can review the full conversation at any time to gain insights into your leads' needs and pain points."
+    }
+  ]
+}

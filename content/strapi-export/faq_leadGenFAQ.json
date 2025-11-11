@@ -1,0 +1,30 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Everything you need to know about our Lead Generation service.",
+  "faqItems": [
+    {
+      "question": "Where does your lead data come from?",
+      "answer": "Our platform aggregates data from a multitude of public and private sources, including county records, tax assessments, and other proprietary data providers. This gives us a comprehensive database of over 140 million on-market and off-market properties across the U.S."
+    },
+    {
+      "question": "How is this different from just buying lists from a list broker?",
+      "answer": "Deal Scale is a dynamic, all-in-one platform, not a static list provider. While list brokers provide a one-time data dump that quickly becomes outdated, our database is constantly updated. Furthermore, our AI-powered filters and lead scoring allow you to build highly targeted, high-potential lists on demand and seamlessly push them into automated outreach campaigns. It's the difference between being handed a phone book and being given a GPS that leads you directly to the best deals. [1, 2, 3]"
+    },
+    {
+      "question": "How does the AI Lead Scoring work?",
+      "answer": "Our AI analyzes thousands of data points for each property, including ownership history, loan information, local market trends, and other behavioral indicators. It then assigns a score based on the likelihood of the owner being a motivated seller, allowing you to prioritize your outreach and focus on the leads most likely to convert. [3, 4, 5]"
+    },
+    {
+      "question": "Can I target a specific neighborhood or zip code?",
+      "answer": "Absolutely. Our platform allows for granular geographic targeting. You can define your search area by state, county, city, zip code, or even by drawing a custom shape on a map to create hyper-local lead lists tailored to your investment strategy."
+    },
+    {
+      "question": "Is this service suitable for a new investor or wholesaler?",
+      "answer": "Yes. Deal Scale is designed to help both new and experienced professionals. For new investors, it dramatically shortens the learning curve and eliminates the need for manual prospecting, providing instant access to high-quality leads. For experienced teams, it provides the tools to scale operations, enter new markets, and create a more predictable and efficient deal pipeline. [4]"
+    },
+    {
+      "question": "How fresh is the data?",
+      "answer": "Our data is updated on a continuous basis. We sync with our providers regularly to ensure you have the most current ownership information, property details, and contact data available, which is crucial for maximizing your connection rates and ROI."
+    }
+  ]
+}

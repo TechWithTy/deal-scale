@@ -1,0 +1,22 @@
+{
+  "title": "Email Intelligence FAQs",
+  "subtitle": "Your questions about our deep-dive email discovery tool.",
+  "faqItems": [
+    {
+      "question": "Is this tool legal to use?",
+      "answer": "Yes, absolutely. Our tool only aggregates data that is already publicly available on the internet through Open-Source Intelligence (OSINT) methods. It does not access any private databases."
+    },
+    {
+      "question": "How does it find the email addresses?",
+      "answer": "When you provide a name and company domain, our system intelligently generates a list of the most common email patterns used by organizations (e.g., `first.last@`, `f.last@`) to give you a powerful and accurate starting point for your outreach."
+    },
+    {
+      "question": "Is there a limit on how many emails I can check?",
+      "answer": "No. As an active Deal Scale subscriber, you receive free and unlimited access to the Email Intelligence tool."
+    },
+    {
+      "question": "What social media platforms does it check?",
+      "answer": "It checks for profiles across a wide range of popular platforms, including LinkedIn, Instagram, X (Twitter), Spotify, Adobe, and many more, to provide a comprehensive view of a lead's digital presence."
+    }
+  ]
+}

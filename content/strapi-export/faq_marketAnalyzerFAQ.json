@@ -1,0 +1,18 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to common questions about the Deal Scale Rental Market Analyzer.",
+  "faqItems": [
+    {
+      "question": "How is this different from the AI Rent Estimator?",
+      "answer": "The Rent Estimator is for analyzing a *single property address* to find its specific rent value. The Market Analyzer is for analyzing an *entire zip code* to understand broad market trends, averages, and investment potential."
+    },
+    {
+      "question": "Where does your data come from?",
+      "answer": "Our data is aggregated from millions of active listings, Multiple Listing Services (MLS), and proprietary public record data. Our system updates over 500,000 property records daily to ensure the highest accuracy."
+    },
+    {
+      "question": "Can I use this to find specific properties for sale?",
+      "answer": "This tool is designed for analyzing the health of a market. Once you identify a promising zip code, you can use our other Deal Scale tools, like Lead Generation, to find specific on-market and off-market properties within that area."
+    }
+  ]
+}

@@ -1,4 +1,0 @@
-{
-  "problem": "I don't know if a company is a legitimate, active business or just a shell.",
-  "solution": "Find hidden subdomains (e.g., 'portal.company.com', 'app.company.com') which indicate active, internal business operations and provide a fuller picture of their digital landscape."
-}

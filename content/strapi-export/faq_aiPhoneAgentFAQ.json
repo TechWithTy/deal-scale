@@ -1,0 +1,22 @@
+{
+  "title": "AI Phone Agent FAQs",
+  "subtitle": "Your questions about our automated calling agent.",
+  "faqItems": [
+    {
+      "question": "Does this sound like a typical robocall?",
+      "answer": "Absolutely not. We use cutting-edge voice synthesis and natural language processing to create a conversational experience that is fluid and human-like. The goal is to engage, not to sound like a machine."
+    },
+    {
+      "question": "What happens if the AI reaches a voicemail?",
+      "answer": "The AI intelligently detects a voicemail and can leave a pre-recorded, natural-sounding message with your callback information. It will then automatically schedule a follow-up call at a later time."
+    },
+    {
+      "question": "Can I customize the scripts the AI uses?",
+      "answer": "Our standard scripts are optimized based on thousands of calls to be highly effective. For our Enterprise clients, we offer the ability to work with our team to create fully custom conversation flows."
+    },
+    {
+      "question": "What phone number does the AI call from?",
+      "answer": "The AI calls from a unique local phone number assigned to your campaign. This builds trust with leads and ensures that when they call back, the AI can answer with the correct context."
+    }
+  ]
+}

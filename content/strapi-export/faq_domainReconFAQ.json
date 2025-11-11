@@ -1,0 +1,22 @@
+{
+  "title": "Domain Recon FAQs",
+  "subtitle": "Your questions about our website intelligence tool, answered.",
+  "faqItems": [
+    {
+      "question": "Is this tool legal to use?",
+      "answer": "Yes, 100%. Our tool only gathers Open-Source Intelligence (OSINT), which is data that is already publicly available. It does not access any private systems or perform any illegal hacking."
+    },
+    {
+      "question": "What's the difference between 'Standard' and 'Deep Recon'?",
+      "answer": "The Standard search uses free, public sources like search engines. The Deep Recon uses your AI Credits to access our paid, premium API subscriptions to specialized services, providing much deeper and more accurate data, like direct emails from Hunter.io or subdomains from enterprise-grade sources."
+    },
+    {
+      "question": "What is a 'subdomain' and why is it useful?",
+      "answer": "A subdomain is a prefix to a domain (e.g., 'portal.company.com'). Finding them can reveal hidden login pages or internal applications, giving you clues about a company's operations and legitimacy."
+    },
+    {
+      "question": "Do I need to get my own API keys for the premium searches?",
+      "answer": "No. That's the advantage of our platform. The Deep Recon search uses our integrated, pre-paid API keys to access these powerful tools. You simply use your universal AI credits."
+    }
+  ]
+}

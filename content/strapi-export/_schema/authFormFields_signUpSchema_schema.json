@@ -1,0 +1,39 @@
+{
+  "kind": "zodObject",
+  "fields": {
+    "email": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "email": true
+    },
+    "first_name": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1
+    },
+    "last_name": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1
+    },
+    "password": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 8
+    },
+    "confirm_password": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false
+    }
+  }
+}

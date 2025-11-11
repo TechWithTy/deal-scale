@@ -1,0 +1,29 @@
+{
+  "id": "free-resource-abtest-market-metrics",
+  "name": "Market Metrics Snapshot Messaging",
+  "description": "Clarify the value of the live metrics toolkit for investors watching multiple territories.",
+  "startDate": "2024-09-01T00:00:00.000Z",
+  "isActive": true,
+  "variants": [
+    {
+      "name": "Insight Focus",
+      "percentage": 100,
+      "copy": {
+        "cta": "Open the Market Dashboard",
+        "buttonCta": "Launch the Snapshot",
+        "tagline": "Track rent, absorption, and comps in one place.",
+        "subtitle": "Always-fresh KPIs curated from MLS, census, and Deal Scale's proprietary dataset.",
+        "description": "Monitor the metrics that matter before you deploy marketing dollars—inventory shifts, rent velocity, and neighborhood absorption trends.",
+        "whatsInItForMe": "Spot which submarkets deserve campaigns this week without pulling a dozen reports.",
+        "target_audience": "Data-driven investors and marketing leads",
+        "pain_point": "Collecting market stats is fragmented across MLS exports, spreadsheets, and old reports.",
+        "solution": "Get a single dashboard that updates itself so you always know where to focus sourcing efforts.",
+        "highlights": [
+          "Weekly refreshed KPIs",
+          "Neighborhood-level filters",
+          "Portfolio benchmark comparisons"
+        ]
+      }
+    }
+  ]
+}

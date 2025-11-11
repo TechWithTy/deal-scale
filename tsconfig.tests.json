@@ -3,7 +3,13 @@
         "compilerOptions": {
                 "types": ["jest", "@testing-library/jest-dom"],
                 "noEmit": true,
-                "jsx": "react-jsx"
+                "jsx": "react-jsx",
+                "baseUrl": ".",
+                "paths": {
+                        "@/*": ["./src/*"],
+                        "@external/dynamic-hero": ["./src/components/dynamic-hero/src/index.ts"],
+                        "@external/dynamic-hero/*": ["./src/components/dynamic-hero/src/*"]
+                }
         },
         "include": [
                 "src",

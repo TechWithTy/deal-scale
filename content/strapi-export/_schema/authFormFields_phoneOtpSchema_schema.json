@@ -1,0 +1,19 @@
+{
+  "kind": "zodObject",
+  "fields": {
+    "phone_number": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1
+    },
+    "otp_code": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1
+    }
+  }
+}

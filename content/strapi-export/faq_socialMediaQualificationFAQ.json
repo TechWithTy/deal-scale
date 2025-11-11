@@ -1,0 +1,22 @@
+{
+  "title": "AI Social Media Qualification FAQs",
+  "subtitle": "Find answers to common questions about our AI Social Media Qualification Agent.",
+  "faqItems": [
+    {
+      "question": "Is this compliant with Meta's (Facebook/Instagram) policies?",
+      "answer": "Yes, 100%. Our system uses the official Meta API for Messenger, which is the approved and compliant way to build messaging automations. Your account's safety is our top priority."
+    },
+    {
+      "question": "Can the AI reply to comments on my posts and ads?",
+      "answer": "Absolutely. You can configure the agent to post a public reply to a comment (e.g., 'Thanks, I've just sent you a DM!') and simultaneously initiate a private conversation in their direct messages to start the qualification process."
+    },
+    {
+      "question": "How customizable are the automated conversations?",
+      "answer": "Currently, advanced workflow and conversation customizations are only available for our Enterprise members. If you're interested in these features, please contact our team to discuss an upgrade."
+    },
+    {
+      "question": "What happens if a user wants to speak to a real person?",
+      "answer": "Our AI can automatically schedule an appointment with your team or initiate a hot transfer to a live representative, ensuring interested leads are promptly connected to a real person without any manual intervention."
+    }
+  ]
+}

@@ -1,4 +1,0 @@
-{
-  "problem": "I have a property address, but no idea who the owner is or how to contact them.",
-  "solution": "Our Reverse Address API enriches a physical address with current owner names, phone numbers, and email addresses."
-}

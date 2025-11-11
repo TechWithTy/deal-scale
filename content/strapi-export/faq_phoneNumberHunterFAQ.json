@@ -1,0 +1,26 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Everything you need to know about your free skip tracing tool.",
+  "faqItems": [
+    {
+      "question": "Is this tool really free?",
+      "answer": "Yes, 100%. The Phone Number Hunter is a value-add tool included with every active Deal Scale subscription. There are no per-lookup fees or credits required to use it."
+    },
+    {
+      "question": "Are there any usage limits?",
+      "answer": "No. As a subscriber, you get unlimited lookups. We want you to use this tool to vet every single inbound call and raw number you receive to maximize your efficiency."
+    },
+    {
+      "question": "How is this different from your bulk skip tracing service?",
+      "answer": "The Phone Number Hunter is designed for quick, single lookups on the fly. Our premium bulk skip tracing service is built to enrich entire lists of thousands of properties with comprehensive contact data all at once."
+    },
+    {
+      "question": "How accurate is the owner's name?",
+      "answer": "The data is highly accurate as it's sourced in real-time from carrier and public records. Keep in mind, the owner's name reflects the account holder, which might differ from the daily user in cases like a family plan."
+    },
+    {
+      "question": "Does this work for international numbers?",
+      "answer": "Currently, the Phone Number Hunter is optimized for U.S. phone numbers only. International numbers may not return accurate or complete data."
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+[
+  {
+    "name": "hasRealEstateExperience",
+    "label": "Do you have direct real estate experience?",
+    "type": "select",
+    "options": [
+      {
+        "value": "yes",
+        "label": "Yes"
+      },
+      {
+        "value": "no",
+        "label": "No"
+      },
+      {
+        "value": "indirect",
+        "label": "Indirect (e.g. tech, finance, marketing)"
+      }
+    ],
+    "value": ""
+  },
+  {
+    "name": "networkSize",
+    "label": "What is the approximate size of your network?",
+    "type": "select",
+    "options": [
+      {
+        "value": "1-100",
+        "label": "1-100"
+      },
+      {
+        "value": "101-1,000",
+        "label": "101-1,000"
+      },
+      {
+        "value": "1,001-10,000",
+        "label": "1,001-10,000"
+      },
+      {
+        "value": "10,001-100,000",
+        "label": "10,001-100,000"
+      },
+      {
+        "value": "100,001+",
+        "label": "100,001+"
+      }
+    ],
+    "value": ""
+  },
+  {
+    "name": "social",
+    "label": "Social Handle or URL (required)",
+    "type": "text",
+    "placeholder": "@yourhandle or https://social.com/yourprofile",
+    "value": ""
+  },
+  {
+    "name": "website",
+    "label": "Website (optional)",
+    "type": "url",
+    "placeholder": "https://yourwebsite.com",
+    "value": ""
+  },
+  {
+    "name": "bankName",
+    "label": "Bank Name",
+    "type": "text",
+    "placeholder": "Bank of America",
+    "value": ""
+  },
+  {
+    "name": "routingNumber",
+    "label": "Routing Number",
+    "type": "text",
+    "placeholder": "XXXXXXXXX",
+    "sensitive": true,
+    "value": ""
+  },
+  {
+    "name": "accountNumber",
+    "label": "Account Number",
+    "type": "text",
+    "placeholder": "**********",
+    "sensitive": true,
+    "value": ""
+  },
+  {
+    "name": "accountType",
+    "label": "Account Type",
+    "type": "select",
+    "options": [
+      {
+        "value": "checking",
+        "label": "Checking"
+      },
+      {
+        "value": "savings",
+        "label": "Savings"
+      }
+    ],
+    "value": ""
+  },
+  {
+    "name": "w9",
+    "label": "W-9 Form (PDF) - Higher Likelyhood of Approval",
+    "type": "file",
+    "accept": ".pdf",
+    "multiple": false,
+    "value": []
+  },
+  {
+    "name": "termsAccepted",
+    "label": "I agree to the Affiliate Terms & authorize Deal Scale to process payments to this account.",
+    "type": "checkbox",
+    "value": false
+  },
+  {
+    "name": "infoAccurate",
+    "label": "I confirm the information provided is accurate.",
+    "type": "checkbox",
+    "value": false
+  },
+  {
+    "name": "newsletterBeta",
+    "label": "Sign me up for the Deal Scale newsletter and beta testing program.",
+    "type": "checkbox",
+    "value": false
+  }
+]

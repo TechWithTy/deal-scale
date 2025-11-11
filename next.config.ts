@@ -125,6 +125,11 @@ const nextConfig: NextConfig = {
 					"https://cal.com/cyber-oni-solutions-inc/investor-pitch-deck-deal-scale",
 				permanent: true,
 			},
+			{
+				source: "/discord",
+				destination: "https://discord.gg/BNrsYRPtFN",
+				permanent: true,
+			},
 		];
 	},
 	async headers() {

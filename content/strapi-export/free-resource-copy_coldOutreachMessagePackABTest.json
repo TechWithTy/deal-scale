@@ -1,0 +1,29 @@
+{
+  "id": "free-resource-abtest-outreach-pack",
+  "name": "Cold Outreach Message Pack Messaging",
+  "description": "Optimize the CTA for the cold outreach scripts bundle to highlight speed-to-launch and channel coverage.",
+  "startDate": "2024-09-01T00:00:00.000Z",
+  "isActive": true,
+  "variants": [
+    {
+      "name": "Ready-to-send",
+      "percentage": 100,
+      "copy": {
+        "cta": "Grab the Outreach Scripts",
+        "buttonCta": "Download the Scripts",
+        "tagline": "Launch a motivated seller campaign today.",
+        "subtitle": "15+ plug-and-play templates covering SMS, email, and voicemail nurture cadences.",
+        "description": "Skip the blank page. Personalize proven scripts, layered cadences, and follow-up reminders designed to convert cold leads into booked calls.",
+        "whatsInItForMe": "Spin up a full outreach sequence in minutes instead of spending weekends writing copy.",
+        "target_audience": "Acquisitions managers and inside sales reps",
+        "pain_point": "It takes too long to craft multi-channel messaging that actually gets replies.",
+        "solution": "Drop in field-tested scripts with ready-made cadences so you can start contacting sellers right away.",
+        "highlights": [
+          "Channel-specific templates",
+          "Follow-up timelines",
+          "Personalization cues for motivated sellers"
+        ]
+      }
+    }
+  ]
+}

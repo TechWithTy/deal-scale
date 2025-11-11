@@ -1,0 +1,22 @@
+{
+  "title": "Automated Direct Mail FAQs",
+  "subtitle": "Your questions about our Snail Mail Campaigns, answered.",
+  "faqItems": [
+    {
+      "question": "Who physically prints and sends the mail?",
+      "answer": "We operate a proprietary, national network of high-quality print and mail facilities. When you launch a campaign, our software intelligently routes your orders to ensure professional production and fast, reliable delivery via USPS First-Class Mail."
+    },
+    {
+      "question": "Do I have to design the mailers myself?",
+      "answer": "You have complete flexibility. We offer three options to fit your needs:\n\n1. **Use Our Templates:** Choose from our built-in library of industry-proven designs like 'Yellow Letters' and professional postcards.\n\n2. **Upload Your Own:** If you have your own branding, you can upload your print-ready PDF designs directly to our platform.\n\n3. **AI-Generated Designs:** For a unique touch, use your AI Credits to have our AI generate custom mailer designs tailored to your campaign goals."
+    },
+    {
+      "question": "How does the pricing work?",
+      "answer": "The service is pay-per-piece, with no monthly subscription required. You are only charged for the mail that is actually sent. Prices vary by the type of mailer (e.g., a stamped letter costs more than a postcard), and all costs include printing and first-class postage."
+    },
+    {
+      "question": "Can the system automatically stop sending mail to someone who calls me?",
+      "answer": "Yes. When you receive a call, or your inbound agent receives a call and th contact is identified, it is then updated automatically in the Deal Scale CRM. Our system will then automatically remove them from any future mailings scheduled in that specific campaign sequence, saving you money."
+    }
+  ]
+}
