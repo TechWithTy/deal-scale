@@ -77,6 +77,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 					<div
 						id="loan-officer-hero-top"
 						className="flex w-full flex-col items-center gap-6 text-center md:max-w-3xl"
+						data-beam-collider="true"
 					>
 						<ScrollProgressIndicator
 							sections={sections}
@@ -94,6 +95,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 					<div
 						id="loan-officer-cta"
 						className="flex w-full flex-col items-center gap-8"
+						data-beam-collider="true"
 					>
 						<p className="max-w-2xl text-center text-lg text-neutral-300">
 							Automated borrower follow-up from your mortgage CRM, orchestrated
@@ -130,6 +132,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 						<div
 							id="live-hero-details"
 							className="flex w-full flex-col gap-6 rounded-3xl border border-border/60 bg-background/70 px-6 py-6 shadow-[0_24px_80px_-40px_rgba(34,197,94,0.35)] md:flex-row md:items-center md:justify-between md:px-10 md:py-8"
+							data-beam-collider="true"
 						>
 							<div
 								className="flex items-center gap-4"

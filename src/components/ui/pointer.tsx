@@ -14,7 +14,7 @@ import {
 
 import { cn } from "@/lib/utils";
 
-type PointerProps = HTMLMotionProps<"div"> & {
+type PointerProps = HTMLMotionProps<"span"> & {
 	enabled?: boolean;
 };
 
@@ -28,7 +28,7 @@ export function Pointer({
 	const x = useMotionValue(0);
 	const y = useMotionValue(0);
 	const [isActive, setIsActive] = useState(false);
-	const containerRef = useRef<HTMLDivElement>(null);
+	const containerRef = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
 		if (!enabled || typeof window === "undefined") {
@@ -72,10 +72,10 @@ export function Pointer({
 
 	return (
 		<>
-			<div ref={containerRef} />
+			<span ref={containerRef} />
 			<AnimatePresence>
 				{enabled && isActive ? (
-					<motion.div
+					<motion.span
 						className="pointer-events-none fixed z-50 translate-x-[-50%] translate-y-[-50%]"
 						style={{
 							top: y,
@@ -109,7 +109,7 @@ export function Pointer({
 								</svg>
 							</span>
 						)}
-					</motion.div>
+					</motion.span>
 				) : null}
 			</AnimatePresence>
 		</>
