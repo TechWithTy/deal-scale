@@ -8,6 +8,27 @@
 ## 🚀 Overview
 
 DealScale is a cutting-edge platform that leverages AI to transform business operations, providing intelligent solutions for deal management, customer engagement, and data-driven decision making.
+## 🏡 Benefits for Realtors and Investors
+
+DealScale isn’t just a tech demo — it’s the infrastructure behind faster, smarter deal flow.
+
+### 💼 For Realtors & Teams
+- **Close More Deals, Faster** — Automate follow-ups, scheduling, and lead qualification so you can focus on clients, not CRM busywork.  
+- **AI-Powered Insights** — Instantly surface hot leads, seller intent scores, and neighborhood trends with predictive analytics.  
+- **Seamless CRM Sync** — Works with your existing systems (GoHighLevel, Zoho, HubSpot, etc.) — no switching or retraining needed.  
+- **Custom Branding & White-Label Ready** — Keep your brokerage identity with branded dashboards, colors, and client portals.  
+
+### 🏘️ For Real Estate Investors
+- **Deal Discovery at Scale** — Import property lists from anywhere (PropStream, Privy, Zillow) and enrich them with verified ownership and market data.  
+- **Automated Outreach** — Launch multi-channel campaigns (voice, SMS, email) powered by AI — personalized for every seller.  
+- **Portfolio Analytics** — Track ROI, time-to-close, and campaign efficiency in one place with real-time dashboards.  
+- **Secure & Private** — All automations run in your own environment, ensuring full data compliance (TCPA, GDPR).  
+
+> 💡 **In short:** DealScale gives real estate professionals the automation power of a startup tech team — without writing a single line of code.
+
+📚 Learn more in our internal DeepWiki:  
+[DealScale – Sales n8n Instance Documentation →](https://deepwiki.com/Deal-Scale/sales-n8n-instance)
+
 
 ## 📚 DeepWiki Documentation
 
