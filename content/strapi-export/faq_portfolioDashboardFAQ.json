@@ -1,0 +1,18 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to common questions about the Enterprise Portfolio Dashboard.",
+  "faqItems": [
+    {
+      "question": "How does your system handle data security for a large portfolio?",
+      "answer": "Security is our top priority. Our platform uses industry-standard encryption for data at rest and in transit. Our Enterprise tier also offers features like Single Sign-On (SSO) and role-based access control to ensure users only see the data relevant to them."
+    },
+    {
+      "question": "Can this dashboard integrate with our existing accounting or property management software?",
+      "answer": "Yes. Our Enterprise plan includes API access, allowing you to create custom integrations to sync data between Deal Scale and your existing systems like Yardi, AppFolio, or your internal accounting software."
+    },
+    {
+      "question": "Is there a limit to the number of properties or users we can have?",
+      "answer": "Our platform is built to scale. The Enterprise plan is designed for large portfolios and includes unlimited property tracking and custom user seats to fit your organization's structure."
+    }
+  ]
+}

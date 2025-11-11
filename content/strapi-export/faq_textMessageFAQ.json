@@ -1,0 +1,18 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to common questions about our AI Text Message Prequalification Agent.",
+  "faqItems": [
+    {
+      "question": "How does the iMessage (blue bubble) support work?",
+      "answer": "Our proprietary messaging gateway can detect if a recipient is an Apple user. When possible, it delivers the message via the iMessage protocol for a more native and trusted user experience. For all other users, it delivers a standard SMS seamlessly. The AI handles both formats without any change to your workflow."
+    },
+    {
+      "question": "Is this compliant with TCPA regulations?",
+      "answer": "Yes. Compliance is at the core of our platform. We enforce consent protocols, automatically process opt-out requests (e.g., 'STOP'), manage quiet hours, and provide the tools you need to run your campaigns in a fully compliant manner."
+    },
+    {
+      "question": "Can the AI understand complex replies?",
+      "answer": "Yes. It's powered by a natural language processing engine, not simple keywords. It can understand intent, such as positive interest, negative responses, questions, and requests to speak with a human, and will react according to the rules you set."
+    }
+  ]
+}

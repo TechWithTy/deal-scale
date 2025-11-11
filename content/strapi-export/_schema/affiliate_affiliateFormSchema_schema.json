@@ -1,0 +1,99 @@
+{
+  "kind": "zodObject",
+  "fields": {
+    "networkSize": {
+      "type": "enum",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "enum": [
+        "1-100",
+        "101-1,000",
+        "1,001-10,000",
+        "10,001-100,000",
+        "100,001+"
+      ]
+    },
+    "social": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 2
+    },
+    "website": {
+      "type": "string",
+      "required": false,
+      "unique": false,
+      "private": false
+    },
+    "bankName": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 2
+    },
+    "routingNumber": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 9,
+      "pattern": "^\\d{9}$"
+    },
+    "accountNumber": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 4,
+      "maxLength": 17
+    },
+    "accountType": {
+      "type": "enum",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "enum": [
+        "checking",
+        "savings"
+      ]
+    },
+    "w9": {
+      "type": "any",
+      "required": false,
+      "unique": false,
+      "private": false
+    },
+    "termsAccepted": {
+      "type": "boolean",
+      "required": true,
+      "unique": false,
+      "private": false
+    },
+    "infoAccurate": {
+      "type": "boolean",
+      "required": true,
+      "unique": false,
+      "private": false
+    },
+    "newsletterBeta": {
+      "type": "boolean",
+      "required": false,
+      "unique": false,
+      "private": false
+    },
+    "hasRealEstateExperience": {
+      "type": "enum",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "enum": [
+        "yes",
+        "no",
+        "indirect"
+      ]
+    }
+  }
+}

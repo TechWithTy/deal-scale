@@ -1,0 +1,30 @@
+{
+  "kind": "zodObject",
+  "fields": {
+    "email": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1,
+      "email": true,
+      "maxLength": 255
+    },
+    "password": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 8,
+      "maxLength": 100,
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>/?]).{8,}$"
+    },
+    "rememberMe": {
+      "type": "optional",
+      "required": true,
+      "default": false,
+      "unique": false,
+      "private": false
+    }
+  }
+}

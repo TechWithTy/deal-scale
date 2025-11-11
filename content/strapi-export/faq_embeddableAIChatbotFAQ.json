@@ -1,0 +1,30 @@
+{
+  "title": "Embeddable AI Sales Chatbot FAQs",
+  "subtitle": "Learn how Deal Scale's AI chatbot can transform your website into a 24/7 lead generation machine.",
+  "faqItems": [
+    {
+      "question": "How easy is it to add the AI chatbot to my website?",
+      "answer": "It's very simple! After customizing your chatbot in the Deal Scale dashboard, you'll receive a small snippet of code. Just paste this code into your website's HTML (usually before the closing </body> tag), and the chatbot will appear."
+    },
+    {
+      "question": "Can I customize the chatbot's appearance to match my brand?",
+      "answer": "Yes, you can customize colors, upload your logo, and tailor the greeting messages to align with your brand identity and website design."
+    },
+    {
+      "question": "What kind of questions can the AI chatbot ask to pre-qualify leads?",
+      "answer": "You can configure a custom script with questions relevant to your business. For real estate, this could include questions about their budget, desired property type, buying/selling timeframe, if they're working with an agent, etc."
+    },
+    {
+      "question": "How does the chatbot hand over leads to my sales team?",
+      "answer": "Qualified leads and their conversation history are automatically synced to your Deal Scale CRM. The chatbot can also be configured to send real-time email/SMS notifications to your team for immediate follow-up, or even attempt a live chat transfer if your agents are available."
+    },
+    {
+      "question": "Can the AI chatbot book appointments directly into our calendar?",
+      "answer": "Yes, if you integrate your calendar (e.g., Google Calendar, Outlook Calendar) with Deal Scale, the AI chatbot can offer available time slots and book appointments directly for qualified leads."
+    },
+    {
+      "question": "What happens if the chatbot can't answer a specific visitor question?",
+      "answer": "You can configure fallback responses. Typically, the chatbot will offer to connect the visitor with a human agent, take their contact details for a follow-up, or direct them to relevant resources on your website."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "AI Command Center FAQs",
+  "subtitle": "Your questions about our AI-powered operations hub.",
+  "faqItems": [
+    {
+      "question": "What's the difference between the AI adding a task and completing one?",
+      "answer": "The AI **adds** tasks proactively when it analyzes your pipeline and spots an opportunity you might have missed (e.g., 'Lead has gone cold, follow up!'). It **completes** tasks after you manually create one (e.g., you write 'Send comps to John'), and the AI recognizes it has the capability to perform that action for you."
+    },
+    {
+      "question": "Can I turn off the AI's proactive task creation?",
+      "answer": "Yes, you have full control. You can set the AI to be as proactive or as passive as you like, from creating many suggestions to only acting on the manual tasks you create."
+    },
+    {
+      "question": "How does the AI know it can complete a task I write?",
+      "answer": "Our AI is trained to recognize specific action-oriented phrases. When you write a task like 'Send follow-up text to Jane' or 'Find comps for 456 Oak Ave', the AI identifies these keywords and, if it has the necessary data, will offer to execute the task for you."
+    },
+    {
+      "question": "Will the AI ever complete a task without my permission?",
+      "answer": "No. For tasks you create manually, the AI will always prompt you for confirmation before taking action. You are always in complete control of your workflow."
+    }
+  ]
+}

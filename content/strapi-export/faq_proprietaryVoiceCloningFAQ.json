@@ -1,0 +1,30 @@
+{
+  "title": "Understanding Deal Scale's Proprietary AI Voice Cloning",
+  "subtitle": "Get answers to common questions about our cutting-edge voice replication technology and how it can personalize your real estate outreach.",
+  "faqItems": [
+    {
+      "question": "How does Deal Scale's technology clone my voice so accurately?",
+      "answer": "You provide a brief, clear audio sample via our secure platform. Deal Scale's advanced, proprietary AI then meticulously analyzes its unique acoustic properties—such as tone, pitch, and inflection—to construct a precise and remarkably natural-sounding digital replica. This entire process is powered and secured by our in-house technology."
+    },
+    {
+      "question": "How natural and human-like will the cloned voice sound to my leads?",
+      "answer": "Our AI Voice Cloning technology is engineered to produce an exceptionally natural and human-like vocal output. It carefully mirrors your own vocal characteristics, making the AI's voice virtually indistinguishable from your actual voice, thereby ensuring authentic and engaging interactions with your leads."
+    },
+    {
+      "question": "Is my voice data and the cloned voice identity kept secure by Deal Scale?",
+      "answer": "Absolutely. Data security is a top priority at Deal Scale. Your provided voice sample and the resulting cloned voice identity are encrypted, stored using robust security measures, and utilized exclusively for your Deal Scale account's AI agents. All data is managed within our secure, proprietary infrastructure."
+    },
+    {
+      "question": "Can I use my unique cloned voice for all AI agent interactions within the Deal Scale platform?",
+      "answer": "Yes, indeed. Once your voice is successfully cloned using our proprietary system, it can be easily set as the default voice for all communications handled by your Deal Scale AI Virtual Agents. This includes both inbound call management and your various outbound outreach campaigns."
+    },
+    {
+      "question": "What makes Deal Scale's Voice Cloning superior to standard text-to-speech (TTS) voices?",
+      "answer": "Standard Text-To-Speech (TTS) systems utilize pre-built, generic voices that often sound impersonal and robotic. In contrast, Deal Scale's Proprietary AI Voice Cloning technology creates a unique, highly personalized AI voice that is directly modeled from *your actual voice*. This results in a truly authentic, trustworthy, and engaging communication experience that generic TTS systems simply cannot replicate."
+    },
+    {
+      "question": "How long does the voice cloning process typically take?",
+      "answer": "After you submit a suitable voice sample, our proprietary AI usually completes the cloning and integration process within 24 to 48 hours. Your authentic cloned voice will then be ready to be deployed by your AI agents."
+    }
+  ]
+}

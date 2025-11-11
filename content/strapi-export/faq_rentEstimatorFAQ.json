@@ -1,0 +1,18 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to common questions about the Deal Scale Rent Estimator.",
+  "faqItems": [
+    {
+      "question": "How accurate is your rental data?",
+      "answer": "Our data is highly accurate. We aggregate information from millions of active listings, Multiple Listing Services (MLS), and proprietary public record data, which is refreshed daily to ensure you have the most current information available."
+    },
+    {
+      "question": "Can I track my entire rental portfolio in one place?",
+      "answer": "Yes. Our Pro and Scale plans include a portfolio dashboard where you can add your existing properties to track their estimated value, rent changes, receive real-time alerts, and analyze historical performance."
+    },
+    {
+      "question": "What areas do you cover?",
+      "answer": "Our platform covers the entire United States, including all 50 states and over 38,000 zip codes. You can look up property data and market trends for any residential property nationwide."
+    }
+  ]
+}

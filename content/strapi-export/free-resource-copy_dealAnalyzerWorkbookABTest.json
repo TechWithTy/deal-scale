@@ -1,0 +1,29 @@
+{
+  "id": "free-resource-abtest-deal-analyzer",
+  "name": "Deal Analyzer Workbook Messaging",
+  "description": "Test messaging for the Deal Analyzer Workbook hero copy to ensure the free resource CTA aligns with investor expectations.",
+  "startDate": "2024-09-01T00:00:00.000Z",
+  "isActive": true,
+  "variants": [
+    {
+      "name": "Value Positioning",
+      "percentage": 100,
+      "copy": {
+        "cta": "Download the Analyzer",
+        "buttonCta": "Get the Workbook",
+        "tagline": "Underwrite every deal with confidence.",
+        "subtitle": "A proven underwriting workbook trusted by acquisition teams scaling their portfolios.",
+        "description": "Run the exact underwriting process Deal Scale uses internally. Prebuilt models, ROI calculators, and risk guardrails keep every acquisition disciplined.",
+        "whatsInItForMe": "Make faster go/no-go calls with the same diligence framework our team uses before writing an offer.",
+        "target_audience": "Real estate investors evaluating off-market deals",
+        "pain_point": "You waste hours recreating underwriting models and second-guess the math on every deal.",
+        "solution": "Plug numbers into a guided workbook that handles the heavy analysis and surfaces the red flags instantly.",
+        "highlights": [
+          "Spreadsheet-ready templates",
+          "ROI and cash-on-cash calculators",
+          "Scenario planning for financing options"
+        ]
+      }
+    }
+  ]
+}

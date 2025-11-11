@@ -1,0 +1,30 @@
+{
+  "title": "AI Outbound Qualification & Scheduling FAQs",
+  "subtitle": "Discover how our AI can supercharge your outbound sales efforts.",
+  "faqItems": [
+    {
+      "question": "What channels does the AI use for outbound outreach?",
+      "answer": "Our AI Outbound Agent primarily utilizes AI-powered voice calls and intelligent SMS messages to connect with and qualify your leads, offering a multi-touch approach."
+    },
+    {
+      "question": "How does the AI know how to qualify my specific leads?",
+      "answer": "During setup, you define your ideal customer profile and provide specific qualification questions, criteria, and even sample conversation scripts. The AI is then configured to use this logic during its interactions."
+    },
+    {
+      "question": "What is a 'hot transfer' and how does it work?",
+      "answer": "A hot transfer is when the AI, after qualifying a lead and sensing high intent, immediately attempts to connect that live lead to an available human sales agent via a phone call, ensuring no momentum is lost."
+    },
+    {
+      "question": "Can the AI book appointments in multiple sales reps' calendars?",
+      "answer": "Yes, you can integrate multiple calendars and set up rules for round-robin or criteria-based assignment, so the AI books appointments with the appropriate sales representative."
+    },
+    {
+      "question": "How natural do the AI voice calls sound?",
+      "answer": "We use advanced text-to-speech and conversational AI technology to make the AI voice sound as natural and human-like as possible, aiming for smooth and engaging conversations."
+    },
+    {
+      "question": "What happens if a lead is not qualified or doesn't want to proceed?",
+      "answer": "The AI will disposition the lead accordingly (e.g., 'Not Interested', 'Nurture', 'Wrong Number'). This information is synced to your CRM, and leads can be added to DNC lists or longer-term nurturing campaigns as per your rules."
+    }
+  ]
+}

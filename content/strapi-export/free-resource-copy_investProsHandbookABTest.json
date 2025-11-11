@@ -1,0 +1,29 @@
+{
+  "id": "free-resource-abtest-investpros-handbook",
+  "name": "InvestPros Handbook Messaging",
+  "description": "Ensure the operations handbook landing copy emphasizes repeatable systems and leadership rituals.",
+  "startDate": "2024-09-01T00:00:00.000Z",
+  "isActive": true,
+  "variants": [
+    {
+      "name": "Playbook Focus",
+      "percentage": 100,
+      "copy": {
+        "cta": "Download the Operating Handbook",
+        "buttonCta": "Access the Handbook",
+        "tagline": "Run your acquisitions team like a top producer.",
+        "subtitle": "Step-by-step operating procedures, meeting cadences, and scorecards from the InvestPros team.",
+        "description": "Adopt the rituals, dashboards, and pipeline reviews used by teams closing dozens of transactions each quarter.",
+        "whatsInItForMe": "Install a proven operating system so your team scales without chaos.",
+        "target_audience": "Team leaders and ops managers",
+        "pain_point": "Your acquisitions team relies on tribal knowledge and lacks consistent processes.",
+        "solution": "Apply templated SOPs, meeting agendas, and performance scorecards to create predictable execution.",
+        "highlights": [
+          "Quarterly planning templates",
+          "Weekly pipeline ritual breakdowns",
+          "Team onboarding checklists"
+        ]
+      }
+    }
+  ]
+}

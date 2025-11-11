@@ -1,0 +1,240 @@
+🔄 Executing TypeScript file: C:\Users\tyriq\Documents\Github\deal-scale\scripts\strapi\export-all.ts
+🔍 Analyzing 62 data files for enhanced relational export...
+📊 Building data model for Strapi export...
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\contact\formFields.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\contact\pilotFormFields.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\discount\mockDiscountCodes.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\legal\legalDocuments.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\products\agents.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\products\credits.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\products\essentials.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\products\free-resources.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\products\license.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\products\notion.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\products\workflow.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\service\services.ts
+   → This is typically an aggregator file - data is exported from source files
+⚠️  Skipping file with JSX/React syntax: C:\Users\tyriq\Documents\Github\deal-scale\src\data\service\slug_data\integrations.ts
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\service\slug_data\pricing\other.ts
+   → This is typically an aggregator file - data is exported from source files
+ℹ️  Skipping file with path alias dependencies: C:\Users\tyriq\Documents\Github\deal-scale\src\data\service\slug_data\pricing.ts
+   → This is typically an aggregator file - data is exported from source files
+📋 Exporting 202 entities in enhanced dependency order...
+✅ Exported array (11 items) from categories_categories -> categories_categories.json
+✅ Exported array (12 items) from affiliate_affiliateFormFields -> affiliate_affiliateFormFields.json
+✅ Exported array (2 items) from authFormFields_confirmCredentialsFormFields -> authFormFields_confirmCredentialsFormFields.json
+✅ Exported array (1 items) from authFormFields_phoneLoginFormFields -> authFormFields_phoneLoginFormFields.json
+⏭️  Skipping duplicate data 'authFormFields_phoneOtpFormFields' (already exported)
+⏭️  Skipping duplicate data 'authFormFields_resetPasswordFormFields' (already exported)
+⏭️  Skipping duplicate data 'authFormFields_signInFormFields' (already exported)
+✅ Exported array (5 items) from authFormFields_signUpFormFields -> authFormFields_signUpFormFields.json
+✅ Exported object (N/A items) from company_companyData -> company_companyData.json
+✅ Exported array (4 items) from consultationSteps_affiliateProgramSteps -> consultationSteps_affiliateProgramSteps.json
+⏭️  Skipping duplicate data 'consultationSteps_betaSignupSteps' (already exported)
+⏭️  Skipping duplicate data 'consultationSteps_pilotProgramSteps' (already exported)
+✅ Exported object (N/A items) from copy_abTestExample -> copy_abTestExample.json
+✅ Exported object (N/A items) from copy_AIConversationCreditsABTest -> copy_AIConversationCreditsABTest.json
+⏭️  Skipping duplicate data 'copy_brandedDeskMatABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_buyerLeadNurtureWorkflowABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_documentTemplatePackABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_ergonomicChairABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_escrowServiceKitABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_investorPlaybookABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_motivatedSellerWorkflowABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_notionDealPipelineABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_notionFundraisingTrackerABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_notionInvestorCrmABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_notionStartupOsABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_notionTeamWikiABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_openHouseWorkflowABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_skipTraceCreditsABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_smartLampABTests' (already exported)
+⏭️  Skipping duplicate data 'copy_targetedLeadCreditsABTests' (already exported)
+✅ Exported object (N/A items) from copyright_aiDirectMailCopyright -> copyright_aiDirectMailCopyright.json
+✅ Exported object (N/A items) from copyright_aiInboundAgentCopyright -> copyright_aiInboundAgentCopyright.json
+✅ Exported object (N/A items) from copyright_aiInboundCopyright -> copyright_aiInboundCopyright.json
+✅ Exported object (N/A items) from copyright_aiOutboundQualificationCopyright -> copyright_aiOutboundQualificationCopyright.json
+✅ Exported object (N/A items) from copyright_aiPhoneAgentCopyright -> copyright_aiPhoneAgentCopyright.json
+✅ Exported object (N/A items) from copyright_aiSocialMediaCopyright -> copyright_aiSocialMediaCopyright.json
+✅ Exported object (N/A items) from copyright_aiSocialMediaOutreachCopyright -> copyright_aiSocialMediaOutreachCopyright.json
+✅ Exported object (N/A items) from copyright_aiTextMessageCopyright -> copyright_aiTextMessageCopyright.json
+✅ Exported object (N/A items) from copyright_aiTextMessageOutreachCopyright -> copyright_aiTextMessageOutreachCopyright.json
+✅ Exported object (N/A items) from copyright_dataEnrichmentCopyright -> copyright_dataEnrichmentCopyright.json
+✅ Exported object (N/A items) from copyright_domainReconCopyright -> copyright_domainReconCopyright.json
+✅ Exported object (N/A items) from copyright_emailIntelligenceCopyright -> copyright_emailIntelligenceCopyright.json
+✅ Exported object (N/A items) from copyright_embeddableAIChatbotCopyright -> copyright_embeddableAIChatbotCopyright.json
+✅ Exported object (N/A items) from copyright_leadDossierCopyright -> copyright_leadDossierCopyright.json
+✅ Exported object (N/A items) from copyright_leadGenCopyright -> copyright_leadGenCopyright.json
+✅ Exported object (N/A items) from copyright_marketAnalysisCopyright -> copyright_marketAnalysisCopyright.json
+✅ Exported object (N/A items) from copyright_marketAnalyzerCopyright -> copyright_marketAnalyzerCopyright.json
+✅ Exported object (N/A items) from copyright_performanceHubCopyright -> copyright_performanceHubCopyright.json
+✅ Exported object (N/A items) from copyright_phoneNumberHunterCopyright -> copyright_phoneNumberHunterCopyright.json
+✅ Exported object (N/A items) from copyright_portfolioDashboardCopyright -> copyright_portfolioDashboardCopyright.json
+✅ Exported object (N/A items) from copyright_proprietaryVoiceCloningCopyright -> copyright_proprietaryVoiceCloningCopyright.json
+✅ Exported object (N/A items) from copyright_rentEstimatorCopyright -> copyright_rentEstimatorCopyright.json
+✅ Exported object (N/A items) from copyright_snailMailCopyright -> copyright_snailMailCopyright.json
+✅ Exported object (N/A items) from copyright_socialLeadGenCopyright -> copyright_socialLeadGenCopyright.json
+✅ Exported object (N/A items) from copyright_socialProfileHunterCopyright -> copyright_socialProfileHunterCopyright.json
+✅ Exported array (8 items) from default_faqItems -> default_faqItems.json
+✅ Exported object (N/A items) from faq_aiDirectMailFAQ -> faq_aiDirectMailFAQ.json
+✅ Exported object (N/A items) from faq_aiInboundAgentFAQ -> faq_aiInboundAgentFAQ.json
+✅ Exported object (N/A items) from faq_aiInboundFAQ -> faq_aiInboundFAQ.json
+✅ Exported object (N/A items) from faq_aiOutboundQualificationFAQ -> faq_aiOutboundQualificationFAQ.json
+✅ Exported object (N/A items) from faq_aiPhoneAgentFAQ -> faq_aiPhoneAgentFAQ.json
+✅ Exported object (N/A items) from faq_aiSocialMediaOutreachFAQ -> faq_aiSocialMediaOutreachFAQ.json
+✅ Exported object (N/A items) from faq_aiTextMessageOutreachFAQ -> faq_aiTextMessageOutreachFAQ.json
+✅ Exported object (N/A items) from faq_dataEnrichmentFAQ -> faq_dataEnrichmentFAQ.json
+✅ Exported object (N/A items) from faq_domainReconFAQ -> faq_domainReconFAQ.json
+✅ Exported object (N/A items) from faq_emailIntelligenceFAQ -> faq_emailIntelligenceFAQ.json
+✅ Exported object (N/A items) from faq_embeddableAIChatbotFAQ -> faq_embeddableAIChatbotFAQ.json
+✅ Exported object (N/A items) from faq_leadDossierFAQ -> faq_leadDossierFAQ.json
+✅ Exported object (N/A items) from faq_leadGenFAQ -> faq_leadGenFAQ.json
+✅ Exported object (N/A items) from faq_marketAnalysisFAQ -> faq_marketAnalysisFAQ.json
+✅ Exported object (N/A items) from faq_marketAnalyzerFAQ -> faq_marketAnalyzerFAQ.json
+✅ Exported object (N/A items) from faq_performanceHubFAQ -> faq_performanceHubFAQ.json
+✅ Exported object (N/A items) from faq_phoneNumberHunterFAQ -> faq_phoneNumberHunterFAQ.json
+✅ Exported object (N/A items) from faq_portfolioDashboardFAQ -> faq_portfolioDashboardFAQ.json
+✅ Exported object (N/A items) from faq_proprietaryVoiceCloningFAQ -> faq_proprietaryVoiceCloningFAQ.json
+✅ Exported object (N/A items) from faq_rentEstimatorFAQ -> faq_rentEstimatorFAQ.json
+✅ Exported object (N/A items) from faq_snailMailFAQ -> faq_snailMailFAQ.json
+✅ Exported object (N/A items) from faq_socialLeadGenFAQ -> faq_socialLeadGenFAQ.json
+✅ Exported object (N/A items) from faq_socialMediaQualificationFAQ -> faq_socialMediaQualificationFAQ.json
+✅ Exported object (N/A items) from faq_socialProfileHunterFAQ -> faq_socialProfileHunterFAQ.json
+✅ Exported object (N/A items) from faq_textMessageFAQ -> faq_textMessageFAQ.json
+⏭️  Skipping duplicate data 'formFields_resetPasswordFormFields' (already exported)
+⏭️  Skipping duplicate data 'formFields_signInFormFields' (already exported)
+✅ Exported array (3 items) from formFields_signUpFormFields -> formFields_signUpFormFields.json
+✅ Exported object (N/A items) from free-resource-copy_coldOutreachMessagePackABTest -> free-resource-copy_coldOutreachMessagePackABTest.json
+✅ Exported object (N/A items) from free-resource-copy_dealAnalyzerWorkbookABTest -> free-resource-copy_dealAnalyzerWorkbookABTest.json
+✅ Exported object (N/A items) from free-resource-copy_investProsHandbookABTest -> free-resource-copy_investProsHandbookABTest.json
+✅ Exported object (N/A items) from free-resource-copy_marketMetricsSnapshotABTest -> free-resource-copy_marketMetricsSnapshotABTest.json
+✅ Exported object (N/A items) from hero_hero -> hero_hero.json
+⏭️  Skipping duplicate data 'how_it_works_aiDirectMailHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiDirectMailNurturingHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiInboundAgentHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiInboundHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiIntegrationHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiOutboundQualificationHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiPhoneAgentHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiSocialMediaHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiSocialMediaOutreachHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiTextMessageHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_aiTextMessageOutreachHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_dataEnrichmentHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_dealScaleProprietaryProcess' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_domainReconHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_emailIntelligenceHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_embeddableAIChatbotHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_followUpHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_generalHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_instantLeadEngagement' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_leadDossierHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_leadGenHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_marketAnalysisHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_marketAnalyzerHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_offMarketAdvantageHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_performanceHubHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_phoneNumberHunterHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_portfolioDashboardHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_proprietaryVoiceCloningHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_rentEstimatorHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_snailMailHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_socialLeadGenHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'how_it_works_socialProfileHunterHowItWorks' (already exported)
+⏭️  Skipping duplicate data 'landingSnapshot_landingBentoFeatureSeeds' (already exported)
+⏭️  Skipping duplicate data 'marquee_marqueeItems' (already exported)
+⏭️  Skipping duplicate data 'milestones_companyMilestones' (already exported)
+⏭️  Skipping duplicate data 'mlsProperties_properties' (already exported)
+✅ Exported array (7 items) from nav_navItems -> nav_navItems.json
+⏭️  Skipping duplicate data 'problems_solutions_aiDirectMailNurturingProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiInboundAgentProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiInboundProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiOutboundQualificationProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiPhoneAgentProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiSocialMediaOutreachProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiSocialMediaProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiTextMessageOutreachProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_aiTextMessageProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_dataEnrichmentProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_domainReconProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_emailIntelligenceProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_embeddableAIChatbotProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_leadDossierProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_leadGenProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_marketAnalysisProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_marketAnalyzerProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_performanceHubProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_phoneNumberHunterProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_portfolioDashboardProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_proprietaryVoiceCloningProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_rentEstimatorProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_snailMailProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_socialLeadGenProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'problems_solutions_socialProfileHunterProblemsSolutions' (already exported)
+⏭️  Skipping duplicate data 'projects_projects' (already exported)
+✅ Exported object (N/A items) from resetPassword_defaultRequestPasswordResetValues -> resetPassword_defaultRequestPasswordResetValues.json
+✅ Exported object (N/A items) from resetPassword_defaultResetPasswordValues -> resetPassword_defaultResetPasswordValues.json
+✅ Exported object (N/A items) from resetPassword_resetPasswordErrorMessages -> resetPassword_resetPasswordErrorMessages.json
+⏭️  Skipping duplicate data 'reviews_reviews' (already exported)
+✅ Exported object (N/A items) from seo_DEFAULT_SEO -> seo_DEFAULT_SEO.json
+✅ Exported object (N/A items) from seo_STATIC_SEO_META -> seo_STATIC_SEO_META.json
+✅ Exported object (N/A items) from share_platformConfigs -> share_platformConfigs.json
+✅ Exported object (N/A items) from signIn_defaultSignInValues -> signIn_defaultSignInValues.json
+✅ Exported object (N/A items) from signIn_signInErrorMessages -> signIn_signInErrorMessages.json
+✅ Exported object (N/A items) from signUp_defaultSignUpValues -> signUp_defaultSignUpValues.json
+✅ Exported object (N/A items) from signUp_signUpErrorMessages -> signUp_signUpErrorMessages.json
+⏭️  Skipping duplicate data 'sizingChart_sizingChart' (already exported)
+✅ Exported object (N/A items) from strapiLandingContent_landingContentGaps -> strapiLandingContent_landingContentGaps.json
+⏭️  Skipping duplicate data 'team_teamMembers' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiDirectMailNurturingTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiInboundAgentTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiInboundTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiOutboundQualificationTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiPhoneAgentTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiSocialAdLeadNurturingTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiSocialMediaOutreachTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiSocialMediaTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiTextMessageOutreachTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_aiTextMessageTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_dataEnrichmentTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_domainReconTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_emailIntelligenceTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_embeddableAIChatbotTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_generalDealScaleTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_leadDossierTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_leadGenTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_marketAnalysisTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_marketAnalyzerTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_performanceHubTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_phoneNumberHunterTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_portfolioDashboardTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_proprietaryVoiceCloningTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_rentEstimatorTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_snailMailTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_socialLeadGenTestimonials' (already exported)
+⏭️  Skipping duplicate data 'testimonials_socialProfileHunterTestimonials' (already exported)
+✅ Exported object (N/A items) from trustedCompanies_companyLogos -> trustedCompanies_companyLogos.json
+✅ Exported object (N/A items) from voiceCloningAfter_afterTranscript -> voiceCloningAfter_afterTranscript.json
+✅ Exported object (N/A items) from voiceCloningBefore_beforeTranscript -> voiceCloningBefore_beforeTranscript.json
+⏭️  Skipping duplicate data 'caseStudies_caseStudies' (already exported)
+⏭️  Skipping duplicate data 'caseStudies_caseStudyCategories' (already exported)
+✅ Exported object (N/A items) from copy_caseStudyCopyright -> copy_caseStudyCopyright.json
+✅ Exported array (6 items) from hero_DEFAULT_GRID -> hero_DEFAULT_GRID.json
+✅ Exported object (N/A items) from hero_defaultHeroProps -> hero_defaultHeroProps.json
+⏭️  Skipping duplicate data 'testimonials_caseStudyTestimonials' (already exported)
+
+🎉 Strapi export complete! Exported 84 complete data structures.
+📊 Total entities: 202 (kept as complete structures, not decomposed)
+📁 Output directory: C:\Users\tyriq\Documents\Github\deal-scale\content\strapi-export
+🔄 Files processed: 47 successful, 15 failed, 118 duplicates skipped

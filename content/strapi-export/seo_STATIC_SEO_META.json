@@ -1,0 +1,464 @@
+{
+  "/": {
+    "title": "Home | Deal Scale",
+    "description": "AI-powered real estate automation and lead generation for investors, agents, and wholesalers.",
+    "canonical": "https://dealscale.io",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/products": {
+    "title": "Products | Deal Scale",
+    "description": "Browse our curated collection of digital and physical products from Deal Scale.",
+    "canonical": "https://dealscale.io/products",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers",
+      "products",
+      "shop",
+      "catalog"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/blogs": {
+    "title": "Blogs | Deal Scale",
+    "description": "See the latest insights, stories, and updates for real estate investors and wholesalers from the Deal Scale team.",
+    "canonical": "https://dealscale.io/blogs",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/pricing": {
+    "title": "Pricing | Deal Scale",
+    "description": "Check out our pricing options and packages tailored to your growth goals. Sensible investments for maximal growth.",
+    "canonical": "https://dealscale.io/pricing",
+    "keywords": [
+      "deal scale pricing",
+      "real estate ai pricing",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/case-studies": {
+    "title": "Case Studies | Deal Scale",
+    "description": "Check out real-world solutions and success stories from real estate professionals using Deal Scale and its Technologies.",
+    "canonical": "https://dealscale.io/case-studies",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/CaseStudy2.png"
+  },
+  "/contact": {
+    "title": "Beta Test Sign Up | Deal Scale",
+    "description": "Get in touch with Deal Scale for expert AI-powered real estate solutions and support.",
+    "canonical": "https://dealscale.io/contact",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/contact-pilot": {
+    "title": "Pilot Priority Access | Deal Scale",
+    "description": "Get Pilot Priority Access: Instantly claim 1 free off-market real estate lead, unlimited free skip tracing, and exclusive early access to our AI-powered tools. Accelerate your deal flow with Deal Scale.",
+    "canonical": "https://dealscale.io/contact-pilot",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/about": {
+    "title": "About Us | Deal Scale",
+    "description": "Learn about Deal Scale's mission to revolutionize real estate with AI-powered solutions for investors, agents, and wholesalers.",
+    "canonical": "https://dealscale.io/about",
+    "keywords": [
+      "About Deal Scale",
+      "Our Mission",
+      "Real Estate Technology",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/features": {
+    "title": "Features | Deal Scale",
+    "description": "Check out powerful features of Deal Scale's AI, including automated lead nurturing, outreach, and our AI Caller.",
+    "canonical": "https://dealscale.io/features",
+    "keywords": [
+      "AI lead nurture",
+      "real estate outreach",
+      "AI personalization",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/Feature.png"
+  },
+  "/agents": {
+    "title": "AI for Real Estate Agents | Deal Scale",
+    "description": "Supercharge your real estate business with AI-driven lead generation and client management tools for agents.",
+    "canonical": "https://dealscale.io/agents",
+    "keywords": [
+      "real estate agent tools",
+      "AI for agents",
+      "lead generation for agents",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/wholesalers": {
+    "title": "AI for Wholesalers | Deal Scale",
+    "description": "The best wholesaling software to automate your outreach, pre-qualify leads, and find motivated sellers faster.",
+    "canonical": "https://dealscale.io/wholesalers",
+    "keywords": [
+      "automation for wholesalers",
+      "best wholesaling software",
+      "wholesaler outreach",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/investors": {
+    "title": "AI for Real Estate Investors | Deal Scale",
+    "description": "Find and nurture off-market deals with AI-powered precision. Close more deals and accelerate your sales cycle.",
+    "canonical": "https://dealscale.io/investors",
+    "keywords": [
+      "real estate investor tools",
+      "passive real estate lead generation",
+      "close more deals with AI",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/events": {
+    "title": "Events | Deal Scale",
+    "description": "Stay updated on upcoming Deal Scale events, webinars, and real estate industry opportunities powered by AI.",
+    "canonical": "https://dealscale.io/events",
+    "keywords": [
+      "real estate events",
+      "deal scale webinars",
+      "AI real estate events",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/portfolio": {
+    "title": "Portfolio | Deal Scale",
+    "description": "Browse Deal Scale's portfolio to see AI-powered real estate solutions in action.",
+    "canonical": "https://dealscale.io/portfolio",
+    "keywords": [
+      "deal scale portfolio",
+      "real estate case studies",
+      "AI real estate success",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/partners": {
+    "title": "Partners | Deal Scale",
+    "description": "Meet Deal Scale's technology and channel partners powering AI-driven real estate growth.",
+    "canonical": "https://dealscale.io/partners",
+    "keywords": [
+      "deal scale partners",
+      "real estate technology partners",
+      "ai integrations",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/careers": {
+    "title": "Careers | Deal Scale",
+    "description": "Explore open roles at Deal Scale and help build AI automation for modern real estate teams.",
+    "canonical": "https://dealscale.zohorecruit.com/jobs/Careers",
+    "keywords": [
+      "deal scale careers",
+      "real estate ai jobs",
+      "proptech roles",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/faqs": {
+    "title": "FAQs | Deal Scale",
+    "description": "Find answers to common questions about Deal Scale's services and AI-powered real estate solutions.",
+    "canonical": "https://dealscale.io/faq",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/tos": {
+    "title": "Terms of Service | Deal Scale",
+    "description": "Review the terms and conditions for using Deal Scale’s website and services.",
+    "canonical": "https://dealscale.io/tos",
+    "keywords": [
+      "Terms of Service",
+      "User Agreement",
+      "Terms and Conditions",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/cookies": {
+    "title": "Cookies Policy | Deal Scale",
+    "description": "Learn how Deal Scale uses cookies to enhance your experience and protect your privacy.",
+    "canonical": "https://dealscale.io/cookies",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/privacy": {
+    "title": "Privacy Policy | Deal Scale",
+    "description": "Read our Privacy Policy to understand how Deal Scale collects, uses, and protects your personal information.",
+    "canonical": "https://dealscale.io/privacy",
+    "keywords": [
+      "Privacy Policy",
+      "Data Protection",
+      "GDPR Compliance",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/GDPR": {
+    "title": "GDPR | Deal Scale",
+    "description": "Read our GDPR policy to learn how Deal Scale protects your data.",
+    "canonical": "https://dealscale.io/GDPR",
+    "image": "/banners/main.png",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ]
+  },
+  "/hippa": {
+    "title": "HIPPA | Deal Scale",
+    "description": "Read our HIPPA policy to learn how Deal Scale protects your data.",
+    "canonical": "https://dealscale.io/hippa",
+    "image": "/banners/main.png",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ]
+  },
+  "/PII": {
+    "title": "PII | Deal Scale",
+    "description": "Read our PII policy to learn how Deal Scale protects your data.",
+    "canonical": "https://dealscale.io/PII",
+    "image": "/banners/main.png",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ]
+  },
+  "/tcpCompliance": {
+    "title": "TCP Compliance | Deal Scale",
+    "description": "Read our TCP Compliance policy to learn how Deal Scale protects your data.",
+    "canonical": "https://dealscale.io/tcpCompliance",
+    "image": "/banners/main.png",
+    "keywords": [
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ]
+  },
+  "/legal": {
+    "title": "Legal Center | Deal Scale",
+    "description": "Access all of Deal Scale's legal documents including Privacy Policy, Terms of Service, and compliance information in one place.",
+    "canonical": "https://dealscale.io/legal",
+    "keywords": [
+      "Legal Documents",
+      "Compliance Center",
+      "Legal Information",
+      "Company Policies",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  },
+  "/linktree": {
+    "title": "Link Tree | Deal Scale",
+    "description": "Quick access to DealScale's most important links, resources, and pages. Browse our products, services, blog posts, events, case studies, and more in one convenient place.",
+    "canonical": "https://dealscale.io/linktree",
+    "keywords": [
+      "deal scale links",
+      "deal scale resources",
+      "real estate resources",
+      "quick links",
+      "Real estate AI",
+      "Real estate CRM",
+      "Real estate automation",
+      "AI lead generation",
+      "Real Estate Investor Leads",
+      "Real Estate Agent Leads",
+      "wholesaling tools",
+      "motivated sellers"
+    ],
+    "image": "/banners/main.png"
+  }
+}

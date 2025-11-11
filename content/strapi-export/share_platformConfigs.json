@@ -1,0 +1,26 @@
+{
+  "facebook": {
+    "label": "Share on Facebook",
+    "network": "facebook",
+    "text": {
+      "maxLength": 5000,
+      "includeUrl": true
+    }
+  },
+  "twitter": {
+    "label": "Share on X (formerly Twitter)",
+    "network": "x",
+    "text": {
+      "maxLength": 280,
+      "includeUrl": true
+    }
+  },
+  "linkedin": {
+    "label": "Share on LinkedIn",
+    "network": "linkedin",
+    "text": {
+      "maxLength": 3000,
+      "includeUrl": true
+    }
+  }
+}

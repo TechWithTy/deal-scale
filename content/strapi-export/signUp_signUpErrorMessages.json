@@ -1,0 +1,36 @@
+{
+  "firstName": {
+    "required": "First name is required",
+    "minLength": "First name must be at least 2 characters",
+    "maxLength": "First name must be less than 50 characters",
+    "invalid": "First name can only contain letters, spaces, hyphens, and apostrophes"
+  },
+  "lastName": {
+    "required": "Last name is required",
+    "minLength": "Last name must be at least 2 characters",
+    "maxLength": "Last name must be less than 50 characters",
+    "invalid": "Last name can only contain letters, spaces, hyphens, and apostrophes"
+  },
+  "email": {
+    "required": "Email is required",
+    "invalid": "Please enter a valid email address",
+    "maxLength": "Email must be less than 255 characters"
+  },
+  "phone": {
+    "required": "Phone number is required",
+    "invalid": "Please enter a valid phone number with country code (e.g., +1234567890)"
+  },
+  "password": {
+    "required": "Password is required",
+    "minLength": "Password must be at least 8 characters",
+    "maxLength": "Password must be less than 100 characters",
+    "invalid": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+  },
+  "confirmPassword": {
+    "required": "Please confirm your password",
+    "mismatch": "Passwords do not match"
+  },
+  "termsAccepted": {
+    "required": "You must accept the terms and conditions"
+  }
+}

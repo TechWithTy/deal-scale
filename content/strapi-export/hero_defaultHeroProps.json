@@ -4,13 +4,13 @@
   "subheadline": "Your new hub for exclusive credits, tools, and resources. Supercharge your real estate automation and get everything you need to scale your deal pipeline in one place.",
   "grid": [
     {
-      "src": "products/workflows.png",
-      "alt": "Automated Real Estate Workflow",
-      "label": "Motivated Seller Workflows",
-      "categoryId": "workflows",
-      "description": "Automate your outreach and find motivated sellers faster.",
-      "link": "/products/motivated-seller-workflows",
-      "ariaLabel": "Explore Motivated Seller Workflows",
+      "src": "products/essentials.png",
+      "alt": "Free Deal Scale resources",
+      "label": "Free Resource Library",
+      "categoryId": "free-resources",
+      "description": "Instant access to downloadable playbooks, scripts, and templates.",
+      "link": "/products#category=free-resources",
+      "ariaLabel": "Explore free resources",
       "colSpan": 2,
       "rowSpan": 2
     },
@@ -46,6 +46,28 @@
       "ariaLabel": "Discover Notion templates for real estate",
       "colSpan": 1,
       "rowSpan": 2
+    },
+    {
+      "src": "products/workflows.png",
+      "alt": "Automated Real Estate Workflow",
+      "label": "Motivated Seller Workflows",
+      "categoryId": "workflows",
+      "description": "Automate your outreach and find motivated sellers faster.",
+      "link": "/products/motivated-seller-workflows",
+      "ariaLabel": "Explore Motivated Seller Workflows",
+      "colSpan": 1,
+      "rowSpan": 1
+    },
+    {
+      "src": "products/workflows.png",
+      "alt": "AI Agents for Real Estate",
+      "label": "AI Agents",
+      "categoryId": "agents",
+      "description": "Launch pre-configured Deal Scale agents with ready-to-go scripts and monetization.",
+      "link": "/products/atlas-voice-concierge",
+      "ariaLabel": "Explore marketplace-ready AI agents",
+      "colSpan": 1,
+      "rowSpan": 1
     }
   ],
   "testimonial": {

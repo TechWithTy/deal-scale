@@ -214,3 +214,13 @@ Based on your 30ms render time, check:
 2. Scroll and record again to see lazy-loaded components appear
 3. Compare first commit vs later commits
 
+
+
+
+
+
+
+
+
+
+

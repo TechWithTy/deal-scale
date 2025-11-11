@@ -1,0 +1,22 @@
+{
+  "title": "Data Enrichment Suite FAQs",
+  "subtitle": "Your questions about our premium data tools.",
+  "faqItems": [
+    {
+      "question": "How are 'Skip Tracing Credits' different from 'AI Credits'?",
+      "answer": "Skip Tracing Credits are specifically used for pulling and verifying data from our premium, enterprise-grade data partners (e.g., finding an owner's phone number). AI Credits are used for generative actions performed by our AI, like answering calls or designing mailers."
+    },
+    {
+      "question": "Where does this premium data come from?",
+      "answer": "We partner with multiple top-tier, trusted data providers who aggregate information from public records, credit bureaus, and telecommunication carriers to ensure the highest possible accuracy."
+    },
+    {
+      "question": "What happens if a search finds no information?",
+      "answer": "Credits are consumed for initiating a search against our premium data sources, regardless of the outcome. A search that returns no result is still valuable, as it tells you that a lead's information is likely invalid or out of date, saving you from wasting time on it."
+    },
+    {
+      "question": "Can I use these tools on an entire list at once?",
+      "answer": "Yes. All tools in the Data Enrichment Suite are designed for both single lookups and bulk actions on entire lead lists, allowing you to clean and enrich thousands of records simultaneously."
+    }
+  ]
+}

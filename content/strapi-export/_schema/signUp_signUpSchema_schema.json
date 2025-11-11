@@ -1,0 +1,68 @@
+{
+  "kind": "zodObject",
+  "fields": {
+    "firstName": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 2,
+      "maxLength": 50,
+      "pattern": "^[a-zA-Z\\s'-]+$"
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 2,
+      "maxLength": 50,
+      "pattern": "^[a-zA-Z\\s'-]+$"
+    },
+    "email": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1,
+      "email": true,
+      "maxLength": 255
+    },
+    "phone": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1,
+      "pattern": "^\\+?[1-9]\\d{1,14}$"
+    },
+    "password": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 8,
+      "maxLength": 100,
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$"
+    },
+    "confirmPassword": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false
+    },
+    "termsAccepted": {
+      "type": "boolean",
+      "required": true,
+      "unique": false,
+      "private": false
+    },
+    "marketingEmails": {
+      "type": "optional",
+      "required": true,
+      "default": false,
+      "unique": false,
+      "private": false
+    }
+  }
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "name": "phone_number",
+    "label": "Phone Number",
+    "type": "tel",
+    "placeholder": "+1 (555) 000-0000"
+  }
+]

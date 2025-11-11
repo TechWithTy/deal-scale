@@ -1,0 +1,22 @@
+{
+  "title": "Lead Dossier Generator FAQs",
+  "subtitle": "Your questions about our most powerful OSINT tool.",
+  "faqItems": [
+    {
+      "question": "Is this tool legal?",
+      "answer": "Yes. Our tool is a powerful search engine for Open-Source Intelligence (OSINT). It only finds and organizes publicly available information from public websites. It does not access private data."
+    },
+    {
+      "question": "What is 'Recursive Search' and why is it important?",
+      "answer": "Recursive search is our most powerful feature. If we find a new username on a person's profile (e.g., a link to their gaming account), our tool automatically starts a *new* search for that second username, linking profiles you would never find manually. It's how we build a complete 360-degree view."
+    },
+    {
+      "question": "How is this different from the Social Profile Hunter?",
+      "answer": "The Social Profile Hunter finds initial accounts. The Lead Dossier Generator does that, and then goes deeper by parsing the content of those pages and performing recursive searches on any new usernames it finds, creating a much more comprehensive web of connections."
+    },
+    {
+      "question": "Are there really no API keys or extra costs?",
+      "answer": "That's correct. The power of this tool is its ability to gather vast amounts of information without relying on paid APIs. As a Deal Scale subscriber, you get unlimited access at no extra cost."
+    }
+  ]
+}

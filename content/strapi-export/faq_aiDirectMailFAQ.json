@@ -1,0 +1,18 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Learn how Deal Scale's AI can transform your direct mail campaigns into a lead generation machine.",
+  "faqItems": [
+    {
+      "question": "How does the pricing work?",
+      "answer": "Our model is simple. You pay a predictable, flat-rate price for each mailer you send. Separately, you purchase 'AI Credits' to use for value-add services like generating personalized content, skip tracing owner data, or having our AI qualify inbound leads."
+    },
+    {
+      "question": "Who prints and sends the mail?",
+      "answer": "We do. Deal Scale operates a proprietary network of national mailing centers and technology to ensure high-quality printing, data management, and timely delivery for all our clients' campaigns. We handle everything in-house."
+    },
+    {
+      "question": "What are AI Credits used for?",
+      "answer": "You have full control. Use credits for: \n1. **AI Mailer Personalization** (1 credit per mail piece) \n2. **AI Lead Qualification** (5 credits when our AI engages a responding lead) \n3. **Skip Tracing** (10 credits for each successful owner data match). Credits never expire."
+    }
+  ]
+}

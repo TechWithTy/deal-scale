@@ -1,0 +1,22 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to common questions about our AI Inbound Call Qualification Agent.",
+  "faqItems": [
+    {
+      "question": "How does the pricing work?",
+      "answer": "Our model is simple. You pay a low, flat monthly fee for your dedicated AI-powered phone number. Then, you use flexible 'AI Credits' to pay for the time the AI is actively engaged on a call (2 credits per minute). There are no hidden fees."
+    },
+    {
+      "question": "Can I use my existing business phone number?",
+      "answer": "Yes, absolutely. You can simply forward your existing business line to your new Deal Scale AI number. Your customers continue to call the number they already know, and our AI handles the rest seamlessly."
+    },
+    {
+      "question": "Can the AI transfer a call to a live person?",
+      "answer": "Yes. You can configure rules for when a live transfer should occur. For example, a caller can request to speak to a human, or the AI can offer to transfer the call to a specific department or team member if it cannot handle the request."
+    },
+    {
+      "question": "What happens if a caller has a very specific or complex question?",
+      "answer": "The AI is trained to recognize the limits of its knowledge. If it encounters a question it can't answer, its primary goal is to intelligently route the caller. It can offer to schedule a call with the right expert or perform a hot transfer to a live agent immediately."
+    }
+  ]
+}

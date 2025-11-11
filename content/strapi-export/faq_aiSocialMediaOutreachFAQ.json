@@ -1,0 +1,26 @@
+{
+  "title": "AI Social Media Conversion FAQs",
+  "subtitle": "Learn how Deal Scale transforms social interactions into sales-ready appointments and calls.",
+  "faqItems": [
+    {
+      "question": "How does Deal Scale handle initial messages to prospects on social media?",
+      "answer": "Our system uses a sophisticated approach. You can implement proven, preset message scripts for common interactions (like initial comment replies or DMs). For more dynamic conversations, our AI can generate contextually relevant messages, all managed through our proprietary intelligent messaging engine."
+    },
+    {
+      "question": "Can I customize the preset message scripts used by the AI?",
+      "answer": "Yes, absolutely. We provide a library of high-converting scripts, and you have full flexibility to customize them or create your own from scratch to perfectly match your brand voice and sales strategy."
+    },
+    {
+      "question": "When does the system use AI-generated messages versus preset scripts?",
+      "answer": "You can configure this based on your preference. Typically, preset scripts are used for initial engagements or common questions. The AI can then take over for more nuanced parts of the conversation, handling objections, or when a query falls outside the scripted flow, ensuring a natural and effective dialogue."
+    },
+    {
+      "question": "How are leads qualified before an appointment is booked or a call is transferred?",
+      "answer": "The AI engages prospects in conversation, asking key qualifying questions defined in your scripts or determined by its understanding of a sales-ready lead. Only prospects meeting your criteria are advanced to an appointment or hot transfer."
+    },
+    {
+      "question": "Which social media platforms are supported for this engagement-to-conversion flow?",
+      "answer": "Currently, our AI Social Media Conversion feature is optimized for platforms like LinkedIn, Facebook (including comments on posts and DMs), and Instagram, where direct engagement can be effectively converted."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Social Profile Hunter FAQs",
+  "subtitle": "Your questions about our OSINT username search tool.",
+  "faqItems": [
+    {
+      "question": "Is this tool legal and safe to use?",
+      "answer": "Yes, 100%. The tool only searches for publicly available information on public websites. It does not access private data or perform any actions that would violate platform terms of service."
+    },
+    {
+      "question": "How is this different from just searching on Google?",
+      "answer": "While Google is powerful, our tool automates the process of checking a specific username or email against a curated list of over 600 websites, including many that may not rank high in search results. It's faster, more comprehensive, and specifically designed for this task."
+    },
+    {
+      "question": "What does the 'AI-Powered Metadata Extraction' do?",
+      "answer": "Instead of just giving you a list of links, our AI model scans the content of the discovered profiles to identify and highlight key information like full names, job titles, or locations, saving you the time of clicking through every single link."
+    },
+    {
+      "question": "Are there any limits on my searches?",
+      "answer": "No. As an active Deal Scale subscriber, you get free and unlimited use of the Social Profile Hunter for both username and email searches."
+    }
+  ]
+}

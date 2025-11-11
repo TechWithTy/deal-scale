@@ -1,0 +1,71 @@
+.hero-headline {
+	font-size: clamp(2rem, 4vw, 3.2rem);
+	line-height: 1.2;
+	text-align: center;
+	max-width: 45rem;
+	margin: 1rem auto 1.5rem;
+	color: #ffffff;
+	font-weight: 700;
+	overflow: visible;
+	white-space: normal;
+	text-wrap: balance;
+	text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+	transition: color 0.3s ease;
+}
+
+.hero-headline__block {
+	display: block;
+	margin-block: 0.35em;
+}
+
+.hero-headline__accent {
+	display: inline;
+	padding-inline: 0.1em;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+	transition: opacity 0.4s ease, transform 0.4s ease, background 0.4s ease,
+		color 0.4s ease;
+}
+
+.hero-headline__accent--persona {
+	background: var(
+		--hero-accent-persona,
+		linear-gradient(90deg, rgba(248, 250, 252, 0.92), rgba(226, 232, 240, 0.82))
+	);
+}
+
+.hero-headline__accent--action {
+	background: var(
+		--hero-accent-action,
+		linear-gradient(90deg, #3b82f6, #06b6d4)
+	);
+}
+
+.hero-headline__accent--risk {
+	background: var(
+		--hero-accent-risk,
+		linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(226, 232, 240, 0.78))
+	);
+}
+
+.hero-headline__personaLabel {
+	display: block;
+	font-size: 0.7rem;
+	letter-spacing: 0.32em;
+	text-transform: uppercase;
+	color: rgba(96, 165, 250, 0.85);
+	margin-bottom: 0.75rem;
+}
+
+.hero-headline__subtitle {
+	color: rgba(226, 232, 240, 0.85);
+	font-size: 1.125rem;
+	margin-top: 1.25rem;
+}
+
+.hero-headline__proof {
+	color: rgba(148, 163, 184, 0.85);
+	font-size: 0.9rem;
+	margin-top: 1.75rem;
+}

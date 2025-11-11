@@ -18,6 +18,10 @@ module.exports = {
 	},
 	moduleNameMapper: {
 		"^@/(.*)$": "<rootDir>/src/$1",
+		"^@external/dynamic-hero$":
+			"<rootDir>/src/components/dynamic-hero/src/index.ts",
+		"^@external/dynamic-hero/(.*)$":
+			"<rootDir>/src/components/dynamic-hero/src/$1",
 		"\\.(css|scss|sass)$": "<rootDir>/__mocks__/fileMock.js",
 		"\\.(svg)$": "<rootDir>/__mocks__/svgMock.js",
 		"^@upstash/redis$": "<rootDir>/__mocks__/@upstash/redis.js",

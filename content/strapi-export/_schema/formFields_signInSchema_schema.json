@@ -1,0 +1,19 @@
+{
+  "kind": "zodObject",
+  "fields": {
+    "email": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "email": true
+    },
+    "password": {
+      "type": "string",
+      "required": true,
+      "unique": false,
+      "private": false,
+      "minLength": 1
+    }
+  }
+}

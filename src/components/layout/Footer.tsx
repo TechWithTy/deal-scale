@@ -10,6 +10,8 @@ import {
 	MapPin,
 	Phone,
 	Twitter,
+	Youtube,
+	type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,6 +28,7 @@ export interface FooterProps {
 		mediumUsername?: string;
 		facebook?: string;
 		instagram?: string;
+		youtube?: string;
 	};
 	quickLinks: Array<{ href: string; label: string }>;
 	contactInfo: {
@@ -52,6 +55,26 @@ export const Footer: React.FC<FooterProps> = ({
 	cookiePolicyLink,
 }) => {
 	const currentYear = new Date().getFullYear();
+	type SocialLinkKey = Exclude<
+		keyof FooterProps["socialLinks"],
+		"mediumUsername"
+	>;
+
+	const socialIconClass =
+		"group flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/80 text-black shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:text-primary dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:border-primary/60 dark:hover:bg-primary/10";
+
+	const socialIconConfigs: Array<{
+		key: SocialLinkKey;
+		Icon: LucideIcon;
+		label: string;
+	}> = [
+		{ key: "github", Icon: Github, label: "GitHub" },
+		{ key: "instagram", Icon: Instagram, label: "Instagram" },
+		{ key: "linkedin", Icon: Linkedin, label: "LinkedIn" },
+		{ key: "facebook", Icon: Facebook, label: "Facebook" },
+		{ key: "twitter", Icon: Twitter, label: "Twitter / X" },
+		{ key: "youtube", Icon: Youtube, label: "YouTube" },
+	];
 
 	return (
 		<footer className="relative border-white/10 border-t bg-background-dark">
@@ -85,47 +108,28 @@ export const Footer: React.FC<FooterProps> = ({
 						<p className="mb-4 max-w-sm text-black text-sm dark:text-white/70">
 							{companyDescription}
 						</p>
-						<div className="flex justify-center space-x-3 lg:justify-start">
-							{socialLinks.github && (
-								<a
-									target="_blank"
-									rel="noopener noreferrer"
-									href={socialLinks.github}
-									className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-black transition-colors hover:border-primary hover:text-primary dark:text-white/70"
-								>
-									<Github className="h-4 w-4" />
-								</a>
-							)}
-							{socialLinks.instagram && (
-								<a
-									target="_blank"
-									rel="noopener noreferrer"
-									href={socialLinks.instagram}
-									className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-black transition-colors hover:border-primary hover:text-primary dark:text-white/70"
-								>
-									<Instagram className="h-4 w-4" />
-								</a>
-							)}
-							{socialLinks.linkedin && (
-								<a
-									target="_blank"
-									rel="noopener noreferrer"
-									href={socialLinks.linkedin}
-									className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-black transition-colors hover:border-primary hover:text-primary dark:text-white/70"
-								>
-									<Linkedin className="h-4 w-4" />
-								</a>
-							)}
-							{socialLinks.facebook && (
-								<a
-									target="_blank"
-									rel="noopener noreferrer"
-									href={socialLinks.facebook}
-									className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-black transition-colors hover:border-primary hover:text-primary dark:text-white/70"
-								>
-									<Facebook className="h-4 w-4" />
-								</a>
-							)}
+						<div className="flex justify-center gap-3 lg:justify-start">
+							{socialIconConfigs.map(({ key, Icon, label }) => {
+								const url = socialLinks[key];
+
+								if (!url) {
+									return null;
+								}
+
+								return (
+									<a
+										key={key}
+										target="_blank"
+										rel="noopener noreferrer"
+										href={url}
+										className={socialIconClass}
+										aria-label={label}
+										title={label}
+									>
+										<Icon className="h-5 w-5 transition-transform group-hover:scale-110" />
+									</a>
+								);
+							})}
 						</div>
 					</div>
 

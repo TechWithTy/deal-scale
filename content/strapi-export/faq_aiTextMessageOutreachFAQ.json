@@ -1,0 +1,26 @@
+{
+  "title": "AI Text Message Outreach FAQs",
+  "subtitle": "Learn how Deal Scale uses AI to make your SMS campaigns more personal, compliant, and effective.",
+  "faqItems": [
+    {
+      "question": "How does the AI personalize text messages?",
+      "answer": "Our AI uses data from your imported lists (like name, city, last interaction) and allows you to insert personalization tokens into your message templates. It can also tailor responses in two-way conversations based on the prospect's replies and context."
+    },
+    {
+      "question": "What compliance features are included for SMS outreach?",
+      "answer": "Deal Scale's platform includes automatic management of opt-out requests (STOP keywords), ensures messages identify your business (if required), and helps you adhere to TCPA guidelines. We always recommend consulting legal counsel for specific compliance needs."
+    },
+    {
+      "question": "Can the AI handle actual conversations over SMS?",
+      "answer": "Yes, our AI is designed for two-way SMS conversations. It can understand replies, answer frequently asked questions based on your provided knowledge, ask qualifying questions, and identify when a lead is ready for human intervention."
+    },
+    {
+      "question": "How are leads from SMS campaigns passed to my sales team?",
+      "answer": "Leads qualified by the AI via SMS can trigger notifications to your team, be automatically updated in your integrated CRM with conversation history, or even initiate other automated actions within Deal Scale, like adding them to an AI call campaign."
+    },
+    {
+      "question": "Do I need to get my own phone number for sending texts?",
+      "answer": "While you can often use a shared shortcode or pooled numbers for some campaigns, we typically recommend and can help provision a dedicated local or toll-free number for your campaigns to improve deliverability and brand recognition."
+    }
+  ]
+}
