@@ -70,20 +70,11 @@ export const BackgroundBeamsWithCollision = ({
 		<div
 			ref={parentRef}
 			className={cn(
-				"relative flex w-full items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background/95 to-background py-16 md:py-20",
-				"min-h-[720px]",
+				"relative flex h-96 w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white to-neutral-100 md:h-[40rem] dark:from-neutral-950 dark:to-neutral-800",
+				// h-screen if you want bigger
 				className,
 			)}
 		>
-			<div
-				className="pointer-events-none absolute inset-0 z-0 opacity-55 mix-blend-screen"
-				style={{
-					background:
-						"linear-gradient(rgba(59,130,246,0.06) 0 1px, transparent 1px 100%) 50% 0/28px 28px, linear-gradient(90deg, rgba(59,130,246,0.05) 0 1px, transparent 1px 100%) 0 50%/28px 28px",
-				}}
-				aria-hidden="true"
-			/>
-
 			{beams.map((beam) => (
 				<CollisionMechanism
 					key={beam.initialX + "beam-idx"}
@@ -93,15 +84,15 @@ export const BackgroundBeamsWithCollision = ({
 				/>
 			))}
 
-			<div className="relative z-10 w-full">{children}</div>
+			{children}
 			<div
 				ref={containerRef}
-				className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-sky-500/14 to-sky-500/28"
+				className="pointer-events-none absolute inset-x-0 bottom-0 w-full bg-neutral-100"
 				style={{
 					boxShadow:
-						"0 0 28px rgba(59,130,246,0.24), 0 1px 1px rgba(14,116,144,0.2), 0 0 0 1px rgba(15,23,42,0.18), 0 0 18px rgba(37,99,235,0.22)",
+						"0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
 				}}
-			/>
+			></div>
 		</div>
 	);
 };

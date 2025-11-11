@@ -72,7 +72,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
 			<HeroAurora className="z-0 opacity-80 dark:opacity-90" />
 
-			<BackgroundBeamsWithCollision className="relative z-0 flex min-h-screen w-full items-center justify-center pb-20">
+			<BackgroundBeamsWithCollision className="relative z-0 flex w-full items-center justify-center pb-16">
 				<div className="container relative z-10 mx-auto flex w-full flex-col items-center gap-12 px-4 py-16 md:px-8">
 					<div
 						id="loan-officer-hero-top"
