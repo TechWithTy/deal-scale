@@ -73,11 +73,12 @@ export const TextRevealCard = ({
     >
       {children}
 
-      <div className="h-40  relative flex items-center overflow-hidden">
+      <div className="relative flex min-h-[12rem] flex-col justify-center overflow-hidden">
         <motion.div
           style={{
             width: "100%",
           }}
+          className="pr-4"
           animate={
             isMouseOver
               ? {
@@ -89,13 +90,13 @@ export const TextRevealCard = ({
                 }
           }
           transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-          className="absolute bg-[#1d1c20] z-20  will-change-transform"
+          className="absolute left-0 top-1/2 z-20 -translate-y-1/2 bg-[#1d1c20] pr-4 will-change-transform"
         >
           <p
             style={{
               textShadow: "4px 4px 15px rgba(0,0,0,0.5)",
             }}
-            className="text-base sm:text-[3rem] py-10 font-bold text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-300"
+            className="text-2xl sm:text-[2.75rem] py-6 font-bold text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-300"
           >
             {revealText}
           </p>
@@ -107,11 +108,12 @@ export const TextRevealCard = ({
             opacity: widthPercentage > 0 ? 1 : 0,
           }}
           transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-          className="h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent absolute z-50 will-change-transform"
+          className="absolute z-50 h-[70%] w-[6px] -translate-y-1/2 bg-gradient-to-b from-transparent via-neutral-800 to-transparent will-change-transform"
+          style={{ top: "50%" }}
         ></motion.div>
 
         <div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
-          <p className="text-base sm:text-[3rem] py-10 font-bold bg-clip-text text-transparent bg-[#323238]">
+          <p className="text-2xl sm:text-[2.75rem] py-6 font-bold bg-clip-text text-transparent bg-[#323238]">
             {text}
           </p>
           <MemoizedStars />

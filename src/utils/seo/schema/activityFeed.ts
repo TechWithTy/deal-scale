@@ -2,11 +2,7 @@ import { companyData } from "@/data/company";
 import type { ActivityEvent } from "@/data/activity/activityStream";
 import { defaultSeo } from "@/utils/seo/staticSeo";
 
-import {
-	ORGANIZATION_ID,
-	SCHEMA_CONTEXT,
-	buildAbsoluteUrl,
-} from "./helpers";
+import { ORGANIZATION_ID, SCHEMA_CONTEXT, buildAbsoluteUrl } from "./helpers";
 import type {
 	DataFeedSchema,
 	DataFeedItemSchema,

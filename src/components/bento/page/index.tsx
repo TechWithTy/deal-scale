@@ -1,9 +1,7 @@
 "use client";
 
-import BentoCard from "@/components/bento/BentoCard";
-import BentoGrid from "@/components/bento/BentoGrid";
 import Header from "@/components/common/Header";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { BentoCard as MagicBentoCard, BentoGrid as MagicBentoGrid } from "@/components/ui/bento-grid";
 import type { BentoFeature } from "@/types/bento/features";
 import type React from "react";
 
@@ -18,20 +16,28 @@ const BentoPage: React.FC<BentoPageProps> = ({ title, subtitle, features }) => {
 		<div className="py-12 text-black dark:text-white">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6">
 				<Header title={title} subtitle={subtitle} className="mb-12" />
-				<BentoGrid className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+				<MagicBentoGrid className="lg:grid-rows-3">
 					{features.map((feature) => (
-						<BentoCard
+						<MagicBentoCard
 							key={feature.title}
-							title={feature.title}
-							description={feature.description || ""}
-							icon={feature.icon}
-							size={feature.size}
-							className="transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+							name={feature.title}
+							description={feature.description ?? ""}
+							Icon={() => <>{feature.icon}</>}
+							href="#"
+							cta="Learn more"
+							className={`relative overflow-hidden bg-background-dark/80 text-foreground shadow-[0_16px_45px_-30px_rgba(14,165,233,0.35)] dark:bg-background-dark/90 ${feature.className ?? ""}`}
+							background={
+								<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+									{feature.background}
+								</div>
+							}
 						>
-							{feature.content}
-						</BentoCard>
+							<div className="relative z-10 flex flex-col gap-4 rounded-2xl bg-background/95 p-5 text-left text-foreground shadow-[0_15px_45px_-30px_rgba(14,165,233,0.35)] ring-1 ring-border/40 dark:bg-background/85 dark:text-foreground">
+								{feature.content}
+							</div>
+						</MagicBentoCard>
 					))}
-				</BentoGrid>
+				</MagicBentoGrid>
 			</div>
 		</div>
 	);

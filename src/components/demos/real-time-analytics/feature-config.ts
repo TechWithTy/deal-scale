@@ -26,6 +26,25 @@ const featureMediaSchema = z.object({
 });
 
 /**
+ * Schema describing the optional analytics chart block.
+ */
+const featureChartDatumSchema = z.object({
+	period: z.string().min(1),
+	current: z.number(),
+	previous: z.number().optional(),
+	target: z.number().optional(),
+});
+
+const featureChartSchema = z.object({
+	heading: z.string().min(1),
+	description: z.string().min(1),
+	data: z.array(featureChartDatumSchema).min(1),
+	currentLabel: z.string().min(1),
+	previousLabel: z.string().optional(),
+	targetLabel: z.string().optional(),
+});
+
+/**
  * Schema for a single demo feature entry.
  */
 export const realTimeFeatureSchema = z.object({
@@ -36,6 +55,7 @@ export const realTimeFeatureSchema = z.object({
 	media: featureMediaSchema,
 	highlights: z.array(featureHighlightSchema).min(1),
 	metrics: z.array(featureMetricSchema).default([]),
+	chart: featureChartSchema.optional(),
 });
 
 /**
@@ -44,6 +64,66 @@ export const realTimeFeatureSchema = z.object({
 const realTimeFeatureListSchema = z.array(realTimeFeatureSchema).min(1);
 
 const realTimeFeaturesSeed = [
+	{
+		id: "insight-pulse",
+		label: "Insight Pulse",
+		eyebrow: "Dynamic analytics overview",
+		description:
+			"Zoom into deal health, revenue velocity, and quota pacing inside a live charting workspace. Operators compare real-time performance to last sprint and quarterly targets without leaving the Macbook canvas.",
+		media: {
+			src: "/demos/real-time-dashboard.svg",
+			alt: "Deal Scale analytics canvas showing live charts and streaming KPIs.",
+		},
+		chart: {
+			heading: "Pipeline velocity vs. target",
+			description:
+				"Live pipeline units streamed from the orchestration layer. Benchmarks update every 30 seconds as data lands in the warehouse.",
+			currentLabel: "Live pipeline",
+			previousLabel: "Last sprint",
+			targetLabel: "Target pace",
+			data: [
+				{ period: "Mon", current: 320, previous: 285, target: 300 },
+				{ period: "Tue", current: 344, previous: 298, target: 310 },
+				{ period: "Wed", current: 362, previous: 305, target: 320 },
+				{ period: "Thu", current: 378, previous: 312, target: 335 },
+				{ period: "Fri", current: 401, previous: 318, target: 348 },
+			],
+		},
+		highlights: [
+			{
+				title: "Segment drill-downs",
+				description:
+					"Slice the live chart by region, AE pod, or campaign cohort and instantly compare to last sprint performance.",
+				metric: {
+					label: "Filters applied",
+					value: "7 segments",
+				},
+			},
+			{
+				title: "AI pacing forecasts",
+				description:
+					"Blend historical trendlines with AI projections so revenue leaders understand if they are ahead or behind pace.",
+				metric: {
+					label: "Forecast delta",
+					value: "+6.4%",
+				},
+			},
+		],
+		metrics: [
+			{
+				label: "Deals in motion",
+				value: "126 deals",
+			},
+			{
+				label: "Revenue pace",
+				value: "$4.2M",
+			},
+			{
+				label: "Win uplift",
+				value: "12.5%",
+			},
+		],
+	},
 	{
 		id: "command-center",
 		label: "Analytics Command Center",

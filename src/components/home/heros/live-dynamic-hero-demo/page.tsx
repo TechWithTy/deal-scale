@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
 	HeroAurora,
 	HeroHeadline,
 	HeroVideoPreview,
 } from "@external/dynamic-hero";
+import { useInView } from "motion/react";
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
@@ -45,6 +46,16 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 
 	const sections = useMemo(() => SCROLL_SECTIONS, []);
 	const [activeSection, setActiveSection] = useState(sections[0]?.id ?? "");
+	const heroRef = useRef<HTMLDivElement | null>(null);
+	const isHeroInView = useInView(heroRef, {
+		amount: 0.35,
+		margin: "0px 0px -20% 0px",
+	});
+	const [isHeroAnimating, setIsHeroAnimating] = useState(true);
+
+	useEffect(() => {
+		setIsHeroAnimating(isHeroInView ?? true);
+	}, [isHeroInView]);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -99,6 +110,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 				<div className="container relative z-10 mx-auto flex w-full flex-col items-center gap-14 px-6 py-16 md:px-10 lg:px-12">
 					<div
 						id="investor-hero-top"
+						ref={heroRef}
 						className="flex w-full flex-col items-center gap-8 text-center md:max-w-4xl lg:max-w-5xl xl:max-w-6xl"
 						data-beam-collider="true"
 					>
@@ -112,7 +124,8 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 							socialProof={LIVE_SOCIAL_PROOF}
 							reviews={LIVE_SOCIAL_PROOF.reviews}
 							personaLabel={PERSONA_LABEL}
-							personaDescription={PERSONA_GOAL}
+							personaDescription={PERSONA_LABEL}
+							isAnimating={isHeroAnimating}
 						/>
 					</div>
 

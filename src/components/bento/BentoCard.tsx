@@ -32,10 +32,10 @@ const BentoCard: React.FC<BentoCardProps> = ({
 	const [isPaused, setIsPaused] = useState<boolean>(false);
 
 	const sizeClasses: Record<string, string> = {
-		sm: "col-span-full md:col-span-3",
-		md: "col-span-full md:col-span-6",
-		lg: "col-span-full md:col-span-8",
-		xl: "col-span-full md:col-span-12",
+		sm: "col-span-12 md:col-span-3 lg:col-span-3",
+		md: "col-span-12 md:col-span-3 lg:col-span-4",
+		lg: "col-span-12 md:col-span-6 lg:col-span-6",
+		xl: "col-span-12 md:col-span-6 lg:col-span-8",
 	};
 
 	const content = children ? (
@@ -51,7 +51,7 @@ const BentoCard: React.FC<BentoCardProps> = ({
 			className={cn(
 				"w-full",
 				// Replace 'cyber-card' with theme-compliant classes
-				"group w-full overflow-hidden rounded-3xl border border-border/60 bg-background-dark/70 shadow-lg backdrop-blur-md transition-all duration-300 hover:border-accent/60 hover:shadow-[0_24px_60px_-38px_rgba(59,130,246,0.45)]",
+				"group w-full overflow-hidden rounded-2xl border border-border/20 bg-background-dark/80 shadow-[0_10px_30px_-15px_rgba(14,165,233,0.35)] backdrop-blur-md transition-all duration-300 hover:border-accent/60 hover:shadow-[0_25px_60px_-35px_rgba(59,130,246,0.55)]",
 				sizeClasses[size],
 				bgColor,
 				className,
