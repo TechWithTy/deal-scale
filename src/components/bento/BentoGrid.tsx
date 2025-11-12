@@ -13,7 +13,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ children, className }) => {
 	return (
 		<div
 			className={cn(
-				"grid grid-cols-1 justify-items-center gap-4 md:grid-cols-4",
+				"grid auto-rows-[minmax(220px,auto)] grid-cols-1 gap-5 md:auto-rows-[minmax(260px,auto)] md:grid-cols-6 lg:grid-cols-12",
 				className,
 			)}
 		>

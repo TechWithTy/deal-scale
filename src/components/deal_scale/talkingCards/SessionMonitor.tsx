@@ -18,6 +18,7 @@ export default function SessionMonitor({
 	onSessionReset,
 	autoStart = false,
 	showCompletionModal = true,
+	variant = "default",
 }: {
 	transcript: Transcript;
 	onCallEnd?: () => void;
@@ -25,6 +26,7 @@ export default function SessionMonitor({
 	onSessionReset?: (resetFn: () => void) => void;
 	autoStart?: boolean;
 	showCompletionModal?: boolean;
+	variant?: "default" | "compact";
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [sessionKey, setSessionKey] = useState(Date.now()); // Used to reset the session
@@ -61,6 +63,7 @@ export default function SessionMonitor({
 				onTransfer={onTransfer}
 				onSessionReset={onSessionReset}
 				autoStart={autoStart}
+				variant={variant}
 			/>
 			{showCompletionModal && isModalOpen && (
 				<CallCompleteModal isOpen={isModalOpen} onClose={handleCloseModal} />
