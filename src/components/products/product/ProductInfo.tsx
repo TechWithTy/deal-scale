@@ -29,12 +29,12 @@ interface ProductInfoProps {
  * - Purely presentational; no modal/payment logic
  */
 export default function ProductInfo({
-        product,
-        onInitiateCheckout,
-        checkoutLoading,
-        stripeLoaded,
-        setActiveTab,
-        ctaText,
+	product,
+	onInitiateCheckout,
+	checkoutLoading,
+	stripeLoaded,
+	setActiveTab,
+	ctaText,
 }: ProductInfoProps) {
 	// * Find selected type data for price
 	const selectedTypeData = product.types.find(
@@ -85,43 +85,43 @@ export default function ProductInfo({
 		}
 	};
 
-        const isFreeResource =
-                product.categories?.includes(ProductCategory.FreeResources) &&
-                Boolean(product.resource);
+	const isFreeResource =
+		product.categories?.includes(ProductCategory.FreeResources) &&
+		Boolean(product.resource);
 
-        return (
-                <div>
-                        {/* Product title and price */}
-                        <ProductTitle product={product} currentPrice={currentPrice} />
+	return (
+		<div>
+			{/* Product title and price */}
+			<ProductTitle product={product} currentPrice={currentPrice} />
 			{/* Star rating and reviews */}
 			<ProductStars
 				rating={averageRating}
 				reviewCount={reviewCount}
 				setActiveTab={setActiveTab}
 			/>
-                        <div className="mt-6">
-                                {!isFreeResource && (
-                                        <>
-                                                {/* Type picker */}
-                                                <ProductTypePicker product={product} />
-                                                {/* Color picker */}
-                                                <ProductColorPicker product={product} />
-                                                {/* Size picker */}
-                                                <ProductSizePicker product={product} />
-                                                {/* Purchase/Favorite/Share actions */}
-                                                <ProductQuantityPicker />
-                                        </>
-                                )}
-                                <ProductActions
-                                        onCheckout={handleCheckoutClick}
-                                        checkoutLoading={checkoutLoading}
-                                        stripeLoaded={stripeLoaded}
-                                        ctaText={isFreeResource ? undefined : ctaText}
-                                        product={product}
-                                        enableAddToCart={!isFreeResource}
-                                />
-                                {/* Trusted by logos */}
-                                <TrustedBySection />
+			<div className="mt-6">
+				{!isFreeResource && (
+					<>
+						{/* Type picker */}
+						<ProductTypePicker product={product} />
+						{/* Color picker */}
+						<ProductColorPicker product={product} />
+						{/* Size picker */}
+						<ProductSizePicker product={product} />
+						{/* Purchase/Favorite/Share actions */}
+						<ProductQuantityPicker />
+					</>
+				)}
+				<ProductActions
+					onCheckout={handleCheckoutClick}
+					checkoutLoading={checkoutLoading}
+					stripeLoaded={stripeLoaded}
+					ctaText={isFreeResource ? undefined : ctaText}
+					product={product}
+					enableAddToCart={!isFreeResource}
+				/>
+				{/* Trusted by logos */}
+				<TrustedBySection />
 			</div>
 		</div>
 	);

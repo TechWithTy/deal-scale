@@ -45,6 +45,9 @@ const nextConfig: NextConfig = {
 			{ protocol: "https", hostname: "placehold.co" },
 			{ protocol: "https", hostname: "cdn-images-1.medium.com" },
 			{ protocol: "https", hostname: "i.imgur.com" },
+			{ protocol: "https", hostname: "upload.wikimedia.org" },
+			{ protocol: "https", hostname: "images.seeklogo.com" },
+			{ protocol: "https", hostname: "kestra.io" },
 			{
 				protocol: "https",
 				hostname: "beehiiv-images-production.s3.amazonaws.com",

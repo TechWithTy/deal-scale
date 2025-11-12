@@ -152,7 +152,7 @@ export function TextFlipHighlight({
 							rotateX: { duration: animationDuration / 1100, ease: "easeOut" },
 						}}
 						className={cn(
-							"text-balance font-semibold text-base md:text-lg whitespace-nowrap",
+							"whitespace-nowrap text-balance font-semibold text-base md:text-lg",
 							theme.text,
 							textClassName,
 						)}

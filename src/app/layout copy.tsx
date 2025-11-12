@@ -34,7 +34,7 @@ export default function RootLayout({
 								<PageLayout>{children}</PageLayout>
 							</QueryClientProvider>
 						</NextAuthProvider>
-                                                <Analytics config={{}} />
+						<Analytics config={{}} />
 					</Suspense>
 					{/* Zoho Chat Widgets */}
 					{/* To use Zoho SalesIQ, uncomment the following line and comment out the ZohoSupportScript line below */}

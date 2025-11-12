@@ -52,7 +52,10 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
 		page: window.location.pathname,
 		navigationType,
 		rating: "rating" in metric ? metric.rating : undefined,
-		delta: "delta" in metric ? Number((metric.delta as number).toFixed(3)) : undefined,
+		delta:
+			"delta" in metric
+				? Number((metric.delta as number).toFixed(3))
+				: undefined,
 		timestamp: Date.now(),
 	};
 

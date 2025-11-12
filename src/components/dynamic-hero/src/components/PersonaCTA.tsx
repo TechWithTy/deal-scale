@@ -3,9 +3,9 @@
 import type { FC, ReactNode } from "react";
 import { useCallback, useMemo } from "react";
 
-import { cn } from "@/lib/utils";
-import { Pointer } from "@/components/ui/pointer";
 import { Button } from "@/components/ui/button";
+import { Pointer } from "@/components/ui/pointer";
+import { cn } from "@/lib/utils";
 
 import { AnimatePresence, motion } from "motion/react";
 import { z } from "zod";
@@ -62,10 +62,10 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 		displayMode !== "primary" && secondary !== undefined;
 	const isHorizontal = orientation === "horizontal";
 	const stackClasses = isHorizontal
-		? "grid w-full max-w-3xl items-stretch justify-center gap-4 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))] md:gap-6"
+		? "grid w-full max-w-3xl grid-cols-1 items-stretch justify-center gap-4 sm:gap-5 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))] md:gap-6"
 		: "flex w-full max-w-3xl flex-col items-stretch justify-center gap-4";
 	const contentAlignment = isHorizontal
-		? "items-start text-left md:items-center md:text-center"
+		? "items-center text-center lg:items-start lg:text-left"
 		: "items-center text-center";
 	const secondaryCopy = useMemo(() => secondary, [secondary]);
 
@@ -138,8 +138,8 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 				{shouldRenderPrimary && (
 					<div
 						className={cn(
-							"relative w-full",
-							isHorizontal ? "md:min-w-[260px]" : "min-w-[240px]",
+							"relative w-full min-w-0",
+							isHorizontal ? "md:min-w-[260px]" : "",
 						)}
 					>
 						<Button
@@ -221,8 +221,8 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 				{shouldRenderSecondary && secondaryCopy && (
 					<div
 						className={cn(
-							"relative w-full",
-							isHorizontal ? "md:min-w-[260px]" : "min-w-[240px]",
+							"relative w-full min-w-0",
+							isHorizontal ? "md:min-w-[260px]" : "",
 						)}
 					>
 						<Button

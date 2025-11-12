@@ -66,6 +66,12 @@ export function NewsletterEmailInput() {
 		}
 	};
 
+	if (!hasMounted) {
+		return (
+			<div className="h-12 w-full max-w-md rounded-md border border-border/40 bg-background/40" />
+		);
+	}
+
 	if (isSubscribed) {
 		return (
 			<div className="rounded-md border border-green-500 bg-green-50 px-4 py-3 text-center text-green-800">

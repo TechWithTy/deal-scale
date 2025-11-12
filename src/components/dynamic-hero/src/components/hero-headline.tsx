@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { Globe } from "@/components/ui/globe";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import {
 	Tooltip,
 	TooltipContent,
@@ -127,29 +126,7 @@ export function HeroHeadline({
 				className,
 			)}
 		>
-			<div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-				<Globe
-					className={cn(
-						"opacity-30 saturate-[1.2]",
-						"-translate-x-[18%] w-[200vw] max-w-none translate-y-28",
-						"sm:-translate-x-[12%] sm:w-[160vw] sm:translate-y-20",
-						"md:-translate-x-[10%] md:w-[130vw] md:translate-y-12",
-						"lg:-translate-x-[6%] lg:w-[105vw] lg:translate-y-6",
-						"xl:-translate-x-[4%] xl:w-[95vw] xl:translate-y-2",
-					)}
-					style={{
-						maskImage:
-							"radial-gradient(circle at 50% 45%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 75%)",
-					}}
-				/>
-				<ProgressiveBlur
-					position="bottom"
-					height="55%"
-					blurLevels={[0.5, 1, 2, 6, 12, 18, 24, 32]}
-					className="pointer-events-none hidden md:block"
-				/>
-				<div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-background/85 to-background" />
-			</div>
+			<div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden" />
 
 			<div className="relative z-10 flex w-full flex-col items-center gap-6 text-center">
 				{showChips && (primaryChip || secondaryChip) ? (
@@ -209,7 +186,10 @@ export function HeroHeadline({
 					initial={{ opacity: 0, y: 8 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.24 }}
-					className={cn(styles.heroHeadline, "text-balance font-semibold")}
+				className={cn(
+					styles.heroHeadline,
+					"text-balance font-semibold text-slate-900 dark:text-white",
+				)}
 				>
 					<span className={styles.heroHeadlineBlock}>
 						Stop{" "}
@@ -226,7 +206,7 @@ export function HeroHeadline({
 							</motion.span>
 						</AnimatePresence>
 					</span>
-					<span className="hero-headline__block">
+					<span className={styles.heroHeadlineBlock}>
 						Start{" "}
 						<AnimatePresence mode="sync" initial={false}>
 							<motion.span
@@ -241,7 +221,7 @@ export function HeroHeadline({
 							</motion.span>
 						</AnimatePresence>
 					</span>
-					<span className="hero-headline__block">
+					<span className={styles.heroHeadlineBlock}>
 						Before{" "}
 						<AnimatePresence mode="sync" initial={false}>
 							<motion.span

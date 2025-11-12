@@ -1,8 +1,8 @@
 "use client";
 import Header from "@/components/common/Header";
 import type {
-        CompanyLogoDictType,
-        CompanyPartner,
+	CompanyLogoDictType,
+	CompanyPartner,
 } from "@/types/service/trusted-companies";
 import { motion, useAnimation } from "framer-motion";
 import Link from "next/link";

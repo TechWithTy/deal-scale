@@ -13,14 +13,21 @@ export function createSelectionCache<S>(): SelectionCache<S> {
 	return {
 		read(selection, equality) {
 			if (hasCachedValue && equality(cachedSelection, selection)) {
-				console.log(`[SelectionCache:${cacheId}] Cache HIT - returning cached selection`);
+				console.log(
+					`[SelectionCache:${cacheId}] Cache HIT - returning cached selection`,
+				);
 				return cachedSelection;
 			}
 
-			console.log(`[SelectionCache:${cacheId}] Cache MISS - caching new selection`, {
-				hadCachedValue: hasCachedValue,
-				isEqual: hasCachedValue ? equality(cachedSelection, selection) : false,
-			});
+			console.log(
+				`[SelectionCache:${cacheId}] Cache MISS - caching new selection`,
+				{
+					hadCachedValue: hasCachedValue,
+					isEqual: hasCachedValue
+						? equality(cachedSelection, selection)
+						: false,
+				},
+			);
 
 			cachedSelection = selection;
 			hasCachedValue = true;

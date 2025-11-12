@@ -3,8 +3,8 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useDataModule } from "@/stores/useDataModuleStore";
 import { useHasMounted } from "@/hooks/useHasMounted";
+import { useDataModule } from "@/stores/useDataModuleStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Bell, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -19,43 +19,48 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const Newsletter = () => {
-        const hasMounted = useHasMounted();
-        const [isSubmitting, setIsSubmitting] = useState(false);
-        const [isSubscribed, setIsSubscribed] = useState(false);
-        const [error, setError] = useState<string | null>(null);
-        const { status: companyStatus, company, error: companyError } = useDataModule(
-                "company",
-                ({ status, data, error: companyLoadError }) => ({
-                        status,
-                        company: data?.companyData,
-                        error: companyLoadError,
-                }),
-        );
+	const hasMounted = useHasMounted();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isSubscribed, setIsSubscribed] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const {
+		status: companyStatus,
+		company,
+		error: companyError,
+	} = useDataModule("company", ({ status, data, error: companyLoadError }) => ({
+		status,
+		company: data?.companyData,
+		error: companyLoadError,
+	}));
 
-        useEffect(() => {
-                if (!hasMounted) return;
-                // Check for the subscription cookie
-                const match = document.cookie.match(/userSubscribedNewsletter=([^;]+)/);
-                if (match && match[1] === "true") {
-                        setIsSubscribed(true);
-                }
-        }, [hasMounted]);
+	useEffect(() => {
+		if (!hasMounted) return;
+		// Check for the subscription cookie
+		const match = document.cookie.match(/userSubscribedNewsletter=([^;]+)/);
+		if (match && match[1] === "true") {
+			setIsSubscribed(true);
+		}
+	}, [hasMounted]);
 
-        const isCompanyLoading = companyStatus === "idle" || companyStatus === "loading";
-        const isCompanyError = companyStatus === "error";
-        const hasPolicyLinks = Boolean(
-                company?.privacyPolicyLink && company?.termsOfServiceLink,
-        );
+	const isCompanyLoading =
+		companyStatus === "idle" || companyStatus === "loading";
+	const isCompanyError = companyStatus === "error";
+	const hasPolicyLinks = Boolean(
+		company?.privacyPolicyLink && company?.termsOfServiceLink,
+	);
 
-        if (isCompanyError) {
-                console.error("[Newsletter] Failed to load company policy links", companyError);
-        }
+	if (isCompanyError) {
+		console.error(
+			"[Newsletter] Failed to load company policy links",
+			companyError,
+		);
+	}
 
-        const {
-                register,
-                handleSubmit,
-                reset,
-                formState: { errors },
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
 	} = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -164,38 +169,38 @@ export const Newsletter = () => {
 						<p className="mt-4 text-center text-red-500 text-sm dark:text-red-400">
 							{error}
 						</p>
-                                        )}
-                                        <p className="mt-4 text-center text-sm">
-                                                {isCompanyLoading ? (
-                                                        <span className="text-muted-foreground">
-                                                                Loading policy details…
-                                                        </span>
-                                                ) : hasPolicyLinks ? (
-                                                        <>
-                                                                By subscribing, you agree to our{" "}
-                                                                <a
-                                                                        href={company?.privacyPolicyLink}
-                                                                        className="underline hover:text-primary"
-                                                                >
-                                                                        Privacy Policy
-                                                                </a>{" "}
-                                                                and{" "}
-                                                                <a
-                                                                        href={company?.termsOfServiceLink}
-                                                                        className="underline hover:text-primary"
-                                                                >
-                                                                        Terms of Service
-                                                                </a>
-                                                                .
-                                                        </>
-                                                ) : (
-                                                        <span className="text-muted-foreground">
-                                                                Policy links will be available soon.
-                                                        </span>
-                                                )}
-                                        </p>
-                                </form>
-                        )}
+					)}
+					<p className="mt-4 text-center text-sm">
+						{isCompanyLoading ? (
+							<span className="text-muted-foreground">
+								Loading policy details…
+							</span>
+						) : hasPolicyLinks ? (
+							<>
+								By subscribing, you agree to our{" "}
+								<a
+									href={company?.privacyPolicyLink}
+									className="underline hover:text-primary"
+								>
+									Privacy Policy
+								</a>{" "}
+								and{" "}
+								<a
+									href={company?.termsOfServiceLink}
+									className="underline hover:text-primary"
+								>
+									Terms of Service
+								</a>
+								.
+							</>
+						) : (
+							<span className="text-muted-foreground">
+								Policy links will be available soon.
+							</span>
+						)}
+					</p>
+				</form>
+			)}
 			<div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
 				<div className="rounded-xl border-2 border-primary/30 bg-background-dark/20 p-6 text-center shadow-lg shadow-primary/10/10 backdrop-blur-sm transition-all duration-300 hover:border-primary/50">
 					<h3 className="mb-2 font-medium text-black text-lg text-primary dark:text-primary dark:text-white">

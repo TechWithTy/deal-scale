@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Testimonial } from "@/types/testimonial";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { AnimatePresence, type Variants, motion } from "framer-motion";
 import { TAB_KEYS, type TabKey } from "./tabConfig";
 
 interface TestimonialTabsProps {

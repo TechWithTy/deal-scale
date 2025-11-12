@@ -1,13 +1,13 @@
 {
-	"files": [],
-	"references": [
-		{
-			"path": "./tsconfig.app.json"
-		},
-		{
-			"path": "./tsconfig.node.json"
-		}
-	],
+        "files": [],
+        "references": [
+                {
+                        "path": "./tsconfig.app.json"
+                },
+                {
+                        "path": "./tsconfig.node.json"
+                }
+        ],
         "compilerOptions": {
                 "baseUrl": ".",
                 "paths": {
@@ -42,9 +42,9 @@
                         }
                 ]
         },
-	"include": [
-		"next-env.d.ts",
-		".next/types/**/*.ts",
+        "include": [
+                "next-env.d.ts",
+                ".next/types/**/*.ts",
                 "**/*.ts",
                 "**/*.tsx",
                 "next.config.ts"

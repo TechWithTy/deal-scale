@@ -7,16 +7,17 @@ import { useAuthModal } from "@/components/auth/use-auth-store";
 import { usePagination } from "@/hooks/use-pagination";
 import { ProductCategory, type ProductType } from "@/types/products";
 import { useSession } from "next-auth/react";
-import React, {
-        useCallback,
-        useEffect,
-        useMemo,
-        useRef,
-        useState,
-        type ReactNode,
+import type React from "react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
 } from "react";
-import ProductCardNew from "./product/ProductCardNew";
 import FreeResourceCard from "./product/FreeResourceCard";
+import ProductCardNew from "./product/ProductCardNew";
 import ProductFilter from "./product/ProductFilter";
 import type { ProductCategoryOption } from "./product/ProductFilter";
 import ProductHero from "./product/ProductHero";
@@ -30,6 +31,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 	workflows: "Workflows",
 	essentials: "Essentials",
 	notion: "Notion",
+	voices: "Voices",
 	leads: "Leads",
 	data: "Data",
 	monetize: "Monetize",
@@ -37,7 +39,54 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 	"add-on": "Add-On",
 	agents: "Agents",
 	"free-resources": "Free Resources",
+	"sales-scripts": "Sales Scripts",
+	prompts: "Prompts",
 };
+
+const MONETIZE_PORTAL_URL = "https://app.dealscale.io";
+const MONETIZE_CATEGORY_OVERRIDES: Partial<
+	Record<
+		ProductCategory,
+		{
+			title: string;
+			subtitle: string;
+			ariaLabel: string;
+		}
+	>
+> = {
+	[ProductCategory.Workflows]: {
+		title: "Monetize Your Workflow",
+		subtitle: "Share your automation with the world and earn revenue",
+		ariaLabel: "Create and monetize your workflow",
+	},
+	[ProductCategory.Agents]: {
+		title: "Launch Your Agent on Deal Scale",
+		subtitle: "List your AI agent and start collecting revenue faster",
+		ariaLabel: "Launch your AI agent on Deal Scale",
+	},
+	[ProductCategory.Voices]: {
+		title: "Monetize Your Voice Agent",
+		subtitle: "Tap into our network and deploy your concierge for clients",
+		ariaLabel: "Monetize your voice agent on Deal Scale",
+	},
+	[ProductCategory.SalesScripts]: {
+		title: "Sell Your Sales Scripts",
+		subtitle: "Publish proven cadences to thousands of Deal Scale operators",
+		ariaLabel: "Sell your sales scripts on Deal Scale",
+	},
+	[ProductCategory.Prompts]: {
+		title: "List Your Prompt Library",
+		subtitle: "Package prompts, earn recurring revenue, and reach new teams",
+		ariaLabel: "List your prompt library on Deal Scale",
+	},
+};
+const MONETIZE_CATEGORY_TARGETS: ReadonlySet<string> = new Set([
+	ProductCategory.Workflows,
+	ProductCategory.Agents,
+	ProductCategory.Prompts,
+	ProductCategory.Voices,
+	ProductCategory.SalesScripts,
+]);
 
 interface ProductGridProps {
 	products: ProductType[];
@@ -50,9 +99,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 	const [showWorkflowModal, setShowWorkflowModal] = useState(false);
 	const [activeCategory, setActiveCategory] = useState<string>("all");
 	const freeResourceCategory = ProductCategory.FreeResources;
-        // On mount, check for #category=... in the hash and set activeCategory
-        useEffect(() => {
-                if (
+	// On mount, check for #category=... in the hash and set activeCategory
+	useEffect(() => {
+		if (
 			typeof window !== "undefined" &&
 			window.location.hash.startsWith("#category=")
 		) {
@@ -82,7 +131,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 	}, [products]);
 
 	// Ref for scrolling to the grid
-        const gridRef = useRef<HTMLDivElement>(null);
+	const gridRef = useRef<HTMLDivElement>(null);
 
 	// Filter products by category and search
 	const featuredFreeResources = useMemo(() => {
@@ -181,32 +230,70 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 		openAuthModal("signin", () => setShowWorkflowModal(true));
 	}, [openAuthModal, session, setShowWorkflowModal]);
 
-        const gridItems = useMemo(() => {
-                const items: { key: string; node: ReactNode }[] = paginatedProducts.map(
-                        (product) => ({
-                                key: product.sku,
-                                node: (
-                                        <ProductCardNew
-                                                {...product}
-                                                className="w-full"
-                                                callbackUrl={callbackUrl}
-                                        />
-                                ),
+	const buildMonetizeParams = useCallback(
+		(category: ProductCategory) => ({
+			utm_source: "deal-scale-marketplace",
+			utm_medium: "cta",
+			utm_campaign: "monetize-card",
+			utm_content: `category-${category}`,
+		}),
+		[],
+	);
+
+	const gridItems = useMemo(() => {
+		const items: { key: string; node: ReactNode }[] = paginatedProducts.map(
+			(product) => ({
+				key: product.sku,
+				node: (
+					<ProductCardNew
+						{...product}
+						className="w-full"
+						callbackUrl={callbackUrl}
+					/>
+				),
 			}),
 		);
 
-		if (activeCategory === "workflows") {
+		if (MONETIZE_CATEGORY_TARGETS.has(activeCategory)) {
+			const categoryKey = activeCategory as ProductCategory;
+			const copy = MONETIZE_CATEGORY_OVERRIDES[categoryKey];
+			const ariaLabel = copy?.ariaLabel ?? "Monetize on Deal Scale";
+
+			const cardNode =
+				categoryKey === ProductCategory.Workflows ? (
+					<MonetizeCard
+						onClick={handleWorkflowClick}
+						ariaLabel={ariaLabel}
+						title={copy?.title}
+						subtitle={copy?.subtitle}
+					/>
+				) : (
+					<MonetizeCard
+						href={MONETIZE_PORTAL_URL}
+						utmParams={buildMonetizeParams(categoryKey)}
+						ariaLabel={ariaLabel}
+						title={copy?.title}
+						subtitle={copy?.subtitle}
+					/>
+				);
+
 			items.unshift({
-				key: "workflow-monetize",
-				node: <MonetizeCard onClick={handleWorkflowClick} />,
+				key: `monetize-${activeCategory}`,
+				node: cardNode,
 			});
 		}
 
-                        return items;
-        }, [paginatedProducts, callbackUrl, activeCategory, handleWorkflowClick]);
+		return items;
+	}, [
+		paginatedProducts,
+		callbackUrl,
+		activeCategory,
+		handleWorkflowClick,
+		buildMonetizeParams,
+	]);
 
-        return (
-                <>
+	return (
+		<>
 			<ProductHero
 				categories={categories}
 				setActiveCategory={setActiveCategory}
@@ -239,15 +326,15 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 									))}
 								</div>
 							)}
-                                                        {(filteredProducts.length > 0 ||
-                                                                activeCategory === "workflows") &&
-                                                                gridItems.length > 0 && (
-                                                                        <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-                                                                                {gridItems.map((item) => (
-                                                                                        <div key={item.key}>{item.node}</div>
-                                                                                ))}
-                                                                        </div>
-                                                                )}
+							{(filteredProducts.length > 0 ||
+								activeCategory === "workflows") &&
+								gridItems.length > 0 && (
+									<div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+										{gridItems.map((item) => (
+											<div key={item.key}>{item.node}</div>
+										))}
+									</div>
+								)}
 							{activeCategory === "workflows" && (
 								<WorkflowCreateModal
 									open={showWorkflowModal}

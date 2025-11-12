@@ -12,7 +12,9 @@ type MockFetchResponseOptions = {
 	headers?: Record<string, string>;
 };
 
-type FetchMock = ((...args: Parameters<typeof fetch>) => ReturnType<typeof fetch>) & {
+type FetchMock = ((
+	...args: Parameters<typeof fetch>
+) => ReturnType<typeof fetch>) & {
 	mockResolvedValueOnce: (value: unknown) => unknown;
 	mockRejectedValueOnce: (error: unknown) => unknown;
 	mockReset: () => unknown;
@@ -61,8 +63,8 @@ export function mockFetchResponse({
 		body: null,
 		bodyUsed: false,
 		formData: async () => new FormData(),
-		type: 'basic' as const,
-		url: '',
+		type: "basic" as const,
+		url: "",
 		redirected: false,
 	};
 

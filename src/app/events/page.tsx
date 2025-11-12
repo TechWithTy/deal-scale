@@ -18,13 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function EventsPage() {
-        const events = await fetchEvents();
-        const itemListSchema = buildEventsItemListSchema(events);
+	const events = await fetchEvents();
+	const itemListSchema = buildEventsItemListSchema(events);
 
-        return (
-                <>
-                        <SchemaInjector schema={itemListSchema} />
-                        <EventClient events={events} />
-                </>
-        );
+	return (
+		<>
+			<SchemaInjector schema={itemListSchema} />
+			<EventClient events={events} />
+		</>
+	);
 }

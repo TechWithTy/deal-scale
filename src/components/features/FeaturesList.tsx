@@ -33,15 +33,18 @@ function isMobileDevice() {
 }
 
 const usePaused = (pausedRef: MutableRefObject<boolean>) => {
-	// No-op on mobile: always return true
-	if (isMobileDevice()) return true;
+	const mobile = useMemo(() => isMobileDevice(), []);
+
 	return useSyncExternalStore(
 		(cb) => {
+			if (mobile) {
+				return () => undefined;
+			}
 			const interval = setInterval(cb, 100);
 			return () => clearInterval(interval);
 		},
-		() => pausedRef.current,
-		() => true, // getServerSnapshot for SSR: always paused on server
+		() => (mobile ? true : pausedRef.current),
+		() => true, // Server snapshot: default paused
 	);
 };
 

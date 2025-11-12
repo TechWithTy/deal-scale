@@ -18,13 +18,13 @@ console.log(
 );
 console.log("CONTACT_EMAIL:", process.env.CONTACT_EMAIL);
 
-type ContactFormFn = typeof import("@/lib/externalRequests/sendgrid")
-        ["contactForm"];
+type ContactFormFn = typeof import("@/lib/externalRequests/sendgrid");
+["contactForm"];
 
 let contactFormImpl: ContactFormFn | undefined;
 if (isExternalIntegrationEnabled) {
-        ({
-                contactForm: contactFormImpl,
+	({
+		contactForm: contactFormImpl,
 	} = require("@/lib/externalRequests/sendgrid"));
 }
 

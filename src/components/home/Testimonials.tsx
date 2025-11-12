@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import type { Testimonial } from "@/types/testimonial";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { type Variants, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import Header from "../common/Header";

@@ -44,8 +44,12 @@ export function MicrosoftClarityScript({ projectId }: { projectId?: string }) {
 				window.requestIdleCallback(initialize, { timeout: 1500 });
 			} else {
 				// Use type assertion to handle browser vs Node.js differences
-				(globalThis as typeof globalThis & { __clarityTimeout?: number }).__clarityTimeout =
-					globalThis.setTimeout(initialize, 800) as unknown as number;
+				(
+					globalThis as typeof globalThis & { __clarityTimeout?: number }
+				).__clarityTimeout = globalThis.setTimeout(
+					initialize,
+					800,
+				) as unknown as number;
 			}
 		}
 

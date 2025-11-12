@@ -10,9 +10,14 @@ import {
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
 import { Separator } from "@/components/ui/separator";
 
+import { MetricBlock } from "./_components/metric-block";
+import {
+	ScrollProgressIndicator,
+	type ScrollProgressSection,
+} from "./_components/scroll-progress-indicator";
 import {
 	LIVE_COPY,
 	LIVE_MICROCOPY,
@@ -20,16 +25,13 @@ import {
 	LIVE_SECONDARY_CTA,
 	LIVE_SOCIAL_PROOF,
 	LIVE_VIDEO,
+	PERSONA_LABEL,
+	PERSONA_GOAL,
 } from "./_config";
-import { MetricBlock } from "./_components/metric-block";
-import {
-	ScrollProgressIndicator,
-	type ScrollProgressSection,
-} from "./_components/scroll-progress-indicator";
 
 const SCROLL_SECTIONS: ScrollProgressSection[] = [
-	{ id: "loan-officer-hero-top", label: "Hero" },
-	{ id: "loan-officer-cta", label: "CTA" },
+	{ id: "investor-hero-top", label: "Hero" },
+	{ id: "investor-cta", label: "CTA" },
 	{ id: "live-hero-details", label: "Metrics" },
 ];
 
@@ -72,37 +74,59 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
 			<HeroAurora className="z-0 opacity-80 dark:opacity-90" />
 
-			<BackgroundBeamsWithCollision className="relative z-0 flex w-full items-center justify-center pb-16">
-				<div className="container relative z-10 mx-auto flex w-full flex-col items-center gap-12 px-4 py-16 md:px-8">
+			<div className="relative z-0 flex w-full items-center justify-center overflow-hidden pt-10 pb-20 md:pb-24">
+				<div className="pointer-events-none absolute inset-0">
+					<InteractiveGridPattern
+						width={72}
+						height={72}
+						className="opacity-20 md:opacity-25"
+						squares={[20, 20]}
+						squaresClassName="stroke-border/25"
+					/>
+					<div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
+
+					<InteractiveGridPattern
+						width={48}
+						height={48}
+						className="opacity-[0.35]"
+						squares={[34, 34]}
+						squaresClassName="stroke-border/20"
+					/>
+
+					<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.24)_0%,rgba(15,23,42,0)_55%)] opacity-35" />
+				</div>
+
+				<div className="container relative z-10 mx-auto flex w-full flex-col items-center gap-14 px-6 py-16 md:px-10 lg:px-12">
 					<div
-						id="loan-officer-hero-top"
-						className="flex w-full flex-col items-center gap-6 text-center md:max-w-3xl"
+						id="investor-hero-top"
+						className="flex w-full flex-col items-center gap-8 text-center md:max-w-4xl lg:max-w-5xl xl:max-w-6xl"
 						data-beam-collider="true"
 					>
-						<ScrollProgressIndicator
-							sections={sections}
-							activeId={activeSection}
-						/>
+						{/*
+							Commenting out the scroll progress badges (Hero / CTA / Metrics)
+							per request.
+						*/}
+						{/* <ScrollProgressIndicator sections={sections} activeId={activeSection} /> */}
 						<HeroHeadline
 							copy={LIVE_COPY}
 							socialProof={LIVE_SOCIAL_PROOF}
 							reviews={LIVE_SOCIAL_PROOF.reviews}
-							personaLabel="Loan Officer Persona"
-							personaDescription="AI follow-up for mortgage teams"
+							personaLabel={PERSONA_LABEL}
+							personaDescription={PERSONA_GOAL}
 						/>
 					</div>
 
 					<div
-						id="loan-officer-cta"
-						className="flex w-full flex-col items-center gap-8"
+						id="investor-cta"
+						className="flex w-full flex-col items-center gap-10"
 						data-beam-collider="true"
 					>
-						<p className="max-w-2xl text-center text-lg text-neutral-300">
-							Automated borrower follow-up from your mortgage CRM, orchestrated
-							so loan officers focus on closing conversations.
+						<p className="max-w-3xl text-center text-base text-muted-foreground sm:text-lg md:text-xl dark:text-neutral-300">
+							Automated investor deal flow from your CRM and market data, so you
+							can focus on evaluating profitable opportunities.
 						</p>
 						<PersonaCTA
-							className="w-full"
+							className="w-full max-w-5xl"
 							displayMode="both"
 							orientation="horizontal"
 							primary={LIVE_PRIMARY_CTA}
@@ -118,14 +142,14 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 							/>
 						</div>
 
-						<div className="max-w-2xl rounded-3xl border border-border/45 bg-background/85 px-6 py-5 text-center shadow-[0_16px_55px_-35px_rgba(37,99,235,0.35)] backdrop-blur-md md:px-10">
-							<p className="font-medium text-foreground text-sm">
-								Start with a 90-second walkthrough of the automation control
-								center.
+						<div className="w-full max-w-2xl rounded-3xl border border-border/45 bg-background/85 px-5 py-5 text-center shadow-[0_16px_55px_-35px_rgba(37,99,235,0.35)] backdrop-blur-md sm:px-6 md:px-10">
+							<p className="font-medium text-foreground text-sm sm:text-base">
+								Start with a 90-second walkthrough of the investor pipeline
+								control center.
 							</p>
-							<p className="mt-2 text-muted-foreground text-sm">
+							<p className="mt-2 text-muted-foreground text-sm sm:text-base">
 								Watch the demo, then review the rollout checklist below to keep
-								your borrower outreach consistent across loan programs.
+								your deal sourcing consistent across acquisitions.
 							</p>
 						</div>
 
@@ -135,7 +159,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 							data-beam-collider="true"
 						>
 							<div
-								className="flex items-center gap-4"
+								className="flex flex-col items-center gap-4 text-center md:flex-row md:text-left"
 								data-beam-collider="true"
 							>
 								<AvatarCircles
@@ -144,26 +168,23 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 									interaction="tooltip"
 									className="-space-x-3"
 								/>
-								<div className="text-left">
-									<p className="font-semibold text-foreground text-sm">
-										Close more loans with always-on borrower follow-up
+								<div className="text-center md:text-left">
+									<p className="font-semibold text-foreground text-sm sm:text-base">
+										Keep motivated sellers warm with always-on deal follow-up
 									</p>
-									<p className="text-muted-foreground text-xs">
-										Automatically nurture borrowers from first inquiry to
-										closing without adding headcount.
+									<p className="text-muted-foreground text-xs sm:text-sm">
+										Automatically nurture leads from first interest to signed
+										contract without burning time.
 									</p>
 								</div>
 							</div>
 							<Separator className="md:hidden" />
-							<div className="grid grid-cols-3 gap-4 text-center font-semibold text-foreground text-sm">
+							<div className="grid w-full grid-cols-1 gap-4 text-center font-semibold text-foreground text-sm sm:grid-cols-3 sm:text-base">
 								<MetricBlock
-									label="Borrower Touchpoints"
-									value="5 AI calls free"
+									label="Seller Touchpoints"
+									value="Daily AI outreach"
 								/>
-								<MetricBlock
-									label="Follow-Up Coverage"
-									value="24/7 automation"
-								/>
+								<MetricBlock label="Deal Screening" value="24/7 automation" />
 								<MetricBlock
 									label="Pipeline Visibility"
 									value="Real-time dashboards"
@@ -171,18 +192,8 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 							</div>
 						</div>
 					</div>
-
-					<section className="mt-6 max-w-4xl rounded-3xl border border-border/40 bg-muted/40 px-6 py-6 text-muted-foreground text-sm lg:px-10 lg:py-8">
-						<p className="leading-relaxed">
-							This live demo mirrors the updated Dynamic Hero schema (v6)
-							featuring the Loan Officer persona. Rotate through
-							mortgage-specific problems, solutions, and fears, launch
-							borrower-oriented CTAs, and connect the hero to your mortgage CRM
-							using the `@external/dynamic-hero` utilities.
-						</p>
-					</section>
 				</div>
-			</BackgroundBeamsWithCollision>
+			</div>
 		</div>
 	);
 }

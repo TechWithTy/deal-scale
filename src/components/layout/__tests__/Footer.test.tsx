@@ -40,4 +40,3 @@ describe("Footer social links", () => {
 		);
 	});
 });
-

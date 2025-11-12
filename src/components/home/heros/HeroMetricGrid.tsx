@@ -54,13 +54,11 @@ const MetricCard = ({ metric }: { metric: MetricHighlight }) => (
 	<div className="relative overflow-hidden rounded-2xl border border-border/40 bg-gradient-to-b from-background/90 via-background/70 to-background/80 p-5">
 		<GridOverlay />
 		<div className="relative z-10 flex flex-col gap-3">
-			<span className="text-xs font-semibold uppercase tracking-[0.32em] text-primary/80">
+			<span className="font-semibold text-primary/80 text-xs uppercase tracking-[0.32em]">
 				{metric.accent}
 			</span>
-			<h3 className="text-lg font-semibold text-foreground">
-				{metric.title}
-			</h3>
-			<p className="text-sm text-muted-foreground leading-relaxed">
+			<h3 className="font-semibold text-foreground text-lg">{metric.title}</h3>
+			<p className="text-muted-foreground text-sm leading-relaxed">
 				{metric.description}
 			</p>
 		</div>
@@ -96,4 +94,3 @@ const GridOverlay = () => {
 		</svg>
 	);
 };
-

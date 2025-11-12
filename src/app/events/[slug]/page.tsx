@@ -3,17 +3,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Separator } from "@/components/ui/separator";
-import { fetchEvents } from "@/lib/events/fetchEvents";
 import type { NormalizedEvent } from "@/lib/events/eventSchemas";
-import { resolveEventParams, type EventPageParams } from "@/lib/events/params";
+import { fetchEvents } from "@/lib/events/fetchEvents";
+import { type EventPageParams, resolveEventParams } from "@/lib/events/params";
 import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
-import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 import { formatDate } from "@/utils/date-formatter";
+import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
+import { Calendar, Clock, ExternalLink, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Calendar, Clock, ExternalLink, MapPin } from "lucide-react";
 
 export const revalidate = 1800;
 // ! Keep this value in sync with EVENTS_REVALIDATE_SECONDS in src/lib/events/constants.ts
@@ -74,15 +74,15 @@ export async function generateMetadata({
 		alternates: {
 			canonical,
 		},
-                openGraph: {
-                        title: `${event.title} | DealScale Events`,
-                        description: event.description,
-                        url: canonical,
-                        type: "website",
-                        images: event.thumbnailImage
-                                ? [{ url: event.thumbnailImage, alt: event.title }]
-                                : undefined,
-                },
+		openGraph: {
+			title: `${event.title} | DealScale Events`,
+			description: event.description,
+			url: canonical,
+			type: "website",
+			images: event.thumbnailImage
+				? [{ url: event.thumbnailImage, alt: event.title }]
+				: undefined,
+		},
 		twitter: {
 			card: "summary_large_image",
 			title: `${event.title} | DealScale Events`,
@@ -114,10 +114,10 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 							)}
 						</div>
 						<h1 className="font-heading text-3xl md:text-4xl">{event.title}</h1>
-						<p className="text-muted-foreground text-lg leading-relaxed">
+						<p className="text-lg text-muted-foreground leading-relaxed">
 							{event.description}
 						</p>
-						<div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+						<div className="flex flex-wrap gap-6 text-muted-foreground text-sm">
 							<span className="flex items-center gap-2">
 								<Calendar className="h-4 w-4" />
 								{formatDate(event.date)}
@@ -145,7 +145,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 						</div>
 					)}
 					<GlassCard className="space-y-4 p-6">
-						<h2 className="text-xl font-semibold">Why attend?</h2>
+						<h2 className="font-semibold text-xl">Why attend?</h2>
 						<p className="text-muted-foreground leading-relaxed">
 							{event.description}
 						</p>
@@ -163,8 +163,8 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 				</article>
 				<aside className="space-y-6">
 					<GlassCard className="space-y-4 p-6">
-						<h2 className="text-lg font-semibold">Event details</h2>
-						<ul className="space-y-3 text-sm text-muted-foreground">
+						<h2 className="font-semibold text-lg">Event details</h2>
+						<ul className="space-y-3 text-muted-foreground text-sm">
 							<li className="flex items-start gap-2">
 								<Calendar className="mt-0.5 h-4 w-4" />
 								<span>{formatDate(event.date)}</span>

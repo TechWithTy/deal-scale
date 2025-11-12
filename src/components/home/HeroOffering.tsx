@@ -20,15 +20,15 @@ export interface HeroOfferingProps {
  * - Otherwise, falls back to SplineModel.
  */
 export const HeroOffering: React.FC<HeroOfferingProps> = ({
-        image,
-        imageAlt,
-        className,
+	image,
+	imageAlt,
+	className,
 }) => {
-        const isMobile = useIsMobile();
+	const isMobile = useIsMobile();
 
-        const isImageSrc = (img: unknown): img is string | StaticImageData =>
-                typeof img === "string" ||
-                (typeof img === "object" && img !== null && "src" in img);
+	const isImageSrc = (img: unknown): img is string | StaticImageData =>
+		typeof img === "string" ||
+		(typeof img === "object" && img !== null && "src" in img);
 
 	return (
 		<div
@@ -53,14 +53,14 @@ export const HeroOffering: React.FC<HeroOfferingProps> = ({
 								duration: 0.8,
 							}}
 						>
-                                <div className="flex w-full max-w-sm items-center justify-center p-0 sm:max-w-md md:max-w-lg">
-                                        <Image
-                                                src={image}
-                                                alt={imageAlt || "Hero Offering"}
-                                                className="h-auto w-full max-w-xs rounded-xl object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl"
-                                                style={{
-                                                        filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
-                                                }}
+							<div className="flex w-full max-w-sm items-center justify-center p-0 sm:max-w-md md:max-w-lg">
+								<Image
+									src={image}
+									alt={imageAlt || "Hero Offering"}
+									className="h-auto w-full max-w-xs rounded-xl object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl"
+									style={{
+										filter: "drop-shadow(0 8px 32px rgba(80, 0, 255, 0.18))",
+									}}
 									width={800}
 									height={800}
 									priority

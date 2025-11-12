@@ -164,52 +164,52 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 		],
 		image: DEFAULT_SEO.image,
 	},
-        "/portfolio": {
-                title: "Portfolio | Deal Scale",
-                description:
-                        "Browse Deal Scale's portfolio to see AI-powered real estate solutions in action.",
-                canonical: "https://dealscale.io/portfolio",
-                keywords: [
-                        "deal scale portfolio",
-                        "real estate case studies",
-                        "AI real estate success",
-                        ...DEFAULT_SEO.keywords,
-                ],
-                image: DEFAULT_SEO.image,
-        },
+	"/portfolio": {
+		title: "Portfolio | Deal Scale",
+		description:
+			"Browse Deal Scale's portfolio to see AI-powered real estate solutions in action.",
+		canonical: "https://dealscale.io/portfolio",
+		keywords: [
+			"deal scale portfolio",
+			"real estate case studies",
+			"AI real estate success",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+	},
 
-        "/partners": {
-                title: "Partners | Deal Scale",
-                description:
-                        "Meet Deal Scale's technology and channel partners powering AI-driven real estate growth.",
-                canonical: "https://dealscale.io/partners",
-                keywords: [
-                        "deal scale partners",
-                        "real estate technology partners",
-                        "ai integrations",
-                        ...DEFAULT_SEO.keywords,
-                ],
-                image: DEFAULT_SEO.image,
-        },
+	"/partners": {
+		title: "Partners | Deal Scale",
+		description:
+			"Meet Deal Scale's technology and channel partners powering AI-driven real estate growth.",
+		canonical: "https://dealscale.io/partners",
+		keywords: [
+			"deal scale partners",
+			"real estate technology partners",
+			"ai integrations",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+	},
 
-        "/careers": {
-                title: "Careers | Deal Scale",
-                description:
-                        "Explore open roles at Deal Scale and help build AI automation for modern real estate teams.",
-                canonical: "https://dealscale.zohorecruit.com/jobs/Careers",
-                keywords: [
-                        "deal scale careers",
-                        "real estate ai jobs",
-                        "proptech roles",
-                        ...DEFAULT_SEO.keywords,
-                ],
-                image: DEFAULT_SEO.image,
-        },
+	"/careers": {
+		title: "Careers | Deal Scale",
+		description:
+			"Explore open roles at Deal Scale and help build AI automation for modern real estate teams.",
+		canonical: "https://dealscale.zohorecruit.com/jobs/Careers",
+		keywords: [
+			"deal scale careers",
+			"real estate ai jobs",
+			"proptech roles",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+	},
 
-        "/faqs": {
-                title: "FAQs | Deal Scale",
-                description:
-                        "Find answers to common questions about Deal Scale's services and AI-powered real estate solutions.",
+	"/faqs": {
+		title: "FAQs | Deal Scale",
+		description:
+			"Find answers to common questions about Deal Scale's services and AI-powered real estate solutions.",
 		canonical: "https://dealscale.io/faq",
 		keywords: DEFAULT_SEO.keywords,
 		image: DEFAULT_SEO.image,
@@ -280,32 +280,47 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 		image: DEFAULT_SEO.image,
 		keywords: DEFAULT_SEO.keywords,
 	},
-        "/legal": {
-                title: "Legal Center | Deal Scale",
-                description:
-                        "Access all of Deal Scale's legal documents including Privacy Policy, Terms of Service, and compliance information in one place.",
-                canonical: "https://dealscale.io/legal",
-                keywords: [
-                        "Legal Documents",
-                        "Compliance Center",
-                        "Legal Information",
-                        "Company Policies",
-                        ...DEFAULT_SEO.keywords,
-                ],
-                image: DEFAULT_SEO.image,
-        },
-        "/linktree": {
-                title: "Link Tree | Deal Scale",
-                description:
-                        "Quick access to DealScale's most important links, resources, and pages. Browse our products, services, blog posts, events, case studies, and more in one convenient place.",
-                canonical: "https://dealscale.io/linktree",
-                keywords: [
-                        "deal scale links",
-                        "deal scale resources",
-                        "real estate resources",
-                        "quick links",
-                        ...DEFAULT_SEO.keywords,
-                ],
-                image: DEFAULT_SEO.image,
-        },
+	"/legal": {
+		title: "Legal Center | Deal Scale",
+		description:
+			"Access all of Deal Scale's legal documents including Privacy Policy, Terms of Service, and compliance information in one place.",
+		canonical: "https://dealscale.io/legal",
+		keywords: [
+			"Legal Documents",
+			"Compliance Center",
+			"Legal Information",
+			"Company Policies",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+	},
+	"/linktree": {
+		title: "Link Tree | Deal Scale",
+		description:
+			"Quick access to DealScale's most important links, resources, and pages. Browse our products, services, blog posts, events, case studies, and more in one convenient place.",
+		canonical: "https://dealscale.io/linktree",
+		keywords: [
+			"deal scale links",
+			"deal scale resources",
+			"real estate resources",
+			"quick links",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+	},
+	"/demos/real-time-analytics": {
+		title: "Real-Time Analytics Demo | Deal Scale",
+		description:
+			"Explore Deal Scale’s real-time analytics workspace. Preview dashboards, experimentation workflows, and live collaboration features inside an interactive MacBook showcase.",
+		canonical: "https://dealscale.io/demos/real-time-analytics",
+		keywords: [
+			"real-time analytics",
+			"ai dashboards",
+			"collaborative analytics",
+			"a/b testing demo",
+			"deal scale demo",
+			...DEFAULT_SEO.keywords,
+		],
+		image: "/banners/Feature.png",
+	},
 };

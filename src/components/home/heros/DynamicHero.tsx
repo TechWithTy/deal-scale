@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import { ArrowDown } from "lucide-react";
+import { useMemo } from "react";
 
 import {
 	DEFAULT_HERO_SOCIAL_PROOF,
@@ -13,12 +13,12 @@ import {
 	resolveHeroCopy,
 } from "@external/dynamic-hero";
 
+import { HeroMetricGrid } from "@/components/home/heros/HeroMetricGrid";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+import { LasersBackground } from "@/components/ui/lasers-background";
 import { LightRays } from "@/components/ui/light-rays";
 import { Pointer } from "@/components/ui/pointer";
 import { Separator } from "@/components/ui/separator";
-import { HeroMetricGrid } from "@/components/home/heros/HeroMetricGrid";
 
 const MOCK_VIDEO: HeroVideoConfig = {
 	src: "https://www.youtube.com/embed/qh3NGpYRG3I?rel=0&controls=1&modestbranding=1",
@@ -105,7 +105,7 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 			<LightRays className="pointer-events-none absolute inset-0 opacity-70" />
 			<HeroAurora className="z-0" />
 
-			<BackgroundBeamsWithCollision className="relative z-0 flex min-h-screen w-full items-center justify-center pb-20">
+			<LasersBackground className="relative z-0 flex min-h-screen w-full items-center justify-center pb-20">
 				<div className="container relative z-10 mx-auto flex w-full flex-col items-center gap-12 px-4 py-16 md:px-8">
 					<div className="flex w-full flex-col items-center gap-4 text-center md:max-w-3xl">
 						<div className="flex flex-wrap items-center justify-center gap-3 text-primary text-xs uppercase tracking-[0.35em]">
@@ -199,7 +199,7 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 						</p>
 					</section>
 				</div>
-			</BackgroundBeamsWithCollision>
+			</LasersBackground>
 		</div>
 	);
 }

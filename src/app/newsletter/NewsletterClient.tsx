@@ -16,46 +16,64 @@ export const offerImg =
 // * Uses reusable components and follows Clean Code, DRY, and UX best practices
 
 export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
-        const { status: testimonialsStatus, testimonials, error: testimonialsError } =
-                useDataModule(
-                        "service/slug_data/testimonials",
-                        ({ status, data, error }) => ({
-                                status,
-                                testimonials: data?.generalDealScaleTestimonials ?? [],
-                                error,
-                        }),
-                );
-        const { status: logosStatus, companyLogos, error: logosError } = useDataModule(
-                "service/slug_data/trustedCompanies",
-                ({ status, data, error }) => ({
-                        status,
-                        companyLogos: data?.companyLogos ?? {},
-                        error,
-                }),
-        );
+	const {
+		status: testimonialsStatus,
+		testimonials,
+		error: testimonialsError,
+	} = useDataModule(
+		"service/slug_data/testimonials",
+		({ status, data, error }) => ({
+			status,
+			testimonials: data?.generalDealScaleTestimonials ?? [],
+			error,
+		}),
+	);
+	const {
+		status: logosStatus,
+		companyLogos,
+		error: logosError,
+	} = useDataModule(
+		"service/slug_data/trustedCompanies",
+		({ status, data, error }) => ({
+			status,
+			companyLogos: data?.companyLogos ?? {},
+			error,
+		}),
+	);
 
-        const hasTestimonials = testimonials.length > 0;
-        const showTestimonialsLoading =
-                (testimonialsStatus === "idle" || testimonialsStatus === "loading") && !hasTestimonials;
-        const showTestimonialsError = testimonialsStatus === "error" && !hasTestimonials;
-        const showTestimonialsReady = testimonialsStatus === "ready" && hasTestimonials;
-        const showTestimonialsEmptyReady = testimonialsStatus === "ready" && !hasTestimonials;
-        const hasLogos = Object.keys(companyLogos).length > 0;
-        const showLogosLoading = (logosStatus === "idle" || logosStatus === "loading") && !hasLogos;
-        const showLogosError = logosStatus === "error" && !hasLogos;
-        const showLogosEmptyReady = logosStatus === "ready" && !hasLogos;
+	const hasTestimonials = testimonials.length > 0;
+	const showTestimonialsLoading =
+		(testimonialsStatus === "idle" || testimonialsStatus === "loading") &&
+		!hasTestimonials;
+	const showTestimonialsError =
+		testimonialsStatus === "error" && !hasTestimonials;
+	const showTestimonialsReady =
+		testimonialsStatus === "ready" && hasTestimonials;
+	const showTestimonialsEmptyReady =
+		testimonialsStatus === "ready" && !hasTestimonials;
+	const hasLogos = Object.keys(companyLogos).length > 0;
+	const showLogosLoading =
+		(logosStatus === "idle" || logosStatus === "loading") && !hasLogos;
+	const showLogosError = logosStatus === "error" && !hasLogos;
+	const showLogosEmptyReady = logosStatus === "ready" && !hasLogos;
 
-        if (showTestimonialsError) {
-                console.error("[NewsletterClient] Failed to load testimonials", testimonialsError);
-        }
+	if (showTestimonialsError) {
+		console.error(
+			"[NewsletterClient] Failed to load testimonials",
+			testimonialsError,
+		);
+	}
 
-        if (showLogosError) {
-                console.error("[NewsletterClient] Failed to load trusted companies", logosError);
-        }
+	if (showLogosError) {
+		console.error(
+			"[NewsletterClient] Failed to load trusted companies",
+			logosError,
+		);
+	}
 
-        return (
-                <main className="flex min-h-screen flex-col bg-background">
-                        {/* ! Hero section for strong visual impact with embedded newsletter email input */}
+	return (
+		<main className="flex min-h-screen flex-col bg-background">
+			{/* ! Hero section for strong visual impact with embedded newsletter email input */}
 			<Hero
 				badgeLeft="Investor Insights"
 				badgeRight="AI-Powered Strategies"
@@ -67,42 +85,42 @@ export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
 				image={offerImg} // Recommend updating this image to something real estate or deal-flow related
 				imageAlt="An illustration of an AI agent automatically adding appointments to a calendar"
 			/>
-                        {showLogosError ? (
-                                <div className="mx-auto my-12 max-w-5xl text-center text-destructive">
-                                        Unable to load partner logos.
-                                </div>
-                        ) : showLogosLoading ? (
-                                <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
-                                        Loading trusted partners…
-                                </div>
-                        ) : hasLogos ? (
-                                <TrustedByScroller variant="secondary" items={companyLogos} />
-                        ) : showLogosEmptyReady ? (
-                                <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
-                                        Trusted partners coming soon.
-                                </div>
-                        ) : null}
-                        {showTestimonialsError ? (
-                                <div className="mx-auto my-12 max-w-5xl text-center text-destructive">
-                                        Unable to load testimonials.
-                                </div>
-                        ) : showTestimonialsLoading ? (
-                                <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
-                                        Loading testimonials…
-                                </div>
-                        ) : showTestimonialsReady ? (
-                                <Testimonials
-                                        testimonials={testimonials}
-                                        title={"What Our Clients Say"}
-                                        subtitle={
-                                                "Hear from our clients about their experiences with our services"
-                                        }
-                                />
-                        ) : showTestimonialsEmptyReady ? (
-                                <div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
-                                        Testimonials coming soon.
-                                </div>
-                        ) : null}
+			{showLogosError ? (
+				<div className="mx-auto my-12 max-w-5xl text-center text-destructive">
+					Unable to load partner logos.
+				</div>
+			) : showLogosLoading ? (
+				<div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
+					Loading trusted partners…
+				</div>
+			) : hasLogos ? (
+				<TrustedByScroller variant="secondary" items={companyLogos} />
+			) : showLogosEmptyReady ? (
+				<div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
+					Trusted partners coming soon.
+				</div>
+			) : null}
+			{showTestimonialsError ? (
+				<div className="mx-auto my-12 max-w-5xl text-center text-destructive">
+					Unable to load testimonials.
+				</div>
+			) : showTestimonialsLoading ? (
+				<div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
+					Loading testimonials…
+				</div>
+			) : showTestimonialsReady ? (
+				<Testimonials
+					testimonials={testimonials}
+					title={"What Our Clients Say"}
+					subtitle={
+						"Hear from our clients about their experiences with our services"
+					}
+				/>
+			) : showTestimonialsEmptyReady ? (
+				<div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">
+					Testimonials coming soon.
+				</div>
+			) : null}
 			{/* Fetch and show latest 3 Beehiiv posts */}
 			{/* todo: move to a custom hook or SWR for better client caching if needed */}
 			<BlogPreview title="Latest Blogs" posts={posts} />

@@ -1,20 +1,20 @@
 .heroHeadline {
-	color: #ffffff;
-	font-size: clamp(2rem, 4vw, 3.2rem);
-	line-height: 1.2;
+	color: var(--hero-foreground, var(--foreground));
+	font-size: clamp(2.2rem, 2.4vw + 1.1rem, 5.4rem);
+	line-height: clamp(1.1, 1.35vw, 1.04);
 	text-align: center;
-	max-width: 45rem;
-	margin: 1rem auto 1.5rem;
+	max-width: min(86rem, 96vw);
+	margin: 1.1rem auto 1.4rem;
 	overflow: visible;
 	white-space: normal;
 	text-wrap: balance;
-	text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+	letter-spacing: -0.015em;
 	transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .heroHeadlineBlock {
 	display: block;
-	margin-block: 0.4em;
+	margin-block: clamp(0.15em, 0.5vw, 0.4em);
 }
 
 .heroHeadlineAccent {
@@ -23,6 +23,18 @@
 	font-weight: 700;
 	transition: opacity 0.4s ease, transform 0.4s ease, background 0.4s ease,
 		color 0.4s ease;
+	position: relative;
+}
+
+.heroHeadlineAccent::after {
+	content: "";
+	position: absolute;
+	inset: -0.35em -0.45em;
+	border-radius: 0.85em;
+	background: currentColor;
+	opacity: 0.14;
+	filter: blur(16px);
+	z-index: -1;
 }
 
 .heroHeadlineAccentPersona {
@@ -57,18 +69,49 @@
 	text-shadow: 0 0 14px rgba(251, 191, 36, 0.32);
 }
 
+@media (prefers-color-scheme: light) {
+	.heroHeadline {
+		text-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+	}
+
+	.heroHeadlineAccentPersona {
+		text-shadow: 0 0 10px rgba(249, 115, 22, 0.18);
+	}
+
+	.heroHeadlineAccentAction {
+		text-shadow: 0 0 10px rgba(37, 99, 235, 0.18);
+	}
+
+	.heroHeadlineAccentRisk {
+		text-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.heroHeadline {
+		text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+	}
+
+	.tagPersona {
+		color: var(
+			--hero-tag-persona-text-dark,
+			hsl(var(--primary-foreground))
+		);
+	}
+}
+
 .tagRow {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	gap: 0.5rem;
-	margin-bottom: 0.75rem;
+	gap: clamp(0.5rem, 0.5vw, 0.75rem);
+	margin-bottom: clamp(0.8rem, 1vw, 1.2rem);
 }
 
 .personaWrapper {
 	display: flex;
 	justify-content: center;
-	margin-bottom: 0.75rem;
+	margin-bottom: clamp(0.75rem, 0.9vw, 1.1rem);
 }
 
 .tag {
@@ -76,23 +119,29 @@
 	align-items: center;
 	border-radius: 9999px;
 	padding: 0.35rem 1rem;
-	font-size: 0.7rem;
-	letter-spacing: 0.28em;
+	font-size: clamp(0.6rem, 0.5vw + 0.48rem, 0.85rem);
+	letter-spacing: clamp(0.22em, 0.3vw, 0.28em);
 	text-transform: uppercase;
-	border: 1px solid rgba(59, 130, 246, 0.4);
-	background: rgba(59, 130, 246, 0.2);
-	color: rgba(96, 165, 250, 0.95);
+	border: 1px solid hsl(var(--primary) / 0.4);
+	background: hsl(var(--primary) / 0.12);
+	color: hsl(var(--primary) / 0.9);
 	transition: color 0.3s ease, background 0.3s ease, border 0.3s ease;
 }
 
 .tagSecondary {
-	background: rgba(15, 23, 42, 0.65);
-	color: rgba(226, 232, 240, 0.85);
-	border-color: rgba(59, 130, 246, 0.25);
+	background: hsl(var(--muted) / 0.55);
+	color: hsl(var(--muted-foreground) / 0.92);
+	border-color: hsl(var(--border) / 0.6);
 }
 
 .tagPersona {
-	background: var(--hero-tag-persona-bg, rgba(59, 130, 246, 0.35));
-	color: var(--hero-tag-persona-text, rgba(191, 219, 254, 0.95));
-	border-color: var(--hero-tag-persona-border, rgba(59, 130, 246, 0.55));
+	background: var(
+		--hero-tag-persona-bg,
+		hsl(var(--primary) / 0.16)
+	);
+	color: var(--hero-tag-persona-text, hsl(var(--primary) / 0.9));
+	border-color: var(
+		--hero-tag-persona-border,
+		hsl(var(--primary) / 0.5)
+	);
 }

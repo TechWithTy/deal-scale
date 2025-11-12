@@ -9,7 +9,7 @@ import { SCHEMA_CONTEXT } from "@/utils/seo/schema/helpers";
  */
 export function buildLinkTreeItemListSchema(
 	items: LinkTreeItem[],
-	baseUrl: string = "https://dealscale.io/linktree",
+	baseUrl = "https://dealscale.io/linktree",
 ): {
 	"@context": typeof SCHEMA_CONTEXT;
 	"@type": "ItemList";
@@ -85,4 +85,3 @@ export function buildLinkTreeItemListSchema(
 		}),
 	};
 }
-

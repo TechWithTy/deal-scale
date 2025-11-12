@@ -11,10 +11,10 @@ interface MetricBlockProps {
 function MetricBlockComponent({ label, value }: MetricBlockProps): JSX.Element {
 	return (
 		<div className="flex flex-col items-center gap-2 rounded-2xl border border-border/40 bg-background/80 px-4 py-4 shadow-[0_20px_60px_-30px_rgba(34,197,94,0.45)] backdrop-blur-md">
-			<span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted-foreground">
+			<span className="font-semibold text-[11px] text-muted-foreground uppercase tracking-[0.32em]">
 				{label}
 			</span>
-			<span className="text-lg font-semibold text-foreground">{value}</span>
+			<span className="font-semibold text-foreground text-lg">{value}</span>
 		</div>
 	);
 }

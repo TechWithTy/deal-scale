@@ -3,7 +3,10 @@
 import AuthGuard from "@/components/auth/AuthGuard";
 import ContactForm from "@/components/contact/form/ContactForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
-import { ContactSteps, type ContactStep } from "@/components/contact/form/ContactSteps";
+import {
+	type ContactStep,
+	ContactSteps,
+} from "@/components/contact/form/ContactSteps";
 import { Newsletter } from "@/components/contact/newsletter/Newsletter";
 import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
@@ -180,126 +183,148 @@ const Contact = () => {
 
 		return { ...result, ...profilePrefill };
 	}, [searchParams, profilePrefill]);
-        const { status: logosStatus, companyLogos, error: logosError } = useDataModule(
-                "service/slug_data/trustedCompanies",
-                ({ status, data, error }) => ({
-                        status,
-                        companyLogos: (data?.companyLogos ?? {}) as CompanyLogoDictType,
-                        error,
-                }),
-        );
-        const { status: testimonialsStatus, testimonials, error: testimonialsError } = useDataModule(
-                "service/slug_data/testimonials",
-                ({ status, data, error }) => ({
-                        status,
-                        testimonials: (data?.generalDealScaleTestimonials ?? []) as Testimonial[],
-                        error,
-                }),
-        );
-        const { status: stepsStatus, steps, error: stepsError } = useDataModule(
-                "service/slug_data/consultationSteps",
-                ({ status, data, error }) => ({
-                        status,
-                        steps: (data?.betaSignupSteps ?? []) as ContactStep[],
-                        error,
-                }),
-        );
+	const {
+		status: logosStatus,
+		companyLogos,
+		error: logosError,
+	} = useDataModule(
+		"service/slug_data/trustedCompanies",
+		({ status, data, error }) => ({
+			status,
+			companyLogos: (data?.companyLogos ?? {}) as CompanyLogoDictType,
+			error,
+		}),
+	);
+	const {
+		status: testimonialsStatus,
+		testimonials,
+		error: testimonialsError,
+	} = useDataModule(
+		"service/slug_data/testimonials",
+		({ status, data, error }) => ({
+			status,
+			testimonials: (data?.generalDealScaleTestimonials ?? []) as Testimonial[],
+			error,
+		}),
+	);
+	const {
+		status: stepsStatus,
+		steps,
+		error: stepsError,
+	} = useDataModule(
+		"service/slug_data/consultationSteps",
+		({ status, data, error }) => ({
+			status,
+			steps: (data?.betaSignupSteps ?? []) as ContactStep[],
+			error,
+		}),
+	);
 
-        const logosDetail = useMemo(() => ({ segment: "trusted-companies" }), []);
-        const testimonialsDetail = useMemo(() => ({ segment: "testimonials" }), []);
-        const stepsDetail = useMemo(() => ({ segment: "consultation-steps" }), []);
+	const logosDetail = useMemo(() => ({ segment: "trusted-companies" }), []);
+	const testimonialsDetail = useMemo(() => ({ segment: "testimonials" }), []);
+	const stepsDetail = useMemo(() => ({ segment: "consultation-steps" }), []);
 
-        const isLogosLoading = logosStatus === "idle" || logosStatus === "loading";
-        const isLogosError = logosStatus === "error";
-        const hasLogos = Object.keys(companyLogos).length > 0;
+	const isLogosLoading = logosStatus === "idle" || logosStatus === "loading";
+	const isLogosError = logosStatus === "error";
+	const hasLogos = Object.keys(companyLogos).length > 0;
 
-        const isTestimonialsLoading = testimonialsStatus === "idle" || testimonialsStatus === "loading";
-        const isTestimonialsError = testimonialsStatus === "error";
-        const hasTestimonials = testimonials.length > 0;
+	const isTestimonialsLoading =
+		testimonialsStatus === "idle" || testimonialsStatus === "loading";
+	const isTestimonialsError = testimonialsStatus === "error";
+	const hasTestimonials = testimonials.length > 0;
 
-        const isStepsLoading = stepsStatus === "idle" || stepsStatus === "loading";
-        const isStepsError = stepsStatus === "error";
-        const hasSteps = steps.length > 0;
+	const isStepsLoading = stepsStatus === "idle" || stepsStatus === "loading";
+	const isStepsError = stepsStatus === "error";
+	const hasSteps = steps.length > 0;
 
-        useDataModuleGuardTelemetry({
-                key: "service/slug_data/trustedCompanies",
-                surface: "ContactClient",
-                status: logosStatus,
-                hasData: hasLogos,
-                error: logosError,
-                detail: logosDetail,
-        });
+	useDataModuleGuardTelemetry({
+		key: "service/slug_data/trustedCompanies",
+		surface: "ContactClient",
+		status: logosStatus,
+		hasData: hasLogos,
+		error: logosError,
+		detail: logosDetail,
+	});
 
-        useDataModuleGuardTelemetry({
-                key: "service/slug_data/testimonials",
-                surface: "ContactClient",
-                status: testimonialsStatus,
-                hasData: hasTestimonials,
-                error: testimonialsError,
-                detail: testimonialsDetail,
-        });
+	useDataModuleGuardTelemetry({
+		key: "service/slug_data/testimonials",
+		surface: "ContactClient",
+		status: testimonialsStatus,
+		hasData: hasTestimonials,
+		error: testimonialsError,
+		detail: testimonialsDetail,
+	});
 
-        useDataModuleGuardTelemetry({
-                key: "service/slug_data/consultationSteps",
-                surface: "ContactClient",
-                status: stepsStatus,
-                hasData: hasSteps,
-                error: stepsError,
-                detail: stepsDetail,
-        });
+	useDataModuleGuardTelemetry({
+		key: "service/slug_data/consultationSteps",
+		surface: "ContactClient",
+		status: stepsStatus,
+		hasData: hasSteps,
+		error: stepsError,
+		detail: stepsDetail,
+	});
 
-        if (isLogosError) {
-                console.error("[ContactClient] Failed to load trusted companies", logosError);
-        }
+	if (isLogosError) {
+		console.error(
+			"[ContactClient] Failed to load trusted companies",
+			logosError,
+		);
+	}
 
-        if (isTestimonialsError) {
-                console.error("[ContactClient] Failed to load testimonials", testimonialsError);
-        }
+	if (isTestimonialsError) {
+		console.error(
+			"[ContactClient] Failed to load testimonials",
+			testimonialsError,
+		);
+	}
 
-        if (isStepsError) {
-                console.error("[ContactClient] Failed to load consultation steps", stepsError);
-        }
+	if (isStepsError) {
+		console.error(
+			"[ContactClient] Failed to load consultation steps",
+			stepsError,
+		);
+	}
 
-        return (
-                <AuthGuard>
-                        <div className="container mx-auto px-6 py-24">
-                                <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
-                                        <div className="lg:col-span-7">
-                                                <ContactForm prefill={prefill} />
-                                        </div>
-                                        <div className="flex flex-col lg:col-span-5">
-                                                <ScheduleMeeting />
-                                                {isStepsError ? (
-                                                        <div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
-                                                                Unable to load next steps right now.
-                                                        </div>
-                                                ) : isStepsLoading ? (
-                                                        <div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-                                                                Loading next steps…
-                                                        </div>
-                                                ) : hasSteps ? (
-                                                        <ContactSteps steps={steps} />
-                                                ) : (
-                                                        <div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-                                                                Next steps coming soon.
-                                                        </div>
-                                                )}
-                                                {isLogosError ? (
-                                                        <div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
-                                                                Unable to load trusted partners right now.
-                                                        </div>
-                                                ) : isLogosLoading ? (
-                                                        <div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-                                                                Loading trusted partners…
-                                                        </div>
-                                                ) : hasLogos ? (
-                                                        <TrustedByMarquee items={companyLogos} />
-                                                ) : (
-                                                        <div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-                                                                Trusted partners coming soon.
-                                                        </div>
-                                                )}
-                                                {/* <div className="relative w-full mt-10 overflow-hidden py-4 text-center bg-background-dark/50 border border-white/10 rounded-xl p-6 backdrop-blur-sm animate-float">
+	return (
+		<AuthGuard>
+			<div className="container mx-auto px-6 py-24">
+				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
+					<div className="lg:col-span-7">
+						<ContactForm prefill={prefill} />
+					</div>
+					<div className="flex flex-col lg:col-span-5">
+						<ScheduleMeeting />
+						{isStepsError ? (
+							<div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
+								Unable to load next steps right now.
+							</div>
+						) : isStepsLoading ? (
+							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+								Loading next steps…
+							</div>
+						) : hasSteps ? (
+							<ContactSteps steps={steps} />
+						) : (
+							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+								Next steps coming soon.
+							</div>
+						)}
+						{isLogosError ? (
+							<div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
+								Unable to load trusted partners right now.
+							</div>
+						) : isLogosLoading ? (
+							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+								Loading trusted partners…
+							</div>
+						) : hasLogos ? (
+							<TrustedByMarquee items={companyLogos} />
+						) : (
+							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+								Trusted partners coming soon.
+							</div>
+						)}
+						{/* <div className="relative w-full mt-10 overflow-hidden py-4 text-center bg-background-dark/50 border border-white/10 rounded-xl p-6 backdrop-blur-sm animate-float">
               <Image
                 src="/CyberOni-Wording_white.png"
                 alt="CyberOni Logo"
@@ -309,34 +334,34 @@ const Contact = () => {
               />
             </div> */}
 					</div>
-                                </div>
-                                <ContactInfo />
+				</div>
+				<ContactInfo />
 
-                                {isTestimonialsError ? (
-                                        <div className="my-12 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
-                                                Unable to load testimonials right now.
-                                        </div>
-                                ) : isTestimonialsLoading ? (
-                                        <div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-                                                Loading testimonials…
-                                        </div>
-                                ) : hasTestimonials ? (
-                                        <Testimonials
-                                                testimonials={testimonials}
-                                                title={"What Our Clients Say"}
-                                                subtitle={
-                                                        "Hear from our clients about their experiences with our services"
-                                                }
-                                        />
-                                ) : (
-                                        <div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-                                                Testimonials coming soon.
-                                        </div>
-                                )}
-                                <Newsletter />
-                        </div>
-                </AuthGuard>
-        );
+				{isTestimonialsError ? (
+					<div className="my-12 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
+						Unable to load testimonials right now.
+					</div>
+				) : isTestimonialsLoading ? (
+					<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+						Loading testimonials…
+					</div>
+				) : hasTestimonials ? (
+					<Testimonials
+						testimonials={testimonials}
+						title={"What Our Clients Say"}
+						subtitle={
+							"Hear from our clients about their experiences with our services"
+						}
+					/>
+				) : (
+					<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+						Testimonials coming soon.
+					</div>
+				)}
+				<Newsletter />
+			</div>
+		</AuthGuard>
+	);
 };
 
 export default Contact;

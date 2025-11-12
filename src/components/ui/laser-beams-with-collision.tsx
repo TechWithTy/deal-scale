@@ -57,8 +57,7 @@ export function LaserBeamsWithCollision({
 
 			const seed = index + 1;
 			const duration =
-				minDuration +
-				(maxDuration - minDuration) * seededRandom(seed * 5.73);
+				minDuration + (maxDuration - minDuration) * seededRandom(seed * 5.73);
 			const delay =
 				minDelay + (maxDelay - minDelay) * seededRandom(seed * 11.37);
 
@@ -70,7 +69,14 @@ export function LaserBeamsWithCollision({
 				height,
 			};
 		});
-	}, [beamCount, beamHeight, beamWidth, clampedCount, delayRange, durationRange]);
+	}, [
+		beamCount,
+		beamHeight,
+		beamWidth,
+		clampedCount,
+		delayRange,
+		durationRange,
+	]);
 
 	return (
 		<div
@@ -233,7 +239,7 @@ const CollisionMechanism = React.forwardRef<
 						delay: beamOptions?.delay ?? 0,
 						repeatDelay,
 					}}
-					className="absolute left-0 top-0 z-10 m-auto rounded-full bg-[linear-gradient(180deg,rgba(191,219,254,0)_0%,rgba(59,130,246,0.38)_40%,rgba(59,130,246,0.95)_60%,rgba(37,99,235,0)_100%)] mix-blend-screen blur-[1px]"
+					className="absolute top-0 left-0 z-10 m-auto rounded-full bg-[linear-gradient(180deg,rgba(191,219,254,0)_0%,rgba(59,130,246,0.38)_40%,rgba(59,130,246,0.95)_60%,rgba(37,99,235,0)_100%)] mix-blend-screen blur-[1px]"
 					style={{
 						height: beamOptions?.height ?? defaultBeamHeight,
 						width: defaultBeamWidth,
@@ -294,4 +300,3 @@ const Explosion = ({
 		</div>
 	);
 };
-

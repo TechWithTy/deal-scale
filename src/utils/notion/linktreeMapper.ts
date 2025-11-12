@@ -314,9 +314,7 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 	};
 
 	// Handle "UTM Campaign (Relation)" property name - use it if available, otherwise fallback to "UTM Campaign"
-	const utmCampaignRelation = getSelectValue(
-		props["UTM Campaign (Relation)"],
-	);
+	const utmCampaignRelation = getSelectValue(props["UTM Campaign (Relation)"]);
 	const utmCampaignRegular = getSelectValue(props["UTM Campaign"]);
 	const utm_campaign = utmCampaignRelation || utmCampaignRegular;
 
