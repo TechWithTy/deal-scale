@@ -7,6 +7,7 @@ import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/featu
 import {
 	SchemaInjector,
 	buildServiceSchema,
+	type SchemaPayload,
 } from "@/utils/seo/schema";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
@@ -63,10 +64,10 @@ const FEATURE_SERVICE_SCHEMAS = REAL_TIME_FEATURES.map((feature) =>
 	}),
 );
 
-const REAL_TIME_ANALYTICS_SCHEMAS = [
+const REAL_TIME_ANALYTICS_SCHEMAS: SchemaPayload = [
 	PRIMARY_SERVICE_SCHEMA,
 	...FEATURE_SERVICE_SCHEMAS,
-] as const;
+];
 
 export async function generateMetadata(): Promise<Metadata> {
 	const keywords = Array.from(

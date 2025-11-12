@@ -14,26 +14,36 @@ import type {
 } from "./types";
 
 const FEED_ID = `${defaultSeo.canonical}#live-activity-feed`;
-const TIME_AGO_REGEX = /^(?<value>\d+)(?<unit>[smhd])?\s*(ago)?$/;
+const TIME_AGO_REGEX = /^(?:\d+)(?:[smhd])?\s*(?:ago)?$/;
+const TIME_AGO_PARSE_REGEX = /^(\d+)([smhd])?/;
+
+function parseTimeAgo(timeAgo: string): { value: number; unit: string } | null {
+	const trimmed = timeAgo.trim().toLowerCase();
+	if (!trimmed) return null;
+
+	const match = trimmed.match(TIME_AGO_PARSE_REGEX);
+	if (!match) return null;
+
+	const value = Number.parseInt(match[1] ?? "", 10);
+	if (Number.isNaN(value)) {
+		return null;
+	}
+
+	const unit = match[2] ?? "m";
+	return { value, unit };
+}
 
 function timeAgoToIso(timeAgo: string): string | undefined {
 	if (!timeAgo) {
 		return undefined;
 	}
-
-	const match = timeAgo.trim().toLowerCase().match(TIME_AGO_REGEX);
-
-	if (!match || !match.groups) {
+	if (!TIME_AGO_REGEX.test(timeAgo.trim().toLowerCase())) {
 		return undefined;
 	}
+	const parsed = parseTimeAgo(timeAgo);
+	if (!parsed) return undefined;
 
-	const value = Number.parseInt(match.groups.value, 10);
-
-	if (Number.isNaN(value)) {
-		return undefined;
-	}
-
-	const unit = match.groups.unit ?? "m";
+	const { value, unit } = parsed;
 	const now = Date.now();
 	let delta = 0;
 

@@ -2,6 +2,8 @@ import path from "node:path";
 // next.config.ts
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
 	// Optimize package imports to reduce bundle size
 	experimental: {
@@ -38,7 +40,7 @@ const nextConfig: NextConfig = {
 		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 		// Minimum Cache TTL (in seconds) for optimized images
-		minimumCacheTTL: 60,
+		minimumCacheTTL: isProd ? 60 : 0,
 		remotePatterns: [
 			{ protocol: "https", hostname: "dealscale.io" },
 			{ protocol: "https", hostname: "vectorlogo.zone" },
@@ -136,13 +138,31 @@ const nextConfig: NextConfig = {
 		];
 	},
 	async headers() {
+		if (!isProd) {
+			return [
+				{
+					source: "/:path*",
+					headers: [
+						{
+							key: "Cache-Control",
+							value: "no-store, must-revalidate",
+						},
+					],
+				},
+			];
+		}
+
+		const cacheControl = isProd
+			? "public, max-age=31536000, immutable"
+			: "no-store, must-revalidate";
+
 		return [
 			{
 				source: "/_next/static/:path*",
 				headers: [
 					{
 						key: "Cache-Control",
-						value: "public, max-age=31536000, immutable",
+						value: cacheControl,
 					},
 				],
 			},
@@ -151,7 +171,7 @@ const nextConfig: NextConfig = {
 				headers: [
 					{
 						key: "Cache-Control",
-						value: "public, max-age=31536000, immutable",
+						value: cacheControl,
 					},
 				],
 			},
@@ -160,7 +180,9 @@ const nextConfig: NextConfig = {
 				headers: [
 					{
 						key: "Cache-Control",
-						value: "public, max-age=2592000, must-revalidate",
+						value: isProd
+							? "public, max-age=2592000, must-revalidate"
+							: cacheControl,
 					},
 				],
 			},
@@ -169,7 +191,7 @@ const nextConfig: NextConfig = {
 				headers: [
 					{
 						key: "Cache-Control",
-						value: "public, max-age=31536000, immutable",
+						value: cacheControl,
 					},
 				],
 			},
@@ -178,7 +200,16 @@ const nextConfig: NextConfig = {
 				headers: [
 					{
 						key: "Cache-Control",
-						value: "public, max-age=31536000, immutable",
+						value: cacheControl,
+					},
+				],
+			},
+			{
+				source: "/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: cacheControl,
 					},
 				],
 			},
