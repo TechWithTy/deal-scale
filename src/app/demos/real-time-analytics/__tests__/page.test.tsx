@@ -20,7 +20,7 @@ jest.mock("@/components/ui/macbook-scroll", () => ({
 }));
 
 describe("RealTimeAnalytics demo showcase", () => {
-	it("renders the default feature with its Macbook media", () => {
+	it("renders the default feature with its Macbook media", async () => {
 		render(<FeatureShowcase features={REAL_TIME_FEATURES} />);
 
 		const defaultFeature = REAL_TIME_FEATURES[0];
@@ -33,11 +33,13 @@ describe("RealTimeAnalytics demo showcase", () => {
 		).toBeInTheDocument();
 
 		expect(
-			screen.getByAltText(defaultFeature.media.alt),
+			await screen.findByAltText(defaultFeature.media.alt),
 		).toBeInTheDocument();
 
 		for (const highlight of defaultFeature.highlights) {
-			expect(screen.getByText(highlight.title)).toBeInTheDocument();
+			expect(
+				await screen.findByText(highlight.title),
+			).toBeInTheDocument();
 		}
 	});
 
@@ -60,12 +62,15 @@ describe("RealTimeAnalytics demo showcase", () => {
 		).toBeInTheDocument();
 
 		expect(
-			screen.getByAltText(targetFeature.media.alt),
+			await screen.findByAltText(targetFeature.media.alt),
 		).toBeInTheDocument();
 
 		for (const highlight of targetFeature.highlights) {
-			expect(screen.getByText(highlight.title)).toBeInTheDocument();
+			expect(
+				await screen.findByText(highlight.title),
+			).toBeInTheDocument();
 		}
 	});
 });
+
 

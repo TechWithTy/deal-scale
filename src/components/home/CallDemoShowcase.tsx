@@ -8,6 +8,7 @@ import { AnimatedList } from "@/components/ui/animatedList";
 import { Iphone } from "@/components/ui/iphone";
 import { LayoutGrid } from "@/components/ui/layout-grid";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 import {
 	AI_OUTREACH_STUDIO_ANCHOR,
 	AI_OUTREACH_STUDIO_DESCRIPTION,
@@ -54,6 +55,34 @@ const TEXT_DEMO_MESSAGES = [
 	},
 ] as const;
 const TEXT_DEMO_MESSAGES_COUNT = TEXT_DEMO_MESSAGES.length;
+
+const SESSION_MONITOR_DIALOG = [
+	"💬 “Hey Sarah, it’s Ava from Metro Home Team. Still open to an offer on 2143 W Elm St this month?”",
+	"💬 “Just checking in—want me to send the contract recap before Jordan calls?”",
+] as const;
+
+const SESSION_MONITOR_STATUS = [
+	"🧠 Auto-response ready, synced with your CRM.",
+	"🧠 Ready to hand off with full call notes.",
+] as const;
+
+const PhoneShell = ({
+	children,
+	className,
+}: {
+	children: React.ReactNode;
+	className?: string;
+}) => (
+	<div
+		className={cn(
+			"relative w-full max-w-[22rem] rounded-[3.25rem] bg-slate-900/45 p-3 shadow-[0_35px_80px_rgba(15,23,42,0.55)] ring-1 ring-slate-800/45 backdrop-blur-md sm:max-w-[24rem] md:max-w-[26rem] dark:bg-slate-900/70 dark:ring-white/12",
+			className,
+		)}
+	>
+		<div className="pointer-events-none absolute inset-0 rounded-[3.25rem] bg-gradient-to-b from-white/8 via-transparent to-black/40 dark:from-white/12 dark:via-transparent dark:to-black/65" />
+		<div className="relative">{children}</div>
+	</div>
+);
 
 function useInterval(callback: () => void, delay: number | null): void {
 	const savedCallback = useRef(callback);
@@ -114,71 +143,73 @@ export const CallDemoShowcase = () => {
 		if (activePreview === "text") {
 			return (
 				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
-					<Iphone
-						aria-label="Text demo preview"
-						className="w-full max-w-[28rem] drop-shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:drop-shadow-[0_30px_90px_rgba(15,23,42,0.65)]"
-						colorScheme="dark"
-					>
-						<>
-							<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
-								<div
-									className={cn(
-										"rounded-full px-3 py-1",
-										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-										"bg-slate-900/70 backdrop-blur",
-									)}
-								>
-									Text Demo
+					<PhoneShell>
+						<Iphone
+							aria-label="Text demo preview"
+							className="w-full"
+							colorScheme="dark"
+						>
+							<>
+								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
+									<div
+										className={cn(
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-slate-900/70 backdrop-blur",
+										)}
+									>
+										Text Demo
+									</div>
 								</div>
-							</div>
-							<div className="flex h-full flex-col justify-end overflow-hidden rounded-[28px] bg-gradient-to-b from-slate-100/90 to-white/95 p-6 shadow-inner backdrop-blur-sm dark:bg-slate-950/85 dark:from-slate-950/85 dark:to-black/90 dark:shadow-none">
-								<AnimatedList
-									delay={220}
-									className="flex w-full flex-col gap-3"
-								>
-									{TEXT_DEMO_MESSAGES.map((message, index) => (
-										<div
-											key={`${message.sender}-${index}`}
-											className={cn(
-												"flex w-full",
-												message.sender === "AI"
-													? "justify-start"
-													: "justify-end",
-											)}
-										>
+								<div className="flex h-full flex-col justify-end overflow-hidden rounded-[28px] bg-gradient-to-b from-slate-100/90 to-white/95 p-6 shadow-inner backdrop-blur-sm dark:bg-slate-950/85 dark:from-slate-950/85 dark:to-black/90 dark:shadow-none">
+									<AnimatedList
+										delay={220}
+										className="flex w-full flex-col gap-3"
+									>
+										{TEXT_DEMO_MESSAGES.map((message, index) => (
 											<div
+												key={`${message.sender}-${index}`}
 												className={cn(
-													"max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500",
+													"flex w-full",
 													message.sender === "AI"
-														? "bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100"
-														: "bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200",
-													activeTextIndex === index && "ring-2",
-													activeTextIndex === index && "ring-sky-300/70",
-													activeTextIndex === index && "scale-[1.02]",
-													activeTextIndex === index &&
-														"shadow-[0_12px_24px_rgba(56,189,248,0.25)]",
+														? "justify-start"
+														: "justify-end",
 												)}
 											>
-												<p className="whitespace-pre-line">{message.text}</p>
+												<div
+													className={cn(
+														"max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500",
+														message.sender === "AI"
+															? "bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100"
+															: "bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200",
+														activeTextIndex === index && "ring-2",
+														activeTextIndex === index && "ring-sky-300/70",
+														activeTextIndex === index && "scale-[1.02]",
+														activeTextIndex === index &&
+															"shadow-[0_12px_24px_rgba(56,189,248,0.25)]",
+													)}
+												>
+													<p className="whitespace-pre-line">{message.text}</p>
+												</div>
 											</div>
-										</div>
-									))}
-								</AnimatedList>
-								<div className="mt-3 text-center font-semibold text-[10px] text-slate-500 uppercase tracking-[0.3em] dark:text-slate-300">
-									<span>DealScale AI • Live Seller Outreach</span>
+										))}
+									</AnimatedList>
+									<div className="mt-3 text-center font-semibold text-[10px] text-slate-500 uppercase tracking-[0.3em] dark:text-slate-300">
+										<span>DealScale AI • Live Seller Outreach</span>
+									</div>
+									<div className="mt-1 flex justify-center">
+										<SparklesText
+											className="font-semibold text-[10px] text-sky-500 uppercase tracking-[0.35em] dark:text-sky-200"
+											sparklesCount={8}
+											colors={{ first: "#38bdf8", second: "#f97316" }}
+										>
+											iMessage Support
+										</SparklesText>
+									</div>
 								</div>
-								<div className="mt-1 flex justify-center">
-									<SparklesText
-										className="font-semibold text-[10px] text-sky-500 uppercase tracking-[0.35em] dark:text-sky-200"
-										sparklesCount={8}
-										colors={{ first: "#38bdf8", second: "#f97316" }}
-									>
-										iMessage Support
-									</SparklesText>
-								</div>
-							</div>
-						</>
-					</Iphone>
+							</>
+						</Iphone>
+					</PhoneShell>
 				</div>
 			);
 		}
@@ -186,73 +217,77 @@ export const CallDemoShowcase = () => {
 		if (callDemoMode === "video") {
 			return (
 				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
-					<Iphone
-						aria-label="Call demo preview"
-						className="w-full max-w-[28rem] drop-shadow-[0_35px_100px_rgba(15,23,42,0.45)] dark:drop-shadow-[0_35px_100px_rgba(15,23,42,0.65)]"
-						colorScheme="dark"
-					>
-						<>
-							<iframe
-								title="Call demo playlist preview"
-								className="size-full"
-								src={CALL_DEMO_PLAYLIST_SRC}
-								loading="lazy"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
-								referrerPolicy="strict-origin-when-cross-origin"
-								allowFullScreen
-								frameBorder="0"
-								aria-label="Call demo video playlist"
-							/>
-							<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
-								<div
-									className={cn(
-										"rounded-full px-3 py-1",
-										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-										"bg-slate-950/55 backdrop-blur",
-									)}
-								>
-									Live Preview
+					<PhoneShell>
+						<Iphone
+							aria-label="Call demo preview"
+							className="relative w-full max-w-[26rem]"
+							colorScheme="dark"
+						>
+							<>
+								<iframe
+									title="Call demo playlist preview"
+									className="size-full"
+									src={CALL_DEMO_PLAYLIST_SRC}
+									loading="lazy"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
+									referrerPolicy="strict-origin-when-cross-origin"
+									allowFullScreen
+									frameBorder="0"
+									aria-label="Call demo video playlist"
+								/>
+								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
+									<div
+										className={cn(
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-slate-950/55 backdrop-blur",
+										)}
+									>
+										Live Preview
+									</div>
 								</div>
-							</div>
-						</>
-					</Iphone>
+							</>
+						</Iphone>
+					</PhoneShell>
 				</div>
 			);
 		}
 
 		return (
 			<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
-				<Iphone
-					aria-label="Call demo preview"
-					className="w-full max-w-[28rem] drop-shadow-[0_35px_100px_rgba(15,23,42,0.45)] dark:drop-shadow-[0_35px_100px_rgba(15,23,42,0.65)]"
-					colorScheme="dark"
-				>
-					<>
-						<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
-							<div
-								className={cn(
-									"rounded-full px-3 py-1",
-									"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-									"bg-slate-950/65 backdrop-blur",
-								)}
-							>
-								Live Call Demo
+				<PhoneShell>
+					<Iphone
+						aria-label="Call demo preview"
+						className="relative w-full max-w-[26rem]"
+						colorScheme="dark"
+					>
+						<>
+							<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
+								<div
+									className={cn(
+										"rounded-full px-3 py-1",
+										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+										"bg-slate-950/65 backdrop-blur",
+									)}
+								>
+									Live Call Demo
+								</div>
 							</div>
-						</div>
-						<div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-3 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
-							<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/40 dark:from-white/10 dark:via-transparent dark:to-black/60" />
-							<div className="relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-black/35 p-2 shadow-inner dark:bg-black/25">
-								<SessionMonitor
-									key={callDemoKey}
-									transcript={demoTranscript}
-									autoStart
-									showCompletionModal={false}
-									onCallEnd={handleCallDemoComplete}
-								/>
+							<div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-3 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
+								<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/40 dark:from-white/10 dark:via-transparent dark:to-black/60" />
+								<div className="relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-black/35 p-2 shadow-inner dark:bg-black/25">
+									<SessionMonitor
+										key={callDemoKey}
+										transcript={demoTranscript}
+										autoStart
+										showCompletionModal={false}
+										onCallEnd={handleCallDemoComplete}
+									/>
+								</div>
 							</div>
-						</div>
-					</>
-				</Iphone>
+						</>
+					</Iphone>
+				</PhoneShell>
 			</div>
 		);
 	}, [
@@ -319,13 +354,30 @@ export const CallDemoShowcase = () => {
 										className="size-10 rounded-full border border-slate-200/80 object-cover dark:border-white/20"
 									/>
 									<div className="flex flex-col gap-2 text-left">
-										<p className="text-slate-900 text-sm leading-relaxed dark:text-white">
-											💬 “Hey Sarah, it’s Ava from Metro Home Team. Still open to
-											an offer on 2143 W Elm St this month?”
-										</p>
-										<p className="text-slate-500 text-[11px] uppercase tracking-[0.18em] dark:text-white/50 sm:text-xs">
-											🧠 Auto-response ready, synced with your CRM.
-										</p>
+										<TypingAnimation
+											words={[...SESSION_MONITOR_DIALOG]}
+											className="text-slate-900 text-sm leading-relaxed dark:text-white"
+											typeSpeed={40}
+											deleteSpeed={30}
+											pauseDelay={2200}
+											loop
+											showCursor={false}
+											startOnView={false}
+											as="p"
+											data-testid="session-monitor-dialog"
+										/>
+										<TypingAnimation
+											words={[...SESSION_MONITOR_STATUS]}
+											className="text-slate-500 text-[11px] uppercase tracking-[0.18em] dark:text-white/50 sm:text-xs"
+											typeSpeed={42}
+											deleteSpeed={28}
+											pauseDelay={2000}
+											loop
+											showCursor={false}
+											startOnView={false}
+											as="p"
+											data-testid="session-monitor-status"
+										/>
 									</div>
 								</div>
 								<div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -357,9 +409,10 @@ export const CallDemoShowcase = () => {
 			},
 			{
 				id: 2,
-				className: "col-span-1 flex items-center justify-center",
+				className:
+					"col-span-1 flex min-h-[26rem] items-center justify-center md:col-start-3 md:min-h-[32rem]",
 				contentClassName:
-					"flex h-full w-full items-center justify-center bg-transparent",
+					"flex w-full items-center justify-center bg-transparent",
 				content: renderPreview(),
 			},
 		],
@@ -376,15 +429,13 @@ export const CallDemoShowcase = () => {
 				<div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 text-center sm:px-6 lg:px-8">
 					<div className="mx-auto max-w-3xl space-y-4">
 						<p className="font-semibold text-sky-500 text-sm uppercase tracking-[0.3em]">
-							AI Outreach Studio
+							{AI_OUTREACH_STUDIO_HEADING}
 						</p>
 						<h2 className="font-semibold text-4xl text-slate-900 tracking-tight sm:text-5xl dark:text-white">
-							Generate calls & texts with AI
+							{AI_OUTREACH_STUDIO_TAGLINE}
 						</h2>
 						<p className="text-base text-slate-600 sm:text-lg dark:text-white/70">
-							Launch live call and text demos powered by DealScale’s outreach
-							engine. Keep messaging aligned with lead intent, then hand off to
-							your team with CRM-ready notes.
+							{AI_OUTREACH_STUDIO_DESCRIPTION}
 						</p>
 						<ul className="grid gap-3 text-slate-600 text-sm sm:grid-cols-3 sm:text-base dark:text-white/70">
 							<li className="rounded-xl border border-slate-200/40 bg-white/40 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-white/5">
@@ -402,7 +453,7 @@ export const CallDemoShowcase = () => {
 						cards={cards}
 						interactive={false}
 						showThumbnails={false}
-						baseCardClassName="rounded-none bg-transparent"
+						baseCardClassName="bg-transparent"
 					/>
 				</div>
 			</section>

@@ -153,9 +153,9 @@ const HERO_COPY_V7 = {
 export type HeroPersonaKey = keyof typeof HERO_COPY_V7.personas;
 
 export const DEFAULT_PERSONA: HeroPersonaKey = "investor";
-export const DEFAULT_PERSONA_DISPLAY = "Investor Persona";
+export const DEFAULT_PERSONA_DISPLAY = "AI Sales Coworker";
 
-const PERSONA_LABEL = "AI Sales Agents";
+const PERSONA_LABEL = "For Investors";
 const PERSONA_GOAL = "Automate deal flow conversations";
 const PERSONA_SOCIAL_PROOF =
 	"Investors trust DealScale to automate deal flow outreach.";

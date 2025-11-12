@@ -2,46 +2,88 @@ import type { FAQItem } from "@/types/faq";
 
 export const faqItems: FAQItem[] = [
 	{
-		question:
-			"How is this different from just buying a list from PropStream, Deal Machine or BatchLeads?",
+		question: "What makes DealScale different from other real estate tools?",
 		answer:
-			"Those are great tools for data, but they only give you the 'what'—a list of contacts. Deal Scale provides the 'how': an autonomous AI agent that actually calls and texts that list for you, holds conversations, pre-qualifies the lead, and books a in person appraisal appointment directly on your calendar. We automate the entire top-of-funnel, not just the data gathering.",
+			"DealScale is an AI sales coworker that automates skip tracing, AI cold calling, and seller qualification for agents and investors. Unlike list providers, it handles outreach, follow-up, and appointment booking so you can focus on closing deals.",
 	},
 	{
-		question: "Is your skip tracing data accurate? And is it really unlimited?",
+		question: "Who is DealScale built for?",
 		answer:
-			"Yes, and yes. We pull from multiple top-tier data sources to ensure high accuracy for owner names, phone numbers, and property details. And our 'Unlimited Free Skip Tracing' is exactly that—unlimited for all subscribers. You can enrich as many leads as you need without worrying about skip-trace credits or monthly caps, which is a major cost-saving advantage.",
+			"DealScale is designed for real estate agents, investors, and wholesalers who want to automate outreach, follow-up, and appointment booking using AI voice, SMS, and data-driven qualification. Agencies and brokerages also use DealScale to scale lead generation without hiring extra staff.",
 	},
 	{
-		question:
-			"Will sellers know they are talking to an AI? How does that work?",
+		question: "What is AI Voice Outreach?",
 		answer:
-			"Transparency is key. Our AI is designed to clearly identify itself as a virtual assistant. However, by using our Voice Cloning feature, the AI speaks in your authentic voice, which builds instant trust and rapport, leading to much higher engagement rates than a standard robotic-sounding AI.",
+			"AI Voice Outreach uses your cloned voice to call and qualify leads automatically. The AI speaks naturally, handles objections, and books appointments directly in your CRM while following compliance standards like TCPA and GDPR.",
 	},
 	{
-		question: "Can I use my own lead lists or do I have to use yours?",
+		question: "How does voice cloning work?",
 		answer:
-			"You can absolutely use your own lists. You can easily upload any CSV of leads you've acquired from other sources, and our AI agent will begin the outreach and qualification process. You can also generate new lists directly within Deal Scale using our 140M+ property database.",
+			"DealScale uses AI voice cloning software built for real estate professionals. You record a short sample of your voice, and a private model is trained securely for your account. Your AI assistant speaks just like you, building trust with sellers while protecting your data and privacy.",
 	},
 	{
-		question:
-			"What happens when the AI finds a 'hot' lead that's ready to talk now?",
+		question: "Can DealScale send SMS or social messages?",
 		answer:
-			"When the AI identifies a highly qualified and motivated lead, it can take multiple actions to maximize your chance of closing the deal. The AI can instantly schedule a calendar callback with the seller at a time that works for both of you, or book an in-person appraisal appointment directly on your calendar. If the seller is ready to talk immediately, the AI can also initiate a live hot transfer call, connecting them directly to you or your acquisition manager in real time. This ensures you never miss the hottest opportunities, whether you prefer a scheduled call, live conversation, or face-to-face meeting.",
+			"Yes. AI SMS and Social DMs are rolling out soon, allowing you to automatically follow up with leads through text, Facebook Messenger, Instagram, and LinkedIn while maintaining brand consistency and compliance.",
 	},
 	{
-		question: "How much time will this actually save me?",
+		question: "Is skip tracing really unlimited and accurate?",
 		answer:
-			"Our clients report saving over 20 hours per week, per agent. By eliminating manual outbound prospecting and repetitive follow-ups, your team can stop chasing cold leads and focus exclusively on what they do best: talking to qualified sellers and closing deals.",
+			"Yes. Every plan includes unlimited verified owner data from over 140 million U.S. property records with more than 90 percent accuracy and no per-record costs. Our data is refreshed daily and enriched for better match rates.",
 	},
 	{
-		question: "Does Deal Scale replace my CRM?",
+		question: "Can I import my own lead lists?",
 		answer:
-			"Yes, Deal Scale is designed to fully replace your CRM. We provide a modern, unified dashboard for a quick overview of all your campaigns, leads, and pipeline management. Our platform includes robust lead tracking, follow-up automation, and powerful CRM features purpose-built for real estate professionals and enterprise teams. For larger organizations, we offer a fully branded enterprise-grade CRM experience—letting you manage custom automations, communications, and performance analytics all in one secure place, without the hassles or limitations of legacy systems.",
+			"Yes. You can upload any CSV, spreadsheet, or CRM export, and DealScale will clean, enrich, and sync it automatically for AI outreach and analysis.",
 	},
 	{
-		question: "What kind of support do you offer to new users?",
+		question: "Will people know they are talking to AI?",
 		answer:
-			"We offer true 24/7 support to all users. Currently, Deal Scale is in an exclusive pilot program—apply for access using the link at the top of our website. Early adopters receive personal onboarding and priority assistance as we roll out new features and improvements.",
+			"You control disclosure. Your agent can identify itself as an AI assistant or speak naturally in your cloned voice for a fully human experience. DealScale provides disclosure templates and consent tools to help you stay transparent and compliant.",
+	},
+	{
+		question: "What kind of ROI can I expect?",
+		answer:
+			"Most users see over 300 percent ROI within 90 days. On average, every $1 spent on DealScale returns $3 to $10 in closed-deal revenue. Many agents and investors recover their annual plan cost after one converted listing or wholesale deal.",
+	},
+	{
+		question: "Does DealScale replace my CRM?",
+		answer:
+			"No. DealScale connects seamlessly with any CRM including HubSpot, GoHighLevel, Lofty, Zoho, FollowUpBoss, and Salesforce for instant two-way sync of leads, conversations, and appointment data.",
+	},
+	{
+		question: "How fast can I launch my first campaign?",
+		answer:
+			"You can launch in under five minutes. Just import leads, clone your voice, select a campaign template, and start AI outreach instantly through phone, SMS, or social channels.",
+	},
+	{
+		question: "What are TCPA compliant voicemail drops?",
+		answer:
+			"DealScale supports ringless voicemail drops that never trigger a live ring. Each message includes a consent statement and opt-out option, ensuring full TCPA and carrier compliance while keeping delivery rates high.",
+	},
+	{
+		question: "Is DealScale TCPA and GDPR compliant?",
+		answer:
+			"Yes. DealScale automatically filters Do Not Call numbers, enforces time zone–safe outreach windows, and tracks consent and opt-outs. All data handling meets TCPA, GDPR, and CCPA compliance standards.",
+	},
+	{
+		question: "What is DealScale's compliance policy?",
+		answer:
+			"DealScale follows a privacy-by-design framework that includes consent tracking, encryption at rest and in transit, carrier registration, and AI use transparency. We align with TCPA, GDPR, CCPA, and emerging AI regulations to protect users and leads alike.",
+	},
+	{
+		question: "How will DealScale handle the Colorado AI Act in 2026?",
+		answer:
+			"DealScale is already preparing for the Colorado Artificial Intelligence Act, effective February 2026. The platform will include AI labeling, opt-out controls, and documentation for automated decision logic so users can meet transparency and fairness requirements easily.",
+	},
+	{
+		question: "Can I white label or self host DealScale?",
+		answer:
+			"Yes. Enterprise and partner users can white label or self host DealScale with custom branding, dedicated infrastructure, and optional revenue-sharing models.",
+	},
+	{
+		question: "Is there a free trial or pilot program?",
+		answer:
+			"Yes. New users can join the pilot program or request a free trial to test AI voice, skip tracing, and CRM integration before upgrading to a paid plan.",
 	},
 ];

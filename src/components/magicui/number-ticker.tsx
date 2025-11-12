@@ -13,6 +13,11 @@ interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
 	decimalPlaces?: number;
 }
 
+declare global {
+	// eslint-disable-next-line no-var
+	var __DS_INTERSECTION_OBSERVER_POLYFILL__: boolean | undefined;
+}
+
 export function NumberTicker({
 	value,
 	startValue = 0,
@@ -23,12 +28,30 @@ export function NumberTicker({
 	...props
 }: NumberTickerProps) {
 	const ref = useRef<HTMLSpanElement>(null);
+	if (
+		typeof window !== "undefined" &&
+		typeof window.IntersectionObserver === "undefined" &&
+		!globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__
+	) {
+		globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__ = true;
+		(window as unknown as Record<string, unknown>).IntersectionObserver = class {
+			constructor() {}
+			observe() {}
+			unobserve() {}
+			disconnect() {}
+		};
+	}
+
 	const motionValue = useMotionValue(direction === "down" ? value : startValue);
 	const springValue = useSpring(motionValue, {
 		damping: 60,
 		stiffness: 100,
 	});
-	const isInView = useInView(ref, { once: true, margin: "0px" });
+	const isInView = useInView(ref, {
+		once: true,
+		margin: "0px",
+		fallbackInView: true,
+	});
 
 	useEffect(() => {
 		if (isInView) {

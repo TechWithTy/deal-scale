@@ -21,14 +21,15 @@ import {
 
 const LEFT_COLUMN_POINTS = [
 	"Sync sourcing, underwriting, and investor CRM workflows into a single live feed.",
-	"Surface the most valuable seller or deal signal with motion cues & badges.",
-	"Respect focus mode — pause motion when the acquisitions desk needs deep work.",
+	"Surface the most valuable seller or deal signal with motion cues and badges.",
+	"Respect focus mode by pausing motion when the acquisitions desk needs deep work.",
 ] as const;
 
 const FALLBACK_HEADLINE =
-	"We orchestrate every deal touchpoint so your team stays in deal mode.";
+	"We orchestrate every deal touchpoint so your AI Sales Agents stay in deal mode.";
 const FALLBACK_SUBHEAD =
-	"Combine DealScale’s ActivityRoller logic with our interactive UI to spotlight the most impactful automation events. Monitor live seller handoffs, deal alerts, and compliance tasks without leaving your workflow.";
+	"Monitor live seller handoffs, deal alerts, and compliance tasks without leaving your workflow. Investors trust DealScale to automate deal flow outreach.";
+const FALLBACK_SUPPORT = "Automate deal flow conversations in under 5 minutes.";
 
 const CARD_STACK_OFFSET = 12;
 const CARD_STACK_SCALE_FACTOR = 0.04;
@@ -94,7 +95,7 @@ const formatEventForStack = (
 
 export default function FeatureSectionActivity(): JSX.Element {
 	const prefersReducedMotion = usePrefersReducedMotion();
-	const personaLabel = PERSONA_LABEL ?? "AI Revenue Team";
+	const personaLabel = PERSONA_LABEL ?? "AI Sales Agents";
 	const personaAudience =
 		personaLabel.endsWith("s") || personaLabel.endsWith("S")
 			? personaLabel
@@ -105,11 +106,13 @@ export default function FeatureSectionActivity(): JSX.Element {
 			: "stays";
 	const headline = `We orchestrate every deal touchpoint so your ${personaAudience} ${personaVerb} in deal mode.`;
 	const subheadline = LIVE_COPY?.values?.benefit?.length
-		? `${FALLBACK_SUBHEAD} ${LIVE_COPY.values.socialProof}`
+		? `${LIVE_COPY.values.benefit} ${LIVE_COPY.values.socialProof ?? ""}`.trim()
 		: FALLBACK_SUBHEAD;
 	const supportCopy = LIVE_COPY?.subtitle?.length
 		? LIVE_COPY.subtitle
-		: `${LIVE_COPY?.values?.socialProof ?? ""} ${PERSONA_GOAL ?? ""}`.trim();
+		: (LIVE_COPY?.values?.socialProof?.length
+				? `${LIVE_COPY.values.socialProof} ${PERSONA_GOAL ?? ""}`.trim()
+				: FALLBACK_SUPPORT);
 
 	return (
 		<section className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background/80 to-background">
@@ -199,7 +202,7 @@ export default function FeatureSectionActivity(): JSX.Element {
 													{activeEvent.action}
 												</>
 											) : (
-												"Stay tuned—new automation events roll in every minute."
+												"Stay tuned. New automation events roll in every minute."
 											)}
 										</div>
 										<p className="text-muted-foreground text-xs uppercase tracking-wide md:text-sm">

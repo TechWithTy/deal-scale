@@ -352,14 +352,6 @@ const Index = async ({
 			</ViewportLazy>
 			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<ViewportLazy>
-				<Faq
-					title="Frequently Asked Questions"
-					subtitle="Find answers to common questions about our services, process, and technology expertise."
-					faqItems={faqItems}
-				/>
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
 				<Pricing
 					title={"Our Pricing"}
 					subtitle={"Lock In Pilot Pricing For 5 Years!"}
@@ -379,6 +371,14 @@ const Index = async ({
 				<BlogPreview title="Latest Blogs" posts={posts} />
 			</ViewportLazy>
 			<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<Faq
+					title="Frequently Asked Questions"
+					subtitle="Find answers to common questions about our services, process, and technology expertise."
+					faqItems={faqItems}
+				/>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<ViewportLazy>
 				<div className="flex items-center justify-center py-5 lg:col-span-7">
 					<ContactForm />
