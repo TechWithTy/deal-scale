@@ -209,21 +209,22 @@ export const LIVE_COPY = resolveHeroCopy(
 );
 
 export const LIVE_PRIMARY_CTA = {
-	label: HERO_COPY_V7.ctas.primary[0],
-	description: "Let AI handle deal flow outreach while you close.",
+	label: "Get Started in 1 Click",
+	description:
+		"Stop dialing. Start closing. Your AI coworker books qualified sellers while you sleep.",
 	emphasis: "solid" as const,
-	badge: "Real Estate AI",
+	badge: "AI Coworker",
 };
 
 export const LIVE_SECONDARY_CTA = {
 	label: HERO_COPY_V7.ctas.secondary[0],
-	description: "Preview DealScale’s AI workflows in a guided tour.",
+	description: "Preview the four-pillar lead engine in a guided tour.",
 	emphasis: "outline" as const,
 	badge: "Live Demo",
 };
 
 export const LIVE_MICROCOPY =
-	'Automate investor deal sourcing and follow-up with DealScale AI. <link href="#live-hero-details">Review the rollout steps</link>.';
+	'Stop dialing. Start closing. Your AI coworker books qualified sellers while you sleep. <link href="#live-hero-details">Review the rollout steps</link>. "People buy from people who make them feel capable and confident." - Dale Carnegie.';
 
 export const LIVE_SOCIAL_PROOF = {
 	...DEFAULT_HERO_SOCIAL_PROOF,

@@ -13,8 +13,8 @@ interface ClientBentoProps {
 
 export default function ClientBento({
 	features,
-	title = "Why Real Estate Leaders Choose Deal Scale",
-	subtitle = "We deliver a scalable and automated solution to keep your deal pipeline consistently full.",
+	title = "Your AI Lead Engine in Four Moves",
+	subtitle = "Every pillar blends simplicity, speed, status, and scale so you stay focused on closing.",
 }: ClientBentoProps) {
 	const {
 		status,
