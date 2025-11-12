@@ -207,9 +207,10 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	},
 
 	"/faqs": {
-		title: "FAQs | Deal Scale",
+		title:
+			"DealScale FAQ | AI Voice, SMS, and Skip Tracing Automation for Real Estate Agents & Investors",
 		description:
-			"Find answers to common questions about Deal Scale's services and AI-powered real estate solutions.",
+			"Learn how DealScale automates skip tracing, AI voice outreach, SMS, and social lead qualification while staying TCPA and GDPR compliant. Discover ROI examples, voice cloning, CRM syncs, and compliance with the 2026 Colorado AI Act.",
 		canonical: "https://dealscale.io/faq",
 		keywords: DEFAULT_SEO.keywords,
 		image: DEFAULT_SEO.image,

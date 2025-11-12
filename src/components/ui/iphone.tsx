@@ -40,13 +40,13 @@ const COLOR_SCHEMES: Record<
 		cameraLensFill: "#E5E5E5",
 	},
 	dark: {
-		outerFill: "#0F172A",
-		outerStroke: "#0F172A",
-		accentFill: "#0B1220",
-		innerFill: "#020617",
-		highlightFill: "#111827",
-		cameraBodyFill: "#1E293B",
-		cameraLensFill: "#334155",
+		outerFill: "#111b2e",
+		outerStroke: "#1e293b",
+		accentFill: "#16233b",
+		innerFill: "#030910",
+		highlightFill: "#1f2a3d",
+		cameraBodyFill: "#243554",
+		cameraLensFill: "#3b4d6d",
 	},
 };
 

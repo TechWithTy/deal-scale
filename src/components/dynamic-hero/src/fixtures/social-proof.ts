@@ -20,7 +20,7 @@ export const DEFAULT_HERO_SOCIAL_PROOF: HeroSocialProof = {
 		},
 	],
 	numPeople: 200,
-	caption: "Reusable hero experiences adopted by DealScale builders.",
+	// caption: "Reusable hero experiences adopted by DealScale builders.",
 	reviews: [
 		{
 			title: "Elena • Broker",

@@ -65,7 +65,7 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 		? "grid w-full max-w-3xl grid-cols-1 items-stretch justify-center gap-4 sm:gap-5 md:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))] md:gap-6"
 		: "flex w-full max-w-3xl flex-col items-stretch justify-center gap-4";
 	const contentAlignment = isHorizontal
-		? "items-center text-center lg:items-start lg:text-left"
+		? "items-center text-center md:items-center md:text-center"
 		: "items-center text-center";
 	const secondaryCopy = useMemo(() => secondary, [secondary]);
 

@@ -8,7 +8,7 @@ export const AI_OUTREACH_STUDIO_HEADING = "AI Outreach Studio";
 export const AI_OUTREACH_STUDIO_TAGLINE =
 	"Turn conversations into conversions automatically.";
 export const AI_OUTREACH_STUDIO_DESCRIPTION =
-	"Launch real call and text demos powered by DealScale’s AI engine. Keep every message aligned with lead intent, then hand off to your team with full CRM context without missed follow ups or manual updates.";
+	"Launch real call and text conversations powered by DealScale’s AI engine. Keep every message aligned with lead intent, then hand off to your team with full CRM context so nothing slips through the cracks.";
 
 export const AI_OUTREACH_STUDIO_FEATURES: FeatureHighlight[] = [
 	{

@@ -35,7 +35,11 @@ export const LayoutGrid = ({
 					return (
 						<div
 							key={card.id}
-							className={cn(card.className, needsPositioning && "relative")}
+							className={cn(
+								baseCardClassName,
+								needsPositioning && "relative",
+								card.className,
+							)}
 						>
 							{showThumbnails && card.thumbnail ? (
 								<ImageComponent card={card} />
@@ -76,18 +80,17 @@ export const LayoutGrid = ({
 
 	return (
 		<div className="relative mx-auto grid h-full w-full max-w-7xl grid-cols-1 gap-4 p-10 md:grid-cols-3">
-			{cards.map((card, i) => (
-				<div key={card.id} className={cn(card.className, "")}>
+			{cards.map((card) => (
+				<div key={card.id} className={cn(baseCardClassName, card.className)}>
 					<motion.div
 						onClick={() => handleClick(card)}
 						className={cn(
-							card.className,
 							"relative overflow-hidden",
 							selected?.id === card.id
 								? "absolute inset-0 z-50 m-auto flex h-1/2 w-full cursor-pointer flex-col flex-wrap items-center justify-center rounded-lg md:w-1/2"
 								: lastSelected?.id === card.id
-									? cn("z-40 h-full w-full", baseCardClassName)
-									: cn("h-full w-full", baseCardClassName),
+									? "z-40 h-full w-full"
+									: "h-full w-full",
 						)}
 						layoutId={`card-${card.id}`}
 					>

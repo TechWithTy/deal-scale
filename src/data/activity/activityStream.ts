@@ -11,7 +11,7 @@ export type ActivityEvent = {
 /**
  * Curated activity feed for the FeatureSectionActivity component.
  *
- * The copy mirrors the mortgage automation storyline used across the
+ * The copy mirrors the investor automation storyline used across the
  * live hero and service flows so the visuals remain consistent.
  */
 export const activityStream: ActivityEvent[] = [
@@ -19,7 +19,7 @@ export const activityStream: ActivityEvent[] = [
 		id: "lead-sync",
 		label: "Pipeline Sync",
 		actor: "DealScale AI Router",
-		action: "Synced 48 new borrower inquiries from Encompass CRM.",
+		action: "Synced 48 off-market seller leads from InvestorFuse CRM.",
 		timeAgo: "2m ago",
 		impact: "+12% response SLA",
 		tags: ["sync", "crm"],
@@ -28,7 +28,7 @@ export const activityStream: ActivityEvent[] = [
 		id: "warm-transfer",
 		label: "Warm Transfer",
 		actor: "AI Concierge",
-		action: "Handed off pre-qualified borrower to Loan Officer Taylor.",
+		action: "Handed off a motivated seller to Acquisitions Partner Taylor.",
 		timeAgo: "5m ago",
 		impact: "Booked intro call",
 		tags: ["handoff", "voice"],
@@ -37,7 +37,7 @@ export const activityStream: ActivityEvent[] = [
 		id: "drip-campaign",
 		label: "Nurture Sequence",
 		actor: "Follow-Up Engine",
-		action: "Triggered 3-step SMS + email drip for stalled FHA applicants.",
+		action: "Triggered a 3-step SMS and voice drip for cold seller prospects.",
 		timeAgo: "11m ago",
 		impact: "Queue refreshed",
 		tags: ["drip", "automation"],
@@ -46,16 +46,16 @@ export const activityStream: ActivityEvent[] = [
 		id: "compliance-audit",
 		label: "Compliance Audit",
 		actor: "Audit Bot",
-		action: "Archived call recordings & attached transcripts to Salesforce.",
+		action: "Archived diligence calls and attached transcripts to the investor CRM.",
 		timeAgo: "18m ago",
 		impact: "Audit ready",
 		tags: ["compliance"],
 	},
 	{
 		id: "rate-alert",
-		label: "Rate Alert",
+		label: "Funding Alert",
 		actor: "Market Pulse",
-		action: "Pushed instant lock alert to 23 high-LTV borrowers.",
+		action: "Pushed instant funding readiness alerts to 23 equity partners.",
 		timeAgo: "26m ago",
 		impact: "Action window 2h",
 		tags: ["alerts", "rates"],
@@ -64,9 +64,10 @@ export const activityStream: ActivityEvent[] = [
 		id: "campaign-report",
 		label: "Campaign Report",
 		actor: "Insights Engine",
-		action: "Published weekly pipeline uplift report for retail mortgage team.",
+		action: "Published weekly deal flow uplift report for the acquisitions desk.",
 		timeAgo: "1h ago",
 		impact: "+31% demos",
 		tags: ["reporting", "insights"],
 	},
 ];
+
