@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
 import SessionMonitor from "@/components/deal_scale/talkingCards/SessionMonitor";
 import { AnimatedList } from "@/components/ui/animatedList";
+import dynamic from "next/dynamic";
 import { Iphone } from "@/components/ui/iphone";
 import { LayoutGrid } from "@/components/ui/layout-grid";
 import { SparklesText } from "@/components/ui/sparkles-text";
@@ -20,6 +22,7 @@ import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
 
 type PreviewType = "call" | "text";
+type CallDemoMode = "video" | "live" | "handoff";
 
 const CALL_DEMO_PLAYLIST_SRC =
 	"https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=0&mute=1&rel=0&playsinline=1&modestbranding=1";
@@ -84,6 +87,52 @@ const PhoneShell = ({
 	</div>
 );
 
+const CallHandoffCard = ({
+	onDecision,
+}: {
+	onDecision: () => void;
+}) => {
+	return (
+		<div className="relative flex h-full flex-col items-center justify-between rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-6 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
+			<div className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/8 via-transparent to-black/60" />
+			<div className="relative flex w-full flex-col items-center gap-4 text-center">
+				<span className="rounded-full bg-emerald-500/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-200">
+					Incoming Call
+				</span>
+				<div className="flex flex-col items-center gap-2">
+					<div className="size-16 overflow-hidden rounded-full border border-emerald-400/30 shadow-inner">
+						<Image
+							src="/avatars/Customer.jpg"
+							alt="Caller avatar"
+							width={64}
+							height={64}
+							className="size-full object-cover"
+						/>
+					</div>
+					<h3 className="text-lg font-semibold">Jordan, DealScale AI Rep</h3>
+					<p className="text-sm text-slate-300">Lead is ready to confirm. Accept and we&apos;ll sync the handoff to your CRM.</p>
+				</div>
+			</div>
+			<div className="relative flex w-full flex-col gap-3">
+				<button
+					type="button"
+					onClick={onDecision}
+					className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/40 transition hover:bg-emerald-400"
+				>
+					Accept Appointment
+				</button>
+				<button
+					type="button"
+					onClick={onDecision}
+					className="inline-flex w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-white/10"
+				>
+					Send to Follow-up Queue
+				</button>
+			</div>
+		</div>
+	);
+};
+
 function useInterval(callback: () => void, delay: number | null): void {
 	const savedCallback = useRef(callback);
 
@@ -106,9 +155,26 @@ function useInterval(callback: () => void, delay: number | null): void {
 
 export const CallDemoShowcase = () => {
 	const [callDemoKey, setCallDemoKey] = useState(() => Date.now());
-	const [callDemoMode, setCallDemoMode] = useState<"video" | "live">("video");
+	const [callDemoMode, setCallDemoMode] = useState<CallDemoMode>("video");
 	const [activePreview, setActivePreview] = useState<PreviewType>("text");
 	const [activeTextIndex, setActiveTextIndex] = useState(0);
+	const [isLeadCaptureOpen, setIsLeadCaptureOpen] = useState(false);
+	const [leadCaptureOrigin, setLeadCaptureOrigin] = useState<"call" | "text">(
+		"text",
+	);
+
+	const hasTriggeredTextLeadCaptureRef = useRef(false);
+	const textLeadCaptureTimeoutRef = useRef<number | null>(null);
+	const textScrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+	const openLeadCaptureModal = useCallback((origin: "call" | "text") => {
+		setLeadCaptureOrigin(origin);
+		setIsLeadCaptureOpen(true);
+	}, []);
+
+	const closeLeadCaptureModal = useCallback(() => {
+		setIsLeadCaptureOpen(false);
+	}, []);
 
 	const advanceTextMessage = useCallback(() => {
 		setActiveTextIndex((prev) => (prev + 1) % TEXT_DEMO_MESSAGES_COUNT);
@@ -127,17 +193,81 @@ export const CallDemoShowcase = () => {
 		}
 	}, []);
 
+	const handleEndTextDemo = useCallback(() => {
+		hasTriggeredTextLeadCaptureRef.current = false;
+		if (textLeadCaptureTimeoutRef.current) {
+			window.clearTimeout(textLeadCaptureTimeoutRef.current);
+			textLeadCaptureTimeoutRef.current = null;
+		}
+		openLeadCaptureModal("text");
+	}, [openLeadCaptureModal]);
+
 	useEffect(() => {
 		if (activePreview !== "text") {
 			setActiveTextIndex(0);
+			hasTriggeredTextLeadCaptureRef.current = false;
+			if (textLeadCaptureTimeoutRef.current) {
+				window.clearTimeout(textLeadCaptureTimeoutRef.current);
+				textLeadCaptureTimeoutRef.current = null;
+			}
 		}
 	}, [activePreview]);
 
 	useInterval(advanceTextMessage, activePreview === "text" ? 3200 : null);
 
+	useEffect(() => {
+		if (activePreview !== "text") {
+			return;
+		}
+		const container = textScrollContainerRef.current;
+		if (!container) {
+			return;
+		}
+		if (typeof container.scrollTo === "function") {
+			container.scrollTo({
+				top: container.scrollHeight,
+				behavior: "smooth",
+			});
+		} else {
+			container.scrollTop = container.scrollHeight;
+		}
+	}, [activePreview, activeTextIndex]);
+
+	useEffect(() => {
+		if (activePreview !== "text") {
+			return;
+		}
+
+		if (
+			activeTextIndex === TEXT_DEMO_MESSAGES_COUNT - 1 &&
+			!hasTriggeredTextLeadCaptureRef.current
+		) {
+			hasTriggeredTextLeadCaptureRef.current = true;
+			if (textLeadCaptureTimeoutRef.current) {
+				window.clearTimeout(textLeadCaptureTimeoutRef.current);
+			}
+			textLeadCaptureTimeoutRef.current = window.setTimeout(() => {
+				openLeadCaptureModal("text");
+				textLeadCaptureTimeoutRef.current = null;
+			}, 900);
+		}
+
+		return () => {
+			if (textLeadCaptureTimeoutRef.current) {
+				window.clearTimeout(textLeadCaptureTimeoutRef.current);
+				textLeadCaptureTimeoutRef.current = null;
+			}
+		};
+	}, [activePreview, activeTextIndex, openLeadCaptureModal]);
+
 	const handleCallDemoComplete = useCallback(() => {
-		setCallDemoMode("video");
+		setCallDemoMode("handoff");
 	}, []);
+
+	const handleCallHandoffDecision = useCallback(() => {
+		setCallDemoMode("video");
+		openLeadCaptureModal("call");
+	}, [openLeadCaptureModal]);
 
 	const renderPreview = useCallback(() => {
 		if (activePreview === "text") {
@@ -158,44 +288,53 @@ export const CallDemoShowcase = () => {
 											"bg-slate-900/70 backdrop-blur",
 										)}
 									>
-										Text Demo
+										AI Text Demo
 									</div>
 								</div>
-								<div className="flex h-full flex-col justify-end overflow-hidden rounded-[28px] bg-gradient-to-b from-slate-100/90 to-white/95 p-6 shadow-inner backdrop-blur-sm dark:bg-slate-950/85 dark:from-slate-950/85 dark:to-black/90 dark:shadow-none">
-									<AnimatedList
-										delay={220}
-										className="flex w-full flex-col gap-3"
-									>
-										{TEXT_DEMO_MESSAGES.map((message, index) => (
-											<div
-												key={`${message.sender}-${index}`}
-												className={cn(
-													"flex w-full",
-													message.sender === "AI"
-														? "justify-start"
-														: "justify-end",
-												)}
+								<div className="flex h-full flex-col overflow-hidden rounded-[28px] bg-gradient-to-b from-slate-100/90 to-white/95 p-6 shadow-inner backdrop-blur-sm dark:bg-slate-950/85 dark:from-slate-950/85 dark:to-black/90 dark:shadow-none">
+									<div className="flex-1 overflow-hidden">
+										<div
+											ref={textScrollContainerRef}
+											className="flex h-full flex-col gap-3 overflow-y-auto pr-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-slate-600/40"
+										>
+											<AnimatedList
+												delay={220}
+												className="flex w-full flex-col gap-3"
 											>
-												<div
-													className={cn(
-														"max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500",
-														message.sender === "AI"
-															? "bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100"
-															: "bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200",
-														activeTextIndex === index && "ring-2",
-														activeTextIndex === index && "ring-sky-300/70",
-														activeTextIndex === index && "scale-[1.02]",
-														activeTextIndex === index &&
-															"shadow-[0_12px_24px_rgba(56,189,248,0.25)]",
-													)}
-												>
-													<p className="whitespace-pre-line">{message.text}</p>
-												</div>
-											</div>
-										))}
-									</AnimatedList>
+												{TEXT_DEMO_MESSAGES.map((message, index) => (
+													<div
+														key={`${message.sender}-${index}`}
+														className={cn(
+															"flex w-full",
+															message.sender === "AI"
+																? "justify-start"
+																: "justify-end",
+														)}
+													>
+														<div
+															className={cn(
+																"max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500",
+																message.sender === "AI"
+																	? "bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100"
+																	: "bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200",
+																activeTextIndex === index && "ring-2",
+																activeTextIndex === index && "ring-sky-300/70",
+																activeTextIndex === index && "scale-[1.02]",
+																activeTextIndex === index &&
+																	"shadow-[0_12px_24px_rgba(56,189,248,0.25)]",
+															)}
+														>
+															<p className="whitespace-pre-line">{message.text}</p>
+														</div>
+													</div>
+												))}
+											</AnimatedList>
+										</div>
+									</div>
 									<div className="mt-3 text-center font-semibold text-[10px] text-slate-500 uppercase tracking-[0.3em] dark:text-slate-300">
-										<span>DealScale AI • Live Seller Outreach</span>
+										<p className="text-center text-[10px] font-medium uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
+											Live Text Outreach
+										</p>
 									</div>
 									<div className="mt-1 flex justify-center">
 										<SparklesText
@@ -206,6 +345,19 @@ export const CallDemoShowcase = () => {
 											iMessage Support
 										</SparklesText>
 									</div>
+									<button
+										type="button"
+										onClick={handleEndTextDemo}
+										className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-slate-900/10 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-900/20 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
+									>
+										Accept Appointment
+									</button>
+									<button
+										type="button"
+										className="mt-2 inline-flex items-center justify-center text-xs font-medium text-slate-500 underline-offset-4 transition hover:text-slate-700 hover:underline dark:text-slate-300 dark:hover:text-white"
+									>
+										Accept Group Chat / Transfer
+									</button>
 								</div>
 							</>
 						</Iphone>
@@ -243,7 +395,7 @@ export const CallDemoShowcase = () => {
 											"bg-slate-950/55 backdrop-blur",
 										)}
 									>
-										Live Preview
+										DealScale Shorts Reel
 									</div>
 								</div>
 							</>
@@ -252,38 +404,103 @@ export const CallDemoShowcase = () => {
 				</div>
 			);
 		}
-
+		if (callDemoMode === "handoff") {
+			return (
+				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
+					<PhoneShell>
+						<Iphone
+							aria-label="Call demo follow-up"
+							className="w-full"
+							colorScheme="dark"
+						>
+							<>
+								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
+									<div
+										className={cn(
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-emerald-500/40 backdrop-blur",
+										)}
+									>
+										Handoff Ready
+									</div>
+								</div>
+								<CallHandoffCard onDecision={handleCallHandoffDecision} />
+							</>
+						</Iphone>
+					</PhoneShell>
+				</div>
+			);
+		}
+		if (callDemoMode === "live") {
+			return (
+				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
+					<PhoneShell>
+						<Iphone
+							aria-label="Call demo preview"
+							className="w-full"
+							colorScheme="dark"
+						>
+							<>
+								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
+									<div
+										className={cn(
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-slate-950/65 backdrop-blur",
+										)}
+									>
+										Live Call Demo
+									</div>
+								</div>
+								<div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-3 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
+									<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/40 dark:from-white/10 dark:via-transparent dark:to-black/60" />
+									<div className="relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-black/35 p-2 shadow-inner dark:bg-black/25">
+										<SessionMonitor
+											key={callDemoKey}
+											transcript={demoTranscript}
+											autoStart
+											showCompletionModal={false}
+											onCallEnd={handleCallDemoComplete}
+											variant="compact"
+										/>
+									</div>
+								</div>
+							</>
+						</Iphone>
+					</PhoneShell>
+				</div>
+			);
+		}
 		return (
 			<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
 				<PhoneShell>
 					<Iphone
 						aria-label="Call demo preview"
-						className="w-full"
+						className="relative w-full max-w-[26rem]"
 						colorScheme="dark"
 					>
 						<>
+							<iframe
+								title="Call demo playlist preview"
+								className="size-full"
+								src={CALL_DEMO_PLAYLIST_SRC}
+								loading="lazy"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
+								referrerPolicy="strict-origin-when-cross-origin"
+								allowFullScreen
+								frameBorder="0"
+								aria-label="Call demo video playlist"
+							/>
 							<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
 								<div
 									className={cn(
 										"rounded-full px-3 py-1",
 										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-										"bg-slate-950/65 backdrop-blur",
+										"bg-slate-950/55 backdrop-blur",
 									)}
 								>
-									Live Call Demo
-								</div>
-							</div>
-							<div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-3 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
-								<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/40 dark:from-white/10 dark:via-transparent dark:to-black/60" />
-								<div className="relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-black/35 p-2 shadow-inner dark:bg-black/25">
-									<SessionMonitor
-										key={callDemoKey}
-										transcript={demoTranscript}
-										autoStart
-										showCompletionModal={false}
-										onCallEnd={handleCallDemoComplete}
-										variant="compact"
-									/>
+									DealScale Shorts Reel
 								</div>
 							</div>
 						</>
@@ -297,7 +514,32 @@ export const CallDemoShowcase = () => {
 		callDemoKey,
 		callDemoMode,
 		handleCallDemoComplete,
+		handleCallHandoffDecision,
+		handleEndTextDemo,
 	]);
+
+	const leadCaptureCopy = useMemo(() => {
+		if (leadCaptureOrigin === "text") {
+			return {
+				title: "Ready to automate your SMS outreach?",
+				description:
+					"Drop in your details and we’ll send over the full SMS workflow alongside early access invites.",
+			};
+		}
+
+		return {
+			title: "Ready to start Scaling Your Deals?",
+			description: "Sign Up To Become A Beta Tester or Pilot Member",
+		};
+	}, [leadCaptureOrigin]);
+
+	const PixelatedVoiceCloneCard = dynamic(
+		() =>
+			import("@/components/ui/pixelated-voice-clone-card").then((module) => ({
+				default: module.PixelatedVoiceCloneCard,
+			})),
+		{ ssr: false, loading: () => <div className="mt-16 flex w-full justify-center"><div className="h-[28rem] w-full max-w-5xl animate-pulse rounded-3xl bg-slate-900/20" /></div> },
+	);
 
 	const cards = useMemo(
 		() => [
@@ -456,8 +698,17 @@ export const CallDemoShowcase = () => {
 						showThumbnails={false}
 						baseCardClassName="bg-transparent"
 					/>
+					<PixelatedVoiceCloneCard className="mt-16" />
 				</div>
 			</section>
+			{isLeadCaptureOpen ? (
+				<CallCompleteModal
+					isOpen={isLeadCaptureOpen}
+					onClose={closeLeadCaptureModal}
+					title={leadCaptureCopy.title}
+					description={leadCaptureCopy.description}
+				/>
+			) : null}
 		</>
 	);
 };

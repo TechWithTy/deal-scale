@@ -73,7 +73,7 @@ const clampPercent = (value?: number) => {
 	return Math.min(Math.max(Math.round(value), 0), 100);
 };
 
-const FeatureCard = ({
+const FeatureCardComponent = ({
 	feature,
 	onVote,
 	isVoting,
@@ -314,5 +314,9 @@ const FeatureCard = ({
 		</Card>
 	);
 };
+
+const FeatureCard = Object.assign(FeatureCardComponent, {
+	displayName: "FeatureCard",
+});
 
 export default FeatureCard;

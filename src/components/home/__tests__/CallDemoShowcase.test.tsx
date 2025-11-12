@@ -49,7 +49,7 @@ describe("CallDemoShowcase", () => {
 		expect(sessionHeadings.length).toBeGreaterThan(0);
 		expect(screen.getByLabelText(/text demo preview/i)).toBeInTheDocument();
 		expect(
-			screen.getByText(/dealScale AI • Live Seller Outreach/i),
+			screen.getByText(/live text outreach/i),
 		).toBeInTheDocument();
 		expect(screen.getByText(/iMessage Support/i)).toBeInTheDocument();
 

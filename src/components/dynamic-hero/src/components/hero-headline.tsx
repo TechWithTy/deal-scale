@@ -42,6 +42,8 @@ interface HeroHeadlineProps {
 	readonly personaLabel?: string;
 	readonly personaDescription?: string;
 	readonly reviews?: HeroSocialProofReview[];
+	/** When false, pauses rotating problem/solution/fear phrases. */
+	readonly isAnimating?: boolean;
 }
 
 export function HeroHeadline({
@@ -54,6 +56,7 @@ export function HeroHeadline({
 	personaLabel,
 	personaDescription,
 	reviews,
+	isAnimating = true,
 }: HeroHeadlineProps): JSX.Element {
 	const problems = useMemo(() => {
 		const source = copy.rotations?.problems ?? [copy.values.problem];
@@ -83,9 +86,13 @@ export function HeroHeadline({
 		[copy.rotations?.fears, copy.values.fear],
 	);
 
-	const problemIndex = useRotatingIndex(problems, PROBLEM_INTERVAL_MS);
-	const solutionIndex = useRotatingIndex(solutions, SOLUTION_INTERVAL_MS);
-	const fearIndex = useRotatingIndex(fears, FEAR_INTERVAL_MS);
+	const problemIndex = useRotatingIndex(problems, PROBLEM_INTERVAL_MS, isAnimating);
+	const solutionIndex = useRotatingIndex(
+		solutions,
+		SOLUTION_INTERVAL_MS,
+		isAnimating,
+	);
+	const fearIndex = useRotatingIndex(fears, FEAR_INTERVAL_MS, isAnimating);
 
 	const problemText =
 		problems[problemIndex]?.trim() ?? problems[0]?.trim() ?? "";
@@ -268,7 +275,11 @@ export function HeroHeadline({
 	);
 }
 
-function useRotatingIndex(items: readonly string[], interval: number): number {
+export function useRotatingIndex(
+	items: readonly string[],
+	interval: number,
+	isActive: boolean = true,
+): number {
 	const [index, setIndex] = useState(0);
 	const length = items.length;
 
@@ -279,7 +290,7 @@ function useRotatingIndex(items: readonly string[], interval: number): number {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: the rotation payload is keyed off the incoming array
 	useEffect(() => {
-		if (length <= 1) {
+		if (length <= 1 || !isActive) {
 			return;
 		}
 		const timer = setInterval(
@@ -287,7 +298,13 @@ function useRotatingIndex(items: readonly string[], interval: number): number {
 			interval,
 		);
 		return () => clearInterval(timer);
-	}, [interval, items, length]);
+	}, [interval, items, length, isActive]);
+
+	useEffect(() => {
+		if (!isActive) {
+			setIndex((current) => current % Math.max(length, 1));
+		}
+	}, [isActive, length]);
 
 	if (length === 0) {
 		return 0;

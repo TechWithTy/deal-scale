@@ -1,11 +1,4 @@
-import Faq from "@/components/faq";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
-import { faqItems } from "@/data/faq/default";
+import { DynamicFaqSection } from "@/components/sections/DynamicFaqSection";
 import type React from "react";
 
 interface FAQsProps {
@@ -18,11 +11,9 @@ const FAQs: React.FC<FAQsProps> = ({
 	subtitle = "Find answers to common questions about our services, process, and technology expertise.",
 }) => {
 	return (
-		<>
-			<div className="my-24 h-full">
-				<Faq title={title} subtitle={subtitle} faqItems={faqItems} />
-			</div>
-		</>
+		<div className="my-24 h-full">
+			<DynamicFaqSection title={title} subtitle={subtitle} />
+		</div>
 	);
 };
 

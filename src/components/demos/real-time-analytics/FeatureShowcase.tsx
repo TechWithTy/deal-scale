@@ -1,20 +1,30 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
 	AnimatePresence,
 	motion,
 } from "motion/react";
 
-import { NumberTicker } from "@/components/magicui/number-ticker";
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
+import { ShinyButton } from "@/components/ui/shiny-button";
 import { cn } from "@/lib/utils";
+import { FeaturePanel } from "./FeaturePanel";
 
 import type { RealTimeFeature } from "./feature-config";
 
 export type FeatureShowcaseProps = {
 	features: RealTimeFeature[];
 };
+
+const indicatorPalette = [
+	{ from: "rgba(96,165,250,0.95)", to: "rgba(37,99,235,0.95)" },
+	{ from: "rgba(74,222,128,0.95)", to: "rgba(22,163,74,0.95)" },
+	{ from: "rgba(192,132,252,0.95)", to: "rgba(147,51,234,0.95)" },
+] as const;
+
+const ROI_CALCULATOR_URL = "https://app.dealscale.io/external-tools/roi-calculator";
 
 /**
  * FeatureShowcase renders the Macbook demo with contextual copy and metrics.
@@ -48,6 +58,12 @@ export function FeatureShowcase({
 	const tablistId = `${generatedId}-tablist`;
 	const activeTabId = `${generatedId}-tab-${activeFeature.id}`;
 	const activePanelId = `${generatedId}-panel-${activeFeature.id}`;
+
+	const handleOpenRoi = useCallback(() => {
+		if (typeof window !== "undefined") {
+			window.open(ROI_CALCULATOR_URL, "_blank", "noopener,noreferrer");
+		}
+	}, []);
 
 	useEffect(() => {
 		if (featureIds.length <= 1) {
@@ -137,10 +153,11 @@ export function FeatureShowcase({
 					aria-label="Real-time analytics feature toggles"
 					className="flex flex-wrap justify-center gap-2"
 				>
-					{stableFeatures.map((feature) => {
+					{stableFeatures.map((feature, index) => {
 						const tabId = `${generatedId}-tab-${feature.id}`;
 						const panelId = `${generatedId}-panel-${feature.id}`;
 						const isSelected = feature.id === activeFeature.id;
+						const palette = indicatorPalette[index % indicatorPalette.length];
 						return (
 							<button
 								key={feature.id}
@@ -160,13 +177,55 @@ export function FeatureShowcase({
 									handleManualSelection(feature.id);
 								}}
 							>
-								<span className="inline-block h-2 w-2 rounded-full bg-current opacity-70 group-data-[selected=true]:scale-125 group-data-[selected=true]:opacity-100" />
+								<span className="relative inline-flex h-3 w-3 items-center justify-center">
+									{isSelected ? (
+										<motion.span
+											className="absolute inset-0 rounded-full"
+											style={{
+												backgroundImage: `linear-gradient(135deg, ${palette.from}, ${palette.to})`,
+											}}
+											animate={{ scale: [1.05, 1.7, 1.05], opacity: [0.45, 0, 0.45] }}
+											transition={{
+												duration: 2.4,
+												repeat: Infinity,
+												ease: "easeOut",
+											}}
+										/>
+									) : null}
+									<motion.span
+										className="relative inline-flex h-2.5 w-2.5 rounded-full shadow-[0_0_6px_rgba(59,130,246,0.45)]"
+										style={{
+											backgroundImage: `linear-gradient(135deg, ${palette.from}, ${palette.to})`,
+										}}
+										animate={
+											isSelected
+												? { scale: [1, 1.35, 1], opacity: [0.9, 1, 0.9] }
+												: { scale: 1, opacity: 0.55 }
+										}
+										transition={{
+											duration: isSelected ? 1.6 : 0.3,
+											repeat: isSelected ? Infinity : 0,
+											repeatType: "mirror",
+											ease: "easeInOut",
+										}}
+									/>
+								</span>
 								<span className="text-xs font-semibold uppercase tracking-wide sm:text-sm">
 									{feature.label}
 								</span>
 							</button>
 						);
 					})}
+				</div>
+				<div className="flex items-center justify-center pt-4">
+					<ShinyButton
+						onClick={handleOpenRoi}
+						primaryColor="rgba(59,130,246,0.9)"
+						className="border-blue-500/60 text-blue-900 dark:text-blue-100"
+						aria-label="Open ROI calculator in a new tab"
+					>
+						Get ROI
+					</ShinyButton>
 				</div>
 			</div>
 
@@ -180,162 +239,6 @@ export function FeatureShowcase({
 				/>
 			</AnimatePresence>
 		</section>
-	);
-}
-
-type FeaturePanelProps = {
-	feature: RealTimeFeature;
-	panelId: string;
-	tabId: string;
-	activeFeatureId: string;
-};
-
-const iconClasses =
-	"inline-flex min-h-[2.25rem] items-center justify-center whitespace-nowrap rounded-xl border px-3 text-xs font-semibold tracking-wide transition-colors";
-
-type NumericValueParts = {
-	value: number;
-	suffix: string;
-	decimalPlaces: number;
-};
-
-function extractNumericValueParts(input: string): NumericValueParts | null {
-	const trimmed = input.trim();
-	const match = trimmed.match(/^(-?\d+(?:\.\d+)?)(.*)$/);
-	if (!match) {
-		return null;
-	}
-
-	const numberPart = match[1];
-	const suffix = match[2] ?? "";
-	const numericValue = Number.parseFloat(numberPart);
-
-	if (Number.isNaN(numericValue)) {
-		return null;
-	}
-
-	const decimalPlaces =
-		numberPart.includes(".") ? numberPart.split(".")[1].length : 0;
-
-	return {
-		value: numericValue,
-		suffix,
-		decimalPlaces,
-	};
-}
-
-function FeaturePanel({
-	feature,
-	panelId,
-	tabId,
-	activeFeatureId,
-}: FeaturePanelProps): JSX.Element {
-	return (
-		<motion.div
-			id={panelId}
-			role="tabpanel"
-			aria-labelledby={tabId}
-			className="flex w-full max-w-5xl flex-col gap-8 rounded-3xl border border-border/60 bg-background/70 p-6 text-left shadow-[0_28px_100px_-50px_rgba(34,197,94,0.35)] sm:p-8"
-			initial={{ opacity: 0, y: 24 }}
-			animate={{ opacity: 1, y: 0 }}
-			exit={{ opacity: 0, y: -24 }}
-			transition={{ duration: 0.45, ease: "easeOut" }}
-		>
-			<div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
-				{feature.highlights.map((highlight) => (
-					<div
-						key={highlight.title}
-						className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-background/60 p-4"
-					>
-						<div className="flex items-start justify-between gap-3">
-							<h3 className="text-base font-semibold text-foreground">
-								{highlight.title}
-							</h3>
-							{highlight.metric ? (
-								<span
-									className={cn(
-										iconClasses,
-										"border-blue-500/25 bg-blue-500/10 text-blue-700 dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100",
-									)}
-								>
-									{(() => {
-										const parts = extractNumericValueParts(
-											highlight.metric.value,
-										);
-
-										if (!parts) {
-											return highlight.metric.value;
-										}
-
-										const tickerKey = `${feature.id}-${highlight.title}-${highlight.metric.value}-${activeFeatureId}`;
-
-										return (
-											<span className="inline-flex items-baseline gap-1">
-												<NumberTicker
-													key={tickerKey}
-													value={parts.value}
-													decimalPlaces={parts.decimalPlaces}
-												/>
-												{parts.suffix ? (
-													<span>{parts.suffix.trimStart()}</span>
-												) : null}
-											</span>
-										);
-									})()}
-								</span>
-							) : null}
-						</div>
-						<p className="text-sm text-muted-foreground">
-							{highlight.description}
-						</p>
-						{highlight.metric ? (
-							<span className="text-xs uppercase tracking-wide text-muted-foreground/80">
-								{highlight.metric.label}
-							</span>
-						) : null}
-					</div>
-				))}
-			</div>
-
-			{feature.metrics.length > 0 ? (
-				<div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
-					{feature.metrics.map((metric) => (
-						<div
-							key={`${feature.id}-${metric.label}`}
-							className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-border/40 bg-background/50 p-4 text-center sm:items-start sm:text-left"
-						>
-							<span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-								{metric.label}
-							</span>
-							<span className="text-2xl font-semibold text-foreground sm:text-xl">
-								{(() => {
-									const parts = extractNumericValueParts(metric.value);
-
-									if (!parts) {
-										return metric.value;
-									}
-
-									const tickerKey = `${feature.id}-${metric.label}-${metric.value}-${activeFeatureId}`;
-
-									return (
-										<span className="inline-flex items-baseline gap-1">
-											<NumberTicker
-												key={tickerKey}
-												value={parts.value}
-												decimalPlaces={parts.decimalPlaces}
-											/>
-											{parts.suffix ? (
-												<span>{parts.suffix.trimStart()}</span>
-											) : null}
-										</span>
-									);
-								})()}
-							</span>
-						</div>
-					))}
-				</div>
-			) : null}
-		</motion.div>
 	);
 }
 

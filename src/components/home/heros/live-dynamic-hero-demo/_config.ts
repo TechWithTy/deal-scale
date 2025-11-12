@@ -213,7 +213,7 @@ export const LIVE_PRIMARY_CTA = {
 	description:
 		"Stop dialing. Start closing. Your AI coworker books qualified sellers while you sleep.",
 	emphasis: "solid" as const,
-	badge: "AI Coworker",
+	badge: "AI Sales Coworkers",
 };
 
 export const LIVE_SECONDARY_CTA = {

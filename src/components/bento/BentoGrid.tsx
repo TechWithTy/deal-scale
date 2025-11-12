@@ -1,7 +1,7 @@
 "use client";
 
+import { BentoGrid as MagicBentoGrid } from "@/components/ui/bento-grid";
 import { cn } from "@/lib/utils";
-import type React from "react";
 import type { ReactNode } from "react";
 
 interface BentoGridProps {
@@ -9,16 +9,16 @@ interface BentoGridProps {
 	className?: string;
 }
 
-const BentoGrid: React.FC<BentoGridProps> = ({ children, className }) => {
+const BentoGrid = ({ children, className }: BentoGridProps) => {
 	return (
-		<div
+		<MagicBentoGrid
 			className={cn(
-				"grid auto-rows-[minmax(220px,auto)] grid-cols-1 gap-5 md:auto-rows-[minmax(260px,auto)] md:grid-cols-6 lg:grid-cols-12",
+				"grid-cols-1 gap-6 md:grid-cols-6 md:grid-flow-dense md:auto-rows-[minmax(0,max-content)] lg:grid-cols-12",
 				className,
 			)}
 		>
 			{children}
-		</div>
+		</MagicBentoGrid>
 	);
 };
 

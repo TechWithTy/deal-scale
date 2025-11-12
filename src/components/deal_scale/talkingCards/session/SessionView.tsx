@@ -207,7 +207,7 @@ export const SessionView = ({
 		<div
 			className={cn(
 				"relative flex h-full w-full flex-col items-center justify-start",
-				isCompact && "gap-4",
+				isCompact && "gap-4 overflow-y-auto pb-4",
 			)}
 		>
 			{/* Audio Manager */}
@@ -234,7 +234,7 @@ export const SessionView = ({
 			/>
 
 			{/* Status Display - Moved to top */}
-			<div className={cn("mb-6 w-full", isCompact && "mb-4")}>
+			<div className={cn("mb-6 w-full", isCompact && "mb-3")}>
 				<StatusDisplay
 					callStatus={callStatus}
 					callDuration={callDuration}
@@ -249,7 +249,7 @@ export const SessionView = ({
 				<div
 					className={cn(
 						"relative flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-12 lg:gap-20",
-						isCompact && "md:flex-col md:gap-6 lg:gap-6",
+						isCompact && "md:flex-col md:gap-4 lg:gap-4",
 					)}
 				>
 					{/* AI Participant Card */}
@@ -270,6 +270,8 @@ export const SessionView = ({
 							className={cn(
 								"z-10 transition-all duration-300 hover:z-20 hover:scale-105 hover:shadow-xl",
 								aiActive && "border-primary/50",
+								isCompact &&
+									"min-w-0 rounded-2xl border-white/5 bg-slate-900/80 p-4 text-sm",
 							)}
 							transcriptText={
 								currentLine?.speaker === "ai" ? currentLine.text : ""
@@ -296,6 +298,8 @@ export const SessionView = ({
 								className={cn(
 									"z-10 transition-all duration-300 hover:z-20 hover:scale-105 hover:shadow-xl",
 									!aiActive && "border-primary/50",
+									isCompact &&
+										"min-w-0 rounded-2xl border-white/5 bg-slate-900/80 p-4 text-sm",
 								)}
 								transcriptText={
 									currentLine?.speaker === "lead" ? currentLine.text : ""
@@ -307,7 +311,7 @@ export const SessionView = ({
 			</div>
 
 			{/* Call Controls */}
-			<div className={cn("mt-8", isCompact && "mt-6")}>
+			<div className={cn("mt-8", isCompact && "mt-4")}>
 				<CallControls
 					playingDemo={playingDemo}
 					callStatus={callStatus}
