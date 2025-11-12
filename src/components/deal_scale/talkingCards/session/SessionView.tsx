@@ -18,6 +18,7 @@ export const SessionView = ({
 	autoPlay,
 	showEndButton,
 	autoStart = false,
+	variant = "default",
 }: {
 	transcript: Transcript;
 	onCallEnd?: (opts: { manual: boolean }) => void;
@@ -26,6 +27,7 @@ export const SessionView = ({
 	autoPlay?: boolean;
 	showEndButton?: boolean;
 	autoStart?: boolean;
+	variant?: "default" | "compact";
 }) => {
 	const [playingDemo, setPlayingDemo] = useState(false);
 	const [aiActive, setAiActive] = useState(false);
@@ -44,6 +46,7 @@ export const SessionView = ({
 	const [transcriptFinished, setTranscriptFinished] = useState(false); // New state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const autoStartRef = useRef(false);
+	const isCompact = variant === "compact";
 
 	// Use a ref to store the latest onCallEnd callback to avoid stale closures
 	const onCallEndRef = useRef(onCallEnd);
@@ -201,7 +204,12 @@ export const SessionView = ({
 	}, [currentSpeaker]);
 
 	return (
-		<div className="relative flex h-full w-full flex-col items-center justify-start">
+		<div
+			className={cn(
+				"relative flex h-full w-full flex-col items-center justify-start",
+				isCompact && "gap-4",
+			)}
+		>
 			{/* Audio Manager */}
 			<AudioManager
 				callStatus={callStatus}
@@ -226,7 +234,7 @@ export const SessionView = ({
 			/>
 
 			{/* Status Display - Moved to top */}
-			<div className="mb-6 w-full">
+			<div className={cn("mb-6 w-full", isCompact && "mb-4")}>
 				<StatusDisplay
 					callStatus={callStatus}
 					callDuration={callDuration}
@@ -238,9 +246,19 @@ export const SessionView = ({
 
 			{/* Participant Cards with Floating Play Button */}
 			<div className="relative w-full">
-				<div className="relative flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-12 lg:gap-20">
+				<div
+					className={cn(
+						"relative flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-12 lg:gap-20",
+						isCompact && "md:flex-col md:gap-6 lg:gap-6",
+					)}
+				>
 					{/* AI Participant Card */}
-					<div className="group relative w-full transition-all duration-300 hover:z-10 hover:scale-105 md:w-auto">
+					<div
+						className={cn(
+							"group relative w-full transition-all duration-300 hover:z-10 hover:scale-105 md:w-auto",
+							isCompact && "md:w-full",
+						)}
+					>
 						<ParticipantCard
 							name={transcript.participants.ai.name}
 							role={transcript.participants.ai.subtitle}
@@ -261,7 +279,12 @@ export const SessionView = ({
 
 					{/* Client Participant Card */}
 					{transcript.participants.lead && (
-						<div className="group relative w-full transition-all duration-300 hover:z-10 hover:scale-105 md:w-auto">
+						<div
+							className={cn(
+								"group relative w-full transition-all duration-300 hover:z-10 hover:scale-105 md:w-auto",
+								isCompact && "md:w-full",
+							)}
+						>
 							<ParticipantCard
 								name={transcript.participants.lead.name}
 								role={transcript.participants.lead.subtitle}
@@ -284,7 +307,7 @@ export const SessionView = ({
 			</div>
 
 			{/* Call Controls */}
-			<div className="mt-8">
+			<div className={cn("mt-8", isCompact && "mt-6")}>
 				<CallControls
 					playingDemo={playingDemo}
 					callStatus={callStatus}

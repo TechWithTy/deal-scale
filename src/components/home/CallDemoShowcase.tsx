@@ -258,7 +258,7 @@ export const CallDemoShowcase = () => {
 				<PhoneShell>
 					<Iphone
 						aria-label="Call demo preview"
-						className="relative w-full max-w-[26rem]"
+						className="w-full"
 						colorScheme="dark"
 					>
 						<>
@@ -282,6 +282,7 @@ export const CallDemoShowcase = () => {
 										autoStart
 										showCompletionModal={false}
 										onCallEnd={handleCallDemoComplete}
+										variant="compact"
 									/>
 								</div>
 							</div>

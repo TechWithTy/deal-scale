@@ -12,6 +12,7 @@ import {
 } from "@/components/home/heros/live-dynamic-hero-demo/_config";
 import type { BentoFeature } from "@/types/bento/features";
 import Lottie from "lottie-react";
+import { Badge } from "@/components/ui/badge";
 import {
 	CalendarCheck,
 	Clock,
@@ -19,10 +20,14 @@ import {
 	PlaneTakeoff,
 } from "lucide-react";
 
+const chipClassName =
+	"mt-6 w-fit border-accent/50 bg-accent/10 text-accent-foreground backdrop-blur-sm";
+
 export const MainBentoFeatures: BentoFeature[] = [
 	{
 		title: "Get Started in 1 Click",
 		icon: <PlaneTakeoff className="h-6 w-6" />,
+		size: "md",
 		content: (
 			<div className="flex h-full flex-col justify-between rounded-2xl bg-background/60 p-4 text-left shadow-[0_16px_48px_-32px_rgba(56,189,248,0.35)] backdrop-blur-md sm:p-6">
 				<div className="mb-4 flex items-center justify-between gap-3">
@@ -49,15 +54,16 @@ export const MainBentoFeatures: BentoFeature[] = [
 					no technical setup. Watch your first AI conversation go live before
 					you finish your coffee.
 				</p>
-				<p className="mt-6 text-xs font-medium uppercase tracking-wide text-accent">
-					Simplicity + Early Win &rarr; &ldquo;I can do this.&rdquo;
-				</p>
+				<Badge variant="outline" className={chipClassName}>
+					Simplicity + Early Win -> "I can do this."
+				</Badge>
 			</div>
 		),
 	},
 	{
 		title: "AI That Works While You Sleep",
 		icon: <Clock className="h-6 w-6" />,
+		size: "lg",
 		content: (
 			<div className="flex h-full flex-col justify-between rounded-2xl bg-background/60 p-4 text-left shadow-[0_16px_48px_-32px_rgba(129,140,248,0.35)] backdrop-blur-md sm:p-6">
 				<div className="mb-4 flex items-center justify-between gap-3">
@@ -84,15 +90,16 @@ export const MainBentoFeatures: BentoFeature[] = [
 					pre-qualifies, nurtures, and books appointments around the clock so
 					no opportunity slips away.
 				</p>
-				<p className="mt-6 text-xs font-medium uppercase tracking-wide text-accent">
-					Consistency + Relief &rarr; &ldquo;Finally, peace of mind.&rdquo;
-				</p>
+				<Badge variant="outline" className={chipClassName}>
+					Consistency + Relief -> "Finally, peace of mind."
+				</Badge>
 			</div>
 		),
 	},
 	{
 		title: "Unlimited Skip Tracing",
 		icon: <DatabaseZap className="h-6 w-6" />,
+		size: "md",
 		content: (
 			<div className="flex h-full flex-col justify-between rounded-2xl bg-background/60 p-4 text-left shadow-[0_16px_48px_-32px_rgba(45,212,191,0.35)] backdrop-blur-md sm:p-6">
 				<div className="mb-4 flex items-center justify-between gap-3">
@@ -119,15 +126,16 @@ export const MainBentoFeatures: BentoFeature[] = [
 					records. Unlimited, high-quality owner data is included with every
 					plan, turning skip tracing into a growth multiplier.
 				</p>
-				<p className="mt-6 text-xs font-medium uppercase tracking-wide text-accent">
-					Practical Value + Exclusivity &rarr; &ldquo;They are giving away what others charge for.&rdquo;
-				</p>
+				<Badge variant="outline" className={chipClassName}>
+					Practical Value + Exclusivity -> "They are giving away what others charge for."
+				</Badge>
 			</div>
 		),
 	},
 	{
 		title: "Appointments, Not Just Leads",
 		icon: <CalendarCheck className="h-6 w-6" />,
+		size: "md",
 		content: (
 			<div className="flex h-full flex-col justify-between rounded-2xl bg-background/60 p-4 text-left shadow-[0_16px_48px_-32px_rgba(251,191,36,0.35)] backdrop-blur-md sm:p-6">
 				<div className="mb-4 flex items-center justify-between gap-3">
@@ -153,9 +161,9 @@ export const MainBentoFeatures: BentoFeature[] = [
 					AI-qualified, sales-ready appointments land directly on your calendar.
 					You focus on closing while the system handles every follow-up.
 				</p>
-				<p className="mt-6 text-xs font-medium uppercase tracking-wide text-accent">
-					Results + Status &rarr; &ldquo;Real closers do not cold-call.&rdquo;
-				</p>
+				<Badge variant="outline" className={chipClassName}>
+					Results + Status -> "Real closers don't cold-call."
+				</Badge>
 			</div>
 		),
 	},
@@ -194,9 +202,9 @@ export const MainBentoFeatures: BentoFeature[] = [
 						<p>{primarySolution}</p>
 						<p>{primaryHope}</p>
 					</div>
-					<p className="mt-4 text-xs font-medium uppercase tracking-wide text-accent">
-						Personalized Automation &rarr; Hero goals stay locked in.
-					</p>
+					<Badge variant="outline" className={chipClassName}>
+						Personalized Automation -> Hero goals stay locked in.
+					</Badge>
 				</div>
 			),
 		};
