@@ -71,33 +71,35 @@ export async function GET(request: NextRequest) {
 		};
 		const dayKeyUTC = (ms: number) => new Date(ms).toISOString().slice(0, 10); // YYYY-MM-DD
 		const isFutureByDay = (ms: number) => dayKeyUTC(ms) > dayKeyUTC(Date.now());
-                const ensurePublishedAt = <T extends Record<string, unknown>>(post: T): T => {
-                        if (!post || typeof post !== "object") return post;
-                        const typed = post as Record<string, unknown> & {
-                                published_at?: unknown;
-                                publish_date?: unknown;
-                                displayed_date?: unknown;
-                                created?: unknown;
-                        };
-                        const current = typed.published_at;
-                        if (
-                                current !== undefined &&
-                                current !== null &&
-                                `${current}`.length > 0
-                        ) {
-                                return post;
-                        }
-                        const fallbackSource =
-                                typed.publish_date ?? typed.displayed_date ?? typed.created;
-                        const ms = toTime(fallbackSource);
-                        if (ms > 0) {
-                                return {
-                                        ...post,
-                                        published_at: new Date(ms).toISOString(),
-                                } as T;
-                        }
-                        return post;
-                };
+		const ensurePublishedAt = <T extends Record<string, unknown>>(
+			post: T,
+		): T => {
+			if (!post || typeof post !== "object") return post;
+			const typed = post as Record<string, unknown> & {
+				published_at?: unknown;
+				publish_date?: unknown;
+				displayed_date?: unknown;
+				created?: unknown;
+			};
+			const current = typed.published_at;
+			if (
+				current !== undefined &&
+				current !== null &&
+				`${current}`.length > 0
+			) {
+				return post;
+			}
+			const fallbackSource =
+				typed.publish_date ?? typed.displayed_date ?? typed.created;
+			const ms = toTime(fallbackSource);
+			if (ms > 0) {
+				return {
+					...post,
+					published_at: new Date(ms).toISOString(),
+				} as T;
+			}
+			return post;
+		};
 		// Debug: print today's timestamp in Beehiiv format (unix seconds)
 		try {
 			const todayUnixSeconds = Math.floor(Date.now() / 1000);

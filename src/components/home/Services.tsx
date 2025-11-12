@@ -8,13 +8,19 @@ import { usePagination } from "@/hooks/use-pagination";
 import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
 import { useDataModule } from "@/stores/useDataModuleStore";
 import {
-        SERVICE_CATEGORIES,
-        type ServiceCategoryValue,
-        type ServiceItemData,
-        type ServicesData,
+	SERVICE_CATEGORIES,
+	type ServiceCategoryValue,
+	type ServiceItemData,
+	type ServicesData,
 } from "@/types/service/services";
 import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import Header from "../common/Header";
 
 interface ServicesSectionProps {
@@ -36,21 +42,24 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// useRef initializer only runs once per component instance, so this is safe
 	// It will differ between server and client instances, but that's OK for logging
 	const componentInstanceId = useRef<string>(
-		typeof window !== "undefined" 
+		typeof window !== "undefined"
 			? `client-${Date.now()}-${Math.random().toString(36).substring(7)}`
-			: `server-${Date.now()}-${Math.random().toString(36).substring(7)}`
+			: `server-${Date.now()}-${Math.random().toString(36).substring(7)}`,
 	);
 	renderIdRef.current += 1;
 	hookCountRef.current = 0;
-	
+
 	// CRITICAL: Date.now() can cause hydration mismatch if used in render output
 	// Only use for logging, not for actual rendering logic
 	const renderTimestamp = typeof window !== "undefined" ? Date.now() : 0;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Render #${renderIdRef.current} starting (local hooks start at 0)`, {
-		isServer: typeof window === "undefined",
-		timestamp: renderTimestamp,
-		instanceId: componentInstanceId.current,
-	});
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Render #${renderIdRef.current} starting (local hooks start at 0)`,
+		{
+			isServer: typeof window === "undefined",
+			timestamp: renderTimestamp,
+			instanceId: componentInstanceId.current,
+		},
+	);
 
 	const {
 		title = "Tailored Solutions for Visionary Companies",
@@ -72,22 +81,30 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// Note: usePathname() returns "/" during SSR, then the actual pathname on client
 	// This can cause hydration mismatches if used for conditional rendering
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(internalActiveTab)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(internalActiveTab)`,
+	);
 	const [internalActiveTab, setInternalActiveTab] =
 		useState<ServiceCategoryValue>(showTabs[0]);
 	// Pagination state now handled by usePagination
 
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(searchTerm)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(searchTerm)`,
+	);
 	const [searchTerm, setSearchTerm] = useState("");
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(activeCategory)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(activeCategory)`,
+	);
 	const [activeCategory, setActiveCategory] = useState<
 		ServiceCategoryValue | ""
 	>("");
 	// Initialize cardsPerPage safely for SSR
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(cardsPerPage)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(cardsPerPage)`,
+	);
 	const [cardsPerPage, setCardsPerPage] = useState(() => {
 		if (typeof window !== "undefined") {
 			if (window.innerWidth < 640) return 6;
@@ -104,7 +121,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// If selector throws, React's error recovery might skip subsequent hooks
 	// NOTE: Cannot wrap hooks in try-catch - hooks must be called unconditionally
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModule - BEFORE`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModule - BEFORE`,
+	);
 	const servicesModuleResult = useDataModule(
 		"service/services",
 		// Error-safe selector - never throws, always returns valid object
@@ -128,9 +147,12 @@ const ServicesSection = (props: ServicesSectionProps) => {
 			}
 		},
 	);
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModule - AFTER`, {
-		status: servicesModuleResult.status,
-	});
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModule - AFTER`,
+		{
+			status: servicesModuleResult.status,
+		},
+	);
 
 	const {
 		status: servicesStatus,
@@ -143,20 +165,21 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// IMPORTANT: All hooks must be called before any early returns
 	// Use useMemo to ensure stable references and prevent hook order issues
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(allServices)`);
-	const allServices = useMemo(
-		() => {
-			if (!servicesData || typeof servicesData !== "object") {
-				return [];
-			}
-			return Object.values(servicesData).flatMap((cat) =>
-				Object.values(cat ?? {}),
-			);
-		},
-		[servicesData],
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(allServices)`,
 	);
+	const allServices = useMemo(() => {
+		if (!servicesData || typeof servicesData !== "object") {
+			return [];
+		}
+		return Object.values(servicesData).flatMap((cat) =>
+			Object.values(cat ?? {}),
+		);
+	}, [servicesData]);
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(categoryOptions)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(categoryOptions)`,
+	);
 	const categoryOptions = useMemo(() => {
 		const unique = new Set<string>();
 		for (const service of allServices) {
@@ -176,7 +199,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// Memoize filterServices to avoid recreating on every render
 	// This must be a hook (useCallback) to maintain consistent hook order
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useCallback(filterServices)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useCallback(filterServices)`,
+	);
 	const filterServices = useCallback(
 		(categoryValue: ServiceCategoryValue) => {
 			// Get category entries - inline to avoid dependency issues
@@ -222,14 +247,18 @@ const ServicesSection = (props: ServicesSectionProps) => {
 
 	// Memoize filteredEntries - CRITICAL: Must be a hook to maintain hook order
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(filteredEntries)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(filteredEntries)`,
+	);
 	const filteredEntries = useMemo(
 		() => filterServices(activeTab),
 		[filterServices, activeTab],
 	);
 
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(guardDetail) - THIS IS HOOK 33 IN ERROR - CRITICAL HOOK`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(guardDetail) - THIS IS HOOK 33 IN ERROR - CRITICAL HOOK`,
+	);
 	const guardDetail = useMemo(
 		() => ({
 			activeTab,
@@ -239,7 +268,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		[activeCategory, activeTab, searchTerm],
 	);
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModuleGuardTelemetry`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModuleGuardTelemetry`,
+	);
 
 	useDataModuleGuardTelemetry({
 		key: "service/services",
@@ -252,7 +283,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 
 	// Call usePagination ONCE at the top level
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: usePagination`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: usePagination`,
+	);
 	const {
 		pagedItems,
 		canShowShowMore,
@@ -273,12 +306,14 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		enableShowAll: true,
 	});
 	hookCountRef.current += 1;
-	console.log(`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useEffect(resize)`);
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useEffect(resize)`,
+	);
 
 	useEffect(() => {
 		// Only run on client
 		if (typeof window === "undefined") return;
-		
+
 		const handleResize = () => {
 			const newCardsPerPage = getCardsPerPage();
 			setCardsPerPage(newCardsPerPage);
@@ -329,230 +364,246 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		return 6; // SSR fallback
 	}
 
-        // CRITICAL: This function must never throw or return undefined/null
-        // It's called during JSX rendering, so any errors here can cause hydration mismatches
-        const renderCardsForCategory = (categoryValue: ServiceCategoryValue) => {
-                try {
-                        const isLoading = ["idle", "loading"].includes(servicesStatus);
-                        const hasEntries = filteredEntries.length > 0;
-                        const encounteredError = servicesStatus === "error" && !hasEntries;
+	// CRITICAL: This function must never throw or return undefined/null
+	// It's called during JSX rendering, so any errors here can cause hydration mismatches
+	const renderCardsForCategory = (categoryValue: ServiceCategoryValue) => {
+		try {
+			const isLoading = ["idle", "loading"].includes(servicesStatus);
+			const hasEntries = filteredEntries.length > 0;
+			const encounteredError = servicesStatus === "error" && !hasEntries;
 
-                const filterControls = (
-                        <ServiceFilter
-                                categories={categoryOptions}
-                                activeCategory={activeCategory}
-                                searchTerm={searchTerm}
-                                onSearch={(term) => {
-                                        setSearchTerm(term);
-                                }}
-                                onCategoryChange={(cat) => {
-                                        setActiveCategory(cat);
-                                }}
-                                showSearch={showSearch}
-                                showCategories={showCategories}
-                        />
-                );
+			const filterControls = (
+				<ServiceFilter
+					categories={categoryOptions}
+					activeCategory={activeCategory}
+					searchTerm={searchTerm}
+					onSearch={(term) => {
+						setSearchTerm(term);
+					}}
+					onCategoryChange={(cat) => {
+						setActiveCategory(cat);
+					}}
+					showSearch={showSearch}
+					showCategories={showCategories}
+				/>
+			);
 
-                if (isLoading && !hasEntries) {
-                        return (
-                                <>
-                                        {filterControls}
-                                        <div className="py-12 text-center text-muted-foreground">
-                                                Loading services…
-                                        </div>
-                                </>
-                        );
-                }
+			if (isLoading && !hasEntries) {
+				return (
+					<>
+						{filterControls}
+						<div className="py-12 text-center text-muted-foreground">
+							Loading services…
+						</div>
+					</>
+				);
+			}
 
-                if (encounteredError) {
-                        console.error("[ServicesSection] Failed to load services", servicesError);
-                        return (
-                                <>
-                                        {filterControls}
-                                        <div className="py-12 text-center text-destructive">
-                                                Unable to load services right now.
-                                        </div>
-                                </>
-                        );
-                }
+			if (encounteredError) {
+				console.error(
+					"[ServicesSection] Failed to load services",
+					servicesError,
+				);
+				return (
+					<>
+						{filterControls}
+						<div className="py-12 text-center text-destructive">
+							Unable to load services right now.
+						</div>
+					</>
+				);
+			}
 
-                return (
-                        <>
-                                {filterControls}
-                                {filteredEntries.length === 0 ? (
-                                        <div className="py-12 text-center font-semibold text-black text-lg dark:text-white/60">
-                                                No results found. Try a different tab.
-                                        </div>
-                                ) : (
-                                        <>
-                                                <div className="grid min-h-0 grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-3">
-                                                        {pagedItems.map(
-                                                                ([serviceKey, serviceData]: [string, ServiceItemData]) => (
-                                                                        <ServiceCard
-                                                                                id={serviceData.id}
-                                                                                key={serviceData.slugDetails.slug ?? serviceKey}
-                                                                                iconName={serviceData.iconName}
-                                                                                title={serviceData.title}
-                                                                                description={serviceData.description}
-                                                                                features={serviceData.features || []}
-                                                                                slugDetails={serviceData.slugDetails}
-                                                                                categories={serviceData.categories}
-                                                                                price={serviceData.price}
-                                                                                onSale={serviceData.onSale}
-                                                                                showBanner={serviceData.showBanner}
-                                                                                bannerText={serviceData.bannerText}
-                                                                                bannerColor={serviceData.bannerColor}
-                                                                                className="flex flex-col"
-                                                                        />
-                                                                ),
-                                                        )}
-                                                </div>
-                                                <div className="mt-12 flex w-full flex-col items-center justify-center gap-6">
-                                                        {canShowPagination && (
-                                                                <>
-                                                                        {canShowShowMore && (
-                                                                                <div className="flex w-full justify-center">
-                                                                                        <button
-                                                                                                className="flex items-center justify-center rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
-                                                                                                onClick={showMore}
-                                                                                                type="button"
-                                                                                        >
-                                                                                                Show More Services
-                                                                                        </button>
-                                                                                </div>
-                                                                        )}
-                                                                        <div className="flex items-center justify-center gap-2">
-                                                                                <button
-                                                                                        className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                                                                                        onClick={prevPage}
-                                                                                        disabled={page === 1}
-                                                                                        type="button"
-                                                                                        aria-label="Previous page"
-                                                                                >
-                                                                                        Prev
-                                                                                </button>
-                                                                        {Array.from({ length: totalPages }, (_, i) => (
-                                                                                                <button
-                                                                                                        key={`page-${i + 1}`}
-                                                                                                        className={`rounded-lg px-4 py-2 transition-colors ${
-                                                                                                                page === i + 1
-                                                                                                                        ? "bg-primary text-primary-foreground"
-                                                                                                                        : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                                                                                                        }`}
-                                                                                                        onClick={() => setPage(i + 1)}
-                                                                                                        type="button"
-                                                                                                        aria-label={`Page ${i + 1}`}
-                                                                                                >
-                                                                                                        {i + 1}
-                                                                                                </button>
-                                                                                        ))}
-                                                                                <button
-                                                                                        className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                                                                                        onClick={nextPage}
-                                                                                        disabled={page === totalPages}
-                                                                                        type="button"
-                                                                                        aria-label="Next page"
-                                                                                >
-                                                                                        Next
-                                                                                </button>
-                                                                        </div>
-                                                                        {canShowShowLess && (
-                                                                                <button
-                                                                                        className="mt-2 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground"
-                                                                                        onClick={showLess}
-                                                                                        type="button"
-                                                                                >
-                                                                                        Show Less Services
-                                                                                </button>
-                                                                        )}
-                                                                </>
-                                                        )}
-                                                </div>
-                                        </>
-                                )}
-                        </>
-                );
-                } catch (renderError) {
-                        // If rendering throws, return safe fallback to prevent hydration mismatch
-                        console.error("[ServicesSection] Error in renderCardsForCategory:", renderError);
-                        return (
-                                <>
-                                        <div className="py-12 text-center text-muted-foreground">
-                                                Unable to load services.
-                                        </div>
-                                </>
-                        );
-                }
-        };
+			return (
+				<>
+					{filterControls}
+					{filteredEntries.length === 0 ? (
+						<div className="py-12 text-center font-semibold text-black text-lg dark:text-white/60">
+							No results found. Try a different tab.
+						</div>
+					) : (
+						<>
+							<div className="grid min-h-0 grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-3">
+								{pagedItems.map(
+									([serviceKey, serviceData]: [string, ServiceItemData]) => (
+										<ServiceCard
+											id={serviceData.id}
+											key={serviceData.slugDetails.slug ?? serviceKey}
+											iconName={serviceData.iconName}
+											title={serviceData.title}
+											description={serviceData.description}
+											features={serviceData.features || []}
+											slugDetails={serviceData.slugDetails}
+											categories={serviceData.categories}
+											price={serviceData.price}
+											onSale={serviceData.onSale}
+											showBanner={serviceData.showBanner}
+											bannerText={serviceData.bannerText}
+											bannerColor={serviceData.bannerColor}
+											className="flex flex-col"
+										/>
+									),
+								)}
+							</div>
+							<div className="mt-12 flex w-full flex-col items-center justify-center gap-6">
+								{canShowPagination && (
+									<>
+										{canShowShowMore && (
+											<div className="flex w-full justify-center">
+												<button
+													className="flex items-center justify-center rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
+													onClick={showMore}
+													type="button"
+												>
+													Show More Services
+												</button>
+											</div>
+										)}
+										<div className="flex items-center justify-center gap-2">
+											<button
+												className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+												onClick={prevPage}
+												disabled={page === 1}
+												type="button"
+												aria-label="Previous page"
+											>
+												Prev
+											</button>
+											{Array.from({ length: totalPages }, (_, i) => (
+												<button
+													key={`page-${i + 1}`}
+													className={`rounded-lg px-4 py-2 transition-colors ${
+														page === i + 1
+															? "bg-primary text-primary-foreground"
+															: "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+													}`}
+													onClick={() => setPage(i + 1)}
+													type="button"
+													aria-label={`Page ${i + 1}`}
+												>
+													{i + 1}
+												</button>
+											))}
+											<button
+												className="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+												onClick={nextPage}
+												disabled={page === totalPages}
+												type="button"
+												aria-label="Next page"
+											>
+												Next
+											</button>
+										</div>
+										{canShowShowLess && (
+											<button
+												className="mt-2 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground"
+												onClick={showLess}
+												type="button"
+											>
+												Show Less Services
+											</button>
+										)}
+									</>
+								)}
+							</div>
+						</>
+					)}
+				</>
+			);
+		} catch (renderError) {
+			// If rendering throws, return safe fallback to prevent hydration mismatch
+			console.error(
+				"[ServicesSection] Error in renderCardsForCategory:",
+				renderError,
+			);
+			return (
+				<>
+					<div className="py-12 text-center text-muted-foreground">
+						Unable to load services.
+					</div>
+				</>
+			);
+		}
+	};
 
-	console.log(`[ServicesSection:${componentInstanceId.current}] Render #${renderIdRef.current} COMPLETE - Local hooks: ${hookCountRef.current} - About to return JSX`, {
-		instanceId: componentInstanceId.current,
-		isServer: typeof window === "undefined",
-	});
-	
+	console.log(
+		`[ServicesSection:${componentInstanceId.current}] Render #${renderIdRef.current} COMPLETE - Local hooks: ${hookCountRef.current} - About to return JSX`,
+		{
+			instanceId: componentInstanceId.current,
+			isServer: typeof window === "undefined",
+		},
+	);
+
 	// CRITICAL: Wrap return in try-catch to ensure component ALWAYS renders, even if JSX throws
 	// This prevents hydration mismatches where server renders nothing but client renders something
 	try {
-		console.log(`[ServicesSection:${componentInstanceId.current}] Attempting to render JSX...`);
+		console.log(
+			`[ServicesSection:${componentInstanceId.current}] Attempting to render JSX...`,
+		);
 		const jsxResult = (
 			<section id="services" className="px-4 py-6 md:px-6 md:py-16 lg:px-8">
-			<div className="mx-auto max-w-7xl">
-				<div className="mb-12 text-center">
-					<Header
-						title="Features"
-						subtitle="A full suite of cutting-edge tools designed to help you close more 
+				<div className="mx-auto max-w-7xl">
+					<div className="mb-12 text-center">
+						<Header
+							title="Features"
+							subtitle="A full suite of cutting-edge tools designed to help you close more 
 deals"
-						className="mb-12 md:mb-16"
-					/>
-				</div>
-
-				<Tabs
-					value={activeTab}
-					onValueChange={(value) =>
-						handleTabChange(value as ServiceCategoryValue)
-					}
-					className="w-full"
-				>
-					<div className="-mx-4 mb-8 flex w-full overflow-x-auto px-4 sm:justify-center">
-						<TabsList className="inline-flex min-w-max rounded-full border border-white/10 bg-card p-1 backdrop-blur-md">
-							{showTabs.map((tab) => (
-								<TabsTrigger
-									key={tab}
-									value={tab}
-									className="rounded-full px-4 py-2 font-medium text-black text-sm transition-all duration-200 hover:text-primary data-[state=active]:bg-background data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-focus/30 data-[state=active]:text-white md:px-6 dark:text-white/70 dark:hover:text-primary"
-								>
-									{getTabLabel(tab)}
-								</TabsTrigger>
-							))}
-						</TabsList>
+							className="mb-12 md:mb-16"
+						/>
 					</div>
 
-					{showTabs.map((tab) => (
-						<TabsContent
-							key={tab}
-							value={tab}
-							className="mt-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-						>
-							{renderCardsForCategory(tab)}
-							{/* Always render the link - pathname check removed to prevent hydration mismatch */}
-							<div className="mt-12 text-center">
-								<Link href="/features" className="inline-block">
-									<Button variant="default" size="lg">
-										Explore All {getTabLabel(tab)} Services
-									</Button>
-								</Link>
-							</div>
-						</TabsContent>
-					))}
-				</Tabs>
-			</div>
-		</section>
+					<Tabs
+						value={activeTab}
+						onValueChange={(value) =>
+							handleTabChange(value as ServiceCategoryValue)
+						}
+						className="w-full"
+					>
+						<div className="-mx-4 mb-8 flex w-full overflow-x-auto px-4 sm:justify-center">
+							<TabsList className="inline-flex min-w-max rounded-full border border-white/10 bg-card p-1 backdrop-blur-md">
+								{showTabs.map((tab) => (
+									<TabsTrigger
+										key={tab}
+										value={tab}
+										className="rounded-full px-4 py-2 font-medium text-black text-sm transition-all duration-200 hover:text-primary data-[state=active]:bg-background data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-focus/30 data-[state=active]:text-white md:px-6 dark:text-white/70 dark:hover:text-primary"
+									>
+										{getTabLabel(tab)}
+									</TabsTrigger>
+								))}
+							</TabsList>
+						</div>
+
+						{showTabs.map((tab) => (
+							<TabsContent
+								key={tab}
+								value={tab}
+								className="mt-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+							>
+								{renderCardsForCategory(tab)}
+								{/* Always render the link - pathname check removed to prevent hydration mismatch */}
+								<div className="mt-12 text-center">
+									<Link href="/features" className="inline-block">
+										<Button variant="default" size="lg">
+											Explore All {getTabLabel(tab)} Services
+										</Button>
+									</Link>
+								</div>
+							</TabsContent>
+						))}
+					</Tabs>
+				</div>
+			</section>
 		);
-		console.log(`[ServicesSection:${componentInstanceId.current}] JSX rendered successfully`);
+		console.log(
+			`[ServicesSection:${componentInstanceId.current}] JSX rendered successfully`,
+		);
 		return jsxResult;
 	} catch (error) {
 		// If JSX rendering throws, log and return fallback to prevent hydration mismatch
-		console.error(`[ServicesSection:${componentInstanceId.current}] ERROR rendering JSX:`, error);
+		console.error(
+			`[ServicesSection:${componentInstanceId.current}] ERROR rendering JSX:`,
+			error,
+		);
 		// Return minimal valid structure to match server/client
 		return (
 			<section id="services" className="px-4 py-6 md:px-6 md:py-16 lg:px-8">

@@ -1,8 +1,8 @@
 "use client";
 
+import { motion } from "motion/react";
 import type { CSSProperties, HTMLAttributes } from "react";
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 

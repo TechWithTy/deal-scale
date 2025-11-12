@@ -10,9 +10,9 @@
 import type {
 	NotionFilesProperty,
 	NotionRichTextProperty,
+	NotionSelectProperty,
 	NotionTitleProperty,
 	NotionUrlProperty,
-	NotionSelectProperty,
 } from "./notionTypes";
 
 // Additional Notion property types not in notionTypes.ts

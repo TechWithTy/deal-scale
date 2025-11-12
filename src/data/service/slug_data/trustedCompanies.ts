@@ -1,11 +1,11 @@
 import type {
-        CompanyLogoDictType,
-        CompanyPartner,
+	CompanyLogoDictType,
+	CompanyPartner,
 } from "@/types/service/trusted-companies";
 
 export type {
-        CompanyLogoDictType,
-        CompanyPartner,
+	CompanyLogoDictType,
+	CompanyPartner,
 } from "@/types/service/trusted-companies";
 
 export const companyLogos: CompanyLogoDictType = {

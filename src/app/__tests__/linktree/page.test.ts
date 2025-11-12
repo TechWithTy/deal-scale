@@ -41,7 +41,9 @@ describe("LinkTree Page Metadata", () => {
 	test("generates metadata with correct title", async () => {
 		const metadata = await generateMetadata();
 
-		expect(metadata.title).toBe("Link Tree | DealScale - Quick Access to Resources");
+		expect(metadata.title).toBe(
+			"Link Tree | DealScale - Quick Access to Resources",
+		);
 	});
 
 	test("generates metadata with correct description", async () => {
@@ -94,4 +96,3 @@ describe("LinkTree Page Metadata", () => {
 		expect(metadata.openGraph?.url).toBe("https://dealscale.io/linktree");
 	});
 });
-

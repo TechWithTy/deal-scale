@@ -3,8 +3,8 @@ import { buildLinkTreeItemListSchema } from "@/lib/linktree/schemaBuilders";
 import type { LinkTreeItem } from "@/utils/linktree-redis";
 import { withUtm } from "@/utils/linktree-redis";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
-import { getStaticSeo } from "@/utils/seo/staticSeo";
 import { SchemaInjector } from "@/utils/seo/schema";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 

@@ -26,16 +26,16 @@ export default async function ServicePage(props: unknown) {
 	const { params } = props as { params: { slug: string } };
 	const allServices: ServiceItemData[] = Object.values(allServicesRaw).flatMap(
 		(category) => Object.values(category),
-        );
-        const service =
-                allServices.find((s) => s.slugDetails.slug === params.slug) || null;
-        if (!service) return notFound();
-        const serviceSchema = buildServiceJsonLd(service);
+	);
+	const service =
+		allServices.find((s) => s.slugDetails.slug === params.slug) || null;
+	if (!service) return notFound();
+	const serviceSchema = buildServiceJsonLd(service);
 
-        return (
-                <>
-                        <SchemaInjector schema={serviceSchema} />
-                        <ServicePageClient service={service} />
-                </>
-        );
+	return (
+		<>
+			<SchemaInjector schema={serviceSchema} />
+			<ServicePageClient service={service} />
+		</>
+	);
 }

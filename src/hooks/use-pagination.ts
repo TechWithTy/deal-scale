@@ -44,7 +44,10 @@ export function usePagination<T>(
 	items: T[],
 	options: UsePaginationOptions = {},
 ): UsePaginationResult<T> {
-	console.log("[usePagination] Hook starting", { itemsLength: items.length, options });
+	console.log("[usePagination] Hook starting", {
+		itemsLength: items.length,
+		options,
+	});
 	const { itemsPerPage = 8, initialPage = 1, enableShowAll = true } = options;
 	console.log("[usePagination] Hook 1: useState(page)");
 	const [page, setPage] = useState(initialPage);
@@ -52,20 +55,33 @@ export function usePagination<T>(
 	const [showAll, setShowAll] = useState(false);
 
 	console.log("[usePagination] Hook 3: useMemo(totalPages)");
-	const totalPages = useMemo(
-		() => {
-			const result = itemsPerPage > 0 ? Math.ceil(items.length / itemsPerPage) : 1;
-			console.log("[usePagination] totalPages computed", { result, itemsLength: items.length, itemsPerPage });
-			return result;
-		},
-		[items.length, itemsPerPage],
-	);
+	const totalPages = useMemo(() => {
+		const result =
+			itemsPerPage > 0 ? Math.ceil(items.length / itemsPerPage) : 1;
+		console.log("[usePagination] totalPages computed", {
+			result,
+			itemsLength: items.length,
+			itemsPerPage,
+		});
+		return result;
+	}, [items.length, itemsPerPage]);
 
 	// Slice items for current page
 	console.log("[usePagination] Hook 4: useMemo(pagedItems)");
 	const pagedItems = useMemo(() => {
-		const result = showAll || !itemsPerPage ? items : items.slice((page - 1) * itemsPerPage, (page - 1) * itemsPerPage + itemsPerPage);
-		console.log("[usePagination] pagedItems computed", { resultLength: result.length, showAll, page, itemsPerPage });
+		const result =
+			showAll || !itemsPerPage
+				? items
+				: items.slice(
+						(page - 1) * itemsPerPage,
+						(page - 1) * itemsPerPage + itemsPerPage,
+					);
+		console.log("[usePagination] pagedItems computed", {
+			resultLength: result.length,
+			showAll,
+			page,
+			itemsPerPage,
+		});
 		return result;
 	}, [items, page, itemsPerPage, showAll]);
 

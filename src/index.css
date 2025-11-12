@@ -122,6 +122,7 @@
 		--animate-aurora: aurora 8s ease-in-out infinite alternate;
 		--animate-marquee: marquee var(--duration) infinite linear;
 		--animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+		--animate-gradient: gradient 8s linear infinite;
 	}
 }
 
@@ -233,6 +234,16 @@
 		}
 		to {
 			transform: translateY(calc(-100% - var(--gap)));
+		}
+	}
+  @keyframes gradient {
+  to {
+    background-position: var(--bg-size, 300%) 0;
+		}
+	}
+  @keyframes gradient {
+  to {
+    background-position: var(--bg-size, 300%) 0;
 		}
 	}
 }

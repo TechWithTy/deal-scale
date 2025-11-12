@@ -45,7 +45,7 @@ export const AvatarCircles = ({
 	const renderAvatar = (avatar: Avatar, index: number) => {
 		const image = (
 			<img
-				className="h-10 w-10 rounded-full border-2 border-background/60 object-cover shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+				className="hover:-translate-y-0.5 h-10 w-10 rounded-full border-2 border-background/60 object-cover shadow-md transition hover:shadow-lg"
 				src={avatar.imageUrl}
 				width={40}
 				height={40}
@@ -54,9 +54,11 @@ export const AvatarCircles = ({
 			/>
 		);
 
-		const label = interaction === "tooltip"
-			? tooltipRenderer?.(avatar, index) ?? buildFallbackLabel(avatar, index)
-			: null;
+		const label =
+			interaction === "tooltip"
+				? (tooltipRenderer?.(avatar, index) ??
+					buildFallbackLabel(avatar, index))
+				: null;
 
 		const wrapped = (
 			<div
@@ -67,7 +69,7 @@ export const AvatarCircles = ({
 			>
 				{image}
 				{label ? (
-					<span className="pointer-events-none absolute inset-x-1/2 top-full z-40 w-max -translate-x-1/2 translate-y-2 rounded-full bg-foreground/80 px-2 py-1 text-center text-[10px] font-semibold uppercase tracking-wide text-background opacity-0 shadow-lg transition group-hover:translate-y-1 group-hover:opacity-100">
+					<span className="-translate-x-1/2 pointer-events-none absolute inset-x-1/2 top-full z-40 w-max translate-y-2 rounded-full bg-foreground/80 px-2 py-1 text-center font-semibold text-[10px] text-background uppercase tracking-wide opacity-0 shadow-lg transition group-hover:translate-y-1 group-hover:opacity-100">
 						{label}
 					</span>
 				) : null}
@@ -96,14 +98,13 @@ export const AvatarCircles = ({
 	};
 
 	return (
-		<div className={cn("flex -space-x-3", className)}>
+		<div className={cn("-space-x-3 flex", className)}>
 			{avatarUrls.map(renderAvatar)}
 			{numPeople && numPeople > avatarUrls.length ? (
-				<div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-background/70 bg-primary/15 text-xs font-semibold uppercase tracking-widest text-primary">
+				<div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-background/70 bg-primary/15 font-semibold text-primary text-xs uppercase tracking-widest">
 					+{numPeople - avatarUrls.length}
 				</div>
 			) : null}
 		</div>
 	);
 };
-

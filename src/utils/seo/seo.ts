@@ -58,44 +58,46 @@ export interface SeoMeta {
 		| undefined;
 }
 
-function toIsoString(value: number | string | Date | null | undefined): string | undefined {
-        if (value === null || value === undefined) {
-                return undefined;
-        }
-        if (value instanceof Date) {
-                const time = value.getTime();
-                return Number.isNaN(time) ? undefined : value.toISOString();
-        }
-        if (typeof value === "number") {
-                const ms = value < 1e12 ? value * 1000 : value;
-                const date = new Date(ms);
-                return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
-        }
-        if (typeof value === "string") {
-                const trimmed = value.trim();
-                if (!trimmed) {
-                        return undefined;
-                }
-                const numeric = Number(trimmed);
-                if (!Number.isNaN(numeric)) {
-                        return toIsoString(numeric);
-                }
-                const date = new Date(trimmed);
-                return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
-        }
-        return undefined;
+function toIsoString(
+	value: number | string | Date | null | undefined,
+): string | undefined {
+	if (value === null || value === undefined) {
+		return undefined;
+	}
+	if (value instanceof Date) {
+		const time = value.getTime();
+		return Number.isNaN(time) ? undefined : value.toISOString();
+	}
+	if (typeof value === "number") {
+		const ms = value < 1e12 ? value * 1000 : value;
+		const date = new Date(ms);
+		return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+	}
+	if (typeof value === "string") {
+		const trimmed = value.trim();
+		if (!trimmed) {
+			return undefined;
+		}
+		const numeric = Number(trimmed);
+		if (!Number.isNaN(numeric)) {
+			return toIsoString(numeric);
+		}
+		const date = new Date(trimmed);
+		return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+	}
+	return undefined;
 }
 
 export function resolveBeehiivDate(
-        ...values: Array<number | string | Date | null | undefined>
+	...values: Array<number | string | Date | null | undefined>
 ): string | undefined {
-        for (const value of values) {
-                const iso = toIsoString(value);
-                if (iso) {
-                        return iso;
-                }
-        }
-        return undefined;
+	for (const value of values) {
+		const iso = toIsoString(value);
+		if (iso) {
+			return iso;
+		}
+	}
+	return undefined;
 }
 
 // * Renders Open Graph meta tags for Next.js/React head
@@ -329,14 +331,17 @@ export function getBlogSeo(post: BeehiivPost): SeoMeta {
 	const image = post.thumbnail_url || defaultSeo.image;
 
 	// Dates: use publish_date if present, else undefined
-        const datePublished = resolveBeehiivDate(
-                post.published_at,
-                post.publish_date,
-                post.displayed_date,
-        );
-        const dateModified =
-                resolveBeehiivDate(post.displayed_date, post.publish_date, post.published_at) ||
-                datePublished;
+	const datePublished = resolveBeehiivDate(
+		post.published_at,
+		post.publish_date,
+		post.displayed_date,
+	);
+	const dateModified =
+		resolveBeehiivDate(
+			post.displayed_date,
+			post.publish_date,
+			post.published_at,
+		) || datePublished;
 
 	return {
 		title: `${post.title} | Blog | Deal Scale`,

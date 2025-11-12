@@ -1,8 +1,8 @@
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { buildPartnersItemListSchema } from "@/lib/partners/schemaBuilders";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
-import { getStaticSeo } from "@/utils/seo/staticSeo";
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 
 import PartnersClient from "./PartnersClient";
@@ -14,12 +14,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function PartnersPage() {
-        const schema = buildPartnersItemListSchema(companyLogos);
+	const schema = buildPartnersItemListSchema(companyLogos);
 
-        return (
-                <>
-                        <SchemaInjector schema={schema} />
-                        <PartnersClient partners={companyLogos} />
-                </>
-        );
+	return (
+		<>
+			<SchemaInjector schema={schema} />
+			<PartnersClient partners={companyLogos} />
+		</>
+	);
 }

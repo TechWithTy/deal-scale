@@ -17,6 +17,7 @@ export const SessionView = ({
 	onSessionReset,
 	autoPlay,
 	showEndButton,
+	autoStart = false,
 }: {
 	transcript: Transcript;
 	onCallEnd?: (opts: { manual: boolean }) => void;
@@ -24,6 +25,7 @@ export const SessionView = ({
 	onSessionReset?: (resetFn: () => void) => void;
 	autoPlay?: boolean;
 	showEndButton?: boolean;
+	autoStart?: boolean;
 }) => {
 	const [playingDemo, setPlayingDemo] = useState(false);
 	const [aiActive, setAiActive] = useState(false);
@@ -41,6 +43,7 @@ export const SessionView = ({
 	const [shouldPlayAudio, setShouldPlayAudio] = useState(false);
 	const [transcriptFinished, setTranscriptFinished] = useState(false); // New state
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const autoStartRef = useRef(false);
 
 	// Use a ref to store the latest onCallEnd callback to avoid stale closures
 	const onCallEndRef = useRef(onCallEnd);
@@ -54,7 +57,7 @@ export const SessionView = ({
 	}, []);
 
 	// Restore Play Demo logic for demos that require it
-	const handlePlayDemo = () => {
+	const handlePlayDemo = useCallback(() => {
 		// Reset all states
 		setPlayingDemo(true);
 		setDemoStarted(true);
@@ -73,28 +76,25 @@ export const SessionView = ({
 			setCallStatus("speaking");
 			setShouldPlayAudio(true);
 		}, 1000);
-	};
+	}, []);
 
 	// Auto play demo if autoPlay is true (for cloned voice)
 	useEffect(() => {
 		if (autoPlay) {
-			setPlayingDemo(true);
-			setDemoStarted(true);
-			setCallStatus("pending");
-			setAiActive(false);
-			setAiStatusText("");
-			setClientStatusText("");
-			setCallDuration(0);
-			setCurrentLine(null);
-			setCurrentSpeaker(null);
-			setDemoStartTime(Date.now());
-			setTranscriptFinished(false);
-			setTimeout(() => {
-				setCallStatus("speaking");
-				setShouldPlayAudio(true);
-			}, 1000);
+			handlePlayDemo();
 		}
-	}, [autoPlay]);
+	}, [autoPlay, handlePlayDemo]);
+
+	useEffect(() => {
+		if (autoStart) {
+			if (!autoStartRef.current) {
+				autoStartRef.current = true;
+				handlePlayDemo();
+			}
+		} else {
+			autoStartRef.current = false;
+		}
+	}, [autoStart, handlePlayDemo]);
 
 	// Handle call end - stop audio and clean up
 	// Accept a manual flag to distinguish between button and audio end

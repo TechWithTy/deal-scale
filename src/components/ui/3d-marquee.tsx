@@ -1,0 +1,190 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
+
+type MarqueeImage =
+	| string
+	| {
+			src: string;
+			alt?: string;
+	  };
+
+interface ThreeDMarqueeProps {
+	images: MarqueeImage[];
+	className?: string;
+	itemClassName?: string;
+}
+
+export const ThreeDMarquee = ({
+	images,
+	className,
+	itemClassName,
+}: ThreeDMarqueeProps) => {
+	const normalizedImages = images.map((image, index) =>
+		typeof image === "string"
+			? { src: image, alt: `Logo ${index + 1}` }
+			: { alt: `Logo ${index + 1}`, ...image },
+	);
+
+	const chunkSize = Math.ceil(normalizedImages.length / 4) || 1;
+	const chunks = Array.from({ length: 4 }, (_, colIndex) => {
+		const start = colIndex * chunkSize;
+		return normalizedImages.slice(start, start + chunkSize);
+	});
+
+	return (
+		<div
+			className={cn(
+				"mx-auto block overflow-hidden rounded-2xl border border-black/5",
+				"h-[520px] sm:h-[560px] lg:h-[640px]",
+				"bg-gradient-to-b from-white via-slate-50 to-slate-100",
+				"pt-4 pb-14 sm:pt-6 sm:pb-16 lg:pt-8 lg:pb-20",
+				"dark:border-white/10 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900",
+				className,
+			)}
+		>
+			<div className="relative flex size-full items-center justify-center">
+				<div className="relative h-full w-full max-w-[900px] px-6 sm:px-8 lg:px-10">
+					<div
+						className="absolute inset-0"
+						style={{
+							top: "50%",
+							left: "50%",
+							transform:
+								"perspective(1400px) translate(-50%, -50%) rotateX(52deg) rotateZ(-38deg)",
+						}}
+					>
+						<div className="grid h-[760px] w-[760px] origin-center grid-cols-4 gap-6 sm:h-[820px] sm:w-[820px] sm:gap-8 lg:h-[900px] lg:w-[900px]">
+							{chunks.map((subarray, columnIndex) => {
+								const columnKey = `marquee-column-${columnIndex}`;
+
+								return (
+									<motion.div
+										animate={{ y: columnIndex % 2 === 0 ? 96 : -96 }}
+										transition={{
+											duration: columnIndex % 2 === 0 ? 12 : 14,
+											repeat: Number.POSITIVE_INFINITY,
+											repeatType: "reverse",
+										}}
+										key={columnKey}
+										className="flex flex-col items-start gap-6 sm:gap-8"
+									>
+										<GridLineVertical className="-left-4" offset="72px" />
+										{subarray.map(({ src, alt }, itemIndex) => {
+											const key = `marquee-image-${columnIndex}-${itemIndex}`;
+
+											return (
+												<div className="relative" key={key}>
+													<GridLineHorizontal
+														className="-top-4"
+														offset="24px"
+													/>
+													<motion.div
+														whileHover={{ y: -6, scale: 1.02 }}
+														transition={{
+															type: "spring",
+															stiffness: 260,
+															damping: 22,
+														}}
+														className={cn(
+															"flex h-28 w-40 items-center justify-center rounded-2xl bg-white/95 p-5 shadow-black/10 shadow-lg ring-1 ring-black/5 backdrop-blur-sm sm:h-32 sm:w-44 sm:p-6",
+															"dark:bg-slate-900/80 dark:shadow-slate-900/40 dark:ring-white/10",
+															itemClassName,
+														)}
+													>
+														<motion.img
+															key={key}
+															src={src}
+															alt={alt}
+															loading="lazy"
+															decoding="async"
+															draggable={false}
+															className="h-full w-full object-contain"
+															width={176}
+															height={128}
+														/>
+													</motion.div>
+												</div>
+											);
+										})}
+									</motion.div>
+								);
+							})}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+const GridLineHorizontal = ({
+	className,
+	offset,
+}: {
+	className?: string;
+	offset?: string;
+}) => {
+	return (
+		<div
+			style={
+				{
+					"--background": "#ffffff",
+					"--color": "rgba(0, 0, 0, 0.2)",
+					"--height": "1px",
+					"--width": "5px",
+					"--fade-stop": "90%",
+					"--offset": offset || "200px", //-100px if you want to keep the line inside
+					"--color-dark": "rgba(255, 255, 255, 0.2)",
+					maskComposite: "exclude",
+				} as React.CSSProperties
+			}
+			className={cn(
+				"absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))]",
+				"bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)]",
+				"[background-size:var(--width)_var(--height)]",
+				"[mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)]",
+				"[mask-composite:exclude]",
+				"z-30",
+				"dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]",
+				className,
+			)}
+		/>
+	);
+};
+
+const GridLineVertical = ({
+	className,
+	offset,
+}: {
+	className?: string;
+	offset?: string;
+}) => {
+	return (
+		<div
+			style={
+				{
+					"--background": "#ffffff",
+					"--color": "rgba(0, 0, 0, 0.2)",
+					"--height": "5px",
+					"--width": "1px",
+					"--fade-stop": "90%",
+					"--offset": offset || "150px", //-100px if you want to keep the line inside
+					"--color-dark": "rgba(255, 255, 255, 0.2)",
+					maskComposite: "exclude",
+				} as React.CSSProperties
+			}
+			className={cn(
+				"absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)]",
+				"bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)]",
+				"[background-size:var(--width)_var(--height)]",
+				"[mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)]",
+				"[mask-composite:exclude]",
+				"z-30",
+				"dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]",
+				className,
+			)}
+		/>
+	);
+};

@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { useSyncExternalStoreWithSelector } from "use-sync-external-store/shim/with-selector";
 import { create } from "zustand";
 import type { StoreApi, UseBoundStore } from "zustand";
 import { shallow } from "zustand/shallow";
-import { useSyncExternalStoreWithSelector } from "use-sync-external-store/shim/with-selector";
 
 import { dataManifest } from "@/data/__generated__/manifest";
 import type {

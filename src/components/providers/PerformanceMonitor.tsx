@@ -18,9 +18,11 @@ function shouldReportResource(
 	isThirdParty: boolean,
 ) {
 	const { transferSize = 0, duration = 0 } = entry;
-	const renderBlockingStatus = (entry as PerformanceResourceTiming & {
-		renderBlockingStatus?: string;
-	}).renderBlockingStatus;
+	const renderBlockingStatus = (
+		entry as PerformanceResourceTiming & {
+			renderBlockingStatus?: string;
+		}
+	).renderBlockingStatus;
 	if (
 		renderBlockingStatus === "blocking" ||
 		renderBlockingStatus === "queued"

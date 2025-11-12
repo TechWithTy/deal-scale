@@ -1,114 +1,108 @@
-import { renderHook, waitFor, act } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 
 import { dataManifest } from "@/data/__generated__/manifest";
 
 import { clearDataModuleStores, useDataModule } from "../useDataModuleStore";
 
 describe("useDataModule", () => {
-        afterEach(() => {
-                clearDataModuleStores();
-        });
+	afterEach(() => {
+		clearDataModuleStores();
+	});
 
-        it("keeps initial selector fallbacks referentially stable", async () => {
-                const manifestEntry = dataManifest["service/services"] as unknown as {
-                        loader: () => Promise<typeof import("@/data/service/services")>;
-                };
-                const originalLoader = manifestEntry.loader;
-                let resolveModule!: (
-                        value: Awaited<ReturnType<typeof originalLoader>>,
-                ) => void;
-                const deferredModule = new Promise<Awaited<ReturnType<typeof originalLoader>>>(
-                        (resolve) => {
-                                resolveModule = resolve;
-                        },
-                );
+	it("keeps initial selector fallbacks referentially stable", async () => {
+		const manifestEntry = dataManifest["service/services"] as unknown as {
+			loader: () => Promise<typeof import("@/data/service/services")>;
+		};
+		const originalLoader = manifestEntry.loader;
+		let resolveModule!: (
+			value: Awaited<ReturnType<typeof originalLoader>>,
+		) => void;
+		const deferredModule = new Promise<
+			Awaited<ReturnType<typeof originalLoader>>
+		>((resolve) => {
+			resolveModule = resolve;
+		});
 
-                manifestEntry.loader = () => deferredModule;
+		manifestEntry.loader = () => deferredModule;
 
-                try {
-                        const { result, rerender } = renderHook(() =>
-                                useDataModule(
-                                        "service/services",
-                                        ({ status, data }) => ({
-                                                status,
-                                                services: (data?.services ?? {}) as Record<string, unknown>,
-                                        }),
-                                ),
-                        );
+		try {
+			const { result, rerender } = renderHook(() =>
+				useDataModule("service/services", ({ status, data }) => ({
+					status,
+					services: (data?.services ?? {}) as Record<string, unknown>,
+				})),
+			);
 
-                        await waitFor(() => {
-                                expect(result.current.status).toBe("loading");
-                        });
+			await waitFor(() => {
+				expect(result.current.status).toBe("loading");
+			});
 
-                        const loadingServices = result.current.services;
+			const loadingServices = result.current.services;
 
-                        act(() => {
-                                rerender();
-                        });
+			act(() => {
+				rerender();
+			});
 
-                        expect(result.current.services).toBe(loadingServices);
+			expect(result.current.services).toBe(loadingServices);
 
-                        await act(async () => {
-                                resolveModule(await originalLoader());
-                        });
+			await act(async () => {
+				resolveModule(await originalLoader());
+			});
 
-                        await waitFor(() => {
-                                expect(result.current.status).toBe("ready");
-                        });
-                } finally {
-                        manifestEntry.loader = originalLoader;
-                }
-        });
+			await waitFor(() => {
+				expect(result.current.status).toBe("ready");
+			});
+		} finally {
+			manifestEntry.loader = originalLoader;
+		}
+	});
 
-        it("stabilizes selector outputs to prevent redundant re-renders", async () => {
-                const renderSpy = jest.fn();
+	it("stabilizes selector outputs to prevent redundant re-renders", async () => {
+		const renderSpy = jest.fn();
 
-                const { result } = renderHook(() => {
-                        renderSpy();
-                        return useDataModule(
-                                "service/services",
-                                ({ status, data }) => ({
-                                        status,
-                                        services: data?.services ?? {},
-                                }),
-                        );
-                });
+		const { result } = renderHook(() => {
+			renderSpy();
+			return useDataModule("service/services", ({ status, data }) => ({
+				status,
+				services: data?.services ?? {},
+			}));
+		});
 
-                await waitFor(() => {
-                        expect(result.current.status).toBe("ready");
-                });
+		await waitFor(() => {
+			expect(result.current.status).toBe("ready");
+		});
 
-                const rendersWhenReady = renderSpy.mock.calls.length;
+		const rendersWhenReady = renderSpy.mock.calls.length;
 
-                await act(async () => {
-                        await Promise.resolve();
-                });
+		await act(async () => {
+			await Promise.resolve();
+		});
 
-                expect(renderSpy.mock.calls.length).toBe(rendersWhenReady);
-        });
+		expect(renderSpy.mock.calls.length).toBe(rendersWhenReady);
+	});
 
-        it("reuses cached selector snapshots across passive re-renders", async () => {
-                const selectorSpy = jest.fn(({ status, data }) => ({
-                        status,
-                        hasData: Boolean(data),
-                }));
+	it("reuses cached selector snapshots across passive re-renders", async () => {
+		const selectorSpy = jest.fn(({ status, data }) => ({
+			status,
+			hasData: Boolean(data),
+		}));
 
-                const { result, rerender } = renderHook(() =>
-                        useDataModule("service/services", selectorSpy),
-                );
+		const { result, rerender } = renderHook(() =>
+			useDataModule("service/services", selectorSpy),
+		);
 
-                await waitFor(() => {
-                        expect(result.current.status).toBe("ready");
-                });
+		await waitFor(() => {
+			expect(result.current.status).toBe("ready");
+		});
 
-                const callsAfterReady = selectorSpy.mock.calls.length;
-                const stableSelection = result.current;
+		const callsAfterReady = selectorSpy.mock.calls.length;
+		const stableSelection = result.current;
 
-                act(() => {
-                        rerender();
-                });
+		act(() => {
+			rerender();
+		});
 
-                expect(selectorSpy.mock.calls.length).toBe(callsAfterReady);
-                expect(result.current).toBe(stableSelection);
-        });
+		expect(selectorSpy.mock.calls.length).toBe(callsAfterReady);
+		expect(result.current).toBe(stableSelection);
+	});
 });

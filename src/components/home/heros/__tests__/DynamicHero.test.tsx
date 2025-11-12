@@ -1,10 +1,10 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import type { ReactNode } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-import DynamicHeroDemoPage from "../DynamicHero";
 import { resolveHeroCopy } from "../../../dynamic-hero/src";
+import DynamicHeroDemoPage from "../DynamicHero";
 
 jest.mock("lucide-react", () => ({
 	ArrowDown: () => <svg data-testid="arrow-down" />,

@@ -9,39 +9,40 @@ import React from "react";
 // ! This component is the hero section for the About page
 
 export default function AboutHero({
-        title,
-        subtitle,
+	title,
+	subtitle,
 }: { title?: string; subtitle?: string }) {
-        const { status, hero, error } = useDataModule(
-                "about/hero",
-                ({ status: heroStatus, data, error: heroError }) => ({
-                        status: heroStatus,
-                        hero: data?.hero,
-                        error: heroError,
-                }),
-        );
+	const { status, hero, error } = useDataModule(
+		"about/hero",
+		({ status: heroStatus, data, error: heroError }) => ({
+			status: heroStatus,
+			hero: data?.hero,
+			error: heroError,
+		}),
+	);
 
-        const resolvedTitle = title ?? hero?.title ?? "About Deal Scale";
-        const resolvedSubtitle = subtitle ?? hero?.subtitle ?? "";
+	const resolvedTitle = title ?? hero?.title ?? "About Deal Scale";
+	const resolvedSubtitle = subtitle ?? hero?.subtitle ?? "";
 
-        const isStoreLoading = !title && !hero && (status === "idle" || status === "loading");
+	const isStoreLoading =
+		!title && !hero && (status === "idle" || status === "loading");
 
-        if (isStoreLoading) {
-                return (
-                        <section className="relative flex items-center justify-center bg-background py-20 md:py-32">
-                                <div className="text-muted-foreground">Loading story…</div>
-                        </section>
-                );
-        }
+	if (isStoreLoading) {
+		return (
+			<section className="relative flex items-center justify-center bg-background py-20 md:py-32">
+				<div className="text-muted-foreground">Loading story…</div>
+			</section>
+		);
+	}
 
-        if (!title && !hero && status === "error") {
-                console.error("[AboutHero] Failed to load hero copy", error);
-        }
+	if (!title && !hero && status === "error") {
+		console.error("[AboutHero] Failed to load hero copy", error);
+	}
 
-        return (
-                <section className="relative flex flex-col items-center justify-center overflow-hidden bg-background py-20 md:py-32">
-                        {/* Uses theme bg-background as per Templating.md */}
-                        <div className="-z-10 absolute inset-0">
+	return (
+		<section className="relative flex flex-col items-center justify-center overflow-hidden bg-background py-20 md:py-32">
+			{/* Uses theme bg-background as per Templating.md */}
+			<div className="-z-10 absolute inset-0">
 				<BlurFade>
 					<div
 						className="h-full w-full"
@@ -52,14 +53,14 @@ export default function AboutHero({
 				</BlurFade>
 			</div>
 			<div className="max-w-2xl space-y-6 text-center">
-                                {/* Magic UI: AuroraText */}
-                                <AuroraText className="font-bold text-4xl tracking-tight md:text-6xl">
-                                        {resolvedTitle}
-                                </AuroraText>
-                                <p className="text-lg text-muted-foreground md:text-2xl">
-                                        {resolvedSubtitle}
-                                </p>
-                        </div>
-                </section>
-        );
+				{/* Magic UI: AuroraText */}
+				<AuroraText className="font-bold text-4xl tracking-tight md:text-6xl">
+					{resolvedTitle}
+				</AuroraText>
+				<p className="text-lg text-muted-foreground md:text-2xl">
+					{resolvedSubtitle}
+				</p>
+			</div>
+		</section>
+	);
 }

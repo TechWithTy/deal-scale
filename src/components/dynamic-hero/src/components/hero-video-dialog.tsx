@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { Play, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 import type { HTMLAttributes } from "react";
 

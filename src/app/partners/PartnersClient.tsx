@@ -7,25 +7,25 @@ import type { CompanyLogoDictType } from "@/data/service/slug_data/trustedCompan
 import { CTASection } from "../../components/common/CTASection";
 
 interface PartnersClientProps {
-        partners: CompanyLogoDictType;
+	partners: CompanyLogoDictType;
 }
 
 export default function PartnersClient({ partners }: PartnersClientProps) {
-        return (
-                <>
-                        <HeroSessionMonitor
+	return (
+		<>
+			<HeroSessionMonitor
 				headline="Our Partners"
 				subheadline=""
 				highlight="Partnerships"
 			/>
-                        <TrustedByMarquee items={partners} />
-                        <div className="m-12 flex flex-col gap-8">
-                                <h1 className="text-center font-bold text-3xl">Our Partners</h1>
-                                <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                                        {Object.values(partners).map((partner) => (
-                                                <Card
-                                                        key={partner.name}
-                                                        className="transition-shadow hover:shadow-lg"
+			<TrustedByMarquee items={partners} />
+			<div className="m-12 flex flex-col gap-8">
+				<h1 className="text-center font-bold text-3xl">Our Partners</h1>
+				<section className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+					{Object.values(partners).map((partner) => (
+						<Card
+							key={partner.name}
+							className="transition-shadow hover:shadow-lg"
 						>
 							<CardContent className="flex flex-col items-center p-6">
 								<img

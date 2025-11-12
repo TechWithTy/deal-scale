@@ -164,4 +164,3 @@ describe("linktree schema builder", () => {
 		expect(schema2.itemListElement[0].url).toContain("example.com");
 	});
 });
-

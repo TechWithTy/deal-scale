@@ -28,7 +28,9 @@ describe("withUtm", () => {
 			const resultUrl = new URL(result);
 
 			expect(resultUrl.searchParams.get("utm_source")).toBe("notion-source");
-			expect(resultUrl.searchParams.get("utm_campaign")).toBe("notion-campaign");
+			expect(resultUrl.searchParams.get("utm_campaign")).toBe(
+				"notion-campaign",
+			);
 			// Ensure "old" value is not present
 			expect(result).not.toContain("utm_source=old");
 		});
@@ -45,7 +47,9 @@ describe("withUtm", () => {
 			const resultUrl = new URL(result);
 
 			expect(resultUrl.searchParams.get("utm_source")).toBe("notion-source");
-			expect(resultUrl.searchParams.get("utm_campaign")).toBe("notion-campaign");
+			expect(resultUrl.searchParams.get("utm_campaign")).toBe(
+				"notion-campaign",
+			);
 			expect(resultUrl.searchParams.get("utm_medium")).toBeNull();
 			expect(result).not.toContain("utm_source=old");
 			expect(result).not.toContain("utm_campaign=old");
@@ -101,7 +105,9 @@ describe("withUtm", () => {
 			const resultUrl = new URL(result);
 
 			expect(resultUrl.searchParams.get("utm_source")).toBe("notion-source");
-			expect(resultUrl.searchParams.get("utm_campaign")).toBe("notion-campaign");
+			expect(resultUrl.searchParams.get("utm_campaign")).toBe(
+				"notion-campaign",
+			);
 			expect(resultUrl.searchParams.get("utm_medium")).toBe("notion-medium");
 			expect(resultUrl.searchParams.get("utm_content")).toBe("notion-content");
 			expect(resultUrl.searchParams.get("utm_term")).toBe("notion-term");
@@ -119,7 +125,9 @@ describe("withUtm", () => {
 			const resultUrl = new URL(result);
 
 			expect(resultUrl.searchParams.get("utm_source")).toBe("notion-source");
-			expect(resultUrl.searchParams.get("utm_campaign")).toBe("notion-campaign");
+			expect(resultUrl.searchParams.get("utm_campaign")).toBe(
+				"notion-campaign",
+			);
 			expect(resultUrl.searchParams.get("utm_medium")).toBeNull();
 		});
 	});
@@ -223,4 +231,3 @@ describe("withUtm", () => {
 		});
 	});
 });
-

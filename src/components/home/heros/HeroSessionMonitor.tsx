@@ -17,22 +17,22 @@ const HIGHLIGHT_WORDS = [
 
 // Animation variants for framer-motion
 const BADGE_ANIMATION_PROPS = {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.6, delay: 0.1 },
+	initial: { opacity: 0, y: 20 },
+	animate: { opacity: 1, y: 0 },
+	transition: { duration: 0.6, delay: 0.1 },
 } as const;
 
 const CTA_ANIMATION_PROPS = {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.6, delay: 0.4 },
+	initial: { opacity: 0, y: 20 },
+	animate: { opacity: 1, y: 0 },
+	transition: { duration: 0.6, delay: 0.4 },
 } as const;
 
 export interface HeroSessionMonitorProps {
-        transcript?: Transcript;
-        className?: string;
-        headline?: string;
-        subheadline?: string;
+	transcript?: Transcript;
+	className?: string;
+	headline?: string;
+	subheadline?: string;
 	highlight?: string;
 	highlightWords?: Array<{ word: string; gradient: string }>;
 	ctaLabel?: string;
@@ -51,7 +51,7 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	transcript = demoTranscript,
 	className,
 	headline,
-        subheadline = "",
+	subheadline = "",
 	highlight = "Appointments Delivered",
 	highlightWords = HIGHLIGHT_WORDS,
 	ctaLabel = "Get Started",
@@ -130,24 +130,24 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	return (
 		<section
 			className={cn(
-				"mx-auto mt-16 mb-8 grid w-full max-w-[calc(100vw-3rem)] items-center gap-8 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:grid-cols-2 lg:gap-10 lg:max-w-5xl lg:px-8 xl:max-w-6xl 2xl:max-w-7xl",
-                                "lg:min-h-[640px] xl:min-h-[720px]",
-                                className,
-                        )}
+				"mx-auto mt-16 mb-8 grid w-full max-w-[calc(100vw-3rem)] items-center gap-8 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:max-w-5xl lg:grid-cols-2 lg:gap-10 lg:px-8 xl:max-w-6xl 2xl:max-w-7xl",
+				"lg:min-h-[640px] xl:min-h-[720px]",
+				className,
+			)}
 			aria-labelledby="hero-heading"
 		>
 			{/* Text Content */}
 			<div className="flex h-full flex-col justify-center text-center sm:text-left md:mt-2">
-                                {badge && (
-                                        <motion.span
-                                                initial={BADGE_ANIMATION_PROPS.initial}
-                                                animate={BADGE_ANIMATION_PROPS.animate}
-                                                transition={BADGE_ANIMATION_PROPS.transition}
-                                                className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
-                                        >
-                                                {badge}
-                                        </motion.span>
-                                )}
+				{badge && (
+					<motion.span
+						initial={BADGE_ANIMATION_PROPS.initial}
+						animate={BADGE_ANIMATION_PROPS.animate}
+						transition={BADGE_ANIMATION_PROPS.transition}
+						className="mx-auto mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-medium text-primary text-sm"
+					>
+						{badge}
+					</motion.span>
+				)}
 				<h1
 					id="hero-heading"
 					className="mx-auto font-bold text-3xl text-glow sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl"
@@ -161,13 +161,13 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 				<p className="mx-auto mb-6 max-w-md text-base text-black sm:mb-10 sm:text-lg lg:max-w-xl lg:text-xl xl:max-w-2xl dark:text-white/70">
 					<HighlightedText text={subheadline} highlightWords={highlightWords} />
 				</p>
-                                {(onCtaClick || onCtaClick2) && (
-                                        <motion.div
-                                                initial={CTA_ANIMATION_PROPS.initial}
-                                                animate={CTA_ANIMATION_PROPS.animate}
-                                                transition={CTA_ANIMATION_PROPS.transition}
-                                                className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
-                                        >
+				{(onCtaClick || onCtaClick2) && (
+					<motion.div
+						initial={CTA_ANIMATION_PROPS.initial}
+						animate={CTA_ANIMATION_PROPS.animate}
+						transition={CTA_ANIMATION_PROPS.transition}
+						className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:justify-start"
+					>
 						{onCtaClick && (
 							<button
 								onClick={onCtaClick}
@@ -205,10 +205,10 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 			>
 				<div className="relative flex w-full max-w-[calc(100vw-3rem)] items-stretch justify-center sm:max-w-[calc(100vw-4rem)] md:max-w-4xl">
 					<div className="flex min-h-[420px] w-full max-w-[calc(100vw-3rem)] items-center justify-center rounded-3xl border border-white/10 bg-black/20 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.25)] backdrop-blur sm:max-w-md md:max-w-4xl lg:min-h-[480px] dark:border-white/5">
-                                                <DemoTabs />
-                                        </div>
-                                </div>
-                        </div>
+						<DemoTabs />
+					</div>
+				</div>
+			</div>
 		</section>
 	);
 };

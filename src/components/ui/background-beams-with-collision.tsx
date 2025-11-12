@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import React, { useRef, useState, useEffect } from "react";
 
 export const BackgroundBeamsWithCollision = ({
@@ -77,7 +77,7 @@ export const BackgroundBeamsWithCollision = ({
 		>
 			{beams.map((beam) => (
 				<CollisionMechanism
-					key={beam.initialX + "beam-idx"}
+					key={`${beam.initialX}beam-idx`}
 					beamOptions={beam}
 					containerRef={containerRef}
 					parentRef={parentRef}
@@ -92,7 +92,7 @@ export const BackgroundBeamsWithCollision = ({
 					boxShadow:
 						"0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
 				}}
-			></div>
+			/>
 		</div>
 	);
 };
@@ -126,6 +126,7 @@ const CollisionMechanism = React.forwardRef<
 	const [beamKey, setBeamKey] = useState(0);
 	const [cycleCollisionDetected, setCycleCollisionDetected] = useState(false);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		const checkCollision = () => {
 			if (
@@ -240,7 +241,7 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
 				exit={{ opacity: 0 }}
 				transition={{ duration: 1.5, ease: "easeOut" }}
 				className="-inset-x-10 absolute top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
-			></motion.div>
+			/>
 			{spans.map((span) => (
 				<motion.span
 					key={span.id}

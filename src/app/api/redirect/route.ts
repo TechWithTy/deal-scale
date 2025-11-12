@@ -81,18 +81,23 @@ export async function GET(req: Request) {
 			if (/^https?:/i.test(location)) {
 				const destUrl = new URL(location);
 				const requestParams = url.searchParams;
-				
+
 				// Preserve any query params from the incoming request (except 'to', 'pageId', 'slug', 'isFile')
 				// Priority: Destination URL params > Incoming request params
 				for (const [key, value] of requestParams.entries()) {
-					if (key !== "to" && key !== "pageId" && key !== "slug" && key !== "isFile") {
+					if (
+						key !== "to" &&
+						key !== "pageId" &&
+						key !== "slug" &&
+						key !== "isFile"
+					) {
 						// Only add if destination URL doesn't already have this parameter
 						if (!destUrl.searchParams.has(key)) {
 							destUrl.searchParams.set(key, value);
 						}
 					}
 				}
-				
+
 				// Update location with preserved params
 				location = destUrl.toString();
 			}

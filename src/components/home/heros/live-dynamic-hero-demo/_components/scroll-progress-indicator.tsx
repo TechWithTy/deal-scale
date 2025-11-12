@@ -17,7 +17,7 @@ function ScrollProgressIndicatorComponent({
 	activeId,
 }: ScrollProgressIndicatorProps): JSX.Element {
 	return (
-		<nav className="flex items-center gap-3 rounded-full border border-border/50 bg-background/70 px-4 py-2 text-[11px] uppercase tracking-[0.32em] text-muted-foreground backdrop-blur-md shadow-[0_12px_40px_-30px_rgba(15,118,110,0.45)]">
+		<nav className="flex items-center gap-3 rounded-full border border-border/50 bg-background/70 px-4 py-2 text-[11px] text-muted-foreground uppercase tracking-[0.32em] shadow-[0_12px_40px_-30px_rgba(15,118,110,0.45)] backdrop-blur-md">
 			{sections.map((section, index) => {
 				const isActive = section.id === activeId;
 				return (

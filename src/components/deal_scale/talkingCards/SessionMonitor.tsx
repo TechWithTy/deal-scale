@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import type { Transcript } from "@/types/transcript";
 import { useCallback, useState } from "react";
 import { SessionView } from "./session";
@@ -17,21 +16,29 @@ export default function SessionMonitor({
 	onCallEnd: externalOnCallEnd,
 	onTransfer,
 	onSessionReset,
+	autoStart = false,
+	showCompletionModal = true,
 }: {
 	transcript: Transcript;
 	onCallEnd?: () => void;
 	onTransfer?: () => void;
 	onSessionReset?: (resetFn: () => void) => void;
+	autoStart?: boolean;
+	showCompletionModal?: boolean;
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [sessionKey, setSessionKey] = useState(Date.now()); // Used to reset the session
 
 	const handleCallEnd = useCallback(() => {
-		setIsModalOpen(true);
+		if (showCompletionModal) {
+			setIsModalOpen(true);
+		} else {
+			setSessionKey(Date.now());
+		}
 		if (externalOnCallEnd) {
 			externalOnCallEnd();
 		}
-	}, [externalOnCallEnd]);
+	}, [externalOnCallEnd, showCompletionModal]);
 
 	const handleCloseModal = useCallback(() => {
 		setIsModalOpen(false);
@@ -53,8 +60,9 @@ export default function SessionMonitor({
 				onCallEnd={handleCallEnd}
 				onTransfer={onTransfer}
 				onSessionReset={onSessionReset}
+				autoStart={autoStart}
 			/>
-			{isModalOpen && (
+			{showCompletionModal && isModalOpen && (
 				<CallCompleteModal isOpen={isModalOpen} onClose={handleCloseModal} />
 			)}
 		</>

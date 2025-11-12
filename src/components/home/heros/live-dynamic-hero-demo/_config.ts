@@ -4,50 +4,172 @@ import {
 	resolveHeroCopy,
 } from "@external/dynamic-hero";
 
-const V6_SCHEMA = {
-	template:
-		"Automate {problem} with AI-powered {solution} — try DealScale free with 5 AI calls before {fear}.",
-	persona: {
-		problems: [
-			"spending hours calling borrowers who never answer",
-			"losing track of loan applications across multiple CRM systems",
-			"manually following up with pre-approved clients who go cold",
-			"juggling borrower outreach, referrals, and realtor relationships without automation",
-		],
-		solutions: [
-			"AI-powered borrower follow-up that runs automatically from your mortgage CRM",
-			"automated call, text, and email sequences that keep loan applicants engaged",
-			"AI lending assistant that nurtures prospects until they’re ready to close",
-			"real-time lead routing and pipeline automation for mortgage teams",
-		],
-		fears: [
-			"competitors capture your pre-approved borrowers first",
-			"your pipeline dries up when rates change or leads go cold",
-			"realtor partners switch to faster loan officers",
-			"you lose repeat borrowers because follow-up slips through the cracks",
-		],
+const HERO_COPY_V7 = {
+	id: "hero-seo-v7",
+	category: "landing_hero_dynamic_copy",
+	version: 7,
+	structure: "problem_solution_fear_hope_persona",
+	personas: {
+		agent: {
+			problem: [
+				"spending hours on manual real estate lead follow-up",
+				"juggling too many cold calling lists and CRM tabs",
+			],
+			solution: [
+				"AI real estate cold calling that runs directly from your CRM",
+				"automated real estate lead follow-up with AI voice and SMS",
+			],
+			fear: [
+				"other agents win your hottest seller leads first",
+				"your real estate pipeline quietly goes cold",
+			],
+			hope: [
+				"every morning you wake up to new appointments booked for you",
+				"you finally spend more time closing and less time chasing leads",
+				"your clients rave about your speed and consistency",
+			],
+		},
+		investor: {
+			problem: [
+				"losing track of off-market and motivated seller leads",
+				"spending too long qualifying real estate deals by hand",
+			],
+			solution: [
+				"AI real estate deal flow automation that connects data, CRM, and outreach",
+				"automated real estate lead generation and nurturing in one dashboard",
+			],
+			fear: [
+				"your next profitable real estate deal slips to a faster investor",
+				"your deal pipeline dries up when the market shifts",
+			],
+			hope: [
+				"you wake up to ready-to-close seller leads every week",
+				"you scale your portfolio while competitors chase spreadsheets",
+				"your next million-dollar flip starts automatically",
+			],
+		},
+		founder: {
+			problem: [
+				"building outbound and follow-up systems by hand for your sales team",
+				"spending time you don’t have managing real estate outreach workflows",
+			],
+			solution: [
+				"launching scalable AI real estate sales workflows in minutes",
+				"automating sales follow-up across voice, SMS, and email from one hub",
+			],
+			fear: [
+				"growth slows because outreach can’t keep up",
+				"your team burns out before you hit your revenue targets",
+			],
+			hope: [
+				"your team scales 3x without adding headcount",
+				"your pipeline runs 24/7 while you focus on strategy",
+				"you finally build a company that runs itself",
+			],
+		},
+		wholesaler: {
+			problem: [
+				"spending nights cold calling seller lists manually",
+				"forgetting to follow up with warm sellers after the first call",
+			],
+			solution: [
+				"AI wholesaling calls that nurture motivated sellers 24/7",
+				"automated follow-up campaigns that keep you top of mind with sellers",
+			],
+			fear: [
+				"other wholesalers lock up your best contracts first",
+				"your marketing spend gets wasted on unworked leads",
+			],
+			hope: [
+				"you lock up more deals while you sleep",
+				"your AI assistant keeps your seller pipeline warm 24/7",
+				"you scale from hustler to business owner",
+			],
+		},
+		loan_officer: {
+			problem: [
+				"spending hours calling borrowers who never answer",
+				"losing track of loan applications across multiple CRM systems",
+			],
+			solution: [
+				"AI-powered borrower follow-up that runs automatically from your mortgage CRM",
+				"automated call, text, and email sequences that keep loan applicants engaged",
+			],
+			fear: [
+				"competitors capture your pre-approved borrowers first",
+				"your pipeline dries up when rates change or leads go cold",
+			],
+			hope: [
+				"your borrowers feel supported from first inquiry to closing day",
+				"you grow referral business while AI handles routine calls",
+				"you hit record closings without burning out your team",
+			],
+		},
 	},
+	template: "Stop {problem}, start {solution} — before {fear}. Imagine {hope}.",
 	ctas: {
 		primary: [
 			"Try DealScale Free",
-			"Automate My Real Estate Outreach",
+			"Automate My Outreach",
 			"Launch My First AI Campaign",
 			"Start 5 Free AI Calls",
 			"Automate Borrower Follow-Up",
 		],
 		secondary: [
-			"See How AI Real Estate Outreach Works",
+			"See How It Works",
 			"Watch a 1-Minute AI Demo",
 			"Take the Quick Start Tour",
 			"View Real Estate Case Studies",
 			"See Mortgage Automation in Action",
 		],
+		social: [
+			"Join 200+ Agents Using AI",
+			"Share with a Teammate",
+			"Invite My Team to DealScale",
+			"Refer a Friend and Earn Credits",
+			"Join Loan Officers Using DealScale",
+		],
 	},
+	demo_mode: {
+		enabled: true,
+		headline_variant:
+			"Automate Real Estate & Mortgage Outreach with AI — See DealScale in Action",
+		cta: "Start Interactive Demo",
+	},
+	metadata: {
+		tone: "hopeful_motivational",
+		vertical: [
+			"real_estate",
+			"investor",
+			"founder",
+			"wholesaler",
+			"loan_officer",
+		],
+		emotion_trigger: ["hope", "relief", "fomo", "social_currency"],
+		updated_by: "Ty",
+	},
+} as const;
+
+export type HeroPersonaKey = keyof typeof HERO_COPY_V7.personas;
+
+export const DEFAULT_PERSONA: HeroPersonaKey = "investor";
+export const DEFAULT_PERSONA_DISPLAY = "Investor Persona";
+
+const PERSONA_LABEL = "AI Sales Agents";
+const PERSONA_GOAL = "Automate deal flow conversations";
+const PERSONA_SOCIAL_PROOF =
+	"Investors trust DealScale to automate deal flow outreach.";
+
+const pickPersonaField = (field: "problem" | "solution" | "fear" | "hope") => {
+	const persona = HERO_COPY_V7.personas[DEFAULT_PERSONA];
+	const entries = persona[field];
+	return entries[0] ?? "";
 };
 
-const TEMPLATE_PROBLEM = V6_SCHEMA.persona.problems[0];
-const TEMPLATE_SOLUTION = V6_SCHEMA.persona.solutions[0];
-const TEMPLATE_FEAR = V6_SCHEMA.persona.fears[0];
+const TEMPLATE_PROBLEM = pickPersonaField("problem");
+const TEMPLATE_SOLUTION = pickPersonaField("solution");
+const TEMPLATE_FEAR = pickPersonaField("fear");
+const TEMPLATE_HOPE = pickPersonaField("hope");
 
 export const LIVE_VIDEO: HeroVideoConfig = {
 	src: "https://www.youtube.com/embed/O-3Mxf_kKQc?rel=0&controls=1&modestbranding=1",
@@ -62,49 +184,50 @@ export const LIVE_COPY = resolveHeroCopy(
 			problem: TEMPLATE_PROBLEM,
 			solution: TEMPLATE_SOLUTION,
 			fear: TEMPLATE_FEAR,
-			socialProof:
-				"Loan officers trust DealScale to automate borrower outreach.",
-			benefit: "Automate borrower conversations",
+			socialProof: PERSONA_SOCIAL_PROOF,
+			benefit: PERSONA_GOAL,
 			time: "5",
-			hope: "Keep borrowers engaged before competitors get there first.",
+			hope: TEMPLATE_HOPE,
 		},
 		rotations: {
-			problems: V6_SCHEMA.persona.problems,
-			solutions: V6_SCHEMA.persona.solutions,
-			fears: V6_SCHEMA.persona.fears,
+			problems: [...HERO_COPY_V7.personas[DEFAULT_PERSONA].problem],
+			solutions: [...HERO_COPY_V7.personas[DEFAULT_PERSONA].solution],
+			fears: [...HERO_COPY_V7.personas[DEFAULT_PERSONA].fear],
 		},
 	},
 	{
 		fallbackPrimaryChip: {
-			label: "Loan Officer Persona",
-			sublabel: "Mortgage automation",
+			label: DEFAULT_PERSONA_DISPLAY,
+			sublabel: "AI pipeline automation",
 			variant: "secondary",
 		},
 		fallbackSecondaryChip: {
-			label: "Production Ready",
+			label: PERSONA_GOAL,
 			variant: "outline",
 		},
 	},
 );
 
 export const LIVE_PRIMARY_CTA = {
-	label: V6_SCHEMA.ctas.primary[4],
-	description: "Put AI borrower follow-up on autopilot with DealScale.",
+	label: HERO_COPY_V7.ctas.primary[0],
+	description: "Let AI handle deal flow outreach while you close.",
 	emphasis: "solid" as const,
-	badge: "Mortgage AI",
+	badge: "Real Estate AI",
 };
 
 export const LIVE_SECONDARY_CTA = {
-	label: V6_SCHEMA.ctas.secondary[4],
-	description: "See mortgage automation workflows in a live control center.",
+	label: HERO_COPY_V7.ctas.secondary[0],
+	description: "Preview DealScale’s AI workflows in a guided tour.",
 	emphasis: "outline" as const,
 	badge: "Live Demo",
 };
 
 export const LIVE_MICROCOPY =
-	'Automate borrower outreach and mortgage follow-up with DealScale AI. <link href="#live-hero-details">Review the rollout steps</link>.';
+	'Automate investor deal sourcing and follow-up with DealScale AI. <link href="#live-hero-details">Review the rollout steps</link>.';
 
 export const LIVE_SOCIAL_PROOF = {
 	...DEFAULT_HERO_SOCIAL_PROOF,
-	caption: "Reusable hero experiences adopted by DealScale builders.",
+	// caption: "Reusable hero experiences adopted by DealScale builders.",
 };
+
+export { PERSONA_GOAL, PERSONA_LABEL, HERO_COPY_V7, PERSONA_SOCIAL_PROOF };

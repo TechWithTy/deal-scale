@@ -1,96 +1,100 @@
-import React from "react";
 import { render } from "@testing-library/react";
+import React from "react";
 
 import type { DataModuleStatus } from "@/stores/useDataModuleStore";
 jest.mock("@/utils/observability/dataModuleGuards", () => ({
-        reportDataModuleGuard: jest.fn(),
+	reportDataModuleGuard: jest.fn(),
 }));
 
-import { useDataModuleGuardTelemetry } from "../useDataModuleGuardTelemetry";
 import { reportDataModuleGuard } from "@/utils/observability/dataModuleGuards";
+import { useDataModuleGuardTelemetry } from "../useDataModuleGuardTelemetry";
 
 describe("useDataModuleGuardTelemetry", () => {
-        beforeEach(() => {
-                jest.clearAllMocks();
-        });
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
 
-        function TestHarness({
-                status,
-                hasData,
-                error,
-        }: {
-                status: DataModuleStatus;
-                hasData: boolean;
-                error?: unknown;
-        }) {
-                useDataModuleGuardTelemetry({
-                        key: "caseStudy/caseStudies",
-                        surface: "TestSurface",
-                        status,
-                        hasData,
-                        error,
-                });
+	function TestHarness({
+		status,
+		hasData,
+		error,
+	}: {
+		status: DataModuleStatus;
+		hasData: boolean;
+		error?: unknown;
+	}) {
+		useDataModuleGuardTelemetry({
+			key: "caseStudy/caseStudies",
+			surface: "TestSurface",
+			status,
+			hasData,
+			error,
+		});
 
-                return null;
-        }
+		return null;
+	}
 
-        it("reports when the module stays idle", () => {
-                render(<TestHarness status="idle" hasData={false} />);
+	it("reports when the module stays idle", () => {
+		render(<TestHarness status="idle" hasData={false} />);
 
-                expect(reportDataModuleGuard).toHaveBeenCalledWith(
-                        expect.objectContaining({
-                                key: "caseStudy/caseStudies",
-                                status: "idle",
-                                surface: "TestSurface",
-                                hasData: false,
-                        }),
-                );
-        });
+		expect(reportDataModuleGuard).toHaveBeenCalledWith(
+			expect.objectContaining({
+				key: "caseStudy/caseStudies",
+				status: "idle",
+				surface: "TestSurface",
+				hasData: false,
+			}),
+		);
+	});
 
-        it("reports when the module enters an error state", () => {
-                const { rerender } = render(<TestHarness status="loading" hasData={false} />);
+	it("reports when the module enters an error state", () => {
+		const { rerender } = render(
+			<TestHarness status="loading" hasData={false} />,
+		);
 
-                jest.clearAllMocks();
+		jest.clearAllMocks();
 
-                rerender(
-                        <TestHarness
-                                status="error"
-                                hasData={false}
-                                error={new Error("load failed")}
-                        />,
-                );
+		rerender(
+			<TestHarness
+				status="error"
+				hasData={false}
+				error={new Error("load failed")}
+			/>,
+		);
 
-                expect(reportDataModuleGuard).toHaveBeenCalledWith(
-                        expect.objectContaining({
-                                status: "error",
-                                error: "load failed",
-                        }),
-                );
-        });
+		expect(reportDataModuleGuard).toHaveBeenCalledWith(
+			expect.objectContaining({
+				status: "error",
+				error: "load failed",
+			}),
+		);
+	});
 
-        it("does not re-emit identical loading states", () => {
-                const { rerender } = render(<TestHarness status="loading" hasData={false} />);
+	it("does not re-emit identical loading states", () => {
+		const { rerender } = render(
+			<TestHarness status="loading" hasData={false} />,
+		);
 
-                expect(reportDataModuleGuard).toHaveBeenCalledTimes(1);
+		expect(reportDataModuleGuard).toHaveBeenCalledTimes(1);
 
-                jest.clearAllMocks();
+		jest.clearAllMocks();
 
-                rerender(<TestHarness status="loading" hasData={false} />);
+		rerender(<TestHarness status="loading" hasData={false} />);
 
-                expect(reportDataModuleGuard).not.toHaveBeenCalled();
-        });
+		expect(reportDataModuleGuard).not.toHaveBeenCalled();
+	});
 
-        it("reports empty ready payloads once", () => {
-                const { rerender } = render(<TestHarness status="ready" hasData={false} />);
+	it("reports empty ready payloads once", () => {
+		const { rerender } = render(<TestHarness status="ready" hasData={false} />);
 
-                expect(reportDataModuleGuard).toHaveBeenCalledWith(
-                        expect.objectContaining({ status: "ready", hasData: false }),
-                );
+		expect(reportDataModuleGuard).toHaveBeenCalledWith(
+			expect.objectContaining({ status: "ready", hasData: false }),
+		);
 
-                jest.clearAllMocks();
+		jest.clearAllMocks();
 
-                rerender(<TestHarness status="ready" hasData={true} />);
+		rerender(<TestHarness status="ready" hasData={true} />);
 
-                expect(reportDataModuleGuard).not.toHaveBeenCalled();
-        });
+		expect(reportDataModuleGuard).not.toHaveBeenCalled();
+	});
 });

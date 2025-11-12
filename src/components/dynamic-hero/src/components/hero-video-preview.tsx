@@ -2,8 +2,8 @@
 
 import React, { type HTMLAttributes, useState } from "react";
 
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { Pointer } from "@/components/ui/pointer";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { cn } from "@/lib/utils";
 
 import type { HeroVideoConfig } from "../types/video";

@@ -1,6 +1,6 @@
 import {
-	resolveEventParams,
 	ResolveEventParamsError,
+	resolveEventParams,
 } from "@/lib/events/params";
 
 describe("resolveEventParams", () => {
