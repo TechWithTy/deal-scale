@@ -16,7 +16,7 @@ const generateAffiliate = (): AffiliateProfile => {
 			"10,001-100,000",
 			"100,001+",
 		]),
-		social: `@${faker.internet.userName()}`,
+		social: `@${faker.internet.username()}`,
 		website: faker.internet.url(),
 		bankName: faker.company.name(),
 		routingNumber: faker.finance.routingNumber(),

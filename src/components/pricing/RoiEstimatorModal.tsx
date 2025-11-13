@@ -6,6 +6,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import type { ROIEstimator } from "@/types/service/plans";
@@ -47,10 +53,16 @@ export const RoiEstimatorModal = ({
 
 	useEffect(() => {
 		setActiveTier(defaultTierKey);
-	}, [defaultTierKey]);
+		setInputs((prev) => coerceInputs(estimator, prev));
+	}, [defaultTierKey, estimator]);
 
 	const result = useMemo(
-		() => computeTierResult({ estimator, inputs, tierKey: activeTier }),
+		() =>
+			computeTierResult({
+				estimator,
+				inputs,
+				tierKey: activeTier,
+			}),
 		[estimator, inputs, activeTier],
 	);
 
@@ -79,6 +91,8 @@ export const RoiEstimatorModal = ({
 		estimator.industryFactors.Other ??
 		1;
 
+	const [inputsAccordionValue, setInputsAccordionValue] = useState("form");
+
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="max-h-[90vh] w-full max-w-4xl overflow-y-auto border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -88,7 +102,7 @@ export const RoiEstimatorModal = ({
 							<DialogTitle className="font-semibold text-2xl">
 								Estimate ROI & Setup Cost
 							</DialogTitle>
-							<p className={cn("text-sm", "text-muted-foreground")}>
+							<p className="text-muted-foreground text-sm">
 								Adjust the assumptions to project new revenue, setup ranges, and
 								long-term profit across deployment models.
 							</p>
@@ -99,10 +113,7 @@ export const RoiEstimatorModal = ({
 								"border border-border/60",
 								"bg-muted/20",
 								"rounded-full",
-								"font-semibold",
-								"text-xs",
-								"tracking-[0.25em]",
-								"uppercase",
+								"font-semibold text-xs uppercase tracking-[0.25em]",
 							)}
 						>
 							<span
@@ -132,7 +143,7 @@ export const RoiEstimatorModal = ({
 					</div>
 				</DialogHeader>
 				{interactiveView ? (
-					<div className="grid gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.1fr)]">
+					<div className="grid items-start gap-6 lg:grid-cols-1 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.2fr)]">
 						<section
 							className={cn(
 								"flex flex-col gap-6",
@@ -141,62 +152,49 @@ export const RoiEstimatorModal = ({
 								"shadow-sm",
 							)}
 						>
-							<header className="flex items-start justify-between gap-3">
-								<div>
-									<p
-										className={cn(
-											"text-xs",
-											"tracking-[0.3em]",
-											"uppercase",
-											"text-muted-foreground",
-										)}
-									>
-										Input Assumptions
-									</p>
-									<h3
-										className={cn(
-											"mt-1",
-											"font-semibold",
-											"text-lg",
-											"text-foreground",
-										)}
-									>
-										Tune your pipeline baseline
-									</h3>
-								</div>
-								<span
-									className={cn(
-										"rounded-full px-3 py-1",
-										"bg-primary/10",
-										"font-semibold",
-										"text-xs",
-										"text-primary",
-										"uppercase",
-									)}
-								>
-									Live update
-								</span>
-							</header>
-							<RoiCalculatorInputs
-								inputs={inputs}
-								estimator={estimator}
-								onChange={handleInputChange}
-							/>
-							<footer
-								className={cn(
-									"rounded-lg border border-border/60",
-									"bg-background/70 p-4",
-									"text-xs",
-									"text-muted-foreground",
-								)}
+							<Accordion
+								type="single"
+								collapsible
+								value={inputsAccordionValue}
+								onValueChange={(value) => setInputsAccordionValue(value ?? "")}
+								className="w-full"
 							>
-								<span className="font-semibold text-foreground">
-									How this works:
-								</span>{" "}
-								We bound the inputs to realistic ranges, then apply your
-								industry multiplier to determine revenue lift, setup scope, and
-								overtime savings.
-							</footer>
+								<AccordionItem value="form" className="border-none">
+									<AccordionTrigger
+										className={cn(
+											"rounded-lg bg-transparent px-0 py-0 text-left font-semibold text-sm uppercase tracking-[0.25em]",
+											"flex items-start justify-between gap-3",
+										)}
+									>
+										<div>
+											<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+												Input Assumptions
+											</p>
+											<h3 className="mt-1 font-semibold text-foreground text-lg">
+												Tune your pipeline baseline
+											</h3>
+										</div>
+										<span className="rounded-full bg-primary/10 px-3 py-1 font-semibold text-primary text-xs uppercase">
+											Live update
+										</span>
+									</AccordionTrigger>
+									<AccordionContent className="space-y-6 pt-4">
+										<RoiCalculatorInputs
+											inputs={inputs}
+											estimator={estimator}
+											onChange={handleInputChange}
+										/>
+										<footer className="rounded-lg border border-border/60 bg-background/70 p-4 text-muted-foreground text-xs">
+											<span className="font-semibold text-foreground">
+												How this works:
+											</span>{" "}
+											We bound the inputs to realistic ranges, then apply your
+											industry multiplier to determine revenue lift, setup
+											scope, and overtime savings.
+										</footer>
+									</AccordionContent>
+								</AccordionItem>
+							</Accordion>
 						</section>
 						<section className="flex flex-col gap-6">
 							<RoiTierSelector
@@ -215,41 +213,15 @@ export const RoiEstimatorModal = ({
 								result={result}
 								summaryPoints={estimator.summaryOutput.points}
 							/>
-							<div
-								className={cn(
-									"rounded-xl border border-border/70",
-									"bg-muted/20 p-5",
-									"shadow-sm",
-								)}
-							>
-								<p
-									className={cn(
-										"text-xs",
-										"tracking-[0.3em]",
-										"uppercase",
-										"text-muted-foreground",
-									)}
-								>
+							<div className="rounded-xl border border-border/70 bg-muted/20 p-5 shadow-sm">
+								<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
 									Industry Factor
 								</p>
 								<div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-									<p
-										className={cn(
-											"text-3xl",
-											"font-semibold",
-											"text-foreground",
-										)}
-									>
+									<p className="font-semibold text-3xl text-foreground">
 										× {factor.toFixed(1)}
 									</p>
-									<p
-										className={cn(
-											"max-w-sm",
-											"text-xs",
-											"leading-relaxed",
-											"text-muted-foreground",
-										)}
-									>
+									<p className="max-w-sm text-muted-foreground text-xs leading-relaxed">
 										Adjusts AI workload, workflow design, and compliance
 										footprint for your vertical. Higher multipliers indicate
 										deeper go-to-market orchestration.
@@ -259,12 +231,23 @@ export const RoiEstimatorModal = ({
 						</section>
 					</div>
 				) : (
-					<RoiSnapshot
-						estimator={estimator}
-						inputs={inputs}
-						tierKey={result.tierKey}
-						showSetupInvestment={showSetupInvestment}
-					/>
+					<div className="space-y-6">
+						<RoiTierSelector
+							tiers={tiers}
+							activeTier={result.tierKey}
+							onTierChange={setActiveTier}
+							showSetupInvestment={showSetupInvestment}
+							onToggleSetup={setShowSetupInvestment}
+							canToggleSetup={canToggleSetup}
+							showSetupToggle={false}
+						/>
+						<RoiSnapshot
+							estimator={estimator}
+							inputs={inputs}
+							tierKey={result.tierKey}
+							showSetupInvestment={showSetupInvestment}
+						/>
+					</div>
 				)}
 			</DialogContent>
 		</Dialog>

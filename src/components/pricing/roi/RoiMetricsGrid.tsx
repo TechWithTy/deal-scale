@@ -26,9 +26,9 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 
 	return (
 		<div className="grid gap-4 sm:grid-cols-2">
-			<div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-primary/10 p-6 shadow-sm">
-				<p className="font-semibold text-primary/80 text-xs uppercase tracking-[0.35em]">
-					Monthly New Revenue
+			<div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-primary/10 p-6 text-center shadow-sm sm:text-left">
+				<p className="text-xs font-semibold uppercase tracking-[0.35em] text-primary/80">
+					Net Monthly Uplift
 				</p>
 				<p className="text-3xl font-semibold">
 					{currency.format(result.gainLow)}
@@ -36,11 +36,11 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 					{currency.format(result.gainHigh)}
 				</p>
 				<p className="text-sm text-muted-foreground">
-					Projected uplift for {result.tier.label}
+					After plan fees & operating costs • Gross potential {currency.format(result.grossGainLow)}–{currency.format(result.grossGainHigh)}
 				</p>
 			</div>
-			<div className="flex flex-col gap-3 rounded-2xl border border-sky-400/40 bg-sky-500/10 p-6 shadow-sm">
-				<p className="font-semibold text-sky-300 text-xs uppercase tracking-[0.35em]">
+			<div className="flex flex-col gap-3 rounded-2xl border border-sky-400/40 bg-sky-500/10 p-6 text-center shadow-sm sm:text-left">
+				<p className="text-xs font-semibold uppercase tracking-[0.35em] text-sky-300">
 					Time Reclaimed
 				</p>
 				<p className="text-3xl font-semibold text-sky-200">
@@ -53,8 +53,8 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 				</div>
 			</div>
 			{hasSetup ? (
-				<div className="flex flex-col gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-6 shadow-sm">
-					<p className="font-semibold text-emerald-300 text-xs uppercase tracking-[0.35em]">
+				<div className="flex flex-col gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-6 text-center shadow-sm sm:text-left">
+					<p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-300">
 						Setup Investment
 					</p>
 					<p className="text-3xl font-semibold text-emerald-100">
@@ -68,19 +68,27 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 				</div>
 			) : null}
 			{hasCosts ? (
-				<div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm">
-					<p className="font-semibold text-xs uppercase tracking-[0.35em] text-muted-foreground">
+				<div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-muted/20 p-6 text-center shadow-sm sm:text-left">
+					<p className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
 						Tier Costs
 					</p>
 					<ul className="space-y-1 text-sm text-muted-foreground">
+						<li>
+							<strong>Net monthly benefit:</strong> {currency.format(result.monthlyNetBenefit)}
+						</li>
+						{result.monthlyOperatingCost ? (
+							<li>
+								<strong>Your monthly cost:</strong> {currency.format(result.monthlyOperatingCost)}
+							</li>
+						) : null}
 						{result.costs.monthlyCost ? (
 							<li>
-								<strong>Monthly:</strong> {currency.format(result.costs.monthlyCost)}
+								<strong>Plan monthly fee:</strong> {currency.format(result.costs.monthlyCost)}
 							</li>
 						) : null}
 						{result.costs.annualCost ? (
 							<li>
-								<strong>Annual:</strong> {currency.format(result.costs.annualCost)}
+								<strong>Plan annual fee:</strong> {currency.format(result.costs.annualCost)}
 							</li>
 						) : null}
 						{result.costs.oneTimeCost ? (

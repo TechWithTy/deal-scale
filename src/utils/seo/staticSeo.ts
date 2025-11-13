@@ -125,6 +125,18 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		priority: 0.7,
 		changeFrequency: "monthly",
 	},
+	"/affiliate": {
+		title: STATIC_SEO_META["/affiliate"].title,
+		description: STATIC_SEO_META["/affiliate"].description,
+		canonical: STATIC_SEO_META["/affiliate"].canonical,
+		image: STATIC_SEO_META["/affiliate"].image,
+		keywords: STATIC_SEO_META["/affiliate"].keywords || DEFAULT_SEO.keywords,
+		priority: STATIC_SEO_META["/affiliate"].priority ?? 0.75,
+		changeFrequency:
+			STATIC_SEO_META["/affiliate"].changeFrequency ?? "monthly",
+		siteName: DEFAULT_SEO.siteName,
+		type: "website",
+	},
 	"/careers": {
 		title: STATIC_SEO_META["/careers"].title,
 		description: STATIC_SEO_META["/careers"].description,

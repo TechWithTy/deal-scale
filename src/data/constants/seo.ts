@@ -329,4 +329,19 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 		],
 		image: "/banners/Feature.png",
 	},
+	"/affiliate": {
+		title: "Affiliate Program | Deal Scale",
+		description:
+			"Join the Deal Scale Partner Circle to earn recurring commissions and unlock VIP benefits for your real estate audience.",
+		canonical: "https://dealscale.io/affiliate",
+		keywords: [
+			"deal scale affiliate program",
+			"real estate affiliate marketing",
+			"ai partner program",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+		priority: 0.75,
+		changeFrequency: "monthly",
+	},
 };

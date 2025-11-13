@@ -35,6 +35,14 @@ import { startStripeToast } from "@/lib/ui/stripeToast";
 
 export type PlanType = "monthly" | "annual" | "oneTime";
 
+type PayButtonLabelParams = {
+	plan: Plan;
+	planType: PlanType;
+	context: CheckoutFormProps["context"];
+	mode: CheckoutFormProps["mode"];
+	isTrial: boolean;
+};
+
 export interface CheckoutFormProps {
 	clientSecret: string;
 	onSuccess: () => void;
@@ -45,6 +53,8 @@ export interface CheckoutFormProps {
 	mode?: "payment" | "setup";
 	context?: "standard" | "trial";
 	postTrialAmount?: number;
+	payButtonLabel?: string;
+	getPayButtonLabel?: (params: PayButtonLabelParams) => string;
 }
 
 export default function CheckoutForm({
@@ -57,6 +67,8 @@ export default function CheckoutForm({
 	mode = "payment",
 	context = "standard",
 	postTrialAmount,
+	payButtonLabel,
+	getPayButtonLabel,
 }: CheckoutFormProps) {
 	const stripe = useStripe();
 	const elements = useElements();
@@ -76,6 +88,17 @@ export default function CheckoutForm({
 	const isSetupMode = mode === "setup";
 	const isTrial = context === "trial";
 	useWaitCursor(loading);
+
+	const resolvedPayButtonLabel =
+		getPayButtonLabel?.({
+			context,
+			isTrial,
+			mode,
+			plan,
+			planType,
+		}) ??
+		payButtonLabel ??
+		"Pay";
 
 	// Auto-apply discount code from plan if it exists
 	useEffect(() => {
@@ -509,7 +532,7 @@ export default function CheckoutForm({
 							) : isTrial ? (
 								"Activate Free Trial"
 							) : (
-								`Pay ${planType === "oneTime" ? "Full Amount" : "Deposit"}`
+								resolvedPayButtonLabel
 							)}
 						</Button>
 					</form>

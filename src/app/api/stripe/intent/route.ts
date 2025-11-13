@@ -11,11 +11,15 @@ import { validateDiscountCode } from "@/utils/discountValidator";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import type stripe from "stripe";
-interface PaymentIntentRequest {
-	price: number;
-	description: string;
-	metadata?: Record<string, string>;
-}
+import { z } from "zod";
+
+const paymentIntentSchema = z.object({
+	price: z.number().int().positive(),
+	description: z.string().min(1),
+	metadata: z.record(z.string()).optional(),
+});
+
+type PaymentIntentRequest = z.infer<typeof paymentIntentSchema>;
 
 interface ErrorResponse {
 	error: string;
@@ -25,8 +29,48 @@ interface ErrorResponse {
 
 export async function POST(request: Request) {
 	try {
-		const { price, description, metadata } =
-			(await request.json()) as PaymentIntentRequest;
+		const rawBody = await request.text();
+		if (!rawBody.trim()) {
+			return NextResponse.json(
+				{
+					error: "Invalid request payload",
+					details: "Request body is required",
+				},
+				{ status: 400 },
+			);
+		}
+
+		let jsonBody: unknown;
+		try {
+			jsonBody = JSON.parse(rawBody);
+		} catch (parseError) {
+			console.error("Payment intent payload parse error:", parseError);
+			return NextResponse.json(
+				{
+					error: "Invalid request payload",
+					details: "Malformed JSON",
+				},
+				{ status: 400 },
+			);
+		}
+
+		const validation = paymentIntentSchema.safeParse(jsonBody);
+		if (!validation.success) {
+			const errorMessage =
+				validation.error.errors
+					.map((issue) => `${issue.path.join(".") || "payload"}: ${issue.message}`)
+					.join("; ") || "Invalid payload";
+
+			return NextResponse.json(
+				{
+					error: "Invalid request payload",
+					details: errorMessage,
+				},
+				{ status: 400 },
+			);
+		}
+
+		const { price, description, metadata } = validation.data;
 
 		console.log("Creating payment intent for:", { price, description });
 		const paymentIntent = await createPaymentIntent({

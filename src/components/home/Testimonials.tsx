@@ -1,11 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { MagicCard } from "@/components/magicui/magic-card";
+import { AuroraText } from "@/components/magicui/aurora-text";
+import {
+	type PersonaKey,
+	getTestimonialsForPersona,
+} from "@/data/personas/testimonialsByPersona";
+import { DEFAULT_PERSONA, usePersonaStore } from "@/stores/usePersonaStore";
 import type { Testimonial } from "@/types/testimonial";
 import { type Variants, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Header from "../common/Header";
+import { PersonaSwitcher } from "./testimonials/TestimonialPersonaSwitcher";
 import { TestimonialAvatar } from "./testimonials/TestimonialAvatar";
 import { TestimonialStars } from "./testimonials/TestimonialStars";
 import { TestimonialTabs } from "./testimonials/TestimonialTabs";
@@ -17,11 +25,38 @@ interface TestimonialsProps {
 	subtitle: string;
 }
 
+const fallbackTestimonials = getTestimonialsForPersona(DEFAULT_PERSONA);
+
+const usePersonaTestimonials = (
+	persona: PersonaKey,
+	externalTestimonials: Testimonial[],
+) => {
+	return useMemo(() => {
+		const personaSpecific = getTestimonialsForPersona(persona);
+		if (personaSpecific.length > 0) {
+			return personaSpecific;
+		}
+
+		if (externalTestimonials.length > 0) {
+			return externalTestimonials.map((item, index) => ({
+				...item,
+				id: item.id ?? index,
+			}));
+		}
+
+		return fallbackTestimonials;
+	}, [externalTestimonials, persona]);
+};
+
 const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
-	const totalTestimonials = testimonials.length;
+	const persona = usePersonaStore((state) => state.persona);
+	const goal = usePersonaStore((state) => state.goal);
+	const personaTestimonials = usePersonaTestimonials(persona, testimonials);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [activeTab, setActiveTab] = useState<TabKey>("review");
 	const shouldReduceMotion = useReducedMotion();
+
+	const totalTestimonials = personaTestimonials.length || 1;
 
 	const nextTestimonial = useCallback(() => {
 		setCurrentIndex((prevIndex) => (prevIndex + 1) % totalTestimonials);
@@ -33,7 +68,13 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 		);
 	}, [totalTestimonials]);
 
-	const currentTestimonial = testimonials[currentIndex];
+	const currentTestimonial =
+		personaTestimonials[currentIndex] ?? personaTestimonials[0];
+
+	useEffect(() => {
+		setCurrentIndex(0);
+		setActiveTab("review");
+	}, [persona]);
 
 	const fadeInUp = useMemo(
 		() =>
@@ -74,133 +115,150 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	return (
 		<motion.section
 			id="testimonials"
-			className="glass-card w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8"
+			className="relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8"
 			initial={shouldReduceMotion ? undefined : { opacity: 0 }}
 			animate={shouldReduceMotion ? undefined : { opacity: 1 }}
 			transition={shouldReduceMotion ? undefined : { duration: 0.5 }}
 		>
-			<div className="mx-auto mb-10 max-w-4xl pt-16 pb-8 text-center">
-				<Header
-					title="What Our Clients Say"
-					subtitle="Hear from our clients about their experiences with our services"
-					size="lg" // or "sm", "md", "xl"
-					className="mb-10" // optional additional classes
+			<div
+				data-testid="testimonial-spotlight-container"
+				className="pointer-events-none absolute inset-0 -z-10"
+			>
+				<div className="absolute top-10 left-[12%] h-72 w-72 rounded-full bg-glow-gradient opacity-25 blur-3xl" />
+				<motion.div
+					data-testid="testimonial-orbit-accent"
+					className="absolute right-[14%] bottom-5 h-72 w-72 rounded-full bg-blue-pulse opacity-20 blur-3xl"
+					animate={
+						shouldReduceMotion
+							? undefined
+							: {
+									scale: [1, 1.15, 1],
+									opacity: [0.2, 0.45, 0.2],
+								}
+					}
+					transition={
+						shouldReduceMotion
+							? undefined
+							: {
+									duration: 6,
+									repeat: Number.POSITIVE_INFINITY,
+									repeatType: "reverse",
+									delay: 1.5,
+								}
+					}
 				/>
 			</div>
-			<div className="absolute top-0 left-1/4 h-64 w-64 rounded-full bg-glow-gradient opacity-30 blur-3xl" />
-			<motion.div
-				className="absolute right-1/4 bottom-0 h-64 w-64 rounded-full bg-blue-pulse opacity-30 blur-3xl"
-				animate={
-					shouldReduceMotion
-						? undefined
-						: {
-								scale: [1, 1.2, 1],
-								opacity: [0.3, 0.5, 0.3],
-							}
-				}
-				transition={
-					shouldReduceMotion
-						? undefined
-						: {
-								duration: 5,
-								repeat: Number.POSITIVE_INFINITY,
-								repeatType: "reverse",
-								delay: 2.5,
-							}
-				}
-			/>
 
-			<div className="glass-card relative z-10 mx-auto max-w-6xl">
-				<motion.div
-					className="glass-card overflow-hidden rounded-2xl border border-white/10"
-					initial={{ opacity: 0, y: 50 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.5 }}
-				>
-					<div className="flex flex-col p-6 sm:p-8 md:p-12">
-						<motion.div
-							className="mb-6 flex w-full items-center justify-center gap-2 sm:justify-center"
-							{...fadeIn}
-						>
-							<TestimonialStars rating={currentTestimonial.rating} />
-						</motion.div>
+			<div className="mx-auto max-w-5xl pt-16 pb-10 text-center">
+				<Header title={title} subtitle={subtitle} size="lg" className="mb-6" />
+				<div className="mx-auto flex max-w-xl flex-col items-center gap-3">
+					<PersonaSwitcher />
+					{goal ? (
+						<p className="text-sm font-medium text-white/70">
+							<span className="mr-1 text-white/60">Primary goal:</span>
+							<AuroraText className="font-semibold">{goal}</AuroraText>
+						</p>
+					) : null}
+				</div>
+			</div>
 
-						<TestimonialTabs
-							activeTab={activeTab}
-							onTabChange={(value) => setActiveTab(value)}
-							fadeInUp={fadeInUp}
-							testimonial={currentTestimonial}
-						/>
+			<div className="relative z-10 mx-auto max-w-6xl">
+				<MagicCard className="overflow-visible rounded-[28px]">
+					<motion.div
+						className="glass-card overflow-hidden rounded-[inherit] border border-white/10"
+						initial={{ opacity: 0, y: 50 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.5 }}
+					>
+						<div className="relative flex flex-col p-6 sm:p-8 md:p-12">
+							<div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/5 to-transparent" />
+							<motion.div
+								className="mb-6 flex w-full items-center justify-center gap-2 sm:justify-center"
+								{...fadeIn}
+							>
+								<TestimonialStars rating={currentTestimonial.rating} />
+							</motion.div>
 
-						<motion.div
-							className="mb-8 flex flex-col items-center text-center sm:flex-row sm:items-start sm:text-left"
-							{...fadeIn}
-						>
-							<TestimonialAvatar
-								name={currentTestimonial.name}
-								image={currentTestimonial.image}
+							<TestimonialTabs
+								activeTab={activeTab}
+								onTabChange={(value) => setActiveTab(value)}
+								fadeInUp={fadeInUp}
+								testimonial={currentTestimonial}
 							/>
-							<div>
-								<h4 className="font-semibold text-base sm:text-base">
-									{currentTestimonial.name}
-								</h4>
-								<p className="text-black text-sm sm:text-sm dark:text-white/60">
-									{currentTestimonial.role}
-								</p>
-							</div>
-						</motion.div>
 
-						<div className="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0">
-							<div className="flex space-x-2">
-								{testimonials.slice(0, 5).map((testimonial, index) => (
-									<motion.button
-										key={testimonial.id}
-										className={`h-2 w-2 rounded-full border border-neutral-200 transition-all duration-300 sm:h-3 sm:w-3 dark:border-neutral-700 ${
-											currentIndex === index
-												? "w-4 bg-primary sm:w-6"
-												: "bg-black/20 hover:bg-black/40 dark:bg-white/20 dark:hover:bg-white/40"
-										}`}
-										onClick={() => setCurrentIndex(index)}
-										aria-label={`View testimonial ${index + 1}`}
-										whileHover={{ scale: 1.2 }}
-										whileTap={{ scale: 0.9 }}
-									/>
-								))}
-							</div>
+							<motion.div
+								className="mb-8 flex flex-col items-center text-center sm:flex-row sm:items-start sm:gap-6 sm:text-left"
+								{...fadeIn}
+							>
+								<TestimonialAvatar
+									name={currentTestimonial.name}
+									image={currentTestimonial.image}
+								/>
+								<div>
+									<h4 className="font-semibold text-base sm:text-lg">
+										{currentTestimonial.name}
+									</h4>
+									<p className="text-black text-sm sm:text-sm dark:text-white/60">
+										{currentTestimonial.role}
+									</p>
+									<p className="mt-1 text-xs uppercase tracking-widest text-primary/80">
+										{persona} persona
+									</p>
+								</div>
+							</motion.div>
 
-							<div className="flex space-x-2">
-								<motion.div
-									whileHover={{ scale: 1.05 }}
-									whileTap={{ scale: 0.95 }}
-								>
-									<Button
-										variant="outline"
-										size="sm"
-										className="border-primary/30 text-primary hover:bg-primary/10"
-										onClick={prevTestimonial}
-										aria-label="Previous testimonial"
+							<div className="flex flex-col items-center justify-between gap-6 sm:flex-row sm:gap-4">
+								<div className="flex items-center gap-2">
+									{personaTestimonials.slice(0, 5).map((testimonial, index) => (
+										<motion.button
+											key={testimonial.id}
+											className={`h-2 w-2 rounded-full border border-white/20 transition-all duration-300 sm:h-3 sm:w-3 ${
+												currentIndex === index
+													? "w-4 bg-primary sm:w-6"
+													: "bg-white/10 hover:bg-white/20"
+											}`}
+											onClick={() => setCurrentIndex(index)}
+											aria-label={`View testimonial ${index + 1}`}
+											whileHover={{ scale: 1.2 }}
+											whileTap={{ scale: 0.9 }}
+										/>
+									))}
+								</div>
+
+								<div className="flex space-x-2">
+									<motion.div
+										whileHover={{ scale: 1.05 }}
+										whileTap={{ scale: 0.95 }}
 									>
-										<ArrowLeft className="h-4 w-4" />
-									</Button>
-								</motion.div>
-								<motion.div
-									whileHover={{ scale: 1.05 }}
-									whileTap={{ scale: 0.95 }}
-								>
-									<Button
-										variant="outline"
-										size="sm"
-										className="border-primary/30 text-primary hover:bg-primary/10"
-										onClick={nextTestimonial}
-										aria-label="Next testimonial"
+										<Button
+											variant="outline"
+											size="sm"
+											className="border-transparent bg-white/5 text-white hover:bg-white/10 dark:border-primary/30"
+											onClick={prevTestimonial}
+											aria-label="Previous testimonial"
+										>
+											<ArrowLeft className="h-4 w-4" />
+										</Button>
+									</motion.div>
+									<motion.div
+										whileHover={{ scale: 1.05 }}
+										whileTap={{ scale: 0.95 }}
 									>
-										<ArrowRight className="h-4 w-4" />
-									</Button>
-								</motion.div>
+										<Button
+											variant="outline"
+											size="sm"
+											className="border-transparent bg-white/5 text-white hover:bg-white/10 dark:border-primary/30"
+											onClick={nextTestimonial}
+											aria-label="Next testimonial"
+										>
+											<ArrowRight className="h-4 w-4" />
+										</Button>
+									</motion.div>
+								</div>
 							</div>
 						</div>
-					</div>
-				</motion.div>
+					</motion.div>
+				</MagicCard>
 			</div>
 		</motion.section>
 	);

@@ -7,6 +7,7 @@ export interface RoiInputs {
 	monthlyDealsClosed: number;
 	averageTimePerDealHours: number;
 	industry: string;
+	monthlyOperatingCost: number;
 }
 
 export interface RoiComputedResults {
@@ -23,6 +24,10 @@ export interface RoiComputedResults {
 	timeSavedMonthly: number;
 	timeSavedAnnual: number;
 	manualHoursMonthly: number;
+	grossGainLow: number;
+	grossGainHigh: number;
+	monthlyNetBenefit: number;
+	monthlyOperatingCost: number;
 }
 
 export interface RoiCostBreakdown {
@@ -44,6 +49,9 @@ export interface RoiTierConfig {
 	key: RoiTierKey;
 	tier: RoiEstimatorTier;
 	showSetupDefault: boolean;
+	group: string;
+	groupLabel: string;
+	isGroupDefault: boolean;
 }
 
 export interface ComputeTierResultOptions {

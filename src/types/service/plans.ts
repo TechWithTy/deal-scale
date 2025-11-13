@@ -23,6 +23,9 @@ export interface RoiEstimatorTier {
 	};
 	default?: boolean;
 	showSetupByDefault?: boolean;
+	group?: string;
+	groupLabel?: string;
+	defaultForGroup?: boolean;
 }
 
 export interface PricingCredits {
@@ -104,6 +107,7 @@ export interface ROIEstimator {
 		monthlyDealsClosed: number;
 		averageTimePerDealHours: number;
 		industry: string;
+		monthlyOperatingCost: number;
 	};
 	calculations: ROIEstimatorCalculations;
 	summaryOutput: ROIEstimatorSummary;

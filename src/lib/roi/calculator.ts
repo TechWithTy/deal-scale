@@ -40,16 +40,26 @@ export const resolveTierConfigs = (
 				tier: defaultSelfHostedTier,
 				showSetupDefault:
 					estimator.tiers?.[key]?.showSetupByDefault ?? true,
+				group: "selfHosted",
+				groupLabel: "Self-Hosted",
+				isGroupDefault: true,
 			},
 		];
 	}
 
-	return entries.map(([key, tier]) => ({
-		key,
-		tier,
-		showSetupDefault:
-			tier.showSetupByDefault ?? tier.kind === "selfHosted",
-	}));
+	return entries.map(([key, tier]) => {
+		const group = tier.group ?? tier.kind ?? key;
+		const groupLabel = tier.groupLabel ?? tier.label;
+
+		return {
+			key,
+			tier,
+			showSetupDefault: tier.showSetupByDefault ?? tier.kind === "selfHosted",
+			group,
+			groupLabel,
+			isGroupDefault: tier.defaultForGroup ?? false,
+		};
+	});
 };
 
 const getActiveTier = (
@@ -128,13 +138,14 @@ export const computeTierResult = (
 	const averageDeal = clamp(inputs.averageDealAmount, 1000, 250000);
 	const monthlyDeals = clamp(inputs.monthlyDealsClosed, 1, 200);
 	const timePerDeal = clamp(inputs.averageTimePerDealHours, 1, 40);
+	const monthlyOperatingCost = Math.max(inputs.monthlyOperatingCost ?? 0, 0);
 
 	const monthlyBase = averageDeal * monthlyDeals;
 	const revenueLift = resolveRevenueLift(tier);
-	const gainLow = monthlyBase * factor * revenueLift.low;
-	const gainHigh = monthlyBase * factor * revenueLift.high;
+	const grossGainLow = monthlyBase * factor * revenueLift.low;
+	const grossGainHigh = monthlyBase * factor * revenueLift.high;
 
-	const annualRevenueHigh = gainHigh * 12;
+	const annualRevenueHigh = grossGainHigh * 12;
 	const efficiency = resolveEfficiency(tier);
 
 	const manualHoursMonthly = timePerDeal * monthlyDeals;
@@ -147,17 +158,29 @@ export const computeTierResult = (
 	const setupHigh = costBreakdown.setupRange?.high ?? 0;
 	const setupLow = costBreakdown.setupRange?.low ?? 0;
 	const oneTimeCost = costBreakdown.oneTimeCost ?? 0;
-	const annualCost = costBreakdown.annualCost ?? 0;
-	const monthlyCost = costBreakdown.monthlyCost ?? 0;
+	const monthlyPlanCost = costBreakdown.monthlyCost ?? 0;
+	const annualPlanCost = costBreakdown.annualCost ?? 0;
+	const annualPlanCostAsMonthly = annualPlanCost / 12;
 
-	const totalYearOneCost = setupHigh + oneTimeCost + annualCost;
-	const year1Profit = annualRevenueHigh * efficiency - totalYearOneCost;
+	const totalMonthlyCost = monthlyPlanCost + annualPlanCostAsMonthly + monthlyOperatingCost;
+
+	const gainLow = grossGainLow - totalMonthlyCost;
+	const gainHigh = grossGainHigh - totalMonthlyCost;
+
+	const totalYearOneCost =
+		setupHigh +
+		oneTimeCost +
+		annualPlanCost +
+		monthlyPlanCost * 12 +
+		monthlyOperatingCost * 12;
+	const year1Profit = grossGainHigh * 12 * efficiency - totalYearOneCost;
 	const year5Profit = year1Profit * 5 * 0.55;
 	const year10Profit = year1Profit * 10 * 0.55 * 1.1;
 
-	const paybackMonths = gainHigh > 0
-		? (setupHigh + oneTimeCost) / Math.max(gainHigh - monthlyCost, 1)
-		: 0;
+	const monthlyNetBenefit = grossGainHigh - totalMonthlyCost;
+
+	const netMonthlyForPayback = Math.max(gainHigh, 0.0001);
+	const paybackMonths = netMonthlyForPayback > 0 ? (setupHigh + oneTimeCost) / netMonthlyForPayback : Infinity;
 
 	return {
 		gainLow,
@@ -168,7 +191,7 @@ export const computeTierResult = (
 		year5Profit,
 		year10Profit,
 		buyoutSetup: costBreakdown.setupRange?.high ?? setupHigh,
-		buyoutMaintenance: annualCost,
+		buyoutMaintenance: annualPlanCost,
 		paybackMonths,
 		timeSavedMonthly,
 		timeSavedAnnual,
@@ -178,6 +201,10 @@ export const computeTierResult = (
 		tier,
 		costs: costBreakdown,
 		showSetupDefault: activeTier.showSetupDefault,
+		grossGainLow,
+		grossGainHigh,
+		monthlyNetBenefit,
+		monthlyOperatingCost,
 	};
 };
 
@@ -199,4 +226,5 @@ export const coerceInputs = (
 	averageTimePerDealHours:
 		partial?.averageTimePerDealHours ?? estimator.exampleInput.averageTimePerDealHours,
 	industry: partial?.industry ?? estimator.exampleInput.industry,
+	monthlyOperatingCost: partial?.monthlyOperatingCost ?? estimator.exampleInput.monthlyOperatingCost,
 });
