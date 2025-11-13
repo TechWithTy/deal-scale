@@ -190,8 +190,12 @@ export const RoiEstimatorModal = ({
 									"text-muted-foreground",
 								)}
 							>
-								<span className="font-semibold text-foreground">How this works:</span>{" "}
-								We bound the inputs to realistic ranges, then apply your industry multiplier to determine revenue lift, setup scope, and overtime savings.
+								<span className="font-semibold text-foreground">
+									How this works:
+								</span>{" "}
+								We bound the inputs to realistic ranges, then apply your
+								industry multiplier to determine revenue lift, setup scope, and
+								overtime savings.
 							</footer>
 						</section>
 						<section className="flex flex-col gap-6">
@@ -229,11 +233,26 @@ export const RoiEstimatorModal = ({
 									Industry Factor
 								</p>
 								<div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-									<p className={cn("text-3xl", "font-semibold", "text-foreground")}>
+									<p
+										className={cn(
+											"text-3xl",
+											"font-semibold",
+											"text-foreground",
+										)}
+									>
 										× {factor.toFixed(1)}
 									</p>
-									<p className={cn("max-w-sm", "text-xs", "leading-relaxed", "text-muted-foreground")}>
-										Adjusts AI workload, workflow design, and compliance footprint for your vertical. Higher multipliers indicate deeper go-to-market orchestration.
+									<p
+										className={cn(
+											"max-w-sm",
+											"text-xs",
+											"leading-relaxed",
+											"text-muted-foreground",
+										)}
+									>
+										Adjusts AI workload, workflow design, and compliance
+										footprint for your vertical. Higher multipliers indicate
+										deeper go-to-market orchestration.
 									</p>
 								</div>
 							</div>
