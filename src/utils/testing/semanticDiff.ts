@@ -50,6 +50,22 @@ const comparableFields: Array<keyof ABTest["variants"][number]["copy"]> = [
 	"whatsInItForMe",
 ];
 
+const normalizeValue = (value: unknown): string => {
+	if (Array.isArray(value)) {
+		return value.map((item) => normalizeValue(item)).join(" ");
+	}
+	if (typeof value === "object" && value !== null) {
+		return JSON.stringify(value);
+	}
+	if (typeof value === "string") {
+		return value;
+	}
+	if (typeof value === "number" || typeof value === "boolean") {
+		return String(value);
+	}
+	return "";
+};
+
 const getVariantName = (variant: ABTest["variants"][number], index: number) =>
 	variant.name ?? `Variant #${index + 1}`;
 
@@ -68,11 +84,11 @@ export const diffAbTests = (
 		if (!prevVariant || !nextVariant || !prevVariant.copy || !nextVariant.copy)
 			continue;
 
-		comparableFields.forEach((field) => {
-			const beforeValue = prevVariant.copy?.[field] ?? "";
-			const afterValue = nextVariant.copy?.[field] ?? "";
+		for (const field of comparableFields) {
+			const beforeValue = normalizeValue(prevVariant.copy?.[field]);
+			const afterValue = normalizeValue(nextVariant.copy?.[field]);
 
-			if (beforeValue === afterValue) return;
+			if (beforeValue === afterValue) continue;
 
 			const similarity = jaccardSimilarity(beforeValue, afterValue);
 
@@ -84,9 +100,8 @@ export const diffAbTests = (
 				beforeValue,
 				afterValue,
 			});
-		});
+		}
 	}
 
 	return results;
 };
-

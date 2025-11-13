@@ -1,7 +1,12 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import type { ProductSummaryProps } from "./types";
 import { Fragment, useMemo } from "react";
+import type { ProductSummaryProps } from "./types";
 
 const copyFields = ["pain_point", "fear", "hope", "solution"] as const;
 
@@ -27,6 +32,27 @@ const extractCopyField = (
 const escapeRegExp = (value: string) =>
 	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+const buildIcon = (
+	titleText: string,
+	className: string,
+	paths: JSX.Element[],
+) => (
+	<span role="img" aria-label={titleText} className="inline-flex">
+		<svg
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			strokeWidth={1.5}
+			viewBox="0 0 24 24"
+			aria-hidden="true"
+			focusable="false"
+		>
+			<title>{titleText}</title>
+			{paths}
+		</svg>
+	</span>
+);
+
 const insightAccents: Record<
 	InsightKey,
 	{
@@ -38,86 +64,74 @@ const insightAccents: Record<
 > = {
 	fear: {
 		label: "Fear Signal",
-		icon: (
-			<svg
-				className="h-4 w-4 text-red-400"
-				fill="none"
-				stroke="currentColor"
-				strokeWidth={1.5}
-				viewBox="0 0 24 24"
-			>
-				<path
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					d="m12 9.5 2 2m-2 0 2-2M9 15h6"
-				/>
-				<path
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7Z"
-				/>
-			</svg>
-		),
+		icon: buildIcon("Fear signal", "h-4 w-4 text-red-400", [
+			<path
+				key="fear-x"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="m12 9.5 2 2m-2 0 2-2M9 15h6"
+			/>,
+			<path
+				key="fear-outline"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7Z"
+			/>,
+		]),
 		trigger:
 			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-red-200 data-[state=open]:bg-red-950/60",
 		content: "px-4 text-sm leading-relaxed text-red-100",
 	},
 	hope: {
 		label: "Hope Moment",
-		icon: (
-			<svg
-				className="h-4 w-4 text-sky-400"
-				fill="none"
-				stroke="currentColor"
-				strokeWidth={1.5}
-				viewBox="0 0 24 24"
-			>
-				<path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l3 3" />
-				<path
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-				/>
-			</svg>
-		),
+		icon: buildIcon("Hope moment", "h-4 w-4 text-sky-400", [
+			<path
+				key="hope-hand"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M12 6v6l3 3"
+			/>,
+			<path
+				key="hope-circle"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+			/>,
+		]),
 		trigger:
 			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-sky-200 data-[state=open]:bg-sky-950/40",
 		content: "px-4 text-sm leading-relaxed text-sky-100",
 	},
 	pain_point: {
 		label: "Problem",
-		icon: (
-			<svg
-				className="h-4 w-4 text-amber-400"
-				fill="none"
-				stroke="currentColor"
-				strokeWidth={1.5}
-				viewBox="0 0 24 24"
-			>
-				<path
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-				/>
-			</svg>
-		),
+		icon: buildIcon("Problem insight", "h-4 w-4 text-amber-400", [
+			<path
+				key="pain-exclamation"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M12 9v4m0 4h.01"
+			/>,
+			<path
+				key="pain-circle"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+			/>,
+		]),
 		trigger:
 			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-amber-200 data-[state=open]:bg-amber-950/40",
 		content: "px-4 text-sm leading-relaxed text-amber-100",
 	},
 	solution: {
 		label: "Solution",
-		icon: (
-			<svg
-				className="h-4 w-4 text-emerald-400"
-				fill="none"
-				stroke="currentColor"
-				strokeWidth={1.5}
-				viewBox="0 0 24 24"
-			>
-				<path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
-			</svg>
-		),
+		icon: buildIcon("Solution insight", "h-4 w-4 text-emerald-400", [
+			<path
+				key="solution-check"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="m5 13 4 4L19 7"
+			/>,
+		]),
 		trigger:
 			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-emerald-200 data-[state=open]:bg-emerald-950/30",
 		content: "px-4 text-sm leading-relaxed text-emerald-100",
@@ -132,7 +146,7 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 
 	const insightEntries = useMemo(
 		() =>
-			([
+			[
 				{ key: "fear" as InsightKey, value: fear },
 				{ key: "hope" as InsightKey, value: hope },
 				{ key: "pain_point" as InsightKey, value: painPoint },
@@ -140,19 +154,24 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 			].filter((entry) => entry.value && entry.value.length > 0) as Array<{
 				key: InsightKey;
 				value: string;
-			}>),
+			}>,
 		[fear, hope, painPoint, solution],
 	);
 
 	const highlightWords = useMemo(() => {
 		const set = new Set<string>();
-		abTest?.variants?.forEach((variant) => {
-			variant.copy?.highlighted_words?.forEach((word) => {
-				if (word && word.trim()) {
-					set.add(word.trim());
+		if (abTest?.variants) {
+			for (const variant of abTest.variants) {
+				const words = variant.copy?.highlighted_words;
+				if (!words) continue;
+				for (const word of words) {
+					const trimmed = word?.trim();
+					if (trimmed) {
+						set.add(trimmed);
+					}
 				}
-			});
-		});
+			}
+		}
 		return Array.from(set);
 	}, [abTest]);
 
@@ -166,7 +185,11 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 		}> = [];
 		const seen = new Set<string>();
 
-		const pushDescriptor = (key: string, phrase?: string, className?: string) => {
+		const pushDescriptor = (
+			key: string,
+			phrase?: string,
+			className?: string,
+		) => {
 			if (!phrase || !className) return;
 			const normalized = `${key}-${phrase.toLowerCase()}`;
 			if (seen.has(normalized)) return;
@@ -195,26 +218,29 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 			"bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200",
 		);
 
-		for (const variant of abTest.variants ?? []) {
-			const words = variant.copy?.highlighted_words;
-			if (!Array.isArray(words)) continue;
-			for (const word of words) {
-				if (typeof word !== "string" || !word.trim()) continue;
+		if (abTest.variants) {
+			for (const variant of abTest.variants) {
+				const words = variant.copy?.highlighted_words;
+				if (Array.isArray(words)) {
+					for (const word of words) {
+						const trimmed = word?.trim();
+						if (trimmed) {
+							pushDescriptor(
+								`keyword-${trimmed}`,
+								trimmed,
+								"bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-200",
+							);
+						}
+					}
+				}
+
+				const cta = variant.copy?.cta;
 				pushDescriptor(
-					`keyword-${word}`,
-					word.trim(),
-					"bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-200",
+					"cta",
+					cta,
+					"bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-200",
 				);
 			}
-		}
-
-		for (const variant of abTest.variants ?? []) {
-			const cta = variant.copy?.cta;
-			pushDescriptor(
-				"cta",
-				cta,
-				"bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-200",
-			);
 		}
 
 		return descriptors;
@@ -233,13 +259,10 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 			match: string;
 		}> = [];
 
-		highlightDescriptors.forEach((descriptor) => {
+		for (const descriptor of highlightDescriptors) {
 			const pattern = new RegExp(escapeRegExp(descriptor.phrase), "gi");
-			let match: RegExpExecArray | null;
-
-			// eslint-disable-next-line no-cond-assign
-			while ((match = pattern.exec(description)) !== null) {
-				const start = match.index;
+			for (const match of description.matchAll(pattern)) {
+				const start = match.index ?? 0;
 				const end = start + match[0].length;
 				const overlaps = occupied.some(
 					(range) => Math.max(range.start, start) < Math.min(range.end, end),
@@ -258,7 +281,7 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 					match: match[0],
 				});
 			}
-		});
+		}
 
 		if (!matches.length) return description;
 
@@ -279,10 +302,7 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 			nodes.push(
 				<mark
 					key={`highlight-${item.key}-${index}`}
-					className={cn(
-						"rounded-sm px-1 py-0.5 font-semibold",
-						item.className,
-					)}
+					className={cn("rounded-sm px-1 py-0.5 font-semibold", item.className)}
 				>
 					{item.match}
 				</mark>,
@@ -308,7 +328,7 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 	return (
 		<div className="mt-4 flex flex-col gap-4 text-left">
 			{description && (
-				<p className="line-clamp-3 text-sm text-slate-600 dark:text-slate-300">
+				<p className="line-clamp-3 text-slate-600 text-sm dark:text-slate-300">
 					{highlightedDescription}
 				</p>
 			)}
@@ -318,7 +338,7 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 					{highlightWords.map((word) => (
 						<span
 							key={word}
-							className="rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-600 dark:bg-blue-500/20 dark:text-blue-200"
+							className="rounded-full bg-blue-500/10 px-2 py-1 font-medium text-blue-600 text-xs dark:bg-blue-500/20 dark:text-blue-200"
 						>
 							{word}
 						</span>
@@ -339,15 +359,25 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 							<AccordionItem
 								key={key}
 								value={key}
-								className="border-b border-slate-200/30 dark:border-slate-800/40"
+								className="border-slate-200/30 border-b dark:border-slate-800/40"
 							>
-								<AccordionTrigger className={cn(accent.trigger, "bg-slate-50/30 dark:bg-slate-900/40")}>
+								<AccordionTrigger
+									className={cn(
+										accent.trigger,
+										"bg-slate-50/30 dark:bg-slate-900/40",
+									)}
+								>
 									<span className="flex items-center gap-2">
 										{accent.icon}
 										{accent.label}
 									</span>
 								</AccordionTrigger>
-								<AccordionContent className={cn(accent.content, "bg-slate-50/20 dark:bg-slate-900/20")}>
+								<AccordionContent
+									className={cn(
+										accent.content,
+										"bg-slate-50/20 dark:bg-slate-900/20",
+									)}
+								>
 									{value}
 								</AccordionContent>
 							</AccordionItem>

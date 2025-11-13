@@ -1,17 +1,27 @@
 import { render } from "@testing-library/react";
 import React from "react";
+import {
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 
 import type { DataModuleStatus } from "@/stores/useDataModuleStore";
-jest.mock("@/utils/observability/dataModuleGuards", () => ({
-	reportDataModuleGuard: jest.fn(),
+
+const observabilityMocks = vi.hoisted(() => ({
+	reportDataModuleGuard: vi.fn(),
 }));
+
+vi.mock("@/utils/observability/dataModuleGuards", () => observabilityMocks);
 
 import { reportDataModuleGuard } from "@/utils/observability/dataModuleGuards";
 import { useDataModuleGuardTelemetry } from "../useDataModuleGuardTelemetry";
 
 describe("useDataModuleGuardTelemetry", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	function TestHarness({
@@ -52,7 +62,7 @@ describe("useDataModuleGuardTelemetry", () => {
 			<TestHarness status="loading" hasData={false} />,
 		);
 
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 
 		rerender(
 			<TestHarness
@@ -77,7 +87,7 @@ describe("useDataModuleGuardTelemetry", () => {
 
 		expect(reportDataModuleGuard).toHaveBeenCalledTimes(1);
 
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 
 		rerender(<TestHarness status="loading" hasData={false} />);
 
@@ -91,7 +101,7 @@ describe("useDataModuleGuardTelemetry", () => {
 			expect.objectContaining({ status: "ready", hasData: false }),
 		);
 
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 
 		rerender(<TestHarness status="ready" hasData={true} />);
 

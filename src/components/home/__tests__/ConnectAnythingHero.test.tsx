@@ -1,17 +1,25 @@
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-
-import { ConnectAnythingHero } from "../ConnectAnythingHero";
+import "@testing-library/jest-dom/vitest";
 
 type MockMarqueeImage = { src: string; alt?: string };
 
+type ConnectAnythingHeroType = typeof import("../ConnectAnythingHero")
+	.ConnectAnythingHero;
+
+let ConnectAnythingHero: ConnectAnythingHeroType;
 let latestImages: MockMarqueeImage[] = [];
 
-jest.mock("@/components/ui/3d-marquee", () => ({
+vi.mock("@/components/ui/3d-marquee", () => ({
 	ThreeDMarquee: ({ images }: { images: MockMarqueeImage[] }) => {
 		latestImages = images;
 		return <div data-testid="three-d-marquee" />;
 	},
 }));
+
+beforeAll(async () => {
+	({ ConnectAnythingHero } = await import("../ConnectAnythingHero"));
+});
 
 describe("ConnectAnythingHero", () => {
 	beforeEach(() => {

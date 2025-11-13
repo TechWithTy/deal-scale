@@ -1,12 +1,14 @@
-import { sanitizeMetricPayload } from "../route";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { sanitizeMetricPayload } from "../sanitize";
 
 describe("sanitizeMetricPayload", () => {
 	beforeEach(() => {
-		jest.spyOn(Date, "now").mockReturnValue(111);
+		vi.spyOn(Date, "now").mockReturnValue(111);
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it("returns normalized web-vital payloads", () => {

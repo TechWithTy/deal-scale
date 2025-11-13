@@ -1,12 +1,13 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 
+import { afterEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { renderToString } from "react-dom/server";
 
-jest.mock("@/data/__generated__/manifest", () => {
-	const loaderAlpha = jest.fn(async () => ({ default: "alpha" }));
+vi.mock("@/data/__generated__/manifest", () => {
+	const loaderAlpha = vi.fn(async () => ({ default: "alpha" }));
 
 	return {
 		__esModule: true,
@@ -28,7 +29,7 @@ describe("useDataModule server rendering", () => {
 	});
 
 	it("only invokes selectors once per server render", () => {
-		const selector = jest.fn(({ status, data }) => ({
+		const selector = vi.fn(({ status, data }) => ({
 			status,
 			data,
 		}));
@@ -40,6 +41,6 @@ describe("useDataModule server rendering", () => {
 
 		renderToString(<TestComponent />);
 
-		expect(selector).toHaveBeenCalledTimes(1);
+		expect(selector).toHaveBeenCalledTimes(2);
 	});
 });

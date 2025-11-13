@@ -1,0 +1,32 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Fix gradient hero text and marquee alignment",
+        "description": "Adjust the ConnectAnythingHero component so the gradient headline renders without clipping and the 3D marquee background stays centered.",
+        "details": "",
+        "testStrategy": "",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Gather component context and diagnose clipping",
+            "description": "Inspect ConnectAnythingHero and AnimatedGradientText implementations to identify why the headline baseline is clipped.",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 1
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-11-13T01:34:28.015Z",
+      "description": "Default tasks context",
+      "updated": "2025-11-13T01:38:35.934Z"
+    }
+  }
+}

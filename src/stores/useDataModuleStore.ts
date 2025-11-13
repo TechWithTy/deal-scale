@@ -449,9 +449,13 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 		}
 	}, [store, key]);
 
-	console.log(`[useDataModule] COMPLETE for key: "${key}"`, {
-		status: (selection as { status?: unknown }).status,
-	});
+const selectionStatus =
+	selection && typeof (selection as { status?: unknown }).status !== "undefined"
+		? (selection as { status?: unknown }).status
+		: undefined;
+console.log(`[useDataModule] COMPLETE for key: "${key}"`, {
+	status: selectionStatus,
+});
 	return selection;
 }
 

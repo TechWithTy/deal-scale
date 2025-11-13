@@ -1,23 +1,34 @@
-jest.mock("@/lib/externalRequests/sendgrid", () => ({
-	sendMail: jest.fn().mockResolvedValue(202),
-	sendMailHtml: jest.fn().mockResolvedValue(202),
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+const sendMailMock = vi.fn().mockResolvedValue(202);
+const sendMailHtmlMock = vi.fn().mockResolvedValue(202);
+
+vi.mock("@/lib/externalRequests/sendgrid", () => ({
+	sendMail: sendMailMock,
+	sendMailHtml: sendMailHtmlMock,
 }));
 
-import * as sendgrid from "@/lib/externalRequests/sendgrid";
-import sgMail from "@sendgrid/mail";
+const setApiKeyMock = vi.fn();
+const sendMock = vi.fn().mockResolvedValue([{ statusCode: 202 }]);
 
-jest.mock("@sendgrid/mail", () => ({
-	setApiKey: jest.fn(),
-	send: jest.fn().mockResolvedValue([{ statusCode: 202 }]),
+vi.mock("@sendgrid/mail", () => ({
+	default: {
+		setApiKey: setApiKeyMock,
+		send: sendMock,
+	},
+	setApiKey: setApiKeyMock,
+	send: sendMock,
 }));
 
-/**
- * Tests for SendGrid email sending functions.
- * All network calls are mocked. No real emails are sent.
- */
+let sendgrid: typeof import("@/lib/externalRequests/sendgrid");
+
+beforeAll(async () => {
+	sendgrid = await import("@/lib/externalRequests/sendgrid");
+});
+
 describe("SendGrid integration", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("sends a plain text email", async () => {
@@ -28,6 +39,12 @@ describe("SendGrid integration", () => {
 			"Test Message",
 		);
 		expect(res).toBe(202);
+		expect(sendMailMock).toHaveBeenCalledWith(
+			"sender@test.com",
+			"to@test.com",
+			"Test Subject",
+			"Test Message",
+		);
 	});
 
 	it("sends an HTML email", async () => {
@@ -38,5 +55,11 @@ describe("SendGrid integration", () => {
 			"<b>Test</b>",
 		);
 		expect(res).toBe(202);
+		expect(sendMailHtmlMock).toHaveBeenCalledWith(
+			"sender@test.com",
+			"to@test.com",
+			"Test Subject",
+			"<b>Test</b>",
+		);
 	});
 });

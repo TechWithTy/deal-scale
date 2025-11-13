@@ -70,7 +70,7 @@ const InstagramEmbed = ({ className }: InstagramEmbedProps) => {
 						referrerPolicy="no-referrer-when-downgrade"
 						allow="encrypted-media"
 					/>
-					<div className="mt-4 text-center text-sm text-slate-900 dark:text-slate-300">
+					<div className="mt-4 text-center text-sm font-medium text-black dark:text-white">
 						If Instagram fails to load,{" "}
 						<a
 							className="underline transition hover:text-slate-700 dark:hover:text-white"

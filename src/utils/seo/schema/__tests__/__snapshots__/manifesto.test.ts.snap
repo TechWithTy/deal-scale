@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`buildManifestoSchema creates a CreativeWorkSeries with list items and anchors: manifesto-first-list-item 1`] = `
+exports[`buildManifestoSchema > creates a CreativeWorkSeries with list items and anchors > manifesto-first-list-item 1`] = `
 {
   "@type": "ListItem",
   "description": "DealScale was created to give real estate operators the freedom that comes from automated deal flow instead of manual grind.",
@@ -10,7 +10,7 @@ exports[`buildManifestoSchema creates a CreativeWorkSeries with list items and a
 }
 `;
 
-exports[`buildManifestoSchema creates a CreativeWorkSeries with list items and anchors: manifesto-first-part 1`] = `
+exports[`buildManifestoSchema > creates a CreativeWorkSeries with list items and anchors > manifesto-first-part 1`] = `
 {
   "@id": "https://dealscale.io/about#manifesto-origin-story",
   "@type": "CreativeWork",

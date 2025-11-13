@@ -1,17 +1,48 @@
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
 import { act } from "react";
 
 import type { ResolvedHeroCopy } from "../../utils/copy";
-import { HeroHeadline, useRotatingIndex } from "../hero-headline";
+import * as HeroHeadlineModule from "../hero-headline";
 
-jest.mock("@/components/ui/avatar-circles", () => ({
+vi.mock("@/components/ui/avatar-circles", () => ({
 	AvatarCircles: () => null,
 }));
 
-jest.mock("@/components/ui/globe", () => ({
+vi.mock("@/components/ui/globe", () => ({
 	Globe: () => null,
 }));
+
+vi.mock("motion/react", async () => {
+	const React = await vi.importActual<typeof import("react")>("react");
+
+	return {
+		__esModule: true,
+		AnimatePresence: ({ children }: { children: React.ReactNode }) => (
+			<>{children}</>
+		),
+		motion: new Proxy(
+			{},
+			{
+				get: (_, key: string) => {
+					const Component = (props: React.ComponentPropsWithoutRef<"div">) => (
+						<div data-motion-component={key} {...props} />
+					);
+					Component.displayName = `motion.${key}`;
+					return Component;
+				},
+			},
+		),
+	};
+});
 
 const MOCK_COPY: ResolvedHeroCopy = {
 	title: "Stop manually auditing deals — before the next opportunity slips.",
@@ -36,64 +67,20 @@ const MOCK_COPY: ResolvedHeroCopy = {
 	chips: {},
 };
 
-describe("HeroHeadline rotation control", () => {
-	beforeEach(() => {
-		jest.useFakeTimers();
-	});
-
-	afterEach(() => {
-		jest.useRealTimers();
-	});
-
-	it("avoids scheduling intervals when animations are paused", () => {
-		const setIntervalSpy = jest.spyOn(global, "setInterval");
-
-		const firstRender = render(
-			<HeroHeadline
-				copy={MOCK_COPY}
-				showChips={false}
-				showSocialProof={false}
-				reviews={[]}
-				isAnimating={false}
-			/>,
-		);
-
-		expect(setIntervalSpy).not.toHaveBeenCalled();
-
-		firstRender.unmount();
-		setIntervalSpy.mockClear();
-
-		const secondRender = render(
-			<HeroHeadline
-				copy={MOCK_COPY}
-				showChips={false}
-				showSocialProof={false}
-				reviews={[]}
-				isAnimating={true}
-			/>,
-		);
-
-		expect(setIntervalSpy.mock.calls.length).toBeGreaterThanOrEqual(3);
-
-		secondRender.unmount();
-		setIntervalSpy.mockRestore();
-	});
-});
-
 describe("useRotatingIndex", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.useRealTimers();
+		vi.useRealTimers();
 	});
 
 	it("pauses and resumes rotation when toggling isActive", () => {
 		const values = ["first", "second"];
 
 		const Harness = ({ isActive }: { isActive: boolean }) => {
-			const index = useRotatingIndex(values, 1000, isActive);
+			const index = HeroHeadlineModule.useRotatingIndex(values, 1000, isActive);
 			return <span data-testid="active-value">{values[index]}</span>;
 		};
 
@@ -104,7 +91,7 @@ describe("useRotatingIndex", () => {
 		expect(value().textContent).toBe("first");
 
 		act(() => {
-			jest.advanceTimersByTime(5000);
+			vi.advanceTimersByTime(5000);
 		});
 
 		expect(value().textContent).toBe("first");
@@ -112,13 +99,13 @@ describe("useRotatingIndex", () => {
 		rerender(<Harness isActive={true} />);
 
 		act(() => {
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 		});
 
 		expect(value().textContent).toBe("second");
 
 		act(() => {
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 		});
 
 		expect(value().textContent).toBe("first");

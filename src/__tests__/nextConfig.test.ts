@@ -1,4 +1,12 @@
 import type { NextConfig } from "next";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 
 const importConfig = async (): Promise<NextConfig> => {
 	const module = await import("../../next.config");
@@ -9,7 +17,7 @@ describe("next.config cache headers", () => {
 	const originalEnv = process.env.NODE_ENV;
 
 	beforeEach(() => {
-		jest.resetModules();
+		vi.resetModules();
 	});
 
 	afterEach(() => {

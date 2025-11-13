@@ -1,7 +1,12 @@
 {
         "extends": "./tsconfig.json",
         "compilerOptions": {
-                "types": ["jest", "@testing-library/jest-dom"],
+		"types": [
+				"jest",
+				"@testing-library/jest-dom",
+				"vitest/globals",
+				"./tests/setup/test-framework-globals"
+		],
                 "noEmit": true,
                 "jsx": "react-jsx",
                 "baseUrl": ".",
@@ -15,7 +20,7 @@
                         ]
                 }
         },
-        "include": [
+		"include": [
                 "src",
                 "tests",
                 "**/__tests__/**/*.ts",
@@ -26,10 +31,13 @@
                 "**/*.test.tsx",
                 "**/*.spec.ts",
                 "**/*.spec.tsx",
-                "src/types/jest-dom.d.ts",
-                "jest.config.js",
-                "jest.setup.js",
-                "jest.env.js"
+				"src/types/jest-dom.d.ts",
+				"jest.config.js",
+				"jest.setup.js",
+				"jest.env.js",
+				"vitest.config.ts",
+				"vitest.setup.ts",
+				"tests/setup/test-framework-globals.d.ts"
         ],
         "exclude": []
 }

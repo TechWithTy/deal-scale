@@ -1,6 +1,15 @@
+import { act, renderHook } from "@testing-library/react";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+
 import { useNewsletterSubscribers } from "@/hooks/beehiiv/use-news-letter-subscribers";
 import type { Subscriber } from "@/types/behiiv";
-import { act, renderHook } from "@testing-library/react";
 
 /**
  * Tests for adding a Beehiiv newsletter subscriber via the useNewsletterSubscribers hook.
@@ -8,21 +17,21 @@ import { act, renderHook } from "@testing-library/react";
  */
 describe("Beehiiv addSubscriber", () => {
 	beforeEach(() => {
-		global.fetch = jest.fn();
+		global.fetch = vi.fn();
 	});
+
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	it("successfully adds a subscriber", async () => {
-		// * Mock returns correct structure as expected by the hook (with data property)
-		(global.fetch as jest.Mock).mockResolvedValue({
+		(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
 			ok: true,
 			json: async () => ({
 				id: "mock_subscriber_id",
 				email: "test@example.com",
 				status: "active",
-				created: 1747528542,
+				created: 1_747_528_542,
 				subscription_tier: "free",
 				subscription_premium_tier_names: [],
 				utm_source: "",
@@ -34,18 +43,19 @@ describe("Beehiiv addSubscriber", () => {
 				stripe_customer_id: "",
 			}),
 		});
+
 		const { result } = renderHook(() => useNewsletterSubscribers());
-		let subscriber: Subscriber;
+		let subscriber: Subscriber | null = null;
+
 		await act(async () => {
 			subscriber = await result.current.addSubscriber("test@example.com");
 		});
+
 		expect(subscriber).not.toBeNull();
-		if (subscriber) {
-			expect(subscriber).toMatchObject({
-				email: "test@example.com",
-				status: "active",
-			});
-		}
+		expect(subscriber).toMatchObject({
+			email: "test@example.com",
+			status: "active",
+		});
 		expect(result.current.error).toBeNull();
 		expect(global.fetch).toHaveBeenCalledWith(
 			"/api/beehiiv/subscribe",
@@ -58,26 +68,34 @@ describe("Beehiiv addSubscriber", () => {
 	});
 
 	it("handles API error response", async () => {
-		(global.fetch as jest.Mock).mockResolvedValue({
+		(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
 			ok: false,
 			json: async () => ({ message: "Already subscribed" }),
 		});
+
 		const { result } = renderHook(() => useNewsletterSubscribers());
-		let subscriber: Subscriber;
+		let subscriber: Subscriber | null = null;
+
 		await act(async () => {
 			subscriber = await result.current.addSubscriber("fail@example.com");
 		});
+
 		expect(subscriber).toBeNull();
 		expect(result.current.error).toBe("Already subscribed");
 	});
 
 	it("handles network error", async () => {
-		(global.fetch as jest.Mock).mockRejectedValue(new Error("Network error"));
+		(global.fetch as ReturnType<typeof vi.fn>).mockRejectedValue(
+			new Error("Network error"),
+		);
+
 		const { result } = renderHook(() => useNewsletterSubscribers());
-		let subscriber: Subscriber;
+		let subscriber: Subscriber | null = null;
+
 		await act(async () => {
 			subscriber = await result.current.addSubscriber("fail2@example.com");
 		});
+
 		expect(subscriber).toBeNull();
 		expect(result.current.error).toBe("Network error");
 	});

@@ -1,3 +1,13 @@
+import {
+	afterEach,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { act } from "react";
 
@@ -19,21 +29,37 @@ describe("CallDemoShowcase", () => {
 			addEventListener(): void {}
 			removeEventListener(): void {}
 		};
-		(global as any).IntersectionObserver = class {
-			constructor() {}
+		type MinimalIntersectionObserver = {
+			observe: () => void;
+			unobserve: () => void;
+			disconnect: () => void;
+		};
+		type MinimalIntersectionObserverConstructor = new (
+			callback: (
+				entries: unknown[],
+				observer: MinimalIntersectionObserver,
+			) => void,
+			options?: Record<string, unknown>,
+		) => MinimalIntersectionObserver;
+		const globalWithIntersectionObserver = globalThis as unknown as {
+			IntersectionObserver: MinimalIntersectionObserverConstructor;
+		};
+		class TestIntersectionObserver implements MinimalIntersectionObserver {
 			observe(): void {}
 			unobserve(): void {}
 			disconnect(): void {}
-		};
+		}
+		globalWithIntersectionObserver.IntersectionObserver =
+			TestIntersectionObserver;
 	});
 
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
 	});
 
 	it("renders outreach studio copy and text preview by default", () => {
@@ -52,7 +78,7 @@ describe("CallDemoShowcase", () => {
 		expect(screen.getByText(/iMessage Support/i)).toBeInTheDocument();
 
 		act(() => {
-			jest.advanceTimersByTime(4500);
+			vi.advanceTimersByTime(4500);
 		});
 
 		const dialogText =
@@ -61,7 +87,7 @@ describe("CallDemoShowcase", () => {
 		expect(dialogText.length).toBeGreaterThan(1);
 
 		act(() => {
-			jest.advanceTimersByTime(2500);
+			vi.advanceTimersByTime(2500);
 		});
 
 		const statusText =
@@ -88,7 +114,7 @@ describe("CallDemoShowcase", () => {
 		);
 
 		act(() => {
-			jest.runOnlyPendingTimers();
+			vi.runOnlyPendingTimers();
 		});
 
 		await waitFor(() =>

@@ -2,22 +2,31 @@
 // ! Network calls are mocked. These tests check correct request formation and error handling.
 // * Run with: jest src/utils/__tests__/api/blogger/api.test.ts
 
-// Set a known API key before importing the Blogger API client
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+
 process.env.BLOGGER_API_KEY = "unit_test_key";
 
-import {
-	getBlogById,
-	getBlogByUrl,
-	getComments,
-	getPost,
-	getPosts,
-} from "../../../../../lib/blogger/api";
+const fetchMock = vi.fn();
 
-const fetchMock = jest.fn();
-
-global.fetch = fetchMock;
+globalThis.fetch = fetchMock as unknown as typeof fetch;
 
 const BASE_URL = "https://www.googleapis.com/blogger/v3";
+
+let getBlogById: typeof import("@/lib/blogger/api").getBlogById;
+let getBlogByUrl: typeof import("@/lib/blogger/api").getBlogByUrl;
+let getPosts: typeof import("@/lib/blogger/api").getPosts;
+let getPost: typeof import("@/lib/blogger/api").getPost;
+let getComments: typeof import("@/lib/blogger/api").getComments;
+
+beforeAll(async () => {
+	({
+		getBlogById,
+		getBlogByUrl,
+		getPosts,
+		getPost,
+		getComments,
+	} = await import("@/lib/blogger/api"));
+});
 
 describe("Blogger API client", () => {
 	afterEach(() => {

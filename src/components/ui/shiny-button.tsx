@@ -4,6 +4,7 @@ import { type MotionProps, motion } from "motion/react";
 import {
 	type ButtonHTMLAttributes,
 	type CSSProperties,
+	type ReactNode,
 	forwardRef,
 } from "react";
 
@@ -35,6 +36,7 @@ export interface ShinyButtonProps
 		MotionProps {
 	className?: string;
 	primaryColor?: string;
+	children?: ReactNode;
 }
 
 export const ShinyButton = forwardRef<HTMLButtonElement, ShinyButtonProps>(

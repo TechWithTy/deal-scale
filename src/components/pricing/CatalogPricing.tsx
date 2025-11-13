@@ -9,6 +9,9 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
 import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
 import { creditProducts } from "@/data/products/credits";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 import { cn } from "@/lib/utils";
 import type { DiscountCode } from "@/types/discount/discountCode";
 import type {
@@ -21,8 +24,7 @@ import type {
 } from "@/types/service/plans";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useNavigationRouter } from "@/hooks/useNavigationRouter";
-import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { Loader2 } from "lucide-react";
 import {
 	type ReactNode,
 	useCallback,
@@ -30,7 +32,6 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import {
 	PartnershipCard,
@@ -39,7 +40,6 @@ import {
 } from "./OneTimePlanCard";
 import { RecurringPlanCard } from "./RecurringPlanCard";
 import { RoiEstimatorModal } from "./RoiEstimatorModal";
-import { startStripeToast } from "@/lib/ui/stripeToast";
 
 type PricingView = PricingInterval | "oneTime";
 
@@ -687,6 +687,7 @@ export const CatalogPricing = ({
 							) : (
 								<>
 									<svg
+										role="img"
 										className="h-3 w-3 opacity-70 transition group-hover:opacity-100"
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -694,11 +695,13 @@ export const CatalogPricing = ({
 										stroke="currentColor"
 										strokeWidth="2"
 									>
+										<title>Copy discount icon</title>
 										<path d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
 										<rect width="12" height="12" x="3" y="7" rx="2" />
 									</svg>
 									<span>
-										Copy <span className="font-mono tracking-[0.3em]">SCALE50</span>{" "}
+										Copy{" "}
+										<span className="font-mono tracking-[0.3em]">SCALE50</span>{" "}
 										& Open Checkout
 									</span>
 								</>

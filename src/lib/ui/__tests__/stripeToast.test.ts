@@ -1,12 +1,12 @@
-import { startStripeToast } from "@/lib/ui/stripeToast";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const toastMocks = {
-	loading: jest.fn(),
-	success: jest.fn(),
-	error: jest.fn(),
+	loading: vi.fn(),
+	success: vi.fn(),
+	error: vi.fn(),
 };
 
-jest.mock("react-hot-toast", () => ({
+vi.mock("react-hot-toast", () => ({
 	toast: {
 		loading: (...args: Parameters<typeof toastMocks.loading>) =>
 			toastMocks.loading(...args),
@@ -17,13 +17,16 @@ jest.mock("react-hot-toast", () => ({
 	},
 }));
 
-describe("startStripeToast", () => {
-	beforeEach(() => {
-		toastMocks.loading.mockReset().mockReturnValue("toast-id");
-		toastMocks.success.mockReset();
-		toastMocks.error.mockReset();
-	});
+let startStripeToast: typeof import("@/lib/ui/stripeToast").startStripeToast;
 
+beforeEach(async () => {
+	toastMocks.loading.mockReset().mockReturnValue("toast-id");
+	toastMocks.success.mockReset();
+	toastMocks.error.mockReset();
+	({ startStripeToast } = await import("@/lib/ui/stripeToast"));
+});
+
+describe("startStripeToast", () => {
 	it("creates a persistent loading toast and returns handlers", () => {
 		const handlers = startStripeToast("Working…");
 

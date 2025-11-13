@@ -14,6 +14,26 @@ export function useNavigationRouter() {
 		(state) => state.finishNavigation,
 	);
 
+	const handleNavigationResult = useCallback(
+		(result: unknown, navigationId: number) => {
+			if (
+				typeof result === "object" &&
+				result !== null &&
+				"catch" in result &&
+				typeof (
+					result as {
+						catch: (onRejected: (reason: unknown) => void) => unknown;
+					}
+				).catch === "function"
+			) {
+				(result as Promise<unknown>).catch(() => {
+					finishNavigation(navigationId);
+				});
+			}
+		},
+		[finishNavigation],
+	);
+
 	const push = useCallback(
 		(
 			href: Parameters<typeof router.push>[0],
@@ -22,19 +42,14 @@ export function useNavigationRouter() {
 			const navigationId = startNavigation();
 			try {
 				const result = router.push(href, options);
-
-				if (result && typeof (result as Promise<unknown>).catch === "function") {
-					(result as Promise<unknown>).catch(() => {
-						finishNavigation(navigationId);
-					});
-				}
+				handleNavigationResult(result, navigationId);
 				return result;
 			} catch (error) {
 				finishNavigation(navigationId);
 				throw error;
 			}
 		},
-		[finishNavigation, router, startNavigation],
+		[finishNavigation, handleNavigationResult, router, startNavigation],
 	);
 
 	const replace = useCallback(
@@ -45,67 +60,51 @@ export function useNavigationRouter() {
 			const navigationId = startNavigation();
 			try {
 				const result = router.replace(href, options);
-				if (result && typeof (result as Promise<unknown>).catch === "function") {
-					(result as Promise<unknown>).catch(() => {
-						finishNavigation(navigationId);
-					});
-				}
+				handleNavigationResult(result, navigationId);
 				return result;
 			} catch (error) {
 				finishNavigation(navigationId);
 				throw error;
 			}
 		},
-		[finishNavigation, router, startNavigation],
+		[finishNavigation, handleNavigationResult, router, startNavigation],
 	);
 
 	const back = useCallback(() => {
 		const navigationId = startNavigation();
 		try {
 			const result = router.back();
-			if (result && typeof (result as Promise<unknown>).catch === "function") {
-				(result as Promise<unknown>).catch(() => {
-					finishNavigation(navigationId);
-				});
-			}
+			handleNavigationResult(result, navigationId);
 			return result;
 		} catch (error) {
 			finishNavigation(navigationId);
 			throw error;
 		}
-	}, [finishNavigation, router, startNavigation]);
+	}, [finishNavigation, handleNavigationResult, router, startNavigation]);
 
 	const forward = useCallback(() => {
 		const navigationId = startNavigation();
 		try {
 			const result = router.forward();
-			if (result && typeof (result as Promise<unknown>).catch === "function") {
-				(result as Promise<unknown>).catch(() => {
-					finishNavigation(navigationId);
-				});
-			}
+			handleNavigationResult(result, navigationId);
 			return result;
 		} catch (error) {
 			finishNavigation(navigationId);
 			throw error;
 		}
-	}, [finishNavigation, router, startNavigation]);
+	}, [finishNavigation, handleNavigationResult, router, startNavigation]);
 
 	const refresh = useCallback(() => {
 		const navigationId = startNavigation();
 		try {
 			const result = router.refresh();
-			if (result && typeof (result as Promise<unknown>).catch === "function") {
-				(result as Promise<unknown>).catch(() => {
-					finishNavigation(navigationId);
-				});
-			}
+			handleNavigationResult(result, navigationId);
 			return result;
 		} catch (error) {
 			finishNavigation(navigationId);
 			throw error;
 		}
-	}, [finishNavigation, router, startNavigation]);
+	}, [finishNavigation, handleNavigationResult, router, startNavigation]);
 
 	return {
 		...router,
@@ -116,4 +115,3 @@ export function useNavigationRouter() {
 		refresh,
 	};
 }
-

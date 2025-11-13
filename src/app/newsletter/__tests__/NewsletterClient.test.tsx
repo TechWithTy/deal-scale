@@ -1,56 +1,60 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
 type DataModuleSelector<T> = (value: any) => T;
 
-const useDataModuleMock = jest.fn();
+const useDataModuleMock = vi.fn();
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
 
-jest.mock("@/components/home/Testimonials", () => ({
+vi.mock("@/components/home/Testimonials", () => ({
 	__esModule: true,
-	default: jest.fn(() => <div data-testid="testimonials-component" />),
+	default: vi.fn(() => <div data-testid="testimonials-component" />),
 }));
 
-jest.mock("@/components/contact/utils/TrustedByScroller", () => ({
+vi.mock("@/components/contact/utils/TrustedByScroller", () => ({
 	__esModule: true,
-	default: jest.fn(() => <div data-testid="trusted-by" />),
+	default: vi.fn(() => <div data-testid="trusted-by" />),
 }));
 
-jest.mock("@/components/home/heros/Hero", () => ({
+vi.mock("@/components/home/heros/Hero", () => ({
 	__esModule: true,
-	default: jest.fn(() => <div data-testid="hero" />),
+	default: vi.fn(() => <div data-testid="hero" />),
 }));
 
-jest.mock("@/components/contact/newsletter/NewsletterEmailInput", () => ({
+vi.mock("@/components/contact/newsletter/NewsletterEmailInput", () => ({
 	__esModule: true,
 	NewsletterEmailInput: () => <div data-testid="newsletter-input" />,
 }));
 
-jest.mock("@/components/home/BlogPreview", () => ({
+vi.mock("@/components/home/BlogPreview", () => ({
 	__esModule: true,
 	BlogPreview: () => <div data-testid="blog-preview" />,
 }));
 
-jest.mock("@/components/home/ClientBento", () => ({
+vi.mock("@/components/home/ClientBento", () => ({
 	__esModule: true,
 	default: () => <div data-testid="client-bento" />,
 }));
 
-jest.mock("@/components/ui/separator", () => ({
+vi.mock("@/components/ui/separator", () => ({
 	__esModule: true,
 	Separator: () => <div data-testid="separator" />,
 }));
+
+const loadNewsletterClient = async () =>
+	(await import("../NewsletterClient")).default;
 
 describe("NewsletterClient", () => {
 	beforeEach(() => {
 		useDataModuleMock.mockReset();
 	});
 
-	it("renders a loading fallback while testimonials are idle", () => {
+	it("renders a loading fallback while testimonials are idle", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: DataModuleSelector<unknown>) => {
 				if (key === "service/slug_data/testimonials") {
@@ -69,7 +73,7 @@ describe("NewsletterClient", () => {
 			},
 		);
 
-		const { default: NewsletterClient } = require("../NewsletterClient");
+		const NewsletterClient = await loadNewsletterClient();
 
 		render(<NewsletterClient posts={[]} />);
 
@@ -79,7 +83,7 @@ describe("NewsletterClient", () => {
 		).not.toBeInTheDocument();
 	});
 
-	it("shows a friendly message when testimonials are ready but empty", () => {
+	it("shows a friendly message when testimonials are ready but empty", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: DataModuleSelector<unknown>) => {
 				if (key === "service/slug_data/testimonials") {
@@ -98,7 +102,7 @@ describe("NewsletterClient", () => {
 			},
 		);
 
-		const { default: NewsletterClient } = require("../NewsletterClient");
+		const NewsletterClient = await loadNewsletterClient();
 
 		render(<NewsletterClient posts={[]} />);
 

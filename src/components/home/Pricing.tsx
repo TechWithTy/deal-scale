@@ -40,6 +40,9 @@ interface CheckoutState {
 	clientSecret: string;
 	plan: Plan;
 	planType: PlanType;
+	mode: "payment" | "setup";
+	context: "standard" | "trial";
+	postTrialAmount?: number;
 }
 
 const Pricing: React.FC<PricingProps> = ({
@@ -110,10 +113,10 @@ const Pricing: React.FC<PricingProps> = ({
 				return;
 			}
 
-		let stripeToast: ReturnType<typeof startStripeToast> | undefined;
-		try {
+			let stripeToast: ReturnType<typeof startStripeToast> | undefined;
+			try {
 				setLoading(plan.id);
-			stripeToast = startStripeToast("Preparing Stripe checkout…");
+				stripeToast = startStripeToast("Preparing Stripe checkout…");
 
 				const metadata: Record<string, string> = {
 					planName: plan.name,
@@ -159,6 +162,8 @@ const Pricing: React.FC<PricingProps> = ({
 					clientSecret: data.clientSecret,
 					plan,
 					planType,
+					mode: "payment",
+					context: "standard",
 				});
 				stripeToast?.success(
 					"Checkout ready. Review the Stripe modal to finish your purchase.",
@@ -226,6 +231,8 @@ const Pricing: React.FC<PricingProps> = ({
 						clientSecret={checkoutState.clientSecret}
 						plan={checkoutState.plan}
 						planType={checkoutState.planType}
+						mode={checkoutState.mode}
+						context={checkoutState.context}
 						onClose={() => setCheckoutState(null)}
 					/>
 				) : null}

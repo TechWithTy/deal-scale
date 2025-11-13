@@ -80,6 +80,7 @@ export function mapSeoMetaToMetadata(seo: SeoMeta): Metadata {
 					]
 				: undefined,
 			type: seo.type || "website",
+			// @ts-expect-error - `seeAlso` is a valid OpenGraph property but not yet typed by Next.js
 			seeAlso: seeAlsoLinks,
 		},
 		twitter: imageUrl

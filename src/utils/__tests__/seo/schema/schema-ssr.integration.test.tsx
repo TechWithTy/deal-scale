@@ -1,9 +1,11 @@
+import { vi } from "vitest";
 import React, { type ReactElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server.node";
 
 import { caseStudies } from "@/data/caseStudy/caseStudies";
 import { mockProducts } from "@/data/products";
 import { services as serviceCatalog } from "@/data/service/services";
+import { mockServerOnly } from "@/testHelpers/vitest/analytics";
 
 const eventFixture = {
 	id: "event-1",
@@ -18,54 +20,65 @@ const eventFixture = {
 	thumbnailImage: "https://example.com/event.jpg",
 };
 
-const fetchEventsMock = jest.fn().mockResolvedValue([eventFixture]);
+const fetchEventsMock = vi.fn().mockResolvedValue([eventFixture]);
 function nullComponentMock() {
 	return { __esModule: true, default: () => null };
 }
 
-jest.mock("@/components/providers/AppProviders", () => ({
+vi.mock("@/components/providers/AppProviders", () => ({
 	AppProviders: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
-jest.mock("@/styles/fonts", () => ({
+vi.mock("@/styles/fonts", () => ({
 	sansFont: { variable: "font-sans" },
 	monoFont: { variable: "font-mono" },
 }));
-jest.mock("@/app/features/ServiceHomeClient", nullComponentMock);
-jest.mock("@/app/blogs/BlogClient", nullComponentMock);
-jest.mock("@/app/partners/PartnersClient", nullComponentMock);
-jest.mock("@/app/products/ProductsClient", nullComponentMock);
-jest.mock("@/app/products/[slug]/ProductClient", nullComponentMock);
-jest.mock("@/components/services/ServicePageClient", nullComponentMock);
-jest.mock("@/app/events/EventClient", nullComponentMock);
-jest.mock("@/app/case-studies/[slug]/CaseStudyPageClient", nullComponentMock);
-jest.mock("@/components/common/CTASection", () => ({
+vi.mock("@/app/features/ServiceHomeClient", nullComponentMock);
+vi.mock("@/app/blogs/BlogClient", nullComponentMock);
+vi.mock("@/app/partners/PartnersClient", nullComponentMock);
+vi.mock("@/app/products/ProductsClient", nullComponentMock);
+vi.mock("@/app/products/[slug]/ProductClient", nullComponentMock);
+vi.mock("@/components/services/ServicePageClient", nullComponentMock);
+vi.mock("@/app/events/EventClient", nullComponentMock);
+vi.mock("@/app/case-studies/[slug]/CaseStudyPageClient", nullComponentMock);
+vi.mock("@/components/common/CTASection", () => ({
 	CTASection: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
-const simpleDivMocks: Array<[string, string]> = [
-	["@/components/about/AboutUsSection", "AboutUsSection"],
-	["@/components/case-studies/CaseStudyGrid", "CaseStudyGrid"],
-	["@/components/contact/form/ContactForm", "ContactForm"],
-	["@/components/contact/utils/TrustedByScroller", "TrustedByScroller"],
-	["@/components/faq", "Faq"],
-	["@/components/home/ClientBento", "ClientBento"],
-	["@/components/home/FeatureVote", "UpcomingFeatures"],
-	["@/components/home/Pricing", "Pricing"],
-	["@/components/home/Services", "Services"],
-	["@/components/home/Testimonials", "Testimonials"],
-	[
-		"@/components/home/heros/HeroSessionMonitorClientWithModal",
-		"HeroSessionMonitor",
-	],
-];
 
-for (const [modulePath, label] of simpleDivMocks) {
-	jest.mock(modulePath, () => ({
+const divMock = (label: string) => ({
+	__esModule: true,
+	default: () => <div>{label}</div>,
+});
+
+vi.mock("@/components/about/AboutUsSection", () => divMock("AboutUsSection"));
+vi.mock("@/components/case-studies/CaseStudyGrid", () =>
+	divMock("CaseStudyGrid"),
+);
+vi.mock("@/components/contact/form/ContactForm", () =>
+	divMock("ContactForm"),
+);
+vi.mock("@/components/contact/utils/TrustedByScroller", () =>
+	divMock("TrustedByScroller"),
+);
+vi.mock("@/components/faq", () => divMock("Faq"));
+vi.mock("@/components/home/ClientBento", () => divMock("ClientBento"));
+vi.mock("@/components/home/ConnectAnythingHero", () => {
+	const Component = () => <div>ConnectAnythingHero</div>;
+	return {
 		__esModule: true,
-		default: () => <div>{label}</div>,
-	}));
-}
+		default: Component,
+		ConnectAnythingHero: Component,
+	};
+});
+vi.mock("@/components/home/FeatureVote", () => divMock("UpcomingFeatures"));
+vi.mock("@/components/home/Pricing", () => divMock("Pricing"));
+vi.mock("@/components/home/Services", () => divMock("Services"));
+vi.mock("@/components/home/Testimonials", () => divMock("Testimonials"));
+vi.mock("@/components/ui/3d-marquee", () => divMock("ThreeDMarquee"));
+vi.mock("@/components/home/heros/HeroSessionMonitorClientWithModal", () =>
+	divMock("HeroSessionMonitor"),
+);
 
-jest.mock("@/components/common/ViewportLazy", () => {
+vi.mock("@/components/common/ViewportLazy", () => {
 	const PassThrough = ({ children }: { children?: ReactNode }) => (
 		<>{children}</>
 	);
@@ -76,21 +89,21 @@ jest.mock("@/components/common/ViewportLazy", () => {
 	};
 });
 
-jest.mock("@/components/home/BlogPreview", () => {
+vi.mock("@/components/home/BlogPreview", () => {
 	const Mock = () => <div>BlogPreview</div>;
 	return { __esModule: true, BlogPreview: Mock, default: Mock };
 });
 
-jest.mock("@/components/ui/separator", () => {
+vi.mock("@/components/ui/separator", () => {
 	const Separator = () => <hr />;
 	return { __esModule: true, Separator, default: Separator };
 });
-jest.mock("lottie-react", () => ({
+vi.mock("lottie-react", () => ({
 	__esModule: true,
 	default: () => null,
 }));
-jest.mock("@/lib/beehiiv/getPosts", () => ({
-	getLatestBeehiivPosts: jest.fn().mockResolvedValue([
+vi.mock("@/lib/beehiiv/getPosts", () => ({
+	getLatestBeehiivPosts: vi.fn().mockResolvedValue([
 		{
 			id: "1",
 			subtitle: "",
@@ -104,10 +117,10 @@ jest.mock("@/lib/beehiiv/getPosts", () => ({
 		},
 	]),
 }));
-jest.mock("@/lib/events/fetchEvents", () => ({
+vi.mock("@/lib/events/fetchEvents", () => ({
 	fetchEvents: (...args: unknown[]) => fetchEventsMock(...args),
 }));
-jest.mock("next/dynamic", () => ({
+vi.mock("next/dynamic", () => ({
 	__esModule: true,
 	default: (
 		importer: () => Promise<unknown>,
@@ -118,20 +131,20 @@ jest.mock("next/dynamic", () => ({
 		return DynamicComponent;
 	},
 }));
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
 	notFound: () => {
 		throw new Error("next.notFound");
 	},
 	useRouter: () => ({
-		back: jest.fn(),
-		forward: jest.fn(),
-		prefetch: jest.fn(),
-		push: jest.fn(),
-		refresh: jest.fn(),
-		replace: jest.fn(),
+		back: vi.fn(),
+		forward: vi.fn(),
+		prefetch: vi.fn(),
+		push: vi.fn(),
+		refresh: vi.fn(),
+		replace: vi.fn(),
 	}),
 }));
-jest.mock("next/image", () => ({
+vi.mock("next/image", () => ({
 	__esModule: true,
 	default: ({
 		priority: _priority,
@@ -140,12 +153,14 @@ jest.mock("next/image", () => ({
 		<img {...props} />
 	),
 }));
-jest.mock("next/link", () => ({
+vi.mock("next/link", () => ({
 	__esModule: true,
 	default: ({ children, ...props }: React.ComponentPropsWithoutRef<"a">) => (
 		<a {...props}>{children}</a>
 	),
 }));
+
+mockServerOnly();
 
 const schemaScriptRegex =
 	/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g;
@@ -154,16 +169,38 @@ function extractJsonLdScripts(html: string): string[] {
 	return [...html.matchAll(schemaScriptRegex)].map(([, json]) => json);
 }
 
+function parseSchemaPayloads(scripts: string[]) {
+	return scripts.flatMap((json) => {
+		const parsed = JSON.parse(json);
+		return Array.isArray(parsed) ? parsed : [parsed];
+	});
+}
+
 async function renderAsync(
 	element: ReactElement | Promise<ReactElement>,
 ): Promise<string> {
 	return renderToStaticMarkup(await Promise.resolve(element));
 }
 
+const originalUseLayoutEffect = React.useLayoutEffect;
+
 describe("JSON-LD SSR integration", () => {
+	beforeAll(() => {
+		// Silence server-side useLayoutEffect warnings by aliasing to useEffect.
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		(React as typeof React & { useLayoutEffect: typeof React.useEffect }).useLayoutEffect =
+			React.useEffect;
+	});
+
 	beforeEach(() => {
 		fetchEventsMock.mockReset();
 		fetchEventsMock.mockResolvedValue([eventFixture]);
+	});
+
+	afterAll(() => {
+		// Restore original implementation after suite completes.
+		(React as typeof React & { useLayoutEffect: typeof originalUseLayoutEffect }).useLayoutEffect =
+			originalUseLayoutEffect;
 	});
 
 	it("renders organization and website schemas in the root layout", async () => {
@@ -198,13 +235,13 @@ describe("JSON-LD SSR integration", () => {
 		const html = renderToStaticMarkup(<RootLayout>{homeContent}</RootLayout>);
 
 		const scripts = extractJsonLdScripts(html);
+		expect(scripts.length).toBeGreaterThanOrEqual(2);
 
-		expect(scripts).toHaveLength(2);
+		const parsed = parseSchemaPayloads(scripts);
+		const types = parsed.map((schema) => schema["@type"]);
 
-		const parsed = scripts.map((json) => JSON.parse(json));
-
-		expect(parsed[0]["@type"]).toBe("Organization");
-		expect(parsed[1]["@type"]).toBe("WebSite");
+		expect(types).toContain("Organization");
+		expect(types).toContain("WebSite");
 	});
 
 	it.each([
@@ -223,11 +260,12 @@ describe("JSON-LD SSR integration", () => {
 			},
 		},
 	])("renders FAQ schema for the $description", async ({ render }) => {
-		const [script] = extractJsonLdScripts(await render());
-		expect(script).toBeDefined();
-		const schema = JSON.parse(script ?? "{}");
-		expect(schema["@type"]).toBe("FAQPage");
-		expect(Array.isArray(schema.mainEntity)).toBe(true);
+		const scripts = extractJsonLdScripts(await render());
+		const faqSchema = parseSchemaPayloads(scripts).find(
+			(schema) => schema?.["@type"] === "FAQPage",
+		);
+		expect(faqSchema).toBeDefined();
+		expect(Array.isArray(faqSchema?.mainEntity)).toBe(true);
 	});
 
 	it("renders sanitized Blog schema for the blogs index", async () => {

@@ -36,6 +36,7 @@ export const MacbookScroll = ({
 	src,
 	showGradient,
 	title,
+	alt,
 	badge,
 	variant = "immersive",
 	className,
@@ -43,6 +44,7 @@ export const MacbookScroll = ({
 	src?: string;
 	showGradient?: boolean;
 	title?: string | React.ReactNode;
+	alt?: string;
 	badge?: React.ReactNode;
 	variant?: MacbookScrollVariant;
 	className?: string;
@@ -128,6 +130,8 @@ export const MacbookScroll = ({
 		[1, isEmbedded ? 1 : 0],
 	);
 
+	const imageAlt = alt ?? (typeof title === "string" ? title : undefined);
+
 	return (
 		<div ref={ref} className={containerClassName}>
 			{!isEmbedded ? (
@@ -152,6 +156,7 @@ export const MacbookScroll = ({
 				scaleY={scaleY}
 				rotate={rotate}
 				translate={translate}
+				alt={imageAlt}
 			/>
 			{/* Base area */}
 			<div className="-z-10 relative h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
@@ -187,12 +192,14 @@ export const Lid = ({
 	rotate,
 	translate,
 	src,
+	alt,
 }: {
 	scaleX: MotionValue<number>;
 	scaleY: MotionValue<number>;
 	rotate: MotionValue<number>;
 	translate: MotionValue<number>;
 	src?: string;
+	alt?: string;
 }) => {
 	return (
 		<div className="relative [perspective:800px]">
@@ -229,7 +236,7 @@ export const Lid = ({
 				<div className="absolute inset-0 rounded-lg bg-[#272729]" />
 				<img
 					src={src as string}
-					alt="aceternity logo"
+					alt={alt ?? "Interactive Macbook demo media"}
 					className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
 				/>
 			</motion.div>

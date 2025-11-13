@@ -127,18 +127,21 @@ export function FeatureShowcase({
 						exit={{ opacity: 0, y: -24 }}
 						transition={{ duration: 0.5, ease: "easeOut" }}
 					>
-						<MacbookScroll
-							src={activeFeature.media.src}
-							title={activeFeature.media.alt}
-							showGradient
-							variant="embedded"
-							className="max-w-full"
-							badge={
-								<span className="inline-flex items-center rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 font-medium text-blue-900 text-xs uppercase tracking-wide dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100">
-									Live demo
-								</span>
-							}
-						/>
+						<div data-testid="realtime-analytics-chart">
+							<MacbookScroll
+								src={activeFeature.media.src}
+								title={activeFeature.media.alt}
+								alt={activeFeature.media.alt}
+								showGradient
+								variant="embedded"
+								className="max-w-full"
+								badge={
+									<span className="inline-flex items-center rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 font-medium text-blue-900 text-xs uppercase tracking-wide dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100">
+										Live demo
+									</span>
+								}
+							/>
+						</div>
 					</motion.div>
 				</AnimatePresence>
 			</div>

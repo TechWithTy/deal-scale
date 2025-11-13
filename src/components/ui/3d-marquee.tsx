@@ -36,8 +36,8 @@ export const ThreeDMarquee = ({
 	return (
 		<div
 			className={cn(
-				"mx-auto block overflow-hidden rounded-2xl border border-black/5",
-				"h-[520px] sm:h-[560px] lg:h-[640px]",
+				"mx-auto block w-full overflow-hidden rounded-2xl border border-black/5",
+				"h-[500px] sm:h-[560px] lg:h-[640px]",
 				"bg-gradient-to-b from-white via-slate-50 to-slate-100",
 				"pt-4 pb-14 sm:pt-6 sm:pb-16 lg:pt-8 lg:pb-20",
 				"dark:border-white/10 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900",
@@ -45,17 +45,17 @@ export const ThreeDMarquee = ({
 			)}
 		>
 			<div className="relative flex size-full items-center justify-center">
-				<div className="relative h-full w-full max-w-[900px] px-6 sm:px-8 lg:px-10">
+				<div className="relative h-full w-full max-w-[980px] px-6 sm:px-8 lg:px-10">
 					<div
 						className="absolute inset-0"
 						style={{
 							top: "50%",
 							left: "50%",
 							transform:
-								"perspective(1400px) translate(-50%, -50%) rotateX(52deg) rotateZ(-38deg)",
+								"perspective(1400px) translate3d(-48%, -52%, 0) rotateX(48deg) rotateZ(-32deg)",
 						}}
 					>
-						<div className="grid h-[760px] w-[760px] origin-center grid-cols-4 gap-6 sm:h-[820px] sm:w-[820px] sm:gap-8 lg:h-[900px] lg:w-[900px]">
+						<div className="grid origin-center grid-cols-4 gap-5 sm:gap-7 lg:gap-8 w-[min(96vw,_700px)] h-[min(96vw,_700px)] sm:w-[min(92vw,_780px)] sm:h-[min(92vw,_780px)] lg:w-[900px] lg:h-[900px]">
 							{chunks.map((subarray, columnIndex) => {
 								const columnKey = `marquee-column-${columnIndex}`;
 

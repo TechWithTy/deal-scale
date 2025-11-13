@@ -1,15 +1,15 @@
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import type { Mock } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import type { ReactNode } from "react";
 import "@testing-library/jest-dom";
 
-import LiveDynamicHeroDemoPage from "../../live-dynamic-hero-demo/page";
+const startTrialMock = vi.fn(() => Promise.resolve());
+const closeCheckoutMock = vi.fn();
+const playVideoMock = vi.fn();
 
-const startTrialMock = jest.fn();
-const closeCheckoutMock = jest.fn();
-const playVideoMock = jest.fn();
-
-jest.mock("@/components/home/heros/useHeroTrialCheckout", () => ({
+vi.mock("@/components/home/heros/useHeroTrialCheckout", () => ({
 	__esModule: true,
 	useHeroTrialCheckout: () => ({
 		isTrialLoading: false,
@@ -19,46 +19,47 @@ jest.mock("@/components/home/heros/useHeroTrialCheckout", () => ({
 	}),
 }));
 
-jest.mock("@/components/cta/PersonaCTA", () => {
-	const React = require("react");
-	return {
-		__esModule: true,
-		default: ({
-			primary,
-			secondary,
-			onPrimaryClick,
-			onSecondaryClick,
-			primaryLoading,
-			microcopy,
-		}: {
-			primary: { label: string };
-			secondary: { label: string };
-			onPrimaryClick?: () => void;
-			onSecondaryClick?: () => void;
-			primaryLoading?: boolean;
-			microcopy?: string;
-		}) => (
-			<div>
-				<button
-					type="button"
-					onClick={onPrimaryClick}
-					disabled={primaryLoading}
-					data-testid="primary-cta"
-				>
-					{primary.label}
-				</button>
-				<button type="button" onClick={onSecondaryClick}>
-					{secondary.label}
-				</button>
-				{microcopy ? <p>{microcopy}</p> : null}
-			</div>
-		),
-	};
-});
+vi.mock("@/components/cta/PersonaCTA", () => ({
+	__esModule: true,
+	default: ({
+		primary,
+		secondary,
+		onPrimaryClick,
+		onSecondaryClick,
+		primaryLoading,
+		microcopy,
+	}: {
+		primary: { label: string };
+		secondary: { label: string };
+		onPrimaryClick?: () => void;
+		onSecondaryClick?: () => void;
+		primaryLoading?: boolean;
+		microcopy?: string;
+	}) => (
+		<div>
+			<button
+				type="button"
+				onClick={onPrimaryClick}
+				disabled={primaryLoading}
+				data-testid="primary-cta"
+			>
+				{primary.label}
+			</button>
+			<button type="button" onClick={onSecondaryClick}>
+				{secondary.label}
+			</button>
+			{microcopy ? <p>{microcopy}</p> : null}
+		</div>
+	),
+}));
 
-jest.mock("@external/dynamic-hero", () => {
+vi.mock("@/components/ui/avatar-circles", () => ({
+	AvatarCircles: () => <div data-testid="avatar-circles" />,
+}));
+
+vi.mock("@external/dynamic-hero", () => {
 	const React = require("react");
-	const resolveHeroCopy = jest.fn((input: unknown, fallback: unknown) =>
+	const resolveHeroCopy = vi.fn((input: unknown, fallback: unknown) =>
 		input ?? fallback,
 	);
 	return {
@@ -72,28 +73,65 @@ jest.mock("@external/dynamic-hero", () => {
 			}));
 			return <div data-testid="hero-video-preview" />;
 		}),
+		DEFAULT_HERO_SOCIAL_PROOF: { badges: [], testimonials: [] },
 		resolveHeroCopy,
-		useHeroVideoConfig: jest.fn(),
+		useHeroVideoConfig: vi.fn(),
 	};
 });
 
-jest.mock("motion/react", () => ({
+vi.mock("motion/react", () => ({
 	useInView: () => true,
 }));
 
-beforeAll(() => {
+let LiveDynamicHeroDemoPage: typeof import("../../live-dynamic-hero-demo/page")
+	.default;
+
+beforeAll(async () => {
 	Object.defineProperty(window.HTMLElement.prototype, "scrollIntoView", {
 		configurable: true,
-		value: jest.fn(),
+		value: vi.fn(),
 	});
-	global.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+	Object.defineProperty(globalThis, "IntersectionObserver", {
+		writable: true,
+		value: class {
+			readonly root: Element | Document | null = null;
+			readonly rootMargin = "0px";
+			readonly thresholds = [0];
+			constructor(private readonly callback: IntersectionObserverCallback) {}
+			disconnect(): void {
+				// noop
+			}
+			observe(target: Element): void {
+				this.callback(
+					[
+						{
+							target,
+							isIntersecting: true,
+							intersectionRatio: 1,
+						} as IntersectionObserverEntry,
+					],
+					this as unknown as IntersectionObserver,
+				);
+			}
+			takeRecords(): IntersectionObserverEntry[] {
+				return [];
+			}
+			unobserve(_target: Element): void {
+				// noop
+			}
+		},
+	});
+	globalThis.requestAnimationFrame = (callback: FrameRequestCallback): number => {
 		callback(0);
 		return 0;
 	};
+	LiveDynamicHeroDemoPage = (
+		await import("../../live-dynamic-hero-demo/page")
+	).default;
 });
 
 beforeEach(() => {
-	jest.clearAllMocks();
+	vi.clearAllMocks();
 });
 
 describe("LiveDynamicHeroDemoPage", () => {
@@ -113,14 +151,16 @@ describe("LiveDynamicHeroDemoPage", () => {
 	});
 
 	it("scrolls to the video preview and plays it when secondary CTA is clicked", async () => {
-		const scrollIntoView = jest.fn();
-		(window.HTMLElement.prototype.scrollIntoView as jest.Mock).mockImplementation(
+		const scrollIntoView = vi.fn();
+		(window.HTMLElement.prototype.scrollIntoView as unknown as Mock).mockImplementation(
 			scrollIntoView,
 		);
 
 		render(<LiveDynamicHeroDemoPage />);
 
-		fireEvent.click(screen.getByRole("button", { name: /see how it works/i }));
+		fireEvent.click(
+			screen.getByRole("button", { name: /see how it works/i }),
+		);
 
 		expect(scrollIntoView).toHaveBeenCalledWith({
 			behavior: "smooth",

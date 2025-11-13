@@ -1,3 +1,4 @@
+import type { ManifestoSectionSummary } from "@/data/about/timelineSummary";
 import type { MediumArticle } from "@/data/medium/post";
 import type { BeehiivPost } from "@/types/behiiv";
 import type { CaseStudy } from "@/types/case-study";
@@ -50,11 +51,13 @@ export interface SeoMeta {
 	datePublished?: string;
 	dateModified?: string;
 	siteName?: string;
+	manifestoSections?: ManifestoSectionSummary[];
 	[key: string]:
 		| string
 		| string[]
 		| number
 		| SeoMeta["changeFrequency"]
+		| ManifestoSectionSummary[]
 		| undefined;
 }
 

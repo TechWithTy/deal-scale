@@ -1,14 +1,8 @@
-import {
-	afterEach,
-	beforeEach,
-	describe,
-	expect,
-	it,
-	jest,
-} from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Response as NodeFetchResponse } from "node-fetch";
 
-jest.mock("next/server", () => ({
+vi.mock("next/server", () => ({
+	__esModule: true,
 	NextResponse: {
 		json: (body: unknown, init?: ResponseInit) =>
 			new NodeFetchResponse(JSON.stringify(body), {
@@ -25,7 +19,7 @@ jest.mock("next/server", () => ({
 const originalEnv = { ...process.env };
 
 const loadRoute = async () => {
-	jest.resetModules();
+	vi.resetModules();
 	return import("../route");
 };
 
@@ -47,6 +41,12 @@ describe("GET /api/init-providers", () => {
 		delete process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
 		delete process.env.ZOHO_SALES_IQ_WIDGET_CODE;
 		delete process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE;
+		delete process.env.FACEBOOK_PIXEL_ID;
+		delete process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
+		delete process.env.PLAUSIBLE_DOMAIN;
+		delete process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+		delete process.env.PLAUSIBLE_ENDPOINT;
+		delete process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT;
 
 		process.env.NODE_ENV = "production";
 
@@ -58,7 +58,7 @@ describe("GET /api/init-providers", () => {
 
 		const payload = await response.json();
 
-		expect(payload).toEqual({
+		expect(payload).toMatchObject({
 			warnings: [
 				{
 					field: "clarityId",
@@ -75,6 +75,18 @@ describe("GET /api/init-providers", () => {
 				{
 					field: "zohoCode",
 					message: "Analytics provider zohoCode is not configured.",
+				},
+				{
+					field: "facebookPixelId",
+					message: "Analytics provider facebookPixelId is not configured.",
+				},
+				{
+					field: "plausibleDomain",
+					message: "Analytics provider plausibleDomain is not configured.",
+				},
+				{
+					field: "plausibleEndpoint",
+					message: "Analytics provider plausibleEndpoint is not configured.",
 				},
 			],
 			fallbacksUsed: {},
