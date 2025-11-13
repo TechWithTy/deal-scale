@@ -55,6 +55,7 @@ export interface ProductActionsProps {
 	onAddToCart: () => void;
 	onPurchase: () => void;
 	isLoading: boolean;
+	onBeforePurchase?: () => Promise<boolean | void> | boolean | void;
 }
 
 export interface CheckoutDialogProps {

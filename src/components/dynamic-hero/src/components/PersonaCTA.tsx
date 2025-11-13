@@ -31,6 +31,7 @@ interface PersonaCTAProps {
 	readonly onPrimaryClick?: () => void;
 	readonly onSecondaryClick?: () => void;
 	readonly className?: string;
+	readonly primaryLoading?: boolean;
 }
 
 const buttonVariantForEmphasis = (
@@ -56,6 +57,7 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 	onSecondaryClick,
 	className,
 	orientation = "vertical",
+	primaryLoading = false,
 }) => {
 	const shouldRenderPrimary = displayMode !== "secondary";
 	const shouldRenderSecondary =
@@ -146,6 +148,8 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 							variant={buttonVariantForEmphasis(primary.emphasis)}
 							onClick={onPrimaryClick}
 							aria-label={primary.ariaLabel ?? primary.label}
+							aria-busy={primaryLoading}
+							disabled={primaryLoading}
 							className={cn(
 								"group relative flex h-full w-full flex-col justify-center gap-1 overflow-hidden rounded-3xl border-none px-6 py-5 text-primary-foreground shadow-[0_28px_60px_-20px_rgba(16,185,129,0.55)] transition",
 								"bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400",
@@ -153,6 +157,7 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 								shouldRenderSecondary ? "ring-2 ring-emerald-200" : "",
 								"whitespace-normal text-balance",
 								contentAlignment,
+								primaryLoading ? "cursor-wait opacity-80" : "",
 							)}
 						>
 							{primary.badge ? (

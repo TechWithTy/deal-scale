@@ -19,7 +19,7 @@ export const AdditionalPricingPlans = [
 					"500 skip trace credits",
 					"200 lead credits",
 					"Standard AI outreach flows",
-					"Email & chat support",
+					"Social or direct mail support",
 				],
 			},
 			annual: {
@@ -32,7 +32,7 @@ export const AdditionalPricingPlans = [
 					"6,000 skip trace credits (500/mo)",
 					"2,400 lead credits (200/mo)",
 					"Standard AI outreach flows",
-					"Priority email & chat support",
+					"Priority social or direct mail support",
 				],
 				bannerText: "Save 17% with annual billing",
 			},

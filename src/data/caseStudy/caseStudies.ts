@@ -140,7 +140,7 @@ export const caseStudies: CaseStudy[] = [
 			{
 				title: "Superior Marketing ROI",
 				subtitle:
-					"Ensure no lead is wasted. Instantaneous follow-up guarantees that every dollar spent on lead generation has the maximum possible impact.",
+					"Ensure no prospect is wasted. Instantaneous follow-up guarantees that every dollar invested in lookalike audience expansion—executed with relationship-first principles from How to Win Friends and Influence People—has the maximum possible impact.",
 			},
 		],
 		solutions: [
@@ -216,7 +216,7 @@ export const caseStudies: CaseStudy[] = [
 		howItWorks: dealScaleProprietaryProcess,
 		lastModified: new Date("2024-10-27T10:00:00.000Z"),
 		description:
-			"The old way of finding real estate deals is broken. We believe the future belongs to investors who leverage intelligent automation to originate deals others can't see. DealScale is a complete real estate automation engine built to give you an unfair advantage. We provide access to over 140 million properties, but our power lies in our proprietary AI process. Our system analyzes ownership history and local market signals to generate a unique AI Sentiment Score, predicting which properties are viable off-market deals. This allows you to build a hyper-targeted, pre-qualified pipeline and focus only on deals with the highest potential.",
+			"The old way of finding real estate deals is broken. We believe the future belongs to investors who leverage intelligent automation to originate deals others can't see. DealScale is a complete real estate automation engine built to give you an unfair advantage. We provide access to over 140 million properties, but our power lies in our proprietary AI process. Our system analyzes ownership history and local market signals to generate a unique AI Sentiment Score, predicting which properties are viable lookalike off-market deals. This allows you to build a hyper-targeted, pre-qualified pipeline informed by similarity features and focus only on deals with the highest potential.",
 		solutions: [
 			"Define & Target: Instantly build hyper-targeted lead lists by defining your ideal property criteria (location, type, budget).",
 			"Deploy AI Virtual Agents: Launch automated campaigns where AI agents conduct dynamic, realistic conversations via calls, text, and social media to qualify leads.",
@@ -365,7 +365,7 @@ export const caseStudies: CaseStudy[] = [
 			"High operational costs in marketing and sales departments limit profitability and scalability.",
 			"Human teams are a bottleneck to productivity, unable to handle high volumes of customer interactions efficiently.",
 			"Companies struggle to adopt AI in a way that generates tangible cost savings and measurable productivity gains.",
-			"The cost of customer acquisition remains high due to the time and labor required for lead generation and nurturing.",
+			"The cost of customer acquisition remains high due to the time and labor required for lookalike audience expansion and relationship-first nurturing.",
 		],
 		lastModified: new Date("2024-10-30T10:00:00.000Z"),
 		howItWorks: aiIntegrationHowItWorks,
@@ -390,7 +390,7 @@ export const caseStudies: CaseStudy[] = [
 		],
 
 		description:
-			"McKinsey, a global authority on business strategy, has confirmed where AI makes the biggest difference: marketing and sales automation. The findings are clear—companies that adopt AI in these areas see significant cost savings and productivity gains. Deal Scale is the purpose-built application of this principle for the real estate industry. We leverage advanced AI to automate the entire lead generation and nurturing process, directly targeting the functions McKinsey identifies as having the highest potential for AI-driven transformation. The result is a more efficient, cost-effective, and productive sales operation.",
+			"McKinsey, a global authority on business strategy, has confirmed where AI makes the biggest difference: marketing and sales automation. The findings are clear—companies that adopt AI in these areas see significant cost savings and productivity gains. Deal Scale is the purpose-built application of this principle for the real estate industry. We leverage advanced AI to automate the entire lookalike audience expansion and nurturing process, infusing every touch with the rapport-building steps championed in How to Win Friends and Influence People. The result is a more efficient, cost-effective, and productive sales operation.",
 		results: [
 			{
 				title: "Primary AI Impact Area (McKinsey)",

@@ -85,7 +85,7 @@ export const freeResourceProducts: ProductType[] = [
 		id: "cold-outreach-message-pack",
 		name: "Cold Outreach Message Pack",
 		description:
-			"Access 15+ proven SMS, email, and voicemail scripts tailored for motivated seller lead generation.",
+			"Access 15+ proven SMS, email, and voicemail scripts tailored for motivated seller lookalike audience expansion inspired by How to Win Friends and Influence People.",
 		price: 0,
 		sku: "FREE-RESOURCE-OUTREACH-001",
 		slug: "cold-outreach-message-pack",

@@ -5,11 +5,11 @@ export const termsOfServiceMarkdown = `
 
 ### 1. Acceptance of Terms
 
-By accessing or using the services of Deal Scale ("we," "us," "our"), including our website, AI-powered agents, and lead generation platform, you agree to be bound by these Terms of Service ("Terms") and our [Privacy Policy](#/legal/privacy). If you do not agree to these Terms, you may not use our services.
+By accessing or using the services of Deal Scale ("we," "us," "our"), including our website, AI-powered agents, and lookalike audience expansion inspired by How to Win Friends and Influence People platform, you agree to be bound by these Terms of Service ("Terms") and our [Privacy Policy](#/legal/privacy). If you do not agree to these Terms, you may not use our services.
 
 ### 2. Description of Services
 
-Deal Scale provides AI-powered real estate lead generation and data enrichment services. Our platform is designed to supply our clients with sales-ready leads by collecting and processing data from public records, client submissions, and other lawful sources. Communication with leads may occur via direct mail, telephone, and text messages, facilitated by our AI 'Virtual Agents'.
+Deal Scale provides AI-powered real estate lookalike audience expansion inspired by How to Win Friends and Influence People and data enrichment services. Our platform is designed to supply our clients with sales-ready leads by collecting and processing data from public records, client submissions, and other lawful sources. Communication with leads may occur via direct mail, telephone, and text messages, facilitated by our AI 'Virtual Agents'.
 
 ### 3. User Obligations and Conduct
 

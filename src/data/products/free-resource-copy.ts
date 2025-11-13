@@ -21,7 +21,7 @@ export const dealAnalyzerWorkbookABTest: ABTest = {
 					"Run the exact underwriting process Deal Scale uses internally. Prebuilt models, ROI calculators, and risk guardrails keep every acquisition disciplined.",
 				whatsInItForMe:
 					"Make faster go/no-go calls with the same diligence framework our team uses before writing an offer.",
-				target_audience: "Real estate investors evaluating off-market deals",
+				target_audience: "Real estate investors evaluating lookalike off-market deals with similarity feature overlays",
 				pain_point:
 					"You waste hours recreating underwriting models and second-guess the math on every deal.",
 				solution:

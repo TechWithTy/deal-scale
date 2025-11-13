@@ -3,7 +3,6 @@ import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
 import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
 import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
 import { ConnectAnythingHero } from "@/components/home/ConnectAnythingHero";
-import Services from "@/components/home/Services";
 // Above-the-fold components (eager load for LCP)
 import {
 	DEFAULT_PERSONA,
@@ -25,7 +24,6 @@ import {
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
-import { SERVICE_CATEGORIES } from "@/types/service/services";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import {
 	SchemaInjector,
@@ -94,8 +92,8 @@ const ClientBento = dynamic(() => import("@/components/home/ClientBento"), {
 		</div>
 	),
 });
-const UpcomingFeatures = dynamic(
-	() => import("@/components/home/FeatureVote"),
+const MarketingCatalogPricing = dynamic(
+	() => import("@/components/pricing/CatalogPricing"),
 	{
 		loading: () => (
 			<div className="flex h-96 items-center justify-center">
@@ -104,13 +102,6 @@ const UpcomingFeatures = dynamic(
 		),
 	},
 );
-const Pricing = dynamic(() => import("@/components/home/Pricing"), {
-	loading: () => (
-		<div className="flex h-96 items-center justify-center">
-			<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
-		</div>
-	),
-});
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
 	loading: () => (
 		<div className="flex h-96 items-center justify-center">
@@ -131,6 +122,14 @@ const CallDemoShowcase = dynamic(
 		import("@/components/home/CallDemoShowcase").then((mod) => ({
 			default: mod.CallDemoShowcase,
 		})),
+	{
+		loading: () => (
+			<SectionFallback className="min-h-[28rem] rounded-3xl border-dashed" />
+		),
+	},
+);
+const InstagramEmbed = dynamic(
+	() => import("@/components/home/InstagramEmbed"),
 	{
 		loading: () => (
 			<SectionFallback className="min-h-[28rem] rounded-3xl border-dashed" />
@@ -223,7 +222,7 @@ const Index = async ({
 	// Paginate the case studies
 	const { caseStudies } = dataModules["caseStudy/caseStudies"];
 	const { faqItems } = dataModules["faq/default"];
-	const { PricingPlans } = dataModules["service/slug_data/pricing"];
+	const { pricingCatalog } = dataModules["service/slug_data/pricing"];
 	const { generalDealScaleTestimonials } =
 		dataModules["service/slug_data/testimonials"];
 	const { companyLogos } = dataModules["service/slug_data/trustedCompanies"];
@@ -297,20 +296,6 @@ const Index = async ({
 			<div className="sm:hidden">
 				<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
 			</div>
-			<Services
-				showSearch={true}
-				showCategories={false}
-				title="Our Comprehensive Services"
-				subtitle="Tailored solutions to meet your business needs"
-				showTabs={[
-					SERVICE_CATEGORIES.LEAD_GENERATION,
-					SERVICE_CATEGORIES.LEAD_PREQUALIFICATION,
-					SERVICE_CATEGORIES.SKIP_TRACING,
-					SERVICE_CATEGORIES.AI_FEATURES,
-					SERVICE_CATEGORIES.REAL_ESTATE_TOOLS,
-				]}
-			/>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<ViewportLazy>
 				<CallDemoShowcase />
 			</ViewportLazy>
@@ -326,10 +311,6 @@ const Index = async ({
 			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<ViewportLazy>
 				<ConnectAnythingHero />
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<UpcomingFeatures />
 			</ViewportLazy>
 			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<ViewportLazy>
@@ -352,10 +333,14 @@ const Index = async ({
 			</ViewportLazy>
 			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<ViewportLazy>
-				<Pricing
-					title={"Our Pricing"}
-					subtitle={"Lock In Pilot Pricing For 5 Years!"}
-					plans={PricingPlans}
+				<MarketingCatalogPricing
+					title="Success-Based Pricing"
+					subtitle="Pay for outcomes, not promises—pilot pricing stays locked for 2 years."
+					catalog={pricingCatalog}
+					showFreePreview={false}
+					showUpgradeStack={false}
+					showAddOnStack={false}
+					showPilotBlurb={false}
 				/>
 			</ViewportLazy>
 			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
@@ -383,6 +368,10 @@ const Index = async ({
 				<div className="flex items-center justify-center py-5 lg:col-span-7">
 					<ContactForm />
 				</div>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<InstagramEmbed />
 			</ViewportLazy>
 		</>
 	);

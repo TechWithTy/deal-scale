@@ -26,6 +26,11 @@ export interface ProductActionsProps {
 	product: ProductType;
 	enableAddToCart?: boolean;
 	variantId?: string;
+	/**
+	 * Optional guard that runs before checkout is triggered.
+	 * Return `false` to short-circuit (e.g. prompt a login) while keeping the current UI in place.
+	 */
+	onBeforeCheckout?: () => Promise<boolean | void> | boolean | void;
 }
 
 export default function ProductActions({
@@ -36,9 +41,11 @@ export default function ProductActions({
 	product,
 	enableAddToCart = true,
 	variantId,
+	onBeforeCheckout,
 }: ProductActionsProps) {
 	const [isAddingToCart, setIsAddingToCart] = useState(false);
 	const [isDemoOpen, setIsDemoOpen] = useState(false);
+	const [isCheckoutIntentPending, setIsCheckoutIntentPending] = useState(false);
 	const { addItem } = useCartStore();
 
 	// Get the first variant's AB test copy if available, otherwise use a default
@@ -88,6 +95,21 @@ export default function ProductActions({
 			});
 		} finally {
 			setIsAddingToCart(false);
+		}
+	};
+	const handleCheckoutIntent = async () => {
+		if (checkoutLoading || isCheckoutIntentPending || !stripeLoaded) {
+			return;
+		}
+		try {
+			setIsCheckoutIntentPending(true);
+			const result = await onBeforeCheckout?.();
+			if (result === false) {
+				return;
+			}
+			onCheckout();
+		} finally {
+			setIsCheckoutIntentPending(false);
 		}
 	};
 	return (
@@ -145,10 +167,12 @@ export default function ProductActions({
 									"hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
 									"transition-colors duration-200",
 								)}
-								onClick={onCheckout}
-								disabled={checkoutLoading || !stripeLoaded}
+								onClick={handleCheckoutIntent}
+								disabled={
+									checkoutLoading || isCheckoutIntentPending || !stripeLoaded
+								}
 							>
-								{checkoutLoading ? (
+								{checkoutLoading || isCheckoutIntentPending ? (
 									<>
 										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 										Processing...

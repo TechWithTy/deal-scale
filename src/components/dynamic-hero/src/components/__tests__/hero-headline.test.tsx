@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { act } from "react";
 
-import { HeroHeadline, useRotatingIndex } from "../hero-headline";
 import type { ResolvedHeroCopy } from "../../utils/copy";
+import { HeroHeadline, useRotatingIndex } from "../hero-headline";
 
 jest.mock("@/components/ui/avatar-circles", () => ({
 	AvatarCircles: () => null,
@@ -124,4 +124,3 @@ describe("useRotatingIndex", () => {
 		expect(value().textContent).toBe("first");
 	});
 });
-

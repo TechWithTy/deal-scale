@@ -12,6 +12,8 @@ import { ThemeProvider } from "@/contexts/theme-context";
 import type { AnalyticsConfig } from "@/lib/analytics/config";
 
 import LoadingAnimation from "../ui/loading-animation";
+import { NavigationLoader } from "../ui/navigation-loader";
+import { ScrollDistanceIndicator } from "../ui/scroll-distance-indicator";
 import { DeferredThirdParties } from "./DeferredThirdParties";
 import NextAuthProvider from "./NextAuthProvider";
 import { PerformanceMonitor } from "./PerformanceMonitor";
@@ -45,6 +47,8 @@ export function AppProviders({
 				<Toaster />
 				<NextAuthProvider>
 					<QueryClientProvider client={queryClient}>
+						<NavigationLoader />
+						<ScrollDistanceIndicator />
 						<PageLayout>{children}</PageLayout>
 					</QueryClientProvider>
 				</NextAuthProvider>

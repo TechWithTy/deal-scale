@@ -1,88 +1,261 @@
 import type { TimelineEntry } from "@/components/ui/timeline";
+import { timelineSummary } from "./timelineSummary";
+
+const cardClass =
+	"space-y-4 rounded-xl border border-border/40 bg-background/70 p-6 text-sm leading-relaxed text-muted-foreground shadow-sm backdrop-blur";
 
 export const timeline: TimelineEntry[] = [
 	{
-		title: "Our Mission",
-		subtitle: "Solving Inefficiency",
+		title: timelineSummary[0].title,
+		subtitle: timelineSummary[0].subtitle,
 		content: (
-			<div>
-				<p className="mb-8 font-normal text-neutral-800 text-xs md:text-sm dark:text-neutral-200">
-					Conversations with real estate professionals revealed a critical need:
-					a solution for inefficient lead management. Our team embarked on a
-					3-month build to create our core AI platform.
+			<div className={cardClass}>
+				<p>
+					DealScale was born from one truth: the people who win in real estate
+					are the ones who automate faster than the competition.
 				</p>
-				<div className="grid grid-cols-2 gap-4">
-					<img
-						src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-						alt="Team collaboration"
-						width={500}
-						height={500}
-						className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-					/>
-					<img
-						src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop"
-						alt="Whiteboard with real estate strategy"
-						width={500}
-						height={500}
-						className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-					/>
+				<p>
+					Agents, wholesalers, and investors crave freedom: the ability to earn
+					anywhere, at any time, without drowning in cold calls, CRMs, or chaos.
+				</p>
+				<p>
+					Traditional tools only added complexity, so we built an AI engine that
+					thinks like a partner, works like a team, and earns like a machine.
+				</p>
+			</div>
+		),
+	},
+	{
+		title: timelineSummary[1].title,
+		subtitle: timelineSummary[1].subtitle,
+		content: (
+			<div className={cardClass}>
+				<blockquote className="border-primary/40 border-l-2 pl-4 font-semibold text-base text-foreground">
+					"Wealth is a system, not a secret, and automation is the great
+					equalizer."
+				</blockquote>
+				<p>
+					We are not here to make software smarter. We exist to make people
+					richer by giving every operator the leverage once reserved for
+					corporate teams and million-dollar tech stacks.
+				</p>
+				<p>
+					Our AI learns, sells, and scales with you, so your ambition is never
+					limited by headcount or manual effort again.
+				</p>
+			</div>
+		),
+	},
+	{
+		title: timelineSummary[2].title,
+		subtitle: timelineSummary[2].subtitle,
+		content: (
+			<div className={cardClass}>
+				<p>
+					We left the crowded CRM race and reimagined what wealth systems should
+					do for modern deal makers.
+				</p>
+				<div className="grid gap-4 lg:grid-cols-2">
+					<div className="rounded-lg bg-muted/20 p-4">
+						<h4 className="font-semibold text-foreground text-sm">
+							Red Ocean (Old Market)
+						</h4>
+						<ul className="mt-2 list-disc space-y-2 pl-4">
+							<li>Competing on CRM features</li>
+							<li>Tools built for tracking</li>
+							<li>Efficiency language</li>
+							<li>"Manage your pipeline."</li>
+							<li>Product focus</li>
+							<li>Subscription SaaS</li>
+						</ul>
+					</div>
+					<div className="rounded-lg bg-primary/5 p-4">
+						<h4 className="font-semibold text-foreground text-sm">
+							Blue Ocean (DealScale)
+						</h4>
+						<ul className="mt-2 list-disc space-y-2 pl-4">
+							<li>Redefining what a CRM even is</li>
+							<li>Systems built for earning</li>
+							<li>Wealth and freedom language</li>
+							<li>"Automate your income."</li>
+							<li>Lifestyle movement</li>
+							<li>Wealth-as-a-Service ecosystem</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		),
 	},
 	{
-		title: "Q1 2025",
-		subtitle: "MVP & Market Validation",
+		title: timelineSummary[3].title,
+		subtitle: timelineSummary[3].subtitle,
 		content: (
-			<div>
-				<p className="mb-4 font-normal text-neutral-800 text-xs md:text-sm dark:text-neutral-200">
-					Our MVP was ready in January. The market response was overwhelmingly
-					positive, validating the need for a better lead generation and
-					nurturing solution.
+			<div className={cardClass}>
+				<p className="font-semibold text-foreground">We are not a CRM.</p>
+				<p className="font-semibold text-foreground">
+					We are an AI Wealth Engine.
 				</p>
-				<div className="mb-8 space-y-2">
-					<div className="flex items-center gap-2 text-neutral-700 text-xs md:text-sm dark:text-neutral-300">
-						✅ 200+ passionate beta users signed up to test the platform.
-					</div>
-					<div className="flex items-center gap-2 font-semibold text-neutral-800 text-xs md:text-sm dark:text-neutral-200">
-						✅ 50+ early customers began paying for our service, confirming
-						real-world value and ROI.
-					</div>
-					<div className="flex items-center gap-2 text-neutral-700 text-xs md:text-sm dark:text-neutral-300">
-						✅ Early results showed a 70% reduction in manual calling and a 40%
-						boost in nurturing efficiency.
-					</div>
-				</div>
-				<div className="grid grid-cols-2 gap-4">
-					<img
-						src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop"
-						alt="Happy customers using product"
-						width={500}
-						height={500}
-						className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-					/>
-					<img
-						src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=800&auto=format&fit=crop"
-						alt="Growth chart"
-						width={500}
-						height={500}
-						className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-					/>
+				<p>
+					DealScale orchestrates your entire cross-CRM universe, running
+					automations, enriching data, cloning your voice, and proving the
+					dollars it generates.
+				</p>
+				<p>
+					It is where real estate professionals stop working in their business
+					and start scaling as a brand.
+				</p>
+			</div>
+		),
+	},
+	{
+		title: timelineSummary[4].title,
+		subtitle: timelineSummary[4].subtitle,
+		content: (
+			<div className={cardClass}>
+				<p>
+					The League turns success into a game, ranking every operator on impact
+					metrics that actually matter: ROI, time saved, and deal value.
+				</p>
+				<blockquote className="border-primary/40 border-l-2 pl-4 font-semibold text-base text-foreground">
+					"Your pipeline is the scoreboard."
+				</blockquote>
+				<ul className="list-disc space-y-2 pl-4">
+					<li>
+						<strong>Operators:</strong> learn automation and build their first
+						playbooks.
+					</li>
+					<li>
+						<strong>Closers:</strong> dominate with AI voice agents and
+						conversation intelligence.
+					</li>
+					<li>
+						<strong>Titans:</strong> mentor the field and profit from the system
+						itself.
+					</li>
+				</ul>
+				<p>
+					It is not gamifying work; it is making wealth a competition worth
+					joining.
+				</p>
+			</div>
+		),
+	},
+	{
+		title: timelineSummary[5].title,
+		subtitle: timelineSummary[5].subtitle,
+		content: (
+			<div className={cardClass}>
+				<p>
+					We do not sell features. We sell status, freedom, and momentum for
+					every ambitious operator on the platform.
+				</p>
+				<p>
+					DealScale users are defined by the lifestyle they unlock, not the
+					software they log into.
+				</p>
+				<div className="rounded-lg bg-muted/20 p-4 font-semibold text-foreground text-sm">
+					<p>Earn while you sleep.</p>
+					<p>Scale while you play.</p>
+					<p>Flex what you have built.</p>
 				</div>
 			</div>
 		),
 	},
 	{
-		title: "Q4 2025",
-		subtitle: "The Future is Automated",
+		title: timelineSummary[6].title,
+		subtitle: timelineSummary[6].subtitle,
 		content: (
-			<div>
-				<p className="font-normal text-neutral-800 text-xs md:text-sm dark:text-neutral-200">
-					Nearing our October launch, we're scaling our proven solution. By
-					refining our AI agents with real-world data, we're building the
-					industry's most effective automation tool. Our vision: to be the AI
-					co-pilot for every real estate deal.
+			<div className={cardClass}>
+				<p>
+					Every promise is engineered to show real-time progress on wealth,
+					freedom, and credibility.
 				</p>
+				<div className="grid gap-4 md:grid-cols-2">
+					<div className="rounded-lg bg-muted/20 p-4">
+						<h4 className="font-semibold text-foreground text-sm">Speed</h4>
+						<p>Launch in five minutes and see automations go live instantly.</p>
+					</div>
+					<div className="rounded-lg bg-muted/20 p-4">
+						<h4 className="font-semibold text-foreground text-sm">
+							Automation
+						</h4>
+						<p>
+							AI that calls, texts, and follows up while you move through your
+							day.
+						</p>
+					</div>
+					<div className="rounded-lg bg-muted/20 p-4">
+						<h4 className="font-semibold text-foreground text-sm">Wealth</h4>
+						<p>
+							ROI dashboards that track dollars earned and hours saved in
+							real-time.
+						</p>
+					</div>
+					<div className="rounded-lg bg-muted/20 p-4">
+						<h4 className="font-semibold text-foreground text-sm">Freedom</h4>
+						<p>Operate from anywhere and own your time outright.</p>
+					</div>
+					<div className="rounded-lg bg-muted/20 p-4 md:col-span-2">
+						<h4 className="font-semibold text-foreground text-sm">Status</h4>
+						<p>
+							Leaderboards, badges, and proof-of-success for every win you log.
+						</p>
+					</div>
+				</div>
+			</div>
+		),
+	},
+	{
+		title: timelineSummary[7].title,
+		subtitle: timelineSummary[7].subtitle,
+		content: (
+			<div className={cardClass}>
+				<p>
+					For brokerages and advanced investors, DealScale offers a self-hosted
+					license so your AI trains on your data and stays fully compliant.
+				</p>
+				<p>
+					Your instance becomes a private wealth engine you own, govern, and
+					profit from.
+				</p>
+				<ul className="list-disc space-y-2 pl-4">
+					<li>Revenue share to align incentives.</li>
+					<li>Hybrid licensing for strategic partners.</li>
+					<li>Full buyout when owning the stack is mission critical.</li>
+				</ul>
+				<p>Freedom through ownership. Profit through automation.</p>
+			</div>
+		),
+	},
+	{
+		title: timelineSummary[8].title,
+		subtitle: timelineSummary[8].subtitle,
+		content: (
+			<div className={cardClass}>
+				<ul className="list-disc space-y-2 pl-4">
+					<li>Stop Dialing. Start Scaling.</li>
+					<li>Make Money While You Sleep or While You Are on the Jet Ski.</li>
+					<li>Your CRM Will Not Make You Rich. DealScale Will.</li>
+					<li>Automation Is the New Status Symbol.</li>
+					<li>Wealth at the Speed of AI.</li>
+				</ul>
+			</div>
+		),
+	},
+	{
+		title: timelineSummary[9].title,
+		subtitle: timelineSummary[9].subtitle,
+		content: (
+			<div className={cardClass}>
+				<p>
+					DealScale is not about software. It is about leverage: the first AI
+					Wealth Engine built for real estate visionaries who demand both
+					freedom and future-proof scale.
+				</p>
+				<blockquote className="border-primary/40 border-l-2 pl-4 font-semibold text-base text-foreground">
+					Built for the ambitious, designed for freedom, and scaled for the
+					future.
+				</blockquote>
 			</div>
 		),
 	},

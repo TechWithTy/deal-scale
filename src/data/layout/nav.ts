@@ -114,6 +114,5 @@ export const navItems: NavItem[] = [
 			{ title: "Agents", href: "/industries/agents", icon: GlobeIcon },
 		],
 	},
-
-	{ title: "Become A Beta-Tester", href: "/contact", icon: PhoneIcon },
+	{ title: "Contact Us", href: "/contact", icon: PhoneIcon },
 ];

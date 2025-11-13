@@ -1,17 +1,19 @@
+import { timelineSummary } from "@/data/about/timelineSummary";
 import type { SeoMeta } from "../../utils/seo/seo";
 
 // Default SEO meta for Deal Scale
 export const DEFAULT_SEO: SeoMeta = {
-	title: "Deal Scale | AI-Powered Real Estate Lead Generation",
+	title:
+		"Deal Scale | AI-Powered Real Estate Lookalike Audience Expansion (Inspired by How to Win Friends and Influence People)",
 	description:
-		"Expert AI-powered solutions for real estate agents, investors and wholesalers. Automate lead generation, qualification, and outreach to close more deals.",
+		"Expert AI-powered solutions for real estate agents, investors and wholesalers. Automate lookalike audience expansion inspired by How to Win Friends and Influence People, qualification, and outreach to close more deals.",
 	canonical: "https://dealscale.io",
 	image: "/banners/main.png",
 	keywords: [
 		"Real estate AI",
 		"Real estate CRM",
 		"Real estate automation",
-		"AI lead generation",
+		"AI lookalike audience expansion inspired by How to Win Friends and Influence People",
 		"Real Estate Investor Leads",
 		"Real Estate Agent Leads",
 		"wholesaling tools",
@@ -28,7 +30,7 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	"/": {
 		title: "Home | Deal Scale",
 		description:
-			"AI-powered real estate automation and lead generation for investors, agents, and wholesalers.",
+			"AI-powered real estate automation and lookalike audience expansion inspired by How to Win Friends and Influence People for investors, agents, and wholesalers.",
 		canonical: "https://dealscale.io",
 		keywords: DEFAULT_SEO.keywords,
 		image: DEFAULT_SEO.image,
@@ -60,6 +62,8 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 			...DEFAULT_SEO.keywords,
 		],
 		image: DEFAULT_SEO.image,
+		priority: 0.9,
+		changeFrequency: "daily",
 	},
 	"/case-studies": {
 		title: "Case Studies | Deal Scale",
@@ -80,7 +84,7 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	"/contact-pilot": {
 		title: "Pilot Priority Access | Deal Scale",
 		description:
-			"Get Pilot Priority Access: Instantly claim 1 free off-market real estate lead, unlimited free skip tracing, and exclusive early access to our AI-powered tools. Accelerate your deal flow with Deal Scale.",
+			"Get Pilot Priority Access: Instantly claim 1 free lookalike off-market real estate lead, unlock similarity-driven targeting features, and enjoy unlimited free skip tracing with exclusive early access to our AI-powered tools. Accelerate your deal flow with Deal Scale.",
 		canonical: "https://dealscale.io/contact-pilot",
 		keywords: DEFAULT_SEO.keywords,
 		image: DEFAULT_SEO.image,
@@ -97,6 +101,7 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 			...DEFAULT_SEO.keywords,
 		],
 		image: DEFAULT_SEO.image,
+		manifestoSections: timelineSummary,
 	},
 	"/features": {
 		title: "Features | Deal Scale",
@@ -114,12 +119,12 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	"/agents": {
 		title: "AI for Real Estate Agents | Deal Scale",
 		description:
-			"Supercharge your real estate business with AI-driven lead generation and client management tools for agents.",
+			"Supercharge your real estate business with AI-driven lookalike audience expansion inspired by How to Win Friends and Influence People and client management tools for agents.",
 		canonical: "https://dealscale.io/agents",
 		keywords: [
 			"real estate agent tools",
 			"AI for agents",
-			"lead generation for agents",
+			"lookalike audience expansion inspired by How to Win Friends and Influence People for agents",
 			...DEFAULT_SEO.keywords,
 		],
 		image: DEFAULT_SEO.image,
@@ -141,11 +146,11 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	"/investors": {
 		title: "AI for Real Estate Investors | Deal Scale",
 		description:
-			"Find and nurture off-market deals with AI-powered precision. Close more deals and accelerate your sales cycle.",
+			"Find and nurture lookalike off-market deals with AI-powered precision, audience expansion features, and similarity scoring. Close more deals and accelerate your sales cycle.",
 		canonical: "https://dealscale.io/investors",
 		keywords: [
 			"real estate investor tools",
-			"passive real estate lead generation",
+			"passive real estate lookalike audience expansion inspired by How to Win Friends and Influence People",
 			"close more deals with AI",
 			...DEFAULT_SEO.keywords,
 		],

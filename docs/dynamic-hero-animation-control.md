@@ -26,7 +26,7 @@ Key responsibilities:
    });
    ```
 
-3. Store the resolved value in local state (`isHeroAnimating`) where `undefined` defaults to `true` (SSR-safe).
+3. Store the resolved value in local state (`isHeroAnimating`) where `undefined` defaults to `true` (SSR-safe). The setter is guarded to avoid unnecessary renders when the intersection result hasn't changed.
 4. Pass the flag to `HeroHeadline` through the `isAnimating` prop:
 
    ```tsx
@@ -40,7 +40,17 @@ Key responsibilities:
    />
    ```
 
-> **SSR note:** `useInView` only runs in the browser. Initial render still passes `true` so the server output is deterministic and avoids hydration mismatches.
+> **SSR note:** `useInView` only runs in the browser. Initial render still passes `true` so the server output is deterministic and avoids hydration mismatches. The helper that scrolls to the metrics section and the manual `IntersectionObserver` that powers the scroll progress indicator both early-return during SSR to avoid referencing `window`.
+
+### Scroll Progress Observer
+
+- `IntersectionObserver` now memoizes the observed sections and only pushes state updates when the active section changes. This eliminates redundant `setState` calls while keeping the scroll progress indicator accurate.
+- Section elements are cached in a ref so the observer can disconnect cleanly without repeating DOM lookups.
+
+### Background Performance
+
+- The layered background grid is rendered via `InteractiveGridPattern`. The component no longer tracks hover state in React; instead it relies on CSS `:hover` styles and memoised SVG coordinates.
+- Wrapping the grid component in `React.memo` keeps it from re-rendering when hero state changes (e.g., the animation visibility flag), improving paint stability on scroll-heavy pages.
 
 ## HeroHeadline API
 

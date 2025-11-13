@@ -237,30 +237,34 @@
 			transform: translateY(calc(-100% - var(--gap)));
 		}
 	}
-  @keyframes gradient {
-  to {
-    background-position: var(--bg-size, 300%) 0;
+	@keyframes gradient {
+		to {
+			background-position: var(--bg-size, 300%) 0;
 		}
 	}
-  @keyframes gradient {
-  to {
-    background-position: var(--bg-size, 300%) 0;
+	@keyframes gradient {
+		to {
+			background-position: var(--bg-size, 300%) 0;
 		}
 	}
-  @keyframes blink-cursor {
-  0%, 49% {
-    opacity: 1;
+	@keyframes blink-cursor {
+		0%,
+		49% {
+			opacity: 1;
 		}
-  50%, 100% {
-    opacity: 0;
+		50%,
+		100% {
+			opacity: 0;
 		}
 	}
-  @keyframes blink-cursor {
-  0%, 49% {
-    opacity: 1;
+	@keyframes blink-cursor {
+		0%,
+		49% {
+			opacity: 1;
 		}
-  50%, 100% {
-    opacity: 0;
+		50%,
+		100% {
+			opacity: 0;
 		}
 	}
 }

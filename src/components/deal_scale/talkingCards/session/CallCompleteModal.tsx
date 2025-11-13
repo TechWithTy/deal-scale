@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Loader2, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { useEffect, useRef, useState } from "react";
 
 interface CallCompleteModalProps {
@@ -36,7 +36,7 @@ export const CallCompleteModal = ({
 	isLoading: externalLoading = false,
 	variant = "complete",
 }: CallCompleteModalProps) => {
-	const router = useRouter();
+	const router = useNavigationRouter();
 	const handleClose = () => {
 		const audioElements = document.getElementsByTagName("audio");
 		for (const audio of audioElements) {

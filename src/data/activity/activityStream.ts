@@ -19,7 +19,7 @@ export const activityStream: ActivityEvent[] = [
 		id: "lead-sync",
 		label: "Pipeline Sync",
 		actor: "DealScale AI Router",
-		action: "Synced 48 off-market seller leads from InvestorFuse CRM.",
+		action: "Synced 48 lookalike off-market seller leads from InvestorFuse CRM using similarity clustering.",
 		timeAgo: "2m ago",
 		impact: "+12% response SLA",
 		tags: ["sync", "crm"],
@@ -46,7 +46,8 @@ export const activityStream: ActivityEvent[] = [
 		id: "compliance-audit",
 		label: "Compliance Audit",
 		actor: "Audit Bot",
-		action: "Archived diligence calls and attached transcripts to the investor CRM.",
+		action:
+			"Archived diligence calls and attached transcripts to the investor CRM.",
 		timeAgo: "18m ago",
 		impact: "Audit ready",
 		tags: ["compliance"],
@@ -64,10 +65,10 @@ export const activityStream: ActivityEvent[] = [
 		id: "campaign-report",
 		label: "Campaign Report",
 		actor: "Insights Engine",
-		action: "Published weekly deal flow uplift report for the acquisitions desk.",
+		action:
+			"Published weekly deal flow uplift report for the acquisitions desk.",
 		timeAgo: "1h ago",
 		impact: "+31% demos",
 		tags: ["reporting", "insights"],
 	},
 ];
-

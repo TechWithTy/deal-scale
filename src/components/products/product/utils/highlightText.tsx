@@ -1,79 +1,142 @@
 import { cn } from "@/lib/utils";
+import { Fragment } from "react";
 
-export function highlightText(
-	text: string,
-	primary: string[] = [],
-	secondary: string[] = [],
-) {
-	if (!primary.length && !secondary.length) return text;
+type HighlightKind =
+	| "cta"
+	| "solution"
+	| "hope"
+	| "fear"
+	| "pain"
+	| "keyword";
 
-	// Combine and dedupe highlights, sort by length descending for greedy matching
-	const allHighlights = [...primary, ...secondary].filter(Boolean);
-	if (!allHighlights.length) return text;
+type HighlightGroups = Partial<Record<HighlightKind, string[]>>;
 
-	const sorted = Array.from(new Set(allHighlights)).sort(
-		(a, b) => b.length - a.length,
-	);
+const HIGHLIGHT_STYLES: Record<HighlightKind, string> = {
+	cta: "bg-emerald-100 text-emerald-900 dark:bg-emerald-600/60 dark:text-emerald-50",
+	solution:
+		"bg-blue-100 text-blue-900 dark:bg-blue-600/40 dark:text-blue-50",
+	hope: "bg-sky-100 text-sky-900 dark:bg-sky-500/40 dark:text-sky-50",
+	fear: "bg-red-100 text-red-900 dark:bg-red-600/50 dark:text-red-50",
+	pain: "bg-rose-100 text-rose-900 dark:bg-rose-600/40 dark:text-rose-50",
+	keyword:
+		"bg-purple-100 text-purple-900 dark:bg-purple-500/40 dark:text-purple-50",
+};
 
-	const pattern = sorted
-		.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-		.join("|");
-	const regex = new RegExp(pattern, "gi");
-	const parts = text.split(regex);
-	const matches: Array<{ index: number; match: string }> = [];
+const ORDER: HighlightKind[] = [
+	"cta",
+	"solution",
+	"fear",
+	"hope",
+	"pain",
+	"keyword",
+];
 
-	// Find all matches
-	// Find all matches
-	let match = regex.exec(text);
-	while (match !== null) {
-		matches.push({ index: match.index, match: match[0] });
-		match = regex.exec(text);
-	}
+const escapeForRegex = (value: string) =>
+	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-	const result: (string | JSX.Element)[] = [];
+interface HighlightDescriptor {
+	key: HighlightKind;
+	phrase: string;
+	className: string;
+}
 
-	for (let i = 0; i < parts.length; i += 1) {
-		result.push(parts[i]);
+const buildDescriptors = (groups: HighlightGroups) => {
+	const descriptors: HighlightDescriptor[] = [];
+	const seen = new Set<string>();
 
-		if (i < matches.length) {
-			const phrase = matches[i].match;
-			const isPrimaryMatch = primary.some(
-				(w) => w.toLowerCase() === phrase.toLowerCase(),
+	ORDER.forEach((key) => {
+		const phrases = groups[key];
+		if (!phrases) return;
+
+		phrases.forEach((phrase) => {
+			const trimmed = phrase?.trim();
+			if (!trimmed) return;
+
+			const identifier = `${key}:${trimmed.toLowerCase()}`;
+			if (seen.has(identifier)) return;
+			seen.add(identifier);
+
+			descriptors.push({
+				key,
+				phrase: trimmed,
+				className: HIGHLIGHT_STYLES[key],
+			});
+		});
+	});
+
+	return descriptors;
+};
+
+export function highlightText(text: string, groups: HighlightGroups = {}) {
+	const descriptors = buildDescriptors(groups);
+	if (!descriptors.length) return text;
+
+	const occupied: Array<{ start: number; end: number }> = [];
+	const matches: Array<{
+		start: number;
+		end: number;
+		className: string;
+		key: HighlightKind;
+		match: string;
+	}> = [];
+
+	descriptors.forEach((descriptor) => {
+		const regex = new RegExp(escapeForRegex(descriptor.phrase), "gi");
+		let match: RegExpExecArray | null;
+
+		// eslint-disable-next-line no-cond-assign
+		while ((match = regex.exec(text)) !== null) {
+			const start = match.index;
+			const end = start + match[0].length;
+			const overlaps = occupied.some(
+				(range) => Math.max(range.start, start) < Math.min(range.end, end),
 			);
-			const isSecondaryMatch = secondary.some(
-				(w) => w.toLowerCase() === phrase.toLowerCase(),
-			);
 
-			if (isPrimaryMatch) {
-				// First primary (CTA) is green, others use template color
-				const isFirstPrimary =
-					primary[0]?.toLowerCase() === phrase.toLowerCase();
-				result.push(
-					<mark
-						key={`${i}-${phrase}`}
-						className={cn(
-							"rounded px-1 font-medium",
-							isFirstPrimary
-								? "bg-emerald-100 text-emerald-900 dark:bg-emerald-600/60 dark:text-emerald-50"
-								: "bg-primary/10 text-foreground dark:bg-primary/40 dark:text-primary-foreground",
-						)}
-					>
-						{phrase}
-					</mark>,
-				);
-			} else if (isSecondaryMatch) {
-				// Orange-red for secondary matches
-				result.push(
-					<mark
-						key={`${i}-${phrase}`}
-						className="rounded bg-orange-100 px-1 font-medium text-orange-900 dark:bg-red-700/60 dark:text-orange-50"
-					>
-						{phrase}
-					</mark>,
-				);
-			}
+			if (overlaps) continue;
+
+			occupied.push({ start, end });
+			matches.push({
+				start,
+				end,
+				className: descriptor.className,
+				key: descriptor.key,
+				match: match[0],
+			});
 		}
+	});
+
+	if (!matches.length) return text;
+
+	matches.sort((a, b) => a.start - b.start);
+
+	const nodes: React.ReactNode[] = [];
+	let cursor = 0;
+
+	matches.forEach((item, index) => {
+		if (cursor < item.start) {
+			nodes.push(
+				<Fragment key={`text-${index}-${cursor}`}>
+					{text.slice(cursor, item.start)}
+				</Fragment>,
+			);
+		}
+
+		nodes.push(
+			<mark
+				key={`highlight-${item.key}-${index}`}
+				className={cn("rounded px-1 py-0.5 font-semibold", item.className)}
+			>
+				{item.match}
+			</mark>,
+		);
+		cursor = item.end;
+	});
+
+	if (cursor < text.length) {
+		nodes.push(
+			<Fragment key={`text-tail-${cursor}`}>{text.slice(cursor)}</Fragment>,
+		);
 	}
 
-	return result;
+	return nodes;
 }

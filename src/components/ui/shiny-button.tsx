@@ -1,7 +1,11 @@
 "use client";
 
-import { forwardRef, type ButtonHTMLAttributes, type CSSProperties } from "react";
-import { motion, type MotionProps } from "motion/react";
+import { type MotionProps, motion } from "motion/react";
+import {
+	type ButtonHTMLAttributes,
+	type CSSProperties,
+	forwardRef,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -10,7 +14,7 @@ const animationProps: MotionProps = {
 	animate: { "--x": "-100%", scale: 1 },
 	whileTap: { scale: 0.95 },
 	transition: {
-		repeat: Infinity,
+		repeat: Number.POSITIVE_INFINITY,
 		repeatType: "loop",
 		repeatDelay: 1,
 		type: "spring",

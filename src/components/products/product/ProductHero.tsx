@@ -15,7 +15,7 @@ import type { HeroGridItem } from "@/data/products/hero";
 import { DEFAULT_GRID, defaultHeroProps } from "@/data/products/hero";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -37,7 +37,7 @@ interface ProductHeroExtendedProps extends ProductHeroProps {
 }
 
 const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
-	const router = useRouter();
+	const router = useNavigationRouter();
 	const {
 		headline = "",
 		highlight = "",

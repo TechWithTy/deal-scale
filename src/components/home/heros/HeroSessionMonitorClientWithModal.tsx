@@ -1,11 +1,11 @@
 "use client";
 import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
-import { useRouter } from "next/navigation";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { useState } from "react";
 import HeroSessionMonitorClient from "./HeroSessionMonitorClient";
 
 export default function HeroSessionMonitorClientWithModal() {
-	const router = useRouter();
+	const router = useNavigationRouter();
 	// State for controlling the call completion modal's visibility
 	const [showCallCompleteModal, setShowCallCompleteModal] = useState(false);
 	const [modalContent, setModalContent] = useState<"complete" | "transfer">(

@@ -6,6 +6,29 @@ export interface AbTestKpi {
 	goal?: number;
 	unit?: string;
 }
+
+export interface AbTestWarning {
+	code: string;
+	message: string;
+	severity: "info" | "warning" | "error";
+	variantName?: string;
+	variantIndex?: number;
+	field?: keyof ABTestCopy | "percentage" | "cta";
+}
+
+export interface AbTestAnalysisSummary {
+	variantCount: number;
+	totalPercentage: number;
+	isBalanced: boolean;
+	isActive: boolean;
+}
+
+export interface AbTestAnalysis {
+	summary: AbTestAnalysisSummary;
+	warnings: AbTestWarning[];
+	normalized: boolean;
+}
+
 export interface ABTestCopy {
 	cta: string;
 	buttonCta?: string;
@@ -16,8 +39,12 @@ export interface ABTestCopy {
 	target_audience: string;
 	pain_point: string;
 	solution: string;
+	hope: string;
+	fear: string;
 	highlights?: string[];
 	highlighted_words?: string[];
+	fears?: string[];
+	pain_points?: string[];
 	additionalInfo?: string;
 	aiGenerated?: {
 		model: string;
@@ -46,5 +73,6 @@ export interface ABTest {
 	targetAudience?: string;
 	kpis?: AbTestKpi[];
 	tags?: string[];
+	analysis?: AbTestAnalysis;
 	[key: string]: unknown;
 }

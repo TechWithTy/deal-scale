@@ -12,26 +12,18 @@ interface AbTestCopySectionProps {
 
 const AbTestCopySection = ({ abTestCopy }: AbTestCopySectionProps) => {
 	if (!abTestCopy) return null;
-	// Primary highlights: CTA, solution, highlighted_words
-	const primaryHighlights = Array.from(
-		new Set(
-			[
-				abTestCopy.cta,
-				abTestCopy.solution,
-				...(abTestCopy.highlighted_words ?? []),
-			].filter(Boolean),
-		),
-	);
-	// Secondary highlights: pain_point
-	const secondaryHighlights = abTestCopy.pain_point
-		? [abTestCopy.pain_point]
-		: [];
-
 	const conversation = generateSalesConversation(abTestCopy);
 	return (
 		<section className="my-8 rounded-md border border-muted bg-muted/40 p-4">
 			<div className="whitespace-pre-line text-base text-black dark:text-white">
-				{highlightText(conversation, primaryHighlights, secondaryHighlights)}
+				{highlightText(conversation, {
+					cta: abTestCopy.cta ? [abTestCopy.cta] : [],
+					solution: abTestCopy.solution ? [abTestCopy.solution] : [],
+					hope: abTestCopy.hope ? [abTestCopy.hope] : [],
+					fear: abTestCopy.fear ? [abTestCopy.fear] : [],
+					pain: abTestCopy.pain_point ? [abTestCopy.pain_point] : [],
+					keyword: abTestCopy.highlighted_words ?? [],
+				})}
 			</div>
 			{abTestCopy.highlights && abTestCopy.highlights.length > 0 && (
 				<HighlightsSection highlights={abTestCopy.highlights} />

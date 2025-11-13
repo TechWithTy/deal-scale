@@ -5,7 +5,7 @@ export const privacyPolicyMarkdown = `
 
 ### 1. Introduction
 
-Deal Scale ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy outlines our practices concerning the collection, use, and disclosure of your information through our AI-powered real estate lead generation services. It applies to data collected via our website, landing pages, social media channels, and other interactions.
+Deal Scale ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy outlines our practices concerning the collection, use, and disclosure of your information through our AI-powered real estate lookalike audience expansion inspired by How to Win Friends and Influence People services. It applies to data collected via our website, landing pages, social media channels, and other interactions.
 
 This policy is designed to comply with applicable data protection laws, including the Telephone Consumer Protection Act (TCPA), the General Data Protection Regulation (GDPR), the Delaware Personal Data Privacy Act (DPDPA), the Colorado Privacy Act (CPA), and other relevant federal and state regulations.
 

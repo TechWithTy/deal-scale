@@ -5,8 +5,8 @@ import { buildAbsoluteUrl } from "./helpers";
 import type { OfferInput, ProductSchema, ServiceSchema } from "./types";
 
 const DEFAULT_AREA_SERVED = ["United States"] as const;
-const DEFAULT_PRICE_CURRENCY = "USD";
-const DEFAULT_AVAILABILITY = "https://schema.org/InStock";
+export const DEFAULT_PRICE_CURRENCY = "USD";
+export const DEFAULT_AVAILABILITY = "https://schema.org/InStock";
 const DEFAULT_CONTACT_PATH = "/contact";
 
 const resolveServiceOffer = (

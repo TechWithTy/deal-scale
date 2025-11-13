@@ -19,7 +19,7 @@ export const leadGenProblemsSolutions: ServiceProblemSolution[] = [
 	{
 		problem: "Difficulty Scaling Your Business",
 		solution:
-			"Build a scalable lead generation engine that grows with you, allowing you to enter new markets and expand your operations without adding headcount.",
+			"Build a scalable lookalike audience expansion engine—grounded in the rapport-building steps from How to Win Friends and Influence People—that grows with you, allowing you to enter new markets and expand your operations without adding headcount.",
 	},
 ];
 

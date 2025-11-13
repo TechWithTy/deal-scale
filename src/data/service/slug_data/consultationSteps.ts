@@ -68,7 +68,7 @@ export const pilotProgramSteps: ConsultationStep[] = [
 		number: 2,
 		title: "Lock-In Exclusive Pilot Pricing",
 		description:
-			"By joining the Pilot Program, you guarantee early adopter pricing, protected for 5 years—regardless of future price increases. Enjoy maximum value and ROI as new features are released.",
+			"By joining the Pilot Program, you guarantee early adopter pricing, protected for 2 years—regardless of future price increases. Enjoy maximum value and ROI as new features are released.",
 	},
 	{
 		number: 3,

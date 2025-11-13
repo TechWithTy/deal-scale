@@ -4,12 +4,12 @@ import type { Metadata } from "next";
 
 import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
 import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
+import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import {
 	SchemaInjector,
-	buildServiceSchema,
 	type SchemaPayload,
+	buildServiceSchema,
 } from "@/utils/seo/schema";
-import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 
 const REAL_TIME_ANALYTICS_PATH = "/demos/real-time-analytics";
@@ -71,17 +71,13 @@ const REAL_TIME_ANALYTICS_SCHEMAS: SchemaPayload = [
 
 export async function generateMetadata(): Promise<Metadata> {
 	const keywords = Array.from(
-		new Set([
-			...(REAL_TIME_ANALYTICS_SEO.keywords ?? []),
-			...FEATURE_KEYWORDS,
-		]),
+		new Set([...(REAL_TIME_ANALYTICS_SEO.keywords ?? []), ...FEATURE_KEYWORDS]),
 	).slice(0, 32);
 
 	return mapSeoMetaToMetadata({
 		...REAL_TIME_ANALYTICS_SEO,
 		title:
-			REAL_TIME_ANALYTICS_SEO.title ??
-			"Real-Time Analytics Demo | Deal Scale",
+			REAL_TIME_ANALYTICS_SEO.title ?? "Real-Time Analytics Demo | Deal Scale",
 		description:
 			REAL_TIME_ANALYTICS_SEO.description ??
 			"Explore Deal Scale’s real-time analytics workspace. Toggle between dashboards, experimentation, and collaboration demos inside an interactive MacBook showcase.",
@@ -116,10 +112,10 @@ export default function RealTimeAnalyticsDemoPage(): JSX.Element {
 				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.22),transparent_60%)]" />
 				<div className="container relative mx-auto flex max-w-6xl flex-col gap-16 px-6 py-16 md:px-10 lg:px-16">
 					<header className="flex flex-col gap-6 text-center md:gap-8">
-						<span className="mx-auto inline-flex w-fit items-center rounded-full border border-blue-500/40 bg-blue-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-blue-200">
+						<span className="mx-auto inline-flex w-fit items-center rounded-full border border-blue-500/40 bg-blue-500/10 px-4 py-1 font-semibold text-blue-200 text-xs uppercase tracking-wide">
 							Interactive product tour
 						</span>
-						<h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+						<h1 className="text-balance font-semibold text-4xl tracking-tight sm:text-5xl">
 							See your analytics, experiments, and team rituals in one Macbook
 							command center
 						</h1>
@@ -136,10 +132,10 @@ export default function RealTimeAnalyticsDemoPage(): JSX.Element {
 						{HIGHLIGHT_COLUMNS.map((highlight) => (
 							<Fragment key={highlight.title}>
 								<div className="flex flex-col gap-3 rounded-3xl border border-border/40 bg-background/70 p-5">
-									<h3 className="text-lg font-semibold text-foreground">
+									<h3 className="font-semibold text-foreground text-lg">
 										{highlight.title}
 									</h3>
-									<p className="text-sm text-muted-foreground">
+									<p className="text-muted-foreground text-sm">
 										{highlight.description}
 									</p>
 								</div>
@@ -151,4 +147,3 @@ export default function RealTimeAnalyticsDemoPage(): JSX.Element {
 		</>
 	);
 }
-

@@ -82,11 +82,11 @@ export const painPointOptions: ContactFormOption[] = [
 	},
 	{
 		value: "high_lead_generation_costs",
-		label: "High lead generation / marketing costs",
+		label: "High lookalike audience expansion (relationship-first marketing) costs",
 	},
 	{
 		value: "missing_off_market_deals",
-		label: "Missing out on off-market deals",
+		label: "Missing out on lookalike off-market deals and similarity features",
 	},
 ];
 

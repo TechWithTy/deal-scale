@@ -1,6 +1,194 @@
-import type { ABTest } from "@/types/testing";
+import type {
+	ABTest,
+	ABTestCopy,
+	AbTestVariant,
+	AbTestAnalysis,
+	AbTestWarning,
+} from "@/types/testing";
 
-export const abTestExample: ABTest = {
+type AbTestCopyInput = Omit<ABTestCopy, "hope" | "fear"> &
+	Partial<Pick<ABTestCopy, "hope" | "fear">>;
+
+type AbTestVariantInput = Omit<AbTestVariant, "copy"> & {
+	copy?: AbTestCopyInput;
+};
+
+type AbTestInput = Omit<ABTest, "variants"> & {
+	variants: AbTestVariantInput[];
+};
+
+const sanitizeCopy = (copy: AbTestCopyInput): ABTestCopy => {
+	const trimmed = Object.entries(copy).reduce<
+		Partial<ABTestCopy> & Record<string, unknown>
+	>((acc, [key, value]) => {
+		if (typeof value === "string") {
+			acc[key] = value.trim();
+			return acc;
+		}
+		if (Array.isArray(value)) {
+			acc[key] = value.map((item) =>
+				typeof item === "string" ? item.trim() : item,
+			);
+			return acc;
+		}
+		acc[key] = value;
+		return acc;
+	}, {});
+
+	const hopeSource =
+		(trimmed.hope && trimmed.hope.length > 0 ? trimmed.hope : undefined) ??
+		(typeof trimmed.whatsInItForMe === "string"
+			? trimmed.whatsInItForMe
+			: undefined) ??
+		(trimmed.solution && trimmed.solution.length > 0
+			? trimmed.solution
+			: undefined) ??
+		"";
+
+	const fearSource =
+		(trimmed.fear && trimmed.fear.length > 0 ? trimmed.fear : undefined) ??
+		(trimmed.pain_point && trimmed.pain_point.length > 0
+			? trimmed.pain_point
+			: undefined) ??
+		"";
+
+	return {
+		...trimmed,
+		hope: hopeSource,
+		fear: fearSource,
+		highlighted_words: Array.from(
+			new Set(
+				((trimmed.highlighted_words as string[] | undefined) ?? [])
+					.map((word) => word.trim())
+					.filter(Boolean),
+			),
+		),
+	} as ABTestCopy;
+};
+
+const analyzeVariants = (
+	variants: AbTestVariant[],
+	testName: string,
+	isActive: boolean | undefined,
+): AbTestAnalysis => {
+	const warnings: AbTestWarning[] = [];
+	const totalPercentage = variants.reduce(
+		(total, variant) => total + (variant.percentage ?? 0),
+		0,
+	);
+
+	if (Math.abs(totalPercentage - 100) > 0.001) {
+		warnings.push({
+			code: "percentage-total-mismatch",
+			message: `Variants in "${testName}" add up to ${totalPercentage}, expected 100.`,
+			severity: "warning",
+			field: "percentage",
+		});
+	}
+
+	const ctas = new Map<string, number>();
+	variants.forEach((variant, index) => {
+		const { copy, name } = variant;
+		if (!copy) {
+			warnings.push({
+				code: "missing-copy",
+				message: `Variant "${name ?? `#${index + 1}`}" is missing copy.`,
+				severity: "error",
+				variantIndex: index,
+				variantName: name,
+			});
+			return;
+		}
+
+		if (!copy.hope || copy.hope.length < 5) {
+			warnings.push({
+				code: "weak-hope",
+				message: `Hope statement is very short for variant "${name ?? `#${index + 1}`}".`,
+				severity: "warning",
+				variantIndex: index,
+				variantName: name,
+				field: "hope",
+			});
+		}
+
+		if (!copy.fear || copy.fear.length < 5) {
+			warnings.push({
+				code: "weak-fear",
+				message: `Fear statement is very short for variant "${name ?? `#${index + 1}`}".`,
+				severity: "warning",
+				variantIndex: index,
+				variantName: name,
+				field: "fear",
+			});
+		}
+
+		const ctaKey = copy.cta.toLowerCase();
+		ctaKey && ctas.set(ctaKey, (ctas.get(ctaKey) ?? 0) + 1);
+
+		if (copy.highlighted_words && copy.highlighted_words.length > 4) {
+			warnings.push({
+				code: "highlights-overload",
+				message: `Variant "${name ?? `#${index + 1}`}" has more than 4 highlighted words.`,
+				severity: "info",
+				variantIndex: index,
+				variantName: name,
+				field: "highlighted_words",
+			});
+		}
+	});
+
+	Array.from(ctas.entries()).forEach(([cta, count]) => {
+		if (count > 1) {
+			warnings.push({
+				code: "duplicate-cta",
+				message: `CTA "${cta}" appears in multiple variants.`,
+				severity: "warning",
+				field: "cta",
+			});
+		}
+	});
+
+	return {
+		normalized: true,
+		summary: {
+			variantCount: variants.length,
+			totalPercentage,
+			isBalanced: Math.abs(totalPercentage - 100) <= 0.001,
+			isActive: Boolean(isActive),
+		},
+		warnings,
+	};
+};
+
+const defineAbTest = (test: AbTestInput): ABTest => {
+	const normalizedVariants = test.variants.map((variant) => {
+		if (!variant.copy) {
+			return variant;
+		}
+
+		return {
+			...variant,
+			copy: sanitizeCopy(variant.copy),
+		};
+	});
+
+	const analysis = analyzeVariants(
+		normalizedVariants,
+		test.name,
+		test.isActive,
+	);
+
+	return {
+		...test,
+		variants: normalizedVariants,
+		analysis,
+	};
+};
+
+const defineAbTests = (tests: AbTestInput[]): ABTest[] =>
+	tests.map((item) => defineAbTest(item));
+
+export const abTestExample = defineAbTest({
 	id: "abtest-001",
 	name: "Product Sales Copy Test",
 	description:
@@ -20,6 +208,8 @@ export const abTestExample: ABTest = {
 					"Feel confident and comfortable updatedx, whether you're at work or play.",
 				target_audience: "Modern Creators",
 				pain_point: "Uncomfotbale Shirts",
+				fear:
+					"Every time you settle for a basic tee you end up sweaty and distracted on camera, so your brand takes the hit.",
 				solution: "Comfortable Shirts",
 				highlights: [
 					"Ultra-soft 100% cotton",
@@ -50,6 +240,8 @@ export const abTestExample: ABTest = {
 					"Experience the difference with our advanced fabric blend and ergonomic fit.",
 				whatsInItForMe: "Upgrade your daily comfort and style.",
 				target_audience: "Ambitious Professionals",
+				fear:
+					"Showing up to a pitch in a sagging tee signals you aren’t ready to operate at a higher level.",
 				highlights: [
 					"Moisture-wicking tech",
 					"Sustainable materials",
@@ -76,8 +268,8 @@ export const abTestExample: ABTest = {
 		{ name: "Overall Conversion Rate", value: 2.0, goal: 3, unit: "%" },
 	],
 	tags: ["sales", "copy", "abtest"],
-};
-export const AIConversationCreditsABTest: ABTest = {
+});
+export const AIConversationCreditsABTest = defineAbTest({
 	id: "abtest-002",
 	name: "AI Conversation Credits",
 	description:
@@ -92,15 +284,17 @@ export const AIConversationCreditsABTest: ABTest = {
 				tagline:
 					"Your AI Agent is Ready to Close Deals. Don't Let It Run Out of Fuel.",
 				subtitle:
-					"Instantly add AI Conversation Credits to keep your automated lead generation, nurturing, and outreach running 24/7.",
+					"Instantly add AI Conversation Credits to keep your automated lookalike audience expansion (inspired by How to Win Friends and Influence People), nurturing, and outreach running 24/7.",
 				description:
 					"Keep your real estate pipeline on full autopilot. AI Conversation Credits power your AI Virtual Agents to make calls, send texts, and nurture leads from first touch to close. Each credit fuels a critical interaction, ensuring no lead goes cold and your deal flow never stops. Top up anytime and choose a bundle with bulk discounts to maximize your ROI.",
 				whatsInItForMe:
 					"This is how you scale effortlessly: Your AI Virtual Agent works around the clock, engaging leads, sending follow-ups, and scheduling calls so you don't have to. More credits mean more automated outreach, a shorter sales cycle, and more closed deals in your pipeline—all without adding headcount.",
 				target_audience:
-					"Growth-focused real estate investors, wholesalers, and flippers who want to use AI automation to scale their business, find more off-market deals, and eliminate tedious manual outreach.",
+					"Growth-focused real estate investors, wholesalers, and flippers who want to use AI automation to scale their business, surface lookalike off-market deals powered by similarity intelligence, and eliminate tedious manual outreach.",
 				pain_point:
 					"Your deal pipeline stalls when manual follow-up becomes overwhelming. You're losing deals because you can't engage every lead instantly and consistently. Scaling your outreach means hiring more staff, which increases overhead and complexity.",
+				fear:
+					"Every unanswered lead gets rerouted to a competitor with an AI dialer—your pipeline goes cold while overhead keeps climbing.",
 				solution:
 					"AI Conversation Credits fuel your automated sales force. They enable your AI Virtual Agent to handle thousands of interactions—calls, texts, and emails—autonomously. This ensures every lead is nurtured instantly, keeping your pipeline full and allowing you to scale outreach infinitely without adding to your payroll.",
 				highlights: [
@@ -129,9 +323,9 @@ export const AIConversationCreditsABTest: ABTest = {
 		{ name: "Overall Conversion Rate", value: 0, goal: 3, unit: "%" },
 	],
 	tags: ["sales", "copy", "abtest", "automation", "ai-credits"],
-};
+});
 
-export const skipTraceCreditsABTests: ABTest[] = [
+export const skipTraceCreditsABTests = defineAbTests([
 	{
 		id: "ab-test-skip-trace-credits-v1",
 		name: "A/B Test for Skip Trace Credits",
@@ -150,13 +344,17 @@ export const skipTraceCreditsABTests: ABTest[] = [
 					description:
 						"Your list of properties is worthless without contact info. Use Skip Trace Credits to instantly uncover accurate phone numbers and emails, transforming your dead list into an actionable outreach campaign. Connect with motivated sellers before your competition does.",
 					whatsInItForMe:
-						"Get the direct phone numbers and emails you need to contact property owners. This lets you bypass gatekeepers, start real conversations, and be the first to make an offer on valuable off-market properties.",
+						"Get the direct phone numbers and emails you need to contact property owners. This lets you bypass gatekeepers, start real conversations, and be the first to make an offer on valuable lookalike off-market properties curated by behavioral twins.",
 					target_audience:
 						"Real estate wholesalers and flippers with lists of potential properties who need accurate contact information to initiate outreach.",
 					pain_point:
 						"Having a list of promising properties but no way to contact the owners, leading to missed opportunities and wasted time on manual searches.",
 					solution:
 						"Our credits provide instant access to verified phone numbers and email addresses for property owners, turning your list of addresses into a high-value, actionable outreach list in seconds.",
+					hope:
+						"Imagine pulling a fresh list and having verified phone numbers in minutes so you can be the first to make an offer on every promising property.",
+					fear:
+						"Competitors are already dialing the owners you just discovered, leaving your leads to go cold while you hunt for contact info.",
 					highlights: [
 						"Instantly Find Owner Phone Numbers",
 						"Uncover Verified Email Addresses",
@@ -170,9 +368,9 @@ export const skipTraceCreditsABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Product Page", "Credits", "Copywriting", "Skip Trace"],
 	},
-];
+]);
 
-export const targetedLeadCreditsABTests: ABTest[] = [
+export const targetedLeadCreditsABTests = defineAbTests([
 	{
 		id: "ab-test-targeted-leads-v1",
 		name: "A/B Test for Targeted Lead Credits",
@@ -209,11 +407,11 @@ export const targetedLeadCreditsABTests: ABTest[] = [
 		],
 		startDate: new Date("2023-11-01T09:00:00.000Z"),
 		isActive: true,
-		tags: ["Product Page", "Credits", "Copywriting", "Lead Generation"],
+		tags: ["Product Page", "Credits", "Copywriting", "Lookalike Audience Expansion Inspired By How To Win Friends And Influence People"],
 	},
-];
+]);
 
-export const documentTemplatePackABTests: ABTest[] = [
+export const documentTemplatePackABTests = defineAbTests([
 	{
 		id: "ab-test-doc-pack-v1",
 		name: "Document Template Pack Copy Test",
@@ -235,6 +433,10 @@ export const documentTemplatePackABTests: ABTest[] = [
 						"Investors and agents who need to create legally-sound documents without delays.",
 					pain_point:
 						"Creating contracts from scratch is slow, risky, and a major bottleneck to closing a deal.",
+					fear:
+						"Every day you wait for a lawyer-drafted contract is a day a motivated seller signs with someone else.",
+					hope:
+						"You can pull the exact document you need in seconds and stay in control of every negotiation.",
 					solution:
 						"Our template pack provides instant access to a complete set of customizable documents, letting you secure deals in minutes, not days.",
 					highlights: [
@@ -259,6 +461,10 @@ export const documentTemplatePackABTests: ABTest[] = [
 						"Investors who want to ensure they are legally protected and look professional to sellers and partners.",
 					pain_point:
 						"Using unprofessional or incomplete documents undermines your credibility and exposes you to unnecessary legal risks.",
+					fear:
+						"One missing clause can tank a deal or spark a lawsuit that erases your profit.",
+					hope:
+						"You walk into every signing with airtight paperwork that earns instant trust.",
 					solution:
 						"Our comprehensive template pack ensures you have the right, professional document for every situation, safeguarding your business.",
 					highlights: [
@@ -273,9 +479,9 @@ export const documentTemplatePackABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Essentials", "Digital Product", "Copywriting", "Contracts"],
 	},
-];
+]);
 
-export const investorPlaybookABTests: ABTest[] = [
+export const investorPlaybookABTests = defineAbTests([
 	{
 		id: "ab-test-investor-book-v1",
 		name: "Investor's Playbook Copy Test",
@@ -335,9 +541,9 @@ export const investorPlaybookABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Essentials", "Physical Product", "Education", "Copywriting"],
 	},
-];
+]);
 
-export const escrowServiceKitABTests: ABTest[] = [
+export const escrowServiceKitABTests = defineAbTests([
 	{
 		id: "ab-test-escrow-kit-v1",
 		name: "Escrow Service Kit Copy Test",
@@ -397,9 +603,9 @@ export const escrowServiceKitABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Essentials", "Digital Product", "Copywriting", "Closing"],
 	},
-];
+]);
 
-export const brandedDeskMatABTests: ABTest[] = [
+export const brandedDeskMatABTests = defineAbTests([
 	{
 		id: "ab-test-desk-mat-v1",
 		name: "Branded Desk Mat Copy Test",
@@ -459,9 +665,9 @@ export const brandedDeskMatABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Essentials", "Physical Product", "Merch", "Copywriting"],
 	},
-];
+]);
 
-export const ergonomicChairABTests: ABTest[] = [
+export const ergonomicChairABTests = defineAbTests([
 	{
 		id: "ab-test-chair-v1",
 		name: "Ergonomic Chair Copy Test",
@@ -521,9 +727,9 @@ export const ergonomicChairABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Essentials", "Physical Product", "Office", "Copywriting"],
 	},
-];
+]);
 
-export const smartLampABTests: ABTest[] = [
+export const smartLampABTests = defineAbTests([
 	{
 		id: "ab-test-lamp-v1",
 		name: "Smart LED Lamp Copy Test",
@@ -583,9 +789,9 @@ export const smartLampABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Essentials", "Physical Product", "Office", "Copywriting"],
 	},
-];
+]);
 
-export const notionInvestorCrmABTests: ABTest[] = [
+export const notionInvestorCrmABTests = defineAbTests([
 	{
 		id: "ab-test-notion-crm-v1",
 		name: "Notion Investor CRM Copy Test",
@@ -645,9 +851,9 @@ export const notionInvestorCrmABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Notion", "CRM", "Fundraising", "Copywriting"],
 	},
-];
+]);
 
-export const notionDealPipelineABTests: ABTest[] = [
+export const notionDealPipelineABTests = defineAbTests([
 	{
 		id: "ab-test-notion-pipeline-v1",
 		name: "Notion Deal Pipeline Copy Test",
@@ -707,9 +913,9 @@ export const notionDealPipelineABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Notion", "Sales", "Pipeline", "Copywriting"],
 	},
-];
+]);
 
-export const notionStartupOsABTests: ABTest[] = [
+export const notionStartupOsABTests = defineAbTests([
 	{
 		id: "ab-test-notion-startup-os-v1",
 		name: "Notion Startup OS Copy Test",
@@ -769,9 +975,9 @@ export const notionStartupOsABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Notion", "Startups", "Operations", "Copywriting"],
 	},
-];
+]);
 
-export const notionFundraisingTrackerABTests: ABTest[] = [
+export const notionFundraisingTrackerABTests = defineAbTests([
 	{
 		id: "ab-test-notion-fundraising-tracker-v1",
 		name: "Notion Fundraising Tracker Copy Test",
@@ -831,9 +1037,9 @@ export const notionFundraisingTrackerABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Notion", "Fundraising", "Startups", "Copywriting"],
 	},
-];
+]);
 
-export const notionTeamWikiABTests: ABTest[] = [
+export const notionTeamWikiABTests = defineAbTests([
 	{
 		id: "ab-test-notion-team-wiki-v1",
 		name: "Notion Team Wiki Copy Test",
@@ -893,9 +1099,9 @@ export const notionTeamWikiABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Notion", "Team", "Onboarding", "Copywriting"],
 	},
-];
+]);
 
-export const buyerLeadNurtureWorkflowABTests: ABTest[] = [
+export const buyerLeadNurtureWorkflowABTests = defineAbTests([
 	{
 		id: "ab-test-buyer-lead-nurture-workflow-v1",
 		name: "Buyer Lead Nurture Workflow Copy Test",
@@ -955,9 +1161,9 @@ export const buyerLeadNurtureWorkflowABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Workflows", "Automation", "Buyer Leads", "Copywriting"],
 	},
-];
+]);
 
-export const motivatedSellerWorkflowABTests: ABTest[] = [
+export const motivatedSellerWorkflowABTests = defineAbTests([
 	{
 		id: "ab-test-motivated-seller-workflow-v1",
 		name: "Motivated Seller Automation Workflow Copy Test",
@@ -976,7 +1182,7 @@ export const motivatedSellerWorkflowABTests: ABTest[] = [
 					whatsInItForMe:
 						"This workflow runs your outreach campaigns 24/7, freeing you from tedious manual follow-ups so you can focus on closing deals.",
 					target_audience:
-						"Real estate investors and wholesalers who want to save time and scale their lead generation.",
+						"Real estate investors and wholesalers who want to save time and scale their lookalike audience expansion strategy inspired by How to Win Friends and Influence People.",
 					pain_point:
 						"Manually following up with hundreds of potential sellers is a full-time job that burns you out and limits your deal flow.",
 					solution:
@@ -996,7 +1202,7 @@ export const motivatedSellerWorkflowABTests: ABTest[] = [
 					buttonCta: "Install Workflow",
 					tagline: "Never Let a Hot Lead Go Cold.",
 					subtitle:
-						"The ultimate workflow to convert more motivated seller leads into profitable, off-market deals.",
+						"The ultimate workflow to convert more motivated seller leads into profitable, lookalike off-market deals identified by our prediction features.",
 					whatsInItForMe:
 						"By instantly and persistently following up with every lead, this workflow ensures you engage hot prospects at the perfect moment, maximizing your conversions.",
 					target_audience:
@@ -1017,9 +1223,9 @@ export const motivatedSellerWorkflowABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Workflows", "Automation", "Motivated Seller", "Copywriting"],
 	},
-];
+]);
 
-export const openHouseWorkflowABTests: ABTest[] = [
+export const openHouseWorkflowABTests = defineAbTests([
 	{
 		id: "ab-test-open-house-workflow-v1",
 		name: "Open House Follow-Up Workflow Copy Test",
@@ -1079,4 +1285,4 @@ export const openHouseWorkflowABTests: ABTest[] = [
 		isActive: true,
 		tags: ["Workflows", "Automation", "Open House", "Copywriting"],
 	},
-];
+]);

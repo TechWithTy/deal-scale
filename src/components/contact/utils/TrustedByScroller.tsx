@@ -1,13 +1,19 @@
 "use client";
 import Header from "@/components/common/Header";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type {
 	CompanyLogoDictType,
 	CompanyPartner,
 } from "@/types/service/trusted-companies";
 import { motion, useAnimation } from "framer-motion";
 import Link from "next/link";
-import React from "react";
-import { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 // ! Removed CompanyRenderer import, rendering images directly below.
 
 interface TrustedByMarqueeProps {
@@ -23,17 +29,22 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 	const controls = useAnimation();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
+	const restartAnimationRef = useRef<() => void>(() => {});
+	const repeatedEntries = useMemo(
+		() => [...entries, ...entries, ...entries],
+		[entries],
+	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (containerRef.current && contentRef.current) {
-			const updateWidths = () => {
-				const contentWidth = contentRef.current?.offsetWidth;
-				const visibleWidth = contentWidth / 3; // Split into thirds for seamless loop
-				const duration = visibleWidth / 50; // 50px per second
+			const startMarquee = () => {
+				const contentWidth = contentRef.current?.offsetWidth ?? 0;
+				const visibleWidth = contentWidth / 3;
+				const duration = visibleWidth / 30;
 
 				controls.start({
-					x: [-visibleWidth, 0], // Animate one third of total width
+					x: [-visibleWidth, 0],
 					transition: {
 						duration,
 						ease: "linear",
@@ -43,15 +54,16 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 				});
 			};
 
-			// Use ResizeObserver for better performance
-			const resizeObserver = new ResizeObserver(updateWidths);
+			restartAnimationRef.current = startMarquee;
+
+			const resizeObserver = new ResizeObserver(() => startMarquee());
 			resizeObserver.observe(contentRef.current);
 
-			// Initial setup
-			updateWidths();
+			startMarquee();
 
 			return () => {
 				resizeObserver.disconnect();
+				controls.stop();
 			};
 		}
 	}, [controls, entries]);
@@ -59,93 +71,110 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 	// * Render company logos with lazy loading, fallback, and support for both public and remote URLs
 
 	// * Render company logos with optional link wrapping
-	const renderLogo = (
-		companyName: string,
-		company: CompanyPartner,
-		key: string,
-	) => {
-		const logo = (
-			<LogoImage
-				companyName={companyName}
-				logoUrl={company.logo}
-				description={company.description}
-			/>
-		);
-		return company.link ? (
-			<Link
-				href={company.link}
-				target="_blank"
-				rel="noopener noreferrer"
-				key={key}
-				className="focus:outline-none"
+	const renderLogoTrigger = (companyName: string, company: CompanyPartner) => {
+		const baseProps = {
+			className:
+				"flex h-full w-full items-center justify-center focus:outline-none",
+		};
+
+		if (company.link) {
+			return (
+				<Link
+					href={company.link}
+					target="_blank"
+					rel="noopener noreferrer"
+					tabIndex={0}
+					aria-label={`Visit ${companyName}`}
+					{...baseProps}
+				>
+					<LogoImage
+						companyName={companyName}
+						logoUrl={company.logo}
+						description={company.description}
+					/>
+				</Link>
+			);
+		}
+
+		return (
+			<span
 				tabIndex={0}
-				aria-label={`Visit ${companyName}`}
+				role="img"
+				aria-label={`${companyName} logo`}
+				{...baseProps}
 			>
-				{logo}
-			</Link>
-		) : (
-			<React.Fragment key={key}>{logo}</React.Fragment>
+				<LogoImage
+					companyName={companyName}
+					logoUrl={company.logo}
+					description={company.description}
+				/>
+			</span>
 		);
 	};
 
 	return (
-		<div className="my-5 flex w-full flex-col">
-			{variant === "default" && (
-				<div className="mb-4 text-center">
-					<Header title="Beta Testers" subtitle="" />
-				</div>
-			)}
-			<div
-				className={`relative w-full overflow-hidden rounded-xl p-4 text-center ${
-					variant === "secondary"
-						? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
-						: "border border-white/10 bg-background-dark/50"
-				} backdrop-blur-sm`}
-			>
+		<TooltipProvider delayDuration={150}>
+			<div className="my-5 flex w-full flex-col">
+				{variant === "default" && (
+					<div className="mb-4 text-center">
+						<Header
+							title="Beta Testers"
+							subtitle="Trusted by top-performing real estate teams and investors nationwide."
+						/>
+					</div>
+				)}
 				<div
-					className="relative flex h-16 items-center overflow-hidden"
-					ref={containerRef}
+					className={`relative w-full overflow-hidden rounded-xl p-4 text-center ${
+						variant === "secondary"
+							? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
+							: "border border-white/10 bg-background-dark/50"
+					} backdrop-blur-sm`}
 				>
-					<motion.div
-						ref={contentRef}
-						className="flex items-center gap-8 whitespace-nowrap"
-						style={{ width: "max-content" }}
-						animate={controls}
+					<div
+						className="relative flex h-16 items-center overflow-hidden"
+						ref={containerRef}
+						onMouseEnter={() => controls.stop()}
+						onMouseLeave={() => restartAnimationRef.current()}
 					>
-						{entries.map(([companyName, company]) => (
-							<motion.div
-								key={`${companyName}`}
-								className="my-5 flex h-16 w-24 shrink-0 items-center justify-center"
-								whileHover={{ scale: 1.05 }}
-								transition={{ type: "spring", stiffness: 300 }}
-							>
-								{renderLogo(companyName, company, `${companyName}`)}
-							</motion.div>
-						))}
-						{entries.map(([companyName, company]) => (
-							<motion.div
-								key={`${companyName}-2`}
-								className="my-5 flex h-16 w-24 shrink-0 items-center justify-center"
-								whileHover={{ scale: 1.05 }}
-								transition={{ type: "spring", stiffness: 300 }}
-							>
-								{renderLogo(companyName, company, `${companyName}-2`)}
-							</motion.div>
-						))}
-						{entries.map(([companyName, company]) => (
-							<motion.div
-								key={`${companyName}-3`}
-								className="my-5 flex h-16 w-24 shrink-0 items-center justify-center"
-								whileHover={{ scale: 1.05 }}
-								transition={{ type: "spring", stiffness: 300 }}
-							>
-								{renderLogo(companyName, company, `${companyName}-3`)}
-							</motion.div>
-						))}
-					</motion.div>
+						<motion.div
+							ref={contentRef}
+							className="flex items-center gap-8 whitespace-nowrap"
+							style={{ width: "max-content" }}
+							animate={controls}
+						>
+							{repeatedEntries.map(([companyName, company], index) => (
+								<motion.div
+									key={`${companyName}-${index}`}
+									className="my-5 flex h-16 w-24 shrink-0 items-center justify-center"
+									whileHover={{ scale: 1.05 }}
+									transition={{ type: "spring", stiffness: 300 }}
+								>
+									<Tooltip>
+										<TooltipTrigger asChild>
+											{renderLogoTrigger(companyName, company)}
+										</TooltipTrigger>
+										<TooltipContent
+											side="top"
+											sideOffset={12}
+											className="max-w-xs text-left text-sm"
+										>
+											<div className="font-semibold text-foreground">
+												{companyName}
+											</div>
+											{company.description && (
+												<p className="mt-1 text-muted-foreground">
+													{company.description}
+												</p>
+											)}
+										</TooltipContent>
+									</Tooltip>
+								</motion.div>
+							))}
+						</motion.div>
+					</div>
 				</div>
 			</div>
-		</div>
+		</TooltipProvider>
 	);
 };
 

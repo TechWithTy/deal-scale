@@ -1,171 +1,247 @@
-import { useEffect, useMemo, useRef, useState } from "react"
-import { motion, MotionProps, useInView } from "motion/react"
+import { type MotionProps, motion, useInView } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+
+type TypingPhase = "typing" | "pause" | "deleting";
 
 interface TypingAnimationProps extends MotionProps {
-  children?: string
-  words?: string[]
-  className?: string
-  duration?: number
-  typeSpeed?: number
-  deleteSpeed?: number
-  delay?: number
-  pauseDelay?: number
-  loop?: boolean
-  as?: React.ElementType
-  startOnView?: boolean
-  showCursor?: boolean
-  blinkCursor?: boolean
-  cursorStyle?: "line" | "block" | "underscore"
+	children?: string;
+	words?: string[];
+	className?: string;
+	duration?: number;
+	typeSpeed?: number;
+	deleteSpeed?: number;
+	delay?: number;
+	pauseDelay?: number;
+	loop?: boolean;
+	as?: React.ElementType;
+	startOnView?: boolean;
+	showCursor?: boolean;
+	blinkCursor?: boolean;
+	cursorStyle?: "line" | "block" | "underscore";
 }
 
+type TypingState = {
+	displayedText: string;
+	wordIndex: number;
+	charIndex: number;
+	phase: TypingPhase;
+};
+
+const INITIAL_STATE: TypingState = {
+	displayedText: "",
+	wordIndex: 0,
+	charIndex: 0,
+	phase: "typing",
+};
+
 export function TypingAnimation({
-  children,
-  words,
-  className,
-  duration = 100,
-  typeSpeed,
-  deleteSpeed,
-  delay = 0,
-  pauseDelay = 1000,
-  loop = false,
-  as: Component = "span",
-  startOnView = true,
-  showCursor = true,
-  blinkCursor = true,
-  cursorStyle = "line",
-  ...props
+	children,
+	words,
+	className,
+	duration = 100,
+	typeSpeed,
+	deleteSpeed,
+	delay = 0,
+	pauseDelay = 1000,
+	loop = false,
+	as: Component = "span",
+	startOnView = true,
+	showCursor = true,
+	blinkCursor = true,
+	cursorStyle = "line",
+	...props
 }: TypingAnimationProps) {
-  const MotionComponent = motion.create(Component, {
-    forwardMotionProps: true,
-  })
+	const MotionComponent = motion.create(Component, {
+		forwardMotionProps: true,
+	});
 
-  const [displayedText, setDisplayedText] = useState<string>("")
-  const [currentWordIndex, setCurrentWordIndex] = useState(0)
-  const [currentCharIndex, setCurrentCharIndex] = useState(0)
-  const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing")
-  const elementRef = useRef<HTMLElement | null>(null)
-  const isInView = useInView(elementRef as React.RefObject<Element>, {
-    amount: 0.3,
-    once: true,
-  })
+	const [typingState, setTypingState] = useState<TypingState>(INITIAL_STATE);
+	const { displayedText, wordIndex, charIndex, phase } = typingState;
 
-  const wordsToAnimate = useMemo(
-    () => words || (children ? [children] : []),
-    [words, children]
-  )
-  const hasMultipleWords = wordsToAnimate.length > 1
+	const elementRef = useRef<HTMLElement | null>(null);
+	const isInView = useInView(elementRef as React.RefObject<Element>, {
+		amount: 0.3,
+		once: true,
+	});
 
-  const typingSpeed = typeSpeed || duration
-  const deletingSpeed = deleteSpeed || typingSpeed / 2
+	const wordsToAnimate = useMemo(
+		() => words || (children ? [children] : []),
+		[words, children],
+	);
 
-  const shouldStart = startOnView ? isInView : true
+	const graphemeMap = useMemo(
+		() => wordsToAnimate.map((word) => Array.from(word)),
+		[wordsToAnimate],
+	);
 
-  useEffect(() => {
-    if (!shouldStart || wordsToAnimate.length === 0) return
+	const contentSignature = useMemo(
+		() => graphemeMap.map((graphemes) => graphemes.join("")).join("|"),
+		[graphemeMap],
+	);
 
-    const timeoutDelay =
-      delay > 0 && displayedText === ""
-        ? delay
-        : phase === "typing"
-          ? typingSpeed
-          : phase === "deleting"
-            ? deletingSpeed
-            : pauseDelay
+	const contentSignatureRef = useRef(contentSignature);
 
-    const timeout = setTimeout(() => {
-      const currentWord = wordsToAnimate[currentWordIndex] || ""
-      const graphemes = Array.from(currentWord)
+	useEffect(() => {
+		if (contentSignatureRef.current !== contentSignature) {
+			contentSignatureRef.current = contentSignature;
+			setTypingState(INITIAL_STATE);
+		}
+	}, [contentSignature]);
 
-      switch (phase) {
-        case "typing":
-          if (currentCharIndex < graphemes.length) {
-            setDisplayedText(graphemes.slice(0, currentCharIndex + 1).join(""))
-            setCurrentCharIndex(currentCharIndex + 1)
-          } else {
-            if (hasMultipleWords || loop) {
-              const isLastWord = currentWordIndex === wordsToAnimate.length - 1
-              if (!isLastWord || loop) {
-                setPhase("pause")
-              }
-            }
-          }
-          break
+	const hasMultipleWords = graphemeMap.length > 1;
 
-        case "pause":
-          setPhase("deleting")
-          break
+	const typingSpeed = typeSpeed || duration;
+	const deletingSpeed = deleteSpeed || typingSpeed / 2;
 
-        case "deleting":
-          if (currentCharIndex > 0) {
-            setDisplayedText(graphemes.slice(0, currentCharIndex - 1).join(""))
-            setCurrentCharIndex(currentCharIndex - 1)
-          } else {
-            const nextIndex = (currentWordIndex + 1) % wordsToAnimate.length
-            setCurrentWordIndex(nextIndex)
-            setPhase("typing")
-          }
-          break
-      }
-    }, timeoutDelay)
+	const shouldStart = startOnView ? isInView : true;
 
-    return () => clearTimeout(timeout)
-  }, [
-    shouldStart,
-    phase,
-    currentCharIndex,
-    currentWordIndex,
-    displayedText,
-    wordsToAnimate,
-    hasMultipleWords,
-    loop,
-    typingSpeed,
-    deletingSpeed,
-    pauseDelay,
-    delay,
-  ])
+	useEffect(() => {
+		if (!shouldStart || graphemeMap.length === 0) return;
 
-  const currentWordGraphemes = Array.from(
-    wordsToAnimate[currentWordIndex] || ""
-  )
-  const isComplete =
-    !loop &&
-    currentWordIndex === wordsToAnimate.length - 1 &&
-    currentCharIndex >= currentWordGraphemes.length &&
-    phase !== "deleting"
+		const currentGraphemes = graphemeMap[wordIndex] ?? [];
+		const isComplete =
+			!loop &&
+			wordIndex === graphemeMap.length - 1 &&
+			charIndex >= currentGraphemes.length &&
+			phase !== "deleting";
 
-  const shouldShowCursor =
-    showCursor &&
-    !isComplete &&
-    (hasMultipleWords || loop || currentCharIndex < currentWordGraphemes.length)
+		if (isComplete) {
+			return;
+		}
 
-  const getCursorChar = () => {
-    switch (cursorStyle) {
-      case "block":
-        return "▌"
-      case "underscore":
-        return "_"
-      case "line":
-      default:
-        return "|"
-    }
-  }
+		const timeoutDelay =
+			delay > 0 && displayedText === ""
+				? delay
+				: phase === "typing"
+					? typingSpeed
+					: phase === "deleting"
+						? deletingSpeed
+						: pauseDelay;
 
-  return (
-    <MotionComponent
-      ref={elementRef}
-      className={cn("leading-[5rem] tracking-[-0.02em]", className)}
-      {...props}
-    >
-      {displayedText}
-      {shouldShowCursor && (
-        <span
-          className={cn("inline-block", blinkCursor && "animate-blink-cursor")}
-        >
-          {getCursorChar()}
-        </span>
-      )}
-    </MotionComponent>
-  )
+		const timeout = window.setTimeout(() => {
+			setTypingState((prev) => {
+				const activeGraphemes = graphemeMap[prev.wordIndex] ?? [];
+
+				switch (prev.phase) {
+					case "typing": {
+						if (prev.charIndex < activeGraphemes.length) {
+							const nextCharIndex = prev.charIndex + 1;
+							const nextText = activeGraphemes.slice(0, nextCharIndex).join("");
+
+							if (
+								nextText === prev.displayedText &&
+								nextCharIndex === prev.charIndex
+							) {
+								return prev;
+							}
+
+							return {
+								displayedText: nextText,
+								charIndex: nextCharIndex,
+								wordIndex: prev.wordIndex,
+								phase: prev.phase,
+							};
+						}
+
+						if (hasMultipleWords || loop) {
+							const isLastWord = prev.wordIndex === graphemeMap.length - 1;
+							if (!isLastWord || loop) {
+								return {
+									...prev,
+									phase: "pause",
+								};
+							}
+						}
+
+						return prev;
+					}
+
+					case "pause":
+						return {
+							...prev,
+							phase: "deleting",
+						};
+
+					case "deleting": {
+						if (prev.charIndex > 0) {
+							const nextCharIndex = prev.charIndex - 1;
+							const nextText = activeGraphemes.slice(0, nextCharIndex).join("");
+
+							return {
+								...prev,
+								displayedText: nextText,
+								charIndex: nextCharIndex,
+							};
+						}
+
+						const nextIndex = (prev.wordIndex + 1) % graphemeMap.length;
+						return {
+							displayedText: "",
+							charIndex: 0,
+							wordIndex: nextIndex,
+							phase: "typing",
+						};
+					}
+				}
+			});
+		}, timeoutDelay);
+
+		return () => window.clearTimeout(timeout);
+	}, [
+		shouldStart,
+		graphemeMap,
+		hasMultipleWords,
+		loop,
+		typingSpeed,
+		deletingSpeed,
+		pauseDelay,
+		delay,
+		displayedText,
+		wordIndex,
+		charIndex,
+		phase,
+	]);
+
+	const currentWordGraphemes = graphemeMap[wordIndex] ?? [];
+	const isComplete =
+		!loop &&
+		wordIndex === graphemeMap.length - 1 &&
+		charIndex >= currentWordGraphemes.length &&
+		phase !== "deleting";
+
+	const shouldShowCursor =
+		showCursor &&
+		!isComplete &&
+		(hasMultipleWords || loop || charIndex < currentWordGraphemes.length);
+
+	const getCursorChar = () => {
+		switch (cursorStyle) {
+			case "block":
+				return "▌";
+			case "underscore":
+				return "_";
+			case "line":
+			default:
+				return "|";
+		}
+	};
+
+	return (
+		<MotionComponent
+			ref={elementRef}
+			className={cn("leading-[5rem] tracking-[-0.02em]", className)}
+			{...props}
+		>
+			{displayedText}
+			{shouldShowCursor && (
+				<span
+					className={cn("inline-block", blinkCursor && "animate-blink-cursor")}
+				>
+					{getCursorChar()}
+				</span>
+			)}
+		</MotionComponent>
+	);
 }

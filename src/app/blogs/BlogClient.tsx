@@ -133,7 +133,7 @@ function BlogContent() {
 				badgeLeft="Investor Insights"
 				badgeRight="AI-Powered Strategies"
 				headline="Get an Unfair Advantage"
-				subheadline="Join our newsletter for exclusive strategies on finding off-market deals, automating seller outreach, and getting a first look at the AI tools top investors use to build their pipelines."
+				subheadline="Join our newsletter for exclusive strategies on finding lookalike off-market deals with similarity-driven features, automating seller outreach, and getting a first look at the AI tools top investors use to build their pipelines."
 				highlight="in Your Market"
 				ctaVariant="form"
 				ctaForm={<NewsletterEmailInput />}

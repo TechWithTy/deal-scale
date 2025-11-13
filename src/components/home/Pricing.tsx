@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 import type { Plan, PlanType } from "@/types/service/plans";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -51,6 +53,7 @@ const Pricing: React.FC<PricingProps> = ({
 	const [checkoutState, setCheckoutState] = useState<CheckoutState | null>(
 		null,
 	);
+	useWaitCursor(Boolean(loading));
 
 	const availableTypes = useMemo(() => {
 		const types = PLAN_TYPES.filter((type) =>
@@ -107,8 +110,10 @@ const Pricing: React.FC<PricingProps> = ({
 				return;
 			}
 
-			try {
+		let stripeToast: ReturnType<typeof startStripeToast> | undefined;
+		try {
 				setLoading(plan.id);
+			stripeToast = startStripeToast("Preparing Stripe checkout…");
 
 				const metadata: Record<string, string> = {
 					planName: plan.name,
@@ -155,12 +160,15 @@ const Pricing: React.FC<PricingProps> = ({
 					plan,
 					planType,
 				});
+				stripeToast?.success(
+					"Checkout ready. Review the Stripe modal to finish your purchase.",
+				);
 			} catch (error) {
 				const message =
 					error instanceof Error
 						? error.message
 						: "Payment failed. Please try again.";
-				toast.error(message);
+				stripeToast?.error(message);
 			} finally {
 				setLoading(null);
 			}

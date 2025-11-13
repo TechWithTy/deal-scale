@@ -282,7 +282,7 @@ export default function ContactPilotForm({
 			<div className="-z-10 absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-focus/10 opacity-60 blur-lg dark:from-primary/30 dark:to-focus/20" />
 			<Header
 				title="Priority Pilot Application"
-				subtitle="Apply for priority access and get 15 AI Credits, priority onboarding, support, locked-in pricing for 5 years, and help shape the future of deal-making!"
+				subtitle="Apply for priority access and get 15 AI Credits, priority onboarding, support, locked-in pricing for 2 years, and help shape the future of deal-making!"
 				size="sm"
 				className="mb-12 md:mb-16"
 			/>

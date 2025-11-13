@@ -94,4 +94,3 @@ const GridOverlay = () => {
 		</svg>
 	);
 };
-

@@ -1602,7 +1602,7 @@ export const dealScaleProprietaryProcess: ServiceHowItWorks[] = [
 	{
 		stepNumber: 1,
 		title: "Define Your Ideal Deal",
-		subtitle: "Hyper-Targeted Lead Generation",
+		subtitle: "Hyper-Targeted Lookalike Audience Expansion",
 		description:
 			"Tap into our database of 140M+ properties. Input precise criteria like location, property type, and budget to instantly generate a list of high-potential leads with our AI Sentiment Score.",
 		icon: "SlidersHorizontal",
