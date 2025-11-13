@@ -327,6 +327,13 @@ export const CallDemoShowcase = () => {
 		if (!container) {
 			return;
 		}
+		const activeMessage = container.querySelector<HTMLElement>(
+			`[data-message-index="${activeTextIndex}"]`,
+		);
+		if (activeMessage?.scrollIntoView) {
+			activeMessage.scrollIntoView({ block: "end", behavior: "smooth" });
+			return;
+		}
 		if (typeof container.scrollTo === "function") {
 			container.scrollTo({
 				top: container.scrollHeight,
@@ -423,6 +430,7 @@ export const CallDemoShowcase = () => {
 													return (
 														<div
 															key={`${message.sender}-${index}`}
+															data-message-index={index}
 															className={cn(
 																"flex w-full",
 																message.sender === "AI"
@@ -455,7 +463,7 @@ export const CallDemoShowcase = () => {
 																		collapsible
 																		className="mt-3 w-full overflow-hidden rounded-xl border border-slate-200/60 bg-white/65 text-left shadow-sm dark:border-white/10 dark:bg-black/35"
 																	>
-																		{message.attachments!.map((attachment) => (
+																		{message.attachments?.map((attachment) => (
 																			<AccordionItem
 																				key={`${message.sender}-${attachment.id}`}
 																				value={`${message.sender}-${attachment.id}`}
@@ -868,7 +876,13 @@ export const CallDemoShowcase = () => {
 				content: renderPreview(),
 			},
 		],
-		[activePreview, handleRestartCallDemo, handleSwitchPreview, renderPreview],
+		[
+			activePreview,
+			callDemoMode,
+			handleRestartCallDemo,
+			handleSwitchPreview,
+			renderPreview,
+		],
 	);
 
 	return (

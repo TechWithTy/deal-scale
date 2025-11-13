@@ -1,35 +1,37 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
-const useDataModuleMock = jest.fn();
-const TrustedByScrollerMock = jest.fn(() => (
-	<div data-testid="trusted-scroller" />
-));
+const useDataModuleMock = vi.fn();
+const TrustedByScrollerMock = vi.fn(() => <div data-testid="trusted-scroller" />);
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
 
-jest.mock("@/components/contact/utils/TrustedByScroller", () => ({
+vi.mock("@/components/contact/utils/TrustedByScroller", () => ({
 	__esModule: true,
 	default: (...args: unknown[]) => TrustedByScrollerMock(...args),
 }));
 
-jest.mock("@/components/common/Header", () => ({
+vi.mock("@/components/common/Header", () => ({
 	__esModule: true,
 	default: ({ title }: { title: string }) => (
 		<div data-testid="header">{title}</div>
 	),
 }));
 
-describe("TrustedBySection", () => {
-	beforeEach(() => {
-		jest.resetModules();
-		useDataModuleMock.mockReset();
-		TrustedByScrollerMock.mockClear();
-	});
+let TrustedBySection: typeof import("../product/TrustedBySection").default;
 
+beforeEach(async () => {
+	vi.resetModules();
+	useDataModuleMock.mockReset();
+	TrustedByScrollerMock.mockClear();
+	({ default: TrustedBySection } = await import("../product/TrustedBySection"));
+});
+
+describe("TrustedBySection", () => {
 	it("renders a loading fallback while company logos are idle", () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: unknown) => unknown) => {
@@ -44,10 +46,6 @@ describe("TrustedBySection", () => {
 				return selector({ status: "ready", data: {}, error: undefined });
 			},
 		);
-
-		const {
-			default: TrustedBySection,
-		} = require("../product/TrustedBySection");
 
 		render(<TrustedBySection />);
 
@@ -73,10 +71,6 @@ describe("TrustedBySection", () => {
 			},
 		);
 
-		const {
-			default: TrustedBySection,
-		} = require("../product/TrustedBySection");
-
 		render(<TrustedBySection />);
 
 		expect(TrustedByScrollerMock).toHaveBeenCalledWith(
@@ -99,10 +93,6 @@ describe("TrustedBySection", () => {
 				return selector({ status: "ready", data: {}, error: undefined });
 			},
 		);
-
-		const {
-			default: TrustedBySection,
-		} = require("../product/TrustedBySection");
 
 		render(<TrustedBySection />);
 

@@ -1,8 +1,8 @@
 import type {
 	ABTest,
 	ABTestCopy,
-	AbTestVariant,
 	AbTestAnalysis,
+	AbTestVariant,
 	AbTestWarning,
 } from "@/types/testing";
 
@@ -137,7 +137,7 @@ const analyzeVariants = (
 		}
 	});
 
-	Array.from(ctas.entries()).forEach(([cta, count]) => {
+	for (const [cta, count] of ctas.entries()) {
 		if (count > 1) {
 			warnings.push({
 				code: "duplicate-cta",
@@ -146,7 +146,7 @@ const analyzeVariants = (
 				field: "cta",
 			});
 		}
-	});
+	}
 
 	return {
 		normalized: true,
@@ -161,9 +161,12 @@ const analyzeVariants = (
 };
 
 const defineAbTest = (test: AbTestInput): ABTest => {
-	const normalizedVariants = test.variants.map((variant) => {
+	const normalizedVariants: AbTestVariant[] = test.variants.map((variant) => {
 		if (!variant.copy) {
-			return variant;
+			return {
+				...variant,
+				copy: undefined,
+			};
 		}
 
 		return {
@@ -172,17 +175,22 @@ const defineAbTest = (test: AbTestInput): ABTest => {
 		};
 	});
 
+	const testName =
+		typeof test.name === "string" && test.name.length > 0
+			? test.name
+			: String(test.id ?? "ab-test");
+
 	const analysis = analyzeVariants(
 		normalizedVariants,
-		test.name,
-		test.isActive,
+		testName,
+		typeof test.isActive === "boolean" ? test.isActive : undefined,
 	);
 
 	return {
 		...test,
 		variants: normalizedVariants,
 		analysis,
-	};
+	} as ABTest;
 };
 
 const defineAbTests = (tests: AbTestInput[]): ABTest[] =>
@@ -208,8 +216,7 @@ export const abTestExample = defineAbTest({
 					"Feel confident and comfortable updatedx, whether you're at work or play.",
 				target_audience: "Modern Creators",
 				pain_point: "Uncomfotbale Shirts",
-				fear:
-					"Every time you settle for a basic tee you end up sweaty and distracted on camera, so your brand takes the hit.",
+				fear: "Every time you settle for a basic tee you end up sweaty and distracted on camera, so your brand takes the hit.",
 				solution: "Comfortable Shirts",
 				highlights: [
 					"Ultra-soft 100% cotton",
@@ -240,8 +247,7 @@ export const abTestExample = defineAbTest({
 					"Experience the difference with our advanced fabric blend and ergonomic fit.",
 				whatsInItForMe: "Upgrade your daily comfort and style.",
 				target_audience: "Ambitious Professionals",
-				fear:
-					"Showing up to a pitch in a sagging tee signals you aren’t ready to operate at a higher level.",
+				fear: "Showing up to a pitch in a sagging tee signals you aren’t ready to operate at a higher level.",
 				highlights: [
 					"Moisture-wicking tech",
 					"Sustainable materials",
@@ -293,8 +299,7 @@ export const AIConversationCreditsABTest = defineAbTest({
 					"Growth-focused real estate investors, wholesalers, and flippers who want to use AI automation to scale their business, surface lookalike off-market deals powered by similarity intelligence, and eliminate tedious manual outreach.",
 				pain_point:
 					"Your deal pipeline stalls when manual follow-up becomes overwhelming. You're losing deals because you can't engage every lead instantly and consistently. Scaling your outreach means hiring more staff, which increases overhead and complexity.",
-				fear:
-					"Every unanswered lead gets rerouted to a competitor with an AI dialer—your pipeline goes cold while overhead keeps climbing.",
+				fear: "Every unanswered lead gets rerouted to a competitor with an AI dialer—your pipeline goes cold while overhead keeps climbing.",
 				solution:
 					"AI Conversation Credits fuel your automated sales force. They enable your AI Virtual Agent to handle thousands of interactions—calls, texts, and emails—autonomously. This ensures every lead is nurtured instantly, keeping your pipeline full and allowing you to scale outreach infinitely without adding to your payroll.",
 				highlights: [
@@ -351,10 +356,8 @@ export const skipTraceCreditsABTests = defineAbTests([
 						"Having a list of promising properties but no way to contact the owners, leading to missed opportunities and wasted time on manual searches.",
 					solution:
 						"Our credits provide instant access to verified phone numbers and email addresses for property owners, turning your list of addresses into a high-value, actionable outreach list in seconds.",
-					hope:
-						"Imagine pulling a fresh list and having verified phone numbers in minutes so you can be the first to make an offer on every promising property.",
-					fear:
-						"Competitors are already dialing the owners you just discovered, leaving your leads to go cold while you hunt for contact info.",
+					hope: "Imagine pulling a fresh list and having verified phone numbers in minutes so you can be the first to make an offer on every promising property.",
+					fear: "Competitors are already dialing the owners you just discovered, leaving your leads to go cold while you hunt for contact info.",
 					highlights: [
 						"Instantly Find Owner Phone Numbers",
 						"Uncover Verified Email Addresses",
@@ -407,7 +410,12 @@ export const targetedLeadCreditsABTests = defineAbTests([
 		],
 		startDate: new Date("2023-11-01T09:00:00.000Z"),
 		isActive: true,
-		tags: ["Product Page", "Credits", "Copywriting", "Lookalike Audience Expansion Inspired By How To Win Friends And Influence People"],
+		tags: [
+			"Product Page",
+			"Credits",
+			"Copywriting",
+			"Lookalike Audience Expansion Inspired By How To Win Friends And Influence People",
+		],
 	},
 ]);
 
@@ -433,10 +441,8 @@ export const documentTemplatePackABTests = defineAbTests([
 						"Investors and agents who need to create legally-sound documents without delays.",
 					pain_point:
 						"Creating contracts from scratch is slow, risky, and a major bottleneck to closing a deal.",
-					fear:
-						"Every day you wait for a lawyer-drafted contract is a day a motivated seller signs with someone else.",
-					hope:
-						"You can pull the exact document you need in seconds and stay in control of every negotiation.",
+					fear: "Every day you wait for a lawyer-drafted contract is a day a motivated seller signs with someone else.",
+					hope: "You can pull the exact document you need in seconds and stay in control of every negotiation.",
 					solution:
 						"Our template pack provides instant access to a complete set of customizable documents, letting you secure deals in minutes, not days.",
 					highlights: [
@@ -461,10 +467,8 @@ export const documentTemplatePackABTests = defineAbTests([
 						"Investors who want to ensure they are legally protected and look professional to sellers and partners.",
 					pain_point:
 						"Using unprofessional or incomplete documents undermines your credibility and exposes you to unnecessary legal risks.",
-					fear:
-						"One missing clause can tank a deal or spark a lawsuit that erases your profit.",
-					hope:
-						"You walk into every signing with airtight paperwork that earns instant trust.",
+					fear: "One missing clause can tank a deal or spark a lawsuit that erases your profit.",
+					hope: "You walk into every signing with airtight paperwork that earns instant trust.",
 					solution:
 						"Our comprehensive template pack ensures you have the right, professional document for every situation, safeguarding your business.",
 					highlights: [

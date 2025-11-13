@@ -1,22 +1,26 @@
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LegalDocument } from "../../../data/legal/legalDocuments";
 import LegalClient from "../LegalClient";
+import * as legalDocumentsModule from "../../../data/legal/legalDocuments";
 
 type TestLegalDocument = LegalDocument;
 
-const toastSuccess = jest.fn();
-const toastError = jest.fn();
-let writeTextMock: jest.SpyInstance<Promise<void>, [string]>;
+const toastSuccess = vi.fn();
+const toastError = vi.fn();
+type ClipboardWriteSpy = ReturnType<typeof vi.spyOn<Clipboard, "writeText">>;
+let writeTextMock: ClipboardWriteSpy;
 
-jest.mock("../../../data/legal/legalDocuments", () => {
-	const actual = jest.requireActual<
+vi.mock("../../../data/legal/legalDocuments", async () => {
+	const actual = await vi.importActual<
 		typeof import("../../../data/legal/legalDocuments")
 	>("../../../data/legal/legalDocuments");
 	const store: { docs: TestLegalDocument[] } = { docs: [] };
 	return {
+		__esModule: true,
 		...actual,
 		get legalDocuments() {
 			return store.docs;
@@ -27,19 +31,17 @@ jest.mock("../../../data/legal/legalDocuments", () => {
 	};
 });
 
-const { __setLegalDocuments } = jest.requireMock<
-	typeof import("../../../data/legal/legalDocuments") & {
-		__setLegalDocuments: (docs: TestLegalDocument[]) => void;
-	}
->("../../../data/legal/legalDocuments");
+const { __setLegalDocuments } = legalDocumentsModule as unknown as {
+	__setLegalDocuments: (docs: TestLegalDocument[]) => void;
+};
 
-jest.mock("@/components/legal/markdown", () => ({
+vi.mock("@/components/legal/markdown", () => ({
 	MarkdownContent: ({ content }: { content: string }) => (
 		<div>{content.replace(/[#*]/g, "").trim()}</div>
 	),
 }));
 
-jest.mock("sonner", () => ({
+vi.mock("sonner", () => ({
 	toast: {
 		success: (...args: unknown[]) => toastSuccess(...args),
 		error: (...args: unknown[]) => toastError(...args),
@@ -79,7 +81,7 @@ describe("LegalClient", () => {
 			});
 		}
 
-		writeTextMock = jest
+		writeTextMock = vi
 			.spyOn(clipboard, "writeText")
 			.mockResolvedValue(undefined);
 	});

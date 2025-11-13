@@ -1,22 +1,25 @@
 /**
  * @jest-environment node
  */
-import { POST } from "@/app/api/contact/route";
-import { addToSendGrid } from "@/lib/externalRequests/sendgrid";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
-// Mock the addToSendGrid function
-jest.mock("@/lib/externalRequests/sendgrid", () => ({
-	addToSendGrid: jest.fn(),
+vi.mock("@/lib/externalRequests/sendgrid", () => ({
+	addToSendGrid: vi.fn(),
 }));
 
-// Type assertion for the mocked function
-const mockedAddToSendGrid = addToSendGrid as jest.Mock;
+let POST: typeof import("@/app/api/contact/route").POST;
+let mockedAddToSendGrid: ReturnType<typeof vi.fn>;
+
+beforeAll(async () => {
+	({ POST } = await import("@/app/api/contact/route"));
+	const sendgridModule = await import("@/lib/externalRequests/sendgrid");
+	mockedAddToSendGrid = sendgridModule.addToSendGrid as ReturnType<typeof vi.fn>;
+});
 
 describe("POST /api/contact (E2E)", () => {
 	beforeEach(() => {
-		// Clear mock history before each test
-		mockedAddToSendGrid.mockClear();
+		mockedAddToSendGrid.mockReset();
 	});
 
 	it("should successfully process a beta tester submission", async () => {

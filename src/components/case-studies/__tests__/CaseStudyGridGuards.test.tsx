@@ -1,28 +1,32 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
-const useDataModuleMock = jest.fn();
+const useDataModuleMock = vi.fn();
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
 
-jest.mock("@/hooks/useDataModuleGuardTelemetry", () => ({
-	useDataModuleGuardTelemetry: jest.fn(),
+vi.mock("@/hooks/useDataModuleGuardTelemetry", () => ({
+	useDataModuleGuardTelemetry: vi.fn(),
 }));
 
-jest.mock("@/hooks/use-category-filter", () => ({
+vi.mock("@/hooks/use-category-filter", () => ({
 	useCategoryFilter: () => ({
 		activeCategory: "all",
-		setActiveCategory: jest.fn(),
+		setActiveCategory: vi.fn(),
 		CategoryFilter: () => <div data-testid="category-filter" />, // eslint-disable-line react/display-name
 	}),
 }));
 
+const loadCaseStudyGrid = async () =>
+	(await import("../CaseStudyGrid")).default;
+
 describe("CaseStudyGrid guard fallbacks", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		useDataModuleMock.mockReset();
 	});
 
@@ -41,7 +45,7 @@ describe("CaseStudyGrid guard fallbacks", () => {
 			},
 		);
 
-		const { default: CaseStudyGrid } = require("../CaseStudyGrid");
+		const CaseStudyGrid = await loadCaseStudyGrid();
 
 		render(<CaseStudyGrid caseStudies={[]} />);
 
@@ -63,7 +67,7 @@ describe("CaseStudyGrid guard fallbacks", () => {
 			},
 		);
 
-		const { default: CaseStudyGrid } = require("../CaseStudyGrid");
+		const CaseStudyGrid = await loadCaseStudyGrid();
 
 		render(<CaseStudyGrid caseStudies={[]} />);
 
@@ -87,7 +91,7 @@ describe("CaseStudyGrid guard fallbacks", () => {
 			},
 		);
 
-		const { default: CaseStudyGrid } = require("../CaseStudyGrid");
+		const CaseStudyGrid = await loadCaseStudyGrid();
 
 		render(<CaseStudyGrid caseStudies={[]} />);
 

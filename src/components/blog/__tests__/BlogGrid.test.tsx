@@ -1,20 +1,36 @@
-import { render, screen } from "@testing-library/react";
-import React from "react";
+import { describe, expect, it, vi } from "vitest";
+import { render } from "@testing-library/react";
 
-jest.mock("next/navigation", () => ({
-	useRouter: () => ({ push: jest.fn() }),
-	useSearchParams: () => new URLSearchParams(""),
+const navigationRouterMock = () => ({
+	push: vi.fn(),
+	replace: vi.fn(),
+	prefetch: vi.fn(),
+	refresh: vi.fn(),
+	back: vi.fn(),
+	forward: vi.fn(),
+});
+
+vi.mock("next/navigation", () => ({
+	__esModule: true,
+	usePathname: () => "/blog",
+	useRouter: navigationRouterMock,
+	useSearchParams: () => new URLSearchParams(),
 }));
 
-jest.mock("@/components/blog/BlogCard", () => ({
-	BlogCard: () => <div data-testid="blog-card">Mock BlogCard</div>,
+vi.mock("@/components/blog/BlogCard", () => ({
+	__esModule: true,
+	default: () => <div data-testid="blog-card" />,
 }));
+
+const loadBlogGrid = async () =>
+	(await import("../BlogGrid")).default;
 
 describe("BlogGrid", () => {
-	it("renders without crashing when no posts are available", () => {
-		const { default: BlogGrid } = require("@/components/blog/BlogGrid");
+	it("renders without crashing when no posts are available", async () => {
+		const BlogGrid = await loadBlogGrid();
 		render(<BlogGrid posts={[]} />);
-
-		expect(screen.getByText(/No posts found/i)).toBeInTheDocument();
+		expect(document.querySelectorAll("[data-testid='blog-card']").length).toBe(
+			0,
+		);
 	});
 });

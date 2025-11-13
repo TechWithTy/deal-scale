@@ -1,8 +1,15 @@
+import {
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import InstagramEmbed from "../InstagramEmbed";
 
-jest.mock("next-themes", () => ({
+vi.mock("next-themes", () => ({
 	useTheme: () => ({ resolvedTheme: "light" }),
 }));
 

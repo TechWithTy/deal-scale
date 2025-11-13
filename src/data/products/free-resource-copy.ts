@@ -21,11 +21,14 @@ export const dealAnalyzerWorkbookABTest: ABTest = {
 					"Run the exact underwriting process Deal Scale uses internally. Prebuilt models, ROI calculators, and risk guardrails keep every acquisition disciplined.",
 				whatsInItForMe:
 					"Make faster go/no-go calls with the same diligence framework our team uses before writing an offer.",
-				target_audience: "Real estate investors evaluating lookalike off-market deals with similarity feature overlays",
+				target_audience:
+					"Real estate investors evaluating lookalike off-market deals with similarity feature overlays",
 				pain_point:
 					"You waste hours recreating underwriting models and second-guess the math on every deal.",
 				solution:
 					"Plug numbers into a guided workbook that handles the heavy analysis and surfaces the red flags instantly.",
+				hope: "Confidently move forward on deals knowing every metric is vetted inside a proven model.",
+				fear: "Missing a hidden risk in your analysis could cost six figures when a deal goes sideways.",
 				highlights: [
 					"Spreadsheet-ready templates",
 					"ROI and cash-on-cash calculators",
@@ -62,6 +65,8 @@ export const coldOutreachMessagePackABTest: ABTest = {
 					"It takes too long to craft multi-channel messaging that actually gets replies.",
 				solution:
 					"Drop in field-tested scripts with ready-made cadences so you can start contacting sellers right away.",
+				hope: "Launch a polished outreach cadence in minutes and keep your pipeline full of seller conversations.",
+				fear: "Heading into the week without messaging ready means hot leads will disengage before you ever reach them.",
 				highlights: [
 					"Channel-specific templates",
 					"Follow-up timelines",
@@ -98,6 +103,8 @@ export const investProsHandbookABTest: ABTest = {
 					"Your acquisitions team relies on tribal knowledge and lacks consistent processes.",
 				solution:
 					"Apply templated SOPs, meeting agendas, and performance scorecards to create predictable execution.",
+				hope: "Build a repeatable machine where every team member knows exactly how to drive revenue.",
+				fear: "Without structure, growth stalls and top performers burn out under chaotic leadership.",
 				highlights: [
 					"Quarterly planning templates",
 					"Weekly pipeline ritual breakdowns",
@@ -134,6 +141,8 @@ export const marketMetricsSnapshotABTest: ABTest = {
 					"Collecting market stats is fragmented across MLS exports, spreadsheets, and old reports.",
 				solution:
 					"Get a single dashboard that updates itself so you always know where to focus sourcing efforts.",
+				hope: "Spot emerging opportunities early and deploy capital where ROI is climbing.",
+				fear: "Flying blind on market shifts leads to wasted spend and missed deals in hotter submarkets.",
 				highlights: [
 					"Weekly refreshed KPIs",
 					"Neighborhood-level filters",

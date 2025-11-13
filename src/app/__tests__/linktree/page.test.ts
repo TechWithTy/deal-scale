@@ -1,15 +1,21 @@
-// Mock SEO utilities before importing the page
-jest.mock("@/utils/seo/staticSeo", () => ({
-	getStaticSeo: jest.fn(),
-	defaultSeo: {
-		canonical: "https://dealscale.io",
-		title: "Deal Scale",
-		description: "Default description",
-	},
-}));
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-jest.mock("@/utils/seo/mapSeoMetaToMetadata", () => ({
-	mapSeoMetaToMetadata: jest.fn((seo) => ({
+vi.mock("@/utils/seo/staticSeo", () => {
+	const getStaticSeo = vi.fn();
+	return {
+		__esModule: true,
+		getStaticSeo,
+		defaultSeo: {
+			canonical: "https://dealscale.io",
+			title: "Deal Scale",
+			description: "Default description",
+		},
+	};
+});
+
+vi.mock("@/utils/seo/mapSeoMetaToMetadata", () => ({
+	__esModule: true,
+	mapSeoMetaToMetadata: vi.fn((seo) => ({
 		title: seo.title || "Deal Scale",
 		description: seo.description || "Default description",
 		alternates: {
@@ -20,6 +26,8 @@ jest.mock("@/utils/seo/mapSeoMetaToMetadata", () => ({
 
 import { generateMetadata } from "@/app/linktree/page";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
+
+const mockedGetStaticSeo = vi.mocked(getStaticSeo);
 
 describe("LinkTree Page Metadata", () => {
 	const mockSeo = {
@@ -34,11 +42,11 @@ describe("LinkTree Page Metadata", () => {
 	};
 
 	beforeEach(() => {
-		jest.clearAllMocks();
-		(getStaticSeo as jest.Mock).mockReturnValue(mockSeo);
+		vi.clearAllMocks();
+		mockedGetStaticSeo.mockReturnValue(mockSeo);
 	});
 
-	test("generates metadata with correct title", async () => {
+	it("generates metadata with correct title", async () => {
 		const metadata = await generateMetadata();
 
 		expect(metadata.title).toBe(
@@ -46,7 +54,7 @@ describe("LinkTree Page Metadata", () => {
 		);
 	});
 
-	test("generates metadata with correct description", async () => {
+	it("generates metadata with correct description", async () => {
 		const metadata = await generateMetadata();
 
 		expect(metadata.description).toContain(
@@ -57,7 +65,7 @@ describe("LinkTree Page Metadata", () => {
 		);
 	});
 
-	test("includes OpenGraph metadata", async () => {
+	it("includes OpenGraph metadata", async () => {
 		const metadata = await generateMetadata();
 
 		expect(metadata.openGraph).toEqual({
@@ -69,7 +77,7 @@ describe("LinkTree Page Metadata", () => {
 		});
 	});
 
-	test("includes Twitter Card metadata", async () => {
+	it("includes Twitter Card metadata", async () => {
 		const metadata = await generateMetadata();
 
 		expect(metadata.twitter).toEqual({
@@ -79,17 +87,17 @@ describe("LinkTree Page Metadata", () => {
 		});
 	});
 
-	test("uses canonical URL from static SEO", async () => {
+	it("uses canonical URL from static SEO", async () => {
 		const metadata = await generateMetadata();
 
-		expect(getStaticSeo).toHaveBeenCalledWith("/linktree");
+		expect(mockedGetStaticSeo).toHaveBeenCalledWith("/linktree");
 		expect(metadata.openGraph?.url).toBe("https://dealscale.io/linktree");
 	});
 
-	test("falls back to default URL if SEO not found", async () => {
-		(getStaticSeo as jest.Mock).mockReturnValue({
+	it("falls back to default URL if SEO not found", async () => {
+		mockedGetStaticSeo.mockReturnValue({
 			canonical: undefined,
-		});
+		} as Partial<typeof mockSeo>);
 
 		const metadata = await generateMetadata();
 

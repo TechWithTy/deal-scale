@@ -2,8 +2,9 @@
 // * Tests both fetching all posts and a single post via the usePosts hook
 // * Run only in a safe test environment (real API calls, may mutate data)
 
-import { usePosts } from "@/hooks/beehiiv/use-posts";
 import type { BeehiivPost } from "@/types/behiiv";
+import { expect } from "vitest";
+import { usePosts } from "@/hooks/beehiiv/use-posts";
 import { act, renderHook } from "@testing-library/react";
 import {
 	describeIfExternal,
@@ -15,15 +16,14 @@ import { getTestBaseUrl } from "@/utils/env";
 // Get the base URL for the current environment
 const baseUrl = getTestBaseUrl();
 
-// Construct the posts endpoint URL
 const TEST_POSTS_ENDPOINT = `${baseUrl}/api/beehiiv/subscribe/posts`;
-
-// * Increase timeout for slow integration tests
-jest.setTimeout(20000);
+const LONG_TIMEOUT = 20_000;
 
 skipExternalTest("Beehiiv Posts CRUD flow (integration)");
 describeIfExternal("Beehiiv Posts CRUD flow (integration)", () => {
-	it("performs full CRUD flow for posts", async () => {
+	it(
+		"performs full CRUD flow for posts",
+		async () => {
 		// * Setup
 		const API_KEY = process.env.BEEHIIV_API_KEY;
 		const PUB_ID = process.env.NEXT_PUBLIC_BEEHIIV_NEWSLETTER_ID_V2;
@@ -140,9 +140,13 @@ describeIfExternal("Beehiiv Posts CRUD flow (integration)", () => {
 				"Skipping delete: post not created in this test or create request failed.",
 			);
 		}
-	});
+		},
+		LONG_TIMEOUT,
+	);
 
-	it("fetches a single post by id", async () => {
+	it(
+		"fetches a single post by id",
+		async () => {
 		const { result } = renderHook(() => usePosts());
 		// * First fetch all posts to get a valid id
 		let postId: string | undefined;
@@ -171,5 +175,7 @@ describeIfExternal("Beehiiv Posts CRUD flow (integration)", () => {
 		expect(singlePost).toHaveProperty("id", testPostId);
 		expect(singlePost).toHaveProperty("title");
 		expect(singlePost).toHaveProperty("content");
-	});
+		},
+		LONG_TIMEOUT,
+	);
 });

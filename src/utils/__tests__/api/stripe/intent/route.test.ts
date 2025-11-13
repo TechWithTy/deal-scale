@@ -2,27 +2,25 @@
  * @jest-environment node
  */
 
+import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { PUT } from "@/app/api/stripe/intent/route";
 import { NextResponse } from "next/server";
 
-jest.mock("@/lib/externalRequests/stripe", () => ({
-	createPaymentIntent: jest.fn(),
-	retrievePaymentIntent: jest.fn(),
-	updatePaymentIntent: jest.fn(),
-	deletePaymentIntent: jest.fn(),
+const stripeMocks = vi.hoisted(() => ({
+	retrieve: vi.fn(),
+	update: vi.fn(),
 }));
 
-import {
-	retrievePaymentIntent,
-	updatePaymentIntent,
-} from "@/lib/externalRequests/stripe";
+vi.mock("@/lib/externalRequests/stripe", () => ({
+	createPaymentIntent: vi.fn(),
+	retrievePaymentIntent: stripeMocks.retrieve,
+	updatePaymentIntent: stripeMocks.update,
+	deletePaymentIntent: vi.fn(),
+}));
 
-const mockedRetrieve = retrievePaymentIntent as jest.MockedFunction<
-	typeof retrievePaymentIntent
->;
-const mockedUpdate = updatePaymentIntent as jest.MockedFunction<
-	typeof updatePaymentIntent
->;
+const retrieveMock = stripeMocks.retrieve;
+const updateMock = stripeMocks.update;
 
 const buildPutRequest = (body: unknown) =>
 	new Request("http://localhost/api/stripe/intent", {
@@ -31,13 +29,13 @@ const buildPutRequest = (body: unknown) =>
 		body: JSON.stringify(body),
 	});
 
-describe("PUT /api/stripe/intent discount handling", () => {
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
+afterEach(() => {
+	vi.clearAllMocks();
+});
 
+describe("PUT /api/stripe/intent discount handling", () => {
 	it("applies product discount when coupon matches product metadata", async () => {
-		mockedRetrieve.mockResolvedValueOnce({
+		retrieveMock.mockResolvedValueOnce({
 			id: "pi_product",
 			amount: 10000,
 			metadata: {
@@ -47,7 +45,7 @@ describe("PUT /api/stripe/intent discount handling", () => {
 			status: "requires_payment_method",
 		} as any);
 
-		mockedUpdate.mockResolvedValueOnce({
+		updateMock.mockResolvedValueOnce({
 			id: "pi_product",
 			amount: 5000,
 			metadata: {
@@ -64,8 +62,8 @@ describe("PUT /api/stripe/intent discount handling", () => {
 			}) as any,
 		)) as NextResponse;
 
-		expect(mockedRetrieve).toHaveBeenCalledWith("pi_product");
-		expect(mockedUpdate).toHaveBeenCalledWith({
+		expect(retrieveMock).toHaveBeenCalledWith("pi_product");
+		expect(updateMock).toHaveBeenCalledWith({
 			intentId: "pi_product",
 			price: 5000,
 			metadata: {
@@ -79,7 +77,7 @@ describe("PUT /api/stripe/intent discount handling", () => {
 	});
 
 	it("applies plan discount when coupon matches recurring plan metadata", async () => {
-		mockedRetrieve.mockResolvedValueOnce({
+		retrieveMock.mockResolvedValueOnce({
 			id: "pi_plan",
 			amount: 200000,
 			metadata: {
@@ -89,7 +87,7 @@ describe("PUT /api/stripe/intent discount handling", () => {
 			status: "requires_payment_method",
 		} as any);
 
-		mockedUpdate.mockResolvedValueOnce({
+		updateMock.mockResolvedValueOnce({
 			id: "pi_plan",
 			amount: 100000,
 			metadata: {
@@ -106,8 +104,8 @@ describe("PUT /api/stripe/intent discount handling", () => {
 			}) as any,
 		)) as NextResponse;
 
-		expect(mockedRetrieve).toHaveBeenCalledWith("pi_plan");
-		expect(mockedUpdate).toHaveBeenCalledWith({
+		expect(retrieveMock).toHaveBeenCalledWith("pi_plan");
+		expect(updateMock).toHaveBeenCalledWith({
 			intentId: "pi_plan",
 			price: 100000,
 			metadata: {

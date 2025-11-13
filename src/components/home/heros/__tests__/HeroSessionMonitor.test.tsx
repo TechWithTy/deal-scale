@@ -1,10 +1,11 @@
+import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
 import HeroSessionMonitor from "../HeroSessionMonitor";
 
-jest.mock("next/dynamic", () => {
-	const React = require("react") as typeof import("react");
+vi.mock("next/dynamic", async () => {
+	const ReactModule = await vi.importActual<typeof import("react")>("react");
 	return {
 		__esModule: true,
 		default: (
@@ -13,21 +14,22 @@ jest.mock("next/dynamic", () => {
 		) => {
 			const Loading = options?.loading;
 			const DynamicComponent = (props: Record<string, unknown>) =>
-				Loading ? React.createElement(Loading, props) : null;
+				Loading ? ReactModule.createElement(Loading, props) : null;
 			DynamicComponent.displayName = "DynamicComponentMock";
 			return DynamicComponent;
 		},
 	};
 });
 
-jest.mock("framer-motion", () => {
-	const React = require("react") as typeof import("react");
+vi.mock("framer-motion", async () => {
+	const ReactModule = await vi.importActual<typeof import("react")>("react");
 	const createMock =
 		(tag: keyof JSX.IntrinsicElements) =>
 		({ children, ...props }: { children?: React.ReactNode }) =>
-			React.createElement(tag, props, children);
+			ReactModule.createElement(tag, props, children);
 
 	return {
+		__esModule: true,
 		motion: {
 			span: createMock("span"),
 			div: createMock("div"),

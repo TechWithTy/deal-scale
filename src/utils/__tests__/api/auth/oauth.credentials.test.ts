@@ -1,8 +1,8 @@
-import { GET } from "@/app/api/auth/oauth/credentials/route";
-import { NextResponse } from "next/server";
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { GET } from "@/app/api/auth/oauth/credentials/route";
 import fetch, {
 	Request as NodeFetchRequest,
 	Response as NodeFetchResponse,
@@ -27,21 +27,36 @@ if (!globalAny.fetch) {
 	globalAny.fetch = fetch;
 }
 
-jest.mock("next-auth", () => ({
-	getServerSession: jest.fn(),
+vi.mock("next/server", () => ({
+	NextResponse: {
+		json: (body: unknown, init?: ResponseInit) =>
+			new NodeFetchResponse(JSON.stringify(body), {
+				status: init?.status ?? 200,
+				statusText: init?.statusText,
+				headers: {
+					"content-type": "application/json",
+					...(init?.headers as Record<string, string> | undefined),
+				},
+			}),
+	},
+}));
+
+vi.mock("next-auth", () => ({
+	getServerSession: vi.fn(),
 }));
 
 describe("GET /api/auth/oauth/credentials", () => {
-	const getServerSession = jest.requireMock("next-auth")
-		.getServerSession as jest.Mock;
+	let getServerSession: ReturnType<typeof vi.fn>;
 
-	beforeAll(() => {
-		global.fetch = jest.fn();
+	beforeAll(async () => {
+		global.fetch = vi.fn();
+		const nextAuth = await import("next-auth");
+		getServerSession = vi.mocked(nextAuth.getServerSession);
 	});
 
 	afterEach(() => {
 		resetMocks();
-		getServerSession.mockReset();
+		getServerSession.mockReset?.();
 	});
 
 	it("returns 401 when no session is present", async () => {
@@ -94,7 +109,7 @@ describe("GET /api/auth/oauth/credentials", () => {
 	it("handles unexpected exceptions with 500", async () => {
 		const session = createSession();
 		getServerSession.mockResolvedValueOnce(session);
-		(global.fetch as jest.Mock).mockRejectedValueOnce(
+		(global.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
 			new Error("network down"),
 		);
 

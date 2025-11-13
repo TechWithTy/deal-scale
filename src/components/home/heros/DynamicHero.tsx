@@ -13,6 +13,7 @@ import {
 	PersonaCTA,
 	resolveHeroCopy,
 } from "@external/dynamic-hero";
+import type { Plan } from "@/types/service/plans";
 
 import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
 import { HeroMetricGrid } from "@/components/home/heros/HeroMetricGrid";

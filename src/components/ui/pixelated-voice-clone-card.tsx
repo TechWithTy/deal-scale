@@ -8,7 +8,7 @@ import {
 	TextRevealCardTitle,
 } from "@/components/ui/text-reveal-card";
 import { cn } from "@/lib/utils";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Tilt = {
 	x: number;
@@ -21,6 +21,14 @@ const MAX_TILT_DEGREES = 12;
 
 const DEFAULT_BEFORE_AUDIO = "/calls/example-call-yt.mp3";
 const DEFAULT_AFTER_AUDIO = "/calls/example-call-yt.mp3";
+
+const BEFORE_AUDIO_CAPTIONS_SRC = `data:text/vtt;charset=utf-8,${encodeURIComponent(
+	"WEBVTT\n\n00:00.000 --> 00:04.000\nOriginal seller script with monotone delivery.\n",
+)}`;
+
+const AFTER_AUDIO_CAPTIONS_SRC = `data:text/vtt;charset=utf-8,${encodeURIComponent(
+	"WEBVTT\n\n00:00.000 --> 00:04.000\nEnhanced expressive clone demonstrating improved tone and pacing.\n",
+)}`;
 
 const CANVAS_CONFIG = {
 	width: 960,
@@ -169,11 +177,13 @@ const PixelatedVoiceCloneCardComponent = ({
 		const after = afterAudioRef.current;
 		const beforeActive =
 			before &&
-			!before.paused && !Number.isNaN(before.currentTime) &&
+			!before.paused &&
+			!Number.isNaN(before.currentTime) &&
 			before.currentTime > 0.05;
 		const afterActive =
 			after &&
-			!after.paused && !Number.isNaN(after.currentTime) &&
+			!after.paused &&
+			!Number.isNaN(after.currentTime) &&
 			after.currentTime > 0.05;
 
 		if (!beforeActive && !afterActive && !isPlayingRef.current) {
@@ -497,7 +507,15 @@ const PixelatedVoiceCloneCardComponent = ({
 								);
 							}
 						}}
-					/>
+					>
+						<track
+							kind="captions"
+							srcLang="en"
+							label="Before voice sample transcript"
+							src={BEFORE_AUDIO_CAPTIONS_SRC}
+							default
+						/>
+					</audio>
 					<audio
 						ref={afterAudioRef}
 						src={afterAudioSrc}
@@ -511,7 +529,15 @@ const PixelatedVoiceCloneCardComponent = ({
 								);
 							}
 						}}
-					/>
+					>
+						<track
+							kind="captions"
+							srcLang="en"
+							label="After voice sample transcript"
+							src={AFTER_AUDIO_CAPTIONS_SRC}
+							default
+						/>
+					</audio>
 				</div>
 			</div>
 

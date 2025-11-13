@@ -8,10 +8,7 @@ import {
 	skipExternalTest,
 } from "../../../testHelpers/external";
 
-type GetSendGridFieldsFn = typeof import(
-	"@/lib/externalRequests/sendgrid/getFields",
-);
-["getSendGridFields"];
+type GetSendGridFieldsFn = (typeof import("@/lib/externalRequests/sendgrid/getFields"))["getSendGridFields"];
 
 let getSendGridFieldsImpl: GetSendGridFieldsFn | undefined;
 if (isExternalIntegrationEnabled) {

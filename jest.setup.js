@@ -1,4 +1,5 @@
 // jest.setup.js
+require("./tests/setup/test-framework-adapter.ts");
 require("@testing-library/jest-dom");
 
 // Polyfill Next.js server web APIs for middleware tests

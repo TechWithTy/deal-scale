@@ -1,63 +1,69 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
 
-const useDataModuleMock = jest.fn();
+type DataModuleSelector<T> = (value: unknown) => T;
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+const useDataModuleMock = vi.fn();
+
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
 
-jest.mock("@/components/auth/AuthGuard", () => ({
+vi.mock("@/components/auth/AuthGuard", () => ({
 	__esModule: true,
 	default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-jest.mock("@/components/contact/form/ContactForm", () => ({
+vi.mock("@/components/contact/form/ContactForm", () => ({
 	__esModule: true,
 	default: () => <div data-testid="contact-form" />,
 }));
 
-jest.mock("@/components/contact/form/ContactSteps", () => ({
+vi.mock("@/components/contact/form/ContactSteps", () => ({
 	__esModule: true,
 	ContactSteps: ({ steps }: { steps: unknown[] }) => (
 		<div data-testid="contact-steps" data-count={steps.length} />
 	),
 }));
 
-jest.mock("@/components/contact/schedule/ScheduleMeeting", () => ({
+vi.mock("@/components/contact/schedule/ScheduleMeeting", () => ({
 	__esModule: true,
 	ScheduleMeeting: () => <div data-testid="schedule-meeting" />,
 }));
 
-jest.mock("@/components/contact/newsletter/Newsletter", () => ({
+vi.mock("@/components/contact/newsletter/Newsletter", () => ({
 	__esModule: true,
 	Newsletter: () => <div data-testid="contact-newsletter" />,
 }));
 
-const TrustedByMock = jest.fn(() => <div data-testid="trusted-by" />);
+const TrustedByMock = vi.fn(() => <div data-testid="trusted-by" />);
 
-jest.mock("@/components/contact/utils/TrustedByScroller", () => ({
+vi.mock("@/components/contact/utils/TrustedByScroller", () => ({
 	__esModule: true,
 	default: () => TrustedByMock(),
 }));
 
-jest.mock("@/components/home/Testimonials", () => ({
+vi.mock("@/components/home/Testimonials", () => ({
 	__esModule: true,
 	default: ({ testimonials }: { testimonials: unknown[] }) => (
 		<div data-testid="testimonials" data-count={testimonials.length} />
 	),
 }));
 
-jest.mock("next-auth/react", () => ({
+vi.mock("next-auth/react", () => ({
 	__esModule: true,
 	useSession: () => ({ data: null }),
 }));
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
 	__esModule: true,
 	useSearchParams: () => new URLSearchParams(),
 }));
+
+const loadContactClient = async () =>
+	(await import("../ContactClient")).default;
 
 describe("ContactClient", () => {
 	beforeEach(() => {
@@ -65,9 +71,9 @@ describe("ContactClient", () => {
 		TrustedByMock.mockClear();
 	});
 
-	it("renders loading fallbacks while contact data modules are idle", () => {
+	it("renders loading fallbacks while contact data modules are idle", async () => {
 		useDataModuleMock.mockImplementation(
-			(key: string, selector: (state: unknown) => unknown) => {
+			(key: string, selector: DataModuleSelector<unknown>) => {
 				switch (key) {
 					case "service/slug_data/trustedCompanies":
 						return selector({
@@ -97,7 +103,7 @@ describe("ContactClient", () => {
 			},
 		);
 
-		const ContactClient = require("../ContactClient").default;
+		const ContactClient = await loadContactClient();
 
 		render(<ContactClient />);
 

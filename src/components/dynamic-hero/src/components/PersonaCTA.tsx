@@ -150,6 +150,7 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 							aria-label={primary.ariaLabel ?? primary.label}
 							aria-busy={primaryLoading}
 							disabled={primaryLoading}
+							data-testid="primary-cta"
 							className={cn(
 								"group relative flex h-full w-full flex-col justify-center gap-1 overflow-hidden rounded-3xl border-none px-6 py-5 text-primary-foreground shadow-[0_28px_60px_-20px_rgba(16,185,129,0.55)] transition",
 								"bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400",
@@ -241,6 +242,7 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 								"whitespace-normal text-balance",
 								contentAlignment,
 							)}
+							data-testid="secondary-cta"
 						>
 							{secondaryCopy.badge ? (
 								<span

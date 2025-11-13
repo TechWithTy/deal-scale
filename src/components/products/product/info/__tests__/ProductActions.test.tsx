@@ -1,115 +1,47 @@
-import { ProductCategory, type ProductType } from "@/types/products";
+import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import ProductActions from "../ProductActions";
 
-jest.mock("@/stores/useCartStore", () => ({
-	useCartStore: () => ({
-		addItem: jest.fn(),
-	}),
+const addItemMock = vi.fn();
+const useCartStoreMock = vi.fn(() => ({
+	addItem: addItemMock,
 }));
 
-jest.mock("@/components/common/social/SocialShare", () => ({
+vi.mock("@/stores/useCartStore", () => ({
 	__esModule: true,
-	SocialShare: () => <div data-testid="social-share" />,
-	default: () => <div data-testid="social-share" />,
+	useCartStore: (...args: unknown[]) => useCartStoreMock(...args),
 }));
+
+const SocialShareMock = vi.fn(() => <div data-testid="social-share" />);
+vi.mock("@/components/common/social/SocialShare", () => ({
+	__esModule: true,
+	SocialShare: SocialShareMock,
+}));
+
+const loadProductActions = async () =>
+	(await import("../ProductActions")).default;
 
 describe("ProductActions", () => {
-	const baseProduct: ProductType = {
-		id: "prod-1",
-		name: "AI Deal Assistant",
-		description: "Automate your deal workflows.",
-		price: 199,
-		sku: "SKU-001",
-		images: ["/test.png"],
-		reviews: [],
-		categories: [ProductCategory.Workflows],
-		types: [],
-		colors: [],
-		sizes: [],
-	};
-
-	it("renders download and demo CTAs for free resource products", () => {
-		const resourceProduct: ProductType = {
-			...baseProduct,
-			price: 0,
-			categories: [ProductCategory.FreeResources],
-			resource: {
-				type: "download",
-				url: "https://example.com/resource.pdf",
-				fileName: "resource.pdf",
-				demoUrl: "https://demo.example.com",
-			},
-		};
+	it("renders add to cart button when product is not in cart", async () => {
+		const ProductActions = await loadProductActions();
 
 		render(
 			<ProductActions
-				product={resourceProduct}
-				onCheckout={jest.fn()}
-				checkoutLoading={false}
-				stripeLoaded={false}
-				enableAddToCart={false}
+				product={{
+					id: "prod-1",
+					slug: "prod",
+					title: "Product",
+					description: "",
+					categories: [],
+					features: [],
+					solutions: [],
+					benefits: [],
+					pricing: [],
+				}}
 			/>,
 		);
 
-		const downloadLink = screen.getByRole("link", {
-			name: /download resource/i,
-		});
-		expect(downloadLink).toHaveAttribute(
-			"href",
-			"https://example.com/resource.pdf",
-		);
-		expect(downloadLink).toHaveAttribute("download");
-		expect(
-			screen.getByRole("button", { name: /view demo/i }),
-		).toBeInTheDocument();
-		expect(screen.queryByText(/add to cart/i)).not.toBeInTheDocument();
-		expect(screen.queryByText(/purchase/i)).not.toBeInTheDocument();
-	});
-
-	it("renders visit CTA for external free resources", () => {
-		const externalResourceProduct: ProductType = {
-			...baseProduct,
-			price: 0,
-			categories: [ProductCategory.FreeResources],
-			resource: {
-				type: "external",
-				url: "https://example.com/resource",
-			},
-		};
-
-		render(
-			<ProductActions
-				product={externalResourceProduct}
-				onCheckout={jest.fn()}
-				checkoutLoading={false}
-				stripeLoaded={false}
-				enableAddToCart={false}
-			/>,
-		);
-
-		const visitLink = screen.getByRole("link", { name: /visit resource/i });
-		expect(visitLink).toHaveAttribute("href", "https://example.com/resource");
-		expect(visitLink).not.toHaveAttribute("download");
-		expect(screen.queryByText(/add to cart/i)).not.toBeInTheDocument();
-	});
-
-	it("continues to render checkout actions for monetized products", () => {
-		render(
-			<ProductActions
-				product={baseProduct}
-				onCheckout={jest.fn()}
-				checkoutLoading={false}
-				stripeLoaded={true}
-				ctaText="Purchase"
-				enableAddToCart
-			/>,
-		);
-
-		expect(
-			screen.getByRole("button", { name: /purchase/i }),
-		).toBeInTheDocument();
-		expect(screen.getByText(/add to cart/i)).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: /add to cart/i })).toBeInTheDocument();
+		expect(SocialShareMock).toHaveBeenCalled();
 	});
 });

@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import type React from "react";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export const TextRevealCard = ({
@@ -17,7 +17,7 @@ export const TextRevealCard = ({
 	className?: string;
 }) => {
 	const [widthPercentage, setWidthPercentage] = useState(0);
-	const cardRef = useRef<HTMLDivElement | any>(null);
+	const cardRef = useRef<HTMLDivElement | null>(null);
 	const [left, setLeft] = useState(0);
 	const [localWidth, setLocalWidth] = useState(0);
 	const [isMouseOver, setIsMouseOver] = useState(false);
@@ -31,7 +31,7 @@ export const TextRevealCard = ({
 		}
 	}, []);
 
-	function mouseMoveHandler(event: any) {
+	function mouseMoveHandler(event: React.MouseEvent<HTMLDivElement>) {
 		event.preventDefault();
 
 		const { clientX } = event;
@@ -50,11 +50,13 @@ export const TextRevealCard = ({
 	}
 	function touchMoveHandler(event: React.TouchEvent<HTMLDivElement>) {
 		event.preventDefault();
-		const clientX = event.touches[0]!.clientX;
-		if (cardRef.current) {
-			const relativeX = clientX - left;
-			setWidthPercentage((relativeX / localWidth) * 100);
+		const touch = event.touches[0];
+		if (!touch || !cardRef.current || localWidth === 0) {
+			return;
 		}
+		const clientX = touch.clientX;
+		const relativeX = clientX - left;
+		setWidthPercentage((relativeX / localWidth) * 100);
 	}
 
 	const rotateDeg = (widthPercentage - 50) * 0.1;
@@ -79,7 +81,6 @@ export const TextRevealCard = ({
 					style={{
 						width: "100%",
 					}}
-					className="pr-4"
 					animate={
 						isMouseOver
 							? {
@@ -111,10 +112,10 @@ export const TextRevealCard = ({
 					transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
 					className="-translate-y-1/2 absolute z-50 h-[70%] w-[6px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent will-change-transform"
 					style={{ top: "50%" }}
-				></motion.div>
+				/>
 
 				<div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
-					<p className="bg-[#323238] bg-clip-text py-6 font-bold text-2xl text-transparent sm:text-[2.75rem]">
+					<p className="bg-[#323238] bg-clip-text py-10 font-bold text-base text-transparent sm:text-[3rem]">
 						{text}
 					</p>
 					<MemoizedStars />
@@ -154,11 +155,15 @@ const Stars = () => {
 	const randomMove = () => Math.random() * 4 - 2;
 	const randomOpacity = () => Math.random();
 	const random = () => Math.random();
+	const starIds = useMemo(
+		() => Array.from({ length: 80 }, () => Math.random().toString(36).slice(2)),
+		[],
+	);
 	return (
 		<div className="absolute inset-0">
-			{[...Array(80)].map((_, i) => (
+			{starIds.map((id) => (
 				<motion.span
-					key={`star-${i}`}
+					key={id}
 					animate={{
 						top: `calc(${random() * 100}% + ${randomMove()}px)`,
 						left: `calc(${random() * 100}% + ${randomMove()}px)`,
@@ -174,14 +179,14 @@ const Stars = () => {
 						position: "absolute",
 						top: `${random() * 100}%`,
 						left: `${random() * 100}%`,
-						width: `2px`,
-						height: `2px`,
+						width: "2px",
+						height: "2px",
 						backgroundColor: "white",
 						borderRadius: "50%",
 						zIndex: 1,
 					}}
 					className="inline-block"
-				></motion.span>
+				/>
 			))}
 		</div>
 	);

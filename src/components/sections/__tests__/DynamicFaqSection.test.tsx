@@ -1,18 +1,21 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
-import { DynamicFaqSection } from "../DynamicFaqSection";
 
-const mockUseSearchParams = jest.fn();
+const mockUseSearchParams = vi.fn();
 
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
 	useSearchParams: () => mockUseSearchParams(),
 }));
 
-describe("DynamicFaqSection", () => {
-	beforeEach(() => {
-		mockUseSearchParams.mockReset();
-	});
+let DynamicFaqSection: typeof import("../DynamicFaqSection").DynamicFaqSection;
 
+beforeEach(async () => {
+	mockUseSearchParams.mockReset();
+	({ DynamicFaqSection } = await import("../DynamicFaqSection"));
+});
+
+describe("DynamicFaqSection", () => {
 	it("defaults to investor persona when the query string is empty", () => {
 		mockUseSearchParams.mockReturnValue(new URLSearchParams());
 
@@ -23,7 +26,7 @@ describe("DynamicFaqSection", () => {
 		);
 
 		expect(screen.getByTestId("persona-next-step")).toHaveTextContent(
-			'Drop in your driving-for-dollars or probate leads, enable the "Motivated Seller Surge" workflow, and let DealScale run AI voice + SMS follow-up instantly. You’ll get qualified callbacks and hot leads posted to your CRM the same day.',
+			/Drop in your driving-for-dollars or probate leads, enable the "Motivated Seller Surge" workflow, and let DealScale run AI voice \+ SMS follow-up instantly\. You\u2019ll get qualified callbacks and hot leads posted to your CRM the same day\./,
 		);
 
 		expect(screen.getByTestId("persona-advanced-faq")).toHaveTextContent(
@@ -41,7 +44,7 @@ describe("DynamicFaqSection", () => {
 		);
 
 		expect(screen.getByTestId("persona-next-step")).toHaveTextContent(
-			'Spin up a client workspace, clone their brand voice, and launch the "Client Retainer Saver" campaign. DealScale keeps their pipeline working 24/7 while you report on booked appointments and retained revenue.',
+			/Spin up a client workspace, clone their brand voice, and launch the "Client Retainer Saver" campaign\. DealScale keeps their pipeline working 24\/7 while you report on booked appointments and retained revenue\./,
 		);
 
 		expect(screen.getByTestId("persona-advanced-faq")).toHaveTextContent(
@@ -60,11 +63,11 @@ describe("DynamicFaqSection", () => {
 		);
 
 		expect(screen.getByTestId("persona-next-step")).toHaveTextContent(
-			'Connect your CRM sandbox, provision AI agents for each region, and deploy the "Enterprise Compliance Guardrail" sequence. DealScale handles outreach, consent tracking, and audit-ready reporting to keep every team aligned.',
+			/Connect your CRM sandbox, provision AI agents for each region, and deploy the "Enterprise Compliance Guardrail" sequence\. DealScale handles outreach, consent tracking, and audit-ready reporting to keep every team aligned\./,
 		);
 
 		expect(screen.getByTestId("persona-advanced-faq")).toHaveTextContent(
-			"Use DealScale’s workspace hierarchy to group regions, assign AI voices, and enforce compliance templates. Central reporting highlights campaign lift by unit while individual teams manage their own playbooks.",
+			"Use DealScale\u2019s workspace hierarchy to group regions, assign AI voices, and enforce compliance templates. Central reporting highlights campaign lift by unit while individual teams manage their own playbooks.",
 		);
 	});
 });

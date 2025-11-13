@@ -1,4 +1,5 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { dataManifest } from "@/data/__generated__/manifest";
 
@@ -58,7 +59,7 @@ describe("useDataModule", () => {
 	});
 
 	it("stabilizes selector outputs to prevent redundant re-renders", async () => {
-		const renderSpy = jest.fn();
+		const renderSpy = vi.fn();
 
 		const { result } = renderHook(() => {
 			renderSpy();
@@ -82,7 +83,7 @@ describe("useDataModule", () => {
 	});
 
 	it("reuses cached selector snapshots across passive re-renders", async () => {
-		const selectorSpy = jest.fn(({ status, data }) => ({
+		const selectorSpy = vi.fn(({ status, data }) => ({
 			status,
 			hasData: Boolean(data),
 		}));

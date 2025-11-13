@@ -1,107 +1,113 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 
 import type { Metadata } from "next";
 
-jest.mock("@/data/bento/main", () => ({
+vi.mock("@/data/bento/main", () => ({
 	MainBentoFeatures: [],
 }));
 
-const makeMockComponent = () => jest.fn(() => null);
+const makeMockComponent = () => vi.fn(() => null);
 
 const TrustedByScrollerMock = makeMockComponent();
-jest.mock("@/components/contact/utils/TrustedByScroller", () => ({
+vi.mock("@/components/contact/utils/TrustedByScroller", () => ({
 	__esModule: true,
 	default: TrustedByScrollerMock,
 }));
 
 const CaseStudyGridMock = makeMockComponent();
-jest.mock("@/components/case-studies/CaseStudyGrid", () => ({
+vi.mock("@/components/case-studies/CaseStudyGrid", () => ({
 	__esModule: true,
 	default: CaseStudyGridMock,
 }));
 
 const TestimonialsMock = makeMockComponent();
-jest.mock("@/components/home/Testimonials", () => ({
+vi.mock("@/components/home/Testimonials", () => ({
 	__esModule: true,
 	default: TestimonialsMock,
 }));
 
 const FaqMock = makeMockComponent();
-jest.mock("@/components/faq", () => ({
+vi.mock("@/components/faq", () => ({
 	__esModule: true,
 	default: FaqMock,
 }));
 
-const PricingMock = makeMockComponent();
-jest.mock("@/components/home/Pricing", () => ({
+const MarketingCatalogPricingMock = makeMockComponent();
+vi.mock("@/components/pricing/CatalogPricing", () => ({
 	__esModule: true,
-	default: PricingMock,
+	default: MarketingCatalogPricingMock,
 }));
 
-jest.mock("@/lib/beehiiv/getPosts", () => ({
+vi.mock("@/lib/beehiiv/getPosts", () => ({
 	__esModule: true,
-	getLatestBeehiivPosts: jest.fn(async () => []),
+	getLatestBeehiivPosts: vi.fn(async () => []),
 }));
 
-jest.mock("@/utils/seo/staticSeo", () => ({
+vi.mock("@/utils/seo/staticSeo", () => ({
 	__esModule: true,
-	getStaticSeo: jest.fn(() => ({
+	getStaticSeo: vi.fn(() => ({
 		canonical: "https://example.test",
 		title: "Example Page",
 		description: "Example description",
 	})),
 }));
 
-jest.mock("@/utils/seo/mapSeoMetaToMetadata", () => ({
+vi.mock("@/utils/seo/mapSeoMetaToMetadata", () => ({
 	__esModule: true,
-	mapSeoMetaToMetadata: jest.fn((seo) => seo as Metadata),
+	mapSeoMetaToMetadata: vi.fn((seo) => seo as Metadata),
 }));
 
-const mockPricingClient = jest.fn(() => null);
+const mockPricingClient = vi.fn(() => null);
 const dynamicWrappers: Array<(props: unknown) => React.ReactElement | null> =
 	[];
-jest.mock("next/dynamic", () => {
-	return jest.fn(() => {
-		const Wrapper = (props: unknown) => {
-			mockPricingClient(props);
-			return null;
-		};
-		dynamicWrappers.push(Wrapper);
-		return Wrapper;
-	});
+vi.mock("next/dynamic", async () => {
+	return {
+		__esModule: true,
+		default: () => {
+			const Wrapper = (props: unknown) => {
+				mockPricingClient(props);
+				return null;
+			};
+			dynamicWrappers.push(Wrapper);
+			return Wrapper;
+		},
+	};
 });
 
-const mockSchemaInjector = jest.fn();
+const mockSchemaInjector = vi.fn();
 function SchemaInjectorMock({
 	schema,
 }: { schema: unknown }): React.ReactElement | null {
 	mockSchemaInjector(schema);
 	return null;
 }
-const mockBuildFAQPageSchema = jest.fn(() => ({}));
-const mockBuildServiceSchema = jest.fn(() => ({}));
-const mockBuildActivityFeedSchema = jest.fn(() => ({}));
-jest.mock("@/utils/seo/schema", () => ({
+const mockBuildFAQPageSchema = vi.fn(() => ({}));
+const mockBuildServiceSchema = vi.fn(() => ({}));
+const mockBuildActivityFeedSchema = vi.fn(() => ({}));
+const mockBuildPricingJsonLd = vi.fn(() => []);
+vi.mock("@/utils/seo/schema", () => ({
 	__esModule: true,
 	SchemaInjector: SchemaInjectorMock,
 	buildFAQPageSchema: (...args: unknown[]) => mockBuildFAQPageSchema(...args),
 	buildServiceSchema: (...args: unknown[]) => mockBuildServiceSchema(...args),
 	buildActivityFeedSchema: (...args: unknown[]) =>
 		mockBuildActivityFeedSchema(...args),
+	buildPricingJsonLd: (...args: unknown[]) => mockBuildPricingJsonLd(...args),
 }));
 
-const mockServiceHomeClient = jest.fn(() => null);
+const mockServiceHomeClient = vi.fn(() => null);
 function ServiceHomeClientWrapper(props: unknown): React.ReactElement | null {
 	mockServiceHomeClient(props);
 	return null;
 }
-jest.mock("../features/ServiceHomeClient", () => ({
+vi.mock("../features/ServiceHomeClient", () => ({
 	__esModule: true,
 	default: ServiceHomeClientWrapper,
 }));
 
 const mockDataModules: Record<string, Record<string, unknown>> = {};
-jest.mock("@/data/__generated__/modules", () => ({
+vi.mock("@/data/__generated__/modules", () => ({
 	__esModule: true,
 	dataModules: mockDataModules,
 }));
@@ -131,7 +137,8 @@ function collectElements(
 
 describe("server entry pages", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
+		dynamicWrappers.length = 0;
 
 		Object.assign(mockDataModules, {
 			"caseStudy/caseStudies": {
@@ -163,6 +170,13 @@ describe("server entry pages", () => {
 						price: {},
 					},
 				],
+				pricingCatalog: {
+					pricing: {
+						monthly: [],
+						annual: [],
+						oneTime: [],
+					},
+				},
 			},
 			"service/slug_data/testimonials": {
 				generalDealScaleTestimonials: [
@@ -192,7 +206,6 @@ describe("server entry pages", () => {
 				},
 			},
 		});
-		dynamicWrappers.length = 0;
 	});
 
 	afterEach(() => {
@@ -234,13 +247,15 @@ describe("server entry pages", () => {
 					typeof element?.props === "object" &&
 					"faqItems" in (element.props as Record<string, unknown>),
 			);
-		const pricing =
-			elements.find((element) => element.type === PricingMock) ??
+		const marketingPricing =
+			elements.find(
+				(element) => element.type === MarketingCatalogPricingMock,
+			) ??
 			elements.find(
 				(element) =>
 					element?.props !== null &&
 					typeof element?.props === "object" &&
-					"plans" in (element.props as Record<string, unknown>),
+					"catalog" in (element.props as Record<string, unknown>),
 			);
 
 		expect(scroller?.props).toMatchObject({
@@ -257,8 +272,8 @@ describe("server entry pages", () => {
 		expect(faq?.props).toMatchObject({
 			faqItems: mockDataModules["faq/default"].faqItems,
 		});
-		expect(pricing?.props).toMatchObject({
-			plans: mockDataModules["service/slug_data/pricing"].PricingPlans,
+		expect(marketingPricing?.props).toMatchObject({
+			catalog: mockDataModules["service/slug_data/pricing"].pricingCatalog,
 		});
 	});
 
@@ -267,17 +282,12 @@ describe("server entry pages", () => {
 
 		const tree = PricingPage();
 		const elements = collectElements(tree);
-		const pricingWrapper = dynamicWrappers[0];
 
-		expect(pricingWrapper).toBeDefined();
-
-		const clientElement = elements.find(
-			(element) => element.type === pricingWrapper,
+		expect(mockBuildPricingJsonLd).toHaveBeenCalledWith(
+			expect.objectContaining({
+				catalog: mockDataModules["service/slug_data/pricing"].pricingCatalog,
+			}),
 		);
-
-		expect(clientElement?.props).toMatchObject({
-			plans: mockDataModules["service/slug_data/pricing"].PricingPlans,
-		});
 
 		const schemaElement = elements.find(
 			(element) => element.type === SchemaInjectorMock,

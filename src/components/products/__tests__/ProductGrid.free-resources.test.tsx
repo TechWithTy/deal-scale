@@ -1,43 +1,82 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import * as React from "react";
 import type { ProductType } from "@/types/products";
 import { ProductCategory } from "@/types/products";
 import type { ABTest } from "@/types/testing";
 import { render, screen } from "@testing-library/react";
-import ProductGrid from "../ProductGrid";
 
-jest.mock("react", () => {
-	const actual = jest.requireActual<typeof import("react")>("react");
-	return { ...actual, default: actual };
-});
-
-jest.mock("next/navigation", () => ({
+vi.mock("next/navigation", () => ({
 	useRouter: () => ({
-		push: jest.fn(),
-		replace: jest.fn(),
-		prefetch: jest.fn(),
+		push: vi.fn(),
+		replace: vi.fn(),
+		prefetch: vi.fn(),
 	}),
 	usePathname: () => "/products",
 	useSearchParams: () => new URLSearchParams(),
 }));
 
-jest.mock("@/components/ui/use-toast", () => ({
-	toast: jest.fn(),
+vi.mock("@/components/ui/use-toast", () => ({
+	toast: vi.fn(),
 }));
 
-jest.mock("next-auth/react", () => ({
-	useSession: () => ({ data: null }),
+const useSessionMock = vi.fn(() => ({ data: null }));
+
+vi.mock("next-auth/react", () => ({
+	useSession: useSessionMock,
 }));
 
-jest.mock("@/components/auth/use-auth-store", () => ({
+vi.mock("@/components/auth/use-auth-store", () => ({
 	useAuthModal: () => ({
-		open: jest.fn(),
+		open: vi.fn(),
 	}),
 }));
 
-const usePaginationMock = jest.fn();
+const usePaginationMock = vi.fn();
 
-jest.mock("@/hooks/use-pagination", () => ({
+vi.mock("@/hooks/use-pagination", () => ({
 	usePagination: (...args: unknown[]) => usePaginationMock(...args),
 }));
+
+vi.mock("embla-carousel-react", () => ({
+	__esModule: true,
+	default: () => [vi.fn(), null],
+	useEmblaCarousel: () => {
+		const api = {
+			on: vi.fn(),
+			off: vi.fn(),
+			scrollPrev: vi.fn(),
+			scrollNext: vi.fn(),
+			canScrollPrev: vi.fn(() => false),
+			canScrollNext: vi.fn(() => false),
+		};
+		return [vi.fn(), api];
+	},
+}));
+
+let ProductGrid: typeof import("../ProductGrid").default;
+
+const LONG_TIMEOUT = 20_000;
+
+beforeEach(async () => {
+	usePaginationMock.mockImplementation((items: unknown[]) => ({
+		pagedItems: items,
+		page: 1,
+		totalPages: 1,
+		nextPage: vi.fn(),
+		prevPage: vi.fn(),
+		setPage: vi.fn(),
+		canShowPagination: false,
+		canShowShowMore: false,
+		canShowShowLess: false,
+		showMore: vi.fn(),
+		showLess: vi.fn(),
+		showAll: false,
+		setShowAll: vi.fn(),
+		reset: vi.fn(),
+	}));
+
+	({ default: ProductGrid } = await import("../ProductGrid"));
+}, LONG_TIMEOUT);
 
 describe("ProductGrid featured free resources", () => {
 	const baseAbTest: ABTest = {
@@ -74,25 +113,6 @@ describe("ProductGrid featured free resources", () => {
 		colors: [],
 		sizes: [],
 		...overrides,
-	});
-
-	beforeEach(() => {
-		usePaginationMock.mockImplementation((items: unknown[]) => ({
-			pagedItems: items,
-			page: 1,
-			totalPages: 1,
-			nextPage: jest.fn(),
-			prevPage: jest.fn(),
-			setPage: jest.fn(),
-			canShowPagination: false,
-			canShowShowMore: false,
-			canShowShowLess: false,
-			showMore: jest.fn(),
-			showLess: jest.fn(),
-			showAll: false,
-			setShowAll: jest.fn(),
-			reset: jest.fn(),
-		}));
 	});
 
 	it("surfaces only featured free resources in the highlight rail", () => {

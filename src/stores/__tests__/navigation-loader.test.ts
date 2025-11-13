@@ -1,4 +1,12 @@
 import { act } from "@testing-library/react";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 
 import {
 	resetNavigationLoaderStore,
@@ -7,13 +15,13 @@ import {
 
 describe("navigation loader store", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 		resetNavigationLoaderStore();
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
 		resetNavigationLoaderStore();
 	});
 
@@ -51,7 +59,7 @@ describe("navigation loader store", () => {
 		expect(useNavigationLoaderStore.getState().isNavigating).toBe(true);
 
 		act(() => {
-			jest.advanceTimersByTime(30);
+			vi.advanceTimersByTime(30);
 		});
 
 		expect(useNavigationLoaderStore.getState().isNavigating).toBe(false);

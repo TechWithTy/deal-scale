@@ -1,24 +1,31 @@
+import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import React from "react";
-import type { ReactNode } from "react";
-import "@testing-library/jest-dom";
+import React, { type ReactNode } from "react";
+import {
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 
-import { resolveHeroCopy } from "../../../dynamic-hero/src";
 import DynamicHeroDemoPage from "../DynamicHero";
+import { resolveHeroCopy } from "../../../dynamic-hero/src";
 
-const pricingCheckoutDialogMock = jest.fn(
+const pricingCheckoutDialogMock = vi.fn(
 	({ clientSecret }: { clientSecret: string }) => (
 		<div data-testid="pricing-checkout-dialog">{clientSecret}</div>
 	),
 );
 
-jest.mock("@/components/home/pricing/PricingCheckoutDialog", () => {
-	const React = require("react");
+vi.mock("@/components/home/pricing/PricingCheckoutDialog", async () => {
+	const ReactModule = await vi.importActual<typeof import("react")>("react");
 	return {
 		__esModule: true,
 		default: (props: { clientSecret: string }) => {
 			pricingCheckoutDialogMock(props);
-			return React.createElement(
+			return ReactModule.createElement(
 				"div",
 				{ "data-testid": "pricing-checkout-dialog" },
 				props.clientSecret ?? "",
@@ -27,19 +34,20 @@ jest.mock("@/components/home/pricing/PricingCheckoutDialog", () => {
 	};
 });
 
-jest.mock("react-hot-toast", () => ({
-	__esModule: true,
+const toastModuleMock = vi.hoisted(() => ({
 	default: {
-		success: jest.fn(),
-		error: jest.fn(),
+		success: vi.fn(),
+		error: vi.fn(),
 	},
 }));
 
-jest.mock("lucide-react", () => ({
+vi.mock("react-hot-toast", () => toastModuleMock);
+
+vi.mock("lucide-react", () => ({
 	ArrowDown: () => <svg data-testid="arrow-down" />,
 }));
 
-jest.mock(
+vi.mock(
 	"@/components/ui/avatar-circles",
 	() => ({
 		AvatarCircles: () => <div data-testid="avatar-circles" />,
@@ -47,7 +55,7 @@ jest.mock(
 	{ virtual: true },
 );
 
-jest.mock(
+vi.mock(
 	"@/components/ui/background-beams-with-collision",
 	() => ({
 		BackgroundBeamsWithCollision: ({ children }: { children?: ReactNode }) => (
@@ -57,7 +65,7 @@ jest.mock(
 	{ virtual: true },
 );
 
-jest.mock(
+vi.mock(
 	"@/components/ui/light-rays",
 	() => ({
 		LightRays: () => <div data-testid="light-rays" />,
@@ -65,7 +73,7 @@ jest.mock(
 	{ virtual: true },
 );
 
-jest.mock(
+vi.mock(
 	"@/components/ui/pointer",
 	() => ({
 		Pointer: ({ children }: { children?: ReactNode }) => (
@@ -75,14 +83,18 @@ jest.mock(
 	{ virtual: true },
 );
 
-jest.mock("../../../dynamic-hero/src", () => {
-	const React = require("react");
+const heroModuleMocks = vi.hoisted(() => {
+	return {
+		resolveHeroCopy: vi.fn(
+			(input: unknown, fallback: unknown) => input ?? fallback,
+		),
+		playVideo: vi.fn(),
+		stopVideo: vi.fn(),
+	};
+});
 
-	const mockResolveHeroCopy = jest.fn(
-		(input: unknown, fallback: unknown) => input ?? fallback,
-	);
-	const playVideoMock = jest.fn();
-
+vi.mock("../../../dynamic-hero/src", async () => {
+	const ReactModule = await vi.importActual<typeof import("react")>("react");
 	return {
 		DEFAULT_HERO_SOCIAL_PROOF: {
 			reviews: [],
@@ -92,11 +104,9 @@ jest.mock("../../../dynamic-hero/src", () => {
 		HeroAurora: ({ children }: { children?: ReactNode }) => (
 			<div data-testid="hero-aurora">{children}</div>
 		),
-		HeroHeadline: ({
-			personaLabel,
-		}: {
-			personaLabel: string;
-		}) => <h1>{personaLabel}</h1>,
+		HeroHeadline: ({ personaLabel }: { personaLabel: string }) => (
+			<h1>{personaLabel}</h1>
+		),
 		PersonaCTA: ({
 			primary,
 			secondary,
@@ -127,33 +137,26 @@ jest.mock("../../../dynamic-hero/src", () => {
 				{microcopy ? <p>{microcopy}</p> : null}
 			</div>
 		),
-		HeroVideoPreview: React.forwardRef((_, ref) => {
-			React.useImperativeHandle(ref, () => ({
-				play: playVideoMock,
-				stop: jest.fn(),
+		HeroVideoPreview: ReactModule.forwardRef((_, ref) => {
+			ReactModule.useImperativeHandle(ref, () => ({
+				play: heroModuleMocks.playVideo,
+				stop: heroModuleMocks.stopVideo,
 			}));
 			return <div data-testid="hero-video-preview" />;
 		}),
-		resolveHeroCopy: mockResolveHeroCopy,
+		resolveHeroCopy: heroModuleMocks.resolveHeroCopy,
 		TextFlipHighlight: ({ children }: { children?: React.ReactNode }) => (
 			<span>{children}</span>
 		),
-		__videoPlayMock: playVideoMock,
+		__videoPlayMock: heroModuleMocks.playVideo,
 	};
 });
 
 describe("DynamicHeroDemoPage", () => {
-	const resolveHeroCopyMock = resolveHeroCopy as jest.Mock;
-	const toast = jest.requireMock("react-hot-toast")
-		.default as jest.Mocked<{
-		success: jest.Mock;
-		error: jest.Mock;
-	}>;
-	const { __videoPlayMock } = jest.requireMock("../../../dynamic-hero/src") as {
-		__videoPlayMock: jest.Mock;
-	};
-	const mockFetch = jest.fn();
-	const scrollIntoViewMock = jest.fn();
+	const resolveHeroCopyMock = vi.mocked(resolveHeroCopy);
+	const toast = toastModuleMock.default;
+	const mockFetch = vi.fn();
+	const scrollIntoViewMock = vi.fn();
 
 	beforeAll(() => {
 		Object.defineProperty(window.HTMLElement.prototype, "scrollIntoView", {
@@ -163,7 +166,7 @@ describe("DynamicHeroDemoPage", () => {
 	});
 
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		mockFetch.mockReset();
 		scrollIntoViewMock.mockReset();
 		pricingCheckoutDialogMock.mockClear();
@@ -181,8 +184,8 @@ describe("DynamicHeroDemoPage", () => {
 	});
 
 	it("scrolls to the details section when Next button is clicked", () => {
-		const scrollIntoView = jest.fn();
-		const getElementByIdSpy = jest
+		const scrollIntoView = vi.fn();
+		const getElementByIdSpy = vi
 			.spyOn(document, "getElementById")
 			.mockReturnValue({ scrollIntoView } as unknown as HTMLElement);
 
@@ -275,6 +278,6 @@ describe("DynamicHeroDemoPage", () => {
 			behavior: "smooth",
 			block: "center",
 		});
-		await waitFor(() => expect(__videoPlayMock).toHaveBeenCalledTimes(1));
+		await waitFor(() => expect(heroModuleMocks.playVideo).toHaveBeenCalledTimes(1));
 	});
 });

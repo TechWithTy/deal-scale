@@ -1,4 +1,4 @@
-jest.setTimeout(20000); // * Increase timeout for slow integration tests
+import { afterAll, expect } from "vitest";
 
 import { useNewsletterSubscribers } from "@/hooks/beehiiv/use-news-letter-subscribers";
 import type { Subscriber } from "@/types/behiiv";
@@ -13,20 +13,22 @@ process.env.API_BASE_URL = "http://localhost:3000";
  * This test will create a real subscriber via the API, read it, update it (if possible), delete it, and confirm deletion.
  * Only run this in a safe test environment!
  */
+const LONG_TIMEOUT = 20_000;
+
 skipExternalTest("Beehiiv CRUD flow (integration)");
 describeIfExternal("Beehiiv CRUD flow (integration)", () => {
 	// Use a unique test email to avoid conflicts
 	const testEmail = `test-e2e+${Date.now()}@example.com`;
 	let subscriberId: string | null = null;
 
-	it("performs full CRUD flow via real API", async () => {
+	it(
+		"performs full CRUD flow via real API",
+		async () => {
 		// Use the real hook and real API (no fetch mocking)
 		const { result } = renderHook(() => useNewsletterSubscribers());
 		let subscriber: Subscriber;
 		await act(async () => {
 			subscriber = await result.current.addSubscriber(testEmail);
-			console.log("DEBUG: subscriber value:", subscriber);
-			console.log("DEBUG: error value:", result.current.error);
 		});
 		expect(subscriber).toHaveProperty("email");
 		expect(subscriber.email).toBe(testEmail);
@@ -41,8 +43,6 @@ describeIfExternal("Beehiiv CRUD flow (integration)", () => {
 		while (!fetchedSub && attempts < 5) {
 			await act(async () => {
 				fetchedSub = await result.current.getSubscriberByEmail(testEmail);
-				console.log("DEBUG: fetchedSub value:", fetchedSub);
-				console.log("DEBUG: error value:", result.current.error);
 			});
 			if (!fetchedSub) await new Promise((res) => setTimeout(res, 500)); // wait 0.5s
 			attempts++;
@@ -82,7 +82,9 @@ describeIfExternal("Beehiiv CRUD flow (integration)", () => {
 			afterDelete = await result.current.getSubscriberByEmail(testEmail);
 		});
 		expect(afterDelete).toBeNull();
-	});
+		},
+		LONG_TIMEOUT,
+	);
 
 	afterAll(async () => {
 		// Clean up: Remove the test subscriber from Beehiiv using the Beehiiv API

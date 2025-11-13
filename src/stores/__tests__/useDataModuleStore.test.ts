@@ -1,10 +1,11 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DataModuleModule } from "@/data/__generated__/manifest";
 import type { DataModuleKey } from "@/data/__generated__/manifest";
 import { act, renderHook, waitFor } from "@testing-library/react";
 
-jest.mock("@/data/__generated__/manifest", () => {
-	const loaderAlpha = jest.fn(async () => ({ default: "alpha" }));
-	const loaderFailure = jest.fn(async () => {
+vi.mock("@/data/__generated__/manifest", () => {
+	const loaderAlpha = vi.fn(async () => ({ default: "alpha" }));
+	const loaderFailure = vi.fn(async () => {
 		throw new Error("boom");
 	});
 
@@ -65,7 +66,7 @@ type MediumPostDataDoesNotMatchValues = Expect<
 
 describe("useDataModuleStore", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		clearDataModuleStores();
 	});
 
@@ -80,7 +81,7 @@ describe("useDataModuleStore", () => {
 
 	it("loads data exactly once when called concurrently", async () => {
 		const store = createDataModuleStore("alpha");
-		const loader = dataManifest.alpha.loader as jest.Mock;
+		const loader = dataManifest.alpha.loader as vi.Mock;
 
 		await act(async () => {
 			await Promise.all([store.getState().load(), store.getState().load()]);
@@ -93,7 +94,7 @@ describe("useDataModuleStore", () => {
 
 	it("captures loader failures", async () => {
 		const store = createDataModuleStore("failure");
-		const loader = dataManifest.failure.loader as jest.Mock;
+		const loader = dataManifest.failure.loader as vi.Mock;
 
 		await act(async () => {
 			await expect(store.getState().load()).rejects.toThrow("boom");
@@ -106,7 +107,7 @@ describe("useDataModuleStore", () => {
 
 	it("reload resets error state", async () => {
 		const store = createDataModuleStore("failure");
-		const loader = dataManifest.failure.loader as jest.Mock;
+		const loader = dataManifest.failure.loader as vi.Mock;
 
 		await act(async () => {
 			await expect(store.getState().load()).rejects.toThrow("boom");

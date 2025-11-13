@@ -1,15 +1,23 @@
 import { act, renderHook } from "@testing-library/react";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 
 import { useDeferredLoad } from "../useDeferredLoad";
 
 describe("useDeferredLoad", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
 	});
 
 	it("enables loading after the maximum wait if idle callbacks are unavailable", () => {
@@ -26,7 +34,7 @@ describe("useDeferredLoad", () => {
 		expect(result.current).toBe(false);
 
 		act(() => {
-			jest.advanceTimersByTime(300);
+			vi.advanceTimersByTime(300);
 		});
 
 		expect(result.current).toBe(true);

@@ -1,35 +1,36 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
 
-const useDataModuleMock = jest.fn();
+const useDataModuleMock = vi.fn();
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
 
-jest.mock("@/components/common/Header", () => ({
+vi.mock("@/components/common/Header", () => ({
 	__esModule: true,
 	default: ({ title }: { title: string }) => (
 		<div data-testid="header">{title}</div>
 	),
 }));
 
-jest.mock("@/components/magicui/aurora-text", () => ({
+vi.mock("@/components/magicui/aurora-text", () => ({
 	__esModule: true,
 	AuroraText: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="aurora-text">{children}</div>
 	),
 }));
 
-jest.mock("@/components/magicui/blur-fade", () => ({
+vi.mock("@/components/magicui/blur-fade", () => ({
 	__esModule: true,
 	BlurFade: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="blur-fade">{children}</div>
 	),
 }));
 
-jest.mock("@/components/ui/timeline", () => ({
+vi.mock("@/components/ui/timeline", () => ({
 	__esModule: true,
 	Timeline: ({ data }: { data: unknown[] }) => (
 		<div
@@ -39,12 +40,15 @@ jest.mock("@/components/ui/timeline", () => ({
 	),
 }));
 
+const loadAboutHero = async () => (await import("../AboutHero")).default;
+const loadAboutTimeline = async () => (await import("../AboutTimeline")).default;
+
 describe("About components data module guards", () => {
 	beforeEach(() => {
 		useDataModuleMock.mockReset();
 	});
 
-	it("renders the loading fallback while AboutHero data is idle", () => {
+	it("renders the loading fallback while AboutHero data is idle", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: unknown) => unknown) => {
 				if (key === "about/hero") {
@@ -59,14 +63,14 @@ describe("About components data module guards", () => {
 			},
 		);
 
-		const { default: AboutHero } = require("../AboutHero");
+		const AboutHero = await loadAboutHero();
 
 		render(<AboutHero />);
 
 		expect(screen.getByText(/Loading story/i)).toBeInTheDocument();
 	});
 
-	it("renders the loading fallback while AboutTimeline data is idle", () => {
+	it("renders the loading fallback while AboutTimeline data is idle", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: unknown) => unknown) => {
 				if (key === "about/timeline") {
@@ -85,7 +89,7 @@ describe("About components data module guards", () => {
 			},
 		);
 
-		const { default: AboutTimeline } = require("../AboutTimeline");
+		const AboutTimeline = await loadAboutTimeline();
 
 		render(<AboutTimeline />);
 
@@ -93,7 +97,7 @@ describe("About components data module guards", () => {
 		expect(screen.queryByTestId("timeline")).not.toBeInTheDocument();
 	});
 
-	it("shows a friendly placeholder when the timeline module resolves empty", () => {
+	it("shows a friendly placeholder when the timeline module resolves empty", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: unknown) => unknown) => {
 				if (key === "about/timeline") {
@@ -108,7 +112,7 @@ describe("About components data module guards", () => {
 			},
 		);
 
-		const { default: AboutTimeline } = require("../AboutTimeline");
+		const AboutTimeline = await loadAboutTimeline();
 
 		render(<AboutTimeline />);
 

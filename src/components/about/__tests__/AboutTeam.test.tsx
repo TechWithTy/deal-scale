@@ -1,25 +1,37 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import React from "react";
+import type React from "react";
 
-const useDataModuleMock = jest.fn();
+const useDataModuleMock = vi.fn();
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
+
+const loadAboutTeam = async () => (await import("../AboutTeam")).default;
 
 describe("AboutTeam", () => {
 	beforeEach(() => {
 		useDataModuleMock.mockReset();
 	});
 
-	it("renders the loading fallback while the data module is idle", () => {
+	it("renders the loading fallback while the data module is idle", async () => {
 		useDataModuleMock.mockImplementation(
-			(_key: string, selector: (state: unknown) => unknown) =>
-				selector({ status: "idle", data: undefined, error: undefined }),
+			(key: string, selector: (state: unknown) => unknown) => {
+				if (key === "about/team") {
+					return selector({
+						status: "idle",
+						data: undefined,
+						error: undefined,
+					});
+				}
+
+				return selector({ status: "ready", data: {}, error: undefined });
+			},
 		);
 
-		const { default: AboutTeam } = require("../AboutTeam");
+		const AboutTeam = await loadAboutTeam();
 
 		render(<AboutTeam />);
 

@@ -1,17 +1,17 @@
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
-jest.mock("lottie-react", () => ({
+vi.mock("lottie-react", () => ({
 	__esModule: true,
 	default: () => null,
 }));
 
 describe("exportLandingData", () => {
 	let tempRoot: string;
-	let exportLandingData: typeof import(
-		"../../../../tools/strapi/export-landing",
-	)["exportLandingData"];
+	type ExportLandingData = (typeof import("../../../../tools/strapi/export-landing"))["exportLandingData"];
+	let exportLandingData: ExportLandingData;
 
 	beforeAll(async () => {
 		({ exportLandingData } = await import(

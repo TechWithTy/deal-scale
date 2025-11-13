@@ -1,6 +1,11 @@
+import type {
+	HeroCopy,
+	HeroCopyRotations,
+	ResolveHeroCopyOptions,
+} from "@external/dynamic-hero";
 import type { Plan } from "@/types/service/plans";
 
-export const HERO_ROTATIONS = {
+export const HERO_ROTATIONS: HeroCopyRotations = {
 	problems: [
 		"manually stitching hero sections",
 		"babysitting inconsistent brand tokens",
@@ -16,9 +21,9 @@ export const HERO_ROTATIONS = {
 		"stakeholders churn on stale demos",
 		"brand QA turns into fire drills",
 	],
-} as const;
+};
 
-export const HERO_COPY_INPUT = {
+export const HERO_COPY_INPUT: HeroCopy = {
 	values: {
 		problem: "manually stitching hero sections",
 		solution: "reusing shared UI modules",
@@ -28,9 +33,9 @@ export const HERO_COPY_INPUT = {
 		time: "7",
 	},
 	rotations: HERO_ROTATIONS,
-} as const;
+};
 
-export const HERO_COPY_FALLBACK = {
+export const HERO_COPY_FALLBACK: ResolveHeroCopyOptions = {
 	fallbackPrimaryChip: {
 		label: "Shared UI Library",
 		sublabel: "Lighting-fast iterations",
@@ -40,7 +45,7 @@ export const HERO_COPY_FALLBACK = {
 		label: "External Demo",
 		variant: "outline",
 	},
-} as const;
+};
 
 export const PRIMARY_CTA = {
 	label: "Launch Quick Start Hero",

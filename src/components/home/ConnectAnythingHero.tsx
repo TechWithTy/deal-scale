@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+import { AuroraText } from "@/components/magicui/aurora-text";
 import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { cn } from "@/lib/utils";
@@ -81,24 +82,34 @@ export function ConnectAnythingHero(): JSX.Element {
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.6 }}
-					className="mb-6 max-w-4xl text-balance text-center font-black text-4xl leading-[1.2] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+					className="mb-6 max-w-4xl text-balance text-center font-black text-4xl leading-tight tracking-tight sm:text-5xl sm:leading-[1.1] md:text-6xl md:leading-[1.08] lg:text-7xl lg:leading-[1.06]"
 				>
-					<AnimatedGradientText
-						speed={3}
-						colorFrom="#6366f1"
-						colorTo="#f97316"
-						className="block bg-gradient-to-r from-indigo-400 via-purple-500 to-orange-400 py-1 text-transparent"
-					>
-						Connect Anything.
-					</AnimatedGradientText>
-					<AnimatedGradientText
-						speed={2.6}
-						colorFrom="#6366f1"
-						colorTo="#f97316"
-						className="block bg-gradient-to-r from-indigo-400 via-purple-500 to-orange-400 py-1 text-transparent"
-					>
-						Automate Everything.
-					</AnimatedGradientText>
+					<div className="space-y-1 sm:space-y-2">
+						<AuroraText
+							speed={1.6}
+							colors={[
+								"#38bdf8",
+								"#a855f7",
+								"#f97316",
+								"#38bdf8",
+							]}
+							className="block w-full bg-clip-text text-transparent drop-shadow-[0_6px_18px_rgba(59,130,246,0.35)]"
+						>
+							Connect Anything.
+						</AuroraText>
+						<AuroraText
+							speed={1.4}
+							colors={[
+								"#38bdf8",
+								"#a855f7",
+								"#f97316",
+								"#38bdf8",
+							]}
+							className="block w-full bg-clip-text text-transparent drop-shadow-[0_6px_18px_rgba(249,115,22,0.3)]"
+						>
+							Automate Everything.
+						</AuroraText>
+					</div>
 				</motion.h1>
 				<AnimatePresence mode="wait">
 					<motion.div

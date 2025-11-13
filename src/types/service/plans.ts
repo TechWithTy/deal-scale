@@ -167,3 +167,4 @@ export interface LegacyPlan {
 }
 
 export type Plan = LegacyPlan;
+export type PlanType = LegacyPlanType;

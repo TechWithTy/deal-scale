@@ -1,40 +1,44 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
 import type React from "react";
 
-jest.mock("@/components/ui/SafeMotionDiv", () => ({
+vi.mock("@/components/ui/SafeMotionDiv", () => ({
 	__esModule: true,
 	default: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="safe-motion-mock">{children}</div>
 	),
 }));
 
-jest.mock("@/components/ui/spline-model", () => ({
+vi.mock("@/components/ui/spline-model", () => ({
 	__esModule: true,
 	default: () => <div data-testid="spline-model-mock">Spline</div>,
 }));
 
-jest.mock("@/hooks/use-mobile", () => ({
-	useIsMobile: jest.fn(),
+const useIsMobileMock = vi.fn();
+
+vi.mock("@/hooks/use-mobile", () => ({
+	useIsMobile: useIsMobileMock,
 }));
 
-jest.mock("next/image", () => ({
+vi.mock("next/image", () => ({
 	__esModule: true,
 	default: (props: React.ComponentPropsWithoutRef<"img">) => (
 		// eslint-disable-next-line @next/next/no-img-element
-		<img alt={props.alt} {...props} />
+		<img alt={props.alt ?? ""} {...props} />
 	),
 }));
 
+let HeroOffering: typeof import("@/components/home/HeroOffering").HeroOffering;
+
+beforeEach(async () => {
+	vi.clearAllMocks();
+	({ HeroOffering } = await import("@/components/home/HeroOffering"));
+});
+
 describe("HeroOffering", () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-	});
-
 	it("applies mobile padding when rendered on mobile", () => {
-		const { useIsMobile } = require("@/hooks/use-mobile");
-		(useIsMobile as jest.Mock).mockReturnValue(true);
+		useIsMobileMock.mockReturnValue(true);
 
-		const { HeroOffering } = require("@/components/home/HeroOffering");
 		const { container } = render(<HeroOffering />);
 
 		const root = container.firstChild as HTMLElement;
@@ -44,10 +48,8 @@ describe("HeroOffering", () => {
 	});
 
 	it("applies desktop min-height when rendered on larger screens", () => {
-		const { useIsMobile } = require("@/hooks/use-mobile");
-		(useIsMobile as jest.Mock).mockReturnValue(false);
+		useIsMobileMock.mockReturnValue(false);
 
-		const { HeroOffering } = require("@/components/home/HeroOffering");
 		const { container } = render(<HeroOffering />);
 
 		const root = container.firstChild as HTMLElement;

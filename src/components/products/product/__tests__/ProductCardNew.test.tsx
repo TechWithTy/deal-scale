@@ -1,10 +1,17 @@
+import {
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+import "@testing-library/jest-dom/vitest";
 import type { ProductType } from "@/types/products";
 import type { ABTest } from "@/types/testing";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import ProductCardNew from "../ProductCardNew";
 
-jest.mock("framer-motion", () => ({
+vi.mock("framer-motion", () => ({
 	motion: {
 		div: ({
 			children,
@@ -19,14 +26,15 @@ jest.mock("framer-motion", () => ({
 	useReducedMotion: () => true,
 }));
 
-jest.mock("react-hot-toast", () => ({
-	success: jest.fn(),
-	error: jest.fn(),
+vi.mock("react-hot-toast", () => ({
+	success: vi.fn(),
+	error: vi.fn(),
+	loading: vi.fn(),
 }));
 
-const addItemMock = jest.fn();
+const addItemMock = vi.fn();
 
-jest.mock("@/stores/useCartStore", () => ({
+vi.mock("@/stores/useCartStore", () => ({
 	useCartStore: () => addItemMock,
 }));
 
@@ -78,16 +86,18 @@ describe("ProductCardNew", () => {
 		expect(description).toHaveClass("line-clamp-3");
 	});
 
-	it("displays problem and solution chips sourced from AB test copy", () => {
+	it("displays problem and solution chips sourced from AB test copy", async () => {
 		render(<ProductCardNew {...baseProduct} abTest={abTest} />);
 
 		expect(screen.getByText("Problem")).toBeInTheDocument();
 		expect(
 			screen.getByText("Manual follow-up drains your pipeline and time."),
 		).toBeInTheDocument();
-		expect(screen.getByText("Solution")).toBeInTheDocument();
+		const solutionTrigger = screen.getByRole("button", { name: /solution/i });
+		expect(solutionTrigger).toBeInTheDocument();
+		fireEvent.click(solutionTrigger);
 		expect(
-			screen.getByText("Automated agents nurture every lead instantly."),
+			await screen.findByText("Automated agents nurture every lead instantly."),
 		).toBeInTheDocument();
 	});
 

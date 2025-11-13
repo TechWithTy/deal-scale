@@ -1,35 +1,48 @@
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
 
-jest.mock("@/data/bento/main", () => ({
+vi.mock("next-auth/react", () => ({
+	__esModule: true,
+	useSession: () => ({ data: null, status: "unauthenticated" }),
+	SessionProvider: ({ children }: { children: React.ReactNode }) => (
+		<>{children}</>
+	),
+}));
+
+vi.mock("@/data/bento/main", () => ({
 	MainBentoFeatures: [],
 }));
 
-const useDataModuleMock = jest.fn();
+const useDataModuleMock = vi.fn();
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
-	createDataModuleStore: jest.fn(),
+	createDataModuleStore: vi.fn(),
 }));
 
-jest.mock("@/hooks/useHasMounted", () => ({
+vi.mock("@/hooks/useHasMounted", () => ({
 	useHasMounted: () => true,
 }));
 
-jest.mock("next/navigation", () => ({
-	usePathname: jest.fn(() => "/"),
-	useRouter: jest.fn(() => ({
-		push: jest.fn(),
-		replace: jest.fn(),
-		prefetch: jest.fn(),
-		refresh: jest.fn(),
-		back: jest.fn(),
-		forward: jest.fn(),
-	})),
+const usePathnameMock = vi.fn(() => "/");
+const useRouterMock = vi.fn(() => ({
+	push: vi.fn(),
+	replace: vi.fn(),
+	prefetch: vi.fn(),
+	refresh: vi.fn(),
+	back: vi.fn(),
+	forward: vi.fn(),
 }));
 
-const BentoPageMock = jest.fn(({ features }: { features: unknown }) => {
+vi.mock("next/navigation", () => ({
+	__esModule: true,
+	usePathname: (...args: unknown[]) => usePathnameMock(...args),
+	useRouter: (...args: unknown[]) => useRouterMock(...args),
+}));
+
+const BentoPageMock = vi.fn(({ features }: { features: unknown }) => {
 	return (
 		<div
 			data-testid="bento"
@@ -37,85 +50,85 @@ const BentoPageMock = jest.fn(({ features }: { features: unknown }) => {
 		/>
 	);
 });
-jest.mock("@/components/bento/page", () => ({
+vi.mock("@/components/bento/page", () => ({
 	__esModule: true,
 	default: BentoPageMock,
 }));
 
-jest.mock("@/components/common/CTASection", () => ({
+vi.mock("@/components/common/CTASection", () => ({
 	__esModule: true,
 	CTASection: () => <div data-testid="cta" />,
 }));
 
-jest.mock("@/components/home/heros/Hero", () => ({
+vi.mock("@/components/home/heros/Hero", () => ({
 	__esModule: true,
 	default: () => <div data-testid="hero" />,
 }));
 
-jest.mock("@/components/home/heros/HeroSessionMonitor", () => ({
+vi.mock("@/components/home/heros/HeroSessionMonitor", () => ({
 	__esModule: true,
 	default: () => <div data-testid="hero-monitor" />,
 }));
 
-jest.mock("@/components/home/heros/HeroSessionMonitorClientWithModal", () => ({
+vi.mock("@/components/home/heros/HeroSessionMonitorClientWithModal", () => ({
 	__esModule: true,
 	default: () => <div data-testid="hero-monitor-modal" />,
 }));
 
-jest.mock("@/components/home/BlogPreview", () => ({
+vi.mock("@/components/home/BlogPreview", () => ({
 	__esModule: true,
 	BlogPreview: () => <div data-testid="blog-preview" />,
 }));
 
-jest.mock("@/components/ui/separator", () => ({
+vi.mock("@/components/ui/separator", () => ({
 	__esModule: true,
 	Separator: () => <hr data-testid="separator" />,
 }));
 
-const TechStackSectionMock = jest.fn(({ stacks }: { stacks: unknown[] }) => (
+const TechStackSectionMock = vi.fn(({ stacks }: { stacks: unknown[] }) => (
 	<div data-testid="tech-stack" data-count={stacks.length} />
 ));
-jest.mock("@/components/common/TechStackSection", () => ({
+vi.mock("@/components/common/TechStackSection", () => ({
 	__esModule: true,
 	TechStackSection: TechStackSectionMock,
 }));
 
-const FeatureTimelineTableMock = jest.fn(({ rows }: { rows: unknown[] }) => (
+const FeatureTimelineTableMock = vi.fn(({ rows }: { rows: unknown[] }) => (
 	<div data-testid="timeline-table" data-count={rows.length} />
 ));
-jest.mock("@/components/features/FeatureTimelineTable", () => ({
+vi.mock("@/components/features/FeatureTimelineTable", () => ({
 	__esModule: true,
 	FeatureTimelineTable: FeatureTimelineTableMock,
 }));
 
-const ServiceCardMock = jest.fn(({ title }: { title: string }) => (
+const ServiceCardMock = vi.fn(({ title }: { title: string }) => (
 	<div>{title}</div>
 ));
-const ServiceFilterMock = jest.fn(() => null);
-const TabsMock = jest.fn(({ children }: { children: React.ReactNode }) => (
+const ServiceFilterMock = vi.fn(() => null);
+const TabsMock = vi.fn(({ children }: { children: React.ReactNode }) => (
 	<div>{children}</div>
 ));
-const TabsListMock = jest.fn(({ children }: { children: React.ReactNode }) => (
+const TabsListMock = vi.fn(({ children }: { children: React.ReactNode }) => (
 	<div>{children}</div>
 ));
-const TabsTriggerMock = jest.fn(
+const TabsTriggerMock = vi.fn(
 	({ children }: { children: React.ReactNode }) => <button>{children}</button>,
 );
-const TabsContentMock = jest.fn(
+const TabsContentMock = vi.fn(
 	({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 );
 
-jest.mock("@/components/services/ServiceCard", () => ({
+vi.mock("@/components/services/ServiceCard", () => ({
 	__esModule: true,
 	default: ServiceCardMock,
 }));
 
-jest.mock("@/components/services/ServiceFilter", () => ({
+vi.mock("@/components/services/ServiceFilter", () => ({
 	__esModule: true,
 	default: ServiceFilterMock,
 }));
 
-jest.mock("@/components/ui/tabs", () => ({
+vi.mock("@/components/ui/tabs", () => ({
 	__esModule: true,
 	Tabs: TabsMock,
 	TabsList: TabsListMock,
@@ -123,32 +136,32 @@ jest.mock("@/components/ui/tabs", () => ({
 	TabsContent: TabsContentMock,
 }));
 
-const CategoryFilterMock = jest.fn(() => <div data-testid="category-filter" />);
-const useCategoryFilterMock = jest.fn(() => ({
+const CategoryFilterMock = vi.fn(() => <div data-testid="category-filter" />);
+const useCategoryFilterMock = vi.fn(() => ({
 	activeCategory: "",
-	setActiveCategory: jest.fn(),
+	setActiveCategory: vi.fn(),
 	CategoryFilter: CategoryFilterMock,
 }));
 
-jest.mock("@/hooks/use-category-filter", () => ({
+vi.mock("@/hooks/use-category-filter", () => ({
 	useCategoryFilter: (...args: unknown[]) => useCategoryFilterMock(...args),
 }));
 
-const TrustedByMock = jest.fn(({ items }: { items: unknown }) => {
+const TrustedByMock = vi.fn(({ items }: { items: unknown }) => {
 	const size = items ? Object.keys(items as Record<string, unknown>).length : 0;
 	return <div data-testid="trusted" data-size={size} />;
 });
-jest.mock("@/components/contact/utils/TrustedByScroller", () => ({
+vi.mock("@/components/contact/utils/TrustedByScroller", () => ({
 	__esModule: true,
 	default: TrustedByMock,
 }));
 
-const TestimonialsMock = jest.fn(
+const TestimonialsMock = vi.fn(
 	({ testimonials }: { testimonials: unknown[] }) => (
 		<div data-testid="testimonials" data-count={testimonials.length} />
 	),
 );
-jest.mock("@/components/home/Testimonials", () => ({
+vi.mock("@/components/home/Testimonials", () => ({
 	__esModule: true,
 	default: TestimonialsMock,
 }));
@@ -170,15 +183,31 @@ beforeAll(() => {
 	});
 });
 
+const loadClientBento = async () =>
+	(await import("../home/ClientBento")).default;
+const loadServices = async () => (await import("../home/Services")).default;
+const loadCaseStudyGrid = async () =>
+	(await import("../case-studies/CaseStudyGrid")).default;
+const loadNewsletterClient = async () =>
+	(await import("../../app/newsletter/NewsletterClient")).default;
+const loadServiceHomeClient = async () =>
+	(await import("../../app/features/ServiceHomeClient")).default;
+const loadContactClient = async () =>
+	(await import("../../app/contact/ContactClient")).default;
+
+const resetMocks = () => {
+	vi.clearAllMocks();
+	useDataModuleMock.mockReset();
+	useCategoryFilterMock.mockClear();
+};
+
 describe("marketing components use data modules", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
-		useDataModuleMock.mockReset();
-		useCategoryFilterMock.mockClear();
+		resetMocks();
 	});
 
-	it("loads features for ClientBento from the data module", () => {
-		const { default: ClientBento } = require("../home/ClientBento");
+	it("loads features for ClientBento from the data module", async () => {
+		const ClientBento = await loadClientBento();
 
 		const mockFeatures = [{ id: "f1" }, { id: "f2" }];
 		useDataModuleMock.mockImplementation(
@@ -208,8 +237,8 @@ describe("marketing components use data modules", () => {
 		expect(bentoProps).toMatchObject({ features: mockFeatures });
 	});
 
-	it("treats idle module status as a loading state for ClientBento", () => {
-		const { default: ClientBento } = require("../home/ClientBento");
+	it("treats idle module status as a loading state for ClientBento", async () => {
+		const ClientBento = await loadClientBento();
 
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (value: any) => any) => {
@@ -231,10 +260,8 @@ describe("marketing components use data modules", () => {
 		expect(BentoPageMock).not.toHaveBeenCalled();
 	});
 
-	it("hydrates service marketing clients via data modules", () => {
-		const {
-			default: ServiceHomeClient,
-		} = require("../../app/features/ServiceHomeClient");
+	it("hydrates service marketing clients via data modules", async () => {
+		const ServiceHomeClient = await loadServiceHomeClient();
 
 		const integrationsStacks = [
 			{
@@ -338,8 +365,8 @@ describe("marketing components use data modules", () => {
 		expect(timelineProps).toMatchObject({ rows: featureTimeline });
 	});
 
-	it("derives service catalog entries from data modules", () => {
-		const { default: Services } = require("../home/Services");
+	it("derives service catalog entries from data modules", async () => {
+		const Services = await loadServices();
 
 		const serviceItem = {
 			id: "svc",
@@ -360,7 +387,7 @@ describe("marketing components use data modules", () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (value: any) => any) => {
 				if (key === "service/services") {
-					const getServicesByCategory = jest.fn(
+					const getServicesByCategory = vi.fn(
 						(category: string) => servicesByCategory[category] ?? {},
 					);
 
@@ -390,8 +417,8 @@ describe("marketing components use data modules", () => {
 		);
 	});
 
-	it("provides case study categories from the data module", () => {
-		const { default: CaseStudyGrid } = require("../case-studies/CaseStudyGrid");
+	it("provides case study categories from the data module", async () => {
+		const CaseStudyGrid = await loadCaseStudyGrid();
 
 		const caseStudies = [
 			{
@@ -428,10 +455,8 @@ describe("marketing components use data modules", () => {
 		expect(useCategoryFilterMock).toHaveBeenCalledWith(["All", "New"]);
 	});
 
-	it("hydrates newsletter client from data modules", () => {
-		const {
-			default: NewsletterClient,
-		} = require("../../app/newsletter/NewsletterClient");
+	it("hydrates newsletter client from data modules", async () => {
+		const NewsletterClient = await loadNewsletterClient();
 
 		const newsletterTestimonials = [
 			{
@@ -501,10 +526,10 @@ describe("marketing components use data modules", () => {
 		});
 	});
 
-	it("loads about page defaults from data modules", () => {
-		const { default: AboutHero } = require("../about/AboutHero");
-		const { default: AboutTeam } = require("../about/AboutTeam");
-		const { default: AboutTimeline } = require("../about/AboutTimeline");
+	it("loads about page defaults from data modules", async () => {
+		const AboutHero = (await import("../about/AboutHero")).default;
+		const AboutTeam = (await import("../about/AboutTeam")).default;
+		const AboutTimeline = (await import("../about/AboutTimeline")).default;
 
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (value: any) => any) => {

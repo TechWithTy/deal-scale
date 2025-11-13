@@ -297,7 +297,10 @@ const PixelatedVoiceOverlayComponent = ({
 											strokeWidth="2"
 											strokeLinecap="round"
 											strokeLinejoin="round"
+											role="presentation"
+											focusable="false"
 										>
+											<title>Before and after comparison arrows</title>
 											<path d="M8 3L3 8l5 5" />
 											<path d="M16 3l5 5-5 5" />
 											<line x1="3" y1="8" x2="21" y2="8" />

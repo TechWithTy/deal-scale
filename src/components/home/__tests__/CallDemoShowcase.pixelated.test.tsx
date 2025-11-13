@@ -1,91 +1,104 @@
+import {
+	afterEach,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 import { render } from "@testing-library/react";
-import type React from "react";
+import React from "react";
 import { act } from "react";
 
-jest.mock("next/dynamic", () => {
-	return (importer: () => Promise<any>) => {
-		return require("@/components/ui/pixelated-voice-clone-card")
-			.PixelatedVoiceCloneCard;
-	};
-});
+const pixelatedMocks = vi.hoisted(() => ({
+	mockComponent: vi.fn(() => <div data-testid="pixelated-card" />),
+}));
 
-jest.mock("@/components/ui/pixelated-voice-clone-card", () => {
-	const React = require("react");
-	const mockComponent = jest.fn(() => <div data-testid="pixelated-card" />);
-	return {
-		__esModule: true,
-		PixelatedVoiceCloneCard: React.memo(mockComponent),
-		__mock: { mockComponent },
-	};
-});
+vi.mock("next/dynamic", () => ({
+	__esModule: true,
+	default: () => React.memo(pixelatedMocks.mockComponent),
+}));
 
-jest.mock("@/components/deal_scale/talkingCards/SessionMonitor", () => ({
+vi.mock("../../ui/pixelated-voice-clone-card", () => ({
+	__esModule: true,
+	PixelatedVoiceCloneCard: React.memo(pixelatedMocks.mockComponent),
+}));
+
+vi.mock("../../deal_scale/talkingCards/SessionMonitor", () => ({
 	__esModule: true,
 	default: () => <div data-testid="session-monitor" />,
 }));
 
-jest.mock("@/components/ui/typing-animation", () => ({
+vi.mock("../../ui/typing-animation", () => ({
 	__esModule: true,
 	TypingAnimation: () => <div data-testid="typing-animation" />,
 }));
 
-jest.mock("@/components/ui/animatedList", () => ({
+vi.mock("../../ui/animatedList", () => ({
 	__esModule: true,
 	AnimatedList: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="animated-list">{children}</div>
 	),
 }));
 
-jest.mock("@/components/ui/iphone", () => ({
+vi.mock("../../ui/iphone", () => ({
 	__esModule: true,
 	Iphone: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="iphone">{children}</div>
 	),
 }));
 
-jest.mock("@/components/ui/layout-grid", () => ({
+vi.mock("../../ui/layout-grid", () => ({
 	__esModule: true,
 	LayoutGrid: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="layout-grid">{children}</div>
 	),
 }));
 
-describe("CallDemoShowcase pixelated clone integration", () => {
-	beforeAll(() => {
-		class MockIntersectionObserver {
-			observe() {}
-			unobserve() {}
-			disconnect() {}
-		}
-		// @ts-ignore
-		global.IntersectionObserver = MockIntersectionObserver;
-	});
+let CallDemoShowcaseModule: typeof import("../CallDemoShowcase");
 
+beforeAll(async () => {
+	CallDemoShowcaseModule = await import("../CallDemoShowcase");
+
+	class MockIntersectionObserver {
+		observe() {}
+		unobserve() {}
+		disconnect() {}
+	}
+
+	// @ts-ignore
+	global.IntersectionObserver = MockIntersectionObserver;
+});
+
+describe("CallDemoShowcase pixelated clone integration", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.runOnlyPendingTimers();
+		vi.clearAllTimers();
+		vi.useRealTimers();
+		pixelatedMocks.mockComponent.mockReset();
 	});
 
-	it("does not remount pixelated card during text auto-advance", () => {
-		const {
-			__mock: { mockComponent: mockPixelated },
-		} = jest.requireMock("@/components/ui/pixelated-voice-clone-card");
-		const { PixelatedVoiceCloneCard } = jest.requireMock(
-			"@/components/ui/pixelated-voice-clone-card",
-		);
-		const { CallDemoShowcase } = require("../CallDemoShowcase");
+	it("does not remount pixelated card during text auto-advance", async () => {
+		const { CallDemoShowcase } = CallDemoShowcaseModule;
 
-		render(<CallDemoShowcase />);
-		const initialCalls = mockPixelated.mock.calls.length;
-
-		act(() => {
-			jest.advanceTimersByTime(3200);
+		await act(async () => {
+			render(<CallDemoShowcase />);
 		});
 
-		expect(mockPixelated.mock.calls.length).toBe(initialCalls);
+		await act(async () => {
+			vi.advanceTimersByTime(0);
+		});
+		const initialCalls = pixelatedMocks.mockComponent.mock.calls.length;
+
+		act(() => {
+			vi.advanceTimersByTime(3200);
+		});
+
+		expect(pixelatedMocks.mockComponent.mock.calls.length).toBe(initialCalls);
 	});
 });

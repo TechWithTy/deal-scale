@@ -1,82 +1,83 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
-const useDataModuleMock = jest.fn();
+const useDataModuleMock = vi.fn();
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
 
-jest.mock("@/hooks/useDataModuleGuardTelemetry", () => ({
-	useDataModuleGuardTelemetry: jest.fn(),
+vi.mock("@/hooks/useDataModuleGuardTelemetry", () => ({
+	useDataModuleGuardTelemetry: vi.fn(),
 }));
 
-jest.mock("@/components/case-studies/CaseStudyBusinessOutcome", () => ({
+vi.mock("@/components/case-studies/CaseStudyBusinessOutcome", () => ({
 	__esModule: true,
 	CaseStudyBusinessOutcome: () => <div data-testid="business-outcome" />, // eslint-disable-line react/display-name
 }));
 
-jest.mock("@/components/case-studies/CaseStudyContent", () => ({
+vi.mock("@/components/case-studies/CaseStudyContent", () => ({
 	__esModule: true,
 	default: () => <div data-testid="case-study-content" />, // eslint-disable-line react/display-name
 }));
 
-jest.mock("@/components/case-studies/CaseStudyDetailHeader", () => ({
+vi.mock("@/components/case-studies/CaseStudyDetailHeader", () => ({
 	__esModule: true,
 	default: () => <div data-testid="case-study-header" />, // eslint-disable-line react/display-name
 }));
 
-jest.mock("@/components/case-studies/RelatedCaseStudies", () => ({
+vi.mock("@/components/case-studies/RelatedCaseStudies", () => ({
 	__esModule: true,
 	default: () => <div data-testid="related-case-studies" />, // eslint-disable-line react/display-name
 }));
 
-jest.mock("@/components/home/Testimonials", () => ({
+vi.mock("@/components/home/Testimonials", () => ({
 	__esModule: true,
 	default: ({ testimonials }: { testimonials: unknown[] }) => (
 		<div data-testid="testimonials" data-count={testimonials.length} />
 	),
 }));
 
-jest.mock("@/components/bento/page", () => ({
+vi.mock("@/components/bento/page", () => ({
 	__esModule: true,
 	default: ({ features }: { features: unknown[] }) => (
 		<div data-testid="bento" data-count={features.length} />
 	),
 }));
 
-jest.mock("@/components/services/HowItWorksCarousel", () => ({
+vi.mock("@/components/services/HowItWorksCarousel", () => ({
 	__esModule: true,
 	default: () => <div data-testid="how-it-works" />, // eslint-disable-line react/display-name
 }));
 
-jest.mock("@/components/common/CTASection", () => ({
+vi.mock("@/components/common/CTASection", () => ({
 	__esModule: true,
 	CTASection: ({ title }: { title: string }) => (
 		<div data-testid="cta" data-title={title} />
 	),
 }));
 
-jest.mock("@/components/common/SEOWrapper", () => ({
+vi.mock("@/components/common/SEOWrapper", () => ({
 	__esModule: true,
 	SEOWrapper: () => <></>,
 	default: () => <></>,
 }));
 
-jest.mock("@/components/ui/section-heading", () => ({
+vi.mock("@/components/ui/section-heading", () => ({
 	__esModule: true,
 	SectionHeading: ({ title }: { title: string }) => (
 		<div data-testid="section-heading" data-title={title} />
 	),
 }));
 
-jest.mock("@/components/ui/separator", () => ({
+vi.mock("@/components/ui/separator", () => ({
 	__esModule: true,
 	Separator: () => <hr data-testid="separator" />, // eslint-disable-line react/display-name
 }));
 
-jest.mock("@/components/home/heros/HeroSessionMonitor", () => ({
+vi.mock("@/components/home/heros/HeroSessionMonitor", () => ({
 	__esModule: true,
 	default: () => <div data-testid="hero-session-monitor" />, // eslint-disable-line react/display-name
 }));
@@ -119,13 +120,16 @@ const baseCaseStudy = {
 	},
 };
 
+const loadCaseStudyPageClient = async () =>
+	(await import("../[slug]/CaseStudyPageClient")).default;
+
 describe("CaseStudyPageClient guard fallbacks", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		useDataModuleMock.mockReset();
 	});
 
-	it("shows a loading placeholder while the bento features module resolves", () => {
+	it("shows a loading placeholder while the bento features module resolves", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: any) => any) => {
 				if (key === "bento/main") {
@@ -148,8 +152,7 @@ describe("CaseStudyPageClient guard fallbacks", () => {
 			},
 		);
 
-		const CaseStudyPageClient =
-			require("../[slug]/CaseStudyPageClient").default;
+		const CaseStudyPageClient = await loadCaseStudyPageClient();
 
 		render(
 			<CaseStudyPageClient
@@ -161,7 +164,7 @@ describe("CaseStudyPageClient guard fallbacks", () => {
 		expect(screen.getByText(/Loading highlights/i)).toBeInTheDocument();
 	});
 
-	it("shows an error placeholder when testimonials fail to load", () => {
+	it("shows an error placeholder when testimonials fail to load", async () => {
 		const error = new Error("network error");
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: any) => any) => {
@@ -181,8 +184,7 @@ describe("CaseStudyPageClient guard fallbacks", () => {
 			},
 		);
 
-		const CaseStudyPageClient =
-			require("../[slug]/CaseStudyPageClient").default;
+		const CaseStudyPageClient = await loadCaseStudyPageClient();
 
 		render(
 			<CaseStudyPageClient
@@ -196,7 +198,7 @@ describe("CaseStudyPageClient guard fallbacks", () => {
 		).toBeInTheDocument();
 	});
 
-	it("shows a placeholder when testimonials resolve empty", () => {
+	it("shows a placeholder when testimonials resolve empty", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: any) => any) => {
 				if (key === "bento/main") {
@@ -219,8 +221,7 @@ describe("CaseStudyPageClient guard fallbacks", () => {
 			},
 		);
 
-		const CaseStudyPageClient =
-			require("../[slug]/CaseStudyPageClient").default;
+		const CaseStudyPageClient = await loadCaseStudyPageClient();
 
 		render(
 			<CaseStudyPageClient

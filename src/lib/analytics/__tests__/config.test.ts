@@ -1,9 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it } from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const originalEnv = { ...process.env };
 
 const loadModule = async () => {
-	jest.resetModules();
+	vi.resetModules();
 	return import("../config");
 };
 
@@ -25,6 +25,8 @@ describe("getAnalyticsConfig", () => {
 		process.env.GOOGLE_TAG_MANAGER_ID = "gtm-private";
 		process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE = "zoho-public";
 		process.env.ZOHO_SALES_IQ_WIDGET_CODE = "zoho-private";
+		process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID = "fb-public";
+		process.env.FACEBOOK_PIXEL_ID = "fb-private";
 		process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN = "public.example";
 		process.env.PLAUSIBLE_DOMAIN = "private.example";
 		process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT = "https://public.example/event";
@@ -38,6 +40,7 @@ describe("getAnalyticsConfig", () => {
 			gaId: "ga-public",
 			gtmId: "gtm-public",
 			zohoCode: "zoho-public",
+			facebookPixelId: "fb-public",
 			plausibleDomain: "public.example",
 			plausibleEndpoint: "https://public.example/event",
 		});
@@ -51,12 +54,14 @@ describe("getAnalyticsConfig", () => {
 		delete process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS;
 		delete process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
 		delete process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE;
+		delete process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
 		delete process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
 		delete process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT;
 		process.env.CLARITY_PROJECT_ID = "private-clarity";
 		process.env.GOOGLE_ANALYTICS_ID = "ga-private";
 		process.env.GOOGLE_TAG_MANAGER_ID = "gtm-private";
 		process.env.ZOHO_SALES_IQ_WIDGET_CODE = "zoho-private";
+		process.env.FACEBOOK_PIXEL_ID = "fb-private";
 		process.env.PLAUSIBLE_DOMAIN = "private.example";
 		process.env.PLAUSIBLE_ENDPOINT = "https://private.example/event";
 
@@ -68,6 +73,7 @@ describe("getAnalyticsConfig", () => {
 			gaId: "ga-private",
 			gtmId: "gtm-private",
 			zohoCode: "zoho-private",
+			facebookPixelId: "fb-private",
 			plausibleDomain: "private.example",
 			plausibleEndpoint: "https://private.example/event",
 		});
@@ -76,6 +82,7 @@ describe("getAnalyticsConfig", () => {
 			gaId: true,
 			gtmId: true,
 			zohoCode: true,
+			facebookPixelId: true,
 			plausibleDomain: true,
 			plausibleEndpoint: true,
 		});
@@ -102,6 +109,11 @@ describe("getAnalyticsConfig", () => {
 					"Using fallback environment variable ZOHO_SALES_IQ_WIDGET_CODE for zohoCode.",
 			},
 			{
+				field: "facebookPixelId",
+				message:
+					"Using fallback environment variable FACEBOOK_PIXEL_ID for facebookPixelId.",
+			},
+			{
 				field: "plausibleDomain",
 				message:
 					"Using fallback environment variable PLAUSIBLE_DOMAIN for plausibleDomain.",
@@ -120,6 +132,7 @@ describe("getAnalyticsConfig", () => {
 		process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS = "ga-public";
 		process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID = "gtm-public";
 		process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE = "zoho-public";
+		process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID = "fb-public";
 		process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN = "public.example";
 		process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT = "https://public.example/event";
 
@@ -131,6 +144,7 @@ describe("getAnalyticsConfig", () => {
 			gaId: "ga-public",
 			gtmId: "gtm-public",
 			zohoCode: "zoho-public",
+			facebookPixelId: "fb-public",
 			plausibleDomain: "public.example",
 			plausibleEndpoint: "https://public.example/event",
 		});
@@ -148,6 +162,8 @@ describe("getAnalyticsConfig", () => {
 		delete process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
 		delete process.env.ZOHO_SALES_IQ_WIDGET_CODE;
 		delete process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE;
+		delete process.env.FACEBOOK_PIXEL_ID;
+		delete process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
 		delete process.env.PLAUSIBLE_DOMAIN;
 		delete process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
 		delete process.env.PLAUSIBLE_ENDPOINT;
@@ -175,6 +191,10 @@ describe("getAnalyticsConfig", () => {
 			{
 				field: "zohoCode",
 				message: "Analytics provider zohoCode is not configured.",
+			},
+			{
+				field: "facebookPixelId",
+				message: "Analytics provider facebookPixelId is not configured.",
 			},
 			{
 				field: "plausibleDomain",

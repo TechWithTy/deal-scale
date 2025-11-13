@@ -43,6 +43,10 @@ export function NumberTicker({
 			};
 	}
 
+	const isServer = typeof window === "undefined";
+	const fallbackInView =
+		isServer || globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__ === true;
+
 	const motionValue = useMotionValue(direction === "down" ? value : startValue);
 	const springValue = useSpring(motionValue, {
 		damping: 60,
@@ -51,7 +55,7 @@ export function NumberTicker({
 	const isInView = useInView(ref, {
 		once: true,
 		margin: "0px",
-		fallbackInView: true,
+		initial: fallbackInView,
 	});
 
 	useEffect(() => {

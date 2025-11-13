@@ -1,27 +1,30 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { submitSitemaps } from "../../deploy/submit-sitemap.js";
 
-type FetchMock = jest.MockedFunction<typeof fetch>;
+type FetchMock = ReturnType<typeof vi.fn<typeof fetch>>;
 
 const originalEnv = { ...process.env };
 const originalFetch = global.fetch;
 
 describe("submitSitemaps", () => {
         let fetchMock: FetchMock;
-        let logSpy: jest.SpyInstance;
-        let warnSpy: jest.SpyInstance;
+        let logSpy: ReturnType<typeof vi.spyOn<typeof console, "log">>;
+        let warnSpy: ReturnType<typeof vi.spyOn<typeof console, "warn">>;
 
         beforeEach(() => {
-                jest.clearAllMocks();
+                vi.clearAllMocks();
                 process.env = { ...originalEnv };
                 process.env.NODE_ENV = "development";
                 process.env.SITEMAP_CANONICAL_BASE = "https://example.com";
                 process.env.SITEMAP_PATHS = "sitemap.xml";
-                fetchMock = jest.fn().mockResolvedValue({ ok: true, status: 200 } as Response) as FetchMock;
+                fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+                        ok: true,
+                        status: 200,
+                } as Response) as FetchMock;
                 global.fetch = fetchMock;
-                logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-                warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+                logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+                warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
         });
 
         afterEach(() => {

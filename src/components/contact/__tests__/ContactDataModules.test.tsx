@@ -1,14 +1,15 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
 
-const useDataModuleMock = jest.fn();
+const useDataModuleMock = vi.fn();
 
-jest.mock("@/stores/useDataModuleStore", () => ({
+vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,
 	useDataModule: (...args: unknown[]) => useDataModuleMock(...args),
 }));
 
-jest.mock("framer-motion", () => ({
+vi.mock("framer-motion", () => ({
 	motion: {
 		div: ({ children, ...rest }: React.HTMLAttributes<HTMLDivElement>) => (
 			<div {...rest}>{children}</div>
@@ -16,23 +17,25 @@ jest.mock("framer-motion", () => ({
 	},
 }));
 
-jest.mock("next/link", () => ({
+vi.mock("next/link", () => ({
 	__esModule: true,
-	default: ({
-		href,
-		children,
-	}: { href: string; children: React.ReactNode }) => (
+	default: ({ href, children }: { href: string; children: React.ReactNode }) => (
 		<a href={href}>{children}</a>
 	),
 }));
 
+const loadContactHero = async () =>
+	(await import("../form/ContactHero")).ContactHero;
+const loadContactInfo = async () =>
+	(await import("../form/ContactInfo")).ContactInfo;
+
 describe("Contact components data module guards", () => {
 	beforeEach(() => {
-		jest.resetModules();
+		vi.resetModules();
 		useDataModuleMock.mockReset();
 	});
 
-	it("renders a loading state for ContactHero while company data is idle", () => {
+	it("renders a loading state for ContactHero while company data is idle", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: unknown) => unknown) => {
 				if (key === "company") {
@@ -47,7 +50,7 @@ describe("Contact components data module guards", () => {
 			},
 		);
 
-		const { ContactHero } = require("../form/ContactHero");
+		const ContactHero = await loadContactHero();
 
 		render(<ContactHero />);
 
@@ -56,7 +59,7 @@ describe("Contact components data module guards", () => {
 		).toBeInTheDocument();
 	});
 
-	it("renders a loading state for ContactInfo while company data is idle", () => {
+	it("renders a loading state for ContactInfo while company data is idle", async () => {
 		useDataModuleMock.mockImplementation(
 			(key: string, selector: (state: unknown) => unknown) => {
 				if (key === "company") {
@@ -71,7 +74,7 @@ describe("Contact components data module guards", () => {
 			},
 		);
 
-		const { ContactInfo } = require("../form/ContactInfo");
+		const ContactInfo = await loadContactInfo();
 
 		render(<ContactInfo />);
 

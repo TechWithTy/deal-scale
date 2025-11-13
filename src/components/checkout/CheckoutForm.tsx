@@ -443,7 +443,7 @@ export default function CheckoutForm({
 								/>
 								<button
 									type="button"
-								className="flex items-center justify-center gap-2 rounded bg-focus px-4 py-2 font-semibold text-white transition-colors hover:bg-primary/80 dark:bg-blue-700 dark:hover:bg-blue-600"
+									className="flex items-center justify-center gap-2 rounded bg-focus px-4 py-2 font-semibold text-white transition-colors hover:bg-primary/80 dark:bg-blue-700 dark:hover:bg-blue-600"
 									onClick={handleCheckDiscount}
 									disabled={
 										checkingDiscount || !!discountApplied || !discountCode
@@ -453,7 +453,10 @@ export default function CheckoutForm({
 										"Applied"
 									) : checkingDiscount ? (
 										<>
-											<Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+											<Loader2
+												className="mr-2 h-4 w-4 animate-spin"
+												aria-hidden
+											/>
 											Checking…
 										</>
 									) : (

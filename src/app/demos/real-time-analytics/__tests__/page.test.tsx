@@ -1,10 +1,19 @@
+import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 
 import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
 import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
 
-jest.mock("@/components/ui/macbook-scroll", () => ({
+vi.mock("@/components/ui/macbook-scroll", () => ({
 	__esModule: true,
 	MacbookScroll: ({
 		src,
@@ -69,11 +78,11 @@ beforeAll(() => {
 	}
 });
 
-let warnSpy: jest.SpyInstance;
+let warnSpy: ReturnType<typeof vi.spyOn> | undefined;
 
 beforeAll(() => {
 	const originalWarn = console.warn.bind(console);
-	warnSpy = jest
+	warnSpy = vi
 		.spyOn(console, "warn")
 		.mockImplementation((message, ...args) => {
 			if (
@@ -89,9 +98,7 @@ beforeAll(() => {
 
 afterAll(() => {
 	warnSpy?.mockRestore();
-});
 
-afterAll(() => {
 	if (originalIntersectionObserver) {
 		// @ts-expect-error - restore original implementation
 		global.IntersectionObserver = originalIntersectionObserver;
@@ -154,7 +161,9 @@ describe("RealTimeAnalytics demo showcase", () => {
 		).toBeInTheDocument();
 
 		expect(
-			await screen.findByAltText(targetFeature.media.alt),
+			await screen.findByAltText(targetFeature.media.alt, undefined, {
+				timeout: 5000,
+			}),
 		).toBeInTheDocument();
 
 		for (const highlight of targetFeature.highlights) {

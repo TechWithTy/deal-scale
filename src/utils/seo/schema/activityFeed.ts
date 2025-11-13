@@ -53,7 +53,6 @@ function timeAgoToIso(timeAgo: string): string | undefined {
 		case "d":
 			delta = value * 24 * 60 * 60 * 1000;
 			break;
-		case "m":
 		default:
 			delta = value * 60 * 1000;
 			break;

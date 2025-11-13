@@ -1,24 +1,34 @@
 import type { Event } from "@/types/event";
 import { Response } from "node-fetch";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+
+type FetchMock = ReturnType<typeof vi.fn>;
 
 describe("fetchEvents", () => {
 	const originalEnv = process.env;
 	const originalFetch = global.fetch;
 
 	beforeEach(() => {
-		jest.resetModules();
+		vi.resetModules();
 		process.env = { ...originalEnv };
 		process.env.DEALSCALE_API_BASE = "https://api.example.com";
-		global.fetch = jest.fn() as unknown as typeof fetch;
+		global.fetch = vi.fn() as unknown as typeof fetch;
 	});
 
 	afterEach(() => {
 		process.env = originalEnv;
 		global.fetch = originalFetch;
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
-	test("returns normalized events from the API when the response is valid", async () => {
+	it("returns normalized events from the API when the response is valid", async () => {
 		const apiEvents: Event[] = [
 			{
 				id: "remote-1",
@@ -32,7 +42,7 @@ describe("fetchEvents", () => {
 			},
 		];
 
-		(global.fetch as jest.Mock).mockResolvedValue(
+		(global.fetch as FetchMock).mockResolvedValue(
 			new Response(JSON.stringify({ events: apiEvents }), {
 				status: 200,
 				headers: { "Content-Type": "application/json" },
@@ -57,8 +67,8 @@ describe("fetchEvents", () => {
 		]);
 	});
 
-	test("falls back to static events when the API request fails", async () => {
-		jest.doMock("@/data/events", () => ({
+	it("falls back to static events when the API request fails", async () => {
+		vi.doMock("@/data/events", () => ({
 			events: [
 				{
 					id: "fallback",
@@ -73,7 +83,7 @@ describe("fetchEvents", () => {
 			],
 		}));
 
-		(global.fetch as jest.Mock).mockRejectedValue(new Error("network error"));
+		(global.fetch as FetchMock).mockRejectedValue(new Error("network error"));
 
 		const { fetchEvents } = await import("@/lib/events/fetchEvents");
 		const result = await fetchEvents();

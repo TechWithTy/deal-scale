@@ -41,3 +41,13 @@ out/
 
 # Local development
 *.local
+
+dev-debug.log
+# Dependency directories
+# Environment variables
+.vscode
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 

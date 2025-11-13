@@ -118,54 +118,49 @@ const LegalClient = () => {
 					const templateUrl = getTemplateUrl(doc);
 
 					return (
-						<Card
+						<button
+							type="button"
 							key={doc.slug}
 							className="cursor-pointer transition-transform hover:scale-105"
 							onClick={() => setSelectedDoc(doc)}
-							role="button"
-							tabIndex={0}
-							onKeyDown={(event) => {
-								if (event.key === "Enter" || event.key === " ") {
-									event.preventDefault();
-									setSelectedDoc(doc);
-								}
-							}}
 						>
-							<CardHeader className="space-y-4">
-								<div className="flex items-start justify-between gap-3">
-									<CardTitle>{doc.title}</CardTitle>
-									<Badge
-										variant={source === "live" ? "default" : "secondary"}
-										className={`whitespace-nowrap ${status.badgeClassName}`}
-									>
-										{status.badgeText}
-									</Badge>
-								</div>
-								<CardDescription>{doc.description}</CardDescription>
-								<p className="text-muted-foreground text-xs">
-									Last updated: {doc.lastUpdated}
-								</p>
-							</CardHeader>
-							{templateUrl && (
-								<CardFooter className="pt-0">
-									<Button
-										asChild
-										variant="outline"
-										size="sm"
-										className="w-full whitespace-nowrap"
-										onClick={(event) => event.stopPropagation()}
-									>
-										<a
-											href={templateUrl}
-											target="_blank"
-											rel="noopener noreferrer"
+							<Card className="text-left">
+								<CardHeader className="space-y-4">
+									<div className="flex items-start justify-between gap-3">
+										<CardTitle>{doc.title}</CardTitle>
+										<Badge
+											variant={source === "live" ? "default" : "secondary"}
+											className={`whitespace-nowrap ${status.badgeClassName}`}
 										>
-											Open template
-										</a>
-									</Button>
-								</CardFooter>
-							)}
-						</Card>
+											{status.badgeText}
+										</Badge>
+									</div>
+									<CardDescription>{doc.description}</CardDescription>
+									<p className="text-muted-foreground text-xs">
+										Last updated: {doc.lastUpdated}
+									</p>
+								</CardHeader>
+								{templateUrl && (
+									<CardFooter className="pt-0">
+										<Button
+											asChild
+											variant="outline"
+											size="sm"
+											className="w-full whitespace-nowrap"
+											onClick={(event) => event.stopPropagation()}
+										>
+											<a
+												href={templateUrl}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												Open template
+											</a>
+										</Button>
+									</CardFooter>
+								)}
+							</Card>
+						</button>
 					);
 				})}
 			</div>
