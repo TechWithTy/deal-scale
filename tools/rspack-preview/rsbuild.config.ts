@@ -42,19 +42,54 @@ export default defineConfig({
 	},
 	tools: {
 		postcss: (opts) => {
-			if (
-				typeof opts.postcssOptions === "object" &&
-				opts.postcssOptions !== null
-			) {
-				opts.postcssOptions.config = path.resolve(
-					projectRoot,
-					"postcss.config.js",
-				);
-			} else {
-				opts.postcssOptions = {
-					config: path.resolve(projectRoot, "postcss.config.js"),
+			const resolvedConfigPath = path.resolve(projectRoot, "postcss.config.js");
+
+			type NormalizedPostcssOptions = Record<string, unknown> & {
+				config?: Record<string, unknown>;
+			};
+
+			const normalizePostcssOptions = (
+				options: unknown,
+			): NormalizedPostcssOptions => {
+				const base =
+					typeof options === "object" && options !== null
+						? (options as Record<string, unknown>)
+						: {};
+				const existingConfig =
+					typeof base.config === "object" && base.config !== null
+						? { ...(base.config as Record<string, unknown>) }
+						: {};
+
+				base.config = {
+					...existingConfig,
+					path: resolvedConfigPath,
 				};
+
+				return base as NormalizedPostcssOptions;
+			};
+
+			if (typeof opts.postcssOptions === "function") {
+				const originalFactory = opts.postcssOptions;
+				opts.postcssOptions = ((loaderContext) => {
+					const originalOptions = originalFactory(loaderContext);
+					if (
+						originalOptions &&
+						typeof (originalOptions as PromiseLike<unknown>).then === "function"
+					) {
+						return (originalOptions as PromiseLike<unknown>).then(
+							(result) => normalizePostcssOptions(result) as unknown,
+						);
+					}
+
+					return normalizePostcssOptions(originalOptions) as unknown;
+				}) as typeof originalFactory;
+				return;
 			}
+
+			const normalized = normalizePostcssOptions(opts.postcssOptions);
+			opts.postcssOptions = normalized as unknown as NonNullable<
+				typeof opts.postcssOptions
+			>;
 		},
 	},
 });

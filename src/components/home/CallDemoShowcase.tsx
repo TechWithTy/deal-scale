@@ -330,17 +330,36 @@ export const CallDemoShowcase = () => {
 		const activeMessage = container.querySelector<HTMLElement>(
 			`[data-message-index="${activeTextIndex}"]`,
 		);
-		if (activeMessage?.scrollIntoView) {
-			activeMessage.scrollIntoView({ block: "end", behavior: "smooth" });
+		if (!activeMessage) {
+			return;
+		}
+		const containerRect = container.getBoundingClientRect();
+		const isContainerVisible =
+			containerRect.bottom > 0 && containerRect.top < window.innerHeight;
+		if (!isContainerVisible) {
+			return;
+		}
+		const messageRect = activeMessage.getBoundingClientRect();
+		const messageHeight =
+			messageRect.height ||
+			activeMessage.offsetHeight ||
+			messageRect.bottom - messageRect.top;
+		const scrollOffset =
+			messageRect.top - containerRect.top + container.scrollTop;
+		const targetScrollTop = Math.max(
+			0,
+			scrollOffset + messageHeight - container.clientHeight,
+		);
+		if (Math.abs(container.scrollTop - targetScrollTop) <= 1) {
 			return;
 		}
 		if (typeof container.scrollTo === "function") {
 			container.scrollTo({
-				top: container.scrollHeight,
+				top: targetScrollTop,
 				behavior: "smooth",
 			});
 		} else {
-			container.scrollTop = container.scrollHeight;
+			container.scrollTop = targetScrollTop;
 		}
 	}, [activePreview, activeTextIndex]);
 
@@ -417,6 +436,7 @@ export const CallDemoShowcase = () => {
 									<div className="flex-1 overflow-hidden">
 										<div
 											ref={textScrollContainerRef}
+											data-testid="text-demo-scroll-container"
 											className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-slate-600/40 flex h-full flex-col gap-3 overflow-y-auto pr-1"
 										>
 											<AnimatedList
