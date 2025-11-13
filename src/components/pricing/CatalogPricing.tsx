@@ -40,6 +40,7 @@ import {
 } from "./OneTimePlanCard";
 import { RecurringPlanCard } from "./RecurringPlanCard";
 import { RoiEstimatorModal } from "./RoiEstimatorModal";
+import { RoiEstimatorSnapshot } from "./RoiEstimatorSnapshot";
 
 type PricingView = PricingInterval | "oneTime";
 
@@ -950,7 +951,7 @@ export const CatalogPricing = ({
 
 				{view === "oneTime" ? (
 					<div className="mt-12 flex flex-col gap-6 lg:grid lg:grid-cols-12">
-						<div className="lg:col-span-5">
+						<div className="flex flex-col gap-8 lg:col-span-5">
 							<SelfHostedCard
 								variant="selfHosted"
 								title={
@@ -991,6 +992,12 @@ export const CatalogPricing = ({
 									"Estimate ROI & Setup Cost"
 								}
 							/>
+							{selfHostedPlan?.roiEstimator ? (
+								<RoiEstimatorSnapshot
+									estimator={selfHostedPlan.roiEstimator}
+									className="rounded-2xl border border-border/60 bg-muted/10 p-6 shadow-sm"
+								/>
+							) : null}
 						</div>
 						<div className="lg:col-span-7">
 							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">

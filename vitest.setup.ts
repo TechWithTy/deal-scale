@@ -90,8 +90,13 @@ const ensureJestFacade = () => {
 			vi.resetModules();
 		},
 		setTimeout: (timeout: number) => {
-			if (typeof (vi as unknown as { setTimeout?: (ms: number) => void }).setTimeout === "function") {
-				(vi as unknown as { setTimeout: (ms: number) => void }).setTimeout(timeout);
+			if (
+				typeof (vi as unknown as { setTimeout?: (ms: number) => void })
+					.setTimeout === "function"
+			) {
+				(vi as unknown as { setTimeout: (ms: number) => void }).setTimeout(
+					timeout,
+				);
 			} else {
 				return undefined;
 			}
@@ -125,17 +130,6 @@ ensureJestFacade();
 
 (globalThis as Record<string, unknown>).React = React;
 
-declare global {
-	// eslint-disable-next-line no-var
-	var fetch: typeof nodeFetch | undefined;
-	// eslint-disable-next-line no-var
-	var Request: typeof NodeRequest | undefined;
-	// eslint-disable-next-line no-var
-	var Response: typeof NodeResponse | undefined;
-	// eslint-disable-next-line no-var
-	var Headers: typeof NodeHeaders | undefined;
-}
-
 if (typeof globalThis.fetch === "undefined") {
 	globalThis.fetch = nodeFetch as unknown as typeof globalThis.fetch;
 }
@@ -147,9 +141,11 @@ if (typeof globalThis.Request === "undefined") {
 }
 
 afterAll(async () => {
-	const agent = (globalThis.fetch as typeof nodeFetch & {
-		__agent?: { destroy?: () => void };
-	})?.__agent;
+	const agent = (
+		globalThis.fetch as unknown as {
+			__agent?: { destroy?: () => void };
+		}
+	)?.__agent;
 
 	if (agent && typeof agent.destroy === "function") {
 		agent.destroy();
