@@ -1,57 +1,37 @@
-import loadingAnimation from "@/assets/animations/launchLoading.json";
-import { motion } from "framer-motion";
-import Lottie from "lottie-react";
-import React, { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+"use client";
 
-export default function LoadingAnimation() {
-	const [currentText, setCurrentText] = useState("Loading");
-	const texts = ["Loading", "Building", "Launching"];
-	const letterVariants = {
-		hidden: { opacity: 0, y: 20 },
-		visible: { opacity: 1, y: 0 },
-	};
-	const containerVariants = {
-		hidden: { opacity: 0 },
-		visible: (i = 1) => ({
-			opacity: 1,
-			transition: { staggerChildren: 0.12, delayChildren: 0.04 * i },
-		}),
-	};
+import { cn } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 
-	useEffect(() => {
-		let index = 0;
-		const interval = setInterval(() => {
-			index = (index + 1) % texts.length;
-			setCurrentText(texts[index]);
-		}, 3000);
-		return () => clearInterval(interval);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+type LoadingAnimationProps = {
+	ariaLive?: "assertive" | "polite" | "off";
+	className?: string;
+	label?: string;
+	spinnerClassName?: string;
+	spinnerSize?: "sm" | "md" | "lg";
+};
 
+export default function LoadingAnimation({
+	ariaLive = "assertive",
+	className,
+	label = "Loading",
+	spinnerClassName,
+	spinnerSize = "lg",
+}: LoadingAnimationProps = {}) {
 	return (
-		<div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-r from-[#9013fe] to-[#64c5a7]">
-			<div className="h-48 w-48 md:h-96 md:w-96">
-				<Lottie
-					animationData={loadingAnimation}
-					loop={true}
-					style={{ width: "100%", height: "100%" }}
-				/>
-			</div>
-			<motion.div
-				key={currentText}
-				variants={containerVariants}
-				initial="hidden"
-				animate="visible"
-				className="mt-4 font-bold text-4xl text-black md:text-6xl dark:text-white"
-			>
-				{currentText.split("").map((letter, index) => (
-					<motion.span key={uuidv4()} variants={letterVariants}>
-						{letter}
-					</motion.span>
-				))}
-				<motion.span variants={letterVariants}>...</motion.span>
-			</motion.div>
+		<div
+			aria-live={ariaLive}
+			className={cn(
+				"flex w-full items-center justify-center py-20",
+				className,
+			)}
+			data-testid="loading-animation"
+		>
+			<Spinner
+				size={spinnerSize}
+				className={cn("text-primary", spinnerClassName)}
+				aria-label={label}
+			/>
 		</div>
 	);
 }

@@ -155,7 +155,7 @@ export const services: ServicesData = {
 		leadManagement: {
 			id: "lead-management",
 			iconName: "Users",
-			title: "Lead Generation and Management",
+			title: "Lookalike Audience Expansion and Management",
 			description:
 				"Tap into our database of over 140 million on-market and off-market properties. Our AI-powered platform allows you to define precise search criteria to build targeted lead lists in minutes, not weeks, ensuring you connect with motivated sellers and find the right deals, faster.",
 			features: [
@@ -195,7 +195,7 @@ export const services: ServicesData = {
 		socialLeadGen: {
 			id: "social-lead-generation",
 			iconName: "Share",
-			title: "Automated Social Lead Generation",
+			title: "Automated Social Lookalike Audience Expansion",
 			description:
 				"Turn social media comments into closed deals. Our AI engages prospects, qualifies them with proven scripts, and nurtures them until they are ready for a sales call—then it books the appointment on your calendar or hot-transfers the live call directly to you.",
 			features: [
@@ -931,7 +931,7 @@ export const services: ServicesData = {
 			iconName: "BotMessageSquare" as IconName, // Or "MessageSquarePlus"
 			title: "Embeddable AI Sales Chatbot",
 			description:
-				"Turn your website into a 24/7 lead generation engine. Our AI chatbot engages visitors, answers questions, pre-qualifies leads, and seamlessly integrates them into your Deal Scale workflow for immediate follow-up or booking.",
+				"Turn your website into a 24/7 lookalike audience expansion engine inspired by How to Win Friends and Influence People. Our AI chatbot engages visitors, answers questions, pre-qualifies leads, and seamlessly integrates them into your Deal Scale workflow for immediate follow-up or booking.",
 			features: [
 				"Easy website embedding with a simple code snippet",
 				"Customizable branding, greetings, and qualification scripts",

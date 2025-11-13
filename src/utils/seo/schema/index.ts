@@ -18,6 +18,7 @@ export {
 	SCHEMA_CONTEXT,
 	WEBSITE_ID,
 } from "./helpers";
+export { buildManifestoSchema } from "./manifesto";
 export {
 	organizationSchema,
 	productSchema,
@@ -34,6 +35,7 @@ export {
 	buildProductListJsonLd,
 	buildServiceJsonLd,
 } from "./transformers";
+export { buildPricingJsonLd } from "./pricing";
 export type {
 	OfferInput,
 	OfferSchema,

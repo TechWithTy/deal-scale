@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -32,6 +34,7 @@ const ProductCard = (props: ProductCardProps) => {
 	const shouldReduceMotion = useReducedMotion();
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
 	const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+	useWaitCursor(isCheckoutLoading);
 
 	const handleAddToCart = () => {
 		toast.success("Added to cart");
@@ -45,6 +48,7 @@ const ProductCard = (props: ProductCardProps) => {
 		}
 
 		setIsCheckoutLoading(true);
+		const stripeToast = startStripeToast("Contacting Stripe…");
 		try {
 			const response = await fetch("/api/stripe/intent", {
 				method: "POST",
@@ -72,12 +76,15 @@ const ProductCard = (props: ProductCardProps) => {
 			if (!clientSecret)
 				throw new Error("Client secret not received from server.");
 			setClientSecret(clientSecret);
+			stripeToast.success(
+				"Checkout ready. Review the Stripe modal to finish your purchase.",
+			);
 		} catch (error) {
 			console.error("Checkout initiation failed:", error);
-			toast.error(
+			stripeToast.error(
 				error instanceof Error
 					? error.message
-					: "Payment failed. Please try again.",
+					: "Stripe checkout failed to initialize. Please try again.",
 			);
 		} finally {
 			setIsCheckoutLoading(false);

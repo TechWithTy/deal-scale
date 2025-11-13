@@ -1,6 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 
-const mockPixelatedCanvas = jest.fn(() => <div data-testid="pixelated-canvas" />);
+const mockPixelatedCanvas = jest.fn(() => (
+	<div data-testid="pixelated-canvas" />
+));
 
 const textRevealSpies: {
 	props?: Record<string, unknown>;
@@ -46,7 +48,9 @@ describe("PixelatedVoiceCloneCard", () => {
 	});
 
 	it("renders the pixelated canvas with the expected defaults", async () => {
-		const { PixelatedVoiceCloneCard } = require("../pixelated-voice-clone-card");
+		const {
+			PixelatedVoiceCloneCard,
+		} = require("../pixelated-voice-clone-card");
 
 		render(<PixelatedVoiceCloneCard />);
 
@@ -65,21 +69,33 @@ describe("PixelatedVoiceCloneCard", () => {
 	});
 
 	it("shows before and after voice cloning messaging", () => {
-		const { PixelatedVoiceCloneCard } = require("../pixelated-voice-clone-card");
+		const {
+			PixelatedVoiceCloneCard,
+		} = require("../pixelated-voice-clone-card");
 
 		render(<PixelatedVoiceCloneCard />);
 
 		expect(
-			screen.getByText(/flat, robotic delivery that breaks connection\./i),
+			screen.getByText(/Flat, robotic delivery that breaks connection\./i),
 		).toBeInTheDocument();
 		expect(
-			screen.getByText(/expressive, human tone that builds trust instantly\./i),
+			screen.getByText(/Expressive, human tone that builds trust instantly\./i),
 		).toBeInTheDocument();
-		expect(screen.getByRole("heading", { name: "Your AI Clone: Authentic, Expressive, Unmistakably You" })).toBeInTheDocument();
+		expect(
+			screen.getByRole("heading", {
+				name: "Your AI Clone: Authentic, Expressive, Unmistakably You",
+			}),
+		).toBeInTheDocument();
+		expect(screen.getByLabelText(/upload a png/i)).toBeInTheDocument();
+		expect(
+			screen.getByText(/Photo-to-video avatar tooling coming soon/i),
+		).toBeInTheDocument();
 	});
 
 	it("uses TextRevealCard to describe the cloning experience", () => {
-		const { PixelatedVoiceCloneCard } = require("../pixelated-voice-clone-card");
+		const {
+			PixelatedVoiceCloneCard,
+		} = require("../pixelated-voice-clone-card");
 
 		render(<PixelatedVoiceCloneCard />);
 
@@ -92,8 +108,9 @@ describe("PixelatedVoiceCloneCard", () => {
 			screen.getByText(/Hover to see how we build authenticity at scale\./i),
 		).toBeInTheDocument();
 		expect(
-			screen.getByText(/Track the shift from robotic to expressive delivery in real time\./i),
+			screen.getByText(
+				/Track the shift from robotic to expressive delivery in real time\./i,
+			),
 		).toBeInTheDocument();
 	});
 });
-

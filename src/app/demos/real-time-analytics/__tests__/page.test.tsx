@@ -49,7 +49,9 @@ class IntersectionObserverMock {
 }
 
 let originalResizeObserver: typeof global.ResizeObserver | undefined;
-let originalIntersectionObserver: typeof global.IntersectionObserver | undefined;
+let originalIntersectionObserver:
+	| typeof global.IntersectionObserver
+	| undefined;
 
 beforeAll(() => {
 	originalResizeObserver = global.ResizeObserver;
@@ -71,16 +73,18 @@ let warnSpy: jest.SpyInstance;
 
 beforeAll(() => {
 	const originalWarn = console.warn.bind(console);
-	warnSpy = jest.spyOn(console, "warn").mockImplementation((message, ...args) => {
-		if (
-			typeof message === "string" &&
-			message.includes("The width(0) and height(0) of chart")
-		) {
-			return;
-		}
+	warnSpy = jest
+		.spyOn(console, "warn")
+		.mockImplementation((message, ...args) => {
+			if (
+				typeof message === "string" &&
+				message.includes("The width(0) and height(0) of chart")
+			) {
+				return;
+			}
 
-		originalWarn(message, ...args);
-	});
+			originalWarn(message, ...args);
+		});
 });
 
 afterAll(() => {
@@ -127,9 +131,7 @@ describe("RealTimeAnalytics demo showcase", () => {
 		).toBeInTheDocument();
 
 		for (const highlight of defaultFeature.highlights) {
-			expect(
-				await screen.findByText(highlight.title),
-			).toBeInTheDocument();
+			expect(await screen.findByText(highlight.title)).toBeInTheDocument();
 		}
 	});
 
@@ -156,11 +158,7 @@ describe("RealTimeAnalytics demo showcase", () => {
 		).toBeInTheDocument();
 
 		for (const highlight of targetFeature.highlights) {
-			expect(
-				await screen.findByText(highlight.title),
-			).toBeInTheDocument();
+			expect(await screen.findByText(highlight.title)).toBeInTheDocument();
 		}
 	});
 });
-
-

@@ -1,8 +1,10 @@
 "use client";
 
 import type { Category } from "@/types/case-study";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 
 export function useCategoryFilter<T extends string>(
 	categories: Category[],
@@ -12,7 +14,7 @@ export function useCategoryFilter<T extends string>(
 ) {
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
-	const router = useRouter();
+	const router = useNavigationRouter();
 	const [internalActiveCategory, setInternalActiveCategory] = useState<
 		T | "" | "all"
 	>("all");

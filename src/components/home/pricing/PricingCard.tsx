@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import type { Plan, PlanType } from "@/types/service/plans";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import type * as React from "react";
 import BannerRibbon from "./BannerRibbon";
 import DiscountBanner from "./DiscountBanner";
@@ -153,12 +153,19 @@ const PricingCard: React.FC<PricingCardProps> = ({
 								className={`min-h-[3.5rem] w-full whitespace-normal rounded-lg py-3 font-semibold text-base leading-snug shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/60 ${plan.highlighted ? "glow bg-gradient-to-r from-primary to-focus text-black-900 dark:text-white-900" : "bg-white/10 text-black-900 hover:bg-white/20 dark:text-white-900"}`}
 								disabled={loading === plan.id}
 								onClick={() => onCheckout(plan, callbackUrl)}
+								aria-live="assertive"
 							>
-								{loading === plan.id
-									? "Processing..."
-									: typeof plan.cta === "string"
-										? plan.cta
-										: plan.cta?.text || "Buy Now"}
+								{loading === plan.id ? (
+									<>
+										<Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+										<span className="sr-only">Processing checkout…</span>
+										<span aria-hidden>Processing…</span>
+									</>
+								) : typeof plan.cta === "string" ? (
+									plan.cta
+								) : (
+									plan.cta?.text || "Buy Now"
+								)}
 							</Button>
 						)}
 					</div>

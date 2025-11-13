@@ -1,11 +1,15 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
-	AnimatePresence,
-	motion,
-} from "motion/react";
+	useCallback,
+	useEffect,
+	useId,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
 import { ShinyButton } from "@/components/ui/shiny-button";
@@ -24,7 +28,8 @@ const indicatorPalette = [
 	{ from: "rgba(192,132,252,0.95)", to: "rgba(147,51,234,0.95)" },
 ] as const;
 
-const ROI_CALCULATOR_URL = "https://app.dealscale.io/external-tools/roi-calculator";
+const ROI_CALCULATOR_URL =
+	"https://app.dealscale.io/external-tools/roi-calculator";
 
 /**
  * FeatureShowcase renders the Macbook demo with contextual copy and metrics.
@@ -32,10 +37,7 @@ const ROI_CALCULATOR_URL = "https://app.dealscale.io/external-tools/roi-calculat
 export function FeatureShowcase({
 	features,
 }: FeatureShowcaseProps): JSX.Element | null {
-	const stableFeatures = useMemo(
-		() => features.filter(Boolean),
-		[features],
-	);
+	const stableFeatures = useMemo(() => features.filter(Boolean), [features]);
 	const featureIds = useMemo(
 		() => stableFeatures.map((feature) => feature.id),
 		[stableFeatures],
@@ -83,9 +85,7 @@ export function FeatureShowcase({
 			setActiveId((currentId) => {
 				const currentIndex = featureIds.indexOf(currentId);
 				const nextIndex =
-					currentIndex === -1
-						? 0
-						: (currentIndex + 1) % featureIds.length;
+					currentIndex === -1 ? 0 : (currentIndex + 1) % featureIds.length;
 				const nextId = featureIds[nextIndex] ?? fallbackId;
 				return nextId;
 			});
@@ -134,7 +134,7 @@ export function FeatureShowcase({
 							variant="embedded"
 							className="max-w-full"
 							badge={
-								<span className="inline-flex items-center rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-xs font-medium uppercase tracking-wide text-blue-900 dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100">
+								<span className="inline-flex items-center rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 font-medium text-blue-900 text-xs uppercase tracking-wide dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100">
 									Live demo
 								</span>
 							}
@@ -168,10 +168,10 @@ export function FeatureShowcase({
 								aria-controls={panelId}
 								data-selected={isSelected}
 								className={cn(
-									"group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition",
+									"group inline-flex items-center gap-2 rounded-full border px-4 py-2 font-medium text-sm transition",
 									isSelected
 										? "border-blue-500 bg-blue-500/10 text-blue-900 shadow-[0_8px_24px_-16px_rgba(59,130,246,0.75)] dark:text-blue-100"
-										: "border-border/70 bg-background/50 text-muted-foreground hover:border-blue-400/70 hover:bg-blue-500/10 hover:text-blue-900 dark:hover:text-blue-100 dark:hover:border-blue-400/60",
+										: "border-border/70 bg-background/50 text-muted-foreground hover:border-blue-400/70 hover:bg-blue-500/10 hover:text-blue-900 dark:hover:border-blue-400/60 dark:hover:text-blue-100",
 								)}
 								onClick={() => {
 									handleManualSelection(feature.id);
@@ -184,10 +184,13 @@ export function FeatureShowcase({
 											style={{
 												backgroundImage: `linear-gradient(135deg, ${palette.from}, ${palette.to})`,
 											}}
-											animate={{ scale: [1.05, 1.7, 1.05], opacity: [0.45, 0, 0.45] }}
+											animate={{
+												scale: [1.05, 1.7, 1.05],
+												opacity: [0.45, 0, 0.45],
+											}}
 											transition={{
 												duration: 2.4,
-												repeat: Infinity,
+												repeat: Number.POSITIVE_INFINITY,
 												ease: "easeOut",
 											}}
 										/>
@@ -204,13 +207,13 @@ export function FeatureShowcase({
 										}
 										transition={{
 											duration: isSelected ? 1.6 : 0.3,
-											repeat: isSelected ? Infinity : 0,
+											repeat: isSelected ? Number.POSITIVE_INFINITY : 0,
 											repeatType: "mirror",
 											ease: "easeInOut",
 										}}
 									/>
 								</span>
-								<span className="text-xs font-semibold uppercase tracking-wide sm:text-sm">
+								<span className="font-semibold text-xs uppercase tracking-wide sm:text-sm">
 									{feature.label}
 								</span>
 							</button>
@@ -241,4 +244,3 @@ export function FeatureShowcase({
 		</section>
 	);
 }
-

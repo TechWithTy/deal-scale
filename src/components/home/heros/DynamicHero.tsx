@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDown } from "lucide-react";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 
 import {
 	DEFAULT_HERO_SOCIAL_PROOF,
@@ -9,16 +9,25 @@ import {
 	HeroHeadline,
 	type HeroVideoConfig,
 	HeroVideoPreview,
+	type HeroVideoPreviewHandle,
 	PersonaCTA,
 	resolveHeroCopy,
 } from "@external/dynamic-hero";
 
+import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
 import { HeroMetricGrid } from "@/components/home/heros/HeroMetricGrid";
+import {
+	CTA_MICROCOPY,
+	HERO_COPY_FALLBACK,
+	HERO_COPY_INPUT,
+	PRIMARY_CTA,
+	SECONDARY_CTA,
+} from "@/components/home/heros/heroConfig";
+import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { LasersBackground } from "@/components/ui/lasers-background";
 import { LightRays } from "@/components/ui/light-rays";
 import { Pointer } from "@/components/ui/pointer";
-import { Separator } from "@/components/ui/separator";
 
 const MOCK_VIDEO: HeroVideoConfig = {
 	src: "https://www.youtube.com/embed/qh3NGpYRG3I?rel=0&controls=1&modestbranding=1",
@@ -27,64 +36,14 @@ const MOCK_VIDEO: HeroVideoConfig = {
 	provider: "youtube",
 };
 
-const HERO_ROTATIONS = {
-	problems: [
-		"manually stitching hero sections",
-		"babysitting inconsistent brand tokens",
-		"copying animations from five codebases",
-	],
-	solutions: [
-		"reusing shared UI modules",
-		"dropping in synced motion presets",
-		"launching personas from one package",
-	],
-	fears: [
-		"launch delays creep in",
-		"stakeholders churn on stale demos",
-		"brand QA turns into fire drills",
-	],
-};
-
-const HERO_COPY_INPUT: Parameters<typeof resolveHeroCopy>[0] = {
-	values: {
-		problem: "manually stitching hero sections",
-		solution: "reusing shared UI modules",
-		fear: "launch delays creep in",
-		socialProof: "Join 200+ teams speeding up delivery.",
-		benefit: "Ship dynamic marketing pages",
-		time: "7",
-	},
-	rotations: HERO_ROTATIONS,
-};
-
-const HERO_COPY_FALLBACK: Parameters<typeof resolveHeroCopy>[1] = {
-	fallbackPrimaryChip: {
-		label: "Shared UI Library",
-		sublabel: "Lighting-fast iterations",
-		variant: "secondary",
-	},
-	fallbackSecondaryChip: {
-		label: "External Demo",
-		variant: "outline",
-	},
-};
-
-const PRIMARY_CTA = {
-	label: "Launch Quick Start Hero",
-	description: "Deploy the reusable hero module in under seven minutes.",
-	emphasis: "solid" as const,
-	badge: "Guided Setup",
-};
-
-const SECONDARY_CTA = {
-	label: "Preview Guided Demo",
-	description: "Tour the module before plugging it into production.",
-	emphasis: "outline" as const,
-	badge: "See it in action",
-};
-
-const CTA_MICROCOPY =
-	'Reusable hero experiences adopted by builders. <link href="#dynamic-hero-details">Explore the KPI impact</link>.';
+interface TrialCheckoutState {
+	clientSecret: string;
+	plan: Plan;
+	planType: "monthly";
+	mode: "setup";
+	context: "trial";
+	postTrialAmount?: number;
+}
 
 export default function DynamicHeroDemoPage(): JSX.Element {
 	const socialProof = DEFAULT_HERO_SOCIAL_PROOF;
@@ -92,13 +51,37 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 		() => resolveHeroCopy(HERO_COPY_INPUT, HERO_COPY_FALLBACK),
 		[],
 	);
+	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
+		useHeroTrialCheckout();
+	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
+	const videoSectionRef = useRef<HTMLDivElement>(null);
 
-	const handleScrollToDetails = () => {
+	const handleScrollToDetails = useCallback(() => {
 		const section = document.getElementById("dynamic-hero-details");
 		if (section) {
 			section.scrollIntoView({ behavior: "smooth", block: "start" });
 		}
-	};
+	}, []);
+
+	const handlePreviewDemo = useCallback(() => {
+		const node = videoSectionRef.current;
+		if (node && typeof node.scrollIntoView === "function") {
+			node.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+
+		const playVideo = () => {
+			videoPreviewRef.current?.play();
+		};
+
+		if (
+			typeof window !== "undefined" &&
+			typeof window.requestAnimationFrame === "function"
+		) {
+			window.requestAnimationFrame(playVideo);
+		} else {
+			playVideo();
+		}
+	}, []);
 
 	return (
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-background to-background/95 text-foreground">
@@ -147,16 +130,22 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 							primary={PRIMARY_CTA}
 							secondary={SECONDARY_CTA}
 							microcopy={CTA_MICROCOPY}
-							onPrimaryClick={handleScrollToDetails}
-							onSecondaryClick={handleScrollToDetails}
+							onPrimaryClick={startTrial}
+							onSecondaryClick={handlePreviewDemo}
+							primaryLoading={isTrialLoading}
 						/>
 						<p className="max-w-xl text-center text-muted-foreground text-sm">
 							Trusted by builders rolling out Quick Start experiences across the
 							DealScale platform.
 						</p>
 
-						<div className="w-full max-w-5xl" data-beam-collider="true">
+						<div
+							ref={videoSectionRef}
+							className="w-full max-w-5xl"
+							data-beam-collider="true"
+						>
 							<HeroVideoPreview
+								ref={videoPreviewRef}
 								video={MOCK_VIDEO}
 								thumbnailAlt="Dynamic hero module mock preview"
 							/>
@@ -200,6 +189,17 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 					</section>
 				</div>
 			</LasersBackground>
+			{checkoutState ? (
+				<PricingCheckoutDialog
+					clientSecret={checkoutState.clientSecret}
+					plan={checkoutState.plan}
+					planType={checkoutState.planType}
+					mode={checkoutState.mode}
+					context={checkoutState.context}
+					postTrialAmount={checkoutState.postTrialAmount}
+					onClose={closeCheckout}
+				/>
+			) : null}
 		</div>
 	);
 }

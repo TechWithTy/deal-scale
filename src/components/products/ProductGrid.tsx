@@ -6,6 +6,7 @@
 import { useAuthModal } from "@/components/auth/use-auth-store";
 import { usePagination } from "@/hooks/use-pagination";
 import { ProductCategory, type ProductType } from "@/types/products";
+import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import type React from "react";
 import {
@@ -359,7 +360,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 									{canShowPagination && (
 										<div className="flex items-center justify-center gap-2">
 											<button
-												className="rounded bg-gray-200 px-3 py-1 text-gray-700 disabled:opacity-50"
+												className="rounded-md border border-slate-300 bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
 												onClick={prevPage}
 												disabled={page === 1}
 												type="button"
@@ -370,10 +371,16 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 											{/* Page numbers */}
 											{Array.from({ length: totalPages }, (_, i) => {
 												const pageNum = i + 1;
+												const isActive = page === pageNum;
 												return (
 													<button
 														key={pageNum}
-														className={`rounded px-3 py-1 ${page === pageNum ? "bg-blue-600 text-black dark:text-white" : "bg-gray-200 text-gray-700"}`}
+														className={cn(
+															"rounded-md border px-3 py-1 text-sm font-semibold transition",
+															isActive
+																? "border-blue-500 bg-blue-600 text-white shadow-sm dark:border-blue-400 dark:bg-blue-500 dark:text-slate-950"
+																: "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800",
+														)}
 														onClick={() => setPage(pageNum)}
 														type="button"
 														aria-label={`Page ${pageNum}`}
@@ -383,7 +390,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 												);
 											})}
 											<button
-												className="rounded bg-gray-200 px-3 py-1 text-gray-700 disabled:opacity-50"
+												className="rounded-md border border-slate-300 bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
 												onClick={nextPage}
 												disabled={page === totalPages}
 												type="button"

@@ -31,12 +31,12 @@ const HERO_COPY_V7 = {
 		},
 		investor: {
 			problem: [
-				"losing track of off-market and motivated seller leads",
+				"losing track of lookalike off-market and motivated seller leads surfaced by AI similarity scoring",
 				"spending too long qualifying real estate deals by hand",
 			],
 			solution: [
 				"AI real estate deal flow automation that connects data, CRM, and outreach",
-				"automated real estate lead generation and nurturing in one dashboard",
+				"automated real estate lookalike audience expansion inspired by How to Win Friends and Influence People and nurturing in one dashboard",
 			],
 			fear: [
 				"your next profitable real estate deal slips to a faster investor",
@@ -153,7 +153,7 @@ const HERO_COPY_V7 = {
 export type HeroPersonaKey = keyof typeof HERO_COPY_V7.personas;
 
 export const DEFAULT_PERSONA: HeroPersonaKey = "investor";
-export const DEFAULT_PERSONA_DISPLAY = "AI Sales Coworker";
+export const DEFAULT_PERSONA_DISPLAY = "AI Sales Coworkers";
 
 const PERSONA_LABEL = "For Investors";
 const PERSONA_GOAL = "Automate deal flow conversations";
@@ -213,7 +213,7 @@ export const LIVE_PRIMARY_CTA = {
 	description:
 		"Stop dialing. Start closing. Your AI coworker books qualified sellers while you sleep.",
 	emphasis: "solid" as const,
-	badge: "AI Sales Coworkers",
+	badge: "Free Trial",
 };
 
 export const LIVE_SECONDARY_CTA = {

@@ -249,10 +249,7 @@ const realTimeFeaturesSeed = [
 	},
 ] as const satisfies Array<z.input<typeof realTimeFeatureSchema>>;
 
-export const REAL_TIME_FEATURES = realTimeFeatureListSchema.parse(
-	realTimeFeaturesSeed,
-);
+export const REAL_TIME_FEATURES =
+	realTimeFeatureListSchema.parse(realTimeFeaturesSeed);
 
 export type RealTimeFeature = (typeof REAL_TIME_FEATURES)[number];
-
-

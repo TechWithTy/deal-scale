@@ -86,7 +86,11 @@ export function HeroHeadline({
 		[copy.rotations?.fears, copy.values.fear],
 	);
 
-	const problemIndex = useRotatingIndex(problems, PROBLEM_INTERVAL_MS, isAnimating);
+	const problemIndex = useRotatingIndex(
+		problems,
+		PROBLEM_INTERVAL_MS,
+		isAnimating,
+	);
 	const solutionIndex = useRotatingIndex(
 		solutions,
 		SOLUTION_INTERVAL_MS,
@@ -193,10 +197,10 @@ export function HeroHeadline({
 					initial={{ opacity: 0, y: 8 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.24 }}
-				className={cn(
-					styles.heroHeadline,
-					"text-balance font-semibold text-slate-900 dark:text-white",
-				)}
+					className={cn(
+						styles.heroHeadline,
+						"text-balance font-semibold text-slate-900 dark:text-white",
+					)}
 				>
 					<span className={styles.heroHeadlineBlock}>
 						Stop{" "}
@@ -278,7 +282,7 @@ export function HeroHeadline({
 export function useRotatingIndex(
 	items: readonly string[],
 	interval: number,
-	isActive: boolean = true,
+	isActive = true,
 ): number {
 	const [index, setIndex] = useState(0);
 	const length = items.length;

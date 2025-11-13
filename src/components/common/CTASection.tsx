@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 
 export const CTASection = ({
 	title,
@@ -17,7 +18,7 @@ export const CTASection = ({
 	href: string;
 	className?: string;
 }) => {
-	const router = useRouter();
+	const router = useNavigationRouter();
 
 	const fadeIn = {
 		hidden: { opacity: 0, y: 20 },

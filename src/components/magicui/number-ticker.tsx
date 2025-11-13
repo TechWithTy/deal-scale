@@ -34,12 +34,13 @@ export function NumberTicker({
 		!globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__
 	) {
 		globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__ = true;
-		(window as unknown as Record<string, unknown>).IntersectionObserver = class {
-			constructor() {}
-			observe() {}
-			unobserve() {}
-			disconnect() {}
-		};
+		(window as unknown as Record<string, unknown>).IntersectionObserver =
+			class {
+				constructor() {}
+				observe() {}
+				unobserve() {}
+				disconnect() {}
+			};
 	}
 
 	const motionValue = useMotionValue(direction === "down" ? value : startValue);

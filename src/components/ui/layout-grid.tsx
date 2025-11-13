@@ -1,8 +1,8 @@
 "use client";
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import type React from "react";
 import { useState } from "react";
-import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
 
 type Card = {
 	id: number;
@@ -31,7 +31,8 @@ export const LayoutGrid = ({
 			<div className="relative mx-auto grid h-full w-full max-w-7xl grid-cols-1 gap-4 p-10 md:grid-cols-3">
 				{cards.map((card) => {
 					const needsPositioning =
-						(showThumbnails && Boolean(card.thumbnail)) || Boolean(card.overlay);
+						(showThumbnails && Boolean(card.thumbnail)) ||
+						Boolean(card.overlay);
 					return (
 						<div
 							key={card.id}
@@ -48,7 +49,12 @@ export const LayoutGrid = ({
 								<div className="absolute inset-0 z-10">{card.overlay}</div>
 							) : null}
 							{card.content ? (
-								<div className={cn("relative z-20 h-full w-full", card.contentClassName)}>
+								<div
+									className={cn(
+										"relative z-20 h-full w-full",
+										card.contentClassName,
+									)}
+								>
 									{card.content}
 								</div>
 							) : null}

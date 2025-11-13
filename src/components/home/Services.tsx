@@ -341,7 +341,7 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	const getTabLabel = (tab: ServiceCategoryValue) => {
 		switch (tab) {
 			case SERVICE_CATEGORIES.LEAD_GENERATION:
-				return "Lead Generation";
+				return "Lookalike Audience Expansion";
 			case SERVICE_CATEGORIES.LEAD_PREQUALIFICATION:
 				return "Lead Pre-qualification";
 			case SERVICE_CATEGORIES.SKIP_TRACING:
@@ -545,9 +545,8 @@ const ServicesSection = (props: ServicesSectionProps) => {
 				<div className="mx-auto max-w-7xl">
 					<div className="mb-12 text-center">
 						<Header
-							title="Features"
-							subtitle="A full suite of cutting-edge tools designed to help you close more 
-deals"
+							title={title}
+							subtitle={subtitle}
 							className="mb-12 md:mb-16"
 						/>
 					</div>

@@ -300,4 +300,3 @@ const Explosion = ({
 		</div>
 	);
 };
-

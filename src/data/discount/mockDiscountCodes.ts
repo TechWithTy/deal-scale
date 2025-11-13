@@ -30,7 +30,8 @@ export const mockDiscountCodes: DiscountCode[] = [
 		created: new Date(),
 		discountPercent: 20,
 		isActive: true,
-		description: "20% off any lead generation service.",
+		description:
+			"20% off any lookalike audience expansion service inspired by How to Win Friends and Influence People.",
 		serviceCategoryIds: [SERVICE_CATEGORIES.LEAD_GENERATION],
 	},
 	{
@@ -54,6 +55,24 @@ export const mockDiscountCodes: DiscountCode[] = [
 		productCategoryIds: [ProductCategory.Credits],
 	},
 	{
+		code: "SCALE50",
+		id: uuidv4(),
+		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
+		created: new Date(),
+		discountPercent: 50,
+		isActive: true,
+		description: "Limited-time 50% launch coupon for AI Conversation Credits.",
+		productCategoryIds: [ProductCategory.Credits, ProductCategory.Automation],
+		planIds: [
+			"basic",
+			"starter",
+			"enterprisePlus",
+			"basicAnnual",
+			"starterAnnual",
+			"enterpriseAnnual",
+		],
+	},
+	{
 		code: "STARTER25",
 		id: uuidv4(),
 		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
@@ -70,7 +89,7 @@ export const mockDiscountCodes: DiscountCode[] = [
 		created: new Date(),
 		discountPercent: 15,
 		isActive: true,
-		description: "15% off any Lead Generation plan.",
+		description: "15% off any Lookalike Audience Expansion Inspired By How To Win Friends And Influence People plan.",
 		planCategoryIds: [PRICING_CATEGORIES.LEAD_GENERATION],
 	},
 	{

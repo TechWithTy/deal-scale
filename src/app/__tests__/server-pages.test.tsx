@@ -85,8 +85,7 @@ jest.mock("@/utils/seo/schema", () => ({
 	__esModule: true,
 	SchemaInjector: SchemaInjectorMock,
 	buildFAQPageSchema: (...args: unknown[]) => mockBuildFAQPageSchema(...args),
-	buildServiceSchema: (...args: unknown[]) =>
-		mockBuildServiceSchema(...args),
+	buildServiceSchema: (...args: unknown[]) => mockBuildServiceSchema(...args),
 	buildActivityFeedSchema: (...args: unknown[]) =>
 		mockBuildActivityFeedSchema(...args),
 }));

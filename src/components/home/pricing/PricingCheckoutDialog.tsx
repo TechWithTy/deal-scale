@@ -10,11 +10,17 @@ import { loadStripe } from "@stripe/stripe-js";
 import { X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 
+type CheckoutContext = "standard" | "trial";
+type CheckoutMode = "payment" | "setup";
+
 type PricingCheckoutDialogProps = {
 	clientSecret: string;
 	onClose: () => void;
 	plan: Plan;
 	planType: PlanType;
+	mode: CheckoutMode;
+	context: CheckoutContext;
+	postTrialAmount?: number;
 };
 
 const stripePromise = (() => {
@@ -33,6 +39,9 @@ export default function PricingCheckoutDialog({
 	onClose,
 	plan,
 	planType,
+	mode,
+	context,
+	postTrialAmount,
 }: PricingCheckoutDialogProps) {
 	useEffect(() => {
 		const { body } = document;
@@ -89,6 +98,9 @@ export default function PricingCheckoutDialog({
 						clientSecret={clientSecret}
 						plan={plan}
 						planType={planType}
+						mode={mode}
+						context={context}
+						postTrialAmount={postTrialAmount}
 						onSuccess={onClose}
 					/>
 				</Elements>

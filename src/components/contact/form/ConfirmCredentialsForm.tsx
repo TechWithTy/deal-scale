@@ -15,8 +15,9 @@ import {
 	confirmCredentialsSchema,
 } from "@/data/contact/authFormFields";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createFieldProps, renderFormField } from "./formFieldHelpers";
@@ -26,7 +27,7 @@ interface ConfirmCredentialsFormProps {
 }
 
 export function ConfirmCredentialsForm({ token }: ConfirmCredentialsFormProps) {
-	const router = useRouter();
+	const router = useNavigationRouter();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const form = useForm<ConfirmCredentialsFormValues>({

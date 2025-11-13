@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, XCircle } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 
 interface StatusPageProps {
 	type: "success" | "error";
@@ -11,7 +13,7 @@ interface StatusPageProps {
 }
 
 export function StatusPage({ type, className = "" }: StatusPageProps) {
-	const router = useRouter();
+	const router = useNavigationRouter();
 	const searchParams = useSearchParams();
 
 	const isSuccess = type === "success";

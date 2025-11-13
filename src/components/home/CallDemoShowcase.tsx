@@ -3,10 +3,15 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
 import SessionMonitor from "@/components/deal_scale/talkingCards/SessionMonitor";
+import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 import { AnimatedList } from "@/components/ui/animatedList";
-import dynamic from "next/dynamic";
 import { Iphone } from "@/components/ui/iphone";
 import { LayoutGrid } from "@/components/ui/layout-grid";
 import { SparklesText } from "@/components/ui/sparkles-text";
@@ -20,25 +25,81 @@ import {
 } from "@/data/home/aiOutreachStudio";
 import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 
 type PreviewType = "call" | "text";
 type CallDemoMode = "video" | "live" | "handoff";
+type AttachmentType = "image" | "gif" | "video" | "file";
+
+type MessageAttachment = {
+	id: string;
+	type: AttachmentType;
+	title: string;
+	meta: string;
+	description?: string;
+	previewGradient?: string;
+};
+
+type TextDemoMessage = {
+	sender: "AI" | "Lead";
+	text: string;
+	attachments?: MessageAttachment[];
+};
 
 const CALL_DEMO_PLAYLIST_SRC =
 	"https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=0&mute=1&rel=0&playsinline=1&modestbranding=1";
 
-const TEXT_DEMO_MESSAGES = [
+const TEXT_DEMO_MESSAGES: readonly TextDemoMessage[] = [
 	{
 		sender: "AI",
 		text: "Hey there 👋 this is Ava with Metro Realty. Just wanted to check in, are you still open to selling your home on 2143 W Elm St this month? If you’d like to talk to a teammate, I can loop in Jordan here: https://deal.scale/agents/jordan.",
+		attachments: [
+			{
+				id: "walkthrough-shots",
+				type: "image",
+				title: "Seller walk-through stills",
+				meta: "3 photos • 2.1 MB",
+				description: "Curb appeal, kitchen update, backyard garden.",
+				previewGradient: "from-sky-400/25 via-sky-500/15 to-indigo-500/20",
+			},
+			{
+				id: "ai-gif",
+				type: "gif",
+				title: "AI pricing explainer.gif",
+				meta: "Loop • 12 sec",
+				description: "Shows the pricing model as the AI narrates the offer.",
+				previewGradient: "from-emerald-400/25 via-cyan-400/20 to-slate-900/30",
+			},
+		],
 	},
 	{
 		sender: "Lead",
 		text: "Hey, it’s Elyas. Depends what kind of offer I’d get.",
+		attachments: [
+			{
+				id: "repair-estimate",
+				type: "file",
+				title: "Roof & plumbing receipts.pdf",
+				meta: "PDF • 684 KB",
+				description: "Recent work they want factored into the offer.",
+				previewGradient: "from-amber-400/25 via-orange-500/20 to-stone-900/25",
+			},
+		],
 	},
 	{
 		sender: "AI",
 		text: "Totally understandable. Looking at recent sales nearby, homes like yours are closing around $420K to $435K. Would that range work for you?",
+		attachments: [
+			{
+				id: "comp-report",
+				type: "video",
+				title: "Comp set walk-through.mp4",
+				meta: "Video • 38 sec",
+				description: "Auto-generated clip summarizing comparable sales.",
+				previewGradient: "from-indigo-400/25 via-purple-500/20 to-slate-900/30",
+			},
+		],
 	},
 	{
 		sender: "Lead",
@@ -56,17 +117,21 @@ const TEXT_DEMO_MESSAGES = [
 		sender: "AI",
 		text: "✅ Great! You’re confirmed for 3 PM. Jordan will reach out then. Thanks again!",
 	},
-] as const;
+];
 const TEXT_DEMO_MESSAGES_COUNT = TEXT_DEMO_MESSAGES.length;
 
 const SESSION_MONITOR_DIALOG = [
-	"💬 “Hey Sarah, it’s Ava from Metro Home Team. Still open to an offer on 2143 W Elm St this month?”",
-	"💬 “Just checking in—want me to send the contract recap before Jordan calls?”",
+	"📞 “Hey Sarah, it’s Ava from Metro Home Team. Still open to an offer on 2143 W Elm St this month?”",
+	"📞 “Looping Jordan into the live call now so we can confirm the cash offer while you stay on.”",
+	"💬 “Texted Elyas the inspection checklist so he can review before tomorrow’s walkthrough.”",
+	"📱 “Sent the investor update on Instagram with new comps and cap-rate projections.”",
 ] as const;
 
 const SESSION_MONITOR_STATUS = [
 	"🧠 Auto-response ready, synced with your CRM.",
-	"🧠 Ready to hand off with full call notes.",
+	"🧠 Live call assist engaged, summarizing investor intent.",
+	"💬 SMS follow-up captured, ready for CRM logging.",
+	"📣 Social outreach tagged with campaign analytics.",
 ] as const;
 
 const PhoneShell = ({
@@ -88,15 +153,19 @@ const PhoneShell = ({
 );
 
 const CallHandoffCard = ({
-	onDecision,
+	onAccept,
+	onQueue,
+	onCancel,
 }: {
-	onDecision: () => void;
+	onAccept: () => void;
+	onQueue: () => void;
+	onCancel: () => void;
 }) => {
 	return (
 		<div className="relative flex h-full flex-col items-center justify-between rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-6 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
 			<div className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/8 via-transparent to-black/60" />
 			<div className="relative flex w-full flex-col items-center gap-4 text-center">
-				<span className="rounded-full bg-emerald-500/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-200">
+				<span className="rounded-full bg-emerald-500/15 px-3 py-1 font-semibold text-[10px] text-emerald-200 uppercase tracking-[0.3em]">
 					Incoming Call
 				</span>
 				<div className="flex flex-col items-center gap-2">
@@ -109,29 +178,54 @@ const CallHandoffCard = ({
 							className="size-full object-cover"
 						/>
 					</div>
-					<h3 className="text-lg font-semibold">Jordan, DealScale AI Rep</h3>
-					<p className="text-sm text-slate-300">Lead is ready to confirm. Accept and we&apos;ll sync the handoff to your CRM.</p>
+					<h3 className="font-semibold text-lg">Jordan, DealScale AI Rep</h3>
+					<p className="text-slate-300 text-sm">
+						Lead is ready to confirm. Accept and we&apos;ll sync the handoff to
+						your CRM.
+					</p>
 				</div>
 			</div>
 			<div className="relative flex w-full flex-col gap-3">
 				<button
 					type="button"
-					onClick={onDecision}
-					className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/40 transition hover:bg-emerald-400"
+					onClick={onAccept}
+					className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 font-semibold text-sm text-white shadow-emerald-500/40 shadow-lg transition hover:bg-emerald-400"
 				>
 					Accept Appointment
 				</button>
 				<button
 					type="button"
-					onClick={onDecision}
-					className="inline-flex w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-white/10"
+					onClick={onQueue}
+					className="inline-flex w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 font-medium text-sm text-white transition hover:bg-white/10"
 				>
 					Send to Follow-up Queue
+				</button>
+				<button
+					type="button"
+					onClick={onCancel}
+					className="inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-transparent px-5 py-2.5 font-medium text-sm text-white transition hover:bg-white/10"
+				>
+					Cancel
 				</button>
 			</div>
 		</div>
 	);
 };
+
+const PixelatedVoiceCloneCard = dynamic(
+	() =>
+		import("@/components/ui/pixelated-voice-clone-card").then((module) => ({
+			default: module.PixelatedVoiceCloneCard,
+		})),
+	{
+		ssr: false,
+		loading: () => (
+			<div className="mt-16 flex w-full justify-center">
+				<div className="h-[28rem] w-full max-w-5xl animate-pulse rounded-3xl bg-slate-900/20" />
+			</div>
+		),
+	},
+);
 
 function useInterval(callback: () => void, delay: number | null): void {
 	const savedCallback = useRef(callback);
@@ -202,6 +296,16 @@ export const CallDemoShowcase = () => {
 		openLeadCaptureModal("text");
 	}, [openLeadCaptureModal]);
 
+	const handleCancelTextDemo = useCallback(() => {
+		hasTriggeredTextLeadCaptureRef.current = false;
+		if (textLeadCaptureTimeoutRef.current) {
+			window.clearTimeout(textLeadCaptureTimeoutRef.current);
+			textLeadCaptureTimeoutRef.current = null;
+		}
+		setActivePreview("call");
+		setCallDemoMode("video");
+	}, []);
+
 	useEffect(() => {
 		if (activePreview !== "text") {
 			setActiveTextIndex(0);
@@ -262,12 +366,23 @@ export const CallDemoShowcase = () => {
 
 	const handleCallDemoComplete = useCallback(() => {
 		setCallDemoMode("handoff");
-	}, []);
-
-	const handleCallHandoffDecision = useCallback(() => {
-		setCallDemoMode("video");
 		openLeadCaptureModal("call");
 	}, [openLeadCaptureModal]);
+
+	const handleCallHandoffAccept = useCallback(() => {
+		setCallDemoMode("handoff");
+		openLeadCaptureModal("call");
+	}, [openLeadCaptureModal]);
+
+	const handleCallHandoffQueue = useCallback(() => {
+		setCallDemoMode("handoff");
+		openLeadCaptureModal("call");
+	}, [openLeadCaptureModal]);
+
+	const handleCallHandoffCancel = useCallback(() => {
+		setCallDemoMode("video");
+		closeLeadCaptureModal();
+	}, [closeLeadCaptureModal]);
 
 	const renderPreview = useCallback(() => {
 		if (activePreview === "text") {
@@ -295,44 +410,121 @@ export const CallDemoShowcase = () => {
 									<div className="flex-1 overflow-hidden">
 										<div
 											ref={textScrollContainerRef}
-											className="flex h-full flex-col gap-3 overflow-y-auto pr-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-slate-600/40"
+											className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-slate-600/40 flex h-full flex-col gap-3 overflow-y-auto pr-1"
 										>
 											<AnimatedList
 												delay={220}
 												className="flex w-full flex-col gap-3"
 											>
-												{TEXT_DEMO_MESSAGES.map((message, index) => (
-													<div
-														key={`${message.sender}-${index}`}
-														className={cn(
-															"flex w-full",
-															message.sender === "AI"
-																? "justify-start"
-																: "justify-end",
-														)}
-													>
+												{TEXT_DEMO_MESSAGES.map((message, index) => {
+													const hasAttachments = Boolean(
+														message.attachments?.length,
+													);
+													return (
 														<div
+															key={`${message.sender}-${index}`}
 															className={cn(
-																"max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500",
+																"flex w-full",
 																message.sender === "AI"
-																	? "bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100"
-																	: "bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200",
-																activeTextIndex === index && "ring-2",
-																activeTextIndex === index && "ring-sky-300/70",
-																activeTextIndex === index && "scale-[1.02]",
-																activeTextIndex === index &&
-																	"shadow-[0_12px_24px_rgba(56,189,248,0.25)]",
+																	? "justify-start"
+																	: "justify-end",
 															)}
 														>
-															<p className="whitespace-pre-line">{message.text}</p>
+															<div
+																className={cn(
+																	"rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500",
+																	message.sender === "AI"
+																		? "bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100"
+																		: "bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200",
+																	hasAttachments
+																		? "w-full max-w-[22.5rem] sm:max-w-[25rem]"
+																		: "max-w-[85%]",
+																	activeTextIndex === index &&
+																		"ring-2 ring-sky-300/70",
+																	activeTextIndex === index && "scale-[1.02]",
+																	activeTextIndex === index &&
+																		"shadow-[0_12px_24px_rgba(56,189,248,0.25)]",
+																)}
+															>
+																<p className="whitespace-pre-line">
+																	{message.text}
+																</p>
+																{hasAttachments ? (
+																	<Accordion
+																		type="single"
+																		collapsible
+																		className="mt-3 w-full overflow-hidden rounded-xl border border-slate-200/60 bg-white/65 text-left shadow-sm dark:border-white/10 dark:bg-black/35"
+																	>
+																		{message.attachments!.map((attachment) => (
+																			<AccordionItem
+																				key={`${message.sender}-${attachment.id}`}
+																				value={`${message.sender}-${attachment.id}`}
+																				className="border-0"
+																			>
+																				<AccordionTrigger className="w-full gap-3 rounded-xl px-4 py-3 text-left font-medium text-[13px] text-slate-700 hover:no-underline focus:outline-none focus:ring-0 dark:text-slate-200">
+																					<span className="flex size-8 items-center justify-center rounded-full bg-slate-900/10 text-base dark:bg-white/15">
+																						{attachment.type === "image" && "🖼️"}
+																						{attachment.type === "gif" && "🎞️"}
+																						{attachment.type === "video" && "▶️"}
+																						{attachment.type === "file" && "📄"}
+																					</span>
+																					<span className="flex w-full flex-1 flex-col items-start">
+																						<span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold text-slate-900 text-sm dark:text-white">
+																							{attachment.title}
+																						</span>
+																						<span className="font-normal text-slate-500 text-xs dark:text-slate-400">
+																							{attachment.meta}
+																						</span>
+																					</span>
+																				</AccordionTrigger>
+																				<AccordionContent className="w-full px-4 pb-4">
+																					<div
+																						className={cn(
+																							"relative w-full overflow-hidden rounded-xl border border-slate-200/60 bg-gradient-to-br p-4 text-slate-800 text-sm shadow-inner dark:border-white/10 dark:text-slate-100",
+																							attachment.previewGradient ??
+																								"from-slate-200/70 via-white/70 to-slate-300/60 dark:from-slate-800/70 dark:via-slate-900/70 dark:to-black/80",
+																						)}
+																					>
+																						<div className="flex items-start gap-3">
+																							<span className="text-xl">
+																								{attachment.type === "image" &&
+																									"🖼️"}
+																								{attachment.type === "gif" &&
+																									"🎬"}
+																								{attachment.type === "video" &&
+																									"🎥"}
+																								{attachment.type === "file" &&
+																									"📎"}
+																							</span>
+																							<div className="flex flex-1 flex-col">
+																								<span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold text-slate-900 text-sm dark:text-white">
+																									{attachment.title}
+																								</span>
+																								<span className="text-slate-700/80 text-xs dark:text-slate-300/80">
+																									{attachment.meta}
+																								</span>
+																								{attachment.description ? (
+																									<span className="mt-2 text-slate-700 text-xs leading-relaxed dark:text-slate-200">
+																										{attachment.description}
+																									</span>
+																								) : null}
+																							</div>
+																						</div>
+																					</div>
+																				</AccordionContent>
+																			</AccordionItem>
+																		))}
+																	</Accordion>
+																) : null}
+															</div>
 														</div>
-													</div>
-												))}
+													);
+												})}
 											</AnimatedList>
 										</div>
 									</div>
 									<div className="mt-3 text-center font-semibold text-[10px] text-slate-500 uppercase tracking-[0.3em] dark:text-slate-300">
-										<p className="text-center text-[10px] font-medium uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
+										<p className="text-center font-medium text-[10px] text-slate-500 uppercase tracking-[0.3em] dark:text-slate-300">
 											Live Text Outreach
 										</p>
 									</div>
@@ -348,15 +540,22 @@ export const CallDemoShowcase = () => {
 									<button
 										type="button"
 										onClick={handleEndTextDemo}
-										className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-slate-900/10 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-900/20 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
+										className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-slate-900/10 px-5 py-2 font-medium text-slate-900 text-sm transition hover:bg-slate-900/20 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
 									>
 										Accept Appointment
 									</button>
 									<button
 										type="button"
-										className="mt-2 inline-flex items-center justify-center text-xs font-medium text-slate-500 underline-offset-4 transition hover:text-slate-700 hover:underline dark:text-slate-300 dark:hover:text-white"
+										className="mt-2 inline-flex items-center justify-center font-medium text-slate-500 text-xs underline-offset-4 transition hover:text-slate-700 hover:underline dark:text-slate-300 dark:hover:text-white"
 									>
 										Accept Group Chat / Transfer
+									</button>
+									<button
+										type="button"
+										onClick={handleCancelTextDemo}
+										className="mt-1 inline-flex items-center justify-center font-medium text-[11px] text-slate-400 underline-offset-4 transition hover:text-slate-600 hover:underline dark:text-slate-400/80 dark:hover:text-white"
+									>
+										Cancel, return to Shorts
 									</button>
 								</div>
 							</>
@@ -395,7 +594,7 @@ export const CallDemoShowcase = () => {
 											"bg-slate-950/55 backdrop-blur",
 										)}
 									>
-										DealScale Shorts Reel
+										Shorts
 									</div>
 								</div>
 							</>
@@ -425,7 +624,11 @@ export const CallDemoShowcase = () => {
 										Handoff Ready
 									</div>
 								</div>
-								<CallHandoffCard onDecision={handleCallHandoffDecision} />
+								<CallHandoffCard
+									onAccept={handleCallHandoffAccept}
+									onQueue={handleCallHandoffQueue}
+									onCancel={handleCallHandoffCancel}
+								/>
 							</>
 						</Iphone>
 					</PhoneShell>
@@ -500,7 +703,7 @@ export const CallDemoShowcase = () => {
 										"bg-slate-950/55 backdrop-blur",
 									)}
 								>
-									DealScale Shorts Reel
+									Shorts
 								</div>
 							</div>
 						</>
@@ -514,7 +717,10 @@ export const CallDemoShowcase = () => {
 		callDemoKey,
 		callDemoMode,
 		handleCallDemoComplete,
-		handleCallHandoffDecision,
+		handleCallHandoffAccept,
+		handleCallHandoffCancel,
+		handleCallHandoffQueue,
+		handleCancelTextDemo,
 		handleEndTextDemo,
 	]);
 
@@ -532,14 +738,6 @@ export const CallDemoShowcase = () => {
 			description: "Sign Up To Become A Beta Tester or Pilot Member",
 		};
 	}, [leadCaptureOrigin]);
-
-	const PixelatedVoiceCloneCard = dynamic(
-		() =>
-			import("@/components/ui/pixelated-voice-clone-card").then((module) => ({
-				default: module.PixelatedVoiceCloneCard,
-			})),
-		{ ssr: false, loading: () => <div className="mt-16 flex w-full justify-center"><div className="h-[28rem] w-full max-w-5xl animate-pulse rounded-3xl bg-slate-900/20" /></div> },
-	);
 
 	const cards = useMemo(
 		() => [
@@ -588,7 +786,7 @@ export const CallDemoShowcase = () => {
 									timing, and goals, then let DealScale handle the outreach and
 									sync every interaction directly to your CRM.
 								</p>
-								<div className="mt-4 flex flex-col items-start gap-4 rounded-xl bg-slate-900/5 p-4 text-slate-700 text-sm dark:bg-black/30 dark:text-white/70 sm:flex-row sm:items-center">
+								<div className="mt-4 flex flex-col items-start gap-4 rounded-xl bg-slate-900/5 p-4 text-slate-700 text-sm sm:flex-row sm:items-center dark:bg-black/30 dark:text-white/70">
 									<Image
 										src="/avatars/Customer.jpg"
 										alt="Customer avatar"
@@ -611,7 +809,7 @@ export const CallDemoShowcase = () => {
 										/>
 										<TypingAnimation
 											words={[...SESSION_MONITOR_STATUS]}
-											className="text-slate-500 text-[11px] uppercase tracking-[0.18em] dark:text-white/50 sm:text-xs"
+											className="text-[11px] text-slate-500 uppercase tracking-[0.18em] sm:text-xs dark:text-white/50"
 											typeSpeed={42}
 											deleteSpeed={28}
 											pauseDelay={2000}
@@ -623,27 +821,38 @@ export const CallDemoShowcase = () => {
 										/>
 									</div>
 								</div>
-								<div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-									<button
-										type="button"
-										onClick={handleRestartCallDemo}
-										className="inline-flex items-center justify-center rounded-full bg-white/90 px-5 py-2 font-medium text-slate-900 text-sm transition hover:bg-white"
-										aria-pressed={activePreview === "call"}
+								<div className="mt-6 flex flex-col items-center gap-4">
+									<div className="flex flex-wrap justify-center gap-3">
+										<button
+											type="button"
+											onClick={handleRestartCallDemo}
+											className={cn(
+												"inline-flex items-center justify-center rounded-full border border-transparent bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-2 font-semibold text-sm text-white shadow-lg shadow-sky-500/40 transition hover:from-sky-400 hover:to-indigo-400",
+												activePreview === "call" && callDemoMode !== "video"
+													? "brightness-105"
+													: "opacity-90 hover:opacity-100",
+											)}
+										>
+											Start a Call Demo
+										</button>
+										<button
+											type="button"
+											onClick={() => handleSwitchPreview("text")}
+											className={cn(
+												"rounded-full border border-slate-900/25 px-5 py-2 font-semibold text-slate-900 text-sm transition hover:bg-slate-900/5 dark:border-white/20 dark:text-white dark:hover:bg-white/10",
+												activePreview === "text" &&
+													"border-slate-900/60 bg-slate-900/10 dark:border-white/30",
+											)}
+										>
+											Try a Text Demo
+										</button>
+									</div>
+									<Link
+										className="font-semibold text-slate-400 text-xs uppercase tracking-[0.3em] transition hover:text-slate-600 dark:text-slate-500 dark:hover:text-white"
+										href="/features"
 									>
-										Start a Call Demo
-									</button>
-									<button
-										type="button"
-										onClick={() => handleSwitchPreview("text")}
-										className={cn(
-											"inline-flex items-center justify-center rounded-full border border-slate-900/20 bg-transparent px-5 py-2 font-medium text-slate-900 text-sm transition hover:border-slate-900/40 hover:bg-slate-900/5 dark:border-white/40 dark:text-white dark:hover:border-white dark:hover:bg-white/10",
-											activePreview === "text" &&
-												"border-slate-900 bg-slate-900/10 text-slate-900 dark:border-white dark:bg-white/20 dark:text-white",
-										)}
-										aria-pressed={activePreview === "text"}
-									>
-										Try a Text Demo
-									</button>
+										View all features
+									</Link>
 								</div>
 							</div>
 						</div>

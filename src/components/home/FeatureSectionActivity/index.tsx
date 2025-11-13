@@ -6,18 +6,18 @@ import ambientFlow from "@/assets/animations/processSteps.json";
 import { AuroraText } from "@/components/magicui/aurora-text";
 import ClientLottie from "@/components/ui/ClientLottie";
 import { Badge } from "@/components/ui/badge";
+import { CardStack } from "@/components/ui/card-stack";
+import { GlareCard } from "@/components/ui/glare-card";
 import type { ActivityEvent } from "@/data/activity/activityStream";
 import { activityStream } from "@/data/activity/activityStream";
 import { cn } from "@/lib/utils";
-import { CardStack } from "@/components/ui/card-stack";
-import { GlareCard } from "@/components/ui/glare-card";
 
-import { ActivityRoller, usePrefersReducedMotion } from "./ActivityRoller";
 import {
 	LIVE_COPY,
 	PERSONA_GOAL,
 	PERSONA_LABEL,
 } from "@/components/home/heros/live-dynamic-hero-demo/_config";
+import { ActivityRoller, usePrefersReducedMotion } from "./ActivityRoller";
 
 const LEFT_COLUMN_POINTS = [
 	"Sync sourcing, underwriting, and investor CRM workflows into a single live feed.",
@@ -110,9 +110,9 @@ export default function FeatureSectionActivity(): JSX.Element {
 		: FALLBACK_SUBHEAD;
 	const supportCopy = LIVE_COPY?.subtitle?.length
 		? LIVE_COPY.subtitle
-		: (LIVE_COPY?.values?.socialProof?.length
-				? `${LIVE_COPY.values.socialProof} ${PERSONA_GOAL ?? ""}`.trim()
-				: FALLBACK_SUPPORT);
+		: LIVE_COPY?.values?.socialProof?.length
+			? `${LIVE_COPY.values.socialProof} ${PERSONA_GOAL ?? ""}`.trim()
+			: FALLBACK_SUPPORT;
 
 	return (
 		<section className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background/80 to-background">
@@ -230,6 +230,7 @@ export default function FeatureSectionActivity(): JSX.Element {
 											items={items}
 											offset={CARD_STACK_OFFSET}
 											scaleFactor={CARD_STACK_SCALE_FACTOR}
+											className="w-[min(18rem,90vw)] md:w-[20rem]"
 										/>
 									</div>
 								</div>

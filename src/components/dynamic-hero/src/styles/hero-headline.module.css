@@ -93,10 +93,7 @@
 	}
 
 	.tagPersona {
-		color: var(
-			--hero-tag-persona-text-dark,
-			hsl(var(--primary-foreground))
-		);
+		color: var(--hero-tag-persona-text-dark, hsl(var(--primary-foreground)));
 	}
 }
 
@@ -135,13 +132,7 @@
 }
 
 .tagPersona {
-	background: var(
-		--hero-tag-persona-bg,
-		hsl(var(--primary) / 0.16)
-	);
+	background: var(--hero-tag-persona-bg, hsl(var(--primary) / 0.16));
 	color: var(--hero-tag-persona-text, hsl(var(--primary) / 0.9));
-	border-color: var(
-		--hero-tag-persona-border,
-		hsl(var(--primary) / 0.5)
-	);
+	border-color: var(--hero-tag-persona-border, hsl(var(--primary) / 0.5));
 }

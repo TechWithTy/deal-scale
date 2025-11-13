@@ -47,4 +47,3 @@ export const AI_OUTREACH_STUDIO_SEO = {
 	anchor: AI_OUTREACH_STUDIO_ANCHOR,
 	features: AI_OUTREACH_STUDIO_FEATURES,
 } as const;
-

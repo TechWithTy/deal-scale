@@ -1,17 +1,18 @@
 "use client";
 
 import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
 import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
 import { abTestExample } from "@/data/products/copy";
 import type { ProductType } from "@/types/products";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import Breadcrumbs from "./Breadcrumbs";
 import ImageGallery from "./ImageGallery";
 import ProductInfo from "./ProductInfo";
 import ProductTabs from "./ProductTabs";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -31,6 +32,7 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 	const [activeTab, setActiveTab] = useState("details");
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
 	const [checkoutPrice, setCheckoutPrice] = useState<number>(0);
+	useWaitCursor(checkoutLoading);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -52,6 +54,7 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 		metadata: object;
 	}) => {
 		setCheckoutLoading(true);
+		const stripeToast = startStripeToast("Contacting Stripe…");
 		try {
 			const response = await fetch("/api/stripe/intent", {
 				method: "POST",
@@ -78,10 +81,13 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 
 			setCheckoutPrice(checkoutDetails.price);
 			setClientSecret(clientSecret);
+			stripeToast.success(
+				"Checkout ready. Review the Stripe modal to finish your purchase.",
+			);
 		} catch (error: unknown) {
 			let errorMessage = "Payment failed. Please try again.";
 			if (error instanceof Error) errorMessage = error.message;
-			toast.error(errorMessage);
+			stripeToast.error(errorMessage);
 			console.error("Checkout initiation failed:", error);
 		} finally {
 			setCheckoutLoading(false);
@@ -114,7 +120,7 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 
 	return (
 		<ProductSelectionProvider>
-			<div className="bg-background">
+			<div className="relative bg-background">
 				<div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
 					<Breadcrumbs items={breadcrumbItems} />
 

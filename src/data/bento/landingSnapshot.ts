@@ -51,7 +51,7 @@ export const landingBentoFeatureSeeds: BentoFeatureSeed[] = [
 		size: "md",
 		summary: "Build your perfect list in seconds -- not spreadsheets.",
 		description:
-			"DealScale's AI Audience Generator finds your next deal before your competitors do. Search 140M+ on-market and off-market properties, layer motivation signals, and let AI predict which owners are ready to sell next. No filters, no formulas -- just precision targeting powered by intent. Emotional hook: \"Go from guessing who to call -- to knowing who is ready.\"",
+			'DealScale\'s AI Audience Generator finds your next deal before your competitors do. Search 140M+ on-market and lookalike off-market properties, layer motivation signals, and let AI predict which owners are ready to sell next with similarity-based features. No filters, no formulas -- just precision targeting powered by intent. Emotional hook: "Go from guessing who to call -- to knowing who is ready."',
 		ctaLabel: "Generate My Audience",
 		ctaUrl: "/contact",
 	},
@@ -60,7 +60,7 @@ export const landingBentoFeatureSeeds: BentoFeatureSeed[] = [
 		size: "lg",
 		summary: "🎙️ Your Voice. Your Brand. Every Call.",
 		description:
-			"Clone your voice once. Close deals forever. Your AI speaks exactly like you -- tone, pacing, and personality included. It builds instant trust with sellers who feel like they are talking to you, not a robot. From the first \"hello\" to the final appointment, every conversation sounds authentic, confident, and on-brand. Emotional hook: \"Imagine scaling yourself -- without losing yourself.\"",
+			'Clone your voice once. Close deals forever. Your AI speaks exactly like you -- tone, pacing, and personality included. It builds instant trust with sellers who feel like they are talking to you, not a robot. From the first "hello" to the final appointment, every conversation sounds authentic, confident, and on-brand. Emotional hook: "Imagine scaling yourself -- without losing yourself."',
 		ctaLabel: "Clone My Voice",
 		ctaUrl: "/contact",
 	},

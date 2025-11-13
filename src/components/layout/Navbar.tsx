@@ -29,9 +29,11 @@ import { ThemeToggle } from "../theme/theme-toggle";
 const NavLink = ({ item, onClick, className = "" }) => {
 	const pathname = usePathname();
 	const isActive = pathname === item.href;
+	const lowerTitle = item.title.toLowerCase();
 	const isHighlighted =
-		item.title.toLowerCase().includes("beta") ||
-		item.title.toLowerCase().includes("pilot");
+		lowerTitle.includes("beta") ||
+		lowerTitle.includes("pilot") ||
+		lowerTitle.includes("contact");
 
 	return (
 		<Link

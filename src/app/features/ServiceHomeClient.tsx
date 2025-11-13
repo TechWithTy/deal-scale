@@ -3,12 +3,13 @@ import BentoPage from "@/components/bento/page";
 import { CTASection } from "@/components/common/CTASection";
 import Header from "@/components/common/Header";
 import { TechStackSection } from "@/components/common/TechStackSection";
+import { FeatureTimelineTable } from "@/components/features/FeatureTimelineTable";
+import UpcomingFeatures from "@/components/home/FeatureVote";
 import ServicesSection from "@/components/home/Services";
 import Hero from "@/components/home/heros/Hero";
 import HeroSessionMonitor from "@/components/home/heros/HeroSessionMonitor";
 import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
 import { Separator } from "@/components/ui/separator";
-import { TimelineDealScales } from "@/components/ui/timeline";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useDataModule } from "@/stores/useDataModuleStore";
 import {
@@ -56,11 +57,11 @@ export default function ServiceHomeClient() {
 	}));
 	const {
 		status: timelineStatus,
-		timeline,
+		milestones,
 		error: timelineError,
 	} = useDataModule("features/feature_timeline", ({ status, data, error }) => ({
 		status,
-		timeline: data?.featureTimeline ?? [],
+		milestones: data?.featureTimeline ?? [],
 		error,
 	}));
 
@@ -84,8 +85,8 @@ export default function ServiceHomeClient() {
 		[bentoStatus, bentoFeatures],
 	);
 	const resolvedTimeline = useMemo(
-		() => (timelineStatus === "ready" ? timeline : []),
-		[timelineStatus, timeline],
+		() => (timelineStatus === "ready" ? milestones : []),
+		[timelineStatus, milestones],
 	);
 
 	const handleIndustryChange = (value: ServiceCategoryValue) => {
@@ -123,6 +124,12 @@ export default function ServiceHomeClient() {
 				</div>
 			</section>
 			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
+			<section className="px-6 md:py-20 lg:px-8">
+				<div className="mx-auto max-w-7xl">
+					<UpcomingFeatures />
+				</div>
+			</section>
+			<Separator className="mx-auto my-16 max-w-7xl border-white/10" />
 			{integrationsStatus === "ready" ? (
 				<TechStackSection
 					title="Integrations"
@@ -156,10 +163,10 @@ export default function ServiceHomeClient() {
 					subtitle="Here's a timeline of our journey."
 				/>
 				{timelineStatus === "ready" && resolvedTimeline.length > 0 ? (
-					<TimelineDealScales data={resolvedTimeline} />
+					<FeatureTimelineTable rows={resolvedTimeline} />
 				) : (
 					<SectionFallback
-						label="feature timeline"
+						label="feature roadmap"
 						error={timelineStatus === "error" ? timelineError : undefined}
 					/>
 				)}
@@ -167,7 +174,7 @@ export default function ServiceHomeClient() {
 			</div>
 			<CTASection
 				title="Ready to Fill Your Calendar on Autopilot?"
-				description="Deal Scale is your 24/7 AI team for automated lead generation and nurturing. Let us handle the repetitive follow-ups so you can focus on high-value conversations and closing."
+				description="Deal Scale is your 24/7 AI team for automated lookalike audience expansion inspired by How to Win Friends and Influence People and nurturing. Let us handle the repetitive follow-ups so you can focus on high-value conversations and closing."
 				buttonText="Automate My Outreach"
 				href="/get-started"
 			/>

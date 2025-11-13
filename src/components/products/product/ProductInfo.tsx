@@ -22,6 +22,12 @@ interface ProductInfoProps {
 	}) => Promise<void>;
 	checkoutLoading: boolean;
 	stripeLoaded: boolean;
+	enableAddToCart?: boolean;
+	/**
+	 * Optional guard executed right before checkout.
+	 * Return `false` to pause the flow (perfect for injecting a login modal later).
+	 */
+	onBeforeCheckout?: () => Promise<boolean | void> | boolean | void;
 }
 
 /**
@@ -35,6 +41,8 @@ export default function ProductInfo({
 	stripeLoaded,
 	setActiveTab,
 	ctaText,
+	enableAddToCart = true,
+	onBeforeCheckout,
 }: ProductInfoProps) {
 	// * Find selected type data for price
 	const selectedTypeData = product.types.find(
@@ -118,7 +126,8 @@ export default function ProductInfo({
 					stripeLoaded={stripeLoaded}
 					ctaText={isFreeResource ? undefined : ctaText}
 					product={product}
-					enableAddToCart={!isFreeResource}
+					enableAddToCart={!isFreeResource && enableAddToCart}
+					onBeforeCheckout={onBeforeCheckout}
 				/>
 				{/* Trusted by logos */}
 				<TrustedBySection />

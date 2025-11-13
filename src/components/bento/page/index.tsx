@@ -1,7 +1,10 @@
 "use client";
 
 import Header from "@/components/common/Header";
-import { BentoCard as MagicBentoCard, BentoGrid as MagicBentoGrid } from "@/components/ui/bento-grid";
+import {
+	BentoCard as MagicBentoCard,
+	BentoGrid as MagicBentoGrid,
+} from "@/components/ui/bento-grid";
 import type { BentoFeature } from "@/types/bento/features";
 import type React from "react";
 
@@ -25,14 +28,14 @@ const BentoPage: React.FC<BentoPageProps> = ({ title, subtitle, features }) => {
 							Icon={() => <>{feature.icon}</>}
 							href="#"
 							cta="Learn more"
-							className={`relative overflow-hidden bg-background-dark/80 text-foreground shadow-[0_16px_45px_-30px_rgba(14,165,233,0.35)] dark:bg-background-dark/90 ${feature.className ?? ""}`}
+							className={`group relative overflow-hidden bg-background-dark/80 text-foreground shadow-[0_16px_45px_-30px_rgba(14,165,233,0.35)] transition-all duration-300 dark:bg-background-dark/90 ${feature.className ?? ""}`}
 							background={
-								<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+								<div className="pointer-events-none absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover:blur-sm group-hover:opacity-70">
 									{feature.background}
 								</div>
 							}
 						>
-							<div className="relative z-10 flex flex-col gap-4 rounded-2xl bg-background/95 p-5 text-left text-foreground shadow-[0_15px_45px_-30px_rgba(14,165,233,0.35)] ring-1 ring-border/40 dark:bg-background/85 dark:text-foreground">
+							<div className="relative z-10 flex flex-col gap-4 rounded-2xl bg-background/95 p-5 text-left text-foreground shadow-[0_15px_45px_-30px_rgba(14,165,233,0.35)] ring-1 ring-border/40 transition-all duration-300 ease-out dark:bg-background/85 dark:text-foreground group-hover:bg-background group-hover:ring-accent/50">
 								{feature.content}
 							</div>
 						</MagicBentoCard>

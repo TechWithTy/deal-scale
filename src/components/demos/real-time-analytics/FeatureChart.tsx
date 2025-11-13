@@ -1,16 +1,9 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import {
-	CartesianGrid,
-	Line,
-	LineChart,
-	XAxis,
-	YAxis,
-} from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import type { ChartConfig } from "@/components/ui/chart";
-import type { RealTimeFeature } from "./feature-config";
 import {
 	ChartContainer,
 	ChartLegend,
@@ -18,6 +11,7 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
+import type { RealTimeFeature } from "./feature-config";
 
 type FeatureChartProps = {
 	chart: NonNullable<RealTimeFeature["chart"]>;
@@ -151,4 +145,3 @@ function FeatureChartComponent({ chart }: FeatureChartProps): JSX.Element {
 export const FeatureChart = memo(FeatureChartComponent);
 
 export default FeatureChart;
-

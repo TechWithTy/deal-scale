@@ -12,14 +12,13 @@ import {
 } from "@/components/ui/carousel";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useHasMounted } from "@/hooks/useHasMounted";
+import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useMemo, useState } from "react";
 import Header from "../common/Header";
-import { SectionHeading } from "../ui/section-heading";
 type BlogPreviewProps = {
 	posts: BeehiivPost[];
 	title?: string;
@@ -38,6 +37,48 @@ export function BlogPreview({
 	const [activeDot, setActiveDot] = useState(0);
 	const [visibleItemsCount, setVisibleItemsCount] = useState(3);
 	const hasMounted = useHasMounted();
+	const safePosts = Array.isArray(posts) ? posts : [];
+
+	const { totalSlides, indicatorIndices, shouldUseCarousel, displayActiveDot } =
+		useMemo(() => {
+			const normalizedPosts = Array.isArray(posts) ? posts : [];
+			const calculatedTotal = Math.max(
+				1,
+				normalizedPosts.length - (visibleItemsCount - 1),
+			);
+			const clampedActive = Math.min(
+				Math.max(activeDot, 0),
+				normalizedPosts.length === 0 ? 0 : calculatedTotal - 1,
+			);
+			const useCarousel = isMobile || normalizedPosts.length > 3;
+
+			const indices = (() => {
+				if (calculatedTotal <= 3) {
+					return Array.from({ length: calculatedTotal }, (_, index) => index);
+				}
+
+				if (clampedActive <= 0) {
+					return [0, 1, 2];
+				}
+
+				if (clampedActive >= calculatedTotal - 1) {
+					return [
+						Math.max(calculatedTotal - 3, 0),
+						Math.max(calculatedTotal - 2, 0),
+						calculatedTotal - 1,
+					];
+				}
+
+				return [clampedActive - 1, clampedActive, clampedActive + 1];
+			})();
+
+			return {
+				totalSlides: calculatedTotal,
+				indicatorIndices: indices,
+				shouldUseCarousel: useCarousel,
+				displayActiveDot: clampedActive,
+			};
+		}, [posts, visibleItemsCount, activeDot, isMobile]);
 
 	useEffect(() => {
 		if (!api) return;
@@ -79,10 +120,7 @@ export function BlogPreview({
 
 	if (!hasMounted) return null;
 
-	if (!posts || posts.length === 0) return null;
-
-	const totalSlides = Math.max(1, posts.length - (visibleItemsCount - 1));
-	const shouldUseCarousel = isMobile || posts.length > 3;
+	if (safePosts.length === 0) return null;
 
 	return (
 		<section id="blog" className={`px-4 py-8 sm:px-6 lg:px-8 ${className}`}>
@@ -114,7 +152,7 @@ export function BlogPreview({
 							setApi={setApi}
 						>
 							<CarouselContent className="-ml-2 md:-ml-4">
-								{posts.map((post, idx) => (
+								{safePosts.map((post, idx) => (
 									<CarouselItem
 										key={typeof post.id === "string" ? post.id : idx}
 										className="pl-2 sm:basis-[85%] md:basis-1/2 md:pl-4 lg:basis-1/3"
@@ -139,7 +177,7 @@ export function BlogPreview({
 										size="default"
 										className="h-8 w-8 border border-primary/50 bg-white/10 text-primary hover:bg-primary/10"
 										onClick={() => api?.scrollPrev()}
-										disabled={activeDot === 0}
+										disabled={displayActiveDot === 0}
 										aria-label="Previous post"
 									>
 										<ArrowLeft className="h-4 w-4 min-w-[1rem] text-primary" />
@@ -154,7 +192,7 @@ export function BlogPreview({
 										size="default"
 										className="h-8 w-8 border border-primary/50 bg-white/10 text-primary hover:bg-primary/10"
 										onClick={() => api?.scrollNext()}
-										disabled={activeDot === totalSlides - 1}
+										disabled={displayActiveDot === totalSlides - 1}
 										aria-label="Next post"
 									>
 										<ArrowRight className="h-4 w-4 min-w-[1rem] text-primary" />
@@ -165,7 +203,7 @@ export function BlogPreview({
 					</div>
 				) : (
 					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-						{posts.slice(0, 3).map((post, idx) => (
+						{safePosts.slice(0, 3).map((post, idx) => (
 							<div
 								key={typeof post.id === "string" ? post.id : idx}
 								className="flex w-full"
@@ -180,15 +218,16 @@ export function BlogPreview({
 
 				{shouldUseCarousel && (
 					<div className="mt-4 flex justify-center space-x-1.5 md:mt-6 md:space-x-2">
-						{Array.from({ length: totalSlides }).map((_, index) => (
+						{indicatorIndices.map((index) => (
 							<button
-								key={uuidv4()}
+								key={index}
 								type="button"
-								className={`h-2 w-2 rounded-full transition-all duration-300 md:h-3 md:w-3 ${
-									activeDot === index
+								className={cn(
+									"h-2 w-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 md:h-3 md:w-3",
+									displayActiveDot === index
 										? "w-4 bg-primary md:w-6"
-										: "bg-white/20 hover:bg-white/40"
-								}`}
+										: "bg-neutral-300 hover:bg-neutral-400/80 dark:bg-white/20 dark:hover:bg-white/40",
+								)}
 								onClick={() => api?.scrollTo(index)}
 								aria-label={`Go to slide ${index + 1}`}
 							/>

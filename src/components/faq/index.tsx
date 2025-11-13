@@ -6,6 +6,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 import type { FAQProps } from "@/types/faq";
 import { motion } from "framer-motion";
 import type React from "react";
@@ -31,22 +32,58 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 				<Accordion
 					type="single"
 					collapsible
-					className="divide-y divide-border/10 rounded-lg border border-border bg-card/80 backdrop-blur-sm"
+					defaultValue={faqItems.length > 0 ? "item-0" : undefined}
+					className="flex flex-col gap-3"
 				>
-					{faqItems.map((item, index) => (
-						<AccordionItem
-							value={`item-${index}`}
-							key={item.answer}
-							className="border-border/10"
-						>
-							<AccordionTrigger className="px-6 py-4 text-left text-foreground transition-colors hover:text-primary focus:ring-2 focus:ring-focus dark:text-foreground">
-								{item.question}
-							</AccordionTrigger>
-							<AccordionContent className="px-6 pb-4 text-muted-foreground dark:text-muted-foreground">
-								{item.answer}
-							</AccordionContent>
-						</AccordionItem>
-					))}
+					{faqItems.map((item, index) => {
+						const isHero = index === 0;
+						return (
+							<AccordionItem
+								value={`item-${index}`}
+								key={`${item.question}-${index}`}
+								data-testid={isHero ? "homepage-faq-hero" : undefined}
+								className={cn(
+									"overflow-hidden border border-transparent transition duration-300 ease-out",
+									isHero
+										? "rounded-3xl border-cyan-400/60 bg-gradient-to-br from-cyan-500/25 via-blue-600/20 to-slate-950 shadow-cyan-500/30 shadow-xl"
+										: "rounded-xl border-border/40 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg",
+								)}
+							>
+								<AccordionTrigger
+									className={cn(
+										"px-6 py-4 text-left text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus dark:text-foreground",
+										isHero
+											? "flex flex-col gap-2 text-cyan-100 sm:flex-row sm:items-center sm:justify-between"
+											: "hover:text-primary",
+									)}
+								>
+									{isHero ? (
+										<>
+											<span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-cyan-200/90">
+												<span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400/70 text-sm font-bold text-slate-950">
+													★
+												</span>
+												Featured Insight · Investors
+											</span>
+											<span className="text-base sm:text-lg">
+												{item.question}
+											</span>
+										</>
+									) : (
+										item.question
+									)}
+								</AccordionTrigger>
+								<AccordionContent
+									className={cn(
+										"px-6 pb-4 text-muted-foreground dark:text-muted-foreground",
+										isHero ? "text-cyan-50/95 sm:text-base" : undefined,
+									)}
+								>
+									{item.answer}
+								</AccordionContent>
+							</AccordionItem>
+						);
+					})}
 				</Accordion>
 
 				<div className="mt-16 text-center">

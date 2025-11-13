@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildManifestoSchema creates a CreativeWorkSeries with list items and anchors: manifesto-first-list-item 1`] = `
+{
+  "@type": "ListItem",
+  "description": "DealScale was created to give real estate operators the freedom that comes from automated deal flow instead of manual grind.",
+  "name": "1️⃣ Origin Story",
+  "position": 1,
+  "url": "https://dealscale.io/about#origin-story",
+}
+`;
+
+exports[`buildManifestoSchema creates a CreativeWorkSeries with list items and anchors: manifesto-first-part 1`] = `
+{
+  "@id": "https://dealscale.io/about#manifesto-origin-story",
+  "@type": "CreativeWork",
+  "description": "DealScale was created to give real estate operators the freedom that comes from automated deal flow instead of manual grind.",
+  "headline": "Automation-first freedom for real estate pros",
+  "name": "1️⃣ Origin Story",
+  "position": 1,
+  "url": "https://dealscale.io/about#origin-story",
+}
+`;

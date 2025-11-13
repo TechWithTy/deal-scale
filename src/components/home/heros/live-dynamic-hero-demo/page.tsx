@@ -1,15 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
 	HeroAurora,
 	HeroHeadline,
 	HeroVideoPreview,
+	type HeroVideoPreviewHandle,
 } from "@external/dynamic-hero";
 import { useInView } from "motion/react";
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
+import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
+import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
 import { Separator } from "@/components/ui/separator";
@@ -26,8 +29,8 @@ import {
 	LIVE_SECONDARY_CTA,
 	LIVE_SOCIAL_PROOF,
 	LIVE_VIDEO,
-	PERSONA_LABEL,
 	PERSONA_GOAL,
+	PERSONA_LABEL,
 } from "./_config";
 
 const SCROLL_SECTIONS: ScrollProgressSection[] = [
@@ -37,27 +40,32 @@ const SCROLL_SECTIONS: ScrollProgressSection[] = [
 ];
 
 export default function LiveDynamicHeroDemoPage(): JSX.Element {
-	const handleScrollToDetails = () => {
-		const section = document.getElementById("live-hero-details");
-		if (section) {
-			section.scrollIntoView({ behavior: "smooth", block: "start" });
-		}
-	};
-
 	const sections = useMemo(() => SCROLL_SECTIONS, []);
 	const [activeSection, setActiveSection] = useState(sections[0]?.id ?? "");
 	const heroRef = useRef<HTMLDivElement | null>(null);
+	const observedSectionsRef = useRef<HTMLElement[]>([]);
+	const videoSectionRef = useRef<HTMLDivElement | null>(null);
+	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
 	const isHeroInView = useInView(heroRef, {
 		amount: 0.35,
 		margin: "0px 0px -20% 0px",
 	});
 	const [isHeroAnimating, setIsHeroAnimating] = useState(true);
+	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
+		useHeroTrialCheckout();
 
 	useEffect(() => {
-		setIsHeroAnimating(isHeroInView ?? true);
+		setIsHeroAnimating((previous) => {
+			const next = isHeroInView ?? true;
+			return previous === next ? previous : next;
+		});
 	}, [isHeroInView]);
 
 	useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		}
+
 		const observer = new IntersectionObserver(
 			(entries) => {
 				const visible = entries
@@ -65,21 +73,49 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 					.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 				const current = visible[0];
 				if (current?.target?.id) {
-					setActiveSection(current.target.id);
+					setActiveSection((previous) =>
+						previous === current.target.id ? previous : current.target.id,
+					);
 				}
 			},
 			{ threshold: 0.42 },
 		);
 
-		for (const section of sections) {
-			const element = document.getElementById(section.id);
-			if (element) {
-				observer.observe(element);
-			}
+		const elements = sections
+			.map(({ id }) => document.getElementById(id))
+			.filter((element): element is HTMLElement => element !== null);
+
+		observedSectionsRef.current = elements;
+
+		for (const element of elements) {
+			observer.observe(element);
 		}
 
-		return () => observer.disconnect();
+		return () => {
+			observer.disconnect();
+			observedSectionsRef.current = [];
+		};
 	}, [sections]);
+
+	const handlePreviewDemo = useCallback(() => {
+		const node = videoSectionRef.current;
+		if (node && typeof node.scrollIntoView === "function") {
+			node.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+
+		const playVideo = () => {
+			videoPreviewRef.current?.play();
+		};
+
+		if (
+			typeof window !== "undefined" &&
+			typeof window.requestAnimationFrame === "function"
+		) {
+			window.requestAnimationFrame(playVideo);
+		} else {
+			playVideo();
+		}
+	}, []);
 
 	return (
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
@@ -145,11 +181,17 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 							primary={LIVE_PRIMARY_CTA}
 							secondary={LIVE_SECONDARY_CTA}
 							microcopy={LIVE_MICROCOPY}
-							onPrimaryClick={handleScrollToDetails}
-							onSecondaryClick={handleScrollToDetails}
+							onPrimaryClick={startTrial}
+							onSecondaryClick={handlePreviewDemo}
+							primaryLoading={isTrialLoading}
 						/>
-						<div className="w-full max-w-5xl" data-beam-collider="true">
+						<div
+							ref={videoSectionRef}
+							className="w-full max-w-5xl"
+							data-beam-collider="true"
+						>
 							<HeroVideoPreview
+								ref={videoPreviewRef}
 								video={LIVE_VIDEO}
 								thumbnailAlt="Live dynamic hero video preview"
 							/>
@@ -207,6 +249,17 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 					</div>
 				</div>
 			</div>
+			{checkoutState ? (
+				<PricingCheckoutDialog
+					clientSecret={checkoutState.clientSecret}
+					plan={checkoutState.plan}
+					planType={checkoutState.planType}
+					mode={checkoutState.mode}
+					context={checkoutState.context}
+					postTrialAmount={checkoutState.postTrialAmount}
+					onClose={closeCheckout}
+				/>
+			) : null}
 		</div>
 	);
 }

@@ -54,12 +54,15 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 	[
 		"/cookies",
 		{
-			title: "Cookies Policy | Deal Scale",
-			description:
-				"Learn how Deal Scale uses cookies to enhance your experience and protect your privacy.",
+			title: "Cookie Policy | Deal Scale",
+			description: "How we use cookies and similar technologies.",
 			canonical: "https://dealscale.io/cookies",
 			image: DEFAULT_SEO.image,
-			keywords: DEFAULT_SEO.keywords,
+			keywords: [
+				"Cookie Policy",
+				"Deal Scale Legal Document",
+				...DEFAULT_SEO.keywords,
+			],
 			priority: 0.3,
 			changeFrequency: "yearly",
 		},
@@ -102,24 +105,30 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 		"/privacy",
 		{
 			title: "Privacy Policy | Deal Scale",
-			description:
-				"Read our Privacy Policy to understand how Deal Scale collects, uses, and protects your personal information.",
+			description: "How we collect, use, and protect your data.",
 			canonical: "https://dealscale.io/privacy",
 			image: DEFAULT_SEO.image,
-			keywords: DEFAULT_SEO.keywords,
-			priority: 0.5,
-			changeFrequency: "monthly",
+			keywords: [
+				"Privacy Policy",
+				"Deal Scale Legal Document",
+				...DEFAULT_SEO.keywords,
+			],
+			priority: 0.3,
+			changeFrequency: "yearly",
 		},
 	],
 	[
 		"/tos",
 		{
 			title: "Terms of Service | Deal Scale",
-			description:
-				"Review the terms and conditions for using Deal Scale’s website and services.",
+			description: "Your legal agreement for using Deal Scale.",
 			canonical: "https://dealscale.io/tos",
 			image: DEFAULT_SEO.image,
-			keywords: DEFAULT_SEO.keywords,
+			keywords: [
+				"Terms of Service",
+				"Deal Scale Legal Document",
+				...DEFAULT_SEO.keywords,
+			],
 		},
 	],
 	[

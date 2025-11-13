@@ -13,7 +13,7 @@ const BentoGrid = ({ children, className }: BentoGridProps) => {
 	return (
 		<MagicBentoGrid
 			className={cn(
-				"grid-cols-1 gap-6 md:grid-cols-6 md:grid-flow-dense md:auto-rows-[minmax(0,max-content)] lg:grid-cols-12",
+				"grid-cols-1 gap-6 md:grid-flow-dense md:auto-rows-[minmax(0,max-content)] md:grid-cols-6 lg:grid-cols-12",
 				className,
 			)}
 		>

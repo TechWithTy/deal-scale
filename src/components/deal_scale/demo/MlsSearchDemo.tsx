@@ -160,7 +160,7 @@ const MlsSearchDemo = () => {
 							className="h-32 w-32"
 						/>
 						<p className="mt-4 font-semibold text-lg">
-							Finding Off Market Leads
+							Finding Lookalike Off Market Leads
 						</p>
 					</div>
 				)}
@@ -186,7 +186,7 @@ const MlsSearchDemo = () => {
 						isOpen={isModalOpen}
 						onClose={handleCloseModal}
 						title="Claim Your Leads"
-						description="Get 5 free on-market leads or 1 off-market lead."
+						description="Get 5 free on-market leads or 1 lookalike off-market lead powered by similarity targeting features."
 					/>
 				)}
 			</div>

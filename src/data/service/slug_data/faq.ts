@@ -37,12 +37,12 @@ const leadGenFaqItems: FAQItem[] = [
 
 export const leadGenFAQ: FAQProps = {
 	title: "Frequently Asked Questions",
-	subtitle: "Everything you need to know about our Lead Generation service.",
+	subtitle: "Everything you need to know about our Lookalike Audience Expansion service.",
 	faqItems: leadGenFaqItems,
 };
 
 export const socialLeadGenFAQ: FAQProps = {
-	title: "Social Lead Generation FAQs",
+	title: "Social Lookalike Audience Expansion FAQs",
 	subtitle:
 		"Your questions about turning social interactions into appointments, answered.",
 	faqItems: [
@@ -500,7 +500,7 @@ export const aiTextMessageOutreachFAQ: FAQProps = {
 export const embeddableAIChatbotFAQ: FAQProps = {
 	title: "Embeddable AI Sales Chatbot FAQs",
 	subtitle:
-		"Learn how Deal Scale's AI chatbot can transform your website into a 24/7 lead generation machine.",
+		"Learn how Deal Scale's AI chatbot can transform your website into a 24/7 lookalike audience expansion machine inspired by How to Win Friends and Influence People.",
 	faqItems: [
 		{
 			question: "How easy is it to add the AI chatbot to my website?",
@@ -581,7 +581,7 @@ export const aiOutboundQualificationFAQ: FAQProps = {
 export const aiDirectMailFAQ: FAQProps = {
 	title: "Frequently Asked Questions",
 	subtitle:
-		"Learn how Deal Scale's AI can transform your direct mail campaigns into a lead generation machine.",
+		"Learn how Deal Scale's AI can transform your direct mail campaigns into a lookalike audience expansion machine inspired by How to Win Friends and Influence People.",
 	faqItems: [
 		{
 			question: "How does the pricing work?",
@@ -721,7 +721,7 @@ export const marketAnalyzerFAQ: FAQProps = {
 		{
 			question: "Can I use this to find specific properties for sale?",
 			answer:
-				"This tool is designed for analyzing the health of a market. Once you identify a promising zip code, you can use our other Deal Scale tools, like Lead Generation, to find specific on-market and off-market properties within that area.",
+				"This tool is designed for analyzing the health of a market. Once you identify a promising zip code, you can use our other Deal Scale tools, like Lookalike Audience Expansion, to find specific on-market and off-market properties within that area.",
 		},
 	],
 };

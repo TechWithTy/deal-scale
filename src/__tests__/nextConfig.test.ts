@@ -97,4 +97,3 @@ describe("next.config cache headers", () => {
 		]);
 	});
 });
-

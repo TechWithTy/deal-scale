@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { act } from "react";
 
-import { CallDemoShowcase } from "../CallDemoShowcase";
 import React from "react";
+import { CallDemoShowcase } from "../CallDemoShowcase";
 
 describe("CallDemoShowcase", () => {
 	beforeAll(() => {
@@ -48,9 +48,7 @@ describe("CallDemoShowcase", () => {
 		});
 		expect(sessionHeadings.length).toBeGreaterThan(0);
 		expect(screen.getByLabelText(/text demo preview/i)).toBeInTheDocument();
-		expect(
-			screen.getByText(/live text outreach/i),
-		).toBeInTheDocument();
+		expect(screen.getByText(/live text outreach/i)).toBeInTheDocument();
 		expect(screen.getByText(/iMessage Support/i)).toBeInTheDocument();
 
 		act(() => {
@@ -75,7 +73,9 @@ describe("CallDemoShowcase", () => {
 	it("enables the call demo preview when requested", () => {
 		render(<CallDemoShowcase />);
 
-		fireEvent.click(screen.getByRole("button", { name: /start a call demo/i }));
+		fireEvent.click(
+			screen.getAllByRole("button", { name: /start a call demo/i })[0],
+		);
 
 		expect(screen.getByLabelText(/call demo preview/i)).toBeInTheDocument();
 	});
@@ -83,7 +83,9 @@ describe("CallDemoShowcase", () => {
 	it("restarts the live call demo inside the phone when requested", async () => {
 		render(<CallDemoShowcase />);
 
-		fireEvent.click(screen.getByRole("button", { name: /start a call demo/i }));
+		fireEvent.click(
+			screen.getAllByRole("button", { name: /start a call demo/i })[0],
+		);
 
 		act(() => {
 			jest.runOnlyPendingTimers();

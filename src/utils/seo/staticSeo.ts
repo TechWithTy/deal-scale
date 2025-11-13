@@ -1,4 +1,5 @@
 import { DEFAULT_SEO, STATIC_SEO_META } from "@/data/constants/seo";
+import { buildLegalSeoMetaMap } from "./legalSeo";
 import type { SeoMeta } from "./seo";
 
 export const defaultSeo: SeoMeta = {
@@ -22,6 +23,16 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		changeFrequency: "daily",
 		siteName: DEFAULT_SEO.siteName,
 		type: DEFAULT_SEO.type,
+	},
+	"/about": {
+		title: STATIC_SEO_META["/about"].title,
+		description: STATIC_SEO_META["/about"].description,
+		canonical: STATIC_SEO_META["/about"].canonical,
+		image: STATIC_SEO_META["/about"].image,
+		keywords: STATIC_SEO_META["/about"].keywords || DEFAULT_SEO.keywords,
+		manifestoSections: STATIC_SEO_META["/about"].manifestoSections,
+		siteName: DEFAULT_SEO.siteName,
+		type: "website",
 	},
 	"/products": STATIC_SEO_META["/products"] ?? {
 		priority: 0.8,
@@ -129,6 +140,8 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		canonical: STATIC_SEO_META["/pricing"].canonical,
 		image: STATIC_SEO_META["/pricing"].image,
 		keywords: DEFAULT_SEO.keywords,
+		priority: STATIC_SEO_META["/pricing"].priority ?? 0.9,
+		changeFrequency: STATIC_SEO_META["/pricing"].changeFrequency ?? "daily",
 	},
 	"/portfolio": {
 		title: STATIC_SEO_META["/portfolio"].title,
@@ -206,6 +219,7 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		priority: 0.6,
 		changeFrequency: "weekly",
 	},
+	...buildLegalSeoMetaMap(),
 };
 
 export function getStaticSeo(path: string): SeoMeta {

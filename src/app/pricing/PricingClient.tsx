@@ -1,7 +1,7 @@
 "use client";
 
-import Pricing from "@/components/home/Pricing";
-import type { Plan } from "@/types/service/plans";
+import CatalogPricing from "@/components/pricing/CatalogPricing";
+import type { PricingCatalog } from "@/types/service/plans";
 import { useSearchParams } from "next/navigation";
 
 /**
@@ -10,23 +10,23 @@ import { useSearchParams } from "next/navigation";
 interface PricingProps {
 	title?: string;
 	subtitle?: string;
-	plans: Plan[];
+	catalog: PricingCatalog;
 }
 
 const PricingClient: React.FC<PricingProps> = ({
-	title = "Pricing",
-	subtitle = "Find answers to common questions about our services, process, and technology expertise.",
-	plans,
+	title = "Success-Based Pricing",
+	subtitle = "Invest in automation outcomes with pilot pricing locked for two years.",
+	catalog,
 }: PricingProps) => {
 	const searchParams = useSearchParams();
 	const callbackUrl = searchParams?.get("callbackUrl") || undefined;
 
 	return (
 		<div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-16 dark:from-black dark:to-gray-900">
-			<Pricing
+			<CatalogPricing
 				title={title}
 				subtitle={subtitle}
-				plans={plans}
+				catalog={catalog}
 				callbackUrl={callbackUrl}
 			/>
 		</div>

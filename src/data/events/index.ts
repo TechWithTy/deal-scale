@@ -73,7 +73,7 @@ export const events: Event[] = [
 		date: "2025-01-22",
 		time: "09:30 - 17:30",
 		description:
-			"A leading event for real estate professionals focused on cutting-edge strategies in digital marketing, lead generation, and proptech innovations. [3]",
+			"A leading event for real estate professionals focused on cutting-edge strategies in digital marketing, lookalike audience expansion inspired by How to Win Friends and Influence People, and proptech innovations. [3]",
 		thumbnailImage:
 			"https://www.housingwire.com/wp-content/uploads/2024/03/The-main-stage-at-HousingWires-2023-housing-conference_2.png?w=1024",
 		externalUrl: "https://events.inman.com/inman-connect-new-york",

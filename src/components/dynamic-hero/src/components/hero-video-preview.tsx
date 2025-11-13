@@ -1,6 +1,12 @@
 "use client";
 
-import React, { type HTMLAttributes, useState } from "react";
+import React, {
+	type HTMLAttributes,
+	useImperativeHandle,
+	useCallback,
+	useState,
+	forwardRef,
+} from "react";
 
 import { Pointer } from "@/components/ui/pointer";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
@@ -16,21 +22,44 @@ export interface HeroVideoPreviewProps
 	thumbnailAlt?: string;
 }
 
+export interface HeroVideoPreviewHandle {
+	play: () => void;
+	stop: () => void;
+}
+
 export const DEFAULT_HERO_VIDEO: HeroVideoConfig = {
 	src: "https://www.youtube.com/embed/qh3NGpYRG3I?rel=0&controls=1&modestbranding=1",
 	poster: "/images/quickstart/video-preview.svg",
 	provider: "youtube",
 };
 
-export function HeroVideoPreview({
-	video,
-	className,
-	thumbnailAlt = "Watch product demo",
-	...containerProps
-}: HeroVideoPreviewProps): JSX.Element {
+export const HeroVideoPreview = forwardRef<
+	HeroVideoPreviewHandle,
+	HeroVideoPreviewProps
+>(function HeroVideoPreview(
+	{
+		video,
+		className,
+		thumbnailAlt = "Watch product demo",
+		...containerProps
+	}: HeroVideoPreviewProps,
+	ref,
+) {
 	const config = video ?? DEFAULT_HERO_VIDEO;
 	const poster = resolveHeroThumbnailSrc(config, DEFAULT_HERO_VIDEO.poster);
 	const [isPlaying, setIsPlaying] = useState(false);
+	const handleOpenChange = useCallback((next: boolean) => {
+		setIsPlaying(next);
+	}, []);
+
+	useImperativeHandle(
+		ref,
+		() => ({
+			play: () => setIsPlaying(true),
+			stop: () => setIsPlaying(false),
+		}),
+		[],
+	);
 
 	return (
 		<div
@@ -53,7 +82,8 @@ export function HeroVideoPreview({
 							video={{ ...config, poster }}
 							thumbnailAlt={thumbnailAlt}
 							animationStyle="from-center"
-							onOpenChange={setIsPlaying}
+							open={isPlaying}
+							onOpenChange={handleOpenChange}
 						/>
 					</div>
 				</div>
@@ -79,4 +109,4 @@ export function HeroVideoPreview({
 			) : null}
 		</div>
 	);
-}
+});

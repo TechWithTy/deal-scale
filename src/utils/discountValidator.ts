@@ -91,49 +91,52 @@ export const validateDiscountCode = (
 	}
 
 	// 3.5. Check plan and plan category restrictions
-	if (
-		discountCode.planIds &&
-		(!validationData.planId ||
-			!discountCode.planIds.includes(validationData.planId))
-	) {
-		console.log("Discount validation failed: plan ID mismatch.", {
-			required: discountCode.planIds,
-			actual: validationData.planId,
-		});
-		return {
-			isValid: false,
-			errorMessage: "This code is not valid for the selected plan.",
-		};
+	if (discountCode.planIds) {
+		if (
+			validationData.planId &&
+			!discountCode.planIds.includes(validationData.planId)
+		) {
+			console.log("Discount validation failed: plan ID mismatch.", {
+				required: discountCode.planIds,
+				actual: validationData.planId,
+			});
+			return {
+				isValid: false,
+				errorMessage: "This code is not valid for the selected plan.",
+			};
+		}
 	}
-	if (
-		discountCode.planCategoryIds &&
-		(!validationData.planCategoryId ||
-			!discountCode.planCategoryIds.includes(validationData.planCategoryId))
-	) {
-		console.log("Discount validation failed: plan category ID mismatch.", {
-			required: discountCode.planCategoryIds,
-			actual: validationData.planCategoryId,
-		});
-		return {
-			isValid: false,
-			errorMessage: "This code is not valid for this plan category.",
-		};
+	if (discountCode.planCategoryIds) {
+		if (
+			validationData.planCategoryId &&
+			!discountCode.planCategoryIds.includes(validationData.planCategoryId)
+		) {
+			console.log("Discount validation failed: plan category ID mismatch.", {
+				required: discountCode.planCategoryIds,
+				actual: validationData.planCategoryId,
+			});
+			return {
+				isValid: false,
+				errorMessage: "This code is not valid for this plan category.",
+			};
+		}
 	}
 
 	// 4. Check product and product category restrictions
-	if (
-		discountCode.productIds &&
-		(!validationData.productId ||
-			!discountCode.productIds.includes(validationData.productId))
-	) {
-		console.log("Discount validation failed: product ID mismatch.", {
-			required: discountCode.productIds,
-			actual: validationData.productId,
-		});
-		return {
-			isValid: false,
-			errorMessage: "This code is not valid for this product.",
-		};
+	if (discountCode.productIds) {
+		if (
+			validationData.productId &&
+			!discountCode.productIds.includes(validationData.productId)
+		) {
+			console.log("Discount validation failed: product ID mismatch.", {
+				required: discountCode.productIds,
+				actual: validationData.productId,
+			});
+			return {
+				isValid: false,
+				errorMessage: "This code is not valid for this product.",
+			};
+		}
 	}
 
 	// Check if any of the product's categories are in the allowed list
@@ -145,7 +148,11 @@ export const validateDiscountCode = (
 		const hasMatchingCategory = validationData.productCategories?.some((cat) =>
 			allowedCategories.includes(cat),
 		);
-		if (!hasMatchingCategory) {
+		if (
+			validationData.productCategories &&
+			validationData.productCategories.length > 0 &&
+			!hasMatchingCategory
+		) {
 			console.log("Discount validation failed: product category ID mismatch.", {
 				required: discountCode.productCategoryIds,
 				actual: validationData.productCategories,

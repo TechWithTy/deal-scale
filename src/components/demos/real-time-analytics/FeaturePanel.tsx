@@ -1,8 +1,8 @@
 "use client";
 
+import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
 
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { cn } from "@/lib/utils";
@@ -46,8 +46,9 @@ function extractNumericValueParts(input: string): NumericValueParts | null {
 		return null;
 	}
 
-	const decimalPlaces =
-		numberPart.includes(".") ? numberPart.split(".")[1].length : 0;
+	const decimalPlaces = numberPart.includes(".")
+		? numberPart.split(".")[1].length
+		: 0;
 
 	return {
 		value: numericValue,
@@ -137,7 +138,7 @@ export function FeaturePanel({
 						className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-background/60 p-4"
 					>
 						<div className="flex items-start justify-between gap-3">
-							<h3 className="text-base font-semibold text-foreground">
+							<h3 className="font-semibold text-base text-foreground">
 								{highlight.title}
 							</h3>
 							{highlight.metric ? (
@@ -174,11 +175,11 @@ export function FeaturePanel({
 								</span>
 							) : null}
 						</div>
-						<p className="text-sm text-muted-foreground">
+						<p className="text-muted-foreground text-sm">
 							{highlight.description}
 						</p>
 						{highlight.metric ? (
-							<span className="text-xs uppercase tracking-wide text-muted-foreground/80">
+							<span className="text-muted-foreground/80 text-xs uppercase tracking-wide">
 								{highlight.metric.label}
 							</span>
 						) : null}
@@ -193,10 +194,10 @@ export function FeaturePanel({
 							key={`${feature.id}-${metric.label}`}
 							className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-border/40 bg-background/50 p-4 text-center sm:items-start sm:text-left"
 						>
-							<span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+							<span className="font-semibold text-muted-foreground text-xs uppercase tracking-wide">
 								{metric.label}
 							</span>
-							<span className="text-2xl font-semibold text-foreground sm:text-xl">
+							<span className="font-semibold text-2xl text-foreground sm:text-xl">
 								{(() => {
 									const parts = extractNumericValueParts(metric.value);
 
@@ -235,4 +236,3 @@ function ChartSkeleton(): JSX.Element {
 }
 
 export default FeaturePanel;
-

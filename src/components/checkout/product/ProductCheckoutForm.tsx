@@ -3,7 +3,8 @@
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 // External imports
 import { useEffect, useState } from "react";
 
@@ -16,6 +17,8 @@ import { cn } from "@/lib/utils";
 import type { DiscountCode } from "@/types/discount/discountCode";
 import type { ProductType } from "@/types/products";
 import { type ShippingOption, TAX_RATE } from "@/types/products/shipping";
+import toast from "react-hot-toast";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
 
 import { CheckoutFooter } from "./CheckoutFooter";
 // Local component imports
@@ -29,16 +32,20 @@ interface ProductCheckoutFormProps {
 	product: ProductType;
 	onClose: () => void;
 	clientSecret: string;
+	prefilledDiscountCode?: string;
+	prefilledDiscount?: DiscountCode;
 }
 
 export function ProductCheckoutForm({
 	product,
 	onClose,
 	clientSecret,
+	prefilledDiscountCode,
+	prefilledDiscount,
 }: ProductCheckoutFormProps) {
 	const stripe = useStripe();
 	const elements = useElements();
-	const router = useRouter();
+	const router = useNavigationRouter();
 	const { selection } = useProductSelection();
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +59,7 @@ export function ProductCheckoutForm({
 	);
 	const [discountError, setDiscountError] = useState<string | null>(null);
 	const [checkingDiscount, setCheckingDiscount] = useState(false);
+	useWaitCursor(isLoading || checkingDiscount);
 
 	// Load shipping options for the current product
 	useEffect(() => {
@@ -71,6 +79,29 @@ export function ProductCheckoutForm({
 	}, [product.id]);
 
 	// Calculate order summary
+	// Prefill or reset discount code when the modal opens with a provided coupon
+	useEffect(() => {
+		if (!prefilledDiscountCode) {
+			setDiscountCode("");
+			setDiscountApplied(null);
+			setDiscountError(null);
+			return;
+		}
+
+		const normalized = prefilledDiscountCode.trim().toUpperCase();
+		setDiscountCode(normalized);
+
+		const prefilled =
+			prefilledDiscount ??
+			mockDiscountCodes.find((dc) => dc.code.toUpperCase() === normalized);
+
+		if (prefilled) {
+			setDiscountApplied(prefilled);
+			setDiscountError(null);
+		} else {
+			setDiscountApplied(null);
+		}
+	}, [prefilledDiscountCode]);
 	const selectedType = product.types?.find((t) => t?.value === selection?.type);
 	const itemPrice = selectedType?.price ?? product.price ?? 0;
 	const quantity = selection.quantity ?? 1;
@@ -139,6 +170,7 @@ export function ProductCheckoutForm({
 
 		setIsLoading(true);
 		setError(null);
+		const stripeToast = startStripeToast("Processing payment…");
 
 		try {
 			const { error: stripeError } = await stripe.confirmPayment({
@@ -164,6 +196,7 @@ export function ProductCheckoutForm({
 			);
 			successUrl.searchParams.append("ctaText", "View My Orders");
 			successUrl.searchParams.append("ctaHref", "/orders");
+			stripeToast.success("Payment successful!");
 			router.push(successUrl.toString());
 		} catch (err) {
 			console.error("Payment error:", err);
@@ -222,6 +255,7 @@ export function ProductCheckoutForm({
 			failureUrl.searchParams.append("subtitle", errorMessage);
 			failureUrl.searchParams.append("ctaText", "Back to Products");
 			failureUrl.searchParams.append("ctaHref", "/products");
+			stripeToast.error(errorMessage);
 			router.push(failureUrl.toString());
 		} finally {
 			setIsLoading(false);

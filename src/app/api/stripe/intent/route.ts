@@ -5,6 +5,7 @@ import {
 	retrievePaymentIntent,
 	updatePaymentIntent,
 } from "@/lib/externalRequests/stripe";
+import type { ProductCategory } from "@/types/products";
 import type { PricingCategoryValue } from "@/types/service/plans";
 import { validateDiscountCode } from "@/utils/discountValidator";
 import { cookies } from "next/headers";
@@ -102,22 +103,37 @@ export async function PUT(req: NextRequest) {
 				);
 			}
 
-			// Use the retrieved metadata for validation, casting the category ID to its specific type
-			if (!metadata?.planId || !metadata?.pricingCategoryId) {
+			let validationResult:
+				| ReturnType<typeof validateDiscountCode>
+				| undefined;
+			if (metadata?.planId) {
+				validationResult = validateDiscountCode(discountCode, {
+					planId: metadata.planId,
+					planCategoryId: metadata?.pricingCategoryId as
+						| PricingCategoryValue
+						| undefined,
+				});
+			} else if (metadata?.productId) {
+				const productCategories = metadata.productCategories
+					?.split(",")
+					.map((value) => value.trim())
+					.filter(Boolean) as ProductCategory[] | undefined;
+
+				validationResult = validateDiscountCode(discountCode, {
+					productId: metadata.productId,
+					productCategories,
+				});
+			} else {
 				return NextResponse.json(
 					{
 						error:
-							"Cannot validate discount. Plan information is missing from the payment intent.",
+							"Cannot validate discount. Plan or product information is missing from the payment intent.",
 					},
 					{ status: 400 },
 				);
 			}
-			const validationResult = validateDiscountCode(discountCode, {
-				planId: metadata?.planId,
-				planCategoryId: metadata?.pricingCategoryId as PricingCategoryValue,
-			});
 
-			if (!validationResult.isValid) {
+			if (!validationResult?.isValid) {
 				return NextResponse.json(
 					{ error: validationResult.errorMessage },
 					{ status: 400 },

@@ -34,17 +34,28 @@ export const AboutUsSection: React.FC = () => (
 					About <span className="text-primary">Deal Scale</span>
 				</h2>
 				<p className="mb-6 max-w-lg text-base text-muted-foreground dark:text-gray-300">
-					We believe your time is better spent closing deals, not chasing them.
-					Deal Scale was founded to automate the relentless, 24/7 work of
-					prospecting and lead nurturing, giving you back your time and filling
-					your calendar with a consistent pipeline of sales-ready appointments.
+					Deal Scale connects growth teams with qualified buyers without the
+					bottlenecks of manual timelines. Powered by AI sales automation,
+					conversational nurture campaigns, and CRM-grade analytics, our revenue
+					platform continuously sources, qualifies, and schedules sales-ready
+					meetings so your closers can focus on winning new business.
 				</p>
-				<Link
-					href="/about"
-					className="inline-block w-fit rounded-md bg-primary px-6 py-3 font-semibold text-sm text-white shadow-lg transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-				>
-					Learn More
-				</Link>
+				<div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+					<Link
+						href="/about"
+						className="inline-block w-fit rounded-md bg-primary px-6 py-3 font-semibold text-sm text-white shadow-lg transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+					>
+						Learn More
+					</Link>
+					<Link
+						href="/discord"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="inline-block w-fit rounded-md border border-primary px-6 py-3 font-semibold text-sm text-primary transition-colors hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+					>
+						Join Our Community
+					</Link>
+				</div>
 			</div>
 		</div>
 	</section>

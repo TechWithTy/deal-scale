@@ -3,7 +3,7 @@
 import { Play, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import type { HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils";
@@ -28,6 +28,8 @@ export interface HeroVideoDialogProps
 		| "top-in-bottom-out"
 		| "left-in-right-out";
 	thumbnailAlt?: string;
+	open?: boolean;
+	defaultOpen?: boolean;
 	onOpenChange?: (isOpen: boolean) => void;
 }
 
@@ -79,10 +81,14 @@ export function HeroVideoDialog({
 	animationStyle = "from-center",
 	thumbnailAlt = "Video thumbnail",
 	className,
+	open,
+	defaultOpen = false,
 	onOpenChange,
 	...containerProps
 }: HeroVideoDialogProps): JSX.Element {
-	const [isOpen, setIsOpen] = useState(false);
+	const [internalOpen, setInternalOpen] = useState(defaultOpen);
+	const isControlled = open !== undefined;
+	const isOpen = isControlled ? Boolean(open) : internalOpen;
 	const preset = useMemo(
 		() => animationPresets[animationStyle] ?? animationPresets["from-center"],
 		[animationStyle],
@@ -91,16 +97,28 @@ export function HeroVideoDialog({
 	const videoSrc = resolveHeroVideoSrc(video);
 	const thumbnailSrc = resolveHeroThumbnailSrc(video);
 	const unoptimizedThumbnail = shouldBypassImageOptimization(thumbnailSrc);
+	const setOpen = useCallback(
+		(next: boolean) => {
+			if (!isControlled) {
+				setInternalOpen(next);
+			}
+			onOpenChange?.(next);
+		},
+		[isControlled, onOpenChange],
+	);
+
 	useEffect(() => {
-		onOpenChange?.(isOpen);
-	}, [isOpen, onOpenChange]);
+		if (isControlled) {
+			onOpenChange?.(Boolean(open));
+		}
+	}, [isControlled, onOpenChange, open]);
 
 	const openModal = () => {
-		setIsOpen(true);
+		setOpen(true);
 	};
 
 	const closeModal = () => {
-		setIsOpen(false);
+		setOpen(false);
 	};
 	return (
 		<div

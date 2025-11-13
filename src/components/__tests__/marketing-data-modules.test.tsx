@@ -80,13 +80,12 @@ jest.mock("@/components/common/TechStackSection", () => ({
 	TechStackSection: TechStackSectionMock,
 }));
 
-const TimelineMock = jest.fn(({ data }: { data: unknown[] }) => (
-	<div data-testid="timeline" data-count={data.length} />
+const FeatureTimelineTableMock = jest.fn(({ rows }: { rows: unknown[] }) => (
+	<div data-testid="timeline-table" data-count={rows.length} />
 ));
-jest.mock("@/components/ui/timeline", () => ({
+jest.mock("@/components/features/FeatureTimelineTable", () => ({
 	__esModule: true,
-	TimelineDealScales: TimelineMock,
-	Timeline: TimelineMock,
+	FeatureTimelineTable: FeatureTimelineTableMock,
 }));
 
 const ServiceCardMock = jest.fn(({ title }: { title: string }) => (
@@ -263,9 +262,12 @@ describe("marketing components use data modules", () => {
 		];
 		const featureTimeline = [
 			{
-				title: "Launch",
-				subtitle: "2024",
-				content: <div>Launched</div>,
+				quarter: "Q1 2024",
+				status: "Live",
+				initiative: "Launch",
+				focus: "Automation",
+				summary: "Initial launch milestone",
+				highlights: ["Highlight 1"],
 			},
 		];
 
@@ -329,9 +331,11 @@ describe("marketing components use data modules", () => {
 		expect(bentoProps).toMatchObject({ features: bentoFeatures });
 
 		const timelineCall =
-			TimelineMock.mock.calls[TimelineMock.mock.calls.length - 1] ?? [];
+			FeatureTimelineTableMock.mock.calls[
+				FeatureTimelineTableMock.mock.calls.length - 1
+			] ?? [];
 		const [timelineProps] = timelineCall;
-		expect(timelineProps).toMatchObject({ data: featureTimeline });
+		expect(timelineProps).toMatchObject({ rows: featureTimeline });
 	});
 
 	it("derives service catalog entries from data modules", () => {

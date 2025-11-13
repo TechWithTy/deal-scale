@@ -229,7 +229,6 @@ export type BlogPostingSchema = {
 	inLanguage?: string;
 };
 
-
 export type PropertyValueSchema = {
 	"@type": "PropertyValue";
 	name: string;

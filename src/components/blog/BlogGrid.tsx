@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { Suspense, lazy } from "react";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import FeaturedBlogCard from "./FeaturedBlogCard";
 const BlogCard = lazy(() =>
 	import("./BlogCard").then((mod) => ({ default: mod.BlogCard })),
@@ -21,7 +22,7 @@ export function truncateSubtitle(subtitle: string, maxLength = 60): string {
 import type { BeehiivPost } from "@/types/behiiv";
 
 const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
-	const router = useRouter();
+	const router = useNavigationRouter();
 	const searchParams = useSearchParams();
 	const pageSize = (() => {
 		const s = searchParams?.get("per_page");
