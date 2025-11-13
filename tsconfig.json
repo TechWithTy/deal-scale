@@ -59,6 +59,7 @@
                 "**/*.spec.ts",
                 "**/*.spec.tsx",
 		"src/testHelpers",
+		"tools",
                 "tests",
                 "scripts",
                 "scripts/**/*"
