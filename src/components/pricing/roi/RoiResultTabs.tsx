@@ -20,11 +20,17 @@ export const RoiResultTabs = ({ result, summaryPoints }: RoiResultTabsProps) => 
 	const costs = result.costs;
 
 	const costItems = [
+		result.monthlyOperatingCost
+			? {
+				label: "Your monthly cost",
+				value: currency.format(result.monthlyOperatingCost),
+			}
+			: null,
 		costs.monthlyCost !== undefined
-			? { label: "Monthly", value: currency.format(costs.monthlyCost) }
+			? { label: "Plan monthly", value: currency.format(costs.monthlyCost) }
 			: null,
 		costs.annualCost !== undefined
-			? { label: "Annual", value: currency.format(costs.annualCost) }
+			? { label: "Plan annual", value: currency.format(costs.annualCost) }
 			: null,
 		costs.oneTimeCost !== undefined
 			? { label: "One-time", value: currency.format(costs.oneTimeCost) }
@@ -39,22 +45,22 @@ export const RoiResultTabs = ({ result, summaryPoints }: RoiResultTabsProps) => 
 
 	return (
 		<Tabs defaultValue="profit" className="space-y-4">
-			<TabsList className="grid w-full grid-cols-3 rounded-full border border-border/60 bg-muted/30 p-1 text-xs font-semibold uppercase tracking-[0.25em]">
+			<TabsList className="!grid !h-auto !max-w-none grid-cols-1 justify-items-center gap-2 rounded-full border border-border/60 bg-muted/30 p-2 text-[0.7rem] font-semibold uppercase tracking-[0.18em] sm:grid-cols-3">
 				<TabsTrigger
 					value="profit"
-					className="rounded-full px-3 py-1 text-muted-foreground transition data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+					className="flex w-full items-center justify-center rounded-full border border-transparent px-4 py-2 text-center text-muted-foreground transition data-[state=active]:border-border/80 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
 				>
 					{isSelfHosted ? "Profit Horizon" : "Profit Outlook"}
 				</TabsTrigger>
 				<TabsTrigger
 					value="middle"
-					className="rounded-full px-3 py-1 text-muted-foreground transition data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+					className="flex w-full items-center justify-center rounded-full border border-transparent px-4 py-2 text-center text-muted-foreground transition data-[state=active]:border-border/80 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
 				>
 					{isSelfHosted ? "Buyout Scenario" : "Cost Summary"}
 				</TabsTrigger>
 				<TabsTrigger
 					value="insights"
-					className="rounded-full px-3 py-1 text-muted-foreground transition data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+					className="flex w-full items-center justify-center rounded-full border border-transparent px-4 py-2 text-center text-muted-foreground transition data-[state=active]:border-border/80 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
 				>
 					Key Insights
 				</TabsTrigger>
@@ -75,6 +81,9 @@ export const RoiResultTabs = ({ result, summaryPoints }: RoiResultTabsProps) => 
 					</h4>
 				</header>
 				<ul className="space-y-2 text-sm leading-relaxed text-foreground">
+					<li>
+						<strong>Net monthly benefit:</strong> {currency.format(result.monthlyNetBenefit)}
+					</li>
 					<li>
 						<strong>Year 1:</strong> {currency.format(result.year1Profit)} net uplift
 					</li>

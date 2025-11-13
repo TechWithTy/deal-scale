@@ -76,6 +76,23 @@ export const RoiCalculatorInputs = ({
 			</div>
 			<div className="grid gap-2">
 				<Label
+					htmlFor="monthlyOperatingCost"
+					className="font-medium text-muted-foreground text-xs uppercase"
+				>
+					General Monthly Operating Cost ($)
+				</Label>
+				<Input
+					id="monthlyOperatingCost"
+					type="number"
+					min={0}
+					step={100}
+					value={inputs.monthlyOperatingCost}
+					onChange={handleNumberChange("monthlyOperatingCost")}
+					className="h-11 rounded-lg border-border/60 bg-background/60"
+				/>
+			</div>
+			<div className="grid gap-2">
+				<Label
 					htmlFor="industry"
 					className="font-medium text-muted-foreground text-xs uppercase"
 				>

@@ -59,11 +59,11 @@ export const RoiSnapshot = ({
 			aria-labelledby={headingId}
 		>
 			{showHeading ? (
-				<header className="space-y-2">
+				<header className="space-y-2 text-center md:text-left">
 					<h2 id={headingId} className="text-2xl font-semibold text-foreground">
 						Estimate ROI &amp; Setup Cost
 					</h2>
-					<p className="text-muted-foreground text-sm">
+					<p className="text-sm text-muted-foreground">
 						Instant summary of projected revenue, costs, and time savings for your
 						selected DealScale tier.
 					</p>
@@ -73,9 +73,9 @@ export const RoiSnapshot = ({
 				result={result}
 				showSetupInvestment={showSetupInvestment && result.costs.setupRange !== null}
 			/>
-			<div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
-				<article className="rounded-2xl border border-border/70 bg-background/70 p-6 shadow-sm">
-					<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+			<div className="grid gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,0.8fr)]">
+				<article className="rounded-2xl border border-border/70 bg-background/70 p-6 text-center shadow-sm md:text-left">
+					<p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
 						ROI Projection
 					</p>
 					<ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-foreground">
@@ -90,14 +90,14 @@ export const RoiSnapshot = ({
 						</li>
 					</ul>
 				</article>
-				<article className="rounded-2xl border border-border/70 bg-muted/20 p-6 shadow-sm">
-					<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+				<article className="rounded-2xl border border-border/70 bg-muted/20 p-6 text-center shadow-sm md:text-left">
+					<p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
 						Industry Factor
 					</p>
 					<p className="mt-2 text-3xl font-semibold text-foreground">
 						× {factor.toFixed(1)}
 					</p>
-					<p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+					<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
 						Multipliers adjust for AI workload and compliance scope across
 						different verticals.
 					</p>

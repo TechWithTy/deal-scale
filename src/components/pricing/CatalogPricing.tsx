@@ -40,6 +40,8 @@ import {
 } from "./OneTimePlanCard";
 import { RecurringPlanCard } from "./RecurringPlanCard";
 import { RoiEstimatorModal } from "./RoiEstimatorModal";
+import { AffiliatePartnerTeaser } from "./AffiliatePartnerTeaser";
+import { AffiliateCommissionModal } from "./AffiliateCommissionModal";
 
 type PricingView = PricingInterval | "oneTime";
 
@@ -48,6 +50,31 @@ const VIEW_OPTIONS: Array<{ value: PricingView; label: string }> = [
 	{ value: "annual", label: "Annual" },
 	{ value: "oneTime", label: "One-Time" },
 ];
+
+const ANNUAL_PLAN_BADGES: Record<
+	string,
+	{ label: string; variant: "basic" | "starter" | "enterprise" }
+> = {
+	basicAnnual: { label: "Basic Annual", variant: "basic" },
+	starterAnnual: { label: "Starter Annual", variant: "starter" },
+	enterpriseAnnual: { label: "Enterprise Annual", variant: "enterprise" },
+};
+
+const MONTHLY_PLAN_BADGES: Record<
+	string,
+	{ label: string; variant: "basic" | "starter" | "enterprise" }
+> = {
+	basic: { label: "Basic Monthly", variant: "basic" },
+	starter: { label: "Starter Monthly", variant: "starter" },
+	enterprisePlus: { label: "Enterprise+ Monthly", variant: "enterprise" },
+};
+
+const ONE_TIME_PLAN_BADGES: Record<
+	string,
+	{ label: string; variant: "partner" | "basic" | "starter" | "enterprise" }
+> = {
+	commissionPartner: { label: "Commission Partner", variant: "partner" },
+};
 
 const FREE_TRIAL_EXP_KEY = "dealscale:pricing:beta-expiry";
 const DEFAULT_COUNTDOWN_MS = 72 * 60 * 60 * 1000; // 72 hours
@@ -147,6 +174,7 @@ export const CatalogPricing = ({
 		useState<DiscountCode | null>(null);
 	const [productCheckoutLoading, setProductCheckoutLoading] = useState(false);
 	const [trialLoading, setTrialLoading] = useState(false);
+	const [affiliateModalOpen, setAffiliateModalOpen] = useState(false);
 
 	useWaitCursor(productCheckoutLoading || trialLoading);
 
@@ -490,6 +518,9 @@ export const CatalogPricing = ({
 		}
 	}, [basicPlan, trialLoading]);
 
+	const isMinimalMode =
+		!showFreePreview && !showUpgradeStack && !showAddOnStack && !showPilotBlurb;
+
 	const minimalStackActive =
 		view === "monthly" && !showFreePreview && !!freePlan && !!basicPlan;
 
@@ -728,327 +759,391 @@ export const CatalogPricing = ({
 		starterPlan,
 	]);
 
+	const highestMonthlyPlanPrice = useMemo(() => {
+		const monthlyPlans = catalog.pricing.monthly;
+		if (!monthlyPlans || monthlyPlans.length === 0) {
+			return null;
+		}
+
+		return monthlyPlans.reduce((max, plan) => {
+			return plan.price > max ? plan.price : max;
+		}, 0);
+	}, [catalog]);
+
+	const topTierCommissionLabel = useMemo(() => {
+		if (!highestMonthlyPlanPrice) {
+			return null;
+		}
+
+		return new Intl.NumberFormat("en-US", {
+			style: "currency",
+			currency: "USD",
+			maximumFractionDigits: 0,
+		}).format(highestMonthlyPlanPrice * 0.5);
+	}, [highestMonthlyPlanPrice]);
+
 	return (
-		<section id="pricing" className="relative px-6 lg:px-8">
-			<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
-			<div className="mx-auto max-w-6xl">
-				<header className="text-center">
-					<p className="text-primary/70 text-xs uppercase tracking-wide">
-						Pricing
-					</p>
-					<h2 className="mt-2 font-semibold text-4xl text-foreground">
-						{title}
-					</h2>
-					<p className="mt-4 text-muted-foreground">{subtitle}</p>
-					<div className="mt-6 inline-flex gap-2 rounded-full border border-border/70 bg-background/80 p-1 shadow-inner backdrop-blur">
-						{VIEW_OPTIONS.filter(({ value }) =>
-							availableViews.includes(value),
-						).map(({ value, label }) => (
-							<Button
-								key={value}
-								variant={view === value ? "default" : "ghost"}
-								size="sm"
-								className={cn(
-									"rounded-full px-4",
-									view === value ? "shadow-md" : "text-muted-foreground",
-								)}
-								onClick={() => handleViewChange(value)}
-							>
-								{label}
-							</Button>
-						))}
-					</div>
-				</header>
-
-				{view === "monthly" ? (
-					<div className="mt-12 space-y-6">
-						{(showFreePreview ||
-							(showUpgradeStack && stackItems.length > 0)) && (
-							<div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-								{showFreePreview && (
-									<GlassCard className="flex flex-col items-center gap-5 p-6 text-center">
-										<div className="flex flex-col items-center gap-2">
-											<Badge
-												variant="secondary"
-												className="bg-primary/10 text-primary"
-											>
-												Free Trial
-											</Badge>
-											<h3 className="font-semibold text-2xl text-foreground">
-												Explore DealScale with 5 AI demo credits
-											</h3>
-											<p className="text-muted-foreground text-sm">
-												Test outbound cadences, dashboard analytics, and CRM
-												sync before you upgrade. Pilot pricing locks in for 2
-												years once you activate.
-											</p>
-											<p className="text-muted-foreground text-xs">
-												After the trial you can continue with the Basic plan at
-												${basicPlan?.price.toLocaleString() ?? "2,000"}
-												/mo—cancel anytime before the renewal.
-											</p>
-										</div>
-										<ul className="list-none space-y-3 text-center text-muted-foreground text-sm">
-											{freePlan?.features?.map((feature) => (
-												<li key={feature}>{feature}</li>
-											)) ?? (
-												<>
-													<li>
-														5 AI demo credits (approx. 4–5 minutes of AI call
-														time)
-													</li>
-													<li>1 active campaign</li>
-													<li>Dashboard + CRM preview</li>
-												</>
-											)}
-										</ul>
-										<div className="flex w-full flex-col gap-3 sm:flex-row">
-											<Button
-												className="flex-1"
-												onClick={handleStartTrial}
-												disabled={trialLoading}
-												aria-live="assertive"
-											>
-												{trialLoading ? (
-													<>
-														<Loader2
-															className="mr-2 h-4 w-4 animate-spin"
-															aria-hidden
-														/>
-														<span className="sr-only">Starting trial…</span>
-														<span aria-hidden>Starting trial…</span>
-													</>
-												) : (
-													"Start Free Trial"
-												)}
-											</Button>
-											<Button
-												variant="outline"
-												className="flex-1 whitespace-nowrap"
-												onClick={() => {
-													if (starterPlan) {
-														void handleSubscribe(starterPlan, "monthly");
-													} else {
-														toast.error(
-															"Starter plan checkout is temporarily unavailable.",
-														);
-													}
-												}}
-												disabled={loading === `${starterPlan?.id}-monthly`}
-											>
-												Lock In Pricing for 2 Years
-											</Button>
-										</div>
-									</GlassCard>
-								)}
-								{showUpgradeStack && stackItems.length > 0 && (
-									<div className="flex items-center justify-center">
-										<CardStack
-											items={stackItems}
-											offset={8}
-											scaleFactor={0.04}
-											height={180}
-										/>
-									</div>
-								)}
-							</div>
-						)}
-						{showPilotBlurb && (
-							<GlassCard className="flex flex-col gap-4 border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-background/90 p-6 lg:flex-row lg:items-center">
-								<div className="space-y-2">
-									<p className="text-primary/70 text-xs uppercase">
-										Pilot Testing Program
-									</p>
-									<h3 className="font-semibold text-foreground text-xl">
-										Upgrade unlocks full automation and white-glove onboarding
-									</h3>
-									<p className="text-muted-foreground text-sm">
-										Basic adds automation-ready credits, custom voices, and CRM
-										sync with pilot pricing locked for <strong>2 years</strong>.
-										Starter goes further with workflow automation, medium queue
-										access, and inbound agents.
-									</p>
-								</div>
+		<>
+			<section id="pricing" className="relative px-6 lg:px-8">
+				<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
+				<div className="mx-auto max-w-6xl">
+					<header className="text-center">
+						<p className="text-primary/70 text-xs uppercase tracking-wide">
+							Pricing
+						</p>
+						<h2 className="mt-2 font-semibold text-4xl text-foreground">
+							{title}
+						</h2>
+						<p className="mt-4 text-muted-foreground">{subtitle}</p>
+						<div className="mt-6 inline-flex gap-2 rounded-full border border-border/70 bg-background/80 p-1 shadow-inner backdrop-blur">
+							{VIEW_OPTIONS.filter(({ value }) =>
+								availableViews.includes(value),
+							).map(({ value, label }) => (
 								<Button
-									variant="secondary"
-									className="whitespace-nowrap"
-									onClick={() => {
-										if (basicPlan) {
-											void handleSubscribe(basicPlan, "monthly");
-										} else {
-											router.push("/contact");
-										}
-									}}
+									key={value}
+									variant={view === value ? "default" : "ghost"}
+									size="sm"
+									className={cn(
+										"rounded-full px-4",
+										view === value ? "shadow-md" : "text-muted-foreground",
+									)}
+									onClick={() => handleViewChange(value)}
 								>
-									Preview Upgrade Checkout
+									{label}
 								</Button>
-							</GlassCard>
-						)}
-					</div>
-				) : null}
-
-				{view !== "oneTime" && recurringPlans.length > 0 ? (
-					<div className="mt-12 grid grid-cols-1 items-start gap-6 md:grid-cols-2">
-						{minimalStackActive && minimalStackItems.length === 2 ? (
-							<div className="md:col-span-2">
-								<CardStack
-									items={minimalStackItems}
-									offset={20}
-									scaleFactor={0.04}
-									height={560}
-									className="max-w-[24rem]"
-								/>
-							</div>
-						) : null}
-						{recurringPlans.map((plan) =>
-							!(minimalStackActive && plan.id === basicPlan?.id) ? (
-								<RecurringPlanCard
-									key={`${plan.id}-${view}`}
-									plan={plan}
-									view={view === "monthly" ? "monthly" : "annual"}
-									onSubscribe={
-										plan.ctaType === "subscribe"
-											? () =>
-													void handleSubscribe(
-														plan,
-														view === "monthly" ? "monthly" : "annual",
-													)
-											: undefined
-									}
-									loading={
-										loading ===
-										`${plan.id}-${view === "monthly" ? "monthly" : "annual"}`
-									}
-									ctaOverride={
-										plan.ctaType === "contactSales"
-											? {
-													label: "Talk to Sales",
-													href: "/contact",
-												}
-											: plan.ctaType === "upgrade"
-												? {
-														label: "Start Free Trial",
-														href: "/signup",
-													}
-												: undefined
-									}
-									badge={
-										view === "annual" && plan.ctaType === "subscribe" ? (
-											<Badge
-												variant="secondary"
-												className="bg-primary/10 text-primary"
-											>
-												Save 15%
-											</Badge>
-										) : undefined
-									}
-								/>
-							) : null,
-						)}
-					</div>
-				) : null}
-
-				{view === "oneTime" ? (
-					<div className="mt-12 flex flex-col gap-6 lg:grid lg:grid-cols-12">
-						<div className="flex flex-col gap-8 lg:col-span-5">
-							<SelfHostedCard
-								variant="selfHosted"
-								title={
-									selfHostedPlan?.name ?? "Self-Hosted / AI Enablement License"
-								}
-								description={
-									selfHostedPlan?.pricingModel ?? "Custom — Contact Sales"
-								}
-								features={
-									selfHostedPlan?.includes ?? [
-										"Private deployment with Docker/Kubernetes support",
-										"White-label branding & dedicated RBAC",
-										"Compliance toolkit (TCPA, GDPR, Colorado AI Act)",
-									]
-								}
-								summary={
-									selfHostedPlan?.notes.slice(0, 3) ?? [
-										"Setup cost typically equals 5–10% of Year-1 ROI.",
-										"Average partners reach 2–3× ROI in Year-1.",
-										"Buyout ends revenue share after a 3-year runway.",
-									]
-								}
-								requirements={
-									selfHostedPlan?.requirements ?? [
-										"Executive sponsor for AI governance sign-off",
-										"Secure cloud or on-prem budget for private deployment",
-										"Dedicated technical contact for integrations",
-										"Annual compliance review cadence with DealScale success team",
-									]
-								}
-								onPrimary={() => router.push("/contact")}
-								primaryLabel={
-									selfHostedPlan?.ctaPrimary.label ?? "Contact Sales"
-								}
-								onSecondary={() => setRoiOpen(true)}
-								secondaryLabel={
-									selfHostedPlan?.ctaSecondary.label ??
-									"Estimate ROI & Setup Cost"
-								}
-							/>
+							))}
 						</div>
-						<div className="lg:col-span-7">
-							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-								{partnershipPlans.map((plan) => (
-									<PartnershipCard
-										key={plan.id}
-										{...toPartnershipProps(plan)}
+					</header>
+
+					{view === "monthly" ? (
+						<div className="mt-12 space-y-6">
+							{(showFreePreview ||
+								(showUpgradeStack && stackItems.length > 0)) && (
+								<div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+									{showFreePreview && (
+										<GlassCard className="flex flex-col items-center gap-5 p-6 text-center">
+											<div className="flex flex-col items-center gap-2">
+												<Badge
+													variant="secondary"
+													className="bg-primary/10 text-primary"
+												>
+													Free Trial
+												</Badge>
+												<h3 className="font-semibold text-2xl text-foreground">
+													Explore DealScale with 5 AI demo credits
+												</h3>
+												<p className="text-muted-foreground text-sm">
+													Test outbound cadences, dashboard analytics, and CRM
+													sync before you upgrade. Pilot pricing locks in for 2
+													years once you activate.
+												</p>
+												<p className="text-muted-foreground text-xs">
+													After the trial you can continue with the Basic plan
+													at ${basicPlan?.price.toLocaleString() ?? "2,000"}
+													/mo—cancel anytime before the renewal.
+												</p>
+											</div>
+											<ul className="list-none space-y-3 text-center text-muted-foreground text-sm">
+												{freePlan?.features?.map((feature) => (
+													<li key={feature}>{feature}</li>
+												)) ?? (
+													<>
+														<li>
+															5 AI demo credits (approx. 4–5 minutes of AI call
+															time)
+														</li>
+														<li>1 active campaign</li>
+														<li>Dashboard + CRM preview</li>
+													</>
+												)}
+											</ul>
+											<div className="flex w-full flex-col gap-3 sm:flex-row">
+												<Button
+													className="flex-1"
+													onClick={handleStartTrial}
+													disabled={trialLoading}
+													aria-live="assertive"
+												>
+													{trialLoading ? (
+														<>
+															<Loader2
+																className="mr-2 h-4 w-4 animate-spin"
+																aria-hidden
+															/>
+															<span className="sr-only">Starting trial…</span>
+															<span aria-hidden>Starting trial…</span>
+														</>
+													) : (
+														"Start Free Trial"
+													)}
+												</Button>
+												<Button
+													variant="outline"
+													className="flex-1 whitespace-nowrap"
+													onClick={() => {
+														if (starterPlan) {
+															void handleSubscribe(starterPlan, "monthly");
+														} else {
+															toast.error(
+																"Starter plan checkout is temporarily unavailable.",
+															);
+														}
+													}}
+													disabled={loading === `${starterPlan?.id}-monthly`}
+												>
+													Lock In Pricing for 2 Years
+												</Button>
+											</div>
+										</GlassCard>
+									)}
+									{showUpgradeStack && stackItems.length > 0 && (
+										<div className="flex items-center justify-center">
+											<CardStack
+												items={stackItems}
+												offset={8}
+												scaleFactor={0.04}
+												height={180}
+											/>
+										</div>
+									)}
+								</div>
+							)}
+							{showPilotBlurb && (
+								<GlassCard className="flex flex-col gap-4 border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-background/90 p-6 lg:flex-row lg:items-center">
+									<div className="space-y-2">
+										<p className="text-primary/70 text-xs uppercase">
+											Pilot Testing Program
+										</p>
+										<h3 className="font-semibold text-foreground text-xl">
+											Upgrade unlocks full automation and white-glove onboarding
+										</h3>
+										<p className="text-muted-foreground text-sm">
+											Basic adds automation-ready credits, custom voices, and
+											CRM sync with pilot pricing locked for{" "}
+											<strong>2 years</strong>. Starter goes further with
+											workflow automation, medium queue access, and inbound
+											agents.
+										</p>
+									</div>
+									<Button
+										variant="secondary"
+										className="whitespace-nowrap"
+										onClick={() => {
+											if (basicPlan) {
+												void handleSubscribe(basicPlan, "monthly");
+											} else {
+												router.push("/contact");
+											}
+										}}
+									>
+										Preview Upgrade Checkout
+									</Button>
+								</GlassCard>
+							)}
+						</div>
+					) : null}
+
+					{view !== "oneTime" && recurringPlans.length > 0 ? (
+						<div className="mt-12 grid grid-cols-1 items-start gap-6 md:grid-cols-2">
+							{minimalStackActive && minimalStackItems.length === 2 ? (
+								<div className="md:col-span-2">
+									<CardStack
+										items={minimalStackItems}
+										offset={20}
+										scaleFactor={0.04}
+										height={560}
+										className="max-w-[24rem]"
 									/>
-								))}
+								</div>
+							) : null}
+							{recurringPlans.map((plan) => {
+								if (minimalStackActive && plan.id === basicPlan?.id) {
+									return null;
+								}
+
+								const monthlyBadgeConfig =
+									view === "monthly" ? MONTHLY_PLAN_BADGES[plan.id] : undefined;
+								const annualBadgeConfig =
+									view === "annual" ? ANNUAL_PLAN_BADGES[plan.id] : undefined;
+
+								const defaultAnnualBadge =
+									view === "annual" &&
+									plan.ctaType === "subscribe" &&
+									!annualBadgeConfig ? (
+										<Badge
+											variant="secondary"
+											className="bg-primary/10 text-primary"
+										>
+											Save 15%
+										</Badge>
+									) : undefined;
+
+								return (
+									<RecurringPlanCard
+										key={`${plan.id}-${view}`}
+										plan={plan}
+										view={view === "monthly" ? "monthly" : "annual"}
+										onSubscribe={
+											plan.ctaType === "subscribe"
+												? () =>
+														void handleSubscribe(
+															plan,
+															view === "monthly" ? "monthly" : "annual",
+														)
+												: undefined
+										}
+										loading={
+											loading ===
+											`${plan.id}-${view === "monthly" ? "monthly" : "annual"}`
+										}
+										ctaOverride={
+											plan.ctaType === "contactSales"
+												? {
+														label: "Talk to Sales",
+														href: "/contact",
+													}
+												: plan.ctaType === "upgrade"
+													? {
+															label: "Start Free Trial",
+															href: "/signup",
+														}
+													: undefined
+										}
+										badge={defaultAnnualBadge}
+										badgeLabel={
+											monthlyBadgeConfig?.label ?? annualBadgeConfig?.label
+										}
+										badgeVariant={
+											monthlyBadgeConfig?.variant ?? annualBadgeConfig?.variant
+										}
+									/>
+								);
+							})}
+						</div>
+					) : null}
+
+					{view === "oneTime" ? (
+						<div className="mt-12 flex flex-col gap-6 lg:grid lg:grid-cols-12">
+							<div className="flex flex-col gap-8 lg:col-span-5">
+								<SelfHostedCard
+									variant="selfHosted"
+									title={
+										selfHostedPlan?.name ??
+										"Self-Hosted / AI Enablement License"
+									}
+									description={
+										selfHostedPlan?.pricingModel ?? "Custom — Contact Sales"
+									}
+									features={
+										selfHostedPlan?.includes ?? [
+											"Private deployment with Docker/Kubernetes support",
+											"White-label branding & dedicated RBAC",
+											"Compliance toolkit (TCPA, GDPR, Colorado AI Act)",
+										]
+									}
+									summary={
+										selfHostedPlan?.notes.slice(0, 3) ?? [
+											"Setup cost typically equals 5–10% of Year-1 ROI.",
+											"Average partners reach 2–3× ROI in Year-1.",
+											"Buyout ends revenue share after a 3-year runway.",
+										]
+									}
+									requirements={
+										selfHostedPlan?.requirements ?? [
+											"Executive sponsor for AI governance sign-off",
+											"Secure cloud or on-prem budget for private deployment",
+											"Dedicated technical contact for integrations",
+											"Annual compliance review cadence with DealScale success team",
+										]
+									}
+									onPrimary={() => router.push("/contact")}
+									primaryLabel={
+										selfHostedPlan?.ctaPrimary.label ?? "Contact Sales"
+									}
+									onSecondary={() => setRoiOpen(true)}
+									secondaryLabel={
+										selfHostedPlan?.ctaSecondary.label ??
+										"Estimate ROI & Setup Cost"
+									}
+								/>
+							</div>
+							<div className="lg:col-span-7">
+								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+									{partnershipPlans.map((plan) => {
+										const badgeConfig = ONE_TIME_PLAN_BADGES[plan.id];
+
+										return (
+											<PartnershipCard
+												key={plan.id}
+												{...toPartnershipProps(plan)}
+												badgeLabel={badgeConfig?.label}
+												badgeVariant={badgeConfig?.variant}
+											/>
+										);
+									})}
+								</div>
 							</div>
 						</div>
-					</div>
+					) : null}
+				</div>
+
+				{checkoutState ? (
+					<PricingCheckoutDialog
+						clientSecret={checkoutState.clientSecret}
+						plan={checkoutState.plan}
+						planType={checkoutState.view}
+						mode={checkoutState.mode}
+						context={checkoutState.context}
+						postTrialAmount={checkoutState.postTrialAmount}
+						onClose={() => setCheckoutState(null)}
+					/>
 				) : null}
-			</div>
 
-			{checkoutState ? (
-				<PricingCheckoutDialog
-					clientSecret={checkoutState.clientSecret}
-					plan={checkoutState.plan}
-					planType={checkoutState.view}
-					mode={checkoutState.mode}
-					context={checkoutState.context}
-					postTrialAmount={checkoutState.postTrialAmount}
-					onClose={() => setCheckoutState(null)}
-				/>
-			) : null}
+				{selfHostedPlan ? (
+					<RoiEstimatorModal
+						open={roiOpen}
+						onOpenChange={setRoiOpen}
+						estimator={selfHostedPlan.roiEstimator}
+					/>
+				) : null}
 
-			{selfHostedPlan ? (
-				<RoiEstimatorModal
-					open={roiOpen}
-					onOpenChange={setRoiOpen}
-					estimator={selfHostedPlan.roiEstimator}
-				/>
+				{productCheckoutSecret && stripePromise && aiCreditsProduct ? (
+					<ProductSelectionProvider>
+						<Elements
+							stripe={stripePromise}
+							options={{
+								clientSecret: productCheckoutSecret,
+								appearance: {
+									theme: "stripe",
+									variables: { colorPrimary: "#4f46e5" },
+								},
+							}}
+						>
+							<ProductCheckoutForm
+								product={aiCreditsProduct}
+								onClose={handleCloseProductCheckout}
+								clientSecret={productCheckoutSecret}
+								prefilledDiscountCode={productCheckoutCoupon ?? undefined}
+								prefilledDiscount={productCheckoutDiscount ?? undefined}
+							/>
+						</Elements>
+					</ProductSelectionProvider>
+				) : null}
+			</section>
+			{!isMinimalMode ? (
+				<div className="mt-16">
+					<AffiliatePartnerTeaser
+						commissionAmount={topTierCommissionLabel}
+						onOpenTiers={() => setAffiliateModalOpen(true)}
+					/>
+				</div>
 			) : null}
-
-			{productCheckoutSecret && stripePromise && aiCreditsProduct ? (
-				<ProductSelectionProvider>
-					<Elements
-						stripe={stripePromise}
-						options={{
-							clientSecret: productCheckoutSecret,
-							appearance: {
-								theme: "stripe",
-								variables: { colorPrimary: "#4f46e5" },
-							},
-						}}
-					>
-						<ProductCheckoutForm
-							product={aiCreditsProduct}
-							onClose={handleCloseProductCheckout}
-							clientSecret={productCheckoutSecret}
-							prefilledDiscountCode={productCheckoutCoupon ?? undefined}
-							prefilledDiscount={productCheckoutDiscount ?? undefined}
-						/>
-					</Elements>
-				</ProductSelectionProvider>
-			) : null}
-		</section>
+			<AffiliateCommissionModal
+				open={affiliateModalOpen}
+				onOpenChange={setAffiliateModalOpen}
+				topCommissionLabel={topTierCommissionLabel}
+			/>
+		</>
 	);
 };
 

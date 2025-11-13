@@ -14,12 +14,14 @@ interface ThreeDMarqueeProps {
 	images: MarqueeImage[];
 	className?: string;
 	itemClassName?: string;
+	variant?: "card" | "hero";
 }
 
 export const ThreeDMarquee = ({
 	images,
 	className,
 	itemClassName,
+	variant = "card",
 }: ThreeDMarqueeProps) => {
 	const normalizedImages = images.map((image, index) =>
 		typeof image === "string"
@@ -33,6 +35,8 @@ export const ThreeDMarquee = ({
 		return normalizedImages.slice(start, start + chunkSize);
 	});
 
+	const isHeroVariant = variant === "hero";
+
 	return (
 		<div
 			className={cn(
@@ -41,11 +45,18 @@ export const ThreeDMarquee = ({
 				"bg-gradient-to-b from-white via-slate-50 to-slate-100",
 				"pt-4 pb-14 sm:pt-6 sm:pb-16 lg:pt-8 lg:pb-20",
 				"dark:border-white/10 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900",
+				isHeroVariant &&
+					"h-full min-h-full rounded-none border-none bg-transparent pt-0 pb-0 dark:bg-transparent",
 				className,
 			)}
 		>
 			<div className="relative flex size-full items-center justify-center">
-				<div className="relative h-full w-full max-w-[980px] px-6 sm:px-8 lg:px-10">
+				<div
+					className={cn(
+						"relative h-full w-full max-w-[980px] px-6 sm:px-8 lg:px-10",
+						isHeroVariant && "max-w-none px-0",
+					)}
+				>
 					<div
 						className="absolute inset-0"
 						style={{
@@ -55,7 +66,13 @@ export const ThreeDMarquee = ({
 								"perspective(1400px) translate3d(-48%, -52%, 0) rotateX(48deg) rotateZ(-32deg)",
 						}}
 					>
-						<div className="grid origin-center grid-cols-4 gap-5 sm:gap-7 lg:gap-8 w-[min(96vw,_700px)] h-[min(96vw,_700px)] sm:w-[min(92vw,_780px)] sm:h-[min(92vw,_780px)] lg:w-[900px] lg:h-[900px]">
+						<div
+							className={cn(
+								"grid origin-center grid-cols-4 gap-5 sm:gap-7 lg:gap-8 w-[min(96vw,_700px)] h-[min(96vw,_700px)] sm:w-[min(92vw,_780px)] sm:h-[min(92vw,_780px)] lg:w-[900px] lg:h-[900px]",
+								isHeroVariant &&
+									"w-[min(120vw,_960px)] h-[min(120vw,_960px)] sm:w-[min(110vw,_1040px)] sm:h-[min(110vw,_1040px)] lg:w-[1100px] lg:h-[1100px]",
+							)}
+						>
 							{chunks.map((subarray, columnIndex) => {
 								const columnKey = `marquee-column-${columnIndex}`;
 
@@ -68,7 +85,10 @@ export const ThreeDMarquee = ({
 											repeatType: "reverse",
 										}}
 										key={columnKey}
-										className="flex flex-col items-start gap-6 sm:gap-8"
+										className={cn(
+											"flex flex-col items-start gap-6 sm:gap-8",
+											isHeroVariant && "gap-8 sm:gap-10",
+										)}
 									>
 										<GridLineVertical className="-left-4" offset="72px" />
 										{subarray.map(({ src, alt }, itemIndex) => {
@@ -90,6 +110,7 @@ export const ThreeDMarquee = ({
 														className={cn(
 															"flex h-28 w-40 items-center justify-center rounded-2xl bg-white/95 p-5 shadow-black/10 shadow-lg ring-1 ring-black/5 backdrop-blur-sm sm:h-32 sm:w-44 sm:p-6",
 															"dark:bg-slate-900/80 dark:shadow-slate-900/40 dark:ring-white/10",
+															isHeroVariant && "bg-white/85 dark:bg-slate-900/75",
 															itemClassName,
 														)}
 													>

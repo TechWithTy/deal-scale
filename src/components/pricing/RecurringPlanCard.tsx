@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import type {
@@ -11,6 +12,7 @@ import type {
 import { Check, Users } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export interface RecurringPlanCardProps {
 	plan: RecurringPlan;
@@ -23,6 +25,8 @@ export interface RecurringPlanCardProps {
 		onClick?: () => void;
 	};
 	badge?: ReactNode;
+	badgeLabel?: string;
+	badgeVariant?: "basic" | "starter" | "enterprise";
 }
 
 const formatCurrency = (amount: number) =>
@@ -60,6 +64,8 @@ export const RecurringPlanCard = ({
 	loading,
 	ctaOverride,
 	badge,
+	badgeLabel,
+	badgeVariant,
 }: RecurringPlanCardProps) => {
 	const priceLabel =
 		view === "monthly"
@@ -110,27 +116,48 @@ export const RecurringPlanCard = ({
 			</Button>
 		);
 
+	const renderBadge = () => {
+		if (badge) return badge;
+		if (!badgeLabel) return null;
+
+		const badgeClass =
+			badgeVariant === "starter"
+				? "bg-gradient-to-r from-orange-500/10 to-orange-500/20 text-orange-400"
+				: badgeVariant === "enterprise"
+					? "bg-gradient-to-r from-emerald-500/10 to-emerald-500/20 text-emerald-400"
+					: "bg-gradient-to-r from-sky-500/10 to-sky-500/20 text-sky-400";
+
+		return (
+			<Badge className={badgeClass} variant="secondary">
+				{badgeLabel}
+			</Badge>
+		);
+	};
+
 	return (
 		<GlassCard
-			className={`flex flex-col justify-between p-6 ${
-				plan.ctaType === "contactSales" ? "border-primary/40" : ""
-			}`}
+			className={cn(
+				"flex flex-col justify-between p-6",
+				plan.ctaType === "contactSales" ? "border-primary/40" : undefined,
+			)}
 			highlighted={plan.ctaType === "subscribe" && plan.price >= 5000}
 		>
 			<div className="space-y-4">
 				<div className="flex items-start justify-between gap-2">
 					<div>
-						<p className="text-muted-foreground text-sm uppercase">
+						<p className={cn("text-sm", "text-muted-foreground", "uppercase")}>
 							{view === "monthly" ? "Monthly Plan" : "Annual Plan"}
 						</p>
-						<h3 className="mt-1 font-semibold text-2xl">{plan.name}</h3>
+						<h3 className={cn("mt-1", "text-2xl", "font-semibold")}>
+							{plan.name}
+						</h3>
 					</div>
-					{badge}
+					{renderBadge()}
 				</div>
 				<div>
-					<p className="font-bold text-4xl">{priceLabel}</p>
+					<p className={cn("text-4xl", "font-bold")}>{priceLabel}</p>
 					{plan.idealFor ? (
-						<p className="mt-1 text-muted-foreground text-sm">
+						<p className={cn("mt-1", "text-sm", "text-muted-foreground")}>
 							Ideal for {plan.idealFor.toLowerCase()}
 						</p>
 					) : null}
