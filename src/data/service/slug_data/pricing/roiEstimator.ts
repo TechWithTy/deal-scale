@@ -60,6 +60,50 @@ export const ROI_ESTIMATOR: ROIEstimator = {
 		output:
 			"Displays 1-, 5-, and 10-year ROI table with setup %, profit, and model comparisons.",
 	},
+	tiers: {
+		selfHosted: {
+			label: "Self-Hosted Buyout",
+			kind: "selfHosted",
+			revenueLift: { low: 0.15, high: 0.3 },
+			efficiency: 0.5,
+			setupPercentRange: { low: 0.05, high: 0.1 },
+			showSetupByDefault: true,
+			default: true,
+		},
+		monthly: {
+			label: "Monthly License",
+			kind: "subscription",
+			revenueLift: { low: 0.1, high: 0.18 },
+			efficiency: 0.4,
+			costs: {
+				monthly: 5000,
+				setup: { low: 3000, high: 7500 },
+			},
+			showSetupByDefault: false,
+		},
+		annual: {
+			label: "Annual License",
+			kind: "subscription",
+			revenueLift: { low: 0.12, high: 0.22 },
+			efficiency: 0.42,
+			costs: {
+				annual: 42500,
+				setup: { low: 5000, high: 12000 },
+			},
+			showSetupByDefault: false,
+		},
+		oneTime: {
+			label: "Launch Accelerator",
+			kind: "subscription",
+			revenueLift: { low: 0.09, high: 0.18 },
+			efficiency: 0.38,
+			costs: {
+				oneTime: 15000,
+			},
+			showSetupByDefault: true,
+		},
+	},
+	defaultTier: "selfHosted",
 };
 
 export default ROI_ESTIMATOR;

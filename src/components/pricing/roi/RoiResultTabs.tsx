@@ -1,0 +1,157 @@
+"use client";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+import type { RoiTierResult } from "@/lib/roi/types";
+
+const currency = new Intl.NumberFormat("en-US", {
+	style: "currency",
+	currency: "USD",
+	maximumFractionDigits: 0,
+});
+
+interface RoiResultTabsProps {
+	result: RoiTierResult;
+	summaryPoints: string[];
+}
+
+export const RoiResultTabs = ({ result, summaryPoints }: RoiResultTabsProps) => {
+	const isSelfHosted = result.tier.kind === "selfHosted";
+	const costs = result.costs;
+
+	const costItems = [
+		costs.monthlyCost !== undefined
+			? { label: "Monthly", value: currency.format(costs.monthlyCost) }
+			: null,
+		costs.annualCost !== undefined
+			? { label: "Annual", value: currency.format(costs.annualCost) }
+			: null,
+		costs.oneTimeCost !== undefined
+			? { label: "One-time", value: currency.format(costs.oneTimeCost) }
+			: null,
+		costs.setupRange
+			? {
+				label: "Setup",
+				value: `${currency.format(costs.setupRange.low)} – ${currency.format(costs.setupRange.high)}`,
+			}
+			: null,
+	].filter(Boolean) as Array<{ label: string; value: string }>;
+
+	return (
+		<Tabs defaultValue="profit" className="space-y-4">
+			<TabsList className="grid w-full grid-cols-3 rounded-full border border-border/60 bg-muted/30 p-1 text-xs font-semibold uppercase tracking-[0.25em]">
+				<TabsTrigger
+					value="profit"
+					className="rounded-full px-3 py-1 text-muted-foreground transition data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+				>
+					{isSelfHosted ? "Profit Horizon" : "Profit Outlook"}
+				</TabsTrigger>
+				<TabsTrigger
+					value="middle"
+					className="rounded-full px-3 py-1 text-muted-foreground transition data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+				>
+					{isSelfHosted ? "Buyout Scenario" : "Cost Summary"}
+				</TabsTrigger>
+				<TabsTrigger
+					value="insights"
+					className="rounded-full px-3 py-1 text-muted-foreground transition data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+				>
+					Key Insights
+				</TabsTrigger>
+			</TabsList>
+			<TabsContent
+				value="profit"
+				className="space-y-3 rounded-xl border border-border/70 bg-background/70 p-5 shadow-sm"
+			>
+				<header>
+					<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+						ROI Projection
+					</p>
+					<h4 className="mt-1 text-lg font-semibold text-foreground">
+						{isSelfHosted
+							? "Compounding returns outlook"
+							: "Projected net impact"
+						}
+					</h4>
+				</header>
+				<ul className="space-y-2 text-sm leading-relaxed text-foreground">
+					<li>
+						<strong>Year 1:</strong> {currency.format(result.year1Profit)} net uplift
+					</li>
+					<li>
+						<strong>Year 5:</strong> {currency.format(result.year5Profit)} cumulative profit
+					</li>
+					<li>
+						<strong>Year 10:</strong> {currency.format(result.year10Profit)} cumulative profit
+					</li>
+				</ul>
+			</TabsContent>
+			<TabsContent
+				value="middle"
+				className="space-y-3 rounded-xl border border-border/70 bg-background/70 p-5 shadow-sm"
+			>
+				{isSelfHosted ? (
+					<header className="space-y-2">
+						<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+							Full Buyout Model
+						</p>
+						<h4 className="text-lg font-semibold text-foreground">
+							Cost to own the automation outright
+						</h4>
+					</header>
+				) : (
+					<header className="space-y-2">
+						<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+							Tier Cost Overview
+						</p>
+						<h4 className="text-lg font-semibold text-foreground">
+							Baseline pricing for {result.tier.label}
+						</h4>
+					</header>
+				)}
+				<ul className="space-y-2 text-sm leading-relaxed text-foreground">
+					{isSelfHosted ? (
+						<>
+							<li>
+								<strong>Setup investment:</strong> {currency.format(result.buyoutSetup)}
+							</li>
+							<li>
+								<strong>Annual maintenance:</strong> {currency.format(result.buyoutMaintenance)}
+							</li>
+							<li>
+								<strong>Ownership:</strong> Perpetual platform and model control after
+								revenue-share sunset
+							</li>
+						</>
+					) : costItems.length ? (
+						costItems.map((item) => (
+							<li key={item.label}>
+								<strong>{item.label}:</strong> {item.value}
+							</li>
+						))
+					) : (
+						<li>No additional platform fees for this tier.</li>
+					)}
+				</ul>
+			</TabsContent>
+			<TabsContent
+				value="insights"
+				className="space-y-3 rounded-xl border border-border/70 bg-background/70 p-5 shadow-sm"
+			>
+				<header>
+					<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+						Key Insights
+					</p>
+					<h4 className="mt-1 text-lg font-semibold text-foreground">
+						What teams see in the first 90 days
+					</h4>
+				</header>
+				<ul className="space-y-2 text-sm leading-relaxed text-foreground">
+					{summaryPoints.map((point) => (
+						<li key={point}>{point}</li>
+					))}
+				</ul>
+			</TabsContent>
+		</Tabs>
+	);
+};

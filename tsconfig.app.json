@@ -36,6 +36,7 @@
 		"**/*.test.tsx",
 		"**/*.spec.ts",
 		"**/*.spec.tsx",
+		"src/testHelpers",
 		"tests"
 	]
 }

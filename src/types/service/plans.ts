@@ -6,6 +6,25 @@ export type PricingInterval = "monthly" | "annual";
 export type PricingUnit = "month" | "year";
 export type UnlimitedValue = number | "unlimited";
 
+export type RoiTierKind = "selfHosted" | "subscription";
+
+export interface RoiEstimatorTier {
+	label: string;
+	kind: RoiTierKind;
+	description?: string;
+	revenueLift?: { low: number; high: number };
+	efficiency?: number;
+	setupPercentRange?: { low: number; high?: number };
+	costs?: {
+		setup?: number | { low: number; high?: number };
+		monthly?: number;
+		annual?: number;
+		oneTime?: number;
+	};
+	default?: boolean;
+	showSetupByDefault?: boolean;
+}
+
 export interface PricingCredits {
 	ai: UnlimitedValue;
 	skipTrace: UnlimitedValue;
@@ -89,6 +108,8 @@ export interface ROIEstimator {
 	calculations: ROIEstimatorCalculations;
 	summaryOutput: ROIEstimatorSummary;
 	cta: ROIEstimatorCTA;
+	tiers?: Record<string, RoiEstimatorTier>;
+	defaultTier?: string;
 }
 
 export interface SelfHostedPlan {
