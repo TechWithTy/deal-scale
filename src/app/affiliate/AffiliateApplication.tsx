@@ -26,6 +26,7 @@ import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 import { v4 as uuidv4 } from "uuid";
 // * Centralized SEO for /affiliate using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
@@ -107,9 +108,10 @@ const AffiliateApplication = () => {
 		setSuccess(true);
 	};
 
-	return (
-		<ExitIntentBoundary variant="affiliate">
-			<AuthGuard>
+	const shouldRenderExitIntent = exitIntentEnabled();
+
+	const content = (
+		<AuthGuard>
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
@@ -138,8 +140,13 @@ const AffiliateApplication = () => {
 				/>
 				<Newsletter />
 			</div>
-			</AuthGuard>
-		</ExitIntentBoundary>
+		</AuthGuard>
+	);
+
+	return shouldRenderExitIntent ? (
+		<ExitIntentBoundary variant="affiliate">{content}</ExitIntentBoundary>
+	) : (
+		content
 	);
 };
 

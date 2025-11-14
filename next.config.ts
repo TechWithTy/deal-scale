@@ -1,14 +1,34 @@
-import path from "node:path";
+import { createRequire } from "node:module";
 // next.config.ts
 import type { NextConfig } from "next";
-import bundleAnalyzer from "@next/bundle-analyzer";
 
 const isProd = process.env.NODE_ENV === "production";
 const ANALYZE = process.env.ANALYZE === "true";
 
-const withBundleAnalyzer = bundleAnalyzer({
-	enabled: ANALYZE,
-});
+const require = createRequire(import.meta.url);
+
+const createBundleAnalyzer = (): ((config: NextConfig) => NextConfig) => {
+	if (!ANALYZE) {
+		return (config) => config;
+	}
+
+	try {
+		const analyzer = require("@next/bundle-analyzer") as (
+			options: { enabled: boolean }
+		) => (config: NextConfig) => NextConfig;
+
+		return analyzer({
+			enabled: true,
+		});
+	} catch (error) {
+		console.warn(
+			"Skipping bundle analyzer because '@next/bundle-analyzer' is not installed."
+		);
+		return (config) => config;
+	}
+};
+
+const withBundleAnalyzer = createBundleAnalyzer();
 
 const nextConfig: NextConfig = {
 	// Optimize package imports to reduce bundle size

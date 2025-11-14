@@ -8,6 +8,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { Toaster } from "@/components/ui/toaster";
 import BodyThemeSync from "@/contexts/BodyThemeSync";
 import { ThemeProvider } from "@/contexts/theme-context";
+import { AnalyticsConsentProvider } from "@/contexts/analytics-consent-context";
 
 import type { AnalyticsConfig } from "@/lib/analytics/config";
 
@@ -39,28 +40,33 @@ export function AppProviders({
 	plausibleEndpoint,
 	initialAnalyticsConfig,
 }: AppProvidersProps) {
+	const defaultAnalyticsConsent =
+		process.env.NEXT_PUBLIC_ANALYTICS_AUTOLOAD === "true";
+
 	return (
-		<ThemeProvider>
-			<BodyThemeSync />
-			<PerformanceMonitor />
-			<Suspense fallback={<LoadingAnimation />}>
-				<Toaster />
-				<NextAuthProvider>
-					<QueryClientProvider client={queryClient}>
-						<NavigationLoader />
-						<ScrollDistanceIndicator />
-						<PageLayout>{children}</PageLayout>
-					</QueryClientProvider>
-				</NextAuthProvider>
-			</Suspense>
-			<DeferredThirdParties
-				clarityProjectId={clarityProjectId}
-				zohoWidgetCode={zohoWidgetCode}
-				facebookPixelId={facebookPixelId}
-				plausibleDomain={plausibleDomain}
-				plausibleEndpoint={plausibleEndpoint}
-				initialConfig={initialAnalyticsConfig}
-			/>
-		</ThemeProvider>
+		<AnalyticsConsentProvider defaultConsent={defaultAnalyticsConsent}>
+			<ThemeProvider>
+				<BodyThemeSync />
+				<PerformanceMonitor />
+				<Suspense fallback={<LoadingAnimation />}>
+					<Toaster />
+					<NextAuthProvider>
+						<QueryClientProvider client={queryClient}>
+							<NavigationLoader />
+							<ScrollDistanceIndicator />
+							<PageLayout>{children}</PageLayout>
+						</QueryClientProvider>
+					</NextAuthProvider>
+				</Suspense>
+				<DeferredThirdParties
+					clarityProjectId={clarityProjectId}
+					zohoWidgetCode={zohoWidgetCode}
+					facebookPixelId={facebookPixelId}
+					plausibleDomain={plausibleDomain}
+					plausibleEndpoint={plausibleEndpoint}
+					initialConfig={initialAnalyticsConfig}
+				/>
+			</ThemeProvider>
+		</AnalyticsConsentProvider>
 	);
 }

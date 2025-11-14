@@ -24,6 +24,7 @@ import type { Metadata } from "next";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 
 import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
 
@@ -286,9 +287,10 @@ const Contact = () => {
 		);
 	}
 
-	return (
-		<ExitIntentBoundary variant="contact">
-			<AuthGuard>
+	const shouldRenderExitIntent = exitIntentEnabled();
+
+	const content = (
+		<AuthGuard>
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
@@ -362,8 +364,13 @@ const Contact = () => {
 				)}
 				<Newsletter />
 			</div>
-			</AuthGuard>
-		</ExitIntentBoundary>
+		</AuthGuard>
+	);
+
+	return shouldRenderExitIntent ? (
+		<ExitIntentBoundary variant="contact">{content}</ExitIntentBoundary>
+	) : (
+		content
 	);
 };
 

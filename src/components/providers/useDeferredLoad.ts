@@ -1,12 +1,43 @@
 import { useEffect, useState } from "react";
 
 const DEFAULT_MAX_WAIT_MS = 5000;
+const DEFAULT_IDLE_TIMEOUT_MS = 2000;
 
-export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
+type DeferredOptions =
+	| number
+	| {
+			enabled?: boolean;
+			/**
+			 * Maximum wait before enabling. Set to `0` to disable the timeout fallback.
+			 */
+			timeout?: number;
+			/**
+			 * If true, defer resolving until an explicit user interaction occurs.
+			 * Idle callbacks and timeout fallbacks will be skipped unless `timeout`
+			 * is explicitly provided.
+			 */
+			requireInteraction?: boolean;
+			/**
+			 * Custom timeout for requestIdleCallback.
+			 */
+			idleTimeout?: number;
+	  };
+
+export function useDeferredLoad(options?: DeferredOptions) {
+	const resolvedOptions =
+		typeof options === "number"
+			? { timeout: options }
+			: options ?? { timeout: DEFAULT_MAX_WAIT_MS };
+	const {
+		enabled = true,
+		timeout = DEFAULT_MAX_WAIT_MS,
+		requireInteraction = false,
+		idleTimeout = DEFAULT_IDLE_TIMEOUT_MS,
+	} = resolvedOptions;
 	const [shouldLoad, setShouldLoad] = useState(false);
 
 	useEffect(() => {
-		if (shouldLoad || typeof window === "undefined") {
+		if (!enabled || shouldLoad || typeof window === "undefined") {
 			return;
 		}
 
@@ -20,29 +51,6 @@ export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
 				setShouldLoad(true);
 			}
 		};
-
-		const scheduleIdle = () => {
-			if (typeof window === "undefined") {
-				return;
-			}
-
-			if ("requestIdleCallback" in window) {
-				const idleId = window.requestIdleCallback(() => enable(), {
-					timeout: 2000,
-				});
-				cleanupFns.push(() => window.cancelIdleCallback?.(idleId));
-			} else {
-				timers.push(globalThis.setTimeout(enable, 1200));
-			}
-		};
-
-		if (document.readyState === "complete") {
-			scheduleIdle();
-		} else {
-			const handleLoad = () => scheduleIdle();
-			window.addEventListener("load", handleLoad, { once: true });
-			cleanupFns.push(() => window.removeEventListener("load", handleLoad));
-		}
 
 		const registerWindowEvent = (eventName: keyof WindowEventMap) => {
 			const handler = () => enable();
@@ -66,7 +74,37 @@ export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
 		registerWindowEvent("pageshow");
 		registerDocumentEvent("visibilitychange");
 
-		timers.push(globalThis.setTimeout(enable, maxWaitMs));
+		if (!requireInteraction) {
+			const scheduleIdle = () => {
+				if (typeof window === "undefined") {
+					return;
+				}
+
+				if ("requestIdleCallback" in window) {
+					const idleId = window.requestIdleCallback(() => enable(), {
+						timeout: idleTimeout,
+					});
+					cleanupFns.push(() => window.cancelIdleCallback?.(idleId));
+				} else {
+					timers.push(globalThis.setTimeout(enable, idleTimeout));
+				}
+			};
+
+			if (document.readyState === "complete") {
+				scheduleIdle();
+			} else {
+				const handleLoad = () => scheduleIdle();
+				window.addEventListener("load", handleLoad, { once: true });
+				cleanupFns.push(() => window.removeEventListener("load", handleLoad));
+			}
+		}
+
+		if (!requireInteraction || timeout > 0) {
+			const timeoutDuration = timeout < 0 ? DEFAULT_MAX_WAIT_MS : timeout;
+			if (timeoutDuration > 0) {
+				timers.push(globalThis.setTimeout(enable, timeoutDuration));
+			}
+		}
 
 		return () => {
 			resolved = true;
@@ -77,7 +115,7 @@ export function useDeferredLoad(maxWaitMs = DEFAULT_MAX_WAIT_MS) {
 				cleanup();
 			}
 		};
-	}, [shouldLoad, maxWaitMs]);
+	}, [enabled, shouldLoad, timeout, requireInteraction, idleTimeout]);
 
 	return shouldLoad;
 }

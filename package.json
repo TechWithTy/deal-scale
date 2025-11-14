@@ -39,6 +39,7 @@
                 "seed:all": "pnpm run seed:categories && pnpm run seed:products && pnpm run seed:services && pnpm run seed:company",
                 "submit:sitemap": "node tools/deploy/submit-sitemap.js",
                 "perf:lighthouse:local": "pnpm dlx lighthouse http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/local",
+                "perf:lighthouse:prod-local": "lighthouse http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/prod",
                 "perf:lighthouse:prod": "pnpm dlx lighthouse https://dealscale.io/ --preset=perf --throttling.cpuSlowdownMultiplier=4 --throttling.downloadThroughputKbps=1500 --throttling.uploadThroughputKbps=750 --output=json --output=html --output-path=reports/lighthouse/prod",
                 "build:analyze:head": "ANALYZE=true pnpm next build 2>&1 | head -20",
                 "generate:data": "pnpm exec tsx tools/data/generate-data-manifest.ts",
