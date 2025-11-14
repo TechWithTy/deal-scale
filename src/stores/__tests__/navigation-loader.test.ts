@@ -1,12 +1,5 @@
 import { act } from "@testing-library/react";
-import {
-	afterEach,
-	beforeEach,
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
 	resetNavigationLoaderStore,
@@ -65,4 +58,3 @@ describe("navigation loader store", () => {
 		expect(useNavigationLoaderStore.getState().isNavigating).toBe(false);
 	});
 });
-

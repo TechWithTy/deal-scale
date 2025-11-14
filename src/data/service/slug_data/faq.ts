@@ -37,7 +37,8 @@ const leadGenFaqItems: FAQItem[] = [
 
 export const leadGenFAQ: FAQProps = {
 	title: "Frequently Asked Questions",
-	subtitle: "Everything you need to know about our Lookalike Audience Expansion service.",
+	subtitle:
+		"Everything you need to know about our Lookalike Audience Expansion service.",
 	faqItems: leadGenFaqItems,
 };
 

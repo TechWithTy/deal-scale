@@ -23,6 +23,7 @@ import {
 	AI_OUTREACH_STUDIO_FEATURES,
 	AI_OUTREACH_STUDIO_HEADING,
 	AI_OUTREACH_STUDIO_TAGLINE,
+	buildPersonaAiOutreachStudioSeo,
 } from "@/data/home/aiOutreachStudio";
 import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from "@/data/personas/catalog";
 import demoTranscript from "@/data/transcripts";
@@ -810,6 +811,13 @@ const CallDemoInteractive = () => {
 		PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
 	const resolvedGoal = goal ?? "Automate deal flow conversations";
 	const resolvedGoalLower = resolvedGoal.toLowerCase();
+	const personaSeo = useMemo(
+		() => buildPersonaAiOutreachStudioSeo({ persona, goal: resolvedGoal }),
+		[persona, resolvedGoal],
+	);
+	const heroTagline = personaSeo.headline ?? AI_OUTREACH_STUDIO_TAGLINE;
+	const heroDescription =
+		personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
 	const leadCaptureCopy = useMemo(() => {
 		if (leadCaptureOrigin === "text") {
 			return {
@@ -843,10 +851,10 @@ const CallDemoInteractive = () => {
 								</span>
 							</p>
 							<h2 className="font-semibold text-3xl text-slate-900 md:text-4xl lg:text-5xl dark:text-white">
-								{AI_OUTREACH_STUDIO_TAGLINE}
+								{heroTagline}
 							</h2>
 							<p className="max-w-sm text-base text-slate-600 md:mx-auto md:max-w-2xl md:text-lg dark:text-white/70">
-								{AI_OUTREACH_STUDIO_DESCRIPTION}
+								{heroDescription}
 							</p>
 						</div>
 						<div className="flex flex-col gap-6">
@@ -987,10 +995,10 @@ const CallDemoInteractive = () => {
 							</span>
 						</p>
 						<h2 className="font-semibold text-4xl text-slate-900 tracking-tight sm:text-5xl dark:text-white">
-							{AI_OUTREACH_STUDIO_TAGLINE}
+							{heroTagline}
 						</h2>
 						<p className="text-base text-slate-600 sm:text-lg dark:text-white/70">
-							{AI_OUTREACH_STUDIO_DESCRIPTION}
+							{heroDescription}
 						</p>
 						<ul className="grid gap-3 text-slate-600 text-sm sm:grid-cols-2 sm:text-base lg:grid-cols-3 dark:text-white/70">
 							{AI_OUTREACH_STUDIO_FEATURES.map((feature) => (
@@ -1042,15 +1050,13 @@ const StaticCallDemoPreview = () => {
 			<div className="grid gap-10 pt-6 lg:grid-cols-2">
 				<div className="space-y-5">
 					<span className="inline-flex items-center rounded-full border border-white/15 px-4 py-1 font-semibold text-slate-200/80 text-xs uppercase tracking-[0.25em]">
-						{AI_OUTREACH_STUDIO_TAGLINE}
+						{heroTagline}
 					</span>
 					<div>
 						<h2 className="text-balance font-semibold text-3xl leading-tight md:text-4xl">
 							{AI_OUTREACH_STUDIO_HEADING}
 						</h2>
-						<p className="mt-3 text-slate-200/80">
-							{AI_OUTREACH_STUDIO_DESCRIPTION}
-						</p>
+						<p className="mt-3 text-slate-200/80">{heroDescription}</p>
 					</div>
 					<ul className="space-y-3 text-slate-100/90">
 						{AI_OUTREACH_STUDIO_FEATURES.slice(0, 3).map((feature) => (

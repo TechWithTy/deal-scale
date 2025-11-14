@@ -19,7 +19,8 @@ export const activityStream: ActivityEvent[] = [
 		id: "lead-sync",
 		label: "Pipeline Sync",
 		actor: "DealScale AI Router",
-		action: "Synced 48 lookalike off-market seller leads from InvestorFuse CRM using similarity clustering.",
+		action:
+			"Synced 48 lookalike off-market seller leads from InvestorFuse CRM using similarity clustering.",
 		timeAgo: "2m ago",
 		impact: "+12% response SLA",
 		tags: ["sync", "crm"],

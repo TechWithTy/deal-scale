@@ -1,0 +1,110 @@
+name: 'Instant Crawl'
+description: 'Trigger search engine crawling via Sitemap ping and IndexNow'
+inputs:
+  mode:
+    description: 'sitemap | indexnow | both'
+    required: false
+    default: 'both'
+  sitemap_url:
+    description: 'Absolute URL to sitemap.xml'
+    required: false
+    default: ''
+  base_url:
+    description: 'Base site URL (e.g., https://dealscale.io)'
+    required: false
+    default: ''
+  dist_dir:
+    description: 'Directory containing built static site to enumerate URLs'
+    required: false
+    default: 'landing/dist'
+  indexnow_key:
+    description: 'IndexNow key (must also exist as {key}.txt at site root)'
+    required: false
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+        SITEMAP_URL: ${{ inputs.sitemap_url }}
+        BASE_URL: ${{ inputs.base_url }}
+        DIST_DIR: ${{ inputs.dist_dir }}
+        INDEXNOW_KEY: ${{ inputs.indexnow_key }}
+      run: |
+        set -euo pipefail
+
+        generate_urls() {
+          local dist="$1" base="$2"
+          : > urls.txt
+          if [ -z "$base" ] || [ ! -d "$dist" ]; then
+            echo "Skipping URL generation: base_url or dist_dir missing" >&2
+            return 0
+          fi
+          # Root URL
+          if [ -f "$dist/index.html" ]; then
+            echo "$base" >> urls.txt
+          fi
+          # Other HTML files
+          while IFS= read -r -d '' file; do
+            rel=${file#"$dist/"}
+            if [[ "$rel" == "index.html" ]]; then
+              continue
+            elif [[ "$rel" == */index.html ]]; then
+              path="/${rel%/index.html}/"
+            else
+              path="/${rel}"
+            fi
+            echo "$base$path" >> urls.txt
+          done < <(find "$dist" -type f -name "*.html" -print0)
+          # Deduplicate and limit to 100 URLs
+          sort -u urls.txt | head -n 100 > urls.tmp && mv urls.tmp urls.txt
+          echo "Generated $(wc -l < urls.txt) URLs for IndexNow ping"
+        }
+
+        ping_sitemaps() {
+          local sm="$1"
+          if [ -z "$sm" ]; then
+            echo "No sitemap_url provided; skipping sitemap pings"; return 0; fi
+          echo "Pinging Google with sitemap"
+          curl -fsS "https://www.google.com/ping?sitemap=$sm" || true
+          echo "Pinging Bing with sitemap"
+          curl -fsS "https://www.bing.com/ping?sitemap=$sm" || true
+        }
+
+        indexnow_submit() {
+          local key="$1" base="$2"
+          if [ -z "$key" ] || [ -z "$base" ]; then
+            echo "IndexNow key or base_url missing; skipping IndexNow"; return 0; fi
+          host=$(echo "$base" | sed -E 's#^https?://([^/]+)/?.*$#\1#')
+          keyLoc="$base/$key.txt"
+          if [ -f urls.txt ]; then
+            mapfile -t urlList < urls.txt
+          else
+            urlList=("$base/")
+          fi
+          # Build JSON payload
+          printf '{"host":"%s","key":"%s","keyLocation":"%s","urlList":[' "$host" "$key" "$keyLoc" > payload.json
+          first=1
+          for u in "${urlList[@]}"; do
+            if [ $first -eq 1 ]; then first=0; else printf ',' >> payload.json; fi
+            printf '"%s"' "$u" >> payload.json
+          done
+          printf ']}' >> payload.json
+          echo "Submitting IndexNow with $((${#urlList[@]})) URLs"
+          curl -fsS -H 'Content-Type: application/json; charset=utf-8' -d @payload.json https://api.indexnow.org/indexnow || true
+        }
+
+        # Generate URL list for indexnow if base/dist provided
+        generate_urls "$DIST_DIR" "$BASE_URL"
+
+        case "$MODE" in
+          sitemap)
+            ping_sitemaps "$SITEMAP_URL" ;;
+          indexnow)
+            indexnow_submit "$INDEXNOW_KEY" "$BASE_URL" ;;
+          both|*)
+            ping_sitemaps "$SITEMAP_URL"
+            indexnow_submit "$INDEXNOW_KEY" "$BASE_URL" ;;
+        esac
+

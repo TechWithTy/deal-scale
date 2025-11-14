@@ -21,10 +21,7 @@ export default function LoadingAnimation({
 	return (
 		<div
 			aria-live={ariaLive}
-			className={cn(
-				"flex w-full items-center justify-center py-20",
-				className,
-			)}
+			className={cn("flex w-full items-center justify-center py-20", className)}
 			data-testid="loading-animation"
 		>
 			<Spinner

@@ -1,9 +1,4 @@
-import {
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import type { ProductType } from "@/types/products";
 import type { ABTest } from "@/types/testing";

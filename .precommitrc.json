@@ -1,0 +1,7 @@
+{
+  "mode": "fast",
+  "runLint": true,
+  "runTypecheck": false,
+  "runTests": false
+}
+

@@ -1,0 +1,63 @@
+name: 'Twilio SMS/Call (VAPI)'
+description: 'Send a Twilio SMS or place a call to a VAPI URL'
+inputs:
+  account_sid:
+    description: 'Twilio Account SID'
+    required: true
+  auth_token:
+    description: 'Twilio Auth Token'
+    required: true
+  from_number:
+    description: 'Twilio From number'
+    required: true
+  to_number:
+    description: 'Recipient number'
+    required: true
+  mode:
+    description: 'sms or call'
+    required: false
+    default: 'sms'
+  vapi_url:
+    description: 'VAPI URL for call mode (Twilio Calls URL)'
+    required: false
+    default: ''
+  message:
+    description: 'Message content for SMS mode'
+    required: false
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      env:
+        TWILIO_SID: ${{ inputs.account_sid }}
+        TWILIO_TOKEN: ${{ inputs.auth_token }}
+        FROM: ${{ inputs.from_number }}
+        TO: ${{ inputs.to_number }}
+        MODE: ${{ inputs.mode }}
+        VAPI_URL: ${{ inputs.vapi_url }}
+        MSG: ${{ inputs.message }}
+      run: |
+        set -euo pipefail
+        base="https://api.twilio.com/2010-04-01/Accounts/$TWILIO_SID"
+        if [ "$MODE" = "call" ]; then
+          if [ -z "$VAPI_URL" ]; then
+            echo "vapi_url is required for call mode" >&2
+            exit 1
+          fi
+          curl -sS -X POST "$base/Calls.json" \
+            --user "$TWILIO_SID:$TWILIO_TOKEN" \
+            --data-urlencode "From=$FROM" \
+            --data-urlencode "To=$TO" \
+            --data-urlencode "Url=$VAPI_URL"
+        else
+          if [ -z "$MSG" ]; then
+            echo "message is empty; sending placeholder"; MSG="Deployment notification"
+          fi
+          curl -sS -X POST "$base/Messages.json" \
+            --user "$TWILIO_SID:$TWILIO_TOKEN" \
+            --data-urlencode "From=$FROM" \
+            --data-urlencode "To=$TO" \
+            --data-urlencode "Body=$MSG"
+        fi
+

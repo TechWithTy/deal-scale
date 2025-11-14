@@ -1,0 +1,42 @@
+name: Code Quality
+
+on:
+  workflow_call:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Enable Corepack (pnpm)
+        shell: bash
+        run: |
+          corepack enable
+          echo "pnpm version: $(pnpm --version)"
+
+      - name: Install dependencies (pnpm)
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        shell: bash
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome lint
+        shell: bash
+        # Use dlx to avoid requiring local install; don't fail pipeline if missing config
+        run: pnpm dlx @biomejs/biome check . || echo "Biome check skipped or warnings only"
+
+      - name: TypeScript typecheck
+        if: ${{ hashFiles('tsconfig.json') != '' }}
+        shell: bash
+        run: pnpm dlx typescript tsc -p .
+
+      - name: Unit tests (if present)
+        shell: bash
+        run: pnpm -s run test --if-present

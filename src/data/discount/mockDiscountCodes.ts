@@ -89,7 +89,8 @@ export const mockDiscountCodes: DiscountCode[] = [
 		created: new Date(),
 		discountPercent: 15,
 		isActive: true,
-		description: "15% off any Lookalike Audience Expansion Inspired By How To Win Friends And Influence People plan.",
+		description:
+			"15% off any Lookalike Audience Expansion Inspired By How To Win Friends And Influence People plan.",
 		planCategoryIds: [PRICING_CATEGORIES.LEAD_GENERATION],
 	},
 	{

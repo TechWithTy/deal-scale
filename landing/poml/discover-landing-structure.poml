@@ -1,0 +1,23 @@
+<step id="discover-landing-structure">
+  <scan>
+    <targets>
+      <item>package.json</item>
+      <item>public/**/*.png</item>
+      <item>public/**/*.webp</item>
+      <item>src/meta/**/*</item>
+      <item>functions/_middleware.*</item>
+      <item>public/sitemap.xml</item>
+      <item>public/robots.txt</item>
+      <item>dist/index.html</item>
+    </targets>
+  </scan>
+  <extract>
+    <fields>
+      <field name="has_sitemap">Boolean</field>
+      <field name="has_og_image">Boolean</field>
+      <field name="image_count">Number</field>
+      <field name="meta_tags">List</field>
+    </fields>
+  </extract>
+</step>
+

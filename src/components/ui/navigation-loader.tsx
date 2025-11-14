@@ -114,4 +114,3 @@ export function NavigationLoader() {
 
 	return createPortal(content, portalHost);
 }
-

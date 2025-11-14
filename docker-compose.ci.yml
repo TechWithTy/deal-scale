@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      target: runner
+    environment:
+      NODE_ENV: production
+      DOMAIN_NAME: localhost
+      NEXTAUTH_SECRET: ci-nextauth-secret
+      NEXTAUTH_URL: http://localhost:3000
+      CLARITY_PROJECT_ID: ci-clarity
+      NEXT_PUBLIC_CLARITY_PROJECT_ID: ci-clarity
+      GOOGLE_ANALYTICS_ID: G-TEST123
+      NEXT_PUBLIC_GOOGLE_ANALYTICS: G-TEST123
+      GOOGLE_TAG_MANAGER_ID: GTM-TEST123
+      NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID: GTM-TEST123
+      ZOHO_SALES_IQ_WIDGET_CODE: ci-zoho-widget
+      NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE: ci-zoho-widget
+      DATABASE_URL: postgresql://dealscale:postgres@db:5432/dealscale
+      DB_PASSWORD: postgres
+      UPSTASH_REDIS_REST_URL: https://redis-ci.local
+      UPSTASH_REDIS_REST_TOKEN: ci-redis-token
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: dealscale
+      POSTGRES_USER: dealscale
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dealscale -d dealscale"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+

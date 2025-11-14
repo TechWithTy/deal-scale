@@ -63,5 +63,3 @@ archiveSarif().catch((error) => {
 	console.error("[archive:opengrep] Failed to archive Opengrep report.", error);
 	process.exitCode = 1;
 });
-
-

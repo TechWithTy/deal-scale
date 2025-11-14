@@ -3,10 +3,9 @@ import type { SeoMeta } from "../../utils/seo/seo";
 
 // Default SEO meta for Deal Scale
 export const DEFAULT_SEO: SeoMeta = {
-	title:
-		"Deal Scale | AI-Powered Real Estate Lookalike Audience Expansion (Inspired by How to Win Friends and Influence People)",
+	title: "Deal Scale AI Real Estate Automation for Deal Flow",
 	description:
-		"Rated 5/5 by investors, agents, and wholesalers. Deal Scale delivers AI-powered lookalike audience expansion inspired by How to Win Friends and Influence People, qualification, and outreach to close more deals.",
+		"AI real estate automation for investors and agents to unify deal flow, automate outreach, and book more appointments without switching CRMs.",
 	canonical: "https://dealscale.io",
 	image: "/banners/main.png",
 	keywords: [
@@ -30,9 +29,9 @@ export const DEFAULT_SEO: SeoMeta = {
  */
 export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	"/": {
-		title: "Home | Deal Scale",
+		title: "Deal Scale AI Real Estate Automation for Deal Flow",
 		description:
-			"Deal Scale earns 5-star reviews from investors, agents, and wholesalers for AI-powered real estate automation and lookalike audience expansion inspired by How to Win Friends and Influence People.",
+			"AI real estate automation for investors and agents to unify deal flow, automate outreach, and book more appointments without switching CRMs.",
 		canonical: "https://dealscale.io",
 		keywords: DEFAULT_SEO.keywords,
 		image: DEFAULT_SEO.image,

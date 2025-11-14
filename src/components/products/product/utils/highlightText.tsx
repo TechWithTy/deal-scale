@@ -1,20 +1,13 @@
 import { cn } from "@/lib/utils";
 import { Fragment } from "react";
 
-type HighlightKind =
-	| "cta"
-	| "solution"
-	| "hope"
-	| "fear"
-	| "pain"
-	| "keyword";
+type HighlightKind = "cta" | "solution" | "hope" | "fear" | "pain" | "keyword";
 
 type HighlightGroups = Partial<Record<HighlightKind, string[]>>;
 
 const HIGHLIGHT_STYLES: Record<HighlightKind, string> = {
 	cta: "bg-emerald-100 text-emerald-900 dark:bg-emerald-600/60 dark:text-emerald-50",
-	solution:
-		"bg-blue-100 text-blue-900 dark:bg-blue-600/40 dark:text-blue-50",
+	solution: "bg-blue-100 text-blue-900 dark:bg-blue-600/40 dark:text-blue-50",
 	hope: "bg-sky-100 text-sky-900 dark:bg-sky-500/40 dark:text-sky-50",
 	fear: "bg-red-100 text-red-900 dark:bg-red-600/50 dark:text-red-50",
 	pain: "bg-rose-100 text-rose-900 dark:bg-rose-600/40 dark:text-rose-50",
