@@ -1,5 +1,6 @@
 "use client";
 
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import CatalogPricing from "@/components/pricing/CatalogPricing";
 import type { PricingCatalog } from "@/types/service/plans";
 import { useSearchParams } from "next/navigation";
@@ -22,14 +23,16 @@ const PricingClient: React.FC<PricingProps> = ({
 	const callbackUrl = searchParams?.get("callbackUrl") || undefined;
 
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-16 dark:from-black dark:to-gray-900">
-			<CatalogPricing
-				title={title}
-				subtitle={subtitle}
-				catalog={catalog}
-				callbackUrl={callbackUrl}
-			/>
-		</div>
+		<ExitIntentBoundary variant="pricing">
+			<div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-16 dark:from-black dark:to-gray-900">
+				<CatalogPricing
+					title={title}
+					subtitle={subtitle}
+					catalog={catalog}
+					callbackUrl={callbackUrl}
+				/>
+			</div>
+		</ExitIntentBoundary>
 	);
 };
 

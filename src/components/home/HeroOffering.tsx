@@ -1,11 +1,17 @@
 "use client";
 
-import SafeMotionDiv from "@/components/ui/SafeMotionDiv";
-import SplineModel from "@/components/ui/spline-model";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import Image, { type StaticImageData } from "next/image";
 import type React from "react";
+import dynamic from "next/dynamic";
+import SafeMotionDiv from "@/components/ui/SafeMotionDiv";
+import SplinePlaceHolder from "@/components/ui/SplinePlaceHolder";
+
+const LazySplineModel = dynamic(() => import("@/components/ui/spline-model"), {
+	ssr: false,
+	loading: () => <SplinePlaceHolder />,
+});
 
 export interface HeroOfferingProps {
 	image?: string | StaticImageData | React.ReactNode;
@@ -82,7 +88,7 @@ export const HeroOffering: React.FC<HeroOfferingProps> = ({
 						</SafeMotionDiv>
 					)
 				) : (
-					<SplineModel />
+					<LazySplineModel />
 				)}
 			</div>
 		</div>

@@ -4,6 +4,7 @@ const TRANSPARENT_PIXEL =
 	"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
 const VALID_THUMBNAIL_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".svg"];
+const VIDEO_THUMBNAIL_EXTENSIONS = [".mp4", ".webm", ".mov"];
 
 const hasOptimizedThumbnailExtension = (src: string): boolean =>
 	VALID_THUMBNAIL_EXTENSIONS.some((extension) => src.endsWith(extension));
@@ -20,4 +21,9 @@ export const isVectorOrAnimatedThumbnail = (src: string): boolean =>
 	src.endsWith(".svg") || src.endsWith(".gif");
 
 export const shouldBypassImageOptimization = (src: string): boolean =>
-	isVectorOrAnimatedThumbnail(src) || !hasOptimizedThumbnailExtension(src);
+	isVectorOrAnimatedThumbnail(src) ||
+		!hasOptimizedThumbnailExtension(src) ||
+		VIDEO_THUMBNAIL_EXTENSIONS.some((extension) => src.endsWith(extension));
+
+export const isVideoThumbnail = (src: string): boolean =>
+	VIDEO_THUMBNAIL_EXTENSIONS.some((extension) => src.endsWith(extension));

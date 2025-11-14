@@ -145,3 +145,5 @@ function FeatureChartComponent({ chart }: FeatureChartProps): JSX.Element {
 export const FeatureChart = memo(FeatureChartComponent);
 
 export default FeatureChart;
+
+

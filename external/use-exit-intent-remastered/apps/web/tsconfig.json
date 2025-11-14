@@ -1,0 +1,37 @@
+{
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "noEmit": true,
+    "baseUrl": "./src",
+    "types": ["node", "next", "next/types/global"],
+    "resolveJsonModule": true,
+    "paths": {
+      "components": ["./components/index.ts"],
+      "components/*": ["./components/*"],
+      "hooks": ["./hooks/index.ts"],
+      "hooks/*": ["./hooks/*"],
+      "modules": ["./modules/index.ts"],
+      "modules/*": ["./modules/*"],
+      "shared": ["./shared/index.ts"],
+      "shared/*": ["./shared/*"],
+      "styles": ["./styles/index.ts"],
+      "styles/*": ["./styles/*"],
+      "templates": ["./templates/index.ts"],
+      "templates/*": ["./templates/*"],
+      "@external/use-exit-intent": [
+        "../../../packages/use-exit-intent/src/index.ts"
+      ],
+      "@external/use-exit-intent/*": [
+        "../../../packages/use-exit-intent/src/*"
+      ]
+    }
+  }
+}

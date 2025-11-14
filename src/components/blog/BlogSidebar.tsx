@@ -14,7 +14,6 @@ interface BlogSidebarProps {
 }
 
 const BlogSidebar = ({ posts }: BlogSidebarProps) => {
-	const [email, setEmail] = useState("");
 	const [fallbackPosts, setFallbackPosts] = useState<BeehiivPost[]>([]);
 
 	// If no posts are provided, fetch the latest 3 as a fallback
@@ -36,20 +35,6 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 						: [];
 				// Safety filter: exclude hidden_from_feed and future-dated (scheduled) posts
 				const visible = items.filter((p: any) => isVisible(p));
-				try {
-					const todayUnix = Math.floor(Date.now() / 1000);
-					console.log("[Sidebar] Today (unix seconds):", todayUnix);
-					console.log(
-						"[Sidebar] Fetched posts publish/displayed:",
-						visible.map((p: any) => ({
-							id: p?.id,
-							title: p?.title,
-							publish_date: p?.publish_date,
-							published_at: p?.published_at,
-							displayed_date: p?.displayed_date,
-						})),
-					);
-				} catch {}
 				setFallbackPosts(visible);
 			} catch (_) {
 				// ignore
@@ -124,30 +109,16 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 			.slice(0, 3);
 	}, [visibleSource]);
 
-	const allTags = useMemo(() => {
-		return Array.from(
-			new Set(
-				(visibleSource || []).flatMap((post) =>
-					Array.isArray((post as any).content_tags)
-						? (post as any).content_tags.filter(
-								(t: unknown): t is string => typeof t === "string",
-							)
-						: [],
-				),
-			),
-		).sort();
-	}, [visibleSource]);
-
-	const handleSubscribe = (e: React.FormEvent) => {
-		e.preventDefault();
-		console.log("Subscribed with email:", email);
-		setEmail("");
-		alert("Thanks for subscribing!");
-	};
-
 	return (
-		<div className="space-y-8">
-			<NewsletterFooter />
+		<div className="space-y-6 lg:sticky lg:top-24">
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.5 }}
+				className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-lg shadow-black/10 backdrop-blur"
+			>
+				<NewsletterFooter />
+			</motion.div>
 
 			<RecentPostsSection title="Recent Posts" posts={recentPosts} />
 

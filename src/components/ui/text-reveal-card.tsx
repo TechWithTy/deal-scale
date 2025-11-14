@@ -18,27 +18,15 @@ export const TextRevealCard = ({
 }) => {
 	const [widthPercentage, setWidthPercentage] = useState(0);
 	const cardRef = useRef<HTMLDivElement | null>(null);
-	const [left, setLeft] = useState(0);
-	const [localWidth, setLocalWidth] = useState(0);
 	const [isMouseOver, setIsMouseOver] = useState(false);
-
-	useEffect(() => {
-		if (cardRef.current) {
-			const { left, width: localWidth } =
-				cardRef.current.getBoundingClientRect();
-			setLeft(left);
-			setLocalWidth(localWidth);
-		}
-	}, []);
 
 	function mouseMoveHandler(event: React.MouseEvent<HTMLDivElement>) {
 		event.preventDefault();
-
-		const { clientX } = event;
-		if (cardRef.current) {
-			const relativeX = clientX - left;
-			setWidthPercentage((relativeX / localWidth) * 100);
-		}
+		if (!cardRef.current) return;
+		const bounds = cardRef.current.getBoundingClientRect();
+		const relativeX = event.clientX - bounds.left;
+		const ratio = Math.min(Math.max(relativeX / bounds.width, 0), 1);
+		setWidthPercentage(ratio * 100);
 	}
 
 	function mouseLeaveHandler() {
@@ -51,12 +39,13 @@ export const TextRevealCard = ({
 	function touchMoveHandler(event: React.TouchEvent<HTMLDivElement>) {
 		event.preventDefault();
 		const touch = event.touches[0];
-		if (!touch || !cardRef.current || localWidth === 0) {
+		if (!touch || !cardRef.current) {
 			return;
 		}
-		const clientX = touch.clientX;
-		const relativeX = clientX - left;
-		setWidthPercentage((relativeX / localWidth) * 100);
+		const bounds = cardRef.current.getBoundingClientRect();
+		const relativeX = touch.clientX - bounds.left;
+		const ratio = Math.min(Math.max(relativeX / bounds.width, 0), 1);
+		setWidthPercentage(ratio * 100);
 	}
 
 	const rotateDeg = (widthPercentage - 50) * 0.1;
@@ -70,7 +59,7 @@ export const TextRevealCard = ({
 			onTouchMove={touchMoveHandler}
 			ref={cardRef}
 			className={cn(
-				"relative w-[40rem] overflow-hidden rounded-lg border border-white/[0.08] bg-[#1d1c20] p-8",
+				"relative w-full max-w-[40rem] overflow-hidden rounded-xl border border-white/[0.08] bg-[#1d1c20] p-5 sm:rounded-2xl sm:p-8",
 				className,
 			)}
 		>
@@ -114,7 +103,7 @@ export const TextRevealCard = ({
 					style={{ top: "50%" }}
 				/>
 
-				<div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
+				<div className="overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
 					<p className="bg-[#323238] bg-clip-text py-10 font-bold text-base text-transparent sm:text-[3rem]">
 						{text}
 					</p>

@@ -29,6 +29,12 @@ describe("core schema builders", () => {
 				expect.objectContaining({ "@type": "ContactPoint" }),
 			]),
 		});
+		expect(Array.isArray(schema.member)).toBe(true);
+		expect(schema.member?.length).toBeGreaterThan(0);
+		expect(schema.member?.[0]).toMatchObject({
+			"@type": "Organization",
+			name: expect.any(String),
+		});
 	});
 
 	it("builds a WebSite schema referencing the organization", () => {

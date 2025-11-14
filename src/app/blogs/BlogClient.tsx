@@ -10,8 +10,10 @@ import { useCategoryFilter } from "@/hooks/use-category-filter";
 import type { BeehiivPost } from "@/types/behiiv";
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { offerImg } from "../newsletter/NewsletterClient";
+
+const DEFAULT_PAGE_SIZE = 12;
 
 // Wrapper component to handle search params with Suspense
 function BlogContent() {
@@ -22,11 +24,6 @@ function BlogContent() {
 
 	useEffect(() => {
 		async function fetchPosts() {
-			try {
-				const todayUnix = Math.floor(Date.now() / 1000);
-				// Debug: today in Beehiiv-style seconds
-				console.log("[BlogClient] Today (unix seconds):", todayUnix);
-			} catch {}
 			setLoading(true);
 			setError(null);
 			try {
@@ -38,29 +35,19 @@ function BlogContent() {
 				const page = searchParams?.get("page");
 				const limit = searchParams?.get("limit");
 
-				// Default per_page to 10 when missing or invalid
+				// Default per_page when missing or invalid
 				const parsedPerPage = per_page ? Number(per_page) : Number.NaN;
 				const inferredPerPage =
 					Number.isFinite(parsedPerPage) && parsedPerPage > 0
 						? parsedPerPage
-						: 10;
+						: DEFAULT_PAGE_SIZE;
+				const parsedPage = page ? Number(page) : Number.NaN;
+
 				const posts = await getLatestBeehiivPosts({
 					perPage: inferredPerPage,
-					page: page ? Number(page) : undefined,
+					page: Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1,
 					limit: limit ? Number(limit) : undefined,
 				});
-				try {
-					console.log(
-						"[BlogClient] Posts publish/displayed sample:",
-						posts.slice(0, 10).map((p: any) => ({
-							id: p?.id,
-							title: p?.title,
-							publish_date: p?.publish_date,
-							published_at: p?.published_at,
-							displayed_date: p?.displayed_date,
-						})),
-					);
-				} catch {}
 				setArticles(posts.slice(0, inferredPerPage));
 			} catch (err: unknown) {
 				console.error("Failed to load posts:", err);
@@ -69,42 +56,42 @@ function BlogContent() {
 				setLoading(false);
 			}
 		}
-		fetchPosts();
+		void fetchPosts();
 	}, [searchParams?.toString()]);
 
-	const categories = [
-		{ id: "all", name: "All Posts" },
-		...Array.from(
-			new Set(
-				articles.flatMap((article) =>
-					Array.isArray(article.content_tags)
-						? article.content_tags.filter(
-								(tag): tag is string => typeof tag === "string",
-							)
-						: [],
+	const categories = useMemo(() => {
+		return [
+			{ id: "all", name: "All Posts" },
+			...Array.from(
+				new Set(
+					articles.flatMap((article) =>
+						Array.isArray(article.content_tags)
+							? article.content_tags.filter(
+									(tag): tag is string => typeof tag === "string",
+								)
+							: [],
+					),
 				),
-			),
-		).map((category) => ({
-			id: category,
-			name: category,
-		})),
-	];
+			).map((category) => ({
+				id: category,
+				name: category,
+			})),
+		];
+	}, [articles]);
 
 	const { activeCategory, CategoryFilter } = useCategoryFilter(categories);
 
 	// Add searchParams to dependencies to trigger re-filter when URL changes
+	const searchParamKey = useMemo(
+		() => searchParams?.toString() ?? "",
+		[searchParams],
+	);
+
 	const { searchQuery, setSearchQuery, filteredPosts } = useBlogSearch(
 		articles,
 		activeCategory,
-		searchParams?.toString(), // Add as dependency
+		searchParamKey,
 	);
-
-	// ! Debug: Log fetched blogs from Beehiiv publication
-	useEffect(() => {
-		if (Array.isArray(articles) && articles.length > 0) {
-			console.log("[Beehiiv] Fetched blogs:", articles);
-		}
-	}, [articles]);
 
 	if (loading) {
 		return (
@@ -129,17 +116,19 @@ function BlogContent() {
 
 	return (
 		<>
-			<Hero
-				badgeLeft="Investor Insights"
-				badgeRight="AI-Powered Strategies"
-				headline="Get an Unfair Advantage"
-				subheadline="Join our newsletter for exclusive strategies on finding lookalike off-market deals with similarity-driven features, automating seller outreach, and getting a first look at the AI tools top investors use to build their pipelines."
-				highlight="in Your Market"
-				ctaVariant="form"
-				ctaForm={<NewsletterEmailInput />}
-				image={offerImg} // Recommend updating this image to something real estate or deal-flow related
-				imageAlt="An illustration of an AI agent automatically adding appointments to a calendar"
-			/>
+			<div className="bg-background-dark/90 pb-8 pt-6 sm:pt-10">
+				<Hero
+					badgeLeft="Investor Insights"
+					badgeRight="AI-Powered Strategies"
+					headline="Get an Unfair Advantage"
+					subheadline="Join our newsletter for exclusive strategies on finding lookalike off-market deals with similarity-driven features, automating seller outreach, and getting a first look at the AI tools top investors use to build their pipelines."
+					highlight="in Your Market"
+					ctaVariant="form"
+					ctaForm={<NewsletterEmailInput />}
+					image={offerImg}
+					imageAlt="AI-powered investing resources shown across devices"
+				/>
+			</div>
 			<div className="px-6 py-12 lg:px-8">
 				<div className="mx-auto max-w-7xl">
 					<CategoryFilter />
@@ -158,9 +147,14 @@ function BlogContent() {
 			<div className="mt-12">
 				<CTASection
 					title="Ready to scale your deal pipeline?"
-					description="Become a beta tester for Deal Scale and get early access to our AI-powered deal pipeline tools."
+					description="Request Founders Circle access to try Deal Scale free before launch and shape the future of our AI deal pipeline tools."
 					buttonText="Contact Us"
 					href="/contact"
+					secondaryButton={{
+						label: "Join Community",
+						href: "/discord",
+						target: "_blank",
+					}}
 				/>
 			</div>
 		</>

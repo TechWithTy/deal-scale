@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { NumberTicker } from "@/components/magicui/number-ticker";
@@ -135,9 +136,22 @@ export function FeaturePanel({
 				{feature.highlights.map((highlight) => (
 					<div
 						key={highlight.title}
-						className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-background/60 p-4"
+						className="overflow-hidden rounded-2xl border border-border/40 bg-background/60"
 					>
-						<div className="flex items-start justify-between gap-3">
+						{highlight.visual ? (
+							<div className="relative h-40 w-full border-b border-border/40 bg-background/50">
+								<Image
+									src={highlight.visual}
+									alt={`${highlight.title} visualization`}
+									fill
+									className="object-cover"
+									sizes="(min-width: 768px) 220px, 100vw"
+									loading="lazy"
+								/>
+							</div>
+						) : null}
+						<div className="flex flex-col gap-3 p-4">
+							<div className="flex items-start justify-between gap-3">
 							<h3 className="font-semibold text-base text-foreground">
 								{highlight.title}
 							</h3>
@@ -174,15 +188,16 @@ export function FeaturePanel({
 									})()}
 								</span>
 							) : null}
+							</div>
+							<p className="text-muted-foreground text-sm">
+								{highlight.description}
+							</p>
+							{highlight.metric ? (
+								<span className="text-muted-foreground/80 text-xs uppercase tracking-wide">
+									{highlight.metric.label}
+								</span>
+							) : null}
 						</div>
-						<p className="text-muted-foreground text-sm">
-							{highlight.description}
-						</p>
-						{highlight.metric ? (
-							<span className="text-muted-foreground/80 text-xs uppercase tracking-wide">
-								{highlight.metric.label}
-							</span>
-						) : null}
 					</div>
 				))}
 			</div>
@@ -192,7 +207,7 @@ export function FeaturePanel({
 					{feature.metrics.map((metric) => (
 						<div
 							key={`${feature.id}-${metric.label}`}
-							className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-border/40 bg-background/50 p-4 text-center sm:items-start sm:text-left"
+							className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-border/40 bg-background/50 p-4 text-center"
 						>
 							<span className="font-semibold text-muted-foreground text-xs uppercase tracking-wide">
 								{metric.label}
@@ -205,7 +220,7 @@ export function FeaturePanel({
 										return metric.value;
 									}
 
-									const tickerKey = `${feature.id}-${metric.label}-${metric.value}-${activeFeatureId}`;
+								const tickerKey = `${feature.id}-${metric.label}-${metric.value}-${activeFeatureId}`;
 
 									return (
 										<span className="inline-flex items-baseline gap-1">

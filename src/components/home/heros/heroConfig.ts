@@ -4,6 +4,7 @@ import type {
 	ResolveHeroCopyOptions,
 } from "@external/dynamic-hero";
 import type { Plan } from "@/types/service/plans";
+import type { PersonaKey } from "@/data/personas/catalog";
 
 export const HERO_ROTATIONS: HeroCopyRotations = {
 	problems: [
@@ -34,6 +35,9 @@ export const HERO_COPY_INPUT: HeroCopy = {
 	},
 	rotations: HERO_ROTATIONS,
 };
+
+export const QUICK_START_PERSONA_KEY: PersonaKey = "founder";
+export const QUICK_START_PERSONA_GOAL = HERO_COPY_INPUT.values.benefit;
 
 export const HERO_COPY_FALLBACK: ResolveHeroCopyOptions = {
 	fallbackPrimaryChip: {

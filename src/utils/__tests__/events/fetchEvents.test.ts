@@ -39,6 +39,8 @@ describe("fetchEvents", () => {
 				externalUrl: "https://events.example.com/remote",
 				category: "conference",
 				location: "Remote",
+				accessType: "external",
+				attendanceType: "webinar",
 			},
 		];
 
@@ -79,6 +81,8 @@ describe("fetchEvents", () => {
 					externalUrl: "https://events.example.com/fallback",
 					category: "meetup",
 					location: "Chicago, IL",
+					accessType: "external",
+					attendanceType: "in-person",
 				},
 			],
 		}));

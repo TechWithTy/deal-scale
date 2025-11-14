@@ -15,6 +15,8 @@ describe("schema builders", () => {
 		externalUrl: "https://events.dealscale.io/ai-demo",
 		category: "conference",
 		location: "Austin, TX",
+		accessType: "external",
+		attendanceType: "in-person",
 	};
 
 	test("buildEventsItemListSchema returns an ItemList with canonical URLs", () => {

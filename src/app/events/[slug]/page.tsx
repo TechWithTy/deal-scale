@@ -9,7 +9,18 @@ import { type EventPageParams, resolveEventParams } from "@/lib/events/params";
 import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
 import { formatDate } from "@/utils/date-formatter";
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
-import { Calendar, Clock, ExternalLink, MapPin } from "lucide-react";
+import {
+	ArrowRight,
+	Calendar,
+	Clock,
+	ExternalLink,
+	Globe2,
+	MapPin,
+	Monitor,
+	Share2,
+	ShieldCheck,
+	Users,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -98,6 +109,29 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
 	const eventSchema = buildEventSchema(event);
 	const isPastEvent = new Date(event.date) < new Date();
+	const accessType = event.accessType ?? "external";
+	const attendanceType = event.attendanceType ?? "in-person";
+	const accessBadge =
+		accessType === "external"
+			? { label: "External Event", icon: Globe2 }
+			: { label: "Internal Event", icon: ShieldCheck };
+	const attendanceBadge = {
+		"in-person": { label: "In Person", icon: Users },
+		webinar: { label: "Webinar", icon: Monitor },
+		hybrid: { label: "Hybrid", icon: Share2 },
+	}[attendanceType];
+	const AccessBadgeIcon = accessBadge.icon;
+	const AttendanceBadgeIcon = attendanceBadge.icon;
+	const registrationHref =
+		accessType === "external"
+			? event.externalUrl ?? buildEventUrl(event.slug)
+			: event.internalPath ?? buildEventUrl(event.slug);
+	const RegistrationIcon =
+		accessType === "external" ? ExternalLink : ArrowRight;
+	const registrationLinkProps =
+		accessType === "external"
+			? { target: "_blank", rel: "noopener noreferrer" as const }
+			: {};
 
 	return (
 		<div className="container py-12">
@@ -112,6 +146,17 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 							) : (
 								<Badge variant="default">Upcoming</Badge>
 							)}
+							<Badge variant="secondary" className="gap-1.5">
+								<AccessBadgeIcon className="h-3.5 w-3.5" aria-hidden />
+								{accessBadge.label}
+							</Badge>
+							<Badge variant="outline" className="gap-1.5">
+								<AttendanceBadgeIcon
+									className="h-3.5 w-3.5"
+									aria-hidden
+								/>
+								{attendanceBadge.label}
+							</Badge>
 						</div>
 						<h1 className="font-heading text-3xl md:text-4xl">{event.title}</h1>
 						<p className="text-lg text-muted-foreground leading-relaxed">
@@ -151,12 +196,11 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 						</p>
 						<Button asChild size="lg">
 							<Link
-								href={event.externalUrl}
-								target="_blank"
-								rel="noopener noreferrer"
+								href={registrationHref}
+								{...registrationLinkProps}
 							>
 								Register now
-								<ExternalLink className="ml-2 h-4 w-4" />
+								<RegistrationIcon className="ml-2 h-4 w-4" />
 							</Link>
 						</Button>
 					</GlassCard>
@@ -180,12 +224,11 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 						</ul>
 						<Button asChild variant="secondary" className="w-full">
 							<Link
-								href={event.externalUrl}
-								target="_blank"
-								rel="noopener noreferrer"
+								href={registrationHref}
+								{...registrationLinkProps}
 							>
 								Visit event site
-								<ExternalLink className="ml-2 h-4 w-4" />
+								<RegistrationIcon className="ml-2 h-4 w-4" />
 							</Link>
 						</Button>
 					</GlassCard>

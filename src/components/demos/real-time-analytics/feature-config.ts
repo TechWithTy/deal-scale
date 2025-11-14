@@ -15,6 +15,7 @@ const featureHighlightSchema = z.object({
 	title: z.string().min(1),
 	description: z.string().min(1),
 	metric: featureMetricSchema.optional(),
+	visual: z.string().optional(),
 });
 
 /**
@@ -71,8 +72,8 @@ const realTimeFeaturesSeed = [
 		description:
 			"Zoom into deal health, revenue velocity, and quota pacing inside a live charting workspace. Operators compare real-time performance to last sprint and quarterly targets without leaving the Macbook canvas.",
 		media: {
-			src: "/demos/real-time-dashboard.svg",
-			alt: "Deal Scale analytics canvas showing live charts and streaming KPIs.",
+			src: "/demo/static/charts/tab-1/baseline-kpis-top.png",
+			alt: "Baseline analytics dashboard chart showing live KPI trends.",
 		},
 		chart: {
 			heading: "Pipeline velocity vs. target",
@@ -98,6 +99,7 @@ const realTimeFeaturesSeed = [
 					label: "Filters applied",
 					value: "7 segments",
 				},
+				visual: "/demo/static/charts/tab-1/baseline-kpis-mid.png",
 			},
 			{
 				title: "AI pacing forecasts",
@@ -107,6 +109,7 @@ const realTimeFeaturesSeed = [
 					label: "Forecast delta",
 					value: "+6.4%",
 				},
+				visual: "/demo/static/charts/tab-1/baseline-kpis-bottom.png",
 			},
 		],
 		metrics: [
@@ -131,8 +134,8 @@ const realTimeFeaturesSeed = [
 		description:
 			"Monitor revenue, pipeline velocity, and marketing lift without refreshing a single tab. The live dashboard layers AI forecasting with human-friendly calculators so operators can take action in seconds.",
 		media: {
-			src: "/demos/real-time-dashboard.svg",
-			alt: "Deal Scale real-time analytics dashboard with live KPI tiles and calculators.",
+			src: "/demo/static/charts/tab-2/ai-agent-overview-top.png",
+			alt: "AI agent analytics chart tracking live outcomes and assist volume.",
 		},
 		highlights: [
 			{
@@ -143,6 +146,7 @@ const realTimeFeaturesSeed = [
 					label: "Refresh rate",
 					value: "1.5s",
 				},
+				visual: "/demo/static/charts/tab-2/ai-agent-overview-mid.png",
 			},
 			{
 				title: "Scenario calculators",
@@ -152,6 +156,7 @@ const realTimeFeaturesSeed = [
 					label: "Forecast accuracy",
 					value: "±3.2%",
 				},
+				visual: "/demo/static/charts/tab-2/ai-agent-overview-bottom.png",
 			},
 		],
 		metrics: [
@@ -172,8 +177,8 @@ const realTimeFeaturesSeed = [
 		description:
 			"Launch experiments, capture results, and promote winners with a single workflow. Experiments sync to analytics so you can compare uplift across every touchpoint.",
 		media: {
-			src: "/demos/experiment-lab.svg",
-			alt: "Experiment lab interface showing variant performance and cohort lift.",
+			src: "/demo/static/charts/tab-3/premium-engagement-top.png",
+			alt: "Premium analytics chart highlighting variant uplift and engagement.",
 		},
 		highlights: [
 			{
@@ -184,6 +189,7 @@ const realTimeFeaturesSeed = [
 					label: "Launch time",
 					value: "8 min setup",
 				},
+				visual: "/demo/static/charts/tab-3/premium-engagement-bottom.png",
 			},
 			{
 				title: "Automated readouts",
@@ -193,6 +199,7 @@ const realTimeFeaturesSeed = [
 					label: "Time saved",
 					value: "14 hrs / sprint",
 				},
+				visual: "/demo/static/charts/tab-3/premium-engagement-bottom-2.png",
 			},
 		],
 		metrics: [
@@ -213,8 +220,8 @@ const realTimeFeaturesSeed = [
 		description:
 			"Bring sales, marketing, and operations into the same command center. Role-aware invites, live commentary, and threaded decisions keep everyone on the same page.",
 		media: {
-			src: "/demos/team-collaboration.svg",
-			alt: "Team collaboration hub with live chat, invites, and task routing.",
+			src: "/demo/static/charts/tab-3/premium-engagement-mid.png",
+			alt: "Engagement and collaboration analytics chart for cross-functional teams.",
 		},
 		highlights: [
 			{
@@ -225,6 +232,7 @@ const realTimeFeaturesSeed = [
 					label: "Teammates onboarded",
 					value: "48 seats",
 				},
+				visual: "/demo/static/charts/tab-3/premium-engagement-bottom-3.png",
 			},
 			{
 				title: "Real-time chat",
@@ -234,6 +242,7 @@ const realTimeFeaturesSeed = [
 					label: "Response time",
 					value: "<30s avg",
 				},
+				visual: "/demo/static/charts/tab-3/premium-engagement-mid.png",
 			},
 		],
 		metrics: [

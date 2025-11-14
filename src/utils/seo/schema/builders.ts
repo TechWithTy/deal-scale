@@ -1,7 +1,9 @@
 import { companyData } from "@/data/company";
+import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import type { BeehiivPost } from "@/types/behiiv";
 import type { CaseStudy } from "@/types/case-study";
 import type { FAQItem } from "@/types/faq";
+import { buildPartnersOrganizationSchema } from "@/lib/partners/schemaBuilders";
 import { defaultSeo } from "@/utils/seo/staticSeo";
 
 import {
@@ -13,6 +15,7 @@ import {
 	buildPostalAddress,
 	buildSocialProfiles,
 } from "./helpers";
+import { getTestimonialReviewData } from "./reviewData";
 import type {
 	BlogPostingSchema,
 	BlogSchema,
@@ -52,6 +55,8 @@ export const buildOrganizationSchema = (): OrganizationSchema => {
 	const logo = defaultSeo.image
 		? buildAbsoluteUrl(defaultSeo.image)
 		: undefined;
+	const { reviews, aggregateRating } = getTestimonialReviewData();
+	const partnerOrganizations = buildPartnersOrganizationSchema(companyLogos);
 
 	return {
 		"@context": SCHEMA_CONTEXT,
@@ -66,6 +71,11 @@ export const buildOrganizationSchema = (): OrganizationSchema => {
 		image: "https://dealscale.io/banners/main.png",
 		contactPoint: buildContactPoints(),
 		...(address && { address }),
+		...(aggregateRating ? { aggregateRating } : {}),
+		...(reviews.length ? { review: reviews } : {}),
+		...(partnerOrganizations.length
+			? { member: partnerOrganizations }
+			: {}),
 	};
 };
 
@@ -116,6 +126,8 @@ export const buildServiceSchema = (
 		"@id": ORGANIZATION_ID,
 	},
 	offers: buildOfferSchema(service.offers),
+	...(service.aggregateRating ? { aggregateRating: service.aggregateRating } : {}),
+	...(service.reviews?.length ? { review: service.reviews } : {}),
 });
 
 export const buildProductSchema = (

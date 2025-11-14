@@ -10,6 +10,7 @@ import {
 import { render } from "@testing-library/react";
 import React from "react";
 import { act } from "react";
+import { usePersonaStore } from "../../../stores/usePersonaStore";
 
 const pixelatedMocks = vi.hoisted(() => ({
 	mockComponent: vi.fn(() => <div data-testid="pixelated-card" />),
@@ -96,6 +97,10 @@ describe("CallDemoShowcase text scroll behavior", () => {
 
 	beforeEach(() => {
 		vi.useFakeTimers();
+
+		usePersonaStore
+			.getState()
+			.setPersonaAndGoal("investor", "Automate deal flow conversations");
 
 		mockScrollTo = vi.fn();
 		windowScrollToSpy = vi

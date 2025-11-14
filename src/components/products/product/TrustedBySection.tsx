@@ -28,7 +28,7 @@ export default function TrustedBySection() {
 
 	return (
 		<div>
-			<Header title="Beta Testers" subtitle="" />
+			<Header title="Founders Circle Partners" subtitle="" />
 			{isError ? (
 				<div className="mt-4 text-center text-destructive">
 					Unable to load trusted partners right now.

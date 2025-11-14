@@ -2,8 +2,8 @@
 
 import Header from "@/components/common/Header";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { useTheme } from "@/contexts/theme-context";
 
 const INSTAGRAM_PROFILE_URL =
 	"https://www.instagram.com/deal_scale/?utm_source=ig_embed&utm_campaign=loading";

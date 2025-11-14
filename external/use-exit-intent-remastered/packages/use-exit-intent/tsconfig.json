@@ -1,0 +1,13 @@
+{
+  "extends": "@daltonmenezes/ts-config/base.json",
+  "include": [
+    "src",
+  ],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationDir": "dist/esm",
+    "emitDeclarationOnly": true,
+    "outDir": "dist/esm",
+  }
+}

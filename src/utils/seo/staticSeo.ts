@@ -137,6 +137,19 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		siteName: DEFAULT_SEO.siteName,
 		type: "website",
 	},
+	"/external-tools/roi-simulator": {
+		title: STATIC_SEO_META["/external-tools/roi-simulator"].title,
+		description: STATIC_SEO_META["/external-tools/roi-simulator"].description,
+		canonical: STATIC_SEO_META["/external-tools/roi-simulator"].canonical,
+		image: STATIC_SEO_META["/external-tools/roi-simulator"].image,
+		keywords: STATIC_SEO_META["/external-tools/roi-simulator"].keywords,
+		priority: STATIC_SEO_META["/external-tools/roi-simulator"].priority ?? 0.85,
+		changeFrequency:
+			STATIC_SEO_META["/external-tools/roi-simulator"].changeFrequency ??
+			"weekly",
+		siteName: DEFAULT_SEO.siteName,
+		type: DEFAULT_SEO.type,
+	},
 	"/careers": {
 		title: STATIC_SEO_META["/careers"].title,
 		description: STATIC_SEO_META["/careers"].description,

@@ -12,6 +12,14 @@ import {
 
 import DynamicHeroDemoPage from "../DynamicHero";
 import { resolveHeroCopy } from "../../../dynamic-hero/src";
+import {
+	QUICK_START_PERSONA_GOAL,
+	QUICK_START_PERSONA_KEY,
+} from "../heroConfig";
+import {
+	resetPersonaStore,
+	usePersonaStore,
+} from "@/stores/usePersonaStore";
 
 const pricingCheckoutDialogMock = vi.fn(
 	({ clientSecret }: { clientSecret: string }) => (
@@ -170,6 +178,7 @@ describe("DynamicHeroDemoPage", () => {
 		mockFetch.mockReset();
 		scrollIntoViewMock.mockReset();
 		pricingCheckoutDialogMock.mockClear();
+		resetPersonaStore();
 		global.fetch = mockFetch as unknown as typeof fetch;
 	});
 
@@ -279,5 +288,16 @@ describe("DynamicHeroDemoPage", () => {
 			block: "center",
 		});
 		await waitFor(() => expect(heroModuleMocks.playVideo).toHaveBeenCalledTimes(1));
+	});
+
+	it("syncs the persona store with the Quick Start persona and goal", async () => {
+		render(<DynamicHeroDemoPage />);
+
+		await waitFor(() =>
+			expect(usePersonaStore.getState().persona).toBe(
+				QUICK_START_PERSONA_KEY,
+			),
+		);
+		expect(usePersonaStore.getState().goal).toBe(QUICK_START_PERSONA_GOAL);
 	});
 });

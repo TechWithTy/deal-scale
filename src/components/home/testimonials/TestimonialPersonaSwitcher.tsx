@@ -1,15 +1,12 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { PERSONA_ORDER, type PersonaKey } from "@/data/personas/testimonialsByPersona";
+import {
+	PERSONA_DISPLAY_ORDER,
+	PERSONA_LABELS,
+} from "@/data/personas/catalog";
 import { usePersonaStore } from "@/stores/usePersonaStore";
 import { cn } from "@/lib/utils";
-
-const personaCopy: Record<PersonaKey, string> = {
-	Investor: "Investors",
-	Wholesaler: "Wholesalers",
-	Agent: "Agents",
-};
 
 export const PersonaSwitcher = () => {
 	const { persona, setPersona } = usePersonaStore();
@@ -17,7 +14,7 @@ export const PersonaSwitcher = () => {
 
 	return (
 		<div className="relative flex w-full max-w-lg items-center justify-center rounded-full border border-white/10 bg-white/5 p-1 backdrop-blur-md">
-			{PERSONA_ORDER.map((option) => {
+			{PERSONA_DISPLAY_ORDER.map((option) => {
 				const isActive = option === persona;
 
 				return (
@@ -44,7 +41,7 @@ export const PersonaSwitcher = () => {
 								}
 							/>
 						)}
-						<span className="relative z-10">{personaCopy[option]}</span>
+						<span className="relative z-10">{PERSONA_LABELS[option]}</span>
 					</button>
 				);
 			})}

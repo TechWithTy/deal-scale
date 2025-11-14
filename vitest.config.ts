@@ -36,6 +36,20 @@ export default defineConfig({
 				),
 			},
 			{
+				find: "@external/use-exit-intent",
+				replacement: path.resolve(
+					__dirname,
+					"./external/use-exit-intent-remastered/packages/use-exit-intent/src",
+				),
+			},
+			{
+				find: /^@external\/use-exit-intent\/(.*)$/,
+				replacement: path.resolve(
+					__dirname,
+					"./external/use-exit-intent-remastered/packages/use-exit-intent/src/$1",
+				),
+			},
+			{
 				find: "server-only",
 				replacement: path.resolve(__dirname, "./tests/stubs/server-only.ts"),
 			},

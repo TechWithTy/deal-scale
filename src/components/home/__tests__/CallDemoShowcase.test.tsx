@@ -13,6 +13,14 @@ import { act } from "react";
 
 import React from "react";
 import { CallDemoShowcase } from "../CallDemoShowcase";
+import {
+	QUICK_START_PERSONA_GOAL,
+	QUICK_START_PERSONA_KEY,
+} from "../heros/heroConfig";
+import {
+	resetPersonaStore,
+	usePersonaStore,
+} from "../../../stores/usePersonaStore";
 
 describe("CallDemoShowcase", () => {
 	beforeAll(() => {
@@ -55,6 +63,10 @@ describe("CallDemoShowcase", () => {
 
 	beforeEach(() => {
 		vi.useFakeTimers();
+		resetPersonaStore();
+		usePersonaStore
+			.getState()
+			.setPersonaAndGoal(QUICK_START_PERSONA_KEY, QUICK_START_PERSONA_GOAL);
 	});
 
 	afterEach(() => {
@@ -76,6 +88,9 @@ describe("CallDemoShowcase", () => {
 		expect(screen.getByLabelText(/text demo preview/i)).toBeInTheDocument();
 		expect(screen.getByText(/live text outreach/i)).toBeInTheDocument();
 		expect(screen.getByText(/iMessage Support/i)).toBeInTheDocument();
+		expect(
+			screen.getAllByText(/Automate deal flow conversations/i).length,
+		).toBeGreaterThan(0);
 
 		act(() => {
 			vi.advanceTimersByTime(4500);

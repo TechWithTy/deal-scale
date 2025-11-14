@@ -6,7 +6,7 @@ export const DEFAULT_SEO: SeoMeta = {
 	title:
 		"Deal Scale | AI-Powered Real Estate Lookalike Audience Expansion (Inspired by How to Win Friends and Influence People)",
 	description:
-		"Expert AI-powered solutions for real estate agents, investors and wholesalers. Automate lookalike audience expansion inspired by How to Win Friends and Influence People, qualification, and outreach to close more deals.",
+		"Rated 5/5 by investors, agents, and wholesalers. Deal Scale delivers AI-powered lookalike audience expansion inspired by How to Win Friends and Influence People, qualification, and outreach to close more deals.",
 	canonical: "https://dealscale.io",
 	image: "/banners/main.png",
 	keywords: [
@@ -21,6 +21,8 @@ export const DEFAULT_SEO: SeoMeta = {
 	],
 	siteName: "Deal Scale | AI-Powered Real Estate Solutions",
 	type: "website",
+	ratingValue: 5,
+	reviewCount: 9,
 };
 
 /**
@@ -30,10 +32,12 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	"/": {
 		title: "Home | Deal Scale",
 		description:
-			"AI-powered real estate automation and lookalike audience expansion inspired by How to Win Friends and Influence People for investors, agents, and wholesalers.",
+			"Deal Scale earns 5-star reviews from investors, agents, and wholesalers for AI-powered real estate automation and lookalike audience expansion inspired by How to Win Friends and Influence People.",
 		canonical: "https://dealscale.io",
 		keywords: DEFAULT_SEO.keywords,
 		image: DEFAULT_SEO.image,
+		ratingValue: 5,
+		reviewCount: 9,
 	},
 	"/products": {
 		title: "Products | Deal Scale",
@@ -343,5 +347,21 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 		image: DEFAULT_SEO.image,
 		priority: 0.75,
 		changeFrequency: "monthly",
+	},
+	"/external-tools/roi-simulator": {
+		title: "ROI Simulator | Deal Scale",
+		description:
+			"Model rehab budgets, marketing spend, and close rates with Deal Scale’s ROI simulator before you launch a campaign.",
+		canonical: "https://app.dealscale.io/roi-simulator",
+		keywords: [
+			"roi calculator",
+			"real estate roi",
+			"deal analyzer",
+			"campaign forecasting",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+		priority: 0.85,
+		changeFrequency: "weekly",
 	},
 };

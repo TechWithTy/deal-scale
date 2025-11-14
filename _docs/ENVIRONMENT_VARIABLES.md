@@ -37,6 +37,19 @@ FACEBOOK_CLIENT_SECRET=your-facebook-client-secret
 FACEBOOK_REDIRECT_URI=https://qmunpzmthgpekebwjazo.supabase.co/auth/v1/callback
 ```
 
+### Exit Intent Controls
+```bash
+# Optional: gate the exit-intent modal to avoid layout clipping caused by
+# lazy-loaded sections. Leave unset or any value other than "true" to keep
+# the detector disabled by default.
+NEXT_PUBLIC_ENABLE_EXIT_INTENT=false
+# Optional: short-lived cooldown after the modal is dismissed (milliseconds)
+# Defaults to 2000 if omitted or invalid.
+NEXT_PUBLIC_EXIT_INTENT_SNOOZE_MS=2000
+# Optional: emit detailed console logs for the exit intent flow when troubleshooting
+NEXT_PUBLIC_EXIT_INTENT_DEBUG=false
+```
+
 ## Environment Setup Instructions
 
 ### Development (.env.local)

@@ -1,34 +1,6 @@
+"use client";
 import { useTheme } from "@/contexts/theme-context"; // * Theme context for dark/light mode
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useHasMounted } from "@/hooks/useHasMounted";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import Spline from "@splinetool/react-spline";
-import React, { useRef, useState, useEffect } from "react";
 import SplinePlaceHolder from "./SplinePlaceHolder";
-
-type SplineApp = {
-	setZoom: (zoom: number) => void;
-	findObjectByName: (name: string) => SPEObject | null;
-	findObjectById: (id: string) => SPEObject | null;
-	emitEvent: (event: string, idOrName: string) => void;
-};
-
-type SPEObject = {
-	name: string;
-	id?: string;
-	position: {
-		x: number;
-		y: number;
-		z: number;
-	};
-	emitEvent: (event: string) => void;
-};
-
-type SplineEvent = {
-	target: {
-		name: string;
-	};
-};
 
 /**
  * SplineModel renders a Spline 3D scene. All interaction (zoom, pan, orbit) should be configured in the Spline editor Play settings.
@@ -65,55 +37,15 @@ export default function SplineModel({
 			? sceneUrl
 			: selectedSceneUrl;
 
-	const splineRef = useRef<SplineApp | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState<Error | null>(null);
-	const containerRef = useRef<HTMLDivElement>(null);
-
-	function onLoad(spline: SplineApp) {
-		try {
-			splineRef.current = spline;
-			setIsLoading(false);
-		} catch (err) {
-			setError(
-				err instanceof Error ? err : new Error("Failed to load Spline scene"),
-			);
-		}
-	}
-
-	function onMouseHover(e: SplineEvent) {
-		try {
-			if (e.target.name === hoverObjectName) {
-				const obj = splineRef.current?.findObjectByName(e.target.name);
-				if (obj) {
-					obj.emitEvent("mouseHover");
-				}
-			}
-		} catch (err) {
-			console.error("Error handling hover:", err);
-		}
-	}
-
-	if (error) {
-		return (
-			<div className="flex h-full w-full items-center justify-center rounded-lg bg-red-50 p-4 text-red-600">
-				Failed to load 3D model: {error.message}
-			</div>
-		);
-	}
-
 	return (
-		<div
-			ref={containerRef}
-			className="relative aspect-square h-full max-h-full w-full max-w-full overflow-hidden sm:h-[350px] md:h-[450px] lg:h-[600px] 2xl:h-[700px]"
-		>
-			{isLoading && <SplinePlaceHolder />}
-			{/* ! Spline scene switches based on theme, unless sceneUrl prop is a custom value */}
-			<Spline
-				scene={effectiveSceneUrl}
-				onLoad={onLoad}
-				onSplineMouseHover={onMouseHover}
-			/>
+		<div className="relative aspect-square h-full max-h-full w-full max-w-full overflow-hidden sm:h-[350px] md:h-[450px] lg:h-[600px] 2xl:h-[700px]">
+			<SplinePlaceHolder />
+			{/* Placeholder shown while Spline integration is disabled.
+				When re-enabling Spline, replace this with the actual component and
+				restore the dynamic import logic. */}
+			<span className="sr-only">
+				Spline scene {effectiveSceneUrl} (hover target: {hoverObjectName})
+			</span>
 		</div>
 	);
 }

@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { AuroraText } from "@/components/magicui/aurora-text";
 import {
+	DEFAULT_PERSONA_KEY,
+	PERSONA_LABELS,
 	type PersonaKey,
-	getTestimonialsForPersona,
-} from "@/data/personas/testimonialsByPersona";
-import { DEFAULT_PERSONA, usePersonaStore } from "@/stores/usePersonaStore";
+} from "@/data/personas/catalog";
+import { getTestimonialsForPersona } from "@/data/personas/testimonialsByPersona";
+import { usePersonaStore } from "@/stores/usePersonaStore";
 import type { Testimonial } from "@/types/testimonial";
 import { type Variants, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -25,7 +27,7 @@ interface TestimonialsProps {
 	subtitle: string;
 }
 
-const fallbackTestimonials = getTestimonialsForPersona(DEFAULT_PERSONA);
+const fallbackTestimonials = getTestimonialsForPersona(DEFAULT_PERSONA_KEY);
 
 const usePersonaTestimonials = (
 	persona: PersonaKey,
@@ -51,12 +53,17 @@ const usePersonaTestimonials = (
 const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	const persona = usePersonaStore((state) => state.persona);
 	const goal = usePersonaStore((state) => state.goal);
-	const personaTestimonials = usePersonaTestimonials(persona, testimonials);
+	const personaLabel =
+		PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
+	const personaSpecificTestimonials = usePersonaTestimonials(
+		persona,
+		testimonials,
+	);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [activeTab, setActiveTab] = useState<TabKey>("review");
 	const shouldReduceMotion = useReducedMotion();
 
-	const totalTestimonials = personaTestimonials.length || 1;
+	const totalTestimonials = personaSpecificTestimonials.length || 1;
 
 	const nextTestimonial = useCallback(() => {
 		setCurrentIndex((prevIndex) => (prevIndex + 1) % totalTestimonials);
@@ -69,7 +76,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	}, [totalTestimonials]);
 
 	const currentTestimonial =
-		personaTestimonials[currentIndex] ?? personaTestimonials[0];
+		personaSpecificTestimonials[currentIndex] ?? fallbackTestimonials[0];
 
 	useEffect(() => {
 		setCurrentIndex(0);
@@ -173,7 +180,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 						<div className="relative flex flex-col p-6 sm:p-8 md:p-12">
 							<div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/5 to-transparent" />
 							<motion.div
-								className="mb-6 flex w-full items-center justify-center gap-2 sm:justify-center"
+								className="mb-6 flex w-full items-center justify-center gap-2"
 								{...fadeIn}
 							>
 								<TestimonialStars rating={currentTestimonial.rating} />
@@ -187,14 +194,14 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 							/>
 
 							<motion.div
-								className="mb-8 flex flex-col items-center text-center sm:flex-row sm:items-start sm:gap-6 sm:text-left"
+								className="mb-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:justify-center sm:gap-6 sm:text-left"
 								{...fadeIn}
 							>
 								<TestimonialAvatar
 									name={currentTestimonial.name}
 									image={currentTestimonial.image}
 								/>
-								<div>
+								<div className="text-center sm:text-left">
 									<h4 className="font-semibold text-base sm:text-lg">
 										{currentTestimonial.name}
 									</h4>
@@ -202,14 +209,16 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 										{currentTestimonial.role}
 									</p>
 									<p className="mt-1 text-xs uppercase tracking-widest text-primary/80">
-										{persona} persona
+										{personaLabel}
 									</p>
 								</div>
 							</motion.div>
 
-							<div className="flex flex-col items-center justify-between gap-6 sm:flex-row sm:gap-4">
-								<div className="flex items-center gap-2">
-									{personaTestimonials.slice(0, 5).map((testimonial, index) => (
+							<div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:justify-between sm:gap-8">
+								<div className="flex items-center justify-center gap-2">
+									{personaSpecificTestimonials
+										.slice(0, 5)
+										.map((testimonial, index) => (
 										<motion.button
 											key={testimonial.id}
 											className={`h-2 w-2 rounded-full border border-white/20 transition-all duration-300 sm:h-3 sm:w-3 ${
@@ -225,7 +234,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 									))}
 								</div>
 
-								<div className="flex space-x-2">
+								<div className="flex items-center justify-center gap-2">
 									<motion.div
 										whileHover={{ scale: 1.05 }}
 										whileTap={{ scale: 0.95 }}

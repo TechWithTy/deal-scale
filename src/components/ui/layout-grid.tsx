@@ -28,7 +28,7 @@ export const LayoutGrid = ({
 }: LayoutGridProps) => {
 	if (!interactive) {
 		return (
-			<div className="relative mx-auto grid h-full w-full max-w-7xl grid-cols-1 gap-4 p-10 md:grid-cols-3">
+			<div className="relative mx-auto grid h-full w-full max-w-7xl grid-cols-1 gap-4 p-6 sm:p-8 md:grid-cols-2 md:p-10 xl:grid-cols-3">
 				{cards.map((card) => {
 					const needsPositioning =
 						(showThumbnails && Boolean(card.thumbnail)) ||
@@ -85,7 +85,7 @@ export const LayoutGrid = ({
 	};
 
 	return (
-		<div className="relative mx-auto grid h-full w-full max-w-7xl grid-cols-1 gap-4 p-10 md:grid-cols-3">
+		<div className="relative mx-auto grid h-full w-full max-w-7xl grid-cols-1 gap-4 p-6 sm:p-8 md:grid-cols-2 md:p-10 xl:grid-cols-3">
 			{cards.map((card) => (
 				<div key={card.id} className={cn(baseCardClassName, card.className)}>
 					<motion.div

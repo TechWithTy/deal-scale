@@ -7,27 +7,27 @@ export interface ConsultationStep {
 export const betaSignupSteps: ConsultationStep[] = [
 	{
 		number: 1,
-		title: "Apply for Beta Tester Program",
+		title: "Request Founders Circle Access",
 		description:
-			"Start your application to become a Deal Scale beta tester. Our beta program is limited to ensure every participant receives special support and has a key role in shaping the final product.",
+			"Start your Founders Circle application. We only approve a limited number of operators so every member receives tailored support and direct influence over the roadmap.",
 	},
 	{
 		number: 2,
-		title: "Unlock Beta Perks",
+		title: "Unlock Founders Circle Perks",
 		description:
-			"Complete a short profile about your business needs and challenges. Instantly unlock your Beta Tester Perks—5 Ai Credits, exclusive newsletter access, a future subscription discount, and bonus Credits if you're approved.",
+			"Complete a short profile about your business goals. Unlock your Founders Circle perks—5 AI credits, exclusive newsletter access, locked pricing, and bonus credits upon approval.",
 	},
 	{
 		number: 3,
 		title: "Gain Early Access",
 		description:
-			"As a beta tester, your feedback directly influences our product roadmap. Vote On Upcoming Features on features and improvements. You'll get priority access as soon as Deal Scale launches.",
+			"As a Founders Circle member, your feedback directly shapes our roadmap. Vote on upcoming features and secure priority access to every release before public launch.",
 	},
 	{
 		number: 4,
 		title: "You're In!",
 		description:
-			"Welcome to the program! Watch for your onboarding email with free credits, your 5 AI Credits, newsletter access, and everything you need to automate your deal flow and close more deals.",
+			"Welcome aboard! Watch for your onboarding email with your 5 AI credits, Founders Circle community access, and everything you need to automate your deal flow.",
 	},
 ];
 export const affiliateProgramSteps: ConsultationStep[] = [

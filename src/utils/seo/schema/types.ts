@@ -30,6 +30,14 @@ export type OfferSchema = OfferInput & {
 	"@type": "Offer";
 };
 
+export type AggregateRatingSchema = {
+	"@type": "AggregateRating";
+	ratingValue: number;
+	reviewCount: number;
+	bestRating?: number;
+	worstRating?: number;
+};
+
 export type OrganizationSchema = {
 	"@context": SchemaContext;
 	"@type": "Organization";
@@ -43,6 +51,8 @@ export type OrganizationSchema = {
 	image?: string | string[];
 	contactPoint: ContactPointSchema[];
 	address?: PostalAddressSchema;
+	aggregateRating?: AggregateRatingSchema;
+	review?: ReviewSchema[];
 };
 
 export type WebSiteSchema = {
@@ -70,6 +80,8 @@ export type ServiceSchemaInput = {
 	category?: string;
 	areaServed?: string[];
 	offers?: OfferInput;
+	aggregateRating?: AggregateRatingSchema;
+	reviews?: ReviewSchema[];
 };
 
 export type ServiceSchema = {
@@ -86,6 +98,8 @@ export type ServiceSchema = {
 		"@id": string;
 	};
 	offers?: OfferSchema;
+	aggregateRating?: AggregateRatingSchema;
+	review?: ReviewSchema[];
 };
 
 export type ProductSchemaInput = {

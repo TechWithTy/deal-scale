@@ -42,15 +42,15 @@ const Hero: React.FC<HeroProps> = ({
 	imageAlt,
 }) => {
 	return (
-		<div className="relative flex flex-col overflow-hidden px-4 pt-12 sm:px-6 lg:px-8 lg:pt-20 xl:px-12">
+		<div className="relative flex flex-col overflow-hidden bg-gradient-to-br from-background via-background-dark to-background px-4 pt-12 sm:px-6 lg:px-8 lg:pt-16 xl:px-12">
 			<div className="absolute inset-0 bg-grid-lines opacity-20" />
-			<div className="-translate-x-1/2 absolute top-1/4 left-1/2 h-[500px] w-[500px] rounded-full bg-glow-gradient blur-3xl lg:h-[700px] lg:w-[700px] xl:h-[900px] xl:w-[900px]" />
-			<div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col gap-6 pt-6 md:flex-row md:gap-10 xl:gap-16">
+			<div className="-translate-x-1/2 absolute top-1/4 left-1/2 h-[380px] w-[380px] rounded-full bg-glow-gradient blur-3xl sm:h-[480px] sm:w-[480px] lg:h-[620px] lg:w-[620px] xl:h-[780px] xl:w-[780px]" />
+			<div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col gap-10 pt-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12 xl:gap-16">
 				{/* On mobile, image/model is first; on md+ screens, text is first */}
 				<HeroOffering
 					image={image}
 					imageAlt={imageAlt}
-					className="order-1 md:order-2"
+					className="order-1 lg:order-2"
 				/>
 				<HeroCta
 					badgeLeft={badgeLeft}
@@ -63,7 +63,7 @@ const Hero: React.FC<HeroProps> = ({
 					ctaVariant={ctaVariant}
 					ctaForm={ctaForm}
 					showLearnMore={showLearnMore}
-					className="order-2 md:order-1"
+					className="order-2 lg:order-1"
 				>
 					{children}
 				</HeroCta>

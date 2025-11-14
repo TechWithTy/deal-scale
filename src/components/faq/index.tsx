@@ -88,16 +88,16 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 
 				<div className="mt-16 text-center">
 					<p className="mb-4 text-muted-foreground">
-						Become a Beta Tester for Deal Scale!
+						Join the Founders Circle to shape Deal Scale.
 						<br />
-						Get <span className="font-semibold text-primary">5 free leads</span>
-						, first dibs when we launch, and exclusive early access perks.
+						Get <span className="font-semibold text-primary">5 AI credits</span>
+						, priority onboarding, and first dibs when we launch.
 					</p>
 					<a
 						href="/contact"
 						className="glow inline-flex items-center justify-center rounded-md bg-gradient-to-r from-primary to-focus px-6 py-3 font-medium text-primary-foreground transition-opacity hover:opacity-90"
 					>
-						Become a Beta Tester
+						Request Founders Circle Access
 					</a>
 				</div>
 			</div>
