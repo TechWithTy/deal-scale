@@ -56,6 +56,9 @@
 		"seo:check": "pnpm exec tsx .github/scripts/seo-check.ts",
 		"seo:lhci": "bash .github/scripts/seo-lhci.sh",
 		"contact:test": "bash .github/scripts/contact-test.sh",
+		"doctor:rspack": "pnpm run build:rspack && pnpm dlx @rsdoctor/cli analyze --profile .rsdoctor/manifest.json",
+        "doctor:logs": "pnpm exec tsx tools/debug/collect-doctor-logs.ts",
+
 		"perf:lighthouse:local": "pnpm dlx lighthouse@12 http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/local",
 		"perf:lighthouse:prod-local": "lighthouse http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/prod",
 		"perf:lighthouse:prod": "pnpm dlx lighthouse@12 https://dealscale.io/ --preset=perf --throttling.cpuSlowdownMultiplier=4 --throttling.downloadThroughputKbps=1500 --throttling.uploadThroughputKbps=750 --output=json --output=html --output-path=reports/lighthouse/prod",

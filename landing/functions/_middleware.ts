@@ -3,6 +3,10 @@
 // - KV Namespace: META_KV (optional) for per-path meta overrides
 // Environment vars (in Pages): CF_PAGES_BRANCH, CF_PAGES_URL, CF_PAGES_COMMIT_SHA
 
+// HTMLRewriter is a global in the Cloudflare Workers runtime. Declare a minimal type to satisfy TS.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const HTMLRewriter: any;
+
 export const onRequest = async (context: any) => {
   const request = context.request as Request;
   const url = new URL(request.url);

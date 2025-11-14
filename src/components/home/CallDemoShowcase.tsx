@@ -1033,9 +1033,25 @@ const CallDemoInteractive = () => {
 };
 
 const StaticCallDemoPreview = () => {
-	useEffect(() => {
-		console.log("[StaticCallDemoPreview] rendered");
-	}, []);
+    useEffect(() => {
+        console.log("[StaticCallDemoPreview] rendered");
+    }, []);
+
+    // Compute static hero text using current persona/goal, matching interactive version
+    const { persona, goal } = usePersonaStore(
+        useShallow((state) => ({
+            persona: state.persona,
+            goal: state.goal,
+        })),
+    );
+    const resolvedGoal = goal ?? "Automate deal flow conversations";
+    const personaSeo = useMemo(
+        () => buildPersonaAiOutreachStudioSeo({ persona, goal: resolvedGoal }),
+        [persona, resolvedGoal],
+    );
+    const heroTagline = personaSeo.headline ?? AI_OUTREACH_STUDIO_TAGLINE;
+    const heroDescription =
+        personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
 
 	return (
 		<section
