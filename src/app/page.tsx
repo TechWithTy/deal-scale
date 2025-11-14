@@ -42,6 +42,7 @@ import {
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 
 // Below-the-fold components (lazy load with dynamic imports for code splitting)
 const AboutUsSection = dynamic(
@@ -321,9 +322,9 @@ const Index = async ({
 			url: `${canonicalUrl}#${AI_OUTREACH_STUDIO_ANCHOR}`,
 		})),
 	} as const;
-	return (
-		<ExitIntentBoundary variant="home">
-			<>
+	const shouldRenderExitIntent = exitIntentEnabled();
+	const pageContent = (
+		<>
 				<SchemaInjector schema={heroServiceSchema} />
 				<SchemaInjector schema={aiOutreachServiceSchema} />
 				<SchemaInjector schema={aiOutreachFeatureListSchema} />
@@ -411,8 +412,12 @@ const Index = async ({
 				<ViewportLazy>
 					<InstagramEmbed />
 				</ViewportLazy>
-			</>
-		</ExitIntentBoundary>
+		</>
+	);
+	return shouldRenderExitIntent ? (
+		<ExitIntentBoundary variant="home">{pageContent}</ExitIntentBoundary>
+	) : (
+		pageContent
 	);
 };
 

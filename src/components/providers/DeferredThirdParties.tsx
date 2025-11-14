@@ -7,6 +7,7 @@ import type {
 } from "@/lib/analytics/config";
 
 import { Analytics } from "@/components/analytics/Analytics";
+import { useAnalyticsConsent } from "@/contexts/analytics-consent-context";
 import { useDeferredLoad } from "./useDeferredLoad";
 
 const ANALYTICS_FIELDS: AnalyticsField[] = [
@@ -229,7 +230,12 @@ export function DeferredThirdParties({
 		zohoWidgetCode,
 	]);
 
-	const shouldLoad = useDeferredLoad(maxWaitMs);
+	const { hasConsented } = useAnalyticsConsent();
+	const shouldLoad = useDeferredLoad({
+		enabled: hasConsented,
+		requireInteraction: true,
+		timeout: typeof maxWaitMs === "number" ? maxWaitMs : 0,
+	});
 	const [providerData, setProviderData] = useState<ProviderResponse | null>(
 		null,
 	);
@@ -257,10 +263,13 @@ export function DeferredThirdParties({
 	}, []);
 
 	useEffect(() => {
+		if (!hasConsented) {
+			return;
+		}
 		if (shouldLoad && needsServerConfig) {
 			setAttempt(0);
 		}
-	}, [needsServerConfig, shouldLoad]);
+	}, [hasConsented, needsServerConfig, shouldLoad]);
 
 	const scheduleRetry = useCallback(() => {
 		if (typeof window === "undefined") {
@@ -285,6 +294,7 @@ export function DeferredThirdParties({
 
 	useEffect(() => {
 		if (
+			!hasConsented ||
 			!shouldLoad ||
 			providerData ||
 			attempt > maxRetries ||
@@ -347,6 +357,7 @@ export function DeferredThirdParties({
 		needsServerConfig,
 		providerData,
 		scheduleRetry,
+		hasConsented,
 		shouldLoad,
 	]);
 
@@ -374,14 +385,16 @@ export function DeferredThirdParties({
 		[config.gaId, config.gtmId, providerData?.gaId, providerData?.gtmId],
 	);
 
-	const shouldRender = Boolean(
-		analyticsConfig.gaId ||
-			analyticsConfig.gtmId ||
-			clarityId ||
-			zohoCode ||
-			resolvedFacebookPixelId ||
-			plausibleConfig.domain,
-	);
+	const shouldRender =
+		hasConsented &&
+		Boolean(
+			analyticsConfig.gaId ||
+				analyticsConfig.gtmId ||
+				clarityId ||
+				zohoCode ||
+				resolvedFacebookPixelId ||
+				plausibleConfig.domain,
+		);
 
 	useZohoLoader(shouldRender, zohoCode);
 

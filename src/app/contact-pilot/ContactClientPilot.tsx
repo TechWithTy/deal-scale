@@ -18,6 +18,7 @@ import type { MultiselectField } from "@/types/contact/formFields";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 
 const Contact = () => {
 	const searchParams = useSearchParams();
@@ -142,9 +143,10 @@ const Contact = () => {
 		return { ...result, ...profilePrefill };
 	}, [searchParams, profilePrefill]);
 
-	return (
-		<ExitIntentBoundary variant="contact-pilot">
-			<AuthGuard>
+	const shouldRenderExitIntent = exitIntentEnabled();
+
+	const content = (
+		<AuthGuard>
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
@@ -176,8 +178,13 @@ const Contact = () => {
 				/>
 				<Newsletter />
 			</div>
-			</AuthGuard>
-		</ExitIntentBoundary>
+		</AuthGuard>
+	);
+
+	return shouldRenderExitIntent ? (
+		<ExitIntentBoundary variant="contact-pilot">{content}</ExitIntentBoundary>
+	) : (
+		content
 	);
 };
 

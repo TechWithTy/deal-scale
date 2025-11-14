@@ -41,3 +41,5 @@
 - Add a visual regression test for the hero section to catch future layout regressions automatically.
 
 
+
+

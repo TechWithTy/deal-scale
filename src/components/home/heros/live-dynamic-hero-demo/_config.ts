@@ -173,7 +173,7 @@ const TEMPLATE_HOPE = pickPersonaField("hope");
 
 export const LIVE_VIDEO: HeroVideoConfig = {
 	src: "https://app.supademo.com/embed/cmhjlwt7i0jk4u1hm0scmf39w?embed_v=2&utm_source=embed",
-	poster: "/supademos/gifs/SVGv2r.mp4",
+	poster: "/supademos/svgs/supademo-thumbnail.png",
 	provider: "supademo",
 };
 

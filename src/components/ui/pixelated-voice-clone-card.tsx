@@ -132,6 +132,8 @@ const PixelatedVoiceCloneCardComponent = ({
 	);
 	const [isCanvasAutoAnimating, setIsCanvasAutoAnimating] = useState(false);
 	const [distortionMultiplier, setDistortionMultiplier] = useState(1);
+	const [isMobile, setIsMobile] = useState(false);
+	const [viewportHeight, setViewportHeight] = useState(0);
 
 	const applyTilt = useCallback((nextTilt: Tilt) => {
 		tiltRef.current = nextTilt;
@@ -216,6 +218,19 @@ const PixelatedVoiceCloneCardComponent = ({
 
 		return () => observer.disconnect();
 	}, [hasLoadedCanvas]);
+
+	useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		}
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 640);
+			setViewportHeight(window.innerHeight);
+		};
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
 
 	useEffect(() => {
 		if (!hasLoadedCanvas) {
@@ -558,7 +573,11 @@ const PixelatedVoiceCloneCardComponent = ({
 				<div
 					ref={canvasWrapperRef}
 					className="relative overflow-hidden rounded-[26px] shadow-[0_25px_70px_-35px_rgba(56,189,248,0.75)] ring-1 ring-slate-900/10 dark:ring-white/10"
-					style={{ minHeight: canvasSize.containerHeight }}
+					style={{
+						minHeight: isMobile
+							? Math.max(canvasSize.containerHeight, viewportHeight || 0)
+							: canvasSize.containerHeight,
+					}}
 				>
 					<div className="pointer-events-none absolute inset-0 rounded-[26px] bg-gradient-to-br from-sky-500/10 via-transparent to-indigo-500/15 blur-sm" />
 					{hasLoadedCanvas ? (
