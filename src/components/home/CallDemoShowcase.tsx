@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import SessionMonitor from "@/components/deal_scale/talkingCards/SessionMonitor";
 import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
+import { useDeferredLoad } from "@/components/providers/useDeferredLoad";
 import {
 	Accordion,
 	AccordionContent,
@@ -24,12 +25,12 @@ import {
 	AI_OUTREACH_STUDIO_TAGLINE,
 } from "@/data/home/aiOutreachStudio";
 import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from "@/data/personas/catalog";
-import { usePersonaStore } from "@/stores/usePersonaStore";
-import { useShallow } from "zustand/react/shallow";
 import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
+import { usePersonaStore } from "@/stores/usePersonaStore";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useShallow } from "zustand/react/shallow";
 
 type PreviewType = "call" | "text";
 type CallDemoMode = "video" | "live" | "handoff";
@@ -250,7 +251,7 @@ function useInterval(callback: () => void, delay: number | null): void {
 	}, [delay]);
 }
 
-export const CallDemoShowcase = () => {
+const CallDemoInteractive = () => {
 	const [callDemoKey, setCallDemoKey] = useState(() => Date.now());
 	const [callDemoMode, setCallDemoMode] = useState<CallDemoMode>("video");
 	const [activePreview, setActivePreview] = useState<PreviewType>("text");
@@ -259,6 +260,7 @@ export const CallDemoShowcase = () => {
 	const [leadCaptureOrigin, setLeadCaptureOrigin] = useState<"call" | "text">(
 		"text",
 	);
+	const [isTextDemoPlaying, setIsTextDemoPlaying] = useState(false);
 
 	const hasTriggeredTextLeadCaptureRef = useRef(false);
 	const textLeadCaptureTimeoutRef = useRef<number | null>(null);
@@ -309,9 +311,24 @@ export const CallDemoShowcase = () => {
 		setCallDemoMode("video");
 	}, []);
 
+	const handleStartTextDemo = useCallback(() => {
+		setActiveTextIndex(0);
+		setIsTextDemoPlaying(true);
+	}, []);
+
+	const handlePauseTextDemo = useCallback(() => {
+		setIsTextDemoPlaying(false);
+		hasTriggeredTextLeadCaptureRef.current = false;
+		if (textLeadCaptureTimeoutRef.current) {
+			window.clearTimeout(textLeadCaptureTimeoutRef.current);
+			textLeadCaptureTimeoutRef.current = null;
+		}
+	}, []);
+
 	useEffect(() => {
 		if (activePreview !== "text") {
 			setActiveTextIndex(0);
+			setIsTextDemoPlaying(false);
 			hasTriggeredTextLeadCaptureRef.current = false;
 			if (textLeadCaptureTimeoutRef.current) {
 				window.clearTimeout(textLeadCaptureTimeoutRef.current);
@@ -320,7 +337,10 @@ export const CallDemoShowcase = () => {
 		}
 	}, [activePreview]);
 
-	useInterval(advanceTextMessage, activePreview === "text" ? 3200 : null);
+	useInterval(
+		advanceTextMessage,
+		activePreview === "text" && isTextDemoPlaying ? 3200 : null,
+	);
 
 	useEffect(() => {
 		if (activePreview !== "text") {
@@ -367,7 +387,7 @@ export const CallDemoShowcase = () => {
 	}, [activePreview, activeTextIndex]);
 
 	useEffect(() => {
-		if (activePreview !== "text") {
+		if (activePreview !== "text" || !isTextDemoPlaying) {
 			return;
 		}
 
@@ -391,7 +411,7 @@ export const CallDemoShowcase = () => {
 				textLeadCaptureTimeoutRef.current = null;
 			}
 		};
-	}, [activePreview, activeTextIndex, openLeadCaptureModal]);
+	}, [activePreview, activeTextIndex, isTextDemoPlaying, openLeadCaptureModal]);
 
 	const handleCallDemoComplete = useCallback(() => {
 		setCallDemoMode("handoff");
@@ -568,9 +588,31 @@ export const CallDemoShowcase = () => {
 											iMessage Support
 										</SparklesText>
 									</div>
+									<div className="mt-4 flex flex-col gap-2">
+										{!isTextDemoPlaying ? (
+											<button
+												type="button"
+												onClick={handleStartTextDemo}
+												className="inline-flex w-full items-center justify-center rounded-full bg-slate-900/90 px-5 py-2 font-semibold text-sm text-white transition hover:bg-slate-800 dark:bg-white/80 dark:text-slate-900 dark:hover:bg-white"
+											>
+												Play SMS Workflow
+											</button>
+										) : (
+											<button
+												type="button"
+												onClick={handlePauseTextDemo}
+												className="inline-flex w-full items-center justify-center rounded-full border border-slate-900/20 px-5 py-2 font-semibold text-slate-900 text-sm transition hover:bg-slate-900/5 dark:border-white/30 dark:text-white dark:hover:bg-white/10"
+											>
+												Pause Conversation
+											</button>
+										)}
+									</div>
 									<button
 										type="button"
-										onClick={handleEndTextDemo}
+										onClick={() => {
+											setIsTextDemoPlaying(false);
+											handleEndTextDemo();
+										}}
 										className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-slate-900/10 px-5 py-2 font-medium text-slate-900 text-sm transition hover:bg-slate-900/20 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
 									>
 										Accept Appointment
@@ -753,6 +795,9 @@ export const CallDemoShowcase = () => {
 		handleCallHandoffQueue,
 		handleCancelTextDemo,
 		handleEndTextDemo,
+		handlePauseTextDemo,
+		handleStartTextDemo,
+		isTextDemoPlaying,
 	]);
 
 	const { persona, goal } = usePersonaStore(
@@ -977,6 +1022,111 @@ export const CallDemoShowcase = () => {
 			) : null}
 		</>
 	);
+};
+
+const StaticCallDemoPreview = () => {
+	useEffect(() => {
+		console.log("[StaticCallDemoPreview] rendered");
+	}, []);
+
+	return (
+		<section
+			id={AI_OUTREACH_STUDIO_ANCHOR}
+			className="relative mx-auto w-full max-w-7xl rounded-3xl border border-white/10 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-6 py-14 text-white shadow-[0_20px_120px_-60px_rgba(15,23,42,0.8)]"
+		>
+			<div className="absolute inset-x-0 top-6 flex justify-center">
+				<span className="rounded-full bg-black/60 px-4 py-1 font-semibold text-white/80 text-xs uppercase tracking-[0.3em]">
+					Interactive demo loads after tap or scroll
+				</span>
+			</div>
+			<div className="grid gap-10 pt-6 lg:grid-cols-2">
+				<div className="space-y-5">
+					<span className="inline-flex items-center rounded-full border border-white/15 px-4 py-1 font-semibold text-slate-200/80 text-xs uppercase tracking-[0.25em]">
+						{AI_OUTREACH_STUDIO_TAGLINE}
+					</span>
+					<div>
+						<h2 className="text-balance font-semibold text-3xl leading-tight md:text-4xl">
+							{AI_OUTREACH_STUDIO_HEADING}
+						</h2>
+						<p className="mt-3 text-slate-200/80">
+							{AI_OUTREACH_STUDIO_DESCRIPTION}
+						</p>
+					</div>
+					<ul className="space-y-3 text-slate-100/90">
+						{AI_OUTREACH_STUDIO_FEATURES.slice(0, 3).map((feature) => (
+							<li
+								key={feature.title}
+								className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4 text-sm leading-relaxed"
+							>
+								<span className="mt-1 inline-block size-2 rounded-full bg-emerald-400" />
+								<div>
+									<p className="font-semibold text-base">{feature.title}</p>
+									<p className="text-slate-200/80">{feature.description}</p>
+								</div>
+							</li>
+						))}
+					</ul>
+					<div className="flex flex-wrap gap-3">
+						<Link
+							href="/contact"
+							className="inline-flex items-center rounded-full bg-white px-5 py-2.5 font-semibold text-black transition hover:bg-white/90"
+						>
+							Request a live handoff
+						</Link>
+						<Link
+							href="/products"
+							className="inline-flex items-center rounded-full border border-white/30 px-5 py-2.5 font-semibold text-white transition hover:bg-white/10"
+						>
+							Browse automations
+						</Link>
+					</div>
+				</div>
+				<div className="rounded-3xl border border-white/10 bg-slate-950/60 p-6 shadow-black/30 shadow-inner">
+					<div className="space-y-4">
+						<p className="text-slate-400 text-xs uppercase tracking-[0.3em]">
+							Example SMS Assist
+						</p>
+						<div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/70 p-6 text-sm leading-relaxed">
+							<p className="text-emerald-300">
+								<span className="font-semibold">AI</span>: Hey there 👋 this is
+								Ava with Metro Realty. Still open to selling 2143 W Elm St this
+								month?
+							</p>
+							<p className="text-white/90">
+								<span className="font-semibold">Lead</span>: Depends what kind
+								of offer I’d get.
+							</p>
+							<p className="text-emerald-300">
+								<span className="font-semibold">AI</span>: Totally
+								understandable. Homes nearby are closing at $420K–$435K. Want
+								Jordan to confirm a cash offer today?
+							</p>
+						</div>
+						<div className="rounded-2xl border border-white/5 bg-white/10 p-4 text-slate-200 text-sm">
+							<p className="font-semibold">Live Call Handoff</p>
+							<p className="mt-1">
+								We’ll keep Ava on the line, sync the transcript to your CRM, and
+								trigger follow-up workflows automatically.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+};
+
+export const CallDemoShowcase = () => {
+	const shouldHydrateCallDemo = useDeferredLoad({
+		requireInteraction: false,
+		timeout: 2000,
+	});
+
+	if (!shouldHydrateCallDemo) {
+		return <StaticCallDemoPreview />;
+	}
+
+	return <CallDemoInteractive />;
 };
 
 CallDemoShowcase.displayName = "CallDemoShowcase";

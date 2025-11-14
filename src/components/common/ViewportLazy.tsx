@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type ViewportLazyProps = {
 	children: ReactNode;
@@ -21,7 +21,10 @@ function getObserverEntry(rootMargin: string): ObserverRegistryEntry {
 	let entry = observerRegistry.get(rootMargin);
 
 	if (!entry) {
-		const targets = new Map<Element, (entry: IntersectionObserverEntry) => void>();
+		const targets = new Map<
+			Element,
+			(entry: IntersectionObserverEntry) => void
+		>();
 		const observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {
@@ -61,11 +64,17 @@ function subscribeToObserver(
 	};
 }
 
-const DefaultFallback = () => (
+const DefaultFallback = ({ label }: { label?: string }) => (
 	<div
 		aria-hidden="true"
-		className="min-h-[24rem] w-full animate-pulse rounded-3xl border border-border/40 bg-muted/15"
-	/>
+		className="min-h-[24rem] w-full animate-pulse rounded-3xl border border-border/40 bg-gradient-to-br from-slate-900/5 via-slate-900/10 to-slate-900/5 dark:from-white/5 dark:via-white/10 dark:to-white/5"
+	>
+		{label ? (
+			<div className="flex h-full items-center justify-center font-semibold text-muted-foreground text-xs uppercase tracking-[0.3em]">
+				{label}
+			</div>
+		) : null}
+	</div>
 );
 
 export function ViewportLazy({
@@ -76,6 +85,12 @@ export function ViewportLazy({
 }: ViewportLazyProps) {
 	const [isVisible, setIsVisible] = useState(false);
 	const containerRef = useRef<HTMLDivElement | null>(null);
+	const label = useMemo(() => {
+		if (typeof children === "string") {
+			return children.slice(0, 24);
+		}
+		return undefined;
+	}, [children]);
 
 	useEffect(() => {
 		if (isVisible) return;
@@ -85,6 +100,7 @@ export function ViewportLazy({
 
 		if (!("IntersectionObserver" in window)) {
 			setIsVisible(true);
+			console.log("[ViewportLazy] revealed", label ?? containerRef.current);
 			return;
 		}
 
@@ -97,11 +113,11 @@ export function ViewportLazy({
 		return () => {
 			cleanup();
 		};
-	}, [isVisible, rootMargin]);
+	}, [isVisible, label, rootMargin]);
 
 	return (
 		<div ref={containerRef} className={className}>
-			{isVisible ? children : fallback ?? <DefaultFallback />}
+			{isVisible ? children : (fallback ?? <DefaultFallback label={label} />)}
 		</div>
 	);
 }

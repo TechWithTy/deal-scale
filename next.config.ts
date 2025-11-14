@@ -93,6 +93,7 @@ const nextConfig: NextConfig = {
 			{ protocol: "https", hostname: "crosscountrymortgage.com" },
 			{ protocol: "https", hostname: "onepercenthomesale.com" },
 			{ protocol: "https", hostname: "squarespace-cdn.com" },
+			{ protocol: "https", hostname: "images.squarespace-cdn.com" },
 			{ protocol: "https", hostname: "lirp.cdn-website.com" },
 			{ protocol: "https", hostname: "www.dwellist.com" },
 			{ protocol: "https", hostname: "downloads.intercomcdn.com" },

@@ -2,10 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useHasMounted } from "@/hooks/useHasMounted";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail } from "lucide-react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,19 +16,31 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+const NewsletterSkeleton = () => (
+	<div className="flex w-full flex-col gap-3" aria-hidden="true">
+		<div className="flex items-center gap-2">
+			<span className="inline-flex h-10 w-10 animate-pulse rounded-md bg-white/10" />
+			<span className="h-10 flex-1 animate-pulse rounded-md bg-white/10" />
+		</div>
+		<span className="h-10 w-full animate-pulse rounded-md bg-white/10" />
+	</div>
+);
+
 export const NewsletterFooter = () => {
+	const [hydrated, setHydrated] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isSubscribed, setIsSubscribed] = useState(false);
-	const hasMounted = useHasMounted();
 
 	useEffect(() => {
-		if (!hasMounted) return;
-		const match = document.cookie.match(/userSubscribedNewsletter=([^;]+)/);
-		if (match && match[1] === "true") {
-			setIsSubscribed(true);
+		setHydrated(true);
+		if (typeof document !== "undefined") {
+			const match = document.cookie.match(/userSubscribedNewsletter=([^;]+)/);
+			if (match?.[1] === "true") {
+				setIsSubscribed(true);
+			}
 		}
-	}, [hasMounted]);
+	}, []);
 
 	const {
 		register,
@@ -62,11 +72,11 @@ export const NewsletterFooter = () => {
 			toast.success("Thank you for subscribing to our newsletter!");
 			reset();
 			setIsSubscribed(true);
-			if (hasMounted) {
+			if (typeof document !== "undefined") {
 				document.cookie =
 					"userSubscribedNewsletter=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 			}
-		} catch (err) {
+		} catch {
 			setError("An unexpected error occurred");
 			toast.error("An unexpected error occurred");
 		} finally {
@@ -74,13 +84,13 @@ export const NewsletterFooter = () => {
 		}
 	};
 
-	if (!hasMounted) return null;
+	const showForm = hydrated && !isSubscribed;
 
 	return (
 		<div className="flex w-full flex-col items-center justify-center">
-			<div className="flex w-full max-w-md flex-col gap-4 rounded-lg bg-white/5 p-5">
-				{isSubscribed ? (
-					<div className="flex w-full flex-col items-center justify-center">
+			<div className="flex min-h-[220px] w-full max-w-md flex-col gap-4 rounded-lg bg-white/5 p-5 shadow-black/10 shadow-lg dark:shadow-black/40">
+				{hydrated && isSubscribed ? (
+					<div className="flex w-full flex-col items-center justify-center text-center">
 						<p className="mb-2 font-semibold text-lg text-primary">
 							You're subscribed! 🎉
 						</p>
@@ -88,7 +98,7 @@ export const NewsletterFooter = () => {
 							Thanks for joining our newsletter.
 						</p>
 					</div>
-				) : (
+				) : showForm ? (
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						className="flex w-full flex-col gap-3"
@@ -134,8 +144,10 @@ export const NewsletterFooter = () => {
 							</p>
 						)}
 					</form>
+				) : (
+					<NewsletterSkeleton />
 				)}
-				<p className="mt-2 w-full text-center text-gray-400 text-xs">
+				<p className="mt-auto w-full text-center text-gray-400 text-xs">
 					By subscribing you agree to our{" "}
 					<Link href="/privacy" className="underline hover:text-primary">
 						Privacy Policy

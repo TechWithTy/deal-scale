@@ -1,19 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
 	HeroHeadline,
 	type HeroVideoPreviewHandle,
-	useHeroVideoConfig,
 	resolveHeroThumbnailSrc,
+	useHeroVideoConfig,
 } from "@external/dynamic-hero";
 import { useInView } from "motion/react";
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
-import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
@@ -26,9 +25,9 @@ import {
 	LIVE_PRIMARY_CTA,
 	LIVE_SECONDARY_CTA,
 	LIVE_SOCIAL_PROOF,
+	LIVE_VIDEO,
 	PERSONA_GOAL,
 	PERSONA_LABEL,
-	LIVE_VIDEO,
 } from "./_config";
 
 const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(
@@ -52,6 +51,11 @@ const HeroVideoPreviewDynamic = dynamic(
 			/>
 		),
 	},
+);
+
+const PricingCheckoutDialog = dynamic(
+	() => import("@/components/home/pricing/PricingCheckoutDialog"),
+	{ ssr: false, loading: () => null },
 );
 
 function HeroVideoPreviewSkeleton({

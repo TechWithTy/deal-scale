@@ -1,5 +1,6 @@
 "use client";
 import Header from "@/components/common/Header";
+import { useDeferredLoad } from "@/components/providers/useDeferredLoad";
 import {
 	Tooltip,
 	TooltipContent,
@@ -11,6 +12,7 @@ import type {
 	CompanyPartner,
 } from "@/types/service/trusted-companies";
 import { motion, useAnimation } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -25,18 +27,33 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 	items,
 	variant = "default",
 }) => {
+	const shouldAnimate = useDeferredLoad({
+		requireInteraction: false,
+		timeout: 2000,
+	});
 	const entries: [string, CompanyPartner][] = Object.entries(items);
 	const controls = useAnimation();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const restartAnimationRef = useRef<() => void>(() => {});
 	const repeatedEntries = useMemo(
-		() => [...entries, ...entries, ...entries],
+		() =>
+			Array.from({ length: 3 }, (_, repeatIndex) =>
+				entries.map(([companyName, company]) => ({
+					key: `${companyName}-${repeatIndex}`,
+					companyName,
+					company,
+				})),
+			).flat(),
 		[entries],
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
+		if (!shouldAnimate) {
+			return;
+		}
+
 		if (containerRef.current && contentRef.current) {
 			const startMarquee = () => {
 				const contentWidth = contentRef.current?.offsetWidth ?? 0;
@@ -66,7 +83,7 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 				controls.stop();
 			};
 		}
-	}, [controls, entries]);
+	}, [controls, entries, shouldAnimate]);
 
 	// * Render company logos with lazy loading, fallback, and support for both public and remote URLs
 
@@ -97,12 +114,7 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 		}
 
 		return (
-			<span
-				tabIndex={0}
-				role="img"
-				aria-label={`${companyName} logo`}
-				{...baseProps}
-			>
+			<span role="img" aria-label={`${companyName} logo`} {...baseProps}>
 				<LogoImage
 					companyName={companyName}
 					logoUrl={company.logo}
@@ -111,6 +123,27 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 			</span>
 		);
 	};
+
+	const renderLogoWithTooltip = (
+		companyName: string,
+		company: CompanyPartner,
+	) => (
+		<Tooltip>
+			<TooltipTrigger asChild>
+				{renderLogoTrigger(companyName, company)}
+			</TooltipTrigger>
+			<TooltipContent
+				side="top"
+				sideOffset={12}
+				className="max-w-xs text-left text-sm"
+			>
+				<div className="font-semibold text-foreground">{companyName}</div>
+				{company.description && (
+					<p className="mt-1 text-muted-foreground">{company.description}</p>
+				)}
+			</TooltipContent>
+		</Tooltip>
+	);
 
 	return (
 		<TooltipProvider delayDuration={150}>
@@ -130,48 +163,48 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 							: "border border-white/10 bg-background-dark/50"
 					} backdrop-blur-sm`}
 				>
-					<div
-						className="relative flex h-16 items-center overflow-hidden"
-						ref={containerRef}
-						onMouseEnter={() => controls.stop()}
-						onMouseLeave={() => restartAnimationRef.current()}
-					>
-						<motion.div
-							ref={contentRef}
-							className="flex items-center gap-8 whitespace-nowrap"
-							style={{ width: "max-content" }}
-							animate={controls}
+					{shouldAnimate ? (
+						<div
+							className="relative flex h-16 items-center overflow-hidden"
+							ref={containerRef}
+							onMouseEnter={() => controls.stop()}
+							onMouseLeave={() => restartAnimationRef.current()}
 						>
-							{repeatedEntries.map(([companyName, company], index) => (
-								<motion.div
-									key={`${companyName}-${index}`}
-									className="my-5 flex h-16 w-24 shrink-0 items-center justify-center"
-									whileHover={{ scale: 1.05 }}
-									transition={{ type: "spring", stiffness: 300 }}
+							<motion.div
+								ref={contentRef}
+								className="flex items-center gap-8 whitespace-nowrap"
+								style={{ width: "max-content" }}
+								animate={controls}
+							>
+								{repeatedEntries.map(({ key, companyName, company }) => (
+									<motion.div
+										key={key}
+										className="my-5 flex h-16 w-24 shrink-0 items-center justify-center"
+										whileHover={{ scale: 1.05 }}
+										transition={{ type: "spring", stiffness: 300 }}
+									>
+										{renderLogoWithTooltip(companyName, company)}
+									</motion.div>
+								))}
+							</motion.div>
+						</div>
+					) : (
+						<div className="relative flex flex-wrap justify-center gap-6 rounded-xl border border-white/5 bg-gradient-to-br from-slate-900/10 via-slate-900/5 to-slate-900/10 p-6 dark:from-white/5 dark:via-white/10 dark:to-white/5">
+							{entries.slice(0, 8).map(([companyName, company]) => (
+								<div
+									key={companyName}
+									className="flex h-16 w-24 items-center justify-center rounded-lg border border-white/10 bg-white/70 text-black dark:bg-white/10"
 								>
-									<Tooltip>
-										<TooltipTrigger asChild>
-											{renderLogoTrigger(companyName, company)}
-										</TooltipTrigger>
-										<TooltipContent
-											side="top"
-											sideOffset={12}
-											className="max-w-xs text-left text-sm"
-										>
-											<div className="font-semibold text-foreground">
-												{companyName}
-											</div>
-											{company.description && (
-												<p className="mt-1 text-muted-foreground">
-													{company.description}
-												</p>
-											)}
-										</TooltipContent>
-									</Tooltip>
-								</motion.div>
+									{renderLogoWithTooltip(companyName, company)}
+								</div>
 							))}
-						</motion.div>
-					</div>
+							<div className="absolute inset-x-0 top-2 flex justify-center">
+								<span className="rounded-full bg-black/60 px-3 py-1 font-semibold text-white/80 text-xs uppercase tracking-[0.3em] dark:bg-white/20">
+									Tap or scroll to animate
+								</span>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</TooltipProvider>
@@ -198,22 +231,22 @@ const LogoImage: React.FC<LogoImageProps> = ({
 				className="flex h-14 w-14 items-center justify-center rounded bg-gray-100 text-gray-400 text-xs dark:bg-gray-800"
 				title={companyName}
 			>
-				{/* ! Fallback: First letter of company */}
 				{companyName.charAt(0).toUpperCase()}
 			</div>
 		);
 	}
 
-	// * Use next/image for optimization, fallback to <img> if needed
-	// ! next/image requires absolute URLs or public/ relative paths
 	return (
-		<img
+		<Image
 			src={logoUrl}
-			alt={`${companyName} Logo`}
-			loading="lazy"
-			className="h-14 w-14 object-contain"
+			alt={
+				description ? `${companyName} - ${description}` : `${companyName} logo`
+			}
+			width={56}
+			height={56}
+			sizes="56px"
+			className="h-14 w-14 rounded-md bg-white object-contain p-1"
 			onError={() => setImgError(true)}
-			style={{ background: "white", borderRadius: 8 }}
 		/>
 	);
 };
