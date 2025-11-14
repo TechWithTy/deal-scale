@@ -1,5 +1,5 @@
 {
-	"name": "nextjs_shadcn_ts",
+	"name": "dealscale",
 	"private": true,
 	"engines": {
 		"node": ">=20.0.0 <21.0.0",
@@ -10,6 +10,7 @@
 		"dev": "pnpm run check:env && next dev",
 		"dev-turbo": "pnpm run check:env && next dev --turbopack",
 		"build": "next build",
+		"typecheck": "tsc --noEmit",
 		"postbuild": "pnpm run submit:sitemap",
 		"prepare": "husky",
 		"archive:reports": "pnpm exec tsx tools/reports/archive-lighthouse-report.ts",
@@ -62,6 +63,11 @@
 		"**/*.{js,jsx,ts,tsx,json,css,md,html,scss}": [
 			"pnpm exec biome format --write"
 		]
+	},
+	"pnpm": {
+		"overrides": {
+			"restore-cursor>onetime": "5.1.2"
+		}
 	},
 	"browserslist": {
 		"production": [
@@ -145,6 +151,7 @@
 		"dompurify": "^3.2.6",
 		"embla-carousel-react": "^8.3.0",
 		"entities": "^6.0.0",
+		"fast-xml-parser": "^5.3.1",
 		"framer-motion": "^12.5.0",
 		"gray-matter": "^4.0.3",
 		"input-otp": "^1.2.4",
@@ -231,6 +238,7 @@
 		"ts-node": "^10.9.2",
 		"tsconfig-paths": "^4.2.0",
 		"tsx": "^4.7.0",
+		"turbo": "^2.5.2",
 		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.0.1",
 		"vite": "^5.4.10",

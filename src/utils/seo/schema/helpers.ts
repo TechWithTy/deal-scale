@@ -43,6 +43,7 @@ export const buildSocialProfiles = (): string[] => {
 	const socialUrls = [
 		socialLinks.linkedin,
 		socialLinks.facebook,
+		socialLinks.twitter,
 		socialLinks.instagram,
 		socialLinks.youtube,
 		socialLinks.mediumUsername && socialLinks.mediumUsername.trim().length > 0

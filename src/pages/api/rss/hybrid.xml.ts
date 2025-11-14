@@ -90,37 +90,38 @@ const buildYouTubeEntries = (feedXml: string): HybridEntry[] => {
 
 	const entries = ensureArray(parsed.feed?.entry);
 
-	return entries
-		.map((entry) => {
-			const videoId = entry["yt:videoId"]?.toString?.().trim();
-			if (!videoId) return undefined;
+	const mappedEntries: Array<HybridEntry | undefined> = entries.map((entry) => {
+		const videoId = entry["yt:videoId"]?.toString?.().trim();
+		if (!videoId) return undefined;
 
-			const title =
-				entry.title?.toString?.().trim() ?? "DealScale Video Update";
-			const description =
-				entry["media:group"]?.["media:description"] ??
-				"Watch the latest automation insights from DealScale.";
-			const published = entry.published ?? entry.updated;
-			const keywords = entry["media:group"]?.["media:keywords"];
-			const categories = ensureArray(
-				keywords ? keywords.split?.(",") : entry.category,
-			)
-				.map((keyword: unknown) => keyword?.toString?.().trim())
-				.filter((keyword: string | undefined): keyword is string =>
-					Boolean(keyword),
-				);
+		const title = entry.title?.toString?.().trim() ?? "DealScale Video Update";
+		const description =
+			entry["media:group"]?.["media:description"] ??
+			"Watch the latest automation insights from DealScale.";
+		const published = entry.published ?? entry.updated;
+		const keywords = entry["media:group"]?.["media:keywords"];
+		const categories = ensureArray(
+			keywords ? keywords.split?.(",") : entry.category,
+		)
+			.map((keyword: unknown) => keyword?.toString?.().trim())
+			.filter((keyword: string | undefined): keyword is string =>
+				Boolean(keyword),
+			);
 
-			return {
-				title,
-				link: `https://www.youtube.com/watch?v=${videoId}`,
-				description: description.toString(),
-				pubDate: normalizeDate(published),
-				guid: `youtube-${videoId}`,
-				source: "youtube" as const,
-				categories,
-			};
-		})
-		.filter((entry): entry is HybridEntry => Boolean(entry));
+		return {
+			title,
+			link: `https://www.youtube.com/watch?v=${videoId}`,
+			description: description.toString(),
+			pubDate: normalizeDate(published),
+			guid: `youtube-${videoId}`,
+			source: "youtube" as const,
+			categories,
+		};
+	});
+
+	return mappedEntries.filter((entry): entry is HybridEntry =>
+		Boolean(entry && entry.link),
+	);
 };
 
 const buildChannelXml = (entries: HybridEntry[]): string => {

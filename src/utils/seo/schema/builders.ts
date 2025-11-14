@@ -1,4 +1,5 @@
 import { companyData } from "@/data/company";
+import { faqItems } from "@/data/faq/default";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import type { BeehiivPost } from "@/types/behiiv";
 import type { CaseStudy } from "@/types/case-study";
@@ -259,6 +260,176 @@ export const buildDatasetSchema = (): DatasetSchema => ({
 		},
 	],
 });
+
+const KNOWS_ABOUT = [
+	"AI automation",
+	"real estate software",
+	"real estate lead generation",
+	"AI sales agents",
+	"CRM automation",
+	"voice cloning for sales",
+	"pipeline automation",
+	"real estate investing tools",
+	"wholesaling automation",
+	"off-market deal discovery",
+];
+
+const VALUE_PROPOSITION_POINTS = [
+	"Import anything—CSVs, CRMs, APIs",
+	"Sync with any CRM including GoHighLevel, Salesforce, Pipedrive, Lofty, Follow Up Boss",
+	"Clone your voice and automate outreach",
+	"AI updates your CRM after every call",
+	"High-intent leads get routed or booked automatically",
+];
+
+const AREA_SERVED = [
+	{
+		"@type": "AdministrativeArea",
+		name: "United States",
+	},
+	{
+		"@type": "AdministrativeArea",
+		name: "Canada",
+	},
+];
+
+const selectFaqEntries = (): FAQPageSchema["mainEntity"] =>
+	faqItems.slice(0, 3).map((faq) => ({
+		"@type": "Question" as const,
+		name: faq.question,
+		acceptedAnswer: {
+			"@type": "Answer" as const,
+			text: faq.answer,
+		},
+	}));
+
+export const buildKnowledgeGraphSchema = () => {
+	const organization = buildOrganizationSchema();
+	const website = buildWebSiteSchema();
+	const software = buildSoftwareApplicationSchema();
+	const dataset = buildDatasetSchema();
+
+	const knowledgeGraphOrganization = {
+		...organization,
+		"@type": ["Organization", "Brand"],
+		legalName: companyData.companyLegalName ?? organization.legalName,
+		foundingDate: "2025-10-29",
+		logo: buildAbsoluteUrl("/company/logos/DealScale_Horizontal_Black.png"),
+		areaServed: AREA_SERVED,
+		knowsAbout: KNOWS_ABOUT,
+		additionalProperty: [
+			{
+				"@type": "PropertyValue",
+				name: "BrandEmotion",
+				value: "Chaos → Control → Confidence → Scale",
+			},
+			{
+				"@type": "PropertyValue",
+				name: "CoreNarrative",
+				value:
+					"DealScale automates the real estate grind—follow-up, CRM updates, outreach—so professionals can spend more time closing deals.",
+			},
+			{
+				"@type": "PropertyValue",
+				name: "ValueProposition",
+				value: VALUE_PROPOSITION_POINTS.join(" | "),
+			},
+		],
+		contactPoint: [
+			{
+				"@type": "ContactPoint",
+				contactType: "customer support",
+				telephone: companyData.contactInfo.phone,
+				email: companyData.contactInfo.email,
+				areaServed: ["US", "Canada"],
+				availableLanguage: ["English"],
+			},
+		],
+	};
+
+	const knowledgeGraphSoftware = {
+		...software,
+		name: "DealScale Automation Platform",
+		applicationCategory: [
+			"Real Estate Automation",
+			"CRM Automation",
+			"AI Sales Software",
+			"Lead Generation Automation",
+		],
+		operatingSystem: "Web",
+		downloadUrl: defaultSeo.canonical,
+		softwareVersion: "1.0",
+		offers: {
+			"@type": "Offer",
+			price: "500",
+			priceCurrency: "USD",
+			url: buildAbsoluteUrl("/tree-beehiv-pricing"),
+		},
+		aggregateRating: {
+			"@type": "AggregateRating",
+			ratingValue: "4.9",
+			bestRating: "5",
+			reviewCount: "27",
+		},
+	};
+
+	const faqPageUrl = buildAbsoluteUrl("/faqs");
+
+	const knowledgeGraphFaq: FAQPageSchema = {
+		"@context": SCHEMA_CONTEXT,
+		"@type": "FAQPage",
+		"@id": `${defaultSeo.canonical}#faq`,
+		url: faqPageUrl,
+		name: defaultSeo.title ?? `${companyData.companyName} FAQ`,
+		description: defaultSeo.description,
+		mainEntity: selectFaqEntries(),
+	};
+
+	const knowledgeGraphVideo = {
+		"@type": "VideoObject",
+		"@id": `${defaultSeo.canonical}#video`,
+		name: "How DealScale Automates CRM Follow-Up",
+		description:
+			"Short demo showing AI-driven CRM updates, scheduling, outreach, and lead qualification.",
+		thumbnailUrl: defaultSeo.image,
+		uploadDate: "2025-10-01",
+		embedUrl: "https://www.youtube.com/embed/dealscale-demo",
+		contentUrl: "https://www.youtube.com/watch?v=dealscale-demo",
+		publisher: { "@id": ORGANIZATION_ID },
+		inLanguage: "en-US",
+	};
+
+	const sitemapDataFeed = {
+		"@type": "DataFeed",
+		"@id": `${defaultSeo.canonical}#sitemap`,
+		name: "DealScale Sitemap Feed",
+		description: "Dynamic list of DealScale pages, blog posts, and events.",
+		dataFeedElement: [
+			{
+				"@type": "DataFeedItem",
+				dateModified: new Date().toISOString(),
+				item: {
+					"@type": "SiteNavigationElement",
+					url: buildAbsoluteUrl("/sitemap.xml"),
+					name: "Dynamic Sitemap Index",
+				},
+			},
+		],
+	};
+
+	return {
+		"@context": SCHEMA_CONTEXT,
+		"@graph": [
+			knowledgeGraphOrganization,
+			website,
+			knowledgeGraphSoftware,
+			knowledgeGraphFaq,
+			knowledgeGraphVideo,
+			dataset,
+			sitemapDataFeed,
+		],
+	} as const;
+};
 
 const buildOfferSchema = (
 	offer?: ServiceSchemaInput["offers"],

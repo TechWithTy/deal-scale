@@ -19,9 +19,7 @@ import { activityStream } from "@/data/activity/activityStream";
 import { caseStudies } from "@/data/caseStudy/caseStudies";
 import { faqItems } from "@/data/faq/default";
 import { pricingCatalog } from "@/data/service/slug_data/pricing";
-import {
-	generalDealScaleTestimonials,
-} from "@/data/service/slug_data/testimonials";
+import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import {
 	AI_OUTREACH_STUDIO_ANCHOR,
@@ -36,6 +34,7 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import {
 	SchemaInjector,
 	buildActivityFeedSchema,
+	buildBlogSchema,
 	buildServiceSchema,
 	getTestimonialReviewData,
 } from "@/utils/seo/schema";
@@ -274,6 +273,14 @@ const Index = async ({
 		reviews: testimonialReviews,
 		aggregateRating: testimonialAggregateRating,
 	} = getTestimonialReviewData();
+	const blogSchema = buildBlogSchema({
+		canonicalUrl: `${canonicalUrl}/blogs`,
+		name: homepageSeo.title ? `${homepageSeo.title} Blog` : "DealScale Blog",
+		description:
+			homepageSeo.description ??
+			"DealScale’s latest deep dives on AI sales agents, automation, and real estate growth.",
+		posts,
+	});
 	const heroServiceSchema = buildServiceSchema({
 		name: PERSONA_LABEL,
 		description: heroServiceDescription,
@@ -325,93 +332,94 @@ const Index = async ({
 	const shouldRenderExitIntent = exitIntentEnabled();
 	const pageContent = (
 		<>
-				<SchemaInjector schema={heroServiceSchema} />
-				<SchemaInjector schema={aiOutreachServiceSchema} />
-				<SchemaInjector schema={aiOutreachFeatureListSchema} />
-				<SchemaInjector schema={activityFeedSchema} />
-				<LiveDynamicHero />
-				<TrustedByScroller variant="default" items={companyLogos} />
-				{/* Separator for mobile only with half margin */}
-				<div className="sm:hidden">
-					<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
-				</div>
-				<ViewportLazy>
-					<CallDemoShowcase />
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<>
-						<FeatureSectionActivity />
-						<div className="mt-12">
-							<FeatureShowcase features={REAL_TIME_FEATURES} />
-						</div>
-					</>
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<ConnectAnythingHero />
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<CaseStudyGrid
-						caseStudies={caseStudies}
-						limit={3}
-						showViewAllButton
-						showCategoryFilter={false}
-					/>
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<Testimonials
-						testimonials={generalDealScaleTestimonials}
-						title={"What Our Clients Say"}
-						subtitle={
-							"Hear from our clients about their experiences with our services"
-						}
-					/>
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<MarketingCatalogPricing
-						title="Success-Based Pricing"
-						subtitle="Pay for outcomes, not promises—pilot pricing stays locked for 2 years."
-						catalog={pricingCatalog}
-						showFreePreview={false}
-						showUpgradeStack={false}
-						showAddOnStack={false}
-						showPilotBlurb={false}
-					/>
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<AboutUsSection />
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<ClientBento />
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<BlogPreview title="Latest Blogs" posts={posts} />
-				</ViewportLazy>
-				<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<Faq
-						title="Frequently Asked Questions"
-						subtitle="Find answers to common questions about our services, process, and technology expertise."
-						faqItems={faqItems}
-					/>
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<div className="flex items-center justify-center py-5 lg:col-span-7">
-						<ContactForm />
+			<SchemaInjector schema={heroServiceSchema} />
+			<SchemaInjector schema={aiOutreachServiceSchema} />
+			<SchemaInjector schema={aiOutreachFeatureListSchema} />
+			<SchemaInjector schema={activityFeedSchema} />
+			<SchemaInjector schema={blogSchema} />
+			<LiveDynamicHero />
+			<TrustedByScroller variant="default" items={companyLogos} />
+			{/* Separator for mobile only with half margin */}
+			<div className="sm:hidden">
+				<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
+			</div>
+			<ViewportLazy>
+				<CallDemoShowcase />
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<>
+					<FeatureSectionActivity />
+					<div className="mt-12">
+						<FeatureShowcase features={REAL_TIME_FEATURES} />
 					</div>
-				</ViewportLazy>
-				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-				<ViewportLazy>
-					<InstagramEmbed />
-				</ViewportLazy>
+				</>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<ConnectAnythingHero />
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<CaseStudyGrid
+					caseStudies={caseStudies}
+					limit={3}
+					showViewAllButton
+					showCategoryFilter={false}
+				/>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<Testimonials
+					testimonials={generalDealScaleTestimonials}
+					title={"What Our Clients Say"}
+					subtitle={
+						"Hear from our clients about their experiences with our services"
+					}
+				/>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<MarketingCatalogPricing
+					title="Success-Based Pricing"
+					subtitle="Pay for outcomes, not promises—pilot pricing stays locked for 2 years."
+					catalog={pricingCatalog}
+					showFreePreview={false}
+					showUpgradeStack={false}
+					showAddOnStack={false}
+					showPilotBlurb={false}
+				/>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<AboutUsSection />
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<ClientBento />
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<BlogPreview title="Latest Blogs" posts={posts} />
+			</ViewportLazy>
+			<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<Faq
+					title="Frequently Asked Questions"
+					subtitle="Find answers to common questions about our services, process, and technology expertise."
+					faqItems={faqItems}
+				/>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<div className="flex items-center justify-center py-5 lg:col-span-7">
+					<ContactForm />
+				</div>
+			</ViewportLazy>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<ViewportLazy>
+				<InstagramEmbed />
+			</ViewportLazy>
 		</>
 	);
 	return shouldRenderExitIntent ? (

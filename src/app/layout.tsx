@@ -5,18 +5,9 @@ import { AppProviders } from "@/components/providers/AppProviders";
 import type { AnalyticsConfig } from "@/lib/analytics/config";
 import { getAnalyticsConfig } from "@/lib/analytics/config";
 import { monoFont, sansFont } from "@/styles/fonts";
-import {
-	SchemaInjector,
-	buildOrganizationSchema,
-	buildWebSiteSchema,
-	buildDatasetSchema,
-	buildSoftwareApplicationSchema,
-} from "@/utils/seo/schema";
+import { SchemaInjector, buildKnowledgeGraphSchema } from "@/utils/seo/schema";
 
-const ORGANIZATION_SCHEMA = buildOrganizationSchema();
-const WEBSITE_SCHEMA = buildWebSiteSchema();
-const SOFTWARE_APPLICATION_SCHEMA = buildSoftwareApplicationSchema();
-const DATASET_SCHEMA = buildDatasetSchema();
+const KNOWLEDGE_GRAPH_SCHEMA = buildKnowledgeGraphSchema();
 
 const analyticsResult = getAnalyticsConfig();
 
@@ -43,10 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" className={`${sansFont.variable} ${monoFont.variable}`}>
 			<body className="theme-cyberoni min-h-screen bg-background font-sans antialiased">
-				<SchemaInjector schema={ORGANIZATION_SCHEMA} />
-				<SchemaInjector schema={WEBSITE_SCHEMA} />
-				<SchemaInjector schema={SOFTWARE_APPLICATION_SCHEMA} />
-				<SchemaInjector schema={DATASET_SCHEMA} />
+				<SchemaInjector schema={KNOWLEDGE_GRAPH_SCHEMA} />
 				<AppProviders
 					clarityProjectId={clarityProjectId}
 					zohoWidgetCode={zohoWidgetCode}

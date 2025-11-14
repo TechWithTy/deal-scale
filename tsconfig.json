@@ -11,7 +11,7 @@
 	"compilerOptions": {
 		"incremental": true,
 		"tsBuildInfoFile": ".tsbuildinfo",
-		"strict": true,
+		"strict": false,
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
@@ -66,9 +66,7 @@
 		"strictNullChecks": false,
 		"target": "ES2017",
 		"lib": ["dom", "dom.iterable", "esnext"],
-		"strict": false,
 		"noEmit": true,
-		"incremental": true,
 		"module": "esnext",
 		"esModuleInterop": true,
 		"moduleResolution": "node",

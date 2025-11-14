@@ -10,6 +10,7 @@ export const companyData: FooterProps = {
 		facebook: "https://www.facebook.com/profile.php?id=61576707389189",
 		instagram: "https://www.instagram.com/deal_scale/",
 		youtube: "https://www.youtube.com/@DealScaleRealEstate",
+		twitter: "https://twitter.com/dealscale",
 		mediumUsername: "dealscale",
 	},
 	quickLinks: [

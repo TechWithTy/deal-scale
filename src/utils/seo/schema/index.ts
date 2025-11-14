@@ -8,6 +8,7 @@ export {
 	buildServiceSchema,
 	buildWebSiteSchema,
 	buildSoftwareApplicationSchema,
+	buildKnowledgeGraphSchema,
 	buildDatasetSchema,
 } from "./builders";
 export { buildActivityFeedSchema } from "./activityFeed";
