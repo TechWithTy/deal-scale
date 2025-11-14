@@ -64,3 +64,5 @@ Feeds return XML; expect a 502 response when upstream services are unreachable (
 By keeping all RSS and video surfaces under dealscale.io, we strengthen domain authority, simplify partner integrations, and provide reliable machine-readable content to search engines and AI agents.
 
 
+
+

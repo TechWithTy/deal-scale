@@ -445,8 +445,6 @@ export default function Navbar() {
 							alt="Deal Scale"
 							width={100}
 							height={10}
-							priority
-							fetchPriority="high"
 							className="block h-auto dark:hidden"
 						/>
 						{/* White logo for dark mode */}
@@ -455,8 +453,6 @@ export default function Navbar() {
 							alt="Deal Scale"
 							width={100}
 							height={10}
-							priority
-							fetchPriority="high"
 							className="hidden h-auto dark:block"
 						/>
 					</Link>
