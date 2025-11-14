@@ -16,6 +16,8 @@ dist-ssr/
 .next/
 out/
 .swc/
+.turbo/
+*.tsbuildinfo
 
 # Local environment files
 .env*
