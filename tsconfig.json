@@ -1,117 +1,103 @@
 {
-        "files": [],
-        "references": [
-                {
-                        "path": "./tsconfig.app.json"
-                },
-                {
-                        "path": "./tsconfig.node.json"
-                }
-        ],
-        "compilerOptions": {
-                "baseUrl": ".",
-                "paths": {
-                        "@/*": [
-                                "./src/*"
-                        ],
-                        "@external/dynamic-hero": [
-                                "./src/components/dynamic-hero/src/index.ts"
-                        ],
-                        "@external/dynamic-hero/*": [
-                                "./src/components/dynamic-hero/src/*"
-                        ],
-                        "shared": [
-                                "./external/use-exit-intent-remastered/apps/web/src/shared/index.ts"
-                        ],
-                        "shared/*": [
-                                "./external/use-exit-intent-remastered/apps/web/src/shared/*"
-                        ],
-                        "styles": [
-                                "./external/use-exit-intent-remastered/apps/web/src/styles/index.ts"
-                        ],
-                        "styles/*": [
-                                "./external/use-exit-intent-remastered/apps/web/src/styles/*"
-                        ],
-                        "components": [
-                                "./external/use-exit-intent-remastered/apps/web/src/components/index.ts"
-                        ],
-                        "components/*": [
-                                "./external/use-exit-intent-remastered/apps/web/src/components/*"
-                        ],
-                        "hooks": [
-                                "./external/use-exit-intent-remastered/apps/web/src/hooks/index.ts"
-                        ],
-                        "hooks/*": [
-                                "./external/use-exit-intent-remastered/apps/web/src/hooks/*"
-                        ],
-                        "modules": [
-                                "./external/use-exit-intent-remastered/apps/web/src/modules/index.ts"
-                        ],
-                        "modules/*": [
-                                "./external/use-exit-intent-remastered/apps/web/src/modules/*"
-                        ],
-                        "templates": [
-                                "./external/use-exit-intent-remastered/apps/web/src/templates/index.ts"
-                        ],
-                        "templates/*": [
-                                "./external/use-exit-intent-remastered/apps/web/src/templates/*"
-                        ],
-                        "@external/use-exit-intent": [
-                                "./external/use-exit-intent-remastered/packages/use-exit-intent/src/index.ts"
-                        ],
-                        "@external/use-exit-intent/*": [
-                                "./external/use-exit-intent-remastered/packages/use-exit-intent/src/*"
-                        ]
-                },
-                "noImplicitAny": false,
-                "noUnusedParameters": false,
-                "skipLibCheck": true,
-                "allowJs": true,
-                "noUnusedLocals": false,
-                "strictNullChecks": false,
-                "target": "ES2017",
-                "lib": [
-                        "dom",
-                        "dom.iterable",
-                        "esnext"
-                ],
-                "strict": false,
-                "noEmit": true,
-                "incremental": true,
-                "module": "esnext",
-                "esModuleInterop": true,
-                "moduleResolution": "node",
-                "resolveJsonModule": true,
-                "isolatedModules": true,
-                "jsx": "preserve",
-                "plugins": [
-                        {
-                                "name": "next"
-                        }
-                ]
-        },
-        "exclude": [
-                "node_modules",
-                "**/__tests__/**",
-                "**/*.__tests__.ts",
-                "**/*.__tests__.tsx",
-                "**/*.test.ts",
-                "**/*.test.tsx",
-                "**/*.spec.ts",
-                "**/*.spec.tsx",
-                "src/testHelpers",
-                "tools",
-                "tests",
-                "vitest.config.ts",
-                "vitest.setup.ts",
-                "vitest.setup-*.ts",
-                "scripts",
-                "scripts/**/*"
-        ],
-        "include": [
-                "next-env.d.ts",
-                ".next/types/**/*.ts",
-                "**/*.ts",
-                "**/*.tsx"
-        ]
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.app.json"
+		},
+		{
+			"path": "./tsconfig.node.json"
+		}
+	],
+	"compilerOptions": {
+		"incremental": true,
+		"tsBuildInfoFile": ".tsbuildinfo",
+		"strict": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+			"@external/dynamic-hero": ["./src/components/dynamic-hero/src/index.ts"],
+			"@external/dynamic-hero/*": ["./src/components/dynamic-hero/src/*"],
+			"shared": [
+				"./external/use-exit-intent-remastered/apps/web/src/shared/index.ts"
+			],
+			"shared/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/shared/*"
+			],
+			"styles": [
+				"./external/use-exit-intent-remastered/apps/web/src/styles/index.ts"
+			],
+			"styles/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/styles/*"
+			],
+			"components": [
+				"./external/use-exit-intent-remastered/apps/web/src/components/index.ts"
+			],
+			"components/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/components/*"
+			],
+			"hooks": [
+				"./external/use-exit-intent-remastered/apps/web/src/hooks/index.ts"
+			],
+			"hooks/*": ["./external/use-exit-intent-remastered/apps/web/src/hooks/*"],
+			"modules": [
+				"./external/use-exit-intent-remastered/apps/web/src/modules/index.ts"
+			],
+			"modules/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/modules/*"
+			],
+			"templates": [
+				"./external/use-exit-intent-remastered/apps/web/src/templates/index.ts"
+			],
+			"templates/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/templates/*"
+			],
+			"@external/use-exit-intent": [
+				"./external/use-exit-intent-remastered/packages/use-exit-intent/src/index.ts"
+			],
+			"@external/use-exit-intent/*": [
+				"./external/use-exit-intent-remastered/packages/use-exit-intent/src/*"
+			]
+		},
+		"noImplicitAny": false,
+		"noUnusedParameters": false,
+		"skipLibCheck": true,
+		"allowJs": true,
+		"noUnusedLocals": false,
+		"strictNullChecks": false,
+		"target": "ES2017",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"strict": false,
+		"noEmit": true,
+		"incremental": true,
+		"module": "esnext",
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
+	},
+	"exclude": [
+		"node_modules",
+		"**/__tests__/**",
+		"**/*.__tests__.ts",
+		"**/*.__tests__.tsx",
+		"**/*.test.ts",
+		"**/*.test.tsx",
+		"**/*.spec.ts",
+		"**/*.spec.tsx",
+		"src/testHelpers",
+		"tools",
+		"tests",
+		"vitest.config.ts",
+		"vitest.setup.ts",
+		"vitest.setup-*.ts",
+		"scripts",
+		"scripts/**/*"
+	],
+	"include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"]
 }

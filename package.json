@@ -14,11 +14,11 @@
 		"prepare": "husky",
 		"archive:reports": "pnpm exec tsx tools/reports/archive-lighthouse-report.ts",
 		"archive:coverage": "pnpm exec tsx tools/reports/archive-vitest-coverage.ts",
-		"archive:snyk": "pnpm exec tsx tools/security/archive-snyk-report.ts",
+		"archive:trivy": "pnpm exec tsx tools/security/archive-trivy-report.ts",
 		"archive:owasp": "pnpm exec tsx tools/security/archive-owasp-report.ts",
-		"archive:security": "pnpm run archive:snyk && pnpm run archive:owasp",
+		"archive:security": "pnpm run archive:trivy && pnpm run archive:owasp",
 		"start": "pnpm run check:env && next start",
-		"commit:stage": "git add . && (git reset HEAD -- coverage reports >/dev/null 2>&1 || true) && pnpm exec lint-staged",
+		"commit:stage": "git add . && pnpm exec lint-staged",
 		"check:env": "pnpm exec tsx tools/checks/check-analytics-env.ts",
 		"dev:vite": "pnpm exec tsx scripts/bundlers/ensure-preview-flag.ts vite:dev && pnpm exec vite --config tools/vite-preview/vite.config.ts",
 		"build:vite": "pnpm exec tsx scripts/bundlers/ensure-preview-flag.ts vite:build && pnpm exec vite build --config tools/vite-preview/vite.config.ts",
@@ -27,10 +27,10 @@
 		"test": "pnpm run test:vitest",
 		"test:vitest": "pnpm exec vitest run",
 		"test:coverage": "pnpm exec vitest run --run",
-		"security:snyk": "pnpm exec tsx tools/security/run-snyk-scan.ts",
+		"security:trivy": "pnpm exec tsx tools/security/run-trivy-scan.ts",
 		"security:owasp": "pnpm exec tsx tools/security/run-owasp-baseline.ts",
-		"security:scan": "pnpm run security:snyk && pnpm run security:owasp",
-		"lint": "biome check --fix src",
+		"security:scan": "pnpm run security:trivy && pnpm run security:owasp",
+		"lint": "pnpm exec biome check --write src",
 		"format": "biome format --write src",
 		"clean-build": "rm -rf .next dist .svelte-kit node_modules/.cache && pnpm build",
 		"export:categories": "node scripts/run-ts.js scripts/strapi/export-categories.ts",
@@ -59,8 +59,8 @@
 		"notion:schema:write": "node scripts/run-ts.js scripts/notion/fetchLinktreeSchema.ts --write"
 	},
 	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx,json,css,md,html,scss,tsx,ts,js,jsx}": [
-			"biome format --write"
+		"**/*.{js,jsx,ts,tsx,json,css,md,html,scss}": [
+			"pnpm exec biome format --write"
 		]
 	},
 	"browserslist": {
@@ -192,6 +192,8 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@commitlint/cli": "^20.1.0",
+		"@commitlint/config-conventional": "^20.0.0",
 		"@eslint/js": "^9.9.0",
 		"@next/bundle-analyzer": "^16.0.3",
 		"@rsbuild/core": "^1.5.6",
@@ -218,7 +220,7 @@
 		"eslint-plugin-react-refresh": "^0.4.9",
 		"fast-glob": "^3.3.2",
 		"globals": "^15.9.0",
-		"husky": "^9.1.6",
+		"husky": "^9.1.7",
 		"jsdom": "^25.0.0",
 		"lint-staged": "^16.2.6",
 		"lovable-tagger": "^1.1.7",

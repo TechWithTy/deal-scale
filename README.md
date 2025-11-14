@@ -70,6 +70,12 @@ Deploy your own instance of DealScale with Vercel:
 
 For detailed documentation, please visit our [Documentation Portal](https://docs.dealscale.com). Internal debug notes for the analytics loaders live in [`_docs/_debug/deferred_third_parties_debug.md`](./_docs/_debug/deferred_third_parties_debug.md).
 
+Key internal docs:
+
+- [`docs/commit-workflow.md`](docs/commit-workflow.md) — Husky hook behavior, staging shortcut, security scan flow.
+- [`docs/commitlint-conventions.md`](docs/commitlint-conventions.md) — required commit message structure and allowed types/scopes.
+- [`docs/opengrep.md`](docs/opengrep.md) — static analysis setup using Opengrep with SARIF archiving.
+
 ## 📄 License
 
 This is proprietary software. All rights reserved. Unauthorized copying, modification, distribution, display, or use of this software, via any medium is strictly prohibited. For licensing inquiries, please contact us at [sam.scalerg@dealscale.io](mailto:sam.scalerg@dealscale.io).
