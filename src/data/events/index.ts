@@ -17,6 +17,8 @@ export const events: Event[] = [
 		category: "conference",
 		location: "Grand Rapids, MI",
 		isFeatured: true,
+		accessType: "external",
+		attendanceType: "in-person",
 	},
 	{
 		id: "2",
@@ -34,6 +36,8 @@ export const events: Event[] = [
 		category: "conference",
 		location: "Laguna Beach, CA",
 		isFeatured: true,
+		accessType: "external",
+		attendanceType: "in-person",
 	},
 	{
 		id: "3",
@@ -49,6 +53,8 @@ export const events: Event[] = [
 		category: "proptech",
 		location: "Las Vegas, NV",
 		isFeatured: true,
+		accessType: "external",
+		attendanceType: "hybrid",
 	},
 	{
 		id: "4",
@@ -65,6 +71,8 @@ export const events: Event[] = [
 		category: "summit",
 		location: "West Palm Beach, FL",
 		isFeatured: false,
+		accessType: "external",
+		attendanceType: "in-person",
 	},
 	{
 		id: "5",
@@ -80,6 +88,8 @@ export const events: Event[] = [
 		category: "conference",
 		location: "New York, NY",
 		isFeatured: true,
+		accessType: "external",
+		attendanceType: "hybrid",
 	},
 	{
 		id: "6",
@@ -96,6 +106,8 @@ export const events: Event[] = [
 		category: "conference",
 		location: "New York, NY",
 		isFeatured: false,
+		accessType: "external",
+		attendanceType: "in-person",
 	},
 	{
 		id: "7",
@@ -111,6 +123,8 @@ export const events: Event[] = [
 		category: "networking",
 		location: "Houston, TX",
 		isFeatured: false,
+		accessType: "external",
+		attendanceType: "in-person",
 	},
 	{
 		id: "8",
@@ -126,6 +140,8 @@ export const events: Event[] = [
 		category: "proptech",
 		location: "New York, NY",
 		isFeatured: false,
+		accessType: "external",
+		attendanceType: "hybrid",
 	},
 ];
 // Helper functions to separate upcoming and past events

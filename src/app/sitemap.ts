@@ -1,3 +1,4 @@
+import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { getAllProducts } from "@/data/products/index";
 import { getAllServices } from "@/data/service/services";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
@@ -75,6 +76,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			keywords: defaultValues.keywords,
 			title: defaultValues.title,
 			image: defaultValues.image,
+		};
+	});
+
+	const partnerEntries = Object.entries(companyLogos).map(([slug, partner]) => {
+		const url = `${baseUrl}/partners#${slug}`;
+		return {
+			url,
+			lastModified: new Date(),
+			changefreq: "monthly" as const,
+			priority: 0.5,
+			canonical: url,
+			title: `${partner.name} | Deal Scale Partner`,
+			description:
+				partner.description ??
+				`Explore Deal Scale's partnership with ${partner.name}.`,
+			type: "website",
 		};
 	});
 
@@ -175,6 +192,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	return [
 		...staticPages,
+		...partnerEntries,
 		...blogPosts,
 		...caseStudyEntries,
 		...productEntries,

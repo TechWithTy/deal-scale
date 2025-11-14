@@ -1,15 +1,13 @@
 {
 	"compilerOptions": {
 		"composite": true,
-		"emitDeclarationOnly": true,
 		"target": "ES2020",
 		"useDefineForClassFields": true,
 		"lib": ["ES2020", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
 
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
+		"moduleResolution": "node",
 		"isolatedModules": true,
 		"moduleDetection": "force",
 		"jsx": "react-jsx",
@@ -26,7 +24,49 @@
 			"@external/dynamic-hero": [
 				"./src/components/dynamic-hero/src/index.ts"
 			],
-			"@external/dynamic-hero/*": ["./src/components/dynamic-hero/src/*"]
+			"@external/dynamic-hero/*": ["./src/components/dynamic-hero/src/*"],
+			"shared": [
+				"./external/use-exit-intent-remastered/apps/web/src/shared/index.ts"
+			],
+			"shared/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/shared/*"
+			],
+			"styles": [
+				"./external/use-exit-intent-remastered/apps/web/src/styles/index.ts"
+			],
+			"styles/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/styles/*"
+			],
+			"components": [
+				"./external/use-exit-intent-remastered/apps/web/src/components/index.ts"
+			],
+			"components/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/components/*"
+			],
+			"hooks": [
+				"./external/use-exit-intent-remastered/apps/web/src/hooks/index.ts"
+			],
+			"hooks/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/hooks/*"
+			],
+			"modules": [
+				"./external/use-exit-intent-remastered/apps/web/src/modules/index.ts"
+			],
+			"modules/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/modules/*"
+			],
+			"templates": [
+				"./external/use-exit-intent-remastered/apps/web/src/templates/index.ts"
+			],
+			"templates/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/templates/*"
+			],
+			"@external/use-exit-intent": [
+				"./external/use-exit-intent-remastered/packages/use-exit-intent/src/index.ts"
+			],
+			"@external/use-exit-intent/*": [
+				"./external/use-exit-intent-remastered/packages/use-exit-intent/src/*"
+			]
 		}
 	},
 	"include": ["src"],

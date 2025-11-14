@@ -1,6 +1,7 @@
 "use client";
 
 import AuthGuard from "@/components/auth/AuthGuard";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import ContactForm from "@/components/contact/form/ContactForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import {
@@ -286,7 +287,8 @@ const Contact = () => {
 	}
 
 	return (
-		<AuthGuard>
+		<ExitIntentBoundary variant="contact">
+			<AuthGuard>
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
@@ -360,7 +362,8 @@ const Contact = () => {
 				)}
 				<Newsletter />
 			</div>
-		</AuthGuard>
+			</AuthGuard>
+		</ExitIntentBoundary>
 	);
 };
 

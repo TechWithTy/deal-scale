@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
 	IconBrightnessDown,
@@ -157,6 +158,7 @@ export const MacbookScroll = ({
 				rotate={rotate}
 				translate={translate}
 				alt={imageAlt}
+		priority={!isEmbedded}
 			/>
 			{/* Base area */}
 			<div className="-z-10 relative h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
@@ -193,6 +195,7 @@ export const Lid = ({
 	translate,
 	src,
 	alt,
+	priority = false,
 }: {
 	scaleX: MotionValue<number>;
 	scaleY: MotionValue<number>;
@@ -200,6 +203,7 @@ export const Lid = ({
 	translate: MotionValue<number>;
 	src?: string;
 	alt?: string;
+	priority?: boolean;
 }) => {
 	return (
 		<div className="relative [perspective:800px]">
@@ -234,11 +238,21 @@ export const Lid = ({
 				className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
 			>
 				<div className="absolute inset-0 rounded-lg bg-[#272729]" />
-				<img
-					src={src as string}
-					alt={alt ?? "Interactive Macbook demo media"}
-					className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
-				/>
+				{src ? (
+					<Image
+						src={src}
+						alt={alt ?? "Interactive Macbook demo media"}
+						fill
+						className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
+						sizes="(min-width: 1280px) 620px, (min-width: 1024px) 520px, 100vw"
+						priority={priority}
+						loading={priority ? "eager" : "lazy"}
+					/>
+				) : (
+					<div className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#272729]">
+						<AceternityLogo />
+					</div>
+				)}
 			</motion.div>
 		</div>
 	);

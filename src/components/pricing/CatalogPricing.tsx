@@ -9,6 +9,8 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
 import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
 import { creditProducts } from "@/data/products/credits";
+import { FOUNDERS_CIRCLE_DEADLINE } from "@/constants/foundersCircleDeadline";
+import { useCountdown } from "@/hooks/useCountdown";
 import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { useWaitCursor } from "@/hooks/useWaitCursor";
 import { startStripeToast } from "@/lib/ui/stripeToast";
@@ -75,9 +77,6 @@ const ONE_TIME_PLAN_BADGES: Record<
 > = {
 	commissionPartner: { label: "Commission Partner", variant: "partner" },
 };
-
-const FREE_TRIAL_EXP_KEY = "dealscale:pricing:beta-expiry";
-const DEFAULT_COUNTDOWN_MS = 72 * 60 * 60 * 1000; // 72 hours
 
 const toLegacyPlan = (
 	plan: RecurringPlan,
@@ -163,7 +162,6 @@ export const CatalogPricing = ({
 		postTrialAmount?: number;
 	} | null>(null);
 	const [roiOpen, setRoiOpen] = useState(false);
-	const [countdown, setCountdown] = useState<string>("");
 	const [productCheckoutSecret, setProductCheckoutSecret] = useState<
 		string | null
 	>(null);
@@ -175,6 +173,12 @@ export const CatalogPricing = ({
 	const [productCheckoutLoading, setProductCheckoutLoading] = useState(false);
 	const [trialLoading, setTrialLoading] = useState(false);
 	const [affiliateModalOpen, setAffiliateModalOpen] = useState(false);
+	const foundersCountdown = useCountdown({
+		targetTimestamp: FOUNDERS_CIRCLE_DEADLINE,
+	});
+	const freeTrialBadgeText = foundersCountdown.isExpired
+		? "Limited-Time Trial · Offer ended"
+		: `Limited-Time Trial · Closes in ${foundersCountdown.formatted}`;
 
 	useWaitCursor(productCheckoutLoading || trialLoading);
 
@@ -194,46 +198,6 @@ export const CatalogPricing = ({
 			setView(availableViews[0]);
 		}
 	}, [availableViews, view]);
-
-	useEffect(() => {
-		if (typeof window === "undefined") {
-			return;
-		}
-
-		const storedExpiry = window.localStorage.getItem(FREE_TRIAL_EXP_KEY);
-		let expiry = storedExpiry ? Number.parseInt(storedExpiry, 10) : Number.NaN;
-
-		if (Number.isNaN(expiry) || expiry <= Date.now()) {
-			expiry = Date.now() + DEFAULT_COUNTDOWN_MS;
-			window.localStorage.setItem(FREE_TRIAL_EXP_KEY, expiry.toString());
-		}
-
-		const updateCountdown = () => {
-			const diff = Math.max(0, expiry - Date.now());
-			if (diff <= 0) {
-				setCountdown("00:00:00");
-				return;
-			}
-
-			const totalSeconds = Math.floor(diff / 1000);
-			const hours = Math.floor(totalSeconds / 3600)
-				.toString()
-				.padStart(2, "0");
-			const minutes = Math.floor((totalSeconds % 3600) / 60)
-				.toString()
-				.padStart(2, "0");
-			const seconds = Math.floor(totalSeconds % 60)
-				.toString()
-				.padStart(2, "0");
-
-			setCountdown(`${hours}:${minutes}:${seconds}`);
-		};
-
-		updateCountdown();
-		const intervalId = window.setInterval(updateCountdown, 1000);
-
-		return () => window.clearInterval(intervalId);
-	}, []);
 
 	const monthlyPlans = catalog.pricing.monthly;
 	const annualPlans = catalog.pricing.annual;
@@ -557,7 +521,7 @@ export const CatalogPricing = ({
 						}}
 						badge={
 							<div className="rounded-full bg-primary/10 px-3 py-1 text-primary text-xs">
-								Limited-Time Trial · Ends in {countdown}
+								{freeTrialBadgeText}
 							</div>
 						}
 					/>
@@ -597,7 +561,7 @@ export const CatalogPricing = ({
 		];
 	}, [
 		basicPlan,
-		countdown,
+		freeTrialBadgeText,
 		freePlan,
 		handleStartTrial,
 		handleSubscribe,

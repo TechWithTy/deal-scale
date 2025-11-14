@@ -1,6 +1,7 @@
 "use client";
 import AffiliateSuccess from "@/components/affiliate/AffiliateSuccess";
 import AuthGuard from "@/components/auth/AuthGuard";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import AffiliateForm from "@/components/contact/form/AffiliateForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import { ContactSteps } from "@/components/contact/form/ContactSteps";
@@ -107,7 +108,8 @@ const AffiliateApplication = () => {
 	};
 
 	return (
-		<AuthGuard>
+		<ExitIntentBoundary variant="affiliate">
+			<AuthGuard>
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
@@ -136,7 +138,8 @@ const AffiliateApplication = () => {
 				/>
 				<Newsletter />
 			</div>
-		</AuthGuard>
+			</AuthGuard>
+		</ExitIntentBoundary>
 	);
 };
 

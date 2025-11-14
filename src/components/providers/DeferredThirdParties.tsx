@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type {
@@ -7,6 +6,7 @@ import type {
 	AnalyticsIssue,
 } from "@/lib/analytics/config";
 
+import { Analytics } from "@/components/analytics/Analytics";
 import { useDeferredLoad } from "./useDeferredLoad";
 
 const ANALYTICS_FIELDS: AnalyticsField[] = [
@@ -20,17 +20,6 @@ const ANALYTICS_FIELDS: AnalyticsField[] = [
 ];
 
 const DEFAULT_PLAUSIBLE_ENDPOINT = "https://plausible.io/api/event";
-
-const Analytics = dynamic(
-	() =>
-		import("@/components/analytics/Analytics").then((mod) => ({
-			default: mod.Analytics,
-		})),
-	{
-		ssr: false,
-		loading: () => null,
-	},
-);
 
 const DEFAULT_RETRY_DELAY_MS = 2000;
 const DEFAULT_MAX_RETRIES = 3;
@@ -225,6 +214,10 @@ export function DeferredThirdParties({
 			plausibleDomain,
 			plausibleEndpoint,
 		});
+
+		if (!base.plausibleEndpoint) {
+			base.plausibleEndpoint = DEFAULT_PLAUSIBLE_ENDPOINT;
+		}
 
 		return base;
 	}, [

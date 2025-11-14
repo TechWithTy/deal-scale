@@ -1,10 +1,19 @@
 "use client";
 
 import { create } from "zustand";
-import type { PersonaKey } from "@/data/personas/testimonialsByPersona";
+import {
+	DEFAULT_PERSONA_KEY,
+	PERSONA_GOALS,
+	type PersonaKey,
+} from "@/data/personas/catalog";
 
-const DEFAULT_GOAL = "";
-export const DEFAULT_PERSONA: PersonaKey = "Investor";
+const deriveGoal = (persona: PersonaKey): string =>
+	PERSONA_GOALS[persona] ?? PERSONA_GOALS[DEFAULT_PERSONA_KEY];
+
+const INITIAL_STATE = {
+	persona: DEFAULT_PERSONA_KEY,
+	goal: deriveGoal(DEFAULT_PERSONA_KEY),
+} as const;
 
 interface PersonaState {
 	persona: PersonaKey;
@@ -16,12 +25,15 @@ interface PersonaState {
 }
 
 export const usePersonaStore = create<PersonaState>((set) => ({
-	persona: DEFAULT_PERSONA,
-	goal: DEFAULT_GOAL,
-	setPersona: (persona) => set({ persona }),
+	...INITIAL_STATE,
+	setPersona: (persona) =>
+		set({
+			persona,
+			goal: deriveGoal(persona),
+		}),
 	setGoal: (goal) => set({ goal }),
 	setPersonaAndGoal: (persona, goal) => set({ persona, goal }),
-	reset: () => set({ persona: DEFAULT_PERSONA, goal: DEFAULT_GOAL }),
+	reset: () => set({ ...INITIAL_STATE }),
 }));
 
 export const resetPersonaStore = () => usePersonaStore.getState().reset();

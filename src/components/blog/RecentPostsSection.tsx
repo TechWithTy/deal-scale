@@ -3,6 +3,7 @@
 import type { BeehiivPost } from "@/types/behiiv";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 interface RecentPostsSectionProps {
 	title: string;
@@ -13,21 +14,27 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 	const recentPosts = Array.isArray(posts) ? posts : [];
 
 	return (
-		<motion.div
+		<motion.section
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.5, delay: 0.1 }}
-			className="glass-card rounded-xl p-6"
+			transition={{ duration: 0.45, delay: 0.08 }}
+			className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-lg shadow-black/10 backdrop-blur"
+			aria-labelledby={`${title.replace(/\s+/g, "-").toLowerCase()}-heading`}
 		>
-			<h3 className="mb-4 font-semibold text-black text-xl dark:text-white">
+			<h3
+				id={`${title.replace(/\s+/g, "-").toLowerCase()}-heading`}
+				className="mb-5 font-semibold text-lg text-white"
+			>
 				{title}
 			</h3>
-			<div className="space-y-4">
+			<div className="flex flex-col gap-4">
 				{recentPosts.map((post) => (
-					<a
+					<Link
 						key={post.id}
 						href={typeof post.web_url === "string" ? post.web_url : "/"}
-						className="group flex items-start space-x-3"
+						className="group flex items-start gap-3 rounded-xl border border-white/5 bg-white/5 p-3 transition hover:border-primary/60 hover:bg-primary/10"
+						target="_blank"
+						rel="noopener noreferrer"
 					>
 						<Image
 							src={
@@ -36,7 +43,7 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 									: "https://place-hold.it/600x600"
 							}
 							alt={post.title}
-							className="h-16 w-16 flex-shrink-0 rounded-md object-cover"
+							className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
 							style={{
 								objectFit:
 									typeof post.thumbnail_url === "string" &&
@@ -47,11 +54,11 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 							width={800}
 							height={450}
 						/>
-						<div>
-							<h4 className="font-medium text-black text-sm transition-colors group-hover:text-primary dark:text-white">
+						<div className="flex flex-col">
+							<h4 className="font-semibold text-sm text-white transition-colors group-hover:text-primary">
 								{post.title}
 							</h4>
-							<p className="text-primary text-xs">
+							<p className="mt-0.5 text-xs text-muted-foreground">
 								{(() => {
 									const raw =
 										(post as any).published_at ?? (post as any).publish_date;
@@ -64,13 +71,13 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 							</p>
 							{Array.isArray(post.content_tags) &&
 								post.content_tags.length > 0 && (
-									<div className="mt-1 flex flex-wrap gap-1">
+									<div className="mt-2 flex flex-wrap gap-1.5">
 										{post.content_tags
 											.filter((tag): tag is string => typeof tag === "string")
 											.map((tag) => (
 												<span
 													key={tag}
-													className="rounded bg-primary/10 px-2 py-0.5 text-primary text-xs"
+													className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[11px] text-primary transition group-hover:border-primary/40"
 												>
 													{tag}
 												</span>
@@ -78,9 +85,9 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 									</div>
 								)}
 						</div>
-					</a>
+					</Link>
 				))}
 			</div>
-		</motion.div>
+		</motion.section>
 	);
 }

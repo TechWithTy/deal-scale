@@ -1,8 +1,14 @@
 import path from "node:path";
 // next.config.ts
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
 const isProd = process.env.NODE_ENV === "production";
+const ANALYZE = process.env.ANALYZE === "true";
+
+const withBundleAnalyzer = bundleAnalyzer({
+	enabled: ANALYZE,
+});
 
 const nextConfig: NextConfig = {
 	// Optimize package imports to reduce bundle size
@@ -217,4 +223,4 @@ const nextConfig: NextConfig = {
 	},
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

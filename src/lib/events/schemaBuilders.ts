@@ -12,6 +12,14 @@ export function buildEventUrl(slug: string): string {
 	return `${EVENTS_CANONICAL_BASE}/${slug}`;
 }
 
+function resolveRegistrationUrl(event: NormalizedEvent): string {
+	if (event.accessType === "internal") {
+		return buildEventUrl(event.slug);
+	}
+
+	return event.externalUrl ?? buildEventUrl(event.slug);
+}
+
 function parseTime(value: string): { start?: string; end?: string } {
 	const [start, end] = value
 		.split("-")
@@ -40,17 +48,14 @@ function combineDateAndTime(
 }
 
 function resolveLocation(event: NormalizedEvent) {
-	const normalized = event.location.toLowerCase();
-	const isOnline = ["online", "virtual", "remote"].some((keyword) =>
-		normalized.includes(keyword),
-	);
+	const registrationUrl = resolveRegistrationUrl(event);
 
-	if (isOnline) {
+	if (event.attendanceType === "webinar") {
 		return {
 			attendanceMode: "https://schema.org/OnlineEventAttendanceMode",
 			location: {
 				"@type": "VirtualLocation",
-				url: event.externalUrl,
+				url: registrationUrl,
 				name: event.title,
 			},
 		} as const;
@@ -58,18 +63,34 @@ function resolveLocation(event: NormalizedEvent) {
 
 	const [city, region] = event.location.split(",").map((part) => part.trim());
 
+	const physicalLocation = {
+		"@type": "Place",
+		name: event.location,
+		address: {
+			"@type": "PostalAddress",
+			addressLocality: city,
+			addressRegion: region || undefined,
+			addressCountry: region && region.length === 2 ? "US" : undefined,
+		},
+	} as const;
+
+	if (event.attendanceType === "hybrid") {
+		return {
+			attendanceMode: "https://schema.org/MixedEventAttendanceMode",
+			location: [
+				physicalLocation,
+				{
+					"@type": "VirtualLocation",
+					url: registrationUrl,
+					name: event.title,
+				},
+			],
+		} as const;
+	}
+
 	return {
 		attendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-		location: {
-			"@type": "Place",
-			name: event.location,
-			address: {
-				"@type": "PostalAddress",
-				addressLocality: city,
-				addressRegion: region || undefined,
-				addressCountry: region && region.length === 2 ? "US" : undefined,
-			},
-		},
+		location: physicalLocation,
 	} as const;
 }
 
@@ -78,6 +99,7 @@ export function buildEventSchema(event: NormalizedEvent) {
 	const { start, end } = parseTime(event.time);
 	const startDate = combineDateAndTime(event.date, start);
 	const endDate = combineDateAndTime(event.date, end);
+	const registrationUrl = resolveRegistrationUrl(event);
 
 	return {
 		"@context": SCHEMA_CONTEXT,
@@ -101,7 +123,7 @@ export function buildEventSchema(event: NormalizedEvent) {
 			price: 0,
 			priceCurrency: "USD",
 			availability: "https://schema.org/InStock",
-			url: event.externalUrl,
+			url: registrationUrl,
 		},
 	};
 }

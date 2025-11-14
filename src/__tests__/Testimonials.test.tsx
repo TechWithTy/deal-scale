@@ -1,7 +1,14 @@
 import { act, render, screen } from "@testing-library/react";
 import Testimonials from "@/components/home/Testimonials";
-import { usePersonaStore } from "@/stores/usePersonaStore";
+import {
+	resetPersonaStore,
+	usePersonaStore,
+} from "@/stores/usePersonaStore";
 import { beforeAll, afterEach, describe, expect, test, vi } from "vitest";
+
+vi.mock("@/components/home/testimonials/TestimonialPersonaSwitcher", () => ({
+	PersonaSwitcher: () => null,
+}));
 
 describe("Testimonials", () => {
 	beforeAll(() => {
@@ -22,18 +29,20 @@ describe("Testimonials", () => {
 	});
 
 	afterEach(() => {
-		usePersonaStore.getState().setPersona("Investor");
-		usePersonaStore.getState().setGoal("");
+		resetPersonaStore();
 	});
 
-	test("renders interactive spotlight accents for testimonials", () => {
-		render(
-			<Testimonials
-				testimonials={[]}
-				title="What Our Clients Say"
-				subtitle="Hear from our clients about their experiences with our services"
-			/>,
-		);
+	test("renders interactive spotlight accents for testimonials", async () => {
+		await act(async () => {
+			render(
+				<Testimonials
+					testimonials={[]}
+					title="What Our Clients Say"
+					subtitle="Hear from our clients about their experiences with our services"
+				/>,
+			);
+		});
+		await act(async () => {});
 
 		expect(
 			screen.getByTestId("testimonial-spotlight-container"),
@@ -43,19 +52,22 @@ describe("Testimonials", () => {
 		).toBeInTheDocument();
 	});
 
-	test("switches testimonial content when persona changes", () => {
-		render(
-			<Testimonials
-				testimonials={[]}
-				title="What Our Clients Say"
-				subtitle="Hear from our clients about their experiences with our services"
-			/>,
-		);
+	test("switches testimonial content when persona changes", async () => {
+		await act(async () => {
+			render(
+				<Testimonials
+					testimonials={[]}
+					title="What Our Clients Say"
+					subtitle="Hear from our clients about their experiences with our services"
+				/>,
+			);
+		});
+		await act(async () => {});
 
 		expect(screen.getByText("Ava Moretti")).toBeInTheDocument();
 
-		act(() => {
-			usePersonaStore.getState().setPersona("Agent");
+		await act(async () => {
+			usePersonaStore.getState().setPersona("agent");
 		});
 
 		expect(screen.getByText("Maya Thompson")).toBeInTheDocument();

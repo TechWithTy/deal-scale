@@ -10,3 +10,4 @@ export * from "./types/video";
 export * from "./types/social-proof";
 export * from "./utils/copy";
 export * from "./utils/video";
+export * from "./hooks/useHeroVideoConfig";

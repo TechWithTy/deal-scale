@@ -1,5 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Mock } from "vitest";
+import type { HeroVideoConfig } from "@external/dynamic-hero";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import type { ReactNode } from "react";
@@ -75,7 +76,15 @@ vi.mock("@external/dynamic-hero", () => {
 		}),
 		DEFAULT_HERO_SOCIAL_PROOF: { badges: [], testimonials: [] },
 		resolveHeroCopy,
-		useHeroVideoConfig: vi.fn(),
+		useHeroVideoConfig: vi.fn((fallback?: HeroVideoConfig) =>
+				fallback ?? {
+					src: "https://example.com/placeholder",
+					poster: "/placeholder.svg",
+					provider: "other",
+				},
+		),
+		setHeroVideoConfig: vi.fn(),
+		resetHeroVideoConfig: vi.fn(),
 	};
 });
 

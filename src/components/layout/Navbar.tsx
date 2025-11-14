@@ -11,10 +11,9 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-	NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
 import { navItems } from "@/data/layout/nav";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -25,6 +24,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { ThemeToggle } from "../theme/theme-toggle";
+import { BetaStickyBanner } from "./BetaStickyBanner";
 
 const NavLink = ({ item, onClick, className = "" }) => {
 	const pathname = usePathname();
@@ -88,7 +88,7 @@ const MegaMenuLink = ({ href, title, icon, className }) => {
 
 const DesktopNav = () => {
 	return (
-		<NavigationMenu className="hidden md:flex">
+		<NavigationMenu className="hidden lg:flex">
 			<NavigationMenuList
 				className={cn("flex space-x-1 transition-all duration-300")}
 			>
@@ -190,7 +190,7 @@ const MobileNav = ({
 	onSignOut,
 	onSignIn,
 }: MobileNavProps) => {
-	const [openSubmenus, setOpenSubmenus] = useState({});
+	const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({});
 
 	const toggleSubmenu = (title) => {
 		setOpenSubmenus((prev) => ({
@@ -202,7 +202,7 @@ const MobileNav = ({
 	return (
 		<div
 			className={cn(
-				"fixed inset-0 z-[100] flex flex-col items-center bg-background-dark/95 backdrop-blur-xl transition-all duration-300",
+				"fixed inset-0 z-[100] flex flex-col items-center bg-transparent backdrop-blur-xl transition-all duration-300",
 				isOpen
 					? "visible opacity-100"
 					: "pointer-events-none invisible opacity-0",
@@ -211,18 +211,50 @@ const MobileNav = ({
 				top: "var(--header-height, 0px)",
 			}}
 		>
-			<div className="absolute top-0 flex w-full justify-end px-6 py-4">
+			{/* biome-ignore lint/nursery/useSortedClasses: z-index ordering is intentional */}
+			<div className="absolute inset-0 overflow-hidden -z-10">
+				{/* biome-ignore lint/nursery/useSortedClasses: flex utilities grouped for readability */}
+				<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+					<PixelatedCanvas
+						src="https://assets.aceternity.com/manu-red.png"
+						width={900}
+						height={1400}
+						cellSize={4}
+						dotScale={0.96}
+						backgroundColor="rgba(7, 13, 27, 0.55)"
+						dropoutStrength={0.1}
+						interactive
+						distortionStrength={10}
+						distortionRadius={220}
+						jitterStrength={3.5}
+						jitterSpeed={0.75}
+						followSpeed={0.06}
+						tintColor="rgba(78, 234, 255, 0.7)"
+						tintStrength={0.4}
+						autoAnimate={isOpen}
+						autoAnimateRadius={260}
+						autoAnimateSpeed={0.22}
+						className="pointer-events-none h-[140%] w-[140%] max-w-none opacity-90"
+					/>
+				</div>
+				{/* biome-ignore lint/nursery/useSortedClasses: gradient utility ordering is intentional */}
+				<div className="absolute bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.4),_transparent_70%)] inset-0 pointer-events-none" />
+				{/* biome-ignore lint/nursery/useSortedClasses: gradient utility ordering is intentional */}
+				<div className="absolute bg-gradient-to-b from-[#050d1d]/15 inset-0 pointer-events-none to-[#050d1d]/60 via-[#050d1d]/25" />
+			</div>
+
+			<div className="absolute top-0 z-40 flex w-full justify-end px-6 py-4">
 				<button
 					onClick={onClose}
 					type="button"
-					className="p-2 text-black transition-colors hover:text-black dark:text-white"
+					className="p-2 text-black transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:text-white"
 					aria-label="Close menu"
 				>
 					<X className="h-6 w-6" />
 				</button>
 			</div>
 
-			<div className="w-full overflow-y-auto px-6 pt-20">
+			<div className="z-10 w-full overflow-y-auto px-6 pt-20">
 				<ul className="mx-auto flex max-h-[calc(100vh-var(--header-height)-8rem)] w-full max-w-md flex-col space-y-2">
 					{navItems.map((item) => (
 						<li key={item.title} className="w-full">
@@ -247,7 +279,7 @@ const MobileNav = ({
 										className={cn(
 											"overflow-hidden transition-all duration-300",
 											openSubmenus[item.title]
-												? "mt-1 mb-2 max-h-96 opacity-100"
+												? "mt-1 mb-2 max-h-[calc(100vh-16rem)] opacity-100"
 												: "max-h-0 opacity-0",
 										)}
 									>
@@ -278,12 +310,7 @@ const MobileNav = ({
 																		{child.ctaSubtitle}
 																	</span>
 																)}
-																<div className="mt-2">
-																	<span className="mb-2 block font-bold text-foreground text-xs">
-																		Sign up for our newsletter
-																	</span>
-																	<NewsletterEmailInput />
-																</div>
+																<NewsletterEmailInput />
 															</div>
 														</div>
 													) : (
@@ -379,7 +406,6 @@ export default function Navbar() {
 	const hasMounted = useHasMounted();
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const isMobile = useIsMobile();
 	const { data: session, status } = useSession();
 	const openAuthModal = useAuthModal((state) => state.open);
 
@@ -431,9 +457,9 @@ export default function Navbar() {
 						/>
 					</Link>
 
-					{!isMobile && <DesktopNav />}
+					<DesktopNav />
 
-					<div className="hidden items-center space-x-2 md:flex">
+					<div className="hidden items-center space-x-2 lg:flex">
 						{isAuthenticated && (
 							<Button variant="outline" size="sm" onClick={handleSignOut}>
 								Sign out
@@ -447,7 +473,7 @@ export default function Navbar() {
 					</div>
 
 					<button
-						className="z-20 text-black md:hidden dark:text-white"
+						className="z-20 text-black lg:hidden dark:text-white"
 						onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
 						type="button"
 						aria-expanded={mobileMenuOpen}
@@ -476,14 +502,7 @@ export default function Navbar() {
 				variant="default"
 				className="top-[56px] px-2 py-2 text-sm lg:top-[64px] lg:px-4 lg:py-3 lg:text-base"
 			>
-				<span className="font-semibold">🆓 5 Ai Credits:&nbsp;</span>
-				<span className="inline md:hidden">Join beta!</span>
-				<span className="hidden md:inline">
-					Apply to join our exclusive beta testing program!
-				</span>
-				<Link href="/contact" className="ml-2 underline">
-					Apply here
-				</Link>
+				<BetaStickyBanner />
 			</StickyBanner>
 		</>
 	);

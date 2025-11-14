@@ -155,10 +155,10 @@ export type HeroPersonaKey = keyof typeof HERO_COPY_V7.personas;
 export const DEFAULT_PERSONA: HeroPersonaKey = "investor";
 export const DEFAULT_PERSONA_DISPLAY = "AI Sales Coworkers";
 
-const PERSONA_LABEL = "For Investors";
+const PERSONA_LABEL = "For Real Estate Investors";
 const PERSONA_GOAL = "Automate deal flow conversations";
 const PERSONA_SOCIAL_PROOF =
-	"Investors trust DealScale to automate deal flow outreach.";
+	"Real estate investors trust DealScale to automate deal flow outreach.";
 
 const pickPersonaField = (field: "problem" | "solution" | "fear" | "hope") => {
 	const persona = HERO_COPY_V7.personas[DEFAULT_PERSONA];
@@ -172,10 +172,9 @@ const TEMPLATE_FEAR = pickPersonaField("fear");
 const TEMPLATE_HOPE = pickPersonaField("hope");
 
 export const LIVE_VIDEO: HeroVideoConfig = {
-	src: "https://www.youtube.com/embed/O-3Mxf_kKQc?rel=0&controls=1&modestbranding=1",
-	poster:
-		"https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1920&auto=format&fit=crop",
-	provider: "youtube",
+	src: "https://app.supademo.com/embed/cmhjlwt7i0jk4u1hm0scmf39w?embed_v=2&utm_source=embed",
+	poster: "/supademos/gifs/SVGv2r.mp4",
+	provider: "supademo",
 };
 
 export const LIVE_COPY = resolveHeroCopy(

@@ -48,6 +48,12 @@ type PixelatedCanvasProps = {
 	fadeOnLeave?: boolean;
 	/** 0..1 smoothing factor for leave fade. Higher = faster fade. */
 	fadeSpeed?: number;
+	/** Enables autonomous animation without pointer input. */
+	autoAnimate?: boolean;
+	/** Radius (px) used for autonomous animation orbit. */
+	autoAnimateRadius?: number;
+	/** Speed factor for autonomous animation orbit. */
+	autoAnimateSpeed?: number;
 };
 
 export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
@@ -76,6 +82,9 @@ export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
 	jitterSpeed = 4,
 	fadeOnLeave = true,
 	fadeSpeed = 0.1,
+	autoAnimate = false,
+	autoAnimateRadius,
+	autoAnimateSpeed = 0.25,
 }) => {
 	const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 	const samplesRef = React.useRef<
@@ -108,6 +117,7 @@ export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
 	const pointerInsideRef = React.useRef<boolean>(false);
 	const activityRef = React.useRef<number>(0);
 	const activityTargetRef = React.useRef<number>(0);
+	const autoAnimatingRef = React.useRef<boolean>(autoAnimate);
 
 	React.useEffect(() => {
 		let isCancelled = false;
@@ -371,14 +381,19 @@ export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
 				const rect = canvasEl.getBoundingClientRect();
 				targetMouseRef.current.x = e.clientX - rect.left;
 				targetMouseRef.current.y = e.clientY - rect.top;
+				autoAnimatingRef.current = false;
 				pointerInsideRef.current = true;
 				activityTargetRef.current = 1;
 			};
 			const onPointerEnter = () => {
+				autoAnimatingRef.current = false;
 				pointerInsideRef.current = true;
 				activityTargetRef.current = 1;
 			};
 			const onPointerLeave = () => {
+				if (autoAnimate) {
+					autoAnimatingRef.current = true;
+				}
 				pointerInsideRef.current = false;
 				if (fadeOnLeave) {
 					activityTargetRef.current = 0;
@@ -390,6 +405,12 @@ export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
 			canvasEl.addEventListener("pointermove", onPointerMove);
 			canvasEl.addEventListener("pointerenter", onPointerEnter);
 			canvasEl.addEventListener("pointerleave", onPointerLeave);
+
+			if (autoAnimate) {
+				autoAnimatingRef.current = true;
+				pointerInsideRef.current = true;
+				activityTargetRef.current = 1;
+			}
 
 			const animate = () => {
 				const now = performance.now();
@@ -405,6 +426,20 @@ export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
 				if (!ctx || !dims || !samples) {
 					rafRef.current = requestAnimationFrame(animate);
 					return;
+				}
+
+				if (autoAnimate && autoAnimatingRef.current && dims) {
+					const minDimension = Math.min(dims.width, dims.height);
+					const radius =
+						typeof autoAnimateRadius === "number"
+							? autoAnimateRadius
+							: minDimension * 0.22;
+					const angle = now * 0.001 * autoAnimateSpeed;
+					targetMouseRef.current.x = dims.width / 2 + Math.cos(angle) * radius;
+					targetMouseRef.current.y =
+						dims.height / 2 + Math.sin(angle * 0.85) * radius;
+					pointerInsideRef.current = true;
+					activityTargetRef.current = 1;
 				}
 
 				animMouseRef.current.x =
@@ -552,6 +587,9 @@ export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
 		jitterSpeed,
 		fadeOnLeave,
 		fadeSpeed,
+		autoAnimate,
+		autoAnimateRadius,
+		autoAnimateSpeed,
 	]);
 
 	return (

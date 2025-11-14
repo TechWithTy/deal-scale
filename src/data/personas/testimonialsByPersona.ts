@@ -1,17 +1,15 @@
+import { DEFAULT_PERSONA_KEY } from "@/data/personas/catalog";
+import type { PersonaKey } from "@/data/personas/catalog";
 import type { Testimonial } from "@/types/testimonial";
-
-export type PersonaKey = "Investor" | "Wholesaler" | "Agent";
 
 export interface PersonaTestimonial extends Testimonial {
 	persona: PersonaKey;
 }
 
-export const PERSONA_ORDER: PersonaKey[] = ["Investor", "Wholesaler", "Agent"];
-
 export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
-	Investor: [
+	investor: [
 		{
-			persona: "Investor",
+			persona: "investor",
 			id: 1,
 			name: "Ava Moretti",
 			role: "Principal, Moretti Capital Holdings",
@@ -25,7 +23,7 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Moretti Capital Holdings",
 		},
 		{
-			persona: "Investor",
+			persona: "investor",
 			id: 2,
 			name: "Raj Patel",
 			role: "Managing Director, Horizon Equity Investments",
@@ -39,7 +37,7 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Horizon Equity Investments",
 		},
 		{
-			persona: "Investor",
+			persona: "investor",
 			id: 3,
 			name: "Sophia Kim",
 			role: "Lead Acquisitions Strategist, Kim Equity Partners",
@@ -53,9 +51,9 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Kim Equity Partners",
 		},
 	],
-	Wholesaler: [
+	wholesaler: [
 		{
-			persona: "Wholesaler",
+			persona: "wholesaler",
 			id: 4,
 			name: "Jordan Alvarez",
 			role: "Founder, Alvarez Off Market Group",
@@ -69,7 +67,7 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Alvarez Off Market Group",
 		},
 		{
-			persona: "Wholesaler",
+			persona: "wholesaler",
 			id: 5,
 			name: "Marcus Bishop",
 			role: "CEO, Bishop Property Solutions",
@@ -83,7 +81,7 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Bishop Property Solutions",
 		},
 		{
-			persona: "Wholesaler",
+			persona: "wholesaler",
 			id: 6,
 			name: "Lila Torres",
 			role: "Co Founder, Torres Home Buyers",
@@ -97,9 +95,9 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Torres Home Buyers",
 		},
 	],
-	Agent: [
+	agent: [
 		{
-			persona: "Agent",
+			persona: "agent",
 			id: 7,
 			name: "Maya Thompson",
 			role: "Top Producing Agent, Thompson and Co.",
@@ -113,7 +111,7 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Thompson and Co.",
 		},
 		{
-			persona: "Agent",
+			persona: "agent",
 			id: 8,
 			name: "Chris Delgado",
 			role: "Realtor, Delgado Realty Group",
@@ -127,7 +125,7 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Delgado Realty Group",
 		},
 		{
-			persona: "Agent",
+			persona: "agent",
 			id: 9,
 			name: "Rebecca Shaw",
 			role: "Associate Broker, Shaw Realty Advisors",
@@ -141,11 +139,16 @@ export const personaTestimonials: Record<PersonaKey, PersonaTestimonial[]> = {
 			company: "Shaw Realty Advisors",
 		},
 	],
+	founder: [],
+	loan_officer: [],
 };
 
-export const getTestimonialsForPersona = (persona: PersonaKey): PersonaTestimonial[] =>
-	personaTestimonials[persona] ?? personaTestimonials.Investor;
+export const getTestimonialsForPersona = (
+	persona: PersonaKey,
+): PersonaTestimonial[] =>
+	personaTestimonials[persona]?.length
+		? personaTestimonials[persona]
+		: personaTestimonials[DEFAULT_PERSONA_KEY];
 
 export const findFirstPersonaTestimonial = (): PersonaTestimonial =>
-	personaTestimonials.Investor[0];
-
+	personaTestimonials[DEFAULT_PERSONA_KEY][0];

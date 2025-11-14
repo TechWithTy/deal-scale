@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDown } from "lucide-react";
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import {
 	DEFAULT_HERO_SOCIAL_PROOF,
@@ -13,6 +13,7 @@ import {
 	PersonaCTA,
 	resolveHeroCopy,
 } from "@external/dynamic-hero";
+import { useShallow } from "zustand/react/shallow";
 import type { Plan } from "@/types/service/plans";
 
 import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
@@ -22,6 +23,8 @@ import {
 	HERO_COPY_FALLBACK,
 	HERO_COPY_INPUT,
 	PRIMARY_CTA,
+	QUICK_START_PERSONA_GOAL,
+	QUICK_START_PERSONA_KEY,
 	SECONDARY_CTA,
 } from "@/components/home/heros/heroConfig";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
@@ -29,6 +32,11 @@ import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { LasersBackground } from "@/components/ui/lasers-background";
 import { LightRays } from "@/components/ui/light-rays";
 import { Pointer } from "@/components/ui/pointer";
+import {
+	DEFAULT_PERSONA_KEY,
+	PERSONA_LABELS,
+} from "@/data/personas/catalog";
+import { usePersonaStore } from "@/stores/usePersonaStore";
 
 const MOCK_VIDEO: HeroVideoConfig = {
 	src: "https://www.youtube.com/embed/qh3NGpYRG3I?rel=0&controls=1&modestbranding=1",
@@ -52,6 +60,24 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 		() => resolveHeroCopy(HERO_COPY_INPUT, HERO_COPY_FALLBACK),
 		[],
 	);
+	const { persona, goal, setPersonaAndGoal } = usePersonaStore(
+		useShallow((state) => ({
+			persona: state.persona,
+			goal: state.goal,
+			setPersonaAndGoal: state.setPersonaAndGoal,
+		})),
+	);
+	useEffect(() => {
+		if (
+			persona !== QUICK_START_PERSONA_KEY ||
+			goal !== QUICK_START_PERSONA_GOAL
+		) {
+			setPersonaAndGoal(QUICK_START_PERSONA_KEY, QUICK_START_PERSONA_GOAL);
+		}
+	}, [goal, persona, setPersonaAndGoal]);
+	const personaLabel =
+		PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
+	const personaDescription = goal ?? QUICK_START_PERSONA_GOAL;
 	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
 		useHeroTrialCheckout();
 	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
@@ -118,8 +144,8 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 							copy={heroCopy}
 							socialProof={socialProof}
 							reviews={socialProof.reviews}
-							personaLabel="Shared UI Library"
-							personaDescription="Persona tuned for DealScale hero builders"
+							personaLabel={personaLabel}
+							personaDescription={personaDescription}
 						/>
 					</div>
 

@@ -7,14 +7,15 @@
 		"module": "ESNext",
 		"skipLibCheck": true,
 
-		"moduleResolution": "bundler",
+		"moduleResolution": "nodenext",
 		"allowImportingTsExtensions": true,
 		"isolatedModules": true,
 		"moduleDetection": "force",
 		"strict": true,
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
-		"noFallthroughCasesInSwitch": true
+		"noFallthroughCasesInSwitch": true,
+		"types": ["node", "next", "next/types/global"]
 	},
 	"include": ["vite.config.ts"]
 }

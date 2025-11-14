@@ -5,6 +5,7 @@ import { getTestBaseUrl } from "@/utils/env";
 
 import { resolveBeehiivDate } from "@/utils/seo/seo";
 import type { SeoMeta } from "@/utils/seo/seo";
+import { getTestimonialReviewData } from "@/utils/seo/schema";
 
 function toIsoDate(value: unknown): string | undefined {
 	if (value === null || value === undefined) {
@@ -45,6 +46,7 @@ export async function getSeoMetadataForPost(id: string): Promise<SeoMeta> {
 	// Always build a fallback canonical URL for not-found
 	const fallbackCanonical = `${getTestBaseUrl()}/blogs/${id}`;
 	const pageUrl = post?.web_url || fallbackCanonical;
+	const { aggregateRating } = getTestimonialReviewData();
 
 	if (!post) {
 		return {
@@ -98,5 +100,7 @@ export async function getSeoMetadataForPost(id: string): Promise<SeoMeta> {
 		dateModified,
 		priority: 0.7, // * or customize per post
 		changeFrequency: "weekly", // * or customize per post
+		ratingValue: aggregateRating?.ratingValue,
+		reviewCount: aggregateRating?.reviewCount,
 	};
 }

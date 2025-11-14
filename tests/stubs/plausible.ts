@@ -11,3 +11,5 @@ export default {
 	trackPageview,
 	enableAutoPageviews,
 };
+
+

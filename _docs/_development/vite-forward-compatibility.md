@@ -48,3 +48,5 @@ This guide details how to introduce Vite incrementally without impacting the pri
 - CI job for `pnpm run build:vite` succeeds consistently and reports bundle regressions <5%.
 - Developers can toggle Vite usage via environment variables without code churn.
 
+
+

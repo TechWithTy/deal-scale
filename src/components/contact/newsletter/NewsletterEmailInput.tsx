@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useHasMounted } from "@/hooks/useHasMounted";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,11 +16,15 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+type NewsletterEmailInputProps = {
+	layout?: "default" | "stacked";
+};
+
 /**
  * Minimal newsletter email input for embedding in Hero or other CTAs.
  * Handles validation, submission, and user feedback.
  */
-export function NewsletterEmailInput() {
+export function NewsletterEmailInput({ layout = "default" }: NewsletterEmailInputProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isSubscribed, setIsSubscribed] = useState(false);
@@ -83,7 +88,10 @@ export function NewsletterEmailInput() {
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
-			className="flex w-full max-w-md flex-col gap-3 sm:flex-row sm:items-center"
+			className={cn(
+				"flex w-full max-w-md flex-col gap-3 sm:flex-row sm:items-center",
+				layout === "stacked" && "md:flex-col md:items-stretch",
+			)}
 			autoComplete="off"
 		>
 			<Input
@@ -98,7 +106,10 @@ export function NewsletterEmailInput() {
 			/>
 			<Button
 				type="submit"
-				className="h-12 min-w-[120px] bg-primary text-black dark:text-white"
+				className={cn(
+					"h-12 min-w-[120px] bg-primary text-black dark:text-white",
+					layout === "stacked" && "w-full md:w-full",
+				)}
 				disabled={isSubmitting}
 			>
 				{isSubmitting ? "Subscribing..." : "Subscribe"}

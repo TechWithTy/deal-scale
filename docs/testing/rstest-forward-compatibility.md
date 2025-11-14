@@ -224,3 +224,5 @@ For full mappings, consult the official [Migrating from Jest](https://rstest.rs/
 
 By following the phased approach above, we maintain testing continuity while gaining access to Rstest’s Rstack ecosystem, multi-project support, and Rsdoctor integration—all without regressing the stability we achieved with the Vitest forward-compatibility work. Adjust the scope per sprint, and keep documentation synchronized so future migrations stay frictionless.
 
+
+

@@ -13,6 +13,7 @@ import {
 	resolveHeroThumbnailSrc,
 	resolveHeroVideoSrc,
 	shouldBypassImageOptimization,
+	isVideoThumbnail,
 } from "../utils/video";
 
 export interface HeroVideoDialogProps
@@ -97,6 +98,7 @@ export function HeroVideoDialog({
 	const videoSrc = resolveHeroVideoSrc(video);
 	const thumbnailSrc = resolveHeroThumbnailSrc(video);
 	const unoptimizedThumbnail = shouldBypassImageOptimization(thumbnailSrc);
+	const isVideoPoster = isVideoThumbnail(thumbnailSrc);
 	const setOpen = useCallback(
 		(next: boolean) => {
 			if (!isControlled) {
@@ -132,14 +134,28 @@ export function HeroVideoDialog({
 					className="group absolute inset-0 z-20 cursor-pointer overflow-hidden rounded-[28px] border-0 bg-transparent p-0 transition duration-200 ease-out"
 					onClick={openModal}
 				>
-					<Image
-						src={thumbnailSrc}
-						alt={thumbnailAlt}
-						fill
-						unoptimized={unoptimizedThumbnail}
-						priority
-						className="object-cover transition-all duration-200 ease-out group-hover:brightness-[0.92]"
-					/>
+					{isVideoPoster ? (
+						<video
+							src={thumbnailSrc}
+							role="img"
+							aria-label={thumbnailAlt}
+							className="size-full object-cover transition-all duration-200 ease-out group-hover:brightness-[0.92]"
+							autoPlay
+							loop
+							muted
+							playsInline
+							preload="auto"
+						/>
+					) : (
+						<Image
+							src={thumbnailSrc}
+							alt={thumbnailAlt}
+							fill
+							unoptimized={unoptimizedThumbnail}
+							priority
+							className="object-cover transition-all duration-200 ease-out group-hover:brightness-[0.92]"
+						/>
+					)}
 					<span
 						aria-hidden
 						className="pointer-events-none absolute inset-x-0 bottom-[-2px] h-[22%] rounded-t-[32px] bg-gradient-to-t from-background/90 via-background/60 to-transparent opacity-95 transition duration-200 ease-out"

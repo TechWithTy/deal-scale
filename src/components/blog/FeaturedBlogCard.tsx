@@ -1,3 +1,6 @@
+"use client";
+
+import { PERSONA_LABELS, type PersonaKey } from "@/data/personas/catalog";
 import type { BeehiivPost } from "@/types/behiiv";
 import { motion } from "framer-motion";
 import {
@@ -13,12 +16,62 @@ import type React from "react";
 import { Suspense } from "react";
 import { truncateSubtitle, truncateTitle } from "./BlogGrid";
 
+type FreshnessBadge = "7-day" | "30-day" | "all" | undefined;
+
+const FRESHNESS_LABELS: Record<
+	Exclude<FreshnessBadge, undefined>,
+	{ label: string; className: string }
+> = {
+	"7-day": {
+		label: "New · 7 Days",
+		className: "bg-emerald-400/90 text-emerald-950",
+	},
+	"30-day": {
+		label: "Trending · 30 Days",
+		className: "bg-amber-300/90 text-amber-900",
+	},
+	all: {
+		label: "Reader Favorite",
+		className: "bg-slate-200/90 text-slate-900",
+	},
+};
+
+const formatPublishedDate = (post: BeehiivPost): string => {
+	const raw =
+		post.published_at ?? post.publish_date ?? post.displayed_date ?? post.created;
+	if (typeof raw === "number") {
+		const ms = raw < 1_000_000_000_000 ? raw * 1000 : raw;
+		return new Date(ms).toLocaleDateString();
+	}
+	if (typeof raw === "string") {
+		const numeric = Number(raw);
+		if (!Number.isNaN(numeric)) {
+			const ms = numeric < 1_000_000_000_000 ? numeric * 1000 : numeric;
+			return new Date(ms).toLocaleDateString();
+		}
+		const parsed = new Date(raw);
+		if (!Number.isNaN(parsed.getTime())) {
+			return parsed.toLocaleDateString();
+		}
+	}
+	if (raw instanceof Date && !Number.isNaN(raw.getTime())) {
+		return raw.toLocaleDateString();
+	}
+	return "Unknown date";
+};
+
 interface FeaturedBlogCardProps {
 	featuredPost: BeehiivPost;
+	freshnessBadge?: FreshnessBadge;
+	persona?: PersonaKey;
+	personaGoal?: string;
 }
 
 const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 	featuredPost,
+	freshnessBadge = "all",
+	persona,
+	personaGoal,
 }) => {
 	// Extract web + email stats safely for featured post
 	const featuredWebStats = featuredPost?.stats?.web;
@@ -67,6 +120,14 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 		? Math.ceil(contentString.split(" ").length / 200)
 		: 0;
 
+	const personaLabel = persona ? PERSONA_LABELS[persona] : undefined;
+	const authors =
+		Array.isArray(featuredPost.authors) && featuredPost.authors.length > 0
+			? featuredPost.authors.join(", ")
+			: undefined;
+	const freshnessLabelMeta =
+		freshnessBadge && FRESHNESS_LABELS[freshnessBadge];
+
 	return (
 		<Suspense fallback={<div>Loading post...</div>}>
 			<motion.div
@@ -93,21 +154,29 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 						}}
 						fill
 					/>
-					<div className="absolute top-4 left-4 rounded bg-primary/90 px-2 py-1 font-medium text-black text-xs dark:text-white">
-						Featured
+					<div className="absolute top-4 left-4 flex flex-wrap gap-2">
+						<span className="rounded bg-primary/90 px-2 py-1 font-semibold text-xs text-black dark:text-white">
+							Featured
+						</span>
+						{freshnessLabelMeta && (
+							<span
+								className={`rounded px-2 py-1 text-xs font-semibold ${freshnessLabelMeta.className}`}
+							>
+								{freshnessLabelMeta.label}
+							</span>
+						)}
+						{personaLabel && (
+							<span className="rounded bg-secondary/90 px-2 py-1 text-xs font-semibold text-secondary-foreground">
+								Tailored for {personaLabel}
+							</span>
+						)}
 					</div>
 				</div>
 				<div className="flex w-full flex-col items-center p-6 md:items-start">
 					<div className="mb-4 flex flex-wrap items-center justify-center gap-4 text-muted-foreground text-xs md:justify-start">
 						<span className="inline-flex items-center text-black dark:text-white/60">
 							<Calendar className="mr-1 h-3 w-3 text-secondary" />
-							{typeof featuredPost.publish_date === "number"
-								? new Date(
-										featuredPost.publish_date * 1000,
-									).toLocaleDateString()
-								: typeof featuredPost.publish_date === "string"
-									? new Date(featuredPost.publish_date).toLocaleDateString()
-									: "Unknown date"}
+							{formatPublishedDate(featuredPost)}
 						</span>
 						<span className="inline-flex items-center text-black dark:text-white/60">
 							<Clock className="mr-1 h-3 w-3 text-secondary" /> {readingTime}{" "}
@@ -161,6 +230,11 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 								{truncateSubtitle(featuredPost.subtitle)}
 							</small>
 						)}
+						{personaGoal && (
+							<p className="max-w-2xl text-center text-xs text-primary/80 md:text-left">
+								{personaGoal}
+							</p>
+						)}
 						{/* Vital web stats for featured post */}
 					</div>
 					<div className="mb-6 flex flex-wrap justify-center gap-2 md:justify-start">
@@ -183,9 +257,15 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 					</div>
 					<div className="flex w-full flex-col items-center justify-between gap-2 md:flex-row">
 						<div className="flex w-full items-center justify-center md:w-auto md:justify-start">
-							<span className="text-black text-sm dark:text-white/80">
-								{featuredPost.authors?.join(", ")}
-							</span>
+							{authors ? (
+								<span className="text-black text-sm dark:text-white/80">
+									{authors}
+								</span>
+							) : (
+								<span className="text-muted-foreground text-sm">
+									DealScale Editorial Team
+								</span>
+							)}
 						</div>
 						<Link
 							href={featuredPost.web_url || "#"}

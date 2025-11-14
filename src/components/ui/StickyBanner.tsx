@@ -37,7 +37,7 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				aria-live="assertive"
 				className={cn(
 					// * Sticky, full-width, glassy, with gradient and neon/aurora highlight
-					"fade-in slide-in-from-top-2 sticky z-50 flex w-full animate-in items-center justify-between gap-4 border-b px-4 py-3 shadow-lg backdrop-blur-2xl transition-all",
+					"fade-in slide-in-from-top-2 sticky z-50 flex w-full animate-in flex-col gap-3 border-b px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
 					// * Glass/gradient background for default and success
 					variant === "default"
 						? "border border-border bg-[linear-gradient(90deg,_hsl(var(--primary)/0.90)_0%,_hsl(var(--accent)/0.85)_100%)] text-glow text-primary-foreground"
@@ -60,13 +60,15 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				)}
 				{...props}
 			>
-				<div className="flex min-w-0 flex-1 items-center">{children}</div>
+				<div className="flex min-w-0 flex-1 flex-col gap-2 md:flex-row md:items-center">
+					{children}
+				</div>
 				<Button
 					variant="ghost"
 					size="icon"
 					aria-label="Close banner"
 					onClick={onClose}
-					className="ml-2 shrink-0"
+					className="flex h-9 w-full items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 md:ml-2 md:h-10 md:w-auto md:justify-center"
 				>
 					<X className="h-5 w-5" aria-hidden="true" />
 				</Button>

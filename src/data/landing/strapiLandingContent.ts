@@ -104,7 +104,7 @@ export const landingContentGaps: LandingGapContentConfig = {
 			},
 		],
 		primaryCta: {
-			label: "Become Beta Tester",
+			label: "Request Founders Circle Access",
 			href: "/contact",
 			action: "navigate",
 		},
@@ -129,7 +129,7 @@ export const landingContentGaps: LandingGapContentConfig = {
 		},
 	},
 	trustedBy: {
-		heading: "Beta Testers",
+		heading: "Founders Circle",
 	},
 	services: {
 		fallbackTitle: "Tailored Solutions for Visionary Companies",
@@ -161,8 +161,8 @@ export const landingContentGaps: LandingGapContentConfig = {
 			"Hear from our clients about their experiences with our services",
 	},
 	faqCta: {
-		body: 'Become a Beta Tester for Deal Scale!\nGet <span class="font-semibold text-primary">5 free leads</span>, first dibs when we launch, and exclusive early access perks.',
-		buttonLabel: "Become a Beta Tester",
+		body: 'Join the Founders Circle and shape Deal Scale.\nGet <span class="font-semibold text-primary">5 AI credits</span>, priority onboarding, and first dibs when we launch.',
+		buttonLabel: "Request Founders Circle Access",
 		buttonUrl: "/contact",
 	},
 	pricing: {
@@ -187,8 +187,8 @@ export const landingContentGaps: LandingGapContentConfig = {
 		landingTitle: "Latest Blogs",
 	},
 	contactForm: {
-		title: "Beta Tester Application",
+		title: "Founders Circle Application",
 		subtitle:
-			"Apply to become a beta tester and get early access, 5 Ai Credits and Vote for the next features",
+			"Request early access to unlock 5 AI credits, priority onboarding, and a direct vote on upcoming features.",
 	},
 };

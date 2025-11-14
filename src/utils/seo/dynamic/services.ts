@@ -1,6 +1,7 @@
 import type { ServiceItemData } from "@/types/service/services";
 import { getTestBaseUrl } from "@/utils/env";
 import type { SeoMeta } from "@/utils/seo/seo";
+import { getTestimonialReviewData } from "@/utils/seo/schema";
 
 /**
  * Fetches SEO metadata for a service by slug.
@@ -15,6 +16,7 @@ export function getSeoMetadataForService(
 	const baseUrl = getTestBaseUrl();
 	const pageUrl = `${baseUrl}/features/${slug}`;
 	const service = services.find((s) => s.slugDetails.slug === slug);
+	const { aggregateRating } = getTestimonialReviewData();
 
 	if (!service) {
 		return {
@@ -52,5 +54,7 @@ export function getSeoMetadataForService(
 			: undefined,
 		priority: 0.8, // * or customize per service
 		changeFrequency: "weekly", // * or customize per service
+		ratingValue: aggregateRating?.ratingValue,
+		reviewCount: aggregateRating?.reviewCount,
 	};
 }

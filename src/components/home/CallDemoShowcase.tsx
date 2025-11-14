@@ -23,6 +23,9 @@ import {
 	AI_OUTREACH_STUDIO_HEADING,
 	AI_OUTREACH_STUDIO_TAGLINE,
 } from "@/data/home/aiOutreachStudio";
+import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from "@/data/personas/catalog";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import { useShallow } from "zustand/react/shallow";
 import demoTranscript from "@/data/transcripts";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
@@ -637,7 +640,7 @@ export const CallDemoShowcase = () => {
 					<PhoneShell>
 						<Iphone
 							aria-label="Call demo follow-up"
-							className="w-full"
+							className="relative w-full max-w-[22rem] md:max-w-[30rem] xl:max-w-[32rem]"
 							colorScheme="dark"
 						>
 							<>
@@ -669,7 +672,7 @@ export const CallDemoShowcase = () => {
 					<PhoneShell>
 						<Iphone
 							aria-label="Call demo preview"
-							className="w-full"
+							className="relative w-full max-w-[22rem] md:max-w-[30rem] xl:max-w-[32rem]"
 							colorScheme="dark"
 						>
 							<>
@@ -708,7 +711,7 @@ export const CallDemoShowcase = () => {
 				<PhoneShell>
 					<Iphone
 						aria-label="Call demo preview"
-						className="relative w-full max-w-[26rem]"
+						className="relative w-full max-w-[24rem] md:max-w-[32rem] xl:max-w-[34rem]"
 						colorScheme="dark"
 					>
 						<>
@@ -752,6 +755,16 @@ export const CallDemoShowcase = () => {
 		handleEndTextDemo,
 	]);
 
+	const { persona, goal } = usePersonaStore(
+		useShallow((state) => ({
+			persona: state.persona,
+			goal: state.goal,
+		})),
+	);
+	const personaLabel =
+		PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
+	const resolvedGoal = goal ?? "Automate deal flow conversations";
+	const resolvedGoalLower = resolvedGoal.toLowerCase();
 	const leadCaptureCopy = useMemo(() => {
 		if (leadCaptureOrigin === "text") {
 			return {
@@ -763,7 +776,8 @@ export const CallDemoShowcase = () => {
 
 		return {
 			title: "Ready to start Scaling Your Deals?",
-			description: "Sign Up To Become A Beta Tester or Pilot Member",
+			description:
+				"Request Founders Circle or Pilot access and unlock the full AI outreach workflow plus white-glove onboarding.",
 		};
 	}, [leadCaptureOrigin]);
 
@@ -771,13 +785,17 @@ export const CallDemoShowcase = () => {
 		() => [
 			{
 				id: 1,
-				className: "relative col-span-1 flex flex-col p-6 md:col-span-2",
+				className:
+					"relative col-span-1 flex flex-col p-6 md:col-span-2 xl:col-span-2",
 				contentClassName: "flex h-full flex-col gap-6",
 				content: (
 					<div className="relative z-20 flex h-full flex-col gap-8">
 						<div className="flex flex-col gap-3 text-balance md:items-center md:text-center">
 							<p className="font-medium text-slate-500 text-sm uppercase tracking-[0.3em] dark:text-white/60">
 								{AI_OUTREACH_STUDIO_HEADING}
+								<span className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-900/5 px-3 py-1 font-semibold text-[0.65rem] text-slate-700 tracking-[0.25em] dark:border-white/15 dark:bg-white/10 dark:text-white/80">
+									{personaLabel}
+								</span>
 							</p>
 							<h2 className="font-semibold text-3xl text-slate-900 md:text-4xl lg:text-5xl dark:text-white">
 								{AI_OUTREACH_STUDIO_TAGLINE}
@@ -787,7 +805,7 @@ export const CallDemoShowcase = () => {
 							</p>
 						</div>
 						<div className="flex flex-col gap-6">
-							<div className="grid gap-4 text-slate-600 text-sm sm:grid-cols-3 dark:text-white/70">
+							<div className="grid gap-4 text-slate-600 text-sm sm:grid-cols-2 lg:grid-cols-3 dark:text-white/70">
 								{AI_OUTREACH_STUDIO_FEATURES.map((feature) => (
 									<div
 										key={feature.title}
@@ -812,7 +830,8 @@ export const CallDemoShowcase = () => {
 								<p className="mt-3 text-slate-600 text-sm dark:text-white/70">
 									Build call and SMS workflows in seconds. Customize tone,
 									timing, and goals, then let DealScale handle the outreach and
-									sync every interaction directly to your CRM.
+									sync every interaction directly to your CRM so you can focus
+									on {resolvedGoalLower}.
 								</p>
 								<div className="mt-4 flex flex-col items-start gap-4 rounded-xl bg-slate-900/5 p-4 text-slate-700 text-sm sm:flex-row sm:items-center dark:bg-black/30 dark:text-white/70">
 									<Image
@@ -890,7 +909,7 @@ export const CallDemoShowcase = () => {
 			{
 				id: 2,
 				className:
-					"col-span-1 flex min-h-[26rem] items-center justify-center md:col-start-3 md:min-h-[32rem]",
+					"col-span-1 flex min-h-[26rem] items-center justify-center md:col-span-2 md:min-h-[34rem] xl:col-span-1 xl:col-start-3",
 				contentClassName:
 					"flex w-full items-center justify-center bg-transparent",
 				content: renderPreview(),
@@ -901,7 +920,9 @@ export const CallDemoShowcase = () => {
 			callDemoMode,
 			handleRestartCallDemo,
 			handleSwitchPreview,
+			personaLabel,
 			renderPreview,
+			resolvedGoalLower,
 		],
 	);
 
@@ -916,6 +937,9 @@ export const CallDemoShowcase = () => {
 					<div className="mx-auto max-w-3xl space-y-4">
 						<p className="font-semibold text-sky-500 text-sm uppercase tracking-[0.3em]">
 							{AI_OUTREACH_STUDIO_HEADING}
+							<span className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-900/5 px-3 py-1 font-semibold text-[0.65rem] text-slate-700 tracking-[0.25em] dark:border-white/15 dark:bg-white/10 dark:text-white/80">
+								{personaLabel}
+							</span>
 						</p>
 						<h2 className="font-semibold text-4xl text-slate-900 tracking-tight sm:text-5xl dark:text-white">
 							{AI_OUTREACH_STUDIO_TAGLINE}
@@ -923,16 +947,15 @@ export const CallDemoShowcase = () => {
 						<p className="text-base text-slate-600 sm:text-lg dark:text-white/70">
 							{AI_OUTREACH_STUDIO_DESCRIPTION}
 						</p>
-						<ul className="grid gap-3 text-slate-600 text-sm sm:grid-cols-3 sm:text-base dark:text-white/70">
-							<li className="rounded-xl border border-slate-200/40 bg-white/40 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-white/5">
-								Generate personalized follow-ups from prompts or CRM data.
-							</li>
-							<li className="rounded-xl border border-slate-200/40 bg-white/40 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-white/5">
-								Switch tones, timing, and channels without losing context.
-							</li>
-							<li className="rounded-xl border border-slate-200/40 bg-white/40 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-white/5">
-								Monitor conversations live with AI-assisted insights.
-							</li>
+						<ul className="grid gap-3 text-slate-600 text-sm sm:grid-cols-2 sm:text-base lg:grid-cols-3 dark:text-white/70">
+							{AI_OUTREACH_STUDIO_FEATURES.map((feature) => (
+								<li
+									key={feature.title}
+									className="rounded-xl border border-slate-200/40 bg-white/40 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-white/5"
+								>
+									{feature.description}
+								</li>
+							))}
 						</ul>
 					</div>
 					<LayoutGrid

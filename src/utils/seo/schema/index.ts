@@ -18,6 +18,11 @@ export {
 	SCHEMA_CONTEXT,
 	WEBSITE_ID,
 } from "./helpers";
+export {
+	getTestimonialReviewData,
+	testimonialAggregateRating,
+	testimonialReviewSchemas,
+} from "./reviewData";
 export { buildManifestoSchema } from "./manifesto";
 export {
 	organizationSchema,
@@ -49,6 +54,7 @@ export type {
 	ReviewSchema,
 	ServiceSchema,
 	ServiceSchemaInput,
+	AggregateRatingSchema,
 	WebSiteSchema,
 	ContactPointSchema,
 	PostalAddressSchema,

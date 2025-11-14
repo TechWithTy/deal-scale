@@ -17,6 +17,9 @@ import {
 	PERSONA_GOAL,
 	PERSONA_LABEL,
 } from "@/components/home/heros/live-dynamic-hero-demo/_config";
+import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from "@/data/personas/catalog";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import { useShallow } from "zustand/react/shallow";
 import { ActivityRoller, usePrefersReducedMotion } from "./ActivityRoller";
 
 const LEFT_COLUMN_POINTS = [
@@ -95,7 +98,17 @@ const formatEventForStack = (
 
 export default function FeatureSectionActivity(): JSX.Element {
 	const prefersReducedMotion = usePrefersReducedMotion();
-	const personaLabel = PERSONA_LABEL ?? "AI Sales Agents";
+	const { persona, goal } = usePersonaStore(
+		useShallow((state) => ({
+			persona: state.persona,
+			goal: state.goal,
+		})),
+	);
+	const personaLabel =
+		PERSONA_LABELS[persona] ??
+		PERSONA_LABEL ??
+		PERSONA_LABELS[DEFAULT_PERSONA_KEY] ??
+		"AI Sales Agents";
 	const personaAudience =
 		personaLabel.endsWith("s") || personaLabel.endsWith("S")
 			? personaLabel
@@ -105,13 +118,18 @@ export default function FeatureSectionActivity(): JSX.Element {
 			? "stay"
 			: "stays";
 	const headline = `We orchestrate every deal touchpoint so your ${personaAudience} ${personaVerb} in deal mode.`;
-	const subheadline = LIVE_COPY?.values?.benefit?.length
-		? `${LIVE_COPY.values.benefit} ${LIVE_COPY.values.socialProof ?? ""}`.trim()
-		: FALLBACK_SUBHEAD;
+	const resolvedBenefit =
+		goal ??
+		LIVE_COPY?.values?.benefit ??
+		PERSONA_GOAL ??
+		"Automate deal flow conversations";
+	const subheadline =
+		`${resolvedBenefit} ${LIVE_COPY?.values?.socialProof ?? ""}`.trim() ||
+		FALLBACK_SUBHEAD;
 	const supportCopy = LIVE_COPY?.subtitle?.length
 		? LIVE_COPY.subtitle
 		: LIVE_COPY?.values?.socialProof?.length
-			? `${LIVE_COPY.values.socialProof} ${PERSONA_GOAL ?? ""}`.trim()
+			? `${LIVE_COPY.values.socialProof} ${resolvedBenefit}`.trim()
 			: FALLBACK_SUPPORT;
 
 	return (

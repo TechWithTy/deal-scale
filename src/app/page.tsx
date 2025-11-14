@@ -1,4 +1,5 @@
 import { ViewportLazy } from "@/components/common/ViewportLazy";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
 import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
 import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
@@ -14,12 +15,19 @@ import {
 } from "@/components/home/heros/live-dynamic-hero-demo/_config";
 import LiveDynamicHero from "@/components/home/heros/live-dynamic-hero-demo/page";
 import { Separator } from "@/components/ui/separator";
-import { dataModules } from "@/data/__generated__/modules";
 import { activityStream } from "@/data/activity/activityStream";
+import { caseStudies } from "@/data/caseStudy/caseStudies";
+import { faqItems } from "@/data/faq/default";
+import { pricingCatalog } from "@/data/service/slug_data/pricing";
+import {
+	generalDealScaleTestimonials,
+} from "@/data/service/slug_data/testimonials";
+import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import {
 	AI_OUTREACH_STUDIO_ANCHOR,
 	AI_OUTREACH_STUDIO_FEATURES,
 	AI_OUTREACH_STUDIO_SEO,
+	AI_OUTREACH_STUDIO_TAGLINE,
 } from "@/data/home/aiOutreachStudio";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { cn } from "@/lib/utils";
@@ -29,6 +37,7 @@ import {
 	SchemaInjector,
 	buildActivityFeedSchema,
 	buildServiceSchema,
+	getTestimonialReviewData,
 } from "@/utils/seo/schema";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
@@ -147,11 +156,18 @@ export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/");
 	const persona = HERO_COPY_V7.personas[DEFAULT_PERSONA];
 
+	const personaAudienceLabel =
+		PERSONA_LABEL.replace(/^For\s+/i, "").trim() || PERSONA_LABEL;
+	const personaPromise = `We orchestrate every deal touchpoint so your ${personaAudienceLabel} stay in deal mode.`;
+	const outreachTagline = AI_OUTREACH_STUDIO_TAGLINE;
+
 	const heroKeywordsBase = [
 		...seo.keywords,
 		PERSONA_LABEL,
 		PERSONA_GOAL,
 		DEFAULT_PERSONA_DISPLAY,
+		outreachTagline,
+		personaPromise,
 		...persona.problem,
 		...persona.solution,
 		...persona.fear,
@@ -165,8 +181,14 @@ export async function generateMetadata(): Promise<Metadata> {
 		LIVE_COPY.subtitle ||
 		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale’s AI Sales Agents.";
 	const aiOutreachDescription = AI_OUTREACH_STUDIO_SEO.description;
-	const combinedDescription = [aiOutreachDescription, heroDescription]
-		.filter(Boolean)
+	const combinedDescriptionSegments = [
+		outreachTagline,
+		aiOutreachDescription,
+		personaPromise,
+		heroDescription,
+	];
+	const combinedDescription = combinedDescriptionSegments
+		.filter((segment) => segment && segment.length > 0)
 		.join(" ");
 
 	const enrichedSeo = mapSeoMetaToMetadata({
@@ -220,13 +242,6 @@ const Index = async ({
 	const currentPage = pageParam ? Number.parseInt(pageParam, 10) || 1 : 1;
 
 	// Paginate the case studies
-	const { caseStudies } = dataModules["caseStudy/caseStudies"];
-	const { faqItems } = dataModules["faq/default"];
-	const { pricingCatalog } = dataModules["service/slug_data/pricing"];
-	const { generalDealScaleTestimonials } =
-		dataModules["service/slug_data/testimonials"];
-	const { companyLogos } = dataModules["service/slug_data/trustedCompanies"];
-
 	const paginatedCaseStudies = paginate(
 		caseStudies,
 		currentPage,
@@ -239,9 +254,28 @@ const Index = async ({
 	const heroDescription =
 		LIVE_COPY.subtitle ||
 		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale’s AI Sales Agents.";
+	const personaAudienceLabel =
+		PERSONA_LABEL.replace(/^For\s+/i, "").trim() || PERSONA_LABEL;
+	const personaPromise = `We orchestrate every deal touchpoint so your ${personaAudienceLabel} stay in deal mode.`;
+	const heroServiceDescription = [personaPromise, heroDescription]
+		.filter((segment) => segment && segment.length > 0)
+		.join(" ");
+	const aiOutreachNarrative = [
+		AI_OUTREACH_STUDIO_TAGLINE,
+		AI_OUTREACH_STUDIO_SEO.description,
+		personaPromise,
+	]
+		.filter((segment) => segment && segment.length > 0)
+		.join(" ");
+	const activityNarrative = `Live automation notifications that help ${personaAudienceLabel} stay in deal mode with AI-personalized follow-ups.`;
+	const aiOutreachFeatureDescription = `${AI_OUTREACH_STUDIO_TAGLINE} Persona-aware workflows keep ${personaAudienceLabel} in deal mode.`;
+	const {
+		reviews: testimonialReviews,
+		aggregateRating: testimonialAggregateRating,
+	} = getTestimonialReviewData();
 	const heroServiceSchema = buildServiceSchema({
 		name: PERSONA_LABEL,
-		description: heroDescription,
+		description: heroServiceDescription,
 		url: `${canonicalUrl}#investor-hero-top`,
 		serviceType: PERSONA_GOAL,
 		category: "Real Estate Investor Automation",
@@ -251,10 +285,12 @@ const Index = async ({
 			priceCurrency: "USD",
 			url: `${canonicalUrl}/contact`,
 		},
+		aggregateRating: testimonialAggregateRating,
+		reviews: testimonialReviews,
 	});
 	const aiOutreachServiceSchema = buildServiceSchema({
 		name: `${AI_OUTREACH_STUDIO_SEO.name} by Deal Scale`,
-		description: AI_OUTREACH_STUDIO_SEO.description,
+		description: aiOutreachNarrative,
 		url: `${canonicalUrl}#${AI_OUTREACH_STUDIO_ANCHOR}`,
 		serviceType: "AI Outreach Automation",
 		category: "Sales Enablement",
@@ -264,18 +300,19 @@ const Index = async ({
 			priceCurrency: "USD",
 			url: `${canonicalUrl}/contact`,
 		},
+		aggregateRating: testimonialAggregateRating,
+		reviews: testimonialReviews,
 	});
 	const activityFeedSchema = buildActivityFeedSchema(activityStream, {
 		url: "/#live-activity-stream",
-		description:
-			"Live automation notifications highlighted in the DealScale investor activity stream.",
+		description: activityNarrative,
 	});
 	const aiOutreachFeatureListSchema = {
 		"@context": "https://schema.org",
 		"@type": "ItemList",
 		"@id": `${canonicalUrl}#${AI_OUTREACH_STUDIO_ANCHOR}-feature-list`,
 		name: `${AI_OUTREACH_STUDIO_SEO.name} Feature Highlights`,
-		description: "Key capabilities of the DealScale AI Outreach Studio.",
+		description: aiOutreachFeatureDescription,
 		itemListElement: AI_OUTREACH_STUDIO_FEATURES.map((feature, index) => ({
 			"@type": "ListItem",
 			position: index + 1,
@@ -285,95 +322,97 @@ const Index = async ({
 		})),
 	} as const;
 	return (
-		<>
-			<SchemaInjector schema={heroServiceSchema} />
-			<SchemaInjector schema={aiOutreachServiceSchema} />
-			<SchemaInjector schema={aiOutreachFeatureListSchema} />
-			<SchemaInjector schema={activityFeedSchema} />
-			<LiveDynamicHero />
-			<TrustedByScroller variant="default" items={companyLogos} />
-			{/* Separator for mobile only with half margin */}
-			<div className="sm:hidden">
-				<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
-			</div>
-			<ViewportLazy>
-				<CallDemoShowcase />
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<>
-					<FeatureSectionActivity />
-					<div className="mt-12">
-						<FeatureShowcase features={REAL_TIME_FEATURES} />
-					</div>
-				</>
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<ConnectAnythingHero />
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<CaseStudyGrid
-					caseStudies={caseStudies}
-					limit={3}
-					showViewAllButton
-					showCategoryFilter={false}
-				/>
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<Testimonials
-					testimonials={generalDealScaleTestimonials}
-					title={"What Our Clients Say"}
-					subtitle={
-						"Hear from our clients about their experiences with our services"
-					}
-				/>
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<MarketingCatalogPricing
-					title="Success-Based Pricing"
-					subtitle="Pay for outcomes, not promises—pilot pricing stays locked for 2 years."
-					catalog={pricingCatalog}
-					showFreePreview={false}
-					showUpgradeStack={false}
-					showAddOnStack={false}
-					showPilotBlurb={false}
-				/>
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<AboutUsSection />
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<ClientBento />
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<BlogPreview title="Latest Blogs" posts={posts} />
-			</ViewportLazy>
-			<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<Faq
-					title="Frequently Asked Questions"
-					subtitle="Find answers to common questions about our services, process, and technology expertise."
-					faqItems={faqItems}
-				/>
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<div className="flex items-center justify-center py-5 lg:col-span-7">
-					<ContactForm />
+		<ExitIntentBoundary variant="home">
+			<>
+				<SchemaInjector schema={heroServiceSchema} />
+				<SchemaInjector schema={aiOutreachServiceSchema} />
+				<SchemaInjector schema={aiOutreachFeatureListSchema} />
+				<SchemaInjector schema={activityFeedSchema} />
+				<LiveDynamicHero />
+				<TrustedByScroller variant="default" items={companyLogos} />
+				{/* Separator for mobile only with half margin */}
+				<div className="sm:hidden">
+					<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
 				</div>
-			</ViewportLazy>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<ViewportLazy>
-				<InstagramEmbed />
-			</ViewportLazy>
-		</>
+				<ViewportLazy>
+					<CallDemoShowcase />
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<>
+						<FeatureSectionActivity />
+						<div className="mt-12">
+							<FeatureShowcase features={REAL_TIME_FEATURES} />
+						</div>
+					</>
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<ConnectAnythingHero />
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<CaseStudyGrid
+						caseStudies={caseStudies}
+						limit={3}
+						showViewAllButton
+						showCategoryFilter={false}
+					/>
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<Testimonials
+						testimonials={generalDealScaleTestimonials}
+						title={"What Our Clients Say"}
+						subtitle={
+							"Hear from our clients about their experiences with our services"
+						}
+					/>
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<MarketingCatalogPricing
+						title="Success-Based Pricing"
+						subtitle="Pay for outcomes, not promises—pilot pricing stays locked for 2 years."
+						catalog={pricingCatalog}
+						showFreePreview={false}
+						showUpgradeStack={false}
+						showAddOnStack={false}
+						showPilotBlurb={false}
+					/>
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<AboutUsSection />
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<ClientBento />
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<BlogPreview title="Latest Blogs" posts={posts} />
+				</ViewportLazy>
+				<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<Faq
+						title="Frequently Asked Questions"
+						subtitle="Find answers to common questions about our services, process, and technology expertise."
+						faqItems={faqItems}
+					/>
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<div className="flex items-center justify-center py-5 lg:col-span-7">
+						<ContactForm />
+					</div>
+				</ViewportLazy>
+				<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+				<ViewportLazy>
+					<InstagramEmbed />
+				</ViewportLazy>
+			</>
+		</ExitIntentBoundary>
 	);
 };
 

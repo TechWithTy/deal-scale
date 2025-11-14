@@ -30,6 +30,9 @@ export async function getLatestBeehiivPosts(
 	opts?: number | BeehiivPostsOptions,
 ): Promise<BeehiivPost[]> {
 	try {
+		const shouldLogDebug =
+			process.env.NODE_ENV !== "production" &&
+			process.env.BEEHIIV_DEBUG !== "false";
 		const isServer = typeof window === "undefined";
 		const baseUrl = getBaseUrl();
 		const apiPath = "/api/beehiiv/posts";
@@ -56,7 +59,10 @@ export async function getLatestBeehiivPosts(
 			? `${baseUrl}${apiPath}${qs ? `?${qs}` : ""}`
 			: `${apiPath}${qs ? `?${qs}` : ""}`;
 
-		console.log("[getLatestBeehiivPosts] Fetching from:", url); // * Debug: log which URL is being fetched
+		if (shouldLogDebug) {
+			// eslint-disable-next-line no-console
+			console.log("[getLatestBeehiivPosts] Fetching from:", url);
+		}
 
 		const res = await fetch(url, {
 			// Let Next.js cache per unique query using route's revalidate
@@ -68,40 +74,50 @@ export async function getLatestBeehiivPosts(
 
 		if (!res.ok) {
 			const errorText = await res.text().catch(() => "No error details");
-			console.error(
-				`[getLatestBeehiivPosts] Failed to fetch posts (${res.status}):`,
-				errorText,
-			);
+			if (shouldLogDebug) {
+				// eslint-disable-next-line no-console
+				console.error(
+					`[getLatestBeehiivPosts] Failed to fetch posts (${res.status}):`,
+					errorText,
+				);
+			}
 			return [];
 		}
 
 		const data = await res.json().catch((err) => {
-			console.error(
-				"[getLatestBeehiivPosts] Failed to parse JSON response:",
-				err,
-			);
+			if (shouldLogDebug) {
+				// eslint-disable-next-line no-console
+				console.error(
+					"[getLatestBeehiivPosts] Failed to parse JSON response:",
+					err,
+				);
+			}
 			return { data: [] };
 		});
 
 		const posts = Array.isArray(data.data) ? data.data : [];
 
 		// Debug: show fetched posts summary for ALL posts (id, title, published_at)
-		try {
-			const summary = posts.map((p: any) => ({
-				id: p?.id,
-				title: p?.title,
-				published_at:
-					p?.published_at ?? p?.publish_date ?? p?.displayed_date ?? null,
-			}));
-			console.log(
-				`[getLatestBeehiivPosts] Received ${posts.length} post(s). Full summary:`,
-				summary,
-			);
-		} catch (logErr) {
-			console.warn(
-				"[getLatestBeehiivPosts] Failed to log posts summary:",
-				logErr,
-			);
+		if (shouldLogDebug) {
+			try {
+				const summary = posts.map((p: any) => ({
+					id: p?.id,
+					title: p?.title,
+					published_at:
+						p?.published_at ?? p?.publish_date ?? p?.displayed_date ?? null,
+				}));
+				// eslint-disable-next-line no-console
+				console.log(
+					`[getLatestBeehiivPosts] Received ${posts.length} post(s). Full summary:`,
+					summary,
+				);
+			} catch (logErr) {
+				// eslint-disable-next-line no-console
+				console.warn(
+					"[getLatestBeehiivPosts] Failed to log posts summary:",
+					logErr,
+				);
+			}
 		}
 		// If legacy numeric limit was supplied, slice on client as a fallback
 		if (typeof opts === "number" && Number.isFinite(opts)) {
@@ -109,7 +125,10 @@ export async function getLatestBeehiivPosts(
 		}
 		return posts;
 	} catch (err) {
-		console.error("[getLatestBeehiivPosts] Unexpected error:", err);
+		if (process.env.NODE_ENV !== "production") {
+			// eslint-disable-next-line no-console
+			console.error("[getLatestBeehiivPosts] Unexpected error:", err);
+		}
 		return [];
 	}
 }

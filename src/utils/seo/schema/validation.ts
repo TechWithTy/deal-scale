@@ -20,6 +20,16 @@ const postalAddressSchema = z.object({
 	addressCountry: z.string().optional(),
 });
 
+const organizationReferenceSchema = z.object({
+	"@type": z.literal("Organization"),
+	"@id": z.string().min(1).optional(),
+	name: z.string().min(1),
+	url: z.string().url(),
+	description: z.string().optional(),
+	logo: z.string().url().optional(),
+	sameAs: z.array(z.string().url()).optional(),
+});
+
 export const organizationSchema = z.object({
 	"@context": schemaContext,
 	"@type": z.literal("Organization"),
@@ -32,6 +42,7 @@ export const organizationSchema = z.object({
 	logo: z.string().url(),
 	contactPoint: z.array(contactPointSchema).min(1),
 	address: postalAddressSchema.optional(),
+	member: z.array(organizationReferenceSchema).optional(),
 });
 
 const searchActionSchema = z.object({

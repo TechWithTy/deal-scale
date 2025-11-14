@@ -11,12 +11,56 @@
         "compilerOptions": {
                 "baseUrl": ".",
                 "paths": {
-                        "@/*": ["./src/*"],
+                        "@/*": [
+                                "./src/*"
+                        ],
                         "@external/dynamic-hero": [
                                 "./src/components/dynamic-hero/src/index.ts"
                         ],
                         "@external/dynamic-hero/*": [
                                 "./src/components/dynamic-hero/src/*"
+                        ],
+                        "shared": [
+                                "./external/use-exit-intent-remastered/apps/web/src/shared/index.ts"
+                        ],
+                        "shared/*": [
+                                "./external/use-exit-intent-remastered/apps/web/src/shared/*"
+                        ],
+                        "styles": [
+                                "./external/use-exit-intent-remastered/apps/web/src/styles/index.ts"
+                        ],
+                        "styles/*": [
+                                "./external/use-exit-intent-remastered/apps/web/src/styles/*"
+                        ],
+                        "components": [
+                                "./external/use-exit-intent-remastered/apps/web/src/components/index.ts"
+                        ],
+                        "components/*": [
+                                "./external/use-exit-intent-remastered/apps/web/src/components/*"
+                        ],
+                        "hooks": [
+                                "./external/use-exit-intent-remastered/apps/web/src/hooks/index.ts"
+                        ],
+                        "hooks/*": [
+                                "./external/use-exit-intent-remastered/apps/web/src/hooks/*"
+                        ],
+                        "modules": [
+                                "./external/use-exit-intent-remastered/apps/web/src/modules/index.ts"
+                        ],
+                        "modules/*": [
+                                "./external/use-exit-intent-remastered/apps/web/src/modules/*"
+                        ],
+                        "templates": [
+                                "./external/use-exit-intent-remastered/apps/web/src/templates/index.ts"
+                        ],
+                        "templates/*": [
+                                "./external/use-exit-intent-remastered/apps/web/src/templates/*"
+                        ],
+                        "@external/use-exit-intent": [
+                                "./external/use-exit-intent-remastered/packages/use-exit-intent/src/index.ts"
+                        ],
+                        "@external/use-exit-intent/*": [
+                                "./external/use-exit-intent-remastered/packages/use-exit-intent/src/*"
                         ]
                 },
                 "noImplicitAny": false,
@@ -26,7 +70,11 @@
                 "noUnusedLocals": false,
                 "strictNullChecks": false,
                 "target": "ES2017",
-                "lib": ["dom", "dom.iterable", "esnext"],
+                "lib": [
+                        "dom",
+                        "dom.iterable",
+                        "esnext"
+                ],
                 "strict": false,
                 "noEmit": true,
                 "incremental": true,
@@ -42,13 +90,6 @@
                         }
                 ]
         },
-        "include": [
-                "next-env.d.ts",
-                ".next/types/**/*.ts",
-                "**/*.ts",
-                "**/*.tsx",
-                "next.config.ts"
-        ],
         "exclude": [
                 "node_modules",
                 "**/__tests__/**",
@@ -58,13 +99,19 @@
                 "**/*.test.tsx",
                 "**/*.spec.ts",
                 "**/*.spec.tsx",
-		"src/testHelpers",
-		"tools",
+                "src/testHelpers",
+                "tools",
                 "tests",
-		"vitest.config.ts",
-		"vitest.setup.ts",
-		"vitest.setup-*.ts",
+                "vitest.config.ts",
+                "vitest.setup.ts",
+                "vitest.setup-*.ts",
                 "scripts",
                 "scripts/**/*"
+        ],
+        "include": [
+                "next-env.d.ts",
+                ".next/types/**/*.ts",
+                "**/*.ts",
+                "**/*.tsx"
         ]
 }

@@ -1,7 +1,7 @@
 import { NewsletterFooter } from "@/components/contact/newsletter/NewsletterFooter";
-import { Button } from "@/components/ui/button";
+import { FooterPersonaPrompt } from "./FooterPersonaPrompt";
+import { FooterBetaCta } from "./FooterBetaCta";
 import {
-	ArrowRight,
 	Facebook,
 	Github,
 	Instagram,
@@ -81,8 +81,8 @@ export const Footer: React.FC<FooterProps> = ({
 			<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
 
 			<div className="mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8">
-				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-					<div className="col-span-1 flex flex-col items-center text-center md:col-span-1 lg:col-span-1 lg:items-start lg:text-left">
+				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:items-center md:justify-items-center md:text-center lg:grid-cols-4 lg:items-start lg:justify-items-start lg:text-left lg:gap-6">
+					<div className="col-span-1 flex flex-col items-center text-center md:col-span-2 md:justify-center md:text-center lg:col-span-1 lg:items-start lg:text-left">
 						<div className="mb-4 flex w-full justify-center lg:justify-start">
 							<Link href="/" className="w-full max-w-[200px] lg:max-w-none">
 								{/* Show dark text logo on light mode */}
@@ -133,7 +133,7 @@ export const Footer: React.FC<FooterProps> = ({
 						</div>
 					</div>
 
-					<div className="text-center">
+					<div className="text-center md:col-span-2 lg:col-span-1">
 						<h3 className="mb-4 font-semibold text-lg">Quick Links</h3>
 						<ul className="space-y-3">
 							{quickLinks.map((link) => (
@@ -150,7 +150,7 @@ export const Footer: React.FC<FooterProps> = ({
 						</ul>
 					</div>
 
-					<div className="flex flex-col items-center text-center">
+					<div className="flex flex-col items-center text-center md:col-span-2 md:items-center md:text-center lg:col-span-1 lg:items-start lg:text-left">
 						<h3 className="mb-4 font-semibold text-lg">Get in Touch</h3>
 						<ul className="w-full space-y-3">
 							<li>
@@ -182,16 +182,13 @@ export const Footer: React.FC<FooterProps> = ({
 								</div>
 							</li>
 						</ul>
-						<div className="mt-4 flex w-full justify-center">
-							<Link href="/contact" className="flex w-full justify-center">
-								<Button className="flex items-center bg-gradient-to-r from-primary to-focus text-black transition-opacity hover:opacity-90 dark:text-white">
-									Become Beta-Tester <ArrowRight className="ml-2 h-4 w-4" />
-								</Button>
-							</Link>
+						<div className="mt-4 flex w-full justify-center lg:justify-start">
+							<FooterBetaCta className="w-full max-w-sm" />
 						</div>
+						<FooterPersonaPrompt className="mt-4 text-center md:mt-6 md:text-center lg:text-left" />
 					</div>
 
-					<div className="col-span-1 flex flex-col items-center md:col-span-2 lg:col-span-1">
+					<div className="col-span-1 flex flex-col items-center md:col-span-2 md:text-center lg:col-span-1">
 						<h3 className="mb-4 text-center font-semibold text-lg">
 							Subscribe to our newsletter
 						</h3>
@@ -201,11 +198,11 @@ export const Footer: React.FC<FooterProps> = ({
 					</div>
 				</div>
 
-				<div className="mt-12 flex flex-col items-center border-white/10 border-t pt-8 md:flex-row md:justify-between">
+				<div className="mt-12 flex flex-col items-center border-white/10 border-t pt-8 md:space-y-4 md:items-center lg:flex-row lg:justify-between lg:space-y-0">
 					<p className="mb-4 text-center text-black text-sm md:mb-0 dark:text-white/60">
 						&copy; {currentYear} {companyName}. All rights reserved.
 					</p>
-					<div className="flex flex-col space-y-2 sm:flex-row sm:space-x-6 sm:space-y-0">
+					<div className="flex flex-col space-y-2 sm:flex-row sm:flex-wrap sm:justify-center sm:space-x-4 sm:space-y-2 lg:space-y-0 lg:space-x-6 lg:justify-end">
 						<Link
 							href="/legal"
 							className="text-black text-sm hover:text-black dark:text-white dark:text-white/60"

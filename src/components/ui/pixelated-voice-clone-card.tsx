@@ -37,13 +37,52 @@ const CANVAS_CONFIG = {
 	dotScale: 0.9,
 	backgroundColor: "#000000",
 	dropoutStrength: 0.35,
-	distortionStrength: 3,
+	baseDistortionStrength: 3,
 	distortionRadius: 80,
 	followSpeed: 0.2,
 	jitterStrength: 4,
 	jitterSpeed: 4,
 	tintColor: "#FFFFFF",
 	tintStrength: 0.2,
+	autoAnimateSpeed: 0.14,
+	autoAnimateRadius: 320,
+};
+
+const CANVAS_ASPECT_RATIO = CANVAS_CONFIG.height / CANVAS_CONFIG.width;
+const MIN_CANVAS_WIDTH = 220;
+const MIN_CANVAS_HEIGHT = 320;
+
+type CanvasDimensions = {
+	width: number;
+	canvasHeight: number;
+	containerHeight: number;
+};
+
+const computeCanvasDimensions = (rawWidth: number): CanvasDimensions => {
+	const sanitizedWidth = Math.max(1, Math.round(rawWidth));
+	const clampedWidth = Math.min(CANVAS_CONFIG.width, sanitizedWidth);
+	const baseCanvasHeight = Math.max(
+		Math.round(clampedWidth * CANVAS_ASPECT_RATIO),
+		MIN_CANVAS_HEIGHT,
+	);
+	const responsiveBuffer =
+		clampedWidth >= 880
+			? 120
+			: clampedWidth >= 720
+				? 160
+				: clampedWidth >= 540
+					? 200
+					: 280;
+	const containerHeight = Math.max(
+		baseCanvasHeight + responsiveBuffer,
+		MIN_CANVAS_HEIGHT + responsiveBuffer,
+	);
+
+	return {
+		width: clampedWidth,
+		canvasHeight: baseCanvasHeight,
+		containerHeight,
+	};
 };
 
 export type PixelatedVoiceCloneCardProps = {
@@ -68,6 +107,7 @@ const PixelatedVoiceCloneCardComponent = ({
 	const [imageUploadError, setImageUploadError] = useState<string | null>(null);
 	const cardRef = useRef<HTMLDivElement | null>(null);
 	const containerRef = useRef<HTMLDivElement | null>(null);
+	const canvasWrapperRef = useRef<HTMLDivElement | null>(null);
 	const rafRef = useRef<number>();
 	const beforeAudioRef = useRef<HTMLAudioElement | null>(null);
 	const afterAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -87,6 +127,11 @@ const PixelatedVoiceCloneCardComponent = ({
 		null,
 	);
 	const isPlayingRef = useRef(false);
+	const [canvasSize, setCanvasSize] = useState<CanvasDimensions>(() =>
+		computeCanvasDimensions(MIN_CANVAS_WIDTH),
+	);
+	const [isCanvasAutoAnimating, setIsCanvasAutoAnimating] = useState(false);
+	const [distortionMultiplier, setDistortionMultiplier] = useState(1);
 
 	const applyTilt = useCallback((nextTilt: Tilt) => {
 		tiltRef.current = nextTilt;
@@ -172,6 +217,49 @@ const PixelatedVoiceCloneCardComponent = ({
 		return () => observer.disconnect();
 	}, [hasLoadedCanvas]);
 
+	useEffect(() => {
+		if (!hasLoadedCanvas) {
+			return;
+		}
+
+		const wrapper = canvasWrapperRef.current;
+		if (!wrapper) {
+			return;
+		}
+
+		const updateSize = (rawWidth: number | null | undefined) => {
+			if (!rawWidth || Number.isNaN(rawWidth) || rawWidth <= 0) {
+				return;
+			}
+
+			const nextDimensions = computeCanvasDimensions(rawWidth);
+			setCanvasSize((prev) =>
+				prev.width === nextDimensions.width &&
+				prev.canvasHeight === nextDimensions.canvasHeight &&
+				prev.containerHeight === nextDimensions.containerHeight
+					? prev
+					: nextDimensions,
+			);
+		};
+
+		const fallbackWidth = wrapper.clientWidth;
+		updateSize(fallbackWidth);
+
+		if (typeof ResizeObserver === "undefined") {
+			return;
+		}
+
+		const observer = new ResizeObserver((entries) => {
+			const widthFromEntry =
+				entries?.[0]?.contentRect?.width ?? wrapper.clientWidth;
+			updateSize(widthFromEntry);
+		});
+
+		observer.observe(wrapper);
+
+		return () => observer.disconnect();
+	}, [hasLoadedCanvas]);
+
 	const stopPlayback = useCallback(() => {
 		const before = beforeAudioRef.current;
 		const after = afterAudioRef.current;
@@ -214,6 +302,8 @@ const PixelatedVoiceCloneCardComponent = ({
 			audioInteractiveRef.current = false;
 			setIsInteractive(false);
 		}
+		setIsCanvasAutoAnimating(false);
+		setDistortionMultiplier(1);
 
 		if (process.env.NODE_ENV !== "production") {
 			console.debug("[PixelatedVoiceCloneCard] stopPlayback", {
@@ -247,6 +337,8 @@ const PixelatedVoiceCloneCardComponent = ({
 				after.currentTime = 0;
 				if (after.preload !== "auto") after.load();
 				await after.play();
+				setIsCanvasAutoAnimating(true);
+				setDistortionMultiplier(2.1);
 			} catch (error) {
 				console.error("Failed to transition to after audio", error, {
 					afterSrc: after.src,
@@ -311,6 +403,8 @@ const PixelatedVoiceCloneCardComponent = ({
 					"[PixelatedVoiceCloneCard] before track playback started",
 				);
 			}
+			setIsCanvasAutoAnimating(true);
+			setDistortionMultiplier(1.8);
 			isPlayingRef.current = true;
 			setIsPlaying(true);
 		} catch (error) {
@@ -324,6 +418,8 @@ const PixelatedVoiceCloneCardComponent = ({
 				audioInteractiveRef.current = false;
 				setIsInteractive(false);
 			}
+			setIsCanvasAutoAnimating(false);
+			setDistortionMultiplier(1);
 			setActiveTrack(null);
 		} finally {
 			setIsLoadingAudio(false);
@@ -334,11 +430,15 @@ const PixelatedVoiceCloneCardComponent = ({
 		stopPlayback();
 		audioInteractiveRef.current = false;
 		setIsInteractive(true);
+		setIsCanvasAutoAnimating(true);
+		setDistortionMultiplier(1.25);
 	}, [stopPlayback]);
 
 	const disableInteractiveView = useCallback(() => {
 		audioInteractiveRef.current = false;
 		setIsInteractive(false);
+		setIsCanvasAutoAnimating(false);
+		setDistortionMultiplier(1);
 	}, []);
 
 	useEffect(() => {
@@ -359,6 +459,8 @@ const PixelatedVoiceCloneCardComponent = ({
 			if (typeof result === "string") {
 				setCustomImageSrc(result);
 				setIsInteractive(true);
+				setIsCanvasAutoAnimating(true);
+				setDistortionMultiplier(1.1);
 				if (process.env.NODE_ENV !== "production") {
 					console.debug("[PixelatedVoiceCloneCard] custom image uploaded", {
 						size: file.size,
@@ -423,6 +525,8 @@ const PixelatedVoiceCloneCardComponent = ({
 		audioInteractiveRef.current = false;
 		setIsInteractive(false);
 		setActiveTrack(null);
+		setIsCanvasAutoAnimating(false);
+		setDistortionMultiplier(1);
 	}, []);
 
 	const resolvedImageSrc = customImageSrc ?? imageSrc;
@@ -431,7 +535,7 @@ const PixelatedVoiceCloneCardComponent = ({
 		<div
 			ref={containerRef}
 			className={cn(
-				"relative mx-auto flex max-w-5xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8",
+				"relative mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8",
 				className,
 			)}
 		>
@@ -451,31 +555,48 @@ const PixelatedVoiceCloneCardComponent = ({
 					willChange: "transform",
 				}}
 			>
-				<div className="relative overflow-hidden rounded-[26px]">
+				<div
+					ref={canvasWrapperRef}
+					className="relative overflow-hidden rounded-[26px] shadow-[0_25px_70px_-35px_rgba(56,189,248,0.75)] ring-1 ring-slate-900/10 dark:ring-white/10"
+					style={{ minHeight: canvasSize.containerHeight }}
+				>
+					<div className="pointer-events-none absolute inset-0 rounded-[26px] bg-gradient-to-br from-sky-500/10 via-transparent to-indigo-500/15 blur-sm" />
 					{hasLoadedCanvas ? (
-						<PixelatedCanvas
-							src={resolvedImageSrc}
-							width={CANVAS_CONFIG.width}
-							height={CANVAS_CONFIG.height}
-							cellSize={CANVAS_CONFIG.cellSize}
-							dotScale={CANVAS_CONFIG.dotScale}
-							shape="square"
-							backgroundColor={CANVAS_CONFIG.backgroundColor}
-							dropoutStrength={CANVAS_CONFIG.dropoutStrength}
-							interactive={isInteractive}
-							distortionStrength={CANVAS_CONFIG.distortionStrength}
-							distortionRadius={CANVAS_CONFIG.distortionRadius}
-							distortionMode="swirl"
-							followSpeed={CANVAS_CONFIG.followSpeed}
-							jitterStrength={CANVAS_CONFIG.jitterStrength}
-							jitterSpeed={CANVAS_CONFIG.jitterSpeed}
-							sampleAverage
-							tintColor={CANVAS_CONFIG.tintColor}
-							tintStrength={CANVAS_CONFIG.tintStrength}
-							className="h-full w-full rounded-3xl object-cover"
-						/>
+						<>
+							<PixelatedCanvas
+								src={resolvedImageSrc}
+								width={canvasSize.width}
+								height={canvasSize.canvasHeight}
+								cellSize={CANVAS_CONFIG.cellSize}
+								dotScale={CANVAS_CONFIG.dotScale}
+								shape="square"
+								backgroundColor={CANVAS_CONFIG.backgroundColor}
+								dropoutStrength={CANVAS_CONFIG.dropoutStrength}
+								interactive={isInteractive}
+								distortionStrength={
+									CANVAS_CONFIG.baseDistortionStrength * distortionMultiplier
+								}
+								distortionRadius={CANVAS_CONFIG.distortionRadius}
+								distortionMode="swirl"
+								followSpeed={CANVAS_CONFIG.followSpeed}
+								jitterStrength={CANVAS_CONFIG.jitterStrength}
+								jitterSpeed={CANVAS_CONFIG.jitterSpeed}
+								sampleAverage
+								tintColor={CANVAS_CONFIG.tintColor}
+								tintStrength={CANVAS_CONFIG.tintStrength}
+								autoAnimate={isCanvasAutoAnimating}
+								autoAnimateSpeed={CANVAS_CONFIG.autoAnimateSpeed}
+								autoAnimateRadius={CANVAS_CONFIG.autoAnimateRadius}
+								responsive
+								className="h-full w-full rounded-3xl object-cover"
+							/>
+							<div className="pointer-events-none absolute inset-0 rounded-[26px] border border-white/10 mix-blend-screen" />
+						</>
 					) : (
-						<div className="h-full w-full rounded-3xl bg-gradient-to-br from-slate-100 via-slate-50 to-transparent dark:from-slate-900/60 dark:via-slate-900/30 dark:to-transparent" />
+						<div
+							className="h-full w-full rounded-3xl bg-gradient-to-br from-slate-100 via-slate-50 to-transparent dark:from-slate-900/60 dark:via-slate-900/30 dark:to-transparent"
+							style={{ minHeight: canvasSize.containerHeight }}
+						/>
 					)}
 
 					<PixelatedVoiceOverlay

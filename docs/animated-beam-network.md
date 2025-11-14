@@ -43,3 +43,5 @@ const Example = () => (
 
 Each integration circle exposes its label through `aria-label` and renders a visible caption beneath the badge, ensuring the animated beams remain screen-reader friendly.
 
+
+

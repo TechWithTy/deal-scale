@@ -7,6 +7,7 @@ import {
 	HeroHeadline,
 	HeroVideoPreview,
 	type HeroVideoPreviewHandle,
+	useHeroVideoConfig,
 } from "@external/dynamic-hero";
 import { useInView } from "motion/react";
 
@@ -28,9 +29,9 @@ import {
 	LIVE_PRIMARY_CTA,
 	LIVE_SECONDARY_CTA,
 	LIVE_SOCIAL_PROOF,
-	LIVE_VIDEO,
 	PERSONA_GOAL,
 	PERSONA_LABEL,
+	LIVE_VIDEO,
 } from "./_config";
 
 const SCROLL_SECTIONS: ScrollProgressSection[] = [
@@ -96,6 +97,8 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 			observedSectionsRef.current = [];
 		};
 	}, [sections]);
+
+	const heroVideo = useHeroVideoConfig(LIVE_VIDEO);
 
 	const handlePreviewDemo = useCallback(() => {
 		const node = videoSectionRef.current;
@@ -192,7 +195,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 						>
 							<HeroVideoPreview
 								ref={videoPreviewRef}
-								video={LIVE_VIDEO}
+								video={heroVideo}
 								thumbnailAlt="Live dynamic hero video preview"
 							/>
 						</div>

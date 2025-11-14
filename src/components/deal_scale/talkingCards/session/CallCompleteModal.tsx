@@ -32,7 +32,7 @@ export const CallCompleteModal = ({
 	isOpen,
 	onClose: originalOnClose,
 	title = "Ready to start Scaling Your Deals?",
-	description = "Sign Up To Become A Beta Tester or Pilot Member",
+	description = "Request Founders Circle or Pilot access to unlock early onboarding perks and personalized workflows.",
 	isLoading: externalLoading = false,
 	variant = "complete",
 }: CallCompleteModalProps) => {
@@ -81,7 +81,8 @@ export const CallCompleteModal = ({
 	const content = {
 		complete: {
 			title: "Ready to start Scaling Your Deals?",
-			description: "Sign Up To Become A Beta Tester or Pilot Member",
+			description:
+				"Request Founders Circle or Pilot access to unlock early onboarding perks and personalized workflows.",
 		},
 		transfer: {
 			title: "Transferring you now...",

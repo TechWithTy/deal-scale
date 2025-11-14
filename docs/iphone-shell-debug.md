@@ -39,3 +39,5 @@
 - Safelist critical Tailwind classes (e.g., `rounded-[3.25rem]`, `shadow-[0_35px_80px_rgba(15,23,42,0.55)]`) in `tailwind.config` to avoid future purges.
 - Consider extracting `PhoneShell` into a shared UI module so multiple sections can reuse it and tests can target a single component.
 - Add a visual regression test for the hero section to catch future layout regressions automatically.
+
+

@@ -18,6 +18,8 @@ const eventFixture = {
 	category: "Webinar",
 	location: "Online",
 	thumbnailImage: "https://example.com/event.jpg",
+	accessType: "external" as const,
+	attendanceType: "webinar" as const,
 };
 
 const fetchEventsMock = vi.fn().mockResolvedValue([eventFixture]);
