@@ -2,6 +2,15 @@ import { defineConfig } from "vitest/config";
 import path from "node:path";
 import react from "@vitejs/plugin-react-swc";
 
+// Temporary relaxed coverage thresholds while we diagnose failing suites.
+// Increase or remove once core tests are restored.
+const requestedCoverageFloor = Number.parseFloat(
+	process.env.VITEST_MIN_COVERAGE ?? "5",
+);
+const coverageFloor = Number.isFinite(requestedCoverageFloor)
+	? requestedCoverageFloor
+	: 5;
+
 export default defineConfig({
 	plugins: [react()],
 	test: {
@@ -16,6 +25,12 @@ export default defineConfig({
 		testTimeout: 30000,
 		coverage: {
 			provider: "v8",
+			thresholds: {
+				lines: coverageFloor,
+				functions: coverageFloor,
+				branches: coverageFloor,
+				statements: coverageFloor,
+			},
 		},
 	},
 	resolve: {
@@ -68,4 +83,3 @@ export default defineConfig({
 		],
 	},
 });
-

@@ -86,11 +86,19 @@
 	}
 
 	.dark body {
-		background: linear-gradient(180deg, rgba(15, 23, 42, 1) 0%, rgba(8, 15, 31, 1) 100%);
+		background: linear-gradient(
+			180deg,
+			rgba(15, 23, 42, 1) 0%,
+			rgba(8, 15, 31, 1) 100%
+		);
 	}
 
 	.light body {
-		background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(240, 240, 240, 1) 100%);
+		background: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 1) 0%,
+			rgba(240, 240, 240, 1) 100%
+		);
 	}
 	.theme {
 		--animate-aurora: aurora 8s ease-in-out infinite alternate;

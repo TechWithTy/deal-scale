@@ -29,8 +29,3 @@ describe("buildPricingJsonLd", () => {
 		expect(selfHosted).toBeDefined();
 	});
 });
-
-
-
-
-

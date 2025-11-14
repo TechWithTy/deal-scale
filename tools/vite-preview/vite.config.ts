@@ -15,7 +15,10 @@ export default defineConfig({
 	resolve: {
 		alias: [
 			{ find: "@", replacement: srcDir },
-			{ find: "@external/dynamic-hero", replacement: path.join(dynamicHeroSrc) },
+			{
+				find: "@external/dynamic-hero",
+				replacement: path.join(dynamicHeroSrc),
+			},
 			{
 				find: /^@external\/dynamic-hero\/(.*)$/u,
 				replacement: path.join(dynamicHeroSrc, "$1"),
@@ -57,8 +60,3 @@ export default defineConfig({
 		emptyOutDir: true,
 	},
 });
-
-
-
-
-

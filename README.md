@@ -74,6 +74,14 @@ For detailed documentation, please visit our [Documentation Portal](https://docs
 
 This is proprietary software. All rights reserved. Unauthorized copying, modification, distribution, display, or use of this software, via any medium is strictly prohibited. For licensing inquiries, please contact us at [sam.scalerg@dealscale.io](mailto:sam.scalerg@dealscale.io).
 
+### Content Feeds
+
+- [`https://dealscale.io/rss.xml`](https://dealscale.io/rss.xml) — proxied Beehiiv newsletter feed.
+- [`https://dealscale.io/rss/youtube.xml`](https://dealscale.io/rss/youtube.xml) — proxied YouTube channel feed.
+- [`https://dealscale.io/rss/hybrid.xml`](https://dealscale.io/rss/hybrid.xml) — combined blog + video feed.
+- [`https://dealscale.io/videos/sitemap.xml`](https://dealscale.io/videos/sitemap.xml) — generated video sitemap. Run `pnpm run sitemap:videos` to refresh.
+- See [`docs/rss-feeds.md`](docs/rss-feeds.md) for implementation details and maintenance notes.
+
 ## 📞 Contact
 
 For business inquiries or support, please [contact our team](mailto:supportg@dealscale.io).

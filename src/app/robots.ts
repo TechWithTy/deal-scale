@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const CANONICAL_HOST = "https://dealscale.io";
+const CANONICAL_ORIGIN = "https://dealscale.io";
 const ALLOWED_ROUTES = [
 	"/",
 	"/blogs",
@@ -38,11 +38,15 @@ function createRule(userAgent: string, crawlDelay?: number): RobotsRule {
 
 export default function robots(): MetadataRoute.Robots {
 	return {
-		host: CANONICAL_HOST,
-		sitemap: [`${CANONICAL_HOST}/sitemap.xml`],
+		sitemap: [`${CANONICAL_ORIGIN}/sitemap.xml`],
 		rules: [
 			createRule("*"),
 			createRule("Googlebot"),
+			createRule("Applebot"),
+			createRule("bingbot"),
+			createRule("CCBot"),
+			createRule("DuckDuckBot"),
+			createRule("AppleNewsBot"),
 			createRule("GPTBot", 10),
 			createRule("PerplexityBot", 10),
 			createRule("ClaudeBot", 10),

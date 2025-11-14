@@ -41,7 +41,3 @@ export function Globe({
 		/>
 	);
 }
-
-
-
-

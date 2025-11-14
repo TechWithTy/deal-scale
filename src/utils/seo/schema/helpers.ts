@@ -23,37 +23,70 @@ export const buildSocialProfiles = (): string[] => {
 	const { socialLinks } = companyData;
 	// Include careers page URL in sameAs for entity linking
 	const CAREERS_URL = "https://dealscale.zohorecruit.com/jobs/Careers";
+	const YOUTUBE_FEED =
+		"https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ";
+
+	const authorityLinks = [
+		"https://www.g2.com/products/dealscale",
+		"https://www.producthunt.com/products/dealscale",
+		"https://www.crunchbase.com/organization/deal-scale",
+		"https://www.linkedin.com/company/dealscale",
+		"https://x.com/dealscaleio",
+		"https://www.facebook.com/dealscale",
+		buildAbsoluteUrl("/rss/hybrid.xml"),
+		socialLinks.youtube,
+		YOUTUBE_FEED,
+		buildAbsoluteUrl("/blog"),
+		buildAbsoluteUrl("/rss.xml"),
+	];
 
 	const socialUrls = [
 		socialLinks.linkedin,
 		socialLinks.facebook,
 		socialLinks.instagram,
+		socialLinks.youtube,
 		socialLinks.mediumUsername && socialLinks.mediumUsername.trim().length > 0
 			? `https://medium.com/@${socialLinks.mediumUsername.trim()}`
 			: undefined,
 		CAREERS_URL, // Add careers URL to Organization schema sameAs array
-	].filter((link): link is string => Boolean(link));
+		...authorityLinks,
+	].filter((link): link is string => Boolean(link?.trim()));
 
-	return socialUrls;
+	const deduped: string[] = [];
+	const seen = new Set<string>();
+
+	for (const url of socialUrls) {
+		const trimmed = url.trim();
+		const normalized = trimmed.replace(/\/+$/, "").toLowerCase();
+
+		if (seen.has(normalized)) {
+			continue;
+		}
+
+		seen.add(normalized);
+		deduped.push(trimmed);
+	}
+
+	return deduped;
 };
 
 export const buildContactPoints = (): ContactPointSchema[] => {
 	const points: ContactPointSchema[] = [];
 
-	if (companyData.contactInfo.phone) {
+	if (companyData.contactInfo.email) {
 		points.push({
 			"@type": "ContactPoint",
-			contactType: "customer service",
-			telephone: companyData.contactInfo.phone,
+			contactType: "Customer Support",
+			email: companyData.contactInfo.email,
 			availableLanguage: ["en"],
 		});
 	}
 
-	if (companyData.contactInfo.email) {
+	if (companyData.contactInfo.phone) {
 		points.push({
 			"@type": "ContactPoint",
-			contactType: "sales",
-			email: companyData.contactInfo.email,
+			contactType: "Sales",
+			telephone: companyData.contactInfo.phone,
 			availableLanguage: ["en"],
 		});
 	}

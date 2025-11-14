@@ -36,6 +36,7 @@ export type AggregateRatingSchema = {
 	reviewCount: number;
 	bestRating?: number;
 	worstRating?: number;
+	ratingExplanation?: string;
 };
 
 export type OrganizationSchema = {
@@ -47,6 +48,20 @@ export type OrganizationSchema = {
 	url: string;
 	description: string;
 	sameAs: string[];
+	alternateName?: string | string[];
+	foundingDate?: string;
+	founder?: {
+		"@type": "Person";
+		name: string;
+		jobTitle?: string;
+		url?: string;
+	};
+	knowsAbout?: string[];
+	brand?: {
+		"@type": "Brand";
+		name: string;
+		logo?: string;
+	};
 	logo: string;
 	image?: string | string[];
 	contactPoint: ContactPointSchema[];
@@ -70,6 +85,14 @@ export type WebSiteSchema = {
 		target: string;
 		"query-input": string;
 	};
+	hasPart?: WebPageReference[];
+};
+
+export type WebPageReference = {
+	"@type": "WebPage" | "CreativeWork";
+	"@id": string;
+	url: string;
+	name?: string;
 };
 
 export type ServiceSchemaInput = {
@@ -158,6 +181,11 @@ export type ReviewSchema = {
 		"@type": "Organization" | "Person";
 		name: string;
 		"@id"?: string;
+	};
+	publisher?: {
+		"@type": "Organization" | "Person";
+		name: string;
+		url?: string;
 	};
 	reviewRating?: ReviewRatingSchema;
 };
@@ -290,4 +318,45 @@ export type BlogSchema = {
 	publisher: {
 		"@id": string;
 	};
+};
+
+export type SoftwareApplicationSchema = {
+	"@context": SchemaContext;
+	"@type": "SoftwareApplication";
+	"@id": string;
+	name: string;
+	description?: string;
+	url: string;
+	image?: string | string[];
+	applicationCategory: string;
+	operatingSystem: string;
+	offers: OfferSchema;
+	aggregateRating?: AggregateRatingSchema;
+	review?: ReviewSchema[];
+	sameAs?: string[];
+	publisher: {
+		"@id": string;
+	};
+};
+
+export type DatasetSchema = {
+	"@context": SchemaContext;
+	"@type": "Dataset";
+	"@id": string;
+	name: string;
+	description: string;
+	url: string;
+	license?: string;
+	keywords?: string[];
+	provider: {
+		"@type": "Organization";
+		"@id": string;
+		name: string;
+		url: string;
+	};
+	distribution?: Array<{
+		"@type": "DataDownload";
+		contentUrl: string;
+		encodingFormat?: string;
+	}>;
 };

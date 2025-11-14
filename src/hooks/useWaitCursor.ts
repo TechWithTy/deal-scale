@@ -22,8 +22,3 @@ export function useWaitCursor(active: boolean) {
 		};
 	}, [active]);
 }
-
-
-
-
-

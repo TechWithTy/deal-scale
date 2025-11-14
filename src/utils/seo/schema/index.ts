@@ -7,6 +7,8 @@ export {
 	buildFAQPageSchema,
 	buildServiceSchema,
 	buildWebSiteSchema,
+	buildSoftwareApplicationSchema,
+	buildDatasetSchema,
 } from "./builders";
 export { buildActivityFeedSchema } from "./activityFeed";
 export {
@@ -48,6 +50,7 @@ export type {
 	BlogSchema,
 	BlogPostingSchema,
 	CreativeWorkSchema,
+	DatasetSchema,
 	FAQPageSchema,
 	ProductSchema,
 	ProductSchemaInput,
@@ -56,6 +59,8 @@ export type {
 	ServiceSchemaInput,
 	AggregateRatingSchema,
 	WebSiteSchema,
+	SoftwareApplicationSchema,
+	WebPageReference,
 	ContactPointSchema,
 	PostalAddressSchema,
 	SchemaContext,

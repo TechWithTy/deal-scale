@@ -13,16 +13,16 @@ const createBundleAnalyzer = (): ((config: NextConfig) => NextConfig) => {
 	}
 
 	try {
-		const analyzer = require("@next/bundle-analyzer") as (
-			options: { enabled: boolean }
-		) => (config: NextConfig) => NextConfig;
+		const analyzer = require("@next/bundle-analyzer") as (options: {
+			enabled: boolean;
+		}) => (config: NextConfig) => NextConfig;
 
 		return analyzer({
 			enabled: true,
 		});
 	} catch (error) {
 		console.warn(
-			"Skipping bundle analyzer because '@next/bundle-analyzer' is not installed."
+			"Skipping bundle analyzer because '@next/bundle-analyzer' is not installed.",
 		);
 		return (config) => config;
 	}
@@ -51,8 +51,9 @@ const nextConfig: NextConfig = {
 					}
 				: false,
 	},
-	// Swc minification is enabled by default in Next.js
-	// Additional optimizations handled via experimental flags above
+	// SWC minification is enabled by default in Next.js
+	// Browser targeting is handled via browserslist in package.json
+	// which targets modern browsers (Chrome 90+, Edge 90+, Firefox 90+, Safari 15+)
 	env: {
 		STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
@@ -123,7 +124,22 @@ const nextConfig: NextConfig = {
 			},
 			{
 				source: "/rss",
-				destination: "https://rss.beehiiv.com/feeds/th0QQipR7J.xml",
+				destination: "/rss.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss.xml",
+				destination: "/api/rss.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/youtube.xml",
+				destination: "/api/rss/youtube.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/hybrid.xml",
+				destination: "/api/rss/hybrid.xml",
 				permanent: true,
 			},
 			{

@@ -1,1 +1,15 @@
+
+
+# Run test suite with coverage. Abort commit on failure.
+pnpm run test:coverage || exit 1
+
+# Execute security scans (Snyk + OWASP). Abort commit on failure.
+pnpm run security:scan || exit 1
+
+# Archive coverage, security, and Lighthouse reports into timestamped history folders.
+pnpm run archive:coverage
+pnpm run archive:security
+pnpm run archive:reports
+
+# Run lint-staged last to format/stage code changes.
 npx lint-staged

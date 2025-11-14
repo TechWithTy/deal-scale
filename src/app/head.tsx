@@ -2,11 +2,15 @@ import {
 	SchemaInjector,
 	buildOrganizationSchema,
 	buildWebSiteSchema,
+	buildDatasetSchema,
+	buildSoftwareApplicationSchema,
 } from "@/utils/seo/schema";
 
 export default function Head() {
 	const organizationSchema = buildOrganizationSchema();
 	const webSiteSchema = buildWebSiteSchema();
+	const softwareApplicationSchema = buildSoftwareApplicationSchema();
+	const datasetSchema = buildDatasetSchema();
 
 	return (
 		<>
@@ -27,6 +31,8 @@ export default function Head() {
 			/>
 			<SchemaInjector schema={organizationSchema} />
 			<SchemaInjector schema={webSiteSchema} />
+			<SchemaInjector schema={softwareApplicationSchema} />
+			<SchemaInjector schema={datasetSchema} />
 		</>
 	);
 }

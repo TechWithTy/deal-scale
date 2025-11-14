@@ -42,8 +42,7 @@ const HeroAuroraDynamic = dynamic(
 );
 
 const HeroVideoPreviewDynamic = dynamic(
-	() =>
-		import("@external/dynamic-hero").then((mod) => mod.HeroVideoPreview),
+	() => import("@external/dynamic-hero").then((mod) => mod.HeroVideoPreview),
 	{
 		ssr: false,
 		loading: () => (
@@ -63,9 +62,9 @@ function HeroVideoPreviewSkeleton({
 	alt: string;
 }) {
 	return (
-		<div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-[32px] border border-border/40 bg-background/80 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.45)] backdrop-blur-lg ring-1 ring-border/30">
+		<div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-[32px] border border-border/40 bg-background/80 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.45)] ring-1 ring-border/30 backdrop-blur-lg">
 			<div className="relative w-full overflow-hidden rounded-[28px] border border-border/30 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.4)]">
-				<div className="aspect-video relative w-full">
+				<div className="relative aspect-video w-full">
 					<Image
 						src={posterSrc}
 						alt={alt}
@@ -261,4 +260,3 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 		</div>
 	);
 }
-

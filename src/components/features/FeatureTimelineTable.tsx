@@ -133,7 +133,3 @@ export function FeatureTimelineTable({
 		</Card>
 	);
 }
-
-
-
-

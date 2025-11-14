@@ -1,0 +1,51 @@
+name: IndexNow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initialize IndexNow secret
+        shell: bash
+        run: |
+          if [ -n "${{ secrets.PRIVATE_INDEX_NOW_KEY }}" ]; then
+            echo "INDEXNOW_SECRET_PRESENT=true" >> "$GITHUB_ENV"
+            echo "INDEXNOW_KEY=${{ secrets.PRIVATE_INDEX_NOW_KEY }}" >> "$GITHUB_ENV"
+          else
+            echo "INDEXNOW_SECRET_PRESENT=false" >> "$GITHUB_ENV"
+          fi
+
+      - uses: actions/checkout@v4
+        if: env.INDEXNOW_SECRET_PRESENT == 'true'
+
+      - name: Skip IndexNow submission (secret missing)
+        if: env.INDEXNOW_SECRET_PRESENT != 'true'
+        run: echo "INDEXNOW_KEY secret is missing; skipping IndexNow notification."
+
+      - name: Build payload
+        if: env.INDEXNOW_SECRET_PRESENT == 'true'
+        shell: bash
+        run: |
+          python scripts/indexnow_payload.py
+
+      - name: Notify IndexNow
+        if: env.INDEXNOW_SECRET_PRESENT == 'true'
+        run: |
+          STATUS=$(curl -sS -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json" \
+            --data @payload.json \
+            -o response.json -w "%{http_code}")
+          echo "IndexNow HTTP status: $STATUS"
+          echo "Response:"
+          cat response.json
+
+          if [ "$STATUS" -ge 400 ]; then
+            echo "IndexNow submission failed."
+            exit 1
+          fi
+

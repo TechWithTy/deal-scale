@@ -18,9 +18,9 @@ type AnalyticsConsentValue = {
 	revokeConsent: () => void;
 };
 
-const AnalyticsConsentContext = createContext<AnalyticsConsentValue | undefined>(
-	undefined,
-);
+const AnalyticsConsentContext = createContext<
+	AnalyticsConsentValue | undefined
+>(undefined);
 
 interface AnalyticsConsentProviderProps {
 	children: ReactNode;
@@ -94,4 +94,3 @@ export function useAnalyticsConsent(): AnalyticsConsentValue {
 	}
 	return context;
 }
-

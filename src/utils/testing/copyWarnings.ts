@@ -43,11 +43,7 @@ export const collectCopyWarnings = (
 				});
 			}
 
-			if (
-				copy.fears &&
-				Array.isArray(copy.fears) &&
-				copy.fears.length === 0
-			) {
+			if (copy.fears && Array.isArray(copy.fears) && copy.fears.length === 0) {
 				inferredWarnings.push({
 					code: "empty-fear-list",
 					message: `Variant "${variant.name ?? `#${index + 1}`}" defines an empty fears list.`,
@@ -87,8 +83,3 @@ export const collectCopyWarnings = (
 		};
 	});
 };
-
-
-
-
-

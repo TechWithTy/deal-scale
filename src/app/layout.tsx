@@ -9,10 +9,14 @@ import {
 	SchemaInjector,
 	buildOrganizationSchema,
 	buildWebSiteSchema,
+	buildDatasetSchema,
+	buildSoftwareApplicationSchema,
 } from "@/utils/seo/schema";
 
 const ORGANIZATION_SCHEMA = buildOrganizationSchema();
 const WEBSITE_SCHEMA = buildWebSiteSchema();
+const SOFTWARE_APPLICATION_SCHEMA = buildSoftwareApplicationSchema();
+const DATASET_SCHEMA = buildDatasetSchema();
 
 const analyticsResult = getAnalyticsConfig();
 
@@ -41,6 +45,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			<body className="theme-cyberoni min-h-screen bg-background font-sans antialiased">
 				<SchemaInjector schema={ORGANIZATION_SCHEMA} />
 				<SchemaInjector schema={WEBSITE_SCHEMA} />
+				<SchemaInjector schema={SOFTWARE_APPLICATION_SCHEMA} />
+				<SchemaInjector schema={DATASET_SCHEMA} />
 				<AppProviders
 					clarityProjectId={clarityProjectId}
 					zohoWidgetCode={zohoWidgetCode}

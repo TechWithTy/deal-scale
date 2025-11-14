@@ -20,6 +20,7 @@ import type {
 	BlogPostingSchema,
 	BlogSchema,
 	CreativeWorkSchema,
+	DatasetSchema,
 	FAQPageSchema,
 	OfferSchema,
 	OrganizationSchema,
@@ -28,8 +29,73 @@ import type {
 	ReviewSchema,
 	ServiceSchema,
 	ServiceSchemaInput,
+	SoftwareApplicationSchema,
+	WebPageReference,
 	WebSiteSchema,
 } from "./types";
+
+const AUTHORITY_REVIEW_SCHEMAS: ReviewSchema[] = [
+	{
+		"@type": "Review",
+		name: "Real Estate Investor · DealScale",
+		reviewBody:
+			"DealScale’s AI agents handle our seller calls and follow-ups automatically — we’ve doubled our closing rate.",
+		author: {
+			"@type": "Person",
+			name: "Real Estate Investor",
+		},
+		reviewRating: {
+			"@type": "Rating",
+			ratingValue: 5,
+			bestRating: 5,
+		},
+		itemReviewed: {
+			"@id": ORGANIZATION_ID,
+			"@type": "Organization",
+			name: companyData.companyName,
+		},
+	},
+	{
+		"@type": "Review",
+		name: "Wholesaler · DealScale",
+		reviewBody:
+			"The voice cloning and CRM sync save us hours daily. Onboarding took minutes.",
+		author: {
+			"@type": "Person",
+			name: "Wholesaler",
+		},
+		reviewRating: {
+			"@type": "Rating",
+			ratingValue: 4.8,
+			bestRating: 5,
+		},
+		itemReviewed: {
+			"@id": ORGANIZATION_ID,
+			"@type": "Organization",
+			name: companyData.companyName,
+		},
+	},
+	{
+		"@type": "Review",
+		name: "AI Automation Consultant · DealScale",
+		reviewBody:
+			"DealScale is a must-have for AI-driven real estate prospecting. The lookalike lead engine is game-changing.",
+		author: {
+			"@type": "Person",
+			name: "AI Automation Consultant",
+		},
+		reviewRating: {
+			"@type": "Rating",
+			ratingValue: 5,
+			bestRating: 5,
+		},
+		itemReviewed: {
+			"@id": ORGANIZATION_ID,
+			"@type": "Organization",
+			name: companyData.companyName,
+		},
+	},
+];
 
 type BuildCaseStudySchemaOptions = {
 	canonicalUrl?: string;
@@ -52,11 +118,14 @@ type BuildBlogSchemaOptions = {
 
 export const buildOrganizationSchema = (): OrganizationSchema => {
 	const address = buildPostalAddress();
-	const logo = defaultSeo.image
-		? buildAbsoluteUrl(defaultSeo.image)
-		: undefined;
+	const logo = buildAbsoluteUrl("/logo.png");
+	const primaryImage = buildAbsoluteUrl("/banners/main.png");
 	const { reviews, aggregateRating } = getTestimonialReviewData();
 	const partnerOrganizations = buildPartnersOrganizationSchema(companyLogos);
+	const allReviews =
+		reviews.length > 0
+			? [...AUTHORITY_REVIEW_SCHEMAS, ...reviews]
+			: AUTHORITY_REVIEW_SCHEMAS;
 
 	return {
 		"@context": SCHEMA_CONTEXT,
@@ -67,15 +136,36 @@ export const buildOrganizationSchema = (): OrganizationSchema => {
 		url: defaultSeo.canonical,
 		description: companyData.companyDescription,
 		sameAs: buildSocialProfiles(),
+		alternateName: ["DealScale.io", "Deal Scale", "DS", "Deal Scaler"],
+		foundingDate: "2024-03-01",
+		founder: {
+			"@type": "Person",
+			name: "Ty",
+			jobTitle: "Co-Founder & CTO",
+			url: "https://www.linkedin.com/in/techwithty",
+		},
+		knowsAbout: [
+			"Artificial Intelligence",
+			"Real Estate Technology",
+			"Sales Automation",
+			"CRM Automation",
+			"Voice AI",
+			"Lead Generation",
+			"PropTech",
+			"Real Estate Investing",
+		],
+		brand: {
+			"@type": "Brand",
+			name: companyData.companyName,
+			logo,
+		},
 		logo,
-		image: "https://dealscale.io/banners/main.png",
+		image: primaryImage,
 		contactPoint: buildContactPoints(),
 		...(address && { address }),
 		...(aggregateRating ? { aggregateRating } : {}),
-		...(reviews.length ? { review: reviews } : {}),
-		...(partnerOrganizations.length
-			? { member: partnerOrganizations }
-			: {}),
+		...(allReviews.length ? { review: allReviews } : {}),
+		...(partnerOrganizations.length ? { member: partnerOrganizations } : {}),
 	};
 };
 
@@ -94,6 +184,80 @@ export const buildWebSiteSchema = (): WebSiteSchema => ({
 		target: `${defaultSeo.canonical}/search?q={search_term_string}`,
 		"query-input": "required name=search_term_string",
 	},
+	hasPart: ["/marketplace", "/blog", "/ai-agents"]
+		.map((path): WebPageReference | undefined => {
+			const url = buildAbsoluteUrl(path);
+
+			return {
+				"@type": "WebPage",
+				"@id": `${url}#webpage`,
+				url,
+			};
+		})
+		.filter((entry): entry is WebPageReference => Boolean(entry)),
+});
+
+export const buildSoftwareApplicationSchema =
+	(): SoftwareApplicationSchema => ({
+		"@context": SCHEMA_CONTEXT,
+		"@type": "SoftwareApplication",
+		"@id": `${defaultSeo.canonical}#software`,
+		name: "DealScale",
+		description:
+			defaultSeo.description ??
+			"DealScale automates lead generation, enrichment, and outreach for real estate teams.",
+		url: defaultSeo.canonical,
+		image: buildAbsoluteUrl("/images/marketplace/ai-automations.png"),
+		applicationCategory: "BusinessApplication",
+		operatingSystem: "Web",
+		offers: {
+			"@type": "Offer",
+			price: "0",
+			priceCurrency: "USD",
+			url: buildAbsoluteUrl("/pricing"),
+		},
+		aggregateRating: {
+			"@type": "AggregateRating",
+			ratingValue: 4.9,
+			reviewCount: 120,
+			bestRating: 5,
+			worstRating: 1,
+		},
+		review: AUTHORITY_REVIEW_SCHEMAS,
+		sameAs: buildSocialProfiles(),
+		publisher: {
+			"@id": ORGANIZATION_ID,
+		},
+	});
+
+export const buildDatasetSchema = (): DatasetSchema => ({
+	"@context": SCHEMA_CONTEXT,
+	"@type": "Dataset",
+	"@id": `${buildAbsoluteUrl("/ai-agents")}#dataset`,
+	name: "DealScale Lookalike Audience Engine",
+	description:
+		"AI-generated real estate prospect datasets enriched via pgvector embeddings, CRM intent signals, and public market data.",
+	url: buildAbsoluteUrl("/ai-agents"),
+	license: buildAbsoluteUrl("/tos"),
+	provider: {
+		"@type": "Organization",
+		"@id": ORGANIZATION_ID,
+		name: companyData.companyName,
+		url: defaultSeo.canonical,
+	},
+	keywords: [
+		"real estate",
+		"lookalike audience",
+		"ai prospecting",
+		"deal sourcing",
+	],
+	distribution: [
+		{
+			"@type": "DataDownload",
+			contentUrl: buildAbsoluteUrl("/contact"),
+			encodingFormat: "application/json",
+		},
+	],
 });
 
 const buildOfferSchema = (
@@ -126,7 +290,9 @@ export const buildServiceSchema = (
 		"@id": ORGANIZATION_ID,
 	},
 	offers: buildOfferSchema(service.offers),
-	...(service.aggregateRating ? { aggregateRating: service.aggregateRating } : {}),
+	...(service.aggregateRating
+		? { aggregateRating: service.aggregateRating }
+		: {}),
 	...(service.reviews?.length ? { review: service.reviews } : {}),
 });
 

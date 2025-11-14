@@ -48,6 +48,10 @@ dev-debug.log
 .vscode
 # OS specific
 
+# Generated reports
+coverage/
+reports/
+
 # Task files
 # tasks.json
 # tasks/ 

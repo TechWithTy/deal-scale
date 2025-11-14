@@ -27,7 +27,7 @@ export function useDeferredLoad(options?: DeferredOptions) {
 	const resolvedOptions =
 		typeof options === "number"
 			? { timeout: options }
-			: options ?? { timeout: DEFAULT_MAX_WAIT_MS };
+			: (options ?? { timeout: DEFAULT_MAX_WAIT_MS });
 	const {
 		enabled = true,
 		timeout = DEFAULT_MAX_WAIT_MS,

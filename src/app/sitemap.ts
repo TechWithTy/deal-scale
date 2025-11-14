@@ -35,9 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = normalize(defaultSeo.canonical || getTestBaseUrl());
 	// Static pages with SEO metadata for sitemap
 
-	const staticPaths = Array.from(
-		new Set(["/", ...Object.keys(staticSeoMeta)]),
-	);
+	const staticPaths = Array.from(new Set(["/", ...Object.keys(staticSeoMeta)]));
 
 	const staticPages = staticPaths.map((path) => {
 		// Get SEO data for the path, fallback to empty object with SeoMeta type
@@ -190,12 +188,75 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	// 	lastModified: service.lastModified,
 	// }));
 
+	const externalEntries: MetadataRoute.Sitemap = [
+		{
+			url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ",
+			changeFrequency: "daily",
+			priority: 0.4,
+		},
+	];
+
+	const allowedExternalUrls = new Set(
+		externalEntries.map((entry) => entry.url),
+	);
+
+	const canonicalHost = (() => {
+		try {
+			return new URL(baseUrl).host;
+		} catch {
+			return undefined;
+		}
+	})();
+
+	const isOnCanonicalHost = (url?: string): boolean => {
+		if (!canonicalHost || !url) {
+			return false;
+		}
+		try {
+			return new URL(url).host === canonicalHost;
+		} catch {
+			return false;
+		}
+	};
+
+	const supplementalEntries: MetadataRoute.Sitemap = [
+		{
+			url: `${baseUrl}/rss.xml`,
+			lastModified: new Date(),
+			changeFrequency: "hourly",
+			priority: 0.6,
+		},
+		{
+			url: `${baseUrl}/rss/youtube.xml`,
+			lastModified: new Date(),
+			changeFrequency: "hourly",
+			priority: 0.6,
+		},
+		{
+			url: `${baseUrl}/rss/hybrid.xml`,
+			lastModified: new Date(),
+			changeFrequency: "hourly",
+			priority: 0.6,
+		},
+		{
+			url: `${baseUrl}/videos/sitemap.xml`,
+			lastModified: new Date(),
+			changeFrequency: "daily",
+			priority: 0.6,
+		},
+	];
+
 	return [
+		...supplementalEntries,
 		...staticPages,
 		...partnerEntries,
 		...blogPosts,
 		...caseStudyEntries,
 		...productEntries,
 		...serviceEntries,
-	];
+		...externalEntries,
+	].filter(
+		(entry) =>
+			isOnCanonicalHost(entry.url) || allowedExternalUrls.has(entry.url),
+	);
 }

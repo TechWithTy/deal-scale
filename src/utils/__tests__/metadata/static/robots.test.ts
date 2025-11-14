@@ -1,23 +1,31 @@
-import robots from "@/app/robots";
+import { describe, expect, it } from "vitest";
+
+import robots from "../../../../app/robots";
 
 describe("robots metadata", () => {
 	it("defines explicit directives for strategic crawlers", () => {
 		const config = robots();
 
-		expect(config.host).toBe("https://dealscale.io");
+		expect(config.host).toBeUndefined();
 		expect(config.sitemap).toEqual(
 			expect.arrayContaining(["https://dealscale.io/sitemap.xml"]),
 		);
 
+		const rules = Array.isArray(config.rules) ? config.rules : [config.rules];
 		const targetedBots = [
 			"*",
 			"Googlebot",
+			"Applebot",
+			"bingbot",
+			"CCBot",
+			"DuckDuckBot",
+			"AppleNewsBot",
 			"GPTBot",
 			"PerplexityBot",
 			"ClaudeBot",
 		];
-		targetedBots.forEach((userAgent) => {
-			const rule = config.rules.find((entry) => entry.userAgent === userAgent);
+		for (const userAgent of targetedBots) {
+			const rule = rules.find((entry) => entry.userAgent === userAgent);
 			expect(rule).toBeDefined();
 			expect(Array.isArray(rule?.allow)).toBe(true);
 			expect(rule?.allow).toEqual(
@@ -40,6 +48,6 @@ describe("robots metadata", () => {
 					"/sandbox/",
 				]),
 			);
-		});
+		}
 	});
 });
