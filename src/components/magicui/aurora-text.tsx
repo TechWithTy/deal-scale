@@ -33,10 +33,10 @@ export const AuroraText = memo(
 		const blurStyle: React.CSSProperties | undefined =
 			blur > 0
 				? {
-					...gradientStyle,
-					filter: `blur(${blur}px)`,
-					opacity: glowOpacity,
-				}
+						...gradientStyle,
+						filter: `blur(${blur}px)`,
+						opacity: glowOpacity,
+					}
 				: undefined;
 
 		return (

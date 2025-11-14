@@ -64,9 +64,9 @@ export function useHeroTrialCheckout(): {
 				);
 			}
 
-			const { clientSecret } = (await response.json().catch(
-				() => ({}),
-			)) as { clientSecret?: string };
+			const { clientSecret } = (await response.json().catch(() => ({}))) as {
+				clientSecret?: string;
+			};
 
 			if (!clientSecret) {
 				throw new Error("Free trial checkout is unavailable right now.");
@@ -114,4 +114,3 @@ export function useHeroTrialCheckout(): {
 		closeCheckout,
 	};
 }
-

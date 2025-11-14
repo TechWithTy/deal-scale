@@ -10,7 +10,9 @@ vi.mock("lottie-react", () => ({
 
 describe("exportLandingData", () => {
 	let tempRoot: string;
-	type ExportLandingData = (typeof import("../../../../tools/strapi/export-landing"))["exportLandingData"];
+	type ExportLandingData = typeof import(
+		"../../../../tools/strapi/export-landing",
+	)["exportLandingData"];
 	let exportLandingData: ExportLandingData;
 
 	beforeAll(async () => {

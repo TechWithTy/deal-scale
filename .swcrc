@@ -1,39 +1,19 @@
 {
-	"$schema": "https://json.schemastore.org/swcrc",
-	"jsc": {
-		"parser": {
-			"syntax": "typescript",
-			"tsx": true,
-			"decorators": false,
-			"dynamicImport": true
-		},
-		"transform": {
-			"react": {
-				"runtime": "automatic",
-				"pragma": "React.createElement",
-				"pragmaFrag": "React.Fragment",
-				"throwIfNamespace": true,
-				"development": false,
-				"useBuiltins": true,
-				"refresh": false
-			}
-		},
-		"target": "es2022",
-		"loose": false,
-		"externalHelpers": false,
-		"keepClassNames": false,
-		"baseUrl": ".",
-		"paths": {}
-	},
-	"module": {
-		"type": "es6",
-		"strict": false,
-		"strictMode": true,
-		"lazy": false,
-		"noInterop": false
-	},
-	"minify": true,
-	"isModule": true
+  "$schema": "https://swc.rs/schema.json",
+  "env": { "targets": "defaults" },
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true,
+      "decorators": false
+    },
+    "transform": {
+      "react": {
+        "runtime": "automatic",
+        "refresh": true
+      }
+    }
+  },
+  "module": { "type": "es6" },
+  "sourceMaps": true
 }
-
-

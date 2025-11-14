@@ -1,26 +1,26 @@
 {
-  "title": "Social Lookalike Audience Expansion FAQs",
-  "subtitle": "Your questions about turning social interactions into appointments, answered.",
-  "faqItems": [
-    {
-      "question": "Which social media platforms are supported?",
-      "answer": "Our automated engagement tools are fully integrated with Meta's official API, supporting both Facebook Business Pages and Instagram Professional accounts."
-    },
-    {
-      "question": "Is this compliant with platform policies?",
-      "answer": "Yes, 100%. We use the official, approved APIs provided by Meta, ensuring our tools are fully compliant with their terms of service. You are not at risk of your account being suspended."
-    },
-    {
-      "question": "What is an 'AI Conversation Credit'?",
-      "answer": "One credit is consumed each time our AI performs a significant action on your behalf. This includes sending a message, looking up information from a database to answer a question, or executing a step in a workflow (like a follow-up). This granular, usage-based model ensures you only pay for the specific work the AI is actively doing to qualify and nurture your leads."
-    },
-    {
-      "question": "Do I have to build the conversation flows myself?",
-      "answer": "No, and that's the key advantage for most users. You simply activate our pre-built, AI-optimized conversation flows that have been expertly designed to qualify real estate leads. However, for teams with highly specific needs, our Enterprise plan provides the tools to fully customize these flows or build your own from the ground up."
-    },
-    {
-      "question": "What happens when the AI qualifies a lead?",
-      "answer": "Our AI's work is just beginning. It will continue to nurture the lead with intelligent follow-ups. When the lead shows high intent and is ready to talk, the AI will either (1) find an open slot on your calendar and book the appointment directly, or (2) initiate a live phone call and transfer the warm lead directly to you."
-    }
-  ]
+	"title": "Social Lookalike Audience Expansion FAQs",
+	"subtitle": "Your questions about turning social interactions into appointments, answered.",
+	"faqItems": [
+		{
+			"question": "Which social media platforms are supported?",
+			"answer": "Our automated engagement tools are fully integrated with Meta's official API, supporting both Facebook Business Pages and Instagram Professional accounts."
+		},
+		{
+			"question": "Is this compliant with platform policies?",
+			"answer": "Yes, 100%. We use the official, approved APIs provided by Meta, ensuring our tools are fully compliant with their terms of service. You are not at risk of your account being suspended."
+		},
+		{
+			"question": "What is an 'AI Conversation Credit'?",
+			"answer": "One credit is consumed each time our AI performs a significant action on your behalf. This includes sending a message, looking up information from a database to answer a question, or executing a step in a workflow (like a follow-up). This granular, usage-based model ensures you only pay for the specific work the AI is actively doing to qualify and nurture your leads."
+		},
+		{
+			"question": "Do I have to build the conversation flows myself?",
+			"answer": "No, and that's the key advantage for most users. You simply activate our pre-built, AI-optimized conversation flows that have been expertly designed to qualify real estate leads. However, for teams with highly specific needs, our Enterprise plan provides the tools to fully customize these flows or build your own from the ground up."
+		},
+		{
+			"question": "What happens when the AI qualifies a lead?",
+			"answer": "Our AI's work is just beginning. It will continue to nurture the lead with intelligent follow-ups. When the lead shows high intent and is ready to talk, the AI will either (1) find an open slot on your calendar and book the appointment directly, or (2) initiate a live phone call and transfer the warm lead directly to you."
+		}
+	]
 }

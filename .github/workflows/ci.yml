@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: "20"
+  PNPM_VERSION: "9"
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Build Docker image
+        run: docker compose -f docker-compose.ci.yml build
+
+      - name: Smoke test container
+        run: |
+          docker compose -f docker-compose.ci.yml up -d
+          bash scripts/ci/wait-for-url.sh http://localhost:3000 30 5
+        shell: bash
+
+      - name: Show running containers
+        if: always()
+        run: docker ps -a
+
+      - name: Tear down compose stack
+        if: always()
+        run: docker compose -f docker-compose.ci.yml down -v
+

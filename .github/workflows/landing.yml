@@ -1,0 +1,146 @@
+name: CI/CD - Landing Page
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.LANDING_CI_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      LANDING_SEO_ENABLED: ${{ vars.LANDING_SEO_ENABLED }}
+      LANDING_LHCI_ENABLED: ${{ vars.LANDING_LHCI_ENABLED }}
+      LANDING_CONTACT_TEST_ENABLED: ${{ vars.LANDING_CONTACT_TEST_ENABLED }}
+      LANDING_DEPLOY_ENABLED: ${{ vars.LANDING_DEPLOY_ENABLED }}
+      LANDING_PREVIEW_ENABLED: ${{ vars.LANDING_PREVIEW_ENABLED }}
+      LANDING_INSTANT_CRAWL_ENABLED: ${{ vars.LANDING_INSTANT_CRAWL_ENABLED }}
+      LANDING_BASE_URL: ${{ vars.LANDING_BASE_URL }}
+      LANDING_SITEMAP_URL: ${{ vars.LANDING_SITEMAP_URL }}
+      LANDING_PREVIEW_BASE_URL: ${{ vars.LANDING_PREVIEW_BASE_URL }}
+      LANDING_PREVIEW_SITEMAP_URL: ${{ vars.LANDING_PREVIEW_SITEMAP_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Enable Corepack (pnpm)
+        shell: bash
+        run: corepack enable
+
+      - name: Install deps
+        shell: bash
+        working-directory: landing
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile
+          else
+            pnpm install
+          fi
+
+      - name: Build landing page
+        shell: bash
+        working-directory: landing
+        run: pnpm build
+
+      - name: Discovery (POML-driven scan)
+        shell: bash
+        working-directory: landing
+        run: pnpm run discover
+
+      - name: SEO Checker
+        if: ${{ env.LANDING_SEO_ENABLED != 'false' }}
+        shell: bash
+        working-directory: landing
+        run: node .github/scripts/seo-check.js
+
+      - name: Lighthouse SEO Test
+        if: ${{ env.LANDING_LHCI_ENABLED != 'false' }}
+        shell: bash
+        working-directory: landing
+        run: bash .github/scripts/seo-lhci.sh
+
+      - name: Contact Endpoint Test
+        if: ${{ env.LANDING_CONTACT_TEST_ENABLED != 'false' }}
+        shell: bash
+        working-directory: landing
+        env:
+          CONTACT_URL: ${{ vars.LANDING_CONTACT_URL }}
+        run: bash .github/scripts/contact-test.sh
+
+      - name: Upload discovery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: landing-discovery
+          path: landing/discovery.json
+
+      - name: Publish Preview (PR branches)
+        if: ${{ github.event_name == 'pull_request' && env.LANDING_PREVIEW_ENABLED == 'true' && secrets.CF_API_TOKEN != '' && secrets.CF_ACCOUNT_ID != '' }}
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: 'dealscale-landing'
+          directory: 'landing/dist'
+          branch: ${{ github.head_ref || github.ref_name }}
+
+      - name: Publish Production (main)
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.LANDING_DEPLOY_ENABLED == 'true' && secrets.CF_API_TOKEN != '' && secrets.CF_ACCOUNT_ID != '' }}
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: 'dealscale-landing'
+          directory: 'landing/dist'
+          branch: 'main'
+
+      - name: Instant Crawl (Preview)
+        if: ${{ github.event_name == 'pull_request' && env.LANDING_PREVIEW_ENABLED == 'true' && env.LANDING_INSTANT_CRAWL_ENABLED == 'true' && (env.LANDING_PREVIEW_BASE_URL != '' || env.LANDING_PREVIEW_SITEMAP_URL != '') }}
+        uses: ./.github/actions/instant-crawl
+        with:
+          mode: both
+          base_url: ${{ env.LANDING_PREVIEW_BASE_URL }}
+          sitemap_url: ${{ env.LANDING_PREVIEW_SITEMAP_URL }}
+          dist_dir: landing/dist
+          indexnow_key: ${{ secrets.INDEXNOW_KEY }}
+
+      - name: Instant Crawl (Production)
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.LANDING_DEPLOY_ENABLED == 'true' && env.LANDING_INSTANT_CRAWL_ENABLED == 'true' && (env.LANDING_BASE_URL != '' || env.LANDING_SITEMAP_URL != '') }}
+        uses: ./.github/actions/instant-crawl
+        with:
+          mode: both
+          base_url: ${{ env.LANDING_BASE_URL }}
+          sitemap_url: ${{ env.LANDING_SITEMAP_URL }}
+          dist_dir: landing/dist
+          indexnow_key: ${{ secrets.INDEXNOW_KEY }}
+
+      - name: Slack Success
+        if: success() && secrets.SLACK_WEBHOOK != ''
+        uses: ./.github/actions/notify-slack
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          status: success
+          title: 'Landing Page deployed'
+          message: |
+            Commit: ${{ github.sha }}
+            Run: ${{ github.run_id }}
+
+      - name: Slack Failure
+        if: failure() && secrets.SLACK_WEBHOOK != ''
+        uses: ./.github/actions/notify-slack
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          status: failure
+          title: 'Landing Page deployment FAILED'
+          message: |
+            Commit: ${{ github.sha }}
+            Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

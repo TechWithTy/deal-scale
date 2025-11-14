@@ -1,0 +1,48 @@
+name: 'PagerDuty Alert'
+description: 'Create a PagerDuty incident via Events v2 API'
+inputs:
+  routing_key:
+    description: 'PagerDuty routing key (Events v2)'
+    required: true
+  summary:
+    description: 'Incident summary'
+    required: true
+  source:
+    description: 'Source identifier (service/system)'
+    required: true
+  severity:
+    description: 'Severity (info|warning|error|critical)'
+    required: false
+    default: error
+  custom_details:
+    description: 'JSON string of custom details'
+    required: false
+    default: '{}'
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      env:
+        ROUTING_KEY: ${{ inputs.routing_key }}
+        SUMMARY: ${{ inputs.summary }}
+        SOURCE: ${{ inputs.source }}
+        SEVERITY: ${{ inputs.severity }}
+        CUSTOM: ${{ inputs.custom_details }}
+      run: |
+        set -euo pipefail
+        payload=$(jq -n --arg rk "$ROUTING_KEY" --arg summary "$SUMMARY" --arg source "$SOURCE" --arg severity "$SEVERITY" --argjson custom "$CUSTOM" '
+        {
+          routing_key: $rk,
+          event_action: "trigger",
+          payload: {
+            summary: $summary,
+            source: $source,
+            severity: $severity,
+            custom_details: $custom
+          }
+        }')
+        curl -sS -X POST \
+          -H 'Content-Type: application/json' \
+          -d "$payload" \
+          https://events.pagerduty.com/v2/enqueue
+

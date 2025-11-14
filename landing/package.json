@@ -1,0 +1,20 @@
+{
+  "name": "dealscale-landing",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "mkdir -p dist && cp -r public/* dist/",
+    "seo": "node .github/scripts/seo-check.js",
+    "lhci": "bash .github/scripts/seo-lhci.sh",
+    "test:contact": "bash .github/scripts/contact-test.sh",
+    "discover": "node ./scripts/discover.mjs"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.13.0",
+    "jsdom": "^24.1.0",
+    "fast-glob": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

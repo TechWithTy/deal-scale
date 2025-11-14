@@ -1,0 +1,24 @@
+# Example Dockerfile showing how to embed Trivy into your app image.
+# Use as a reference; adapt to your base image and package manager.
+
+FROM node:20-slim AS app
+
+# Install Trivy (official install script) into /usr/local/bin
+ARG TRIVY_VERSION=v0.67.2
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates gnupg \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+      | sh -s -- -b /usr/local/bin ${TRIVY_VERSION} \
+    && trivy --version
+
+# Your app setup...
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY . .
+
+# Optional: run a self-scan of the image filesystem at build time (not recommended for production builds)
+# RUN trivy fs --scanners vuln,secret,misconfig --exit-code 0 --severity HIGH,CRITICAL /app
+
+CMD ["node", "server.js"]
+

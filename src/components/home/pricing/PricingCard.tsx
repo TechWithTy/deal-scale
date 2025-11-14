@@ -157,7 +157,10 @@ const PricingCard: React.FC<PricingCardProps> = ({
 							>
 								{loading === plan.id ? (
 									<>
-										<Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+										<Loader2
+											className="mr-2 h-4 w-4 animate-spin"
+											aria-hidden
+										/>
 										<span className="sr-only">Processing checkout…</span>
 										<span aria-hidden>Processing…</span>
 									</>

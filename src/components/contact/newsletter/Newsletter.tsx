@@ -109,10 +109,11 @@ export const Newsletter = () => {
 				</h2>
 				<p className="mx-auto max-w-2xl text-black dark:text-white/70">
 					Get actionable AI-powered strategies to fill your calendar with
-					qualified sellers, uncover exclusive lookalike off-market deals powered by our similarity features, and scale your
-					real estate business—without the burnout. Join Deal Scale’s Pipeline &
-					Profit for proven automation tactics, expert insights, and real
-					results. No fluff, just what moves the needle.
+					qualified sellers, uncover exclusive lookalike off-market deals
+					powered by our similarity features, and scale your real estate
+					business—without the burnout. Join Deal Scale’s Pipeline & Profit for
+					proven automation tactics, expert insights, and real results. No
+					fluff, just what moves the needle.
 				</p>
 			</div>
 			{isSubscribed ? (

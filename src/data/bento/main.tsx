@@ -54,7 +54,10 @@ export const MainBentoFeatures: BentoFeature[] = [
 					Upload your seller list, connect your CRM, and spin up your first AI
 					campaign in a single click—before your coffee cools.
 				</p>
-				<Badge variant="secondary" className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground">
+				<Badge
+					variant="secondary"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+				>
 					AI campaign live in under 60 seconds
 				</Badge>
 			</div>
@@ -79,14 +82,19 @@ export const MainBentoFeatures: BentoFeature[] = [
 					<h3 className="text-xl font-semibold text-white leading-tight">
 						AI That Works While You Sleep
 					</h3>
-					<p className="text-sm font-medium text-white/80">Never miss a hot lead again</p>
+					<p className="text-sm font-medium text-white/80">
+						Never miss a hot lead again
+					</p>
 				</div>
 				<p className="text-sm leading-6 text-white/75">
 					Your AI responds instantly to every text, call, or form. It
 					pre-qualifies, nurtures, and books appointments around the clock so no
 					opportunity slips away.
 				</p>
-				<Badge variant="secondary" className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground">
+				<Badge
+					variant="secondary"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+				>
 					Replies 24/7 — zero delays
 				</Badge>
 			</div>
@@ -111,13 +119,18 @@ export const MainBentoFeatures: BentoFeature[] = [
 					<h3 className="text-xl font-semibold text-white leading-tight">
 						Appointments, Not Just Leads
 					</h3>
-					<p className="text-sm font-medium text-white/80">Your calendar, always full</p>
+					<p className="text-sm font-medium text-white/80">
+						Your calendar, always full
+					</p>
 				</div>
 				<p className="text-sm leading-6 text-white/75">
 					AI-qualified, sales-ready appointments land directly on your calendar.
 					You focus on closing while the system handles every follow-up.
 				</p>
-				<Badge variant="secondary" className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground">
+				<Badge
+					variant="secondary"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+				>
 					Calendar auto-filled with sales-ready calls
 				</Badge>
 			</div>
@@ -142,14 +155,19 @@ export const MainBentoFeatures: BentoFeature[] = [
 					<h3 className="text-xl font-semibold text-white leading-tight">
 						Unlimited Skip Tracing
 					</h3>
-					<p className="text-sm font-medium text-white/80">Data that does not cost you extra</p>
+					<p className="text-sm font-medium text-white/80">
+						Data that does not cost you extra
+					</p>
 				</div>
 				<p className="text-sm leading-6 text-white/75">
 					Build hyper-targeted lists from more than 140 million property
 					records. Unlimited, high-quality owner data is included with every
 					plan, turning skip tracing into a growth multiplier.
 				</p>
-				<Badge variant="secondary" className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground">
+				<Badge
+					variant="secondary"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+				>
 					Unlimited owner data included
 				</Badge>
 			</div>

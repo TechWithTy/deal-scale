@@ -30,4 +30,3 @@ export function startStripeToast(message: string): ToastHandlers {
 		},
 	};
 }
-

@@ -1,12 +1,5 @@
 import type { NextConfig } from "next";
-import {
-	afterEach,
-	beforeEach,
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const importConfig = async (): Promise<NextConfig> => {
 	const module = await import("../../next.config");

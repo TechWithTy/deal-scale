@@ -73,5 +73,3 @@ archiveTrivyReports().catch((error) => {
 	console.error("[archive:trivy] Failed to archive Trivy reports.", error);
 	process.exitCode = 1;
 });
-
-

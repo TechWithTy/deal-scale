@@ -1,3 +1,11 @@
+import {
+	DEFAULT_PERSONA_KEY,
+	PERSONA_GOALS,
+	PERSONA_LABELS,
+	type PersonaKey,
+} from "@/data/personas/catalog";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
+
 export type FeatureHighlight = {
 	title: string;
 	description: string;
@@ -39,11 +47,80 @@ export const AI_OUTREACH_STUDIO_KEYWORDS = [
 	"AI session monitor",
 ] as const;
 
-export const AI_OUTREACH_STUDIO_SEO = {
-	name: AI_OUTREACH_STUDIO_HEADING,
-	headline: AI_OUTREACH_STUDIO_TAGLINE,
-	description: AI_OUTREACH_STUDIO_DESCRIPTION,
-	keywords: AI_OUTREACH_STUDIO_KEYWORDS,
-	anchor: AI_OUTREACH_STUDIO_ANCHOR,
-	features: AI_OUTREACH_STUDIO_FEATURES,
-} as const;
+type AiOutreachStudioSeo = {
+	name: string;
+	headline: string;
+	description: string;
+	keywords: string[];
+	anchor: string;
+	features: FeatureHighlight[];
+};
+
+const dedupeKeywords = (keywords: Iterable<string>) =>
+	Array.from(new Set(Array.from(keywords)));
+
+export const buildAiOutreachStudioSeo = (
+	overrides: Partial<AiOutreachStudioSeo> = {},
+): AiOutreachStudioSeo => {
+	const homeSeo = getStaticSeo("/");
+	const baseKeywords = homeSeo.keywords ?? [];
+	const mergedKeywords =
+		overrides.keywords ??
+		dedupeKeywords([...AI_OUTREACH_STUDIO_KEYWORDS, ...baseKeywords]);
+
+	const seo: AiOutreachStudioSeo = {
+		name: overrides.name ?? AI_OUTREACH_STUDIO_HEADING,
+		headline: overrides.headline ?? AI_OUTREACH_STUDIO_TAGLINE,
+		description: overrides.description ?? AI_OUTREACH_STUDIO_DESCRIPTION,
+		keywords: dedupeKeywords(mergedKeywords),
+		anchor: overrides.anchor ?? AI_OUTREACH_STUDIO_ANCHOR,
+		features: overrides.features ?? [...AI_OUTREACH_STUDIO_FEATURES],
+	};
+
+	return seo;
+};
+
+export const AI_OUTREACH_STUDIO_SEO = buildAiOutreachStudioSeo();
+
+const toLowerFragment = (value: string) => value.toLowerCase();
+
+type PersonaSeoInput = {
+	persona?: PersonaKey;
+	goal?: string;
+};
+
+const resolvePersonaLabel = (persona?: PersonaKey) =>
+	PERSONA_LABELS[persona ?? DEFAULT_PERSONA_KEY] ??
+	PERSONA_LABELS[DEFAULT_PERSONA_KEY];
+
+const resolvePersonaGoal = (persona?: PersonaKey, goal?: string) => {
+	if (goal?.trim()) {
+		return goal.trim();
+	}
+	const key = persona ?? DEFAULT_PERSONA_KEY;
+	return PERSONA_GOALS[key] ?? PERSONA_GOALS[DEFAULT_PERSONA_KEY];
+};
+
+export const buildPersonaAiOutreachStudioSeo = ({
+	persona,
+	goal,
+}: PersonaSeoInput = {}): AiOutreachStudioSeo => {
+	const personaLabel = resolvePersonaLabel(persona);
+	const personaGoal = resolvePersonaGoal(persona, goal);
+	const personaHeadline = `${AI_OUTREACH_STUDIO_TAGLINE} for ${personaLabel}`;
+	const personaDescription = `AI outreach automation for ${toLowerFragment(
+		personaLabel,
+	)} teams to ${toLowerFragment(personaGoal)}. ${
+		AI_OUTREACH_STUDIO_DESCRIPTION
+	}`;
+
+	return buildAiOutreachStudioSeo({
+		headline: personaHeadline,
+		description: personaDescription,
+		keywords: dedupeKeywords([
+			...AI_OUTREACH_STUDIO_KEYWORDS,
+			personaLabel,
+			personaGoal,
+		]),
+	});
+};

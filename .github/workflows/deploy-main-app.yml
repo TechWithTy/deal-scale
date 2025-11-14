@@ -1,0 +1,37 @@
+name: Deal Scale Hetzner CI/CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  quality:
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.MAIN_CI_ENABLED == 'true' || vars.CI_CD_ENABLED == 'true' }}
+    uses: ./.github/workflows/subworkflows/code-quality.yml
+
+  security:
+    needs: quality
+    if: ${{ needs.quality.result == 'success' }}
+    uses: ./.github/workflows/subworkflows/security.yml
+    with:
+      registry: ghcr.io
+      image_name: dealscale/main-app
+      snyk_enabled: ${{ vars.SNYK_ENABLED }}
+      snyk_severity: ${{ vars.SNYK_SEVERITY }}
+    secrets: inherit
+
+  deploy:
+    needs: security
+    if: ${{ needs.security.result == 'success' }}
+    uses: ./.github/workflows/subworkflows/deploy.yml
+    with:
+      registry: ghcr.io
+      image_name: dealscale/main-app
+      deploy_path: /srv/dealscale
+      compose_file: infra/hetzner/docker-compose.yml
+      deploy_enabled: ${{ vars.MAIN_DEPLOY_ENABLED }}
+      notify_enabled: ${{ vars.MAIN_NOTIFY_ENABLED }}
+      lhci_enabled: ${{ vars.MAIN_LHCI_ENABLED }}
+      lhci_url: ${{ vars.MAIN_LHCI_URL }}
+    secrets: inherit

@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  app:
+    image: ${IMAGE}
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    # Add volumes, env_file, depends_on etc. as needed
+

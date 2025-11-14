@@ -1,0 +1,172 @@
+name: Deploy & Validate
+
+on:
+  workflow_call:
+    inputs:
+      registry:
+        required: true
+        type: string
+      image_name:
+        required: true
+        type: string
+      deploy_path:
+        required: true
+        type: string
+      compose_file:
+        required: true
+        type: string
+      deploy_enabled:
+        required: false
+        type: string
+        default: 'true'
+      notify_enabled:
+        required: false
+        type: string
+        default: 'true'
+      lhci_enabled:
+        required: false
+        type: string
+        default: 'false'
+      lhci_url:
+        required: false
+        type: string
+    secrets:
+      HETZNER_HOST:
+        required: false
+      HETZNER_USER:
+        required: false
+      HETZNER_SSH_KEY:
+        required: false
+      OWASP_TARGET_URL:
+        required: false
+      SLACK_WEBHOOK:
+        required: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_FULL: ${{ inputs.registry }}/${{ github.repository_owner }}/${{ inputs.image_name }}
+      IMAGE_TAG: ${{ github.sha }}
+      DEPLOY_PATH: ${{ inputs.deploy_path }}
+      COMPOSE_FILE_PATH: ${{ inputs.compose_file }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        if: ${{ inputs.deploy_enabled == 'true' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_FULL }}:${{ env.IMAGE_TAG }}
+
+      - name: OWASP ZAP baseline scan
+        if: ${{ secrets.OWASP_TARGET_URL != '' }}
+        env:
+          TARGET: ${{ secrets.OWASP_TARGET_URL }}
+        run: |
+          docker run --rm \
+            -v "$(pwd)":/zap/wrk \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t "$TARGET" -w zap-warn.md -x zap-report.xml -J zap-report.json || true
+
+      - name: Upload ZAP artifacts
+        if: ${{ secrets.OWASP_TARGET_URL != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-reports
+          path: |
+            zap-warn.md
+            zap-report.xml
+            zap-report.json
+
+      - name: Copy infra to Hetzner (SCP)
+        if: ${{ inputs.deploy_enabled == 'true' && secrets.HETZNER_HOST != '' }}
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HETZNER_HOST }}
+          username: ${{ secrets.HETZNER_USER }}
+          key: ${{ secrets.HETZNER_SSH_KEY }}
+          source: infra/hetzner/*
+          target: ${{ env.DEPLOY_PATH }}
+
+      - name: Deploy on Hetzner (SSH)
+        if: ${{ inputs.deploy_enabled == 'true' && secrets.HETZNER_HOST != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          IMAGE_FULL: ${{ env.IMAGE_FULL }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          DEPLOY_PATH: ${{ env.DEPLOY_PATH }}
+          COMPOSE_FILE_PATH: ${{ env.COMPOSE_FILE_PATH }}
+        with:
+          host: ${{ secrets.HETZNER_HOST }}
+          username: ${{ secrets.HETZNER_USER }}
+          key: ${{ secrets.HETZNER_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            mkdir -p "$DEPLOY_PATH"
+            export IMAGE="$IMAGE_FULL:$IMAGE_TAG"
+            echo "Deploying image: $IMAGE"
+            if ! command -v docker &> /dev/null; then
+              echo "Docker not found on remote host" >&2
+              exit 1
+            fi
+            cd "$DEPLOY_PATH"
+            export IMAGE="$IMAGE"
+            docker compose -f docker-compose.yml pull || true
+            docker compose -f docker-compose.yml up -d
+
+      - name: Smoke test
+        if: ${{ secrets.OWASP_TARGET_URL != '' }}
+        env:
+          TARGET: ${{ secrets.OWASP_TARGET_URL }}
+        run: |
+          curl -fsS --max-time 15 "$TARGET/health" || curl -fsS --max-time 15 "$TARGET" || (echo "Smoke test failed" && exit 1)
+
+      - name: Lighthouse E2E SEO/Perf
+        if: ${{ inputs.lhci_enabled == 'true' && inputs.lhci_url != '' }}
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            ${{ inputs.lhci_url }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: ''
+          runs: 1
+          # Default assertions: SEO >=0.9 (error), Performance >=0.7 (warn)
+          # treosh action uses lhci autorun; we rely on default or project-level config if present
+
+      - name: Slack success notification
+        if: ${{ success() && inputs.notify_enabled != 'false' && secrets.SLACK_WEBHOOK != '' }}
+        uses: ./.github/actions/notify-slack
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          status: success
+          title: "Deploy succeeded"
+          message: |
+            App: ${{ env.IMAGE_FULL }}
+            Tag: ${{ env.IMAGE_TAG }}
+            Run: ${{ github.run_id }}
+
+      - name: Slack failure notification
+        if: ${{ failure() && inputs.notify_enabled != 'false' && secrets.SLACK_WEBHOOK != '' }}
+        uses: ./.github/actions/notify-slack
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          status: failure
+          title: "Deploy failed"
+          message: |
+            Commit: ${{ github.sha }}
+            Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

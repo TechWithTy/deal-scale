@@ -12,5 +12,3 @@ export function serverOnly(): void {
 		hasWarned = true;
 	}
 }
-
-

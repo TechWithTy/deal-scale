@@ -81,5 +81,3 @@ runOwaspBaselineScan().catch((error) => {
 	);
 	process.exitCode = 1;
 });
-
-

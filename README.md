@@ -66,6 +66,28 @@ Deploy your own instance of DealScale with Vercel:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Fdeal-scale&project-name=deal-scale&repository-name=deal-scale)
 
+## 🔁 CI/CD & Containers
+
+- Automated backend/front-end checks run via [`.github/workflows/ci.yml`](.github/workflows/ci.yml) on every push and pull request. The workflow installs dependencies with pnpm, runs linting, unit tests, a production build, and finally performs a smoke test against the Docker Compose stack.
+- A multi-stage [`Dockerfile`](Dockerfile) is available for building the production image. The new `docker-compose.ci.yml` spins up the app alongside Postgres and Redis with sensible defaults for CI or local smoke testing:
+
+  ```bash
+  docker compose -f docker-compose.ci.yml up --build
+  # open http://localhost:3000 once the services report healthy
+  ```
+
+  Use `docker compose down -v` to tear everything back down when finished.
+
+- The dedicated landing-page pipeline in [`.github/workflows/landing.yml`](.github/workflows/landing.yml) exports static assets (`pnpm run landing:build`), validates required metadata/alt text, runs a Lighthouse SEO audit (`@lhci/cli`), pings the contact endpoint, and deploys the `dist/` bundle to Cloudflare Pages. Configure the following secrets before enabling deployments:
+
+  | Secret | Purpose |
+  | --- | --- |
+  | `CF_API_TOKEN` | Cloudflare Pages API token with `Pages=Edit` |
+  | `CF_ACCOUNT_ID` | Cloudflare account identifier |
+  | `CF_PAGES_PROJECT` | Target Pages project slug |
+  | `CONTACT_TEST_URL` *(optional)* | Override contact endpoint for smoke test |
+  | `SLACK_WEBHOOK` | Channel notifications for success/failure |
+
 ## 📖 Documentation
 
 For detailed documentation, please visit our [Documentation Portal](https://docs.dealscale.com). Internal debug notes for the analytics loaders live in [`_docs/_debug/deferred_third_parties_debug.md`](./_docs/_debug/deferred_third_parties_debug.md).

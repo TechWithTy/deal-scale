@@ -88,6 +88,8 @@
 		"**/*.test.tsx",
 		"**/*.spec.ts",
 		"**/*.spec.tsx",
+		"functions",
+		"landing/functions",
 		"src/testHelpers",
 		"tools",
 		"tests",
