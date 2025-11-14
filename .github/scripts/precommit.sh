@@ -58,6 +58,12 @@ fi
 
 echo "[pre-commit] mode=$MODE lint=$RUN_LINT typecheck=$RUN_TYPECHECK tests=$RUN_TESTS"
 
+# Keep commit scopes in sync with repo structure (best-effort)
+if have pnpm && [ -f "tools/commitlint/sync-scopes.ts" ]; then
+  echo "[pre-commit] Syncing commit scopes"
+  pnpm -s exec tsx tools/commitlint/sync-scopes.ts || true
+fi
+
 # Collect staged files (null-separated to handle spaces)
 mapfile -d '' -t STAGED_ARR < <(git diff --cached --name-only -z --diff-filter=ACMR)
 if [ ${#STAGED_ARR[@]} -eq 0 ]; then
@@ -105,4 +111,3 @@ if [ "$RUN_TESTS" = "true" ] && [ -f package.json ]; then
 fi
 
 echo "[pre-commit] Completed"
-

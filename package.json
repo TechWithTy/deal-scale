@@ -57,7 +57,8 @@
 		"seo:lhci": "bash .github/scripts/seo-lhci.sh",
 		"contact:test": "bash .github/scripts/contact-test.sh",
 		"doctor:rspack": "pnpm run build:rspack && pnpm dlx @rsdoctor/cli analyze --profile .rsdoctor/manifest.json",
-        "doctor:logs": "pnpm exec tsx tools/debug/collect-doctor-logs.ts",
+		"doctor:logs": "pnpm exec tsx tools/debug/collect-doctor-logs.ts",
+        "sync:commit-scopes": "pnpm exec tsx tools/commitlint/sync-scopes.ts",
 
 		"perf:lighthouse:local": "pnpm dlx lighthouse@12 http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/local",
 		"perf:lighthouse:prod-local": "lighthouse http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/prod",
