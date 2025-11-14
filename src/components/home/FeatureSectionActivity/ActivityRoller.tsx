@@ -8,8 +8,10 @@ const DEFAULT_INTERVAL_MS = 3200;
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 type UseActivityRollerOptions = {
-	events: ActivityEvent[];
-	intervalMs?: number;
+    events: ActivityEvent[];
+    intervalMs?: number;
+    /** If false, rotation is paused (e.g., when offscreen). */
+    active?: boolean;
 };
 
 type ActivityRollerState = {
@@ -68,8 +70,9 @@ const usePrefersReducedMotion = (): boolean => {
 };
 
 export const useActivityRoller = ({
-	events,
-	intervalMs = DEFAULT_INTERVAL_MS,
+    events,
+    intervalMs = DEFAULT_INTERVAL_MS,
+    active = true,
 }: UseActivityRollerOptions): ActivityRollerState => {
 	const normalizedEvents = useMemo(() => events.filter(Boolean), [events]);
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -86,17 +89,17 @@ export const useActivityRoller = ({
 		}
 	}, [activeIndex, normalizedEvents.length]);
 
-	useEffect(() => {
-		if (prefersReducedMotion || normalizedEvents.length <= 1) {
-			return;
-		}
+    useEffect(() => {
+        if (!active || prefersReducedMotion || normalizedEvents.length <= 1) {
+            return;
+        }
 
 		const timer = window.setInterval(() => {
 			setActiveIndex((current) => (current + 1) % normalizedEvents.length);
 		}, intervalMs);
 
 		return () => window.clearInterval(timer);
-	}, [intervalMs, prefersReducedMotion, normalizedEvents.length]);
+    }, [intervalMs, prefersReducedMotion, normalizedEvents.length, active]);
 
 	const activeEvent =
 		normalizedEvents.length === 0
@@ -113,16 +116,17 @@ export const useActivityRoller = ({
 };
 
 type ActivityRollerProps = UseActivityRollerOptions & {
-	children: (state: ActivityRollerState) => JSX.Element;
+    children: (state: ActivityRollerState) => JSX.Element;
 };
 
 export const ActivityRoller = ({
-	children,
-	events,
-	intervalMs,
+    children,
+    events,
+    intervalMs,
+    active = true,
 }: ActivityRollerProps): JSX.Element => {
-	const state = useActivityRoller({ events, intervalMs });
-	return children(state);
+    const state = useActivityRoller({ events, intervalMs, active });
+    return children(state);
 };
 
 export { usePrefersReducedMotion };

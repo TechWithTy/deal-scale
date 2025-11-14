@@ -45,16 +45,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 // Below-the-fold components (lazy load with dynamic imports for code splitting)
-const AboutUsSection = dynamic(
-	() => import("@/components/about/AboutUsSection"),
-	{
-		loading: () => (
-			<div className="flex h-96 items-center justify-center">
-				<div className="h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
-			</div>
-		),
-	},
-);
+import { AboutUsSection } from "@/components/about/AboutUsSection";
 const CaseStudyGrid = dynamic(
 	() => import("@/components/case-studies/CaseStudyGrid"),
 	{

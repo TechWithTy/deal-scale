@@ -69,13 +69,14 @@ function HeroVideoPreviewSkeleton({
 		<div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-[32px] border border-border/40 bg-background/80 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.45)] ring-1 ring-border/30 backdrop-blur-lg">
 			<div className="relative w-full overflow-hidden rounded-[28px] border border-border/30 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.4)]">
 				<div className="relative aspect-video w-full">
-					<Image
-						src={posterSrc}
-						alt={alt}
-						fill
-						className="object-cover"
-						priority
-					/>
+                <Image
+                    src={posterSrc}
+                    alt={alt}
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(min-width: 1280px) 1024px, (min-width: 768px) 768px, 100vw"
+                />
 				</div>
 			</div>
 		</div>

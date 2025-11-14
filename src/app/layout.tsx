@@ -31,11 +31,20 @@ const {
 } = initialAnalyticsConfig;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-	return (
-		<html lang="en" className={`${sansFont.variable} ${monoFont.variable}`}>
-			<body className="theme-cyberoni min-h-screen bg-background font-sans antialiased">
-				<SchemaInjector schema={KNOWLEDGE_GRAPH_SCHEMA} />
-				<AppProviders
+    return (
+        <html lang="en" className={`${sansFont.variable} ${monoFont.variable}`}>
+            <head>
+                {/* Preload small hero logo to stabilize LCP visual */}
+                <link
+                    rel="preload"
+                    as="image"
+                    href="/logos/DealScale%20Transparent%20Logo/Deal%20Scale%20No%20Text.png"
+                    // type omitted; browsers infer from extension
+                />
+            </head>
+            <body className="theme-cyberoni min-h-screen bg-background font-sans antialiased">
+                <SchemaInjector schema={KNOWLEDGE_GRAPH_SCHEMA} />
+                <AppProviders
 					clarityProjectId={clarityProjectId}
 					zohoWidgetCode={zohoWidgetCode}
 					facebookPixelId={facebookPixelId}

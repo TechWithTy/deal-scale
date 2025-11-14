@@ -120,9 +120,10 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	) as Variants;
 
 	return (
-		<motion.section
-			id="testimonials"
-			className="relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8"
+    <motion.section
+        id="testimonials"
+        className="relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8 transform-gpu will-change-transform will-change-opacity"
+        style={{ overflowClipMargin: '24px' }}
 			initial={shouldReduceMotion ? undefined : { opacity: 0 }}
 			animate={shouldReduceMotion ? undefined : { opacity: 1 }}
 			transition={shouldReduceMotion ? undefined : { duration: 0.5 }}
@@ -131,10 +132,10 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 				data-testid="testimonial-spotlight-container"
 				className="pointer-events-none absolute inset-0 -z-10"
 			>
-				<div className="absolute top-10 left-[12%] h-72 w-72 rounded-full bg-glow-gradient opacity-25 blur-3xl" />
-				<motion.div
-					data-testid="testimonial-orbit-accent"
-					className="absolute right-[14%] bottom-5 h-72 w-72 rounded-full bg-blue-pulse opacity-20 blur-3xl"
+            <div className="absolute top-10 left-[12%] h-72 w-72 rounded-full bg-glow-gradient opacity-25 blur-3xl transform-gpu will-change-transform will-change-opacity translate-z-0" />
+            <motion.div
+                data-testid="testimonial-orbit-accent"
+                className="absolute right-[14%] bottom-5 h-72 w-72 rounded-full bg-blue-pulse opacity-20 blur-3xl transform-gpu will-change-transform will-change-opacity translate-z-0"
 					animate={
 						shouldReduceMotion
 							? undefined

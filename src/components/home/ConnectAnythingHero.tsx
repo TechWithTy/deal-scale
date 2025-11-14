@@ -14,6 +14,7 @@ import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
 const ROTATION_INTERVAL_MS = 4000;
 
@@ -174,30 +175,33 @@ export function ConnectAnythingHero(): JSX.Element {
 		return () => window.clearInterval(intervalId);
 	}, []);
 
-	return (
-		<section
-			className={cn(
-				"relative flex w-full flex-col items-center justify-center overflow-hidden",
-				"min-h-[720px] bg-transparent py-24 pb-28 sm:min-h-[760px] sm:py-28 sm:pb-32 md:min-h-[calc(100vh-120px)] lg:py-32 lg:pb-36",
-			)}
-		>
-			<div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent" />
-			<AnimatedBeamNetwork
-				variant="background"
-				nodes={BEAM_NETWORK_NODES}
-				showLabels={false}
-				showCenterLabel={false}
-				centerContent={
-					<img
-						src="/logos/DealScale%20Transparent%20Logo/Deal%20Scale%20No%20Text.png"
-						alt="DealScale core logo"
-						loading="lazy"
-						className="h-12 w-12 object-contain md:h-14 md:w-14"
-					/>
-				}
-				className="absolute inset-0 -z-20 h-full w-full"
-			/>
-			<div className="relative z-20 flex w-full max-w-5xl flex-col items-center px-6 text-center">
+    return (
+        <section
+            className={cn(
+                "relative flex w-full flex-col items-center justify-center overflow-hidden transform-gpu will-change-transform will-change-opacity",
+                "min-h-[720px] bg-transparent py-24 pb-28 sm:min-h-[760px] sm:py-28 sm:pb-32 md:min-h-[calc(100vh-120px)] lg:py-32 lg:pb-36",
+            )}
+            style={{ overflowClipMargin: '24px' }}
+        >
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent transform-gpu will-change-transform will-change-opacity translate-z-0" />
+            <AnimatedBeamNetwork
+                variant="background"
+                nodes={BEAM_NETWORK_NODES}
+                showLabels={false}
+                showCenterLabel={false}
+                centerContent={
+                    <Image
+                        src="/logos/DealScale%20Transparent%20Logo/Deal%20Scale%20No%20Text.png"
+                        alt="DealScale core logo"
+                        width={56}
+                        height={56}
+                        priority={false}
+                        className="h-12 w-12 object-contain md:h-14 md:w-14"
+                    />
+                }
+                className="absolute inset-0 -z-20 h-full w-full transform-gpu will-change-transform will-change-opacity translate-z-0"
+            />
+            <div className="relative z-20 flex w-full max-w-5xl flex-col items-center px-6 text-center">
 				<motion.div
 					initial={{ opacity: 0, y: -18 }}
 					animate={{ opacity: 1, y: 0 }}

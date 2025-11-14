@@ -146,8 +146,8 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 	);
 
 	return (
-		<TooltipProvider delayDuration={150}>
-			<div className="my-5 flex w-full flex-col">
+    <TooltipProvider delayDuration={150}>
+            <div className="my-5 flex w-full flex-col transform-gpu will-change-transform will-change-opacity" style={{ overflowClipMargin: '24px' }}>
 				{variant === "default" && (
 					<div className="mb-4 text-center">
 						<Header
@@ -156,13 +156,13 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 						/>
 					</div>
 				)}
-				<div
-					className={`relative w-full overflow-hidden rounded-xl p-4 text-center ${
-						variant === "secondary"
-							? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
-							: "border border-white/10 bg-background-dark/50"
-					} backdrop-blur-sm`}
-				>
+                <div
+                        className={`relative w-full overflow-hidden rounded-xl p-4 text-center transform-gpu will-change-transform will-change-opacity ${
+                        variant === "secondary"
+                                ? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
+                                : "border border-white/10 bg-background-dark/50"
+                        } backdrop-blur-sm`}
+                >
 					{shouldAnimate ? (
 						<div
 							className="relative flex h-16 items-center overflow-hidden"

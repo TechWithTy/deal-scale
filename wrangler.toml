@@ -1,31 +1,15 @@
 name = "dealscale"
-compatibility_date = "2024-01-01"
+compatibility_date = "2025-11-14"
+main = ".open-next/worker.js"
 
 [build]
-command = "pnpm build"
+command = "pnpm run build:cf"
 cwd = "."
-watch_dir = "src"
 
-[build.upload]
-format = "modules"
-
-[[build.upload.rules]]
-type = "ESModule"
-globs = ["**/*.js"]
-
-# Exclude content folders from deployment
-exclude = [
-  "content/**",
-  "strapi-export/**",
-  "**/_docs/**",
-  "**/_depr/**"
-]
-
-# Environment variables for Cloudflare Pages
+# Environment variables for Cloudflare deployment
 [vars]
 NODE_ENV = "production"
 NEXTAUTH_URL = "https://your-domain.pages.dev"
-
 # Secrets (set with wrangler secret put)
 # DATABASE_URL = "your-database-url"
 # NEXTAUTH_SECRET = "your-secret"

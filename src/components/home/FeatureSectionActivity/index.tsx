@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import ambientFlow from "@/assets/animations/processSteps.json";
 import { AuroraText } from "@/components/magicui/aurora-text";
@@ -97,6 +97,8 @@ const formatEventForStack = (
 });
 
 export default function FeatureSectionActivity(): JSX.Element {
+    const sectionRef = useRef<HTMLElement | null>(null);
+    const [inView, setInView] = useState(false);
 	const prefersReducedMotion = usePrefersReducedMotion();
 	const { persona, goal } = usePersonaStore(
 		useShallow((state) => ({
@@ -132,19 +134,47 @@ export default function FeatureSectionActivity(): JSX.Element {
 			? `${LIVE_COPY.values.socialProof} ${resolvedBenefit}`.trim()
 			: FALLBACK_SUPPORT;
 
-	return (
-		<section className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background/80 to-background">
-			<div className="pointer-events-none absolute inset-0 opacity-70">
-				<div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
-				<div className="-right-40 sm:-right-32 lg:-right-20 absolute top-10 h-[28rem] w-[28rem] blur-[120px] sm:top-20 sm:h-[34rem] sm:w-[34rem] lg:top-12 lg:h-[38rem] lg:w-[38rem]">
-					<ClientLottie
-						animationData={ambientFlow}
-						loop={!prefersReducedMotion}
-						autoPlay={!prefersReducedMotion}
-						className="h-full w-full opacity-70 mix-blend-screen"
-					/>
-				</div>
-			</div>
+	// Observe visibility to pause animations when offscreen
+	useEffect(() => {
+		if (typeof IntersectionObserver === "undefined") {
+			setInView(true);
+			return;
+		}
+
+		const node = sectionRef.current;
+		if (!node) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) {
+					if (e.target === node) {
+						setInView(e.isIntersecting);
+					}
+				}
+			},
+			{ root: null, rootMargin: "0px", threshold: 0.25 },
+		);
+		observer.observe(node);
+		return () => observer.disconnect();
+	}, []);
+
+    return (
+        <section
+            ref={sectionRef}
+            className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background/80 to-background transform-gpu will-change-transform will-change-opacity"
+            style={{ overflowClipMargin: "24px" }}
+        >
+            <div className="pointer-events-none absolute inset-0 opacity-70 transform-gpu will-change-transform will-change-opacity translate-z-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
+                <div className="-right-40 sm:-right-32 lg:-right-20 absolute top-10 h-[28rem] w-[28rem] blur-[80px] sm:top-20 sm:h-[34rem] sm:w-[34rem] lg:top-12 lg:h-[38rem] lg:w-[38rem] transform-gpu will-change-transform will-change-opacity translate-z-0">
+                    <ClientLottie
+                        animationData={ambientFlow}
+                        loop={inView && !prefersReducedMotion}
+                        autoPlay={inView && !prefersReducedMotion}
+                        className="h-full w-full opacity-70 mix-blend-screen"
+                    />
+                </div>
+            </div>
 
 			<div className="relative grid gap-14 px-6 py-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:px-12 xl:px-16">
 				<div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left lg:gap-8">
@@ -174,7 +204,7 @@ export default function FeatureSectionActivity(): JSX.Element {
 					</ul>
 				</div>
 
-				<ActivityRoller events={activityStream}>
+				<ActivityRoller events={activityStream} active={inView}>
 					{({
 						activeEvent,
 						activeIndex,
