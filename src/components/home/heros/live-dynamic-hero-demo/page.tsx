@@ -12,32 +12,51 @@ import {
 	PERSONA_LABEL,
 } from "./_config";
 
-const LiveDynamicHeroClient = dynamic(() => import("./LiveDynamicHeroClient"), {
-	ssr: false,
-	loading: () => null,
-});
+const LiveDynamicHeroClient = dynamic(
+	() => import("./LiveDynamicHeroClient"),
+	{
+		ssr: false,
+		loading: () => <HeroStaticFallback variant="loading" />,
+	},
+);
 
-function HeroStaticFallback() {
-	const headline =
-		typeof LIVE_COPY?.title === "string"
-			? LIVE_COPY.title
-			: "Automate real estate deal flow with AI-driven outreach.";
+function HeroStaticFallback({ variant }: { variant?: "loading" | "static" }) {
+	const {
+		problem: problemPhrase = "losing track of off-market leads",
+		solution: solutionPhrase = "AI real estate deal automation",
+		fear: fearPhrase = "your next profitable deal slips",
+	} = LIVE_COPY?.values ?? {};
 	const description =
 		typeof LIVE_COPY?.subtitle === "string"
 			? LIVE_COPY.subtitle
 			: "Deal Scale keeps motivated sellers warm with AI sales agents so you can focus on closing.";
 
 	return (
-		<section className="relative overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background py-24 text-foreground">
-			<div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18)_0%,rgba(15,23,42,0)_60%)] opacity-70" />
-			<div className="relative mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center sm:px-8">
-				<span className="inline-flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 px-4 py-1 font-medium text-foreground/80 text-sm uppercase tracking-wide">
+		<section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
+			<div className="pointer-events-none absolute inset-0">
+				<div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.22)_0%,rgba(15,23,42,0)_62%)] opacity-80" />
+				<div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(99,102,241,0.15),rgba(59,130,246,0.08),rgba(34,197,94,0.08))]" />
+			</div>
+
+			<div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center gap-8 px-6 py-16 text-center sm:px-10">
+				<span className="inline-flex items-center justify-center rounded-full border border-border/40 bg-background/70 px-5 py-1.5 font-semibold text-foreground/80 text-xs uppercase tracking-[0.4em]">
 					{PERSONA_LABEL}
 				</span>
-				<h1 className="text-balance font-semibold text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">
-					{headline}
-				</h1>
-				<p className="max-w-3xl text-balance text-base text-foreground/70 sm:text-lg">
+				<div className="space-y-4 text-balance">
+					<p className="text-lg font-semibold text-foreground/80">Stop</p>
+					<p className="text-3xl font-semibold leading-snug text-foreground sm:text-4xl md:text-5xl">
+						{problemPhrase}
+					</p>
+					<p className="text-lg font-semibold text-foreground/80">Start</p>
+					<p className="text-2xl font-semibold text-primary sm:text-3xl">
+						{solutionPhrase}
+					</p>
+					<p className="text-lg font-semibold text-foreground/80">Before</p>
+					<p className="text-2xl font-semibold text-yellow-500 sm:text-3xl">
+						{fearPhrase}
+					</p>
+				</div>
+				<p className="max-w-3xl text-base text-muted-foreground sm:text-lg">
 					{description}
 				</p>
 				<div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
@@ -54,6 +73,11 @@ function HeroStaticFallback() {
 						{LIVE_SECONDARY_CTA.label}
 					</Link>
 				</div>
+				<p className="max-w-2xl text-sm text-muted-foreground">
+					{variant === "loading"
+						? "Loading the interactive demo…"
+						: "We render the full interactive hero once your browser is idle so the page stays responsive on every device."}
+				</p>
 				<div id="live-hero-details" aria-hidden="true" className="sr-only" />
 			</div>
 		</section>
@@ -62,14 +86,15 @@ function HeroStaticFallback() {
 
 export default function LiveDynamicHeroDemoPage(): JSX.Element {
 	const shouldHydrate = useDeferredLoad({
-		requireInteraction: true,
-		timeout: 60000,
-		idleTimeout: 1500,
+		timeout: 1000,
+		idleTimeout: 300,
 	});
 
-	if (!shouldHydrate) {
-		return <HeroStaticFallback />;
-	}
-
-	return <LiveDynamicHeroClient />;
+	// Always render static fallback immediately for above-the-fold LCP
+	// Upgrade to interactive version when browser is ready (fast timeout for better UX)
+	return shouldHydrate ? (
+		<LiveDynamicHeroClient />
+	) : (
+		<HeroStaticFallback variant="static" />
+	);
 }

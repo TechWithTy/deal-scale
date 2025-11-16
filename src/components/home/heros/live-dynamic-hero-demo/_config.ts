@@ -31,16 +31,16 @@ const HERO_COPY_V7 = {
 		},
 		investor: {
 			problem: [
-				"losing track of lookalike off-market and motivated seller leads surfaced by AI similarity scoring",
-				"spending too long qualifying real estate deals by hand",
+				"losing track of off-market leads",
+				"qualifying motivated sellers manually",
 			],
 			solution: [
-				"AI real estate deal flow automation that connects data, CRM, and outreach",
-				"automated real estate lookalike audience expansion inspired by How to Win Friends and Influence People and nurturing in one dashboard",
+				"AI real estate deal flow automation",
+				"How to Win nurturing loops",
 			],
 			fear: [
-				"your next profitable real estate deal slips to a faster investor",
-				"your deal pipeline dries up when the market shifts",
+				"your next profitable deal slips",
+				"your deal pipeline dries up",
 			],
 			hope: [
 				"you wake up to ready-to-close seller leads every week",
