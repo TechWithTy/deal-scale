@@ -13,6 +13,7 @@ import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { cn } from "@/lib/utils";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 import { Sparkles } from "lucide-react";
 import Image from "next/image";
 
@@ -166,6 +167,13 @@ const HERO_METRICS = [
  */
 export function ConnectAnythingHero(): JSX.Element {
 	const [activeMessageIndex, setActiveMessageIndex] = useState(0);
+	const enableGpu = useGpuOptimizations();
+	const gpuContainerClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
+	const gpuDepthClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity translate-z-0"
+		: "";
 
 	useEffect(() => {
 		const intervalId = window.setInterval(() => {
@@ -177,13 +185,17 @@ export function ConnectAnythingHero(): JSX.Element {
 
     return (
         <section
-            className={cn(
-                "relative flex w-full flex-col items-center justify-center overflow-hidden transform-gpu will-change-transform will-change-opacity",
+        className={cn(
+                "relative flex w-full flex-col items-center justify-center overflow-hidden",
                 "min-h-[720px] bg-transparent py-24 pb-28 sm:min-h-[760px] sm:py-28 sm:pb-32 md:min-h-[calc(100vh-120px)] lg:py-32 lg:pb-36",
+				gpuContainerClass,
             )}
             style={{ overflowClipMargin: '24px' }}
         >
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent transform-gpu will-change-transform will-change-opacity translate-z-0" />
+            <div className={cn(
+				"pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent",
+				gpuDepthClass,
+			)} />
             <AnimatedBeamNetwork
                 variant="background"
                 nodes={BEAM_NETWORK_NODES}
@@ -199,7 +211,10 @@ export function ConnectAnythingHero(): JSX.Element {
                         className="h-12 w-12 object-contain md:h-14 md:w-14"
                     />
                 }
-                className="absolute inset-0 -z-20 h-full w-full transform-gpu will-change-transform will-change-opacity translate-z-0"
+                className={cn(
+					"absolute inset-0 -z-20 h-full w-full",
+					gpuDepthClass,
+				)}
             />
             <div className="relative z-20 flex w-full max-w-5xl flex-col items-center px-6 text-center">
 				<motion.div
@@ -258,13 +273,13 @@ export function ConnectAnythingHero(): JSX.Element {
 						animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
 						exit={{ opacity: 0, y: -12, clipPath: "inset(0 0 100% 0)" }}
 						transition={{ duration: 0.6, ease: "easeInOut" }}
-						className="max-w-2xl text-center"
+						className="max-w-2xl text-center min-h-[3.5rem]"
 					>
 						<AnimatedGradientText
 							speed={2.4}
 							colorFrom="#22d3ee"
 							colorTo="#f472b6"
-							className="font-semibold text-lg text-slate-100 tracking-tight drop-shadow-[0_0_25px_rgba(14,116,144,0.25)] md:text-xl"
+							className="font-semibold text-lg text-slate-900 tracking-tight drop-shadow-[0_4px_18px_rgba(14,116,144,0.25)] dark:text-slate-100 md:text-xl"
 						>
 							{HERO_MESSAGES[activeMessageIndex]}
 						</AnimatedGradientText>
@@ -274,7 +289,7 @@ export function ConnectAnythingHero(): JSX.Element {
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
-					className="mt-5 max-w-3xl text-sm text-slate-100/85 md:text-base"
+					className="mt-5 max-w-3xl text-sm text-slate-900 drop-shadow-[0_6px_14px_rgba(15,23,42,0.2)] dark:text-slate-100/85 md:text-base"
 				>
 					DealScale keeps your existing CRM stack in sync, enriches every touchpoint, and orchestrates automations across all platforms, with primary integrations for Kestra, Make, Zapier, and n8n.
 				</motion.p>
@@ -294,21 +309,21 @@ export function ConnectAnythingHero(): JSX.Element {
 								hidden: { opacity: 0, y: 14 },
 								visible: { opacity: 1, y: 0 },
 							}}
-							className="rounded-3xl border border-white/20 bg-white/30 px-5 py-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.22)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/50"
+							className="rounded-3xl border border-slate-200/60 bg-white/80 px-6 py-6 text-center shadow-[0_20px_60px_rgba(15,23,42,0.15)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/50"
 						>
-							<div className="flex items-baseline gap-1">
+							<div className="flex items-baseline justify-center gap-1">
 								<NumberTicker
 									value={metric.value}
 									decimalPlaces={metric.decimalPlaces ?? 0}
-									className="text-3xl font-semibold text-white"
+									className="text-3xl font-semibold text-slate-900 dark:text-white"
 								/>
 								{metric.suffix ? (
-									<span className="text-lg font-semibold uppercase tracking-wide text-white/90">
+									<span className="text-lg font-semibold uppercase tracking-wide text-slate-800 dark:text-white/90">
 										{metric.suffix}
 									</span>
 								) : null}
 							</div>
-							<p className="mt-1 text-sm text-slate-800/90 dark:text-slate-200/90">
+							<p className="mt-1 text-sm text-slate-600 dark:text-slate-200/90">
 								{metric.label}
 							</p>
 						</motion.li>

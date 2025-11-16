@@ -16,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 // ! Removed CompanyRenderer import, rendering images directly below.
 
 interface TrustedByMarqueeProps {
@@ -145,9 +146,20 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 		</Tooltip>
 	);
 
+	const enableGpu = useGpuOptimizations();
+	const gpuShellClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
+	const gpuDepthClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity translate-z-0"
+		: "";
+
 	return (
     <TooltipProvider delayDuration={150}>
-            <div className="my-5 flex w-full flex-col transform-gpu will-change-transform will-change-opacity" style={{ overflowClipMargin: '24px' }}>
+            <div
+				className={`my-5 flex w-full flex-col ${gpuShellClass}`}
+				style={{ overflowClipMargin: '24px' }}
+			>
 				{variant === "default" && (
 					<div className="mb-4 text-center">
 						<Header
@@ -157,15 +169,15 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 					</div>
 				)}
                 <div
-                        className={`relative w-full overflow-hidden rounded-xl p-4 text-center transform-gpu will-change-transform will-change-opacity ${
-                        variant === "secondary"
-                                ? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
-                                : "border border-white/10 bg-background-dark/50"
-                        } backdrop-blur-sm`}
+					className={`relative w-full overflow-hidden rounded-xl p-4 text-center ${gpuShellClass} ${
+						variant === "secondary"
+							? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
+							: "border border-white/10 bg-background-dark/50"
+					} backdrop-blur-sm`}
                 >
 					{shouldAnimate ? (
 						<div
-							className="relative flex h-16 items-center overflow-hidden"
+							className={`relative flex h-16 items-center overflow-hidden ${gpuDepthClass}`}
 							ref={containerRef}
 							onMouseEnter={() => controls.stop()}
 							onMouseLeave={() => restartAnimationRef.current()}

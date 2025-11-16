@@ -11,6 +11,7 @@ import { GlareCard } from "@/components/ui/glare-card";
 import type { ActivityEvent } from "@/data/activity/activityStream";
 import { activityStream } from "@/data/activity/activityStream";
 import { cn } from "@/lib/utils";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 
 import {
 	LIVE_COPY,
@@ -99,6 +100,13 @@ const formatEventForStack = (
 export default function FeatureSectionActivity(): JSX.Element {
     const sectionRef = useRef<HTMLElement | null>(null);
     const [inView, setInView] = useState(false);
+	const enableGpu = useGpuOptimizations();
+	const gpuShellClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
+	const gpuDepthClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity translate-z-0"
+		: "";
 	const prefersReducedMotion = usePrefersReducedMotion();
 	const { persona, goal } = usePersonaStore(
 		useShallow((state) => ({
@@ -161,12 +169,25 @@ export default function FeatureSectionActivity(): JSX.Element {
     return (
         <section
             ref={sectionRef}
-            className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background/80 to-background transform-gpu will-change-transform will-change-opacity"
+            className={cn(
+				"relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background/80 to-background",
+				gpuShellClass,
+			)}
             style={{ overflowClipMargin: "24px" }}
         >
-            <div className="pointer-events-none absolute inset-0 opacity-70 transform-gpu will-change-transform will-change-opacity translate-z-0">
+            <div
+				className={cn(
+					"pointer-events-none absolute inset-0 opacity-70",
+					gpuDepthClass,
+				)}
+			>
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
-                <div className="-right-40 sm:-right-32 lg:-right-20 absolute top-10 h-[28rem] w-[28rem] blur-[80px] sm:top-20 sm:h-[34rem] sm:w-[34rem] lg:top-12 lg:h-[38rem] lg:w-[38rem] transform-gpu will-change-transform will-change-opacity translate-z-0">
+                <div
+					className={cn(
+						"-right-40 sm:-right-32 lg:-right-20 absolute top-10 h-[28rem] w-[28rem] blur-[80px] sm:top-20 sm:h-[34rem] sm:w-[34rem] lg:top-12 lg:h-[38rem] lg:w-[38rem]",
+						gpuDepthClass,
+					)}
+				>
                     <ClientLottie
                         animationData={ambientFlow}
                         loop={inView && !prefersReducedMotion}

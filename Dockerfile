@@ -22,3 +22,5 @@ RUN pnpm install --prod --frozen-lockfile
 EXPOSE 3000
 CMD ["pnpm", "start"]
 
+
+

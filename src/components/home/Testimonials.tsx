@@ -20,6 +20,7 @@ import { TestimonialAvatar } from "./testimonials/TestimonialAvatar";
 import { TestimonialStars } from "./testimonials/TestimonialStars";
 import { TestimonialTabs } from "./testimonials/TestimonialTabs";
 import type { TabKey } from "./testimonials/tabConfig";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 
 interface TestimonialsProps {
 	testimonials: Testimonial[];
@@ -62,6 +63,13 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [activeTab, setActiveTab] = useState<TabKey>("review");
 	const shouldReduceMotion = useReducedMotion();
+	const enableGpu = useGpuOptimizations();
+	const gpuShellClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
+	const gpuDepthClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity translate-z-0"
+		: "";
 
 	const totalTestimonials = personaSpecificTestimonials.length || 1;
 
@@ -122,7 +130,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	return (
     <motion.section
         id="testimonials"
-        className="relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8 transform-gpu will-change-transform will-change-opacity"
+        className={`relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8 ${gpuShellClass}`}
         style={{ overflowClipMargin: '24px' }}
 			initial={shouldReduceMotion ? undefined : { opacity: 0 }}
 			animate={shouldReduceMotion ? undefined : { opacity: 1 }}
@@ -132,10 +140,12 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 				data-testid="testimonial-spotlight-container"
 				className="pointer-events-none absolute inset-0 -z-10"
 			>
-            <div className="absolute top-10 left-[12%] h-72 w-72 rounded-full bg-glow-gradient opacity-25 blur-3xl transform-gpu will-change-transform will-change-opacity translate-z-0" />
+            <div
+					className={`absolute top-10 left-[12%] h-72 w-72 rounded-full bg-glow-gradient opacity-25 blur-3xl ${gpuDepthClass}`}
+				/>
             <motion.div
                 data-testid="testimonial-orbit-accent"
-                className="absolute right-[14%] bottom-5 h-72 w-72 rounded-full bg-blue-pulse opacity-20 blur-3xl transform-gpu will-change-transform will-change-opacity translate-z-0"
+                className={`absolute right-[14%] bottom-5 h-72 w-72 rounded-full bg-blue-pulse opacity-20 blur-3xl ${gpuDepthClass}`}
 					animate={
 						shouldReduceMotion
 							? undefined
