@@ -41,9 +41,13 @@ const HERO_PHRASE_DEFAULTS = {
 
 const isDev = process.env.NODE_ENV !== "production";
 
-const toWords = (value: string) => collapseWhitespace(value).split(" ").filter(Boolean);
+const toWords = (value: string) =>
+	collapseWhitespace(value).split(" ").filter(Boolean);
 
-type HeroPhraseCategory = keyof Pick<HeroCopyValues, "problem" | "solution" | "fear">;
+type HeroPhraseCategory = keyof Pick<
+	HeroCopyValues,
+	"problem" | "solution" | "fear"
+>;
 
 const normalizePhrase = (
 	value: string | undefined,
