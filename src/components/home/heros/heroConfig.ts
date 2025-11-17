@@ -14,7 +14,7 @@ export const HERO_ROTATIONS: HeroCopyRotations = {
 	],
 	solutions: [
 		"STEPS automations expand warm audiences",
-		"How to Win nurturing loops",
+		"automated seller nurturing",
 		"guided STEPS motions launch faster",
 	],
 	fears: [
@@ -70,7 +70,7 @@ export const CTA_MICROCOPY =
 
 export const HERO_TRIAL_PLAN = {
 	id: "dynamic-hero-basic",
-	name: "Dynamic Hero Quick Start",
+	name: "DealScale",
 };
 
 export const createHeroTrialPlan = (): Plan => ({
@@ -81,7 +81,7 @@ export const createHeroTrialPlan = (): Plan => ({
 			amount: 0,
 			description: "Free trial - no charge today",
 			features: [
-				"Guided dynamic hero onboarding during the trial window.",
+				"Full access to DealScale AI automation features during your trial.",
 				"Stay active after the trial to keep full access.",
 			],
 		},
