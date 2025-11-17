@@ -116,7 +116,7 @@ const Pricing: React.FC<PricingProps> = ({
 			let stripeToast: ReturnType<typeof startStripeToast> | undefined;
 			try {
 				setLoading(plan.id);
-				stripeToast = startStripeToast("Preparing Stripe checkout…");
+				stripeToast = startStripeToast("Preparing checkout…");
 
 				const metadata: Record<string, string> = {
 					planName: plan.name,
@@ -155,7 +155,7 @@ const Pricing: React.FC<PricingProps> = ({
 
 				const data = (await response.json()) as { clientSecret?: string };
 				if (!data.clientSecret) {
-					throw new Error("No client secret returned from Stripe API");
+					throw new Error("Unable to initialize checkout. Please try again.");
 				}
 
 				setCheckoutState({
@@ -166,7 +166,7 @@ const Pricing: React.FC<PricingProps> = ({
 					context: "standard",
 				});
 				stripeToast?.success(
-					"Checkout ready. Review the Stripe modal to finish your purchase.",
+					"Checkout ready. Complete your purchase in the payment form.",
 				);
 			} catch (error) {
 				const message =

@@ -120,7 +120,7 @@ const ServiceCard = (props: ServiceCardProps) => {
 					props.className,
 				)}
 			>
-				Error: Invalid core service data.
+				Unable to display service information. Please refresh the page or contact support.
 			</div>
 		);
 	}

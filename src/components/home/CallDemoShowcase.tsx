@@ -894,7 +894,7 @@ const CallDemoInteractive = () => {
 										height={40}
 										className="size-10 rounded-full border border-slate-200/80 object-cover dark:border-white/20"
 									/>
-									<div className="flex flex-col gap-2 text-left">
+									<div className="flex min-h-[4rem] flex-col gap-2 text-left">
 										<TypingAnimation
 											words={[...SESSION_MONITOR_DIALOG]}
 											className="text-slate-900 text-sm leading-relaxed dark:text-white"
@@ -903,7 +903,7 @@ const CallDemoInteractive = () => {
 											pauseDelay={2200}
 											loop
 											showCursor={false}
-											startOnView={false}
+											startOnView={true}
 											as="p"
 											data-testid="session-monitor-dialog"
 										/>
@@ -915,7 +915,7 @@ const CallDemoInteractive = () => {
 											pauseDelay={2000}
 											loop
 											showCursor={false}
-											startOnView={false}
+											startOnView={true}
 											as="p"
 											data-testid="session-monitor-status"
 										/>
@@ -985,33 +985,9 @@ const CallDemoInteractive = () => {
 				id={AI_OUTREACH_STUDIO_ANCHOR}
 				className="relative isolate overflow-hidden py-24"
 			>
-				<div className="-z-10 pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),_transparent_55%)]" />
-				<div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 text-center sm:px-6 lg:px-8">
-					<div className="mx-auto max-w-3xl space-y-4">
-						<p className="font-semibold text-sky-500 text-sm uppercase tracking-[0.3em]">
-							{AI_OUTREACH_STUDIO_HEADING}
-							<span className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-900/5 px-3 py-1 font-semibold text-[0.65rem] text-slate-700 tracking-[0.25em] dark:border-white/15 dark:bg-white/10 dark:text-white/80">
-								{personaLabel}
-							</span>
-						</p>
-						<h2 className="font-semibold text-4xl text-slate-900 tracking-tight sm:text-5xl dark:text-white">
-							{heroTagline}
-						</h2>
-						<p className="text-base text-slate-600 sm:text-lg dark:text-white/70">
-							{heroDescription}
-						</p>
-						<ul className="grid gap-3 text-slate-600 text-sm sm:grid-cols-2 sm:text-base lg:grid-cols-3 dark:text-white/70">
-							{AI_OUTREACH_STUDIO_FEATURES.map((feature) => (
-								<li
-									key={feature.title}
-									className="rounded-xl border border-slate-200/40 bg-white/40 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-white/5"
-								>
-									{feature.description}
-								</li>
-							))}
-						</ul>
-					</div>
-					<LayoutGrid
+			<div className="-z-10 pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),_transparent_55%)]" />
+			<div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
+				<LayoutGrid
 						cards={cards}
 						interactive={false}
 						showThumbnails={false}

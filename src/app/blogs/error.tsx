@@ -9,9 +9,11 @@ export default function ErrorBoundary({
 	reset: () => void;
 }) {
 	return (
-		<div className="container max-w-4xl p-6 text-red-500">
-			<h2 className="mb-4 font-bold text-2xl">Blog Loading Error</h2>
-			<p className="mb-4">{error.message}</p>
+		<div className="container max-w-4xl p-6">
+			<h2 className="mb-4 font-bold text-2xl">Unable to Load Blog Post</h2>
+			<p className="mb-6 text-muted-foreground">
+				We couldn't load this blog post. Please try again or browse other posts.
+			</p>
 			<div className="flex gap-4">
 				<button
 					type="button"

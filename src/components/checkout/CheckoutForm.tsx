@@ -301,7 +301,8 @@ export default function CheckoutForm({
 						break;
 				}
 			} else if (error instanceof Error) {
-				errorMessage = error.message;
+				// Don't expose raw error messages - use generic fallback
+				errorMessage = "An error occurred during payment. Please try again.";
 			}
 
 			const failureUrl = new URL(`${window.location.origin}/failed`);

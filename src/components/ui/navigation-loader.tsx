@@ -104,7 +104,7 @@ export function NavigationLoader() {
 			<div className="pointer-events-none fixed inset-x-0 top-0 z-[70] flex justify-center">
 				<div className="pointer-events-auto mt-3 flex items-center gap-2 rounded-full bg-background/90 px-4 py-2 text-xs font-medium text-muted-foreground shadow-lg ring-1 ring-border/40 backdrop-blur">
 					<Spinner size="sm" aria-label="Navigating" className="text-primary" />
-					<span aria-hidden>Loading experience…</span>
+					<span aria-hidden>Navigating…</span>
 				</div>
 			</div>
 		);

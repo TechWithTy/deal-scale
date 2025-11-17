@@ -73,11 +73,6 @@ function HeroStaticFallback({ variant }: { variant?: "loading" | "static" }) {
 						{LIVE_SECONDARY_CTA.label}
 					</Link>
 				</div>
-				<p className="max-w-2xl text-sm text-muted-foreground">
-					{variant === "loading"
-						? "Loading the interactive demo…"
-						: "We render the full interactive hero once your browser is idle so the page stays responsive on every device."}
-				</p>
 				<div id="live-hero-details" aria-hidden="true" className="sr-only" />
 			</div>
 		</section>

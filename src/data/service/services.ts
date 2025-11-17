@@ -1045,7 +1045,7 @@ export const services: ServicesData = {
 				"Historical Performance & Lease Tracking",
 				"Automated Market Update Emails",
 				"White-Labeled Reporting for Clients & Stakeholders",
-				"API Access & Role-Based Permissions",
+				"Integration Access & Role-Based Permissions",
 			],
 			price: "Enterprise Tier",
 			showBanner: true,
