@@ -862,7 +862,7 @@ const CallDemoInteractive = () => {
 								{AI_OUTREACH_STUDIO_FEATURES.map((feature) => (
 									<div
 										key={feature.title}
-										className="rounded-xl border border-slate-200/70 bg-white/75 p-4 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5"
+										className="rounded-xl border border-slate-200/70 bg-white/75 p-4 text-center shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5"
 									>
 										<h3 className="font-semibold text-slate-900 text-sm uppercase tracking-[0.18em] dark:text-white">
 											{feature.title}
