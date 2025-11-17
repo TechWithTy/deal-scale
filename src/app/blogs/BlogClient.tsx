@@ -152,7 +152,7 @@ function BlogContent() {
 					href="/contact"
 					secondaryButton={{
 						label: "Join Community",
-						href: "/discord",
+						href: "https://discord.gg/BNrsYRPtFN",
 						target: "_blank",
 					}}
 				/>
