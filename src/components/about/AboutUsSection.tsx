@@ -39,7 +39,7 @@ export const AboutUsSection: React.FC = () => (
 					platform continuously sources, qualifies, and schedules sales-ready
 					meetings so your closers can focus on winning new business.
 				</p>
-				<div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+				<div className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-start">
 					<Link
 						href="/about"
 						className="inline-block w-fit rounded-md bg-primary px-6 py-3 font-semibold text-sm text-white shadow-lg transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
@@ -50,7 +50,7 @@ export const AboutUsSection: React.FC = () => (
 						href="https://discord.gg/BNrsYRPtFN"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="inline-block w-fit rounded-md border border-primary px-6 py-3 font-semibold text-sm text-primary transition-colors hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+						className="inline-block w-fit rounded-md border border-primary px-6 py-3 font-semibold text-primary text-sm transition-colors hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 					>
 						Join Our Community
 					</a>

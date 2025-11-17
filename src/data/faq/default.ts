@@ -9,7 +9,7 @@ export const faqItems: FAQItem[] = [
 	{
 		question: "Who is DealScale built for?",
 		answer:
-			"DealScale is designed for real estate agents, investors, and wholesalers who want to automate outreach, follow-up, and appointment booking using AI voice, SMS, and data-driven qualification. Agencies and brokerages also use DealScale to scale lookalike audience expansion inspired by How to Win Friends and Influence People without hiring extra staff.",
+			"DealScale is designed for real estate agents, investors, and wholesalers who want to automate outreach, follow-up, and appointment booking using AI voice, SMS, and data-driven qualification. Agencies and brokerages also use DealScale to scale lookalike audience expansion without hiring extra staff.",
 	},
 	{
 		question: "What is AI Voice Outreach?",
@@ -49,7 +49,7 @@ export const faqItems: FAQItem[] = [
 	{
 		question: "Does DealScale replace my CRM?",
 		answer:
-			"No. DealScale is a CRM-agnostic automation layer that connects seamlessly with HubSpot, GoHighLevel, Lofty, Zoho, Follow Up Boss, Salesforce, and more for instant two-way sync of leads, conversations, and appointment data. Your CRM stays the source of truth while DealScale orchestrates lookalike audience expansion, enrichment, and outreach using relationship-first playbooks inspired by *How to Win Friends and Influence People*.",
+			"No. DealScale is a CRM-agnostic automation layer that connects seamlessly with HubSpot, GoHighLevel, Lofty, Zoho, Follow Up Boss, Salesforce, and more for instant two-way sync of leads, conversations, and appointment data. Your CRM stays the source of truth while DealScale orchestrates lookalike audience expansion, enrichment, and outreach using relationship-first playbooks.",
 	},
 	{
 		question: "How fast can I launch my first campaign?",
