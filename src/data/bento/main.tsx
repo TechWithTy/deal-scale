@@ -28,8 +28,8 @@ const layout = {
 
 export const MainBentoFeatures: BentoFeature[] = [
 	{
-		title: "Full text search",
-		description: "Search through all your files in one place.",
+		title: "Get started in 3 minutes or less",
+		description: "Launch your first AI campaign in minutes, not hours.",
 		icon: <PlaneTakeoff className="h-6 w-6 text-accent" />,
 		className: layout.startOne,
 		background: (
