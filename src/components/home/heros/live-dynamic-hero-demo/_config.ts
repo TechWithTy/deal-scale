@@ -32,12 +32,12 @@ const HERO_COPY_V7 = {
 		investor: {
 			problem: [
 				"losing track of off-market leads",
-				"qualifying motivated sellers manually",
+				"chasing leads manually",
 			],
-			solution: [
-				"AI real estate deal flow automation",
-				"How to Win nurturing loops",
-			],
+		solution: [
+			"AI real estate deal flow automation",
+			"automated seller nurturing",
+		],
 			fear: [
 				"your next profitable deal slips",
 				"your deal pipeline dries up",
