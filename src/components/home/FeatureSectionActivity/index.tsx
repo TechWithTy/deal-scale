@@ -30,7 +30,7 @@ const LEFT_COLUMN_POINTS = [
 ] as const;
 
 const FALLBACK_HEADLINE =
-	"We orchestrate every deal touchpoint so your AI Sales Agents stay in deal mode.";
+	"We orchestrate every deal touchpoint so AI Sales Agents stay in deal mode.";
 const FALLBACK_SUBHEAD =
 	"Monitor live seller handoffs, deal alerts, and compliance tasks without leaving your workflow. Investors trust DealScale to automate deal flow outreach.";
 const FALLBACK_SUPPORT = "Automate deal flow conversations in under 5 minutes.";
@@ -127,7 +127,7 @@ export default function FeatureSectionActivity(): JSX.Element {
 		personaAudience.endsWith("s") || personaAudience.endsWith("S")
 			? "stay"
 			: "stays";
-	const headline = `We orchestrate every deal touchpoint so your ${personaAudience} ${personaVerb} in deal mode.`;
+	const headline = `We orchestrate every deal touchpoint so ${personaAudience} ${personaVerb} in deal mode.`;
 	const resolvedBenefit =
 		goal ??
 		LIVE_COPY?.values?.benefit ??

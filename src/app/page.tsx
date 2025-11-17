@@ -255,7 +255,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 	const personaAudienceLabel =
 		PERSONA_LABEL.replace(/^For\s+/i, "").trim() || PERSONA_LABEL;
-	const personaPromise = `We orchestrate every deal touchpoint so your ${personaAudienceLabel} stay in deal mode.`;
+	const personaPromise = `We orchestrate every deal touchpoint so ${personaAudienceLabel} stay in deal mode.`;
 	const outreachTagline = AI_OUTREACH_STUDIO_TAGLINE;
 
 	const heroKeywordsBase = [
@@ -340,7 +340,7 @@ const Index = async ({
 		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale’s AI Sales Agents.";
 	const personaAudienceLabel =
 		PERSONA_LABEL.replace(/^For\s+/i, "").trim() || PERSONA_LABEL;
-	const personaPromise = `We orchestrate every deal touchpoint so your ${personaAudienceLabel} stay in deal mode.`;
+	const personaPromise = `We orchestrate every deal touchpoint so ${personaAudienceLabel} stay in deal mode.`;
 	const heroServiceDescription = [personaPromise, heroDescription]
 		.filter((segment) => segment && segment.length > 0)
 		.join(" ");
