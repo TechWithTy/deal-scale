@@ -843,7 +843,7 @@ const CallDemoInteractive = () => {
 				contentClassName: "flex h-full flex-col gap-6",
 				content: (
 					<div className="relative z-20 flex h-full flex-col gap-8">
-						<div className="flex flex-col gap-3 text-balance md:items-center md:text-center">
+						<div className="flex flex-col gap-3 text-balance items-center text-center md:items-center md:text-center">
 							<p className="font-medium text-slate-500 text-sm uppercase tracking-[0.3em] dark:text-white/60">
 								{AI_OUTREACH_STUDIO_HEADING}
 								<span className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-900/5 px-3 py-1 font-semibold text-[0.65rem] text-slate-700 tracking-[0.25em] dark:border-white/15 dark:bg-white/10 dark:text-white/80">
