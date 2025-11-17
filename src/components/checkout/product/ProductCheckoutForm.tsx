@@ -164,7 +164,7 @@ export function ProductCheckoutForm({
 		e.preventDefault();
 
 		if (!stripe || !elements) {
-			setError("Stripe hasn't loaded yet. Please try again.");
+			setError("Payment system is still loading. Please wait a moment and try again.");
 			return;
 		}
 
@@ -247,7 +247,8 @@ export function ProductCheckoutForm({
 						break;
 				}
 			} else if (err instanceof Error) {
-				errorMessage = err.message;
+				// Don't expose raw error messages - use generic fallback
+				errorMessage = "An error occurred during payment. Please try again.";
 			}
 
 			const failureUrl = new URL(`${window.location.origin}/failed`);

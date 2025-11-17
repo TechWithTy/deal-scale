@@ -63,7 +63,7 @@ export function TypingAnimation({
 	const elementRef = useRef<HTMLElement | null>(null);
 	const isInView = useInView(elementRef as React.RefObject<Element>, {
 		amount: 0.3,
-		once: true,
+		once: false, // Check continuously to stop animation when out of view
 	});
 
 	const wordsToAnimate = useMemo(
@@ -95,10 +95,11 @@ export function TypingAnimation({
 	const typingSpeed = typeSpeed || duration;
 	const deletingSpeed = deleteSpeed || typingSpeed / 2;
 
-	const shouldStart = startOnView ? isInView : true;
+	// Stop animation when out of view to prevent layout shifts
+	const shouldAnimate = startOnView ? isInView : true;
 
 	useEffect(() => {
-		if (!shouldStart || graphemeMap.length === 0) return;
+		if (!shouldAnimate || graphemeMap.length === 0) return;
 
 		const currentGraphemes = graphemeMap[wordIndex] ?? [];
 		const isComplete =
@@ -190,7 +191,7 @@ export function TypingAnimation({
 
 		return () => window.clearTimeout(timeout);
 	}, [
-		shouldStart,
+		shouldAnimate,
 		graphemeMap,
 		hasMultipleWords,
 		loop,

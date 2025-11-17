@@ -1248,7 +1248,7 @@ export const aiDirectMailNurturingHowItWorks: ServiceHowItWorks[] = [
 		subtitle:
 			"Our integrated network handles all printing and mailing logistics.",
 		description:
-			"Once your campaign is approved, Deal Scale's robust backend infrastructure (our whitelabeled print & mail network) manages the high-quality printing, addressing, and timely mailing of your personalized pieces.",
+			"Once your campaign is approved, Deal Scale's integrated print and mail network manages the high-quality printing, addressing, and timely mailing of your personalized pieces.",
 		icon: "User", // Or "Truck"
 		label: "Step 4: Automated Fulfillment",
 		positionLabel: "bottom",

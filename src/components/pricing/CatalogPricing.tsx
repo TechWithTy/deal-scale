@@ -256,7 +256,7 @@ export const CatalogPricing = ({
 				};
 
 				if (!clientSecret) {
-					throw new Error("Missing payment intent secret");
+					throw new Error("Unable to initialize checkout. Please try again.");
 				}
 
 				setCheckoutState({
@@ -318,7 +318,7 @@ export const CatalogPricing = ({
 					(dc) => dc.code.toUpperCase() === normalizedCoupon,
 				) ?? null,
 			);
-			const stripeToast = startStripeToast("Preparing Stripe checkout…");
+			const stripeToast = startStripeToast("Preparing checkout…");
 
 			try {
 				await navigator.clipboard.writeText(coupon);
@@ -387,7 +387,7 @@ export const CatalogPricing = ({
 
 				setProductCheckoutSecret(data.clientSecret);
 				stripeToast.success(
-					"Checkout ready. Review the Stripe modal to finish your purchase.",
+					"Checkout ready. Complete your purchase in the payment form.",
 				);
 			} catch (error) {
 				const message =

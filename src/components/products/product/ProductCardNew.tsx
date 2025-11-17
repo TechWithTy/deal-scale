@@ -81,12 +81,12 @@ const ProductCardNew = (props: CardProps) => {
 
 	const handleInitiateCheckout = async () => {
 		if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-			toast.error("Stripe is not configured. Cannot proceed to checkout.");
+			toast.error("Checkout is currently unavailable. Please contact support.");
 			return;
 		}
 
 		setIsCheckoutLoading(true);
-		const stripeToast = startStripeToast("Contacting Stripe…");
+		const stripeToast = startStripeToast("Preparing checkout…");
 		try {
 			const response = await fetch("/api/stripe/intent", {
 				method: "POST",
@@ -112,10 +112,10 @@ const ProductCardNew = (props: CardProps) => {
 
 			const { clientSecret } = await response.json();
 			if (!clientSecret)
-				throw new Error("Client secret not received from server.");
+				throw new Error("Unable to initialize checkout. Please try again.");
 			setClientSecret(clientSecret);
 			stripeToast.success(
-				"Checkout ready. Review the Stripe modal to finish your purchase.",
+				"Checkout ready. Complete your purchase in the payment form.",
 			);
 		} catch (error) {
 			console.error("Checkout initiation failed:", error);

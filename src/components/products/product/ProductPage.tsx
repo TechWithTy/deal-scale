@@ -54,7 +54,7 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 		metadata: object;
 	}) => {
 		setCheckoutLoading(true);
-		const stripeToast = startStripeToast("Contacting Stripe…");
+		const stripeToast = startStripeToast("Preparing checkout…");
 		try {
 			const response = await fetch("/api/stripe/intent", {
 				method: "POST",
@@ -76,17 +76,16 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 
 			const { clientSecret } = await response.json();
 			if (!clientSecret) {
-				throw new Error("Client secret not received from server.");
+				throw new Error("Unable to initialize checkout. Please try again.");
 			}
 
 			setCheckoutPrice(checkoutDetails.price);
 			setClientSecret(clientSecret);
 			stripeToast.success(
-				"Checkout ready. Review the Stripe modal to finish your purchase.",
+				"Checkout ready. Complete your purchase in the payment form.",
 			);
 		} catch (error: unknown) {
-			let errorMessage = "Payment failed. Please try again.";
-			if (error instanceof Error) errorMessage = error.message;
+			const errorMessage = "Unable to start checkout. Please try again.";
 			stripeToast.error(errorMessage);
 			console.error("Checkout initiation failed:", error);
 		} finally {

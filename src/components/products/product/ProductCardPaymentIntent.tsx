@@ -129,7 +129,7 @@ const ProductCard = (props: ProductCardProps) => {
 			}
 
 			if (!responseData.clientSecret) {
-				throw new Error("Client secret not received from server");
+				throw new Error("Unable to initialize checkout. Please try again.");
 			}
 
 			console.log("5. Setting client secret...");
@@ -140,7 +140,7 @@ const ProductCard = (props: ProductCardProps) => {
 				message: error.message,
 				stack: error.stack,
 			});
-			toast.error(error.message || "Payment failed. Please try again.");
+			toast.error("Unable to start checkout. Please try again.");
 		} finally {
 			setCheckoutLoading(false);
 		}
@@ -155,7 +155,7 @@ const ProductCard = (props: ProductCardProps) => {
 					props.className,
 				)}
 			>
-				Error: Invalid core product data.
+				Unable to display product information. Please refresh the page or contact support.
 			</div>
 		);
 	}
