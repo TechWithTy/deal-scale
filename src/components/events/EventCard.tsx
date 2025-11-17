@@ -297,7 +297,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
 												asChild
 											>
 												<a
-													href="/discord"
+													href="https://discord.gg/BNrsYRPtFN"
 													target="_blank"
 													rel="noopener noreferrer"
 												>
@@ -436,12 +436,12 @@ const EventCard = ({ event, index }: EventCardProps) => {
 										className="w-full max-w-xs gap-2 border border-primary/30 bg-white/70 text-primary transition-colors hover:border-primary hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white"
 										asChild
 									>
-										<a
-											href="/discord"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											Join Community <ExternalLink className="h-4 w-4" />
+									<a
+										href="https://discord.gg/BNrsYRPtFN"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										Join Community <ExternalLink className="h-4 w-4" />
 										</a>
 									</Button>
 								</div>

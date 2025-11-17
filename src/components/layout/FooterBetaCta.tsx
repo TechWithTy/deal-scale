@@ -61,8 +61,8 @@ export function FooterBetaCta({ className = "" }: { className?: string }) {
 						Request Early Access <ArrowRight className="ml-2 h-4 w-4" />
 					</Button>
 				</Link>
-				<Link
-					href="/discord"
+				<a
+					href="https://discord.gg/BNrsYRPtFN"
 					target="_blank"
 					rel="noopener noreferrer"
 					className="flex w-full justify-center lg:w-auto lg:justify-start"
@@ -73,7 +73,7 @@ export function FooterBetaCta({ className = "" }: { className?: string }) {
 					>
 						Join Community <ArrowRight className="ml-2 h-4 w-4" />
 					</Button>
-				</Link>
+				</a>
 			</div>
 		</div>
 	);

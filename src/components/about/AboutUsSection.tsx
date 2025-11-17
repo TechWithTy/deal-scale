@@ -46,14 +46,14 @@ export const AboutUsSection: React.FC = () => (
 					>
 						Learn More
 					</Link>
-					<Link
-						href="/discord"
+					<a
+						href="https://discord.gg/BNrsYRPtFN"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="inline-block w-fit rounded-md border border-primary px-6 py-3 font-semibold text-sm text-primary transition-colors hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 					>
 						Join Our Community
-					</Link>
+					</a>
 				</div>
 			</div>
 		</div>

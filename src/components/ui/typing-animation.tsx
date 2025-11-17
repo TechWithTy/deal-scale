@@ -61,10 +61,46 @@ export function TypingAnimation({
 	const { displayedText, wordIndex, charIndex, phase } = typingState;
 
 	const elementRef = useRef<HTMLElement | null>(null);
+	const [mounted, setMounted] = useState(false);
+	const [manuallyInView, setManuallyInView] = useState(false);
 	const isInView = useInView(elementRef as React.RefObject<Element>, {
-		amount: 0.3,
+		amount: 0.1, // Lower threshold to detect when element is in view more easily
 		once: false, // Check continuously to stop animation when out of view
+		margin: "0px", // No margin for detection
 	});
+
+	// Ensure component is mounted before checking viewport
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	// Manual fallback check for viewport visibility (in case useInView doesn't detect it)
+	useEffect(() => {
+		if (!mounted || !startOnView) return;
+
+		const checkInView = () => {
+			if (!elementRef.current) return;
+			const rect = elementRef.current.getBoundingClientRect();
+			const isVisible =
+				rect.top < window.innerHeight &&
+				rect.bottom > 0 &&
+				rect.left < window.innerWidth &&
+				rect.right > 0;
+			setManuallyInView(isVisible);
+		};
+
+		// Check immediately
+		checkInView();
+
+		// Also check on scroll and resize as fallback
+		window.addEventListener("scroll", checkInView, { passive: true });
+		window.addEventListener("resize", checkInView, { passive: true });
+
+		return () => {
+			window.removeEventListener("scroll", checkInView);
+			window.removeEventListener("resize", checkInView);
+		};
+	}, [mounted, startOnView]);
 
 	const wordsToAnimate = useMemo(
 		() => words || (children ? [children] : []),
@@ -82,6 +118,18 @@ export function TypingAnimation({
 	);
 
 	const contentSignatureRef = useRef(contentSignature);
+	const wasInViewRef = useRef<boolean | null>(null);
+	const shouldAnimateRef = useRef<boolean>(startOnView ? isInView : true);
+
+	// Stop animation when out of view to prevent layout shifts
+	// Use useInView result, or fallback to manual check if useInView hasn't detected it yet
+	// If not mounted yet or startOnView is false, allow animation
+	const isActuallyInView = startOnView
+		? mounted
+			? isInView || manuallyInView
+			: true
+		: true;
+	const shouldAnimate = isActuallyInView;
 
 	useEffect(() => {
 		if (contentSignatureRef.current !== contentSignature) {
@@ -90,13 +138,41 @@ export function TypingAnimation({
 		}
 	}, [contentSignature]);
 
+	// Reset animation when coming back into view (if startOnView is enabled)
+	useEffect(() => {
+		if (startOnView) {
+			// Initialize wasInViewRef on first render
+			if (wasInViewRef.current === null) {
+				wasInViewRef.current = isActuallyInView;
+				// If initially in view, ensure animation can start
+				if (isActuallyInView) {
+					setTypingState(INITIAL_STATE);
+				}
+			} else if (isActuallyInView && wasInViewRef.current === false) {
+				// Just came back into view, reset animation
+				setTypingState(INITIAL_STATE);
+			}
+			wasInViewRef.current = isActuallyInView;
+		} else {
+			wasInViewRef.current = true; // Always in view if startOnView is false
+		}
+	}, [isActuallyInView, startOnView]);
+
 	const hasMultipleWords = graphemeMap.length > 1;
 
 	const typingSpeed = typeSpeed || duration;
 	const deletingSpeed = deleteSpeed || typingSpeed / 2;
 
-	// Stop animation when out of view to prevent layout shifts
-	const shouldAnimate = startOnView ? isInView : true;
+	// Track shouldAnimate changes to ensure animation restarts
+	useEffect(() => {
+		const prevShouldAnimate = shouldAnimateRef.current;
+		shouldAnimateRef.current = shouldAnimate;
+
+		// If animation was stopped and is now enabled, ensure it can restart
+		if (!prevShouldAnimate && shouldAnimate && startOnView) {
+			// Animation is being re-enabled, state will be reset by the isInView effect above
+		}
+	}, [shouldAnimate, startOnView]);
 
 	useEffect(() => {
 		if (!shouldAnimate || graphemeMap.length === 0) return;
@@ -223,7 +299,6 @@ export function TypingAnimation({
 				return "▌";
 			case "underscore":
 				return "_";
-			case "line":
 			default:
 				return "|";
 		}
