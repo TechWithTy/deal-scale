@@ -122,7 +122,7 @@ export default function HeroSideBySide(): JSX.Element {
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
 			<HeroAuroraDynamic className="z-0 opacity-80 dark:opacity-90" />
 
-			<div className="relative z-0 flex w-full items-center justify-center overflow-hidden pt-10 pb-20 md:pb-24">
+			<div className="relative z-0 flex min-h-[calc(100vh-4rem)] w-full items-center justify-center overflow-hidden">
 				<div className="pointer-events-none absolute inset-0">
 					<InteractiveGridPattern
 						width={72}
@@ -144,11 +144,11 @@ export default function HeroSideBySide(): JSX.Element {
 					<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.24)_0%,rgba(15,23,42,0)_55%)] opacity-35" />
 				</div>
 
-				<div className="container relative z-10 mx-auto w-full px-6 py-16 md:px-10 lg:px-12">
+				<div className="container relative z-10 mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12 lg:py-20">
 					{/* Side-by-side layout: Text left, Video right */}
-					<div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 md:grid-cols-2 md:items-center lg:gap-16">
+					<div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
 						{/* Left Column: Text Content */}
-						<div className="flex flex-col gap-8 text-left">
+						<div className="flex flex-col gap-6 text-left md:gap-8">
 							{/* Persona Badge */}
 							<span className="inline-flex w-fit items-center justify-center rounded-full border border-border/40 bg-background/70 px-5 py-1.5 font-semibold text-foreground/80 text-xs uppercase tracking-[0.4em]">
 								{PERSONA_LABEL}
@@ -160,25 +160,27 @@ export default function HeroSideBySide(): JSX.Element {
 							</h1>
 
 							{/* Description */}
-							<p className="max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl dark:text-neutral-300">
+							<p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl dark:text-neutral-300">
 								{description}
 							</p>
 
 							{/* CTAs */}
-							<PersonaCTA
-								className="w-full"
-								displayMode="both"
-								orientation="horizontal"
-								primary={LIVE_PRIMARY_CTA}
-								secondary={LIVE_SECONDARY_CTA}
-								microcopy={LIVE_MICROCOPY}
-								onPrimaryClick={startTrial}
-								onSecondaryClick={handlePreviewDemo}
-								primaryLoading={isTrialLoading}
-							/>
+							<div className="mt-2">
+								<PersonaCTA
+									className="w-full"
+									displayMode="both"
+									orientation="horizontal"
+									primary={LIVE_PRIMARY_CTA}
+									secondary={LIVE_SECONDARY_CTA}
+									microcopy={LIVE_MICROCOPY}
+									onPrimaryClick={startTrial}
+									onSecondaryClick={handlePreviewDemo}
+									primaryLoading={isTrialLoading}
+								/>
+							</div>
 
 							{/* Social Proof */}
-							<div className="flex flex-col items-start gap-4">
+							<div className="mt-2 flex flex-col items-start gap-3">
 								<AvatarCircles
 									avatarUrls={LIVE_SOCIAL_PROOF.avatars}
 									numPeople={LIVE_SOCIAL_PROOF.numPeople}
@@ -195,14 +197,16 @@ export default function HeroSideBySide(): JSX.Element {
 						{/* Right Column: Video */}
 						<div
 							ref={videoSectionRef}
-							className="w-full"
+							className="flex w-full items-center justify-center"
 							data-beam-collider="true"
 						>
-							<HeroVideoPreviewDynamic
-								ref={videoPreviewRef}
-								video={heroVideo}
-								thumbnailAlt="Live dynamic hero video preview"
-							/>
+							<div className="w-full max-w-full">
+								<HeroVideoPreviewDynamic
+									ref={videoPreviewRef}
+									video={heroVideo}
+									thumbnailAlt="Live dynamic hero video preview"
+								/>
+							</div>
 						</div>
 					</div>
 
