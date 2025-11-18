@@ -13,7 +13,7 @@ export const PersonaSwitcher = () => {
 	const shouldReduceMotion = useReducedMotion();
 
 	return (
-		<div className="relative flex w-full max-w-lg items-center justify-center rounded-full border border-white/10 bg-white/5 p-1 backdrop-blur-md">
+		<div className="relative flex w-full max-w-lg items-center justify-center rounded-full border border-black/10 bg-white/80 p-1 backdrop-blur-md dark:border-white/10 dark:bg-white/5">
 			{PERSONA_DISPLAY_ORDER.map((option) => {
 				const isActive = option === persona;
 
@@ -24,8 +24,8 @@ export const PersonaSwitcher = () => {
 						className={cn(
 							"relative z-10 flex flex-1 items-center justify-center rounded-full px-4 py-2 text-xs font-medium uppercase tracking-wide transition-colors sm:text-sm",
 							isActive
-								? "text-white"
-								: "text-white/60 hover:text-white focus-visible:text-white",
+								? "text-black dark:text-white"
+								: "text-black/70 hover:text-black dark:text-white/80 dark:hover:text-white focus-visible:text-black dark:focus-visible:text-white",
 						)}
 						onClick={() => setPersona(option)}
 						aria-pressed={isActive}
@@ -33,7 +33,7 @@ export const PersonaSwitcher = () => {
 						{isActive && (
 							<motion.span
 								layoutId="persona-active-pill"
-								className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/40 via-primary/20 to-primary/40 shadow-[0_0_25px_rgba(93,132,255,0.45)]"
+								className="absolute inset-0 rounded-full bg-primary/20 shadow-[0_0_25px_rgba(93,132,255,0.3)] dark:bg-gradient-to-r dark:from-primary/40 dark:via-primary/20 dark:to-primary/40 dark:shadow-[0_0_25px_rgba(93,132,255,0.45)]"
 								transition={
 									shouldReduceMotion
 										? { duration: 0 }
