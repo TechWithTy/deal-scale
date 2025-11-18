@@ -24,7 +24,6 @@ import {
 	LIVE_SECONDARY_CTA,
 	LIVE_SOCIAL_PROOF,
 	LIVE_VIDEO,
-	PERSONA_GOAL,
 	PERSONA_LABEL,
 } from "./_config";
 
@@ -157,7 +156,7 @@ export default function HeroSideBySide(): JSX.Element {
 							</span>
 
 							{/* Single Combined Statement */}
-							<h1 className="text-4xl font-bold leading-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+							<h1 className="font-bold text-4xl text-foreground leading-tight sm:text-5xl md:text-6xl lg:text-7xl">
 								{combinedStatement}
 							</h1>
 

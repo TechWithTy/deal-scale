@@ -12,27 +12,24 @@ import {
 	PERSONA_LABEL,
 } from "./_config";
 
-const LiveDynamicHeroClient = dynamic(
-	() => import("./LiveDynamicHeroClient"),
-	{
-		ssr: false,
-		loading: () => <HeroStaticFallback variant="loading" />,
-	},
-);
+// Keep for potential future use
+// const LiveDynamicHeroClient = dynamic(
+// 	() => import("./LiveDynamicHeroClient"),
+// 	{
+// 		ssr: false,
+// 		loading: () => <HeroStaticFallback variant="loading" />,
+// 	},
+// );
 
-const HeroSideBySide = dynamic(
-	() => import("./HeroSideBySide"),
-	{
-		ssr: false,
-		loading: () => <HeroStaticFallback variant="loading" />,
-	},
-);
+const HeroSideBySide = dynamic(() => import("./HeroSideBySide"), {
+	ssr: false,
+	loading: () => <HeroStaticFallback />,
+});
 
-function HeroStaticFallback({ variant }: { variant?: "loading" | "static" }) {
+function HeroStaticFallback() {
 	const {
 		problem: problemPhrase = "losing track of off-market leads",
 		solution: solutionPhrase = "AI real estate deal automation",
-		fear: fearPhrase = "your next profitable deal slips",
 	} = LIVE_COPY?.values ?? {};
 	const description =
 		typeof LIVE_COPY?.subtitle === "string"
@@ -50,7 +47,7 @@ function HeroStaticFallback({ variant }: { variant?: "loading" | "static" }) {
 				<span className="inline-flex items-center justify-center rounded-full border border-border/40 bg-background/70 px-5 py-1.5 font-semibold text-foreground/80 text-xs uppercase tracking-[0.4em]">
 					{PERSONA_LABEL}
 				</span>
-				<h1 className="text-4xl font-bold leading-tight text-foreground sm:text-5xl md:text-6xl">
+				<h1 className="font-bold text-4xl text-foreground leading-tight sm:text-5xl md:text-6xl">
 					Stop {problemPhrase}, start {solutionPhrase}
 				</h1>
 				<p className="max-w-3xl text-base text-muted-foreground sm:text-lg">
