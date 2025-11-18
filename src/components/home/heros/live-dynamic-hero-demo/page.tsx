@@ -20,6 +20,14 @@ const LiveDynamicHeroClient = dynamic(
 	},
 );
 
+const HeroSideBySide = dynamic(
+	() => import("./HeroSideBySide"),
+	{
+		ssr: false,
+		loading: () => <HeroStaticFallback variant="loading" />,
+	},
+);
+
 function HeroStaticFallback({ variant }: { variant?: "loading" | "static" }) {
 	const {
 		problem: problemPhrase = "losing track of off-market leads",
@@ -42,20 +50,9 @@ function HeroStaticFallback({ variant }: { variant?: "loading" | "static" }) {
 				<span className="inline-flex items-center justify-center rounded-full border border-border/40 bg-background/70 px-5 py-1.5 font-semibold text-foreground/80 text-xs uppercase tracking-[0.4em]">
 					{PERSONA_LABEL}
 				</span>
-				<div className="space-y-4 text-balance">
-					<p className="text-lg font-semibold text-foreground/80">Stop</p>
-					<p className="text-3xl font-semibold leading-snug text-foreground sm:text-4xl md:text-5xl">
-						{problemPhrase}
-					</p>
-					<p className="text-lg font-semibold text-foreground/80">Start</p>
-					<p className="text-2xl font-semibold text-primary sm:text-3xl">
-						{solutionPhrase}
-					</p>
-					<p className="text-lg font-semibold text-foreground/80">Before</p>
-					<p className="text-2xl font-semibold text-yellow-500 sm:text-3xl">
-						{fearPhrase}
-					</p>
-				</div>
+				<h1 className="text-4xl font-bold leading-tight text-foreground sm:text-5xl md:text-6xl">
+					Stop {problemPhrase}, start {solutionPhrase}
+				</h1>
 				<p className="max-w-3xl text-base text-muted-foreground sm:text-lg">
 					{description}
 				</p>
@@ -88,7 +85,7 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 	// Always render static fallback immediately for above-the-fold LCP
 	// Upgrade to interactive version when browser is ready (fast timeout for better UX)
 	return shouldHydrate ? (
-		<LiveDynamicHeroClient />
+		<HeroSideBySide />
 	) : (
 		<HeroStaticFallback variant="static" />
 	);
