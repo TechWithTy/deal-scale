@@ -384,18 +384,17 @@ export default function CheckoutForm({
 						{isTrial ? (
 							<>
 								<span className="block font-semibold text-primary">
-									No charge today.
+									Start your free trial — no charge today.
 								</span>
 								<span className="block">
-									We secure your payment method to carry your {plan.name} plan
-									into full access at{" "}
+									We'll secure your payment method to automatically continue your {plan.name} plan at{" "}
 									{formatPrice(
 										postTrialAmount ?? plan.price[planType].amount ?? 0,
 									)}
-									.
+									{" "}after the trial ends.
 								</span>
 								<span className="block">
-									Cancel anytime before the trial ends.
+									Cancel anytime before the trial ends with no charges.
 								</span>
 								<span className="block text-[11px] text-tertiary uppercase tracking-wide">
 									Trial credits expire when the trial ends.

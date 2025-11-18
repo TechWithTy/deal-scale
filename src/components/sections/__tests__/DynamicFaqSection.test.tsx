@@ -22,7 +22,7 @@ describe("DynamicFaqSection", () => {
 		render(<DynamicFaqSection />);
 
 		expect(screen.getByTestId("featured-faq-answer")).toHaveTextContent(
-			"DealScale is an AI sales coworker that automates skip tracing, AI cold calling, and seller qualification for agents and investors. Unlike list providers, it handles outreach, follow-up, and appointment booking so you can focus on closing deals.",
+			"DealScale is an AI sales teammate that automates skip tracing, AI cold calling, and seller qualification for agents and investors. Unlike list providers, it handles outreach, follow-up, and appointment booking so you can focus on closing deals.",
 		);
 
 		expect(screen.getByTestId("persona-next-step")).toHaveTextContent(

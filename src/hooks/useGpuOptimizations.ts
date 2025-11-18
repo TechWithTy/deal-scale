@@ -52,3 +52,4 @@ export function useGpuOptimizations(): boolean {
 	return enableGpu;
 }
 
+

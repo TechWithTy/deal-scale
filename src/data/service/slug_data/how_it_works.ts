@@ -763,7 +763,7 @@ export const marketAnalysisHowItWorks: ServiceHowItWorks[] = [
 		title: "Arm Your Agents",
 		subtitle: "Feed Insights to Your AI Team",
 		description:
-			"Pass the market analysis to your AI Sales Agents. They will intelligently weave these stats into their conversations to build authority and create compelling arguments.",
+			"Pass the market analysis to your AI Sales Assistants. They will intelligently weave these stats into their conversations to build authority and create compelling arguments.",
 		icon: "BrainCircuit",
 		label: "Empower AI Agents",
 		positionLabel: "left-[130px] top-[10px]",

@@ -30,7 +30,7 @@ const LEFT_COLUMN_POINTS = [
 ] as const;
 
 const FALLBACK_HEADLINE =
-	"We orchestrate every deal touchpoint so AI Sales Agents stay in deal mode.";
+	"We orchestrate every deal touchpoint so AI Sales Assistants stay in deal mode.";
 const FALLBACK_SUBHEAD =
 	"Monitor live seller handoffs, deal alerts, and compliance tasks without leaving your workflow. Investors trust DealScale to automate deal flow outreach.";
 const FALLBACK_SUPPORT = "Automate deal flow conversations in under 5 minutes.";
@@ -118,7 +118,7 @@ export default function FeatureSectionActivity(): JSX.Element {
 		PERSONA_LABELS[persona] ??
 		PERSONA_LABEL ??
 		PERSONA_LABELS[DEFAULT_PERSONA_KEY] ??
-		"AI Sales Agents";
+		"AI Sales Assistants";
 	const personaAudience =
 		personaLabel.endsWith("s") || personaLabel.endsWith("S")
 			? personaLabel

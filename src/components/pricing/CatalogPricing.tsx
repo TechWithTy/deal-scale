@@ -468,7 +468,7 @@ export const CatalogPricing = ({
 				postTrialAmount: basicPlan.price,
 			});
 			stripeToast.success(
-				"Free trial ready. Review the checkout modal to finish activation.",
+				"Free trial ready. Complete checkout to start your trial — no charge today.",
 			);
 		} catch (error) {
 			stripeToast.error(

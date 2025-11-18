@@ -60,7 +60,7 @@ const MOCK_COPY: ResolvedHeroCopy = {
 		problems: ["manually auditing deals", "chasing spreadsheets all night"],
 		solutions: [
 			"automating investor follow-up",
-			"rolling out AI sales coworkers",
+			"rolling out AI sales teammates",
 		],
 		fears: ["missing the next flip", "watching the pipeline dry up"],
 	},

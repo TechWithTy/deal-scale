@@ -4,7 +4,7 @@ export const faqItems: FAQItem[] = [
 	{
 		question: "What makes DealScale different from other real estate tools?",
 		answer:
-			"DealScale is an AI sales coworker that automates skip tracing, AI cold calling, and seller qualification for agents and investors. Unlike list providers, it handles outreach, follow-up, and appointment booking so you can focus on closing deals. For investors like you, it also bakes in best-next-step playbooks that earn trust with sellers, win influencer referrals, and keep your pipeline warm without adding headcount.",
+			"DealScale is an AI sales teammate that automates skip tracing, AI cold calling, and seller qualification for agents and investors. Unlike list providers, it handles outreach, follow-up, and appointment booking so you can focus on closing deals. For investors like you, it also bakes in best-next-step playbooks that earn trust with sellers, win influencer referrals, and keep your pipeline warm without adding headcount.",
 	},
 	{
 		question: "Who is DealScale built for?",

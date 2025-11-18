@@ -29,7 +29,7 @@ function HeroStaticFallback({ variant }: { variant?: "loading" | "static" }) {
 	const description =
 		typeof LIVE_COPY?.subtitle === "string"
 			? LIVE_COPY.subtitle
-			: "Deal Scale keeps motivated sellers warm with AI sales agents so you can focus on closing.";
+			: "Deal Scale keeps motivated sellers warm with AI sales assistants so you can focus on closing.";
 
 	return (
 		<section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">

@@ -290,7 +290,7 @@ export const marketAnalysisFAQ: FAQProps = {
 		{
 			question: "What does it mean to 'Arm Your Agents'?",
 			answer:
-				"It means you can select a market report and give it to your AI Sales Agents as context. The AI will then be able to reference specific data points from that report (like rent growth or property type demand) in its live conversations with sellers, making it sound exceptionally knowledgeable.",
+				"It means you can select a market report and give it to your AI Sales Assistants as context. The AI will then be able to reference specific data points from that report (like rent growth or property type demand) in its live conversations with sellers, making it sound exceptionally knowledgeable.",
 		},
 		{
 			question: "Can I track my existing portfolio of properties?",

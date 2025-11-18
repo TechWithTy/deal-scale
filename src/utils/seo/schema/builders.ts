@@ -265,7 +265,7 @@ const KNOWS_ABOUT = [
 	"AI automation",
 	"real estate software",
 	"real estate lead generation",
-	"AI sales agents",
+	"AI sales assistants",
 	"CRM automation",
 	"voice cloning for sales",
 	"pipeline automation",

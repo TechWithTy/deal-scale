@@ -25,9 +25,9 @@ export const PERSONA_FAQ_ITEMS: PersonaFaqItem[] = [
 		question: "What is DealScale and how does it help me?",
 		answers: {
 			agent:
-				"DealScale is your AI-powered sales coworker that finds, qualifies, and follows up with seller and listing leads using your own cloned voice. It automates outreach, books appointments, and syncs with your CRM so you can focus on closing listings.",
+				"DealScale is your AI-powered sales teammate that finds, qualifies, and follows up with seller and listing leads using your own cloned voice. It automates outreach, books appointments, and syncs with your CRM so you can focus on closing listings.",
 			investor:
-				"DealScale is an AI sales coworker that automates skip tracing, AI cold calling, and seller qualification for agents and investors. Unlike list providers, it handles outreach, follow-up, and appointment booking so you can focus on closing deals. For investors like you, DealScale ships with playbooks that spark seller trust, convert influencer partners, and keep you top-of-mind without extra hiring.",
+				"DealScale is an AI sales teammate that automates skip tracing, AI cold calling, and seller qualification for agents and investors. Unlike list providers, it handles outreach, follow-up, and appointment booking so you can focus on closing deals. For investors like you, DealScale ships with playbooks that spark seller trust, convert influencer partners, and keep you top-of-mind without extra hiring.",
 			wholesaler:
 				"DealScale automates lead qualification for wholesalers. It calls and texts property owners, pre-screens motivation, and drops warm leads straight into your CRM or pipeline automatically.",
 			agency:
