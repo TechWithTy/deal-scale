@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
 	return (
 		<div className={`text-center ${className}`}>
 			<motion.h2
-				className={`relative z-10 mb-2 break-words bg-gradient-to-r from-blue-600 via-fuchsia-500 to-amber-500 bg-clip-text font-bold text-transparent leading-normal dark:from-blue-400 dark:via-fuchsia-300 dark:to-amber-400 ${h2} ${spacing}`}
+				className={`relative z-10 mb-2 break-words font-bold text-black leading-normal dark:text-white ${h2} ${spacing}`}
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5, delay: 0.2 }}
