@@ -160,7 +160,7 @@ export default function HeroSideBySide(): JSX.Element {
 							</h1>
 
 							{/* Description */}
-							<p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl dark:text-neutral-300">
+							<p className="max-w-2xl text-base text-muted-foreground leading-relaxed sm:text-lg md:text-xl dark:text-neutral-300">
 								{description}
 							</p>
 
