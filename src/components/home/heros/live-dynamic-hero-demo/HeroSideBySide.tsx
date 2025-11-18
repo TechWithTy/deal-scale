@@ -122,7 +122,7 @@ export default function HeroSideBySide(): JSX.Element {
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
 			<HeroAuroraDynamic className="z-0 opacity-80 dark:opacity-90" />
 
-			<div className="relative z-0 flex min-h-[calc(100vh-4rem)] w-full items-center justify-center overflow-hidden">
+			<section className="relative z-0 w-full overflow-hidden">
 				<div className="pointer-events-none absolute inset-0">
 					<InteractiveGridPattern
 						width={72}
@@ -146,7 +146,7 @@ export default function HeroSideBySide(): JSX.Element {
 
 				<div className="container relative z-10 mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12 lg:py-20">
 					{/* Side-by-side layout: Text left, Video right */}
-					<div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
+					<div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-8 md:grid-cols-2 md:items-center md:gap-12 lg:gap-16">
 						{/* Left Column: Text Content */}
 						<div className="flex flex-col gap-6 text-left md:gap-8">
 							{/* Persona Badge */}
@@ -197,10 +197,10 @@ export default function HeroSideBySide(): JSX.Element {
 						{/* Right Column: Video */}
 						<div
 							ref={videoSectionRef}
-							className="flex w-full items-center justify-center"
+							className="flex w-full items-center justify-center md:sticky md:top-24 md:self-start"
 							data-beam-collider="true"
 						>
-							<div className="w-full max-w-full">
+							<div className="w-full">
 								<HeroVideoPreviewDynamic
 									ref={videoPreviewRef}
 									video={heroVideo}
@@ -209,9 +209,13 @@ export default function HeroSideBySide(): JSX.Element {
 							</div>
 						</div>
 					</div>
+				</div>
+			</section>
 
-					{/* Additional Content Below */}
-					<div className="mx-auto mt-16 flex w-full max-w-7xl flex-col gap-10">
+			{/* Additional Content Below */}
+			<section className="relative z-10 w-full bg-background/50">
+				<div className="container mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12">
+					<div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
 						<div className="w-full max-w-2xl rounded-3xl border border-border/45 bg-background/85 px-5 py-5 text-center shadow-[0_16px_55px_-35px_rgba(37,99,235,0.35)] backdrop-blur-md sm:px-6 md:px-10">
 							<p className="font-medium text-foreground text-sm sm:text-base">
 								Start with a 90-second walkthrough of the investor pipeline
@@ -263,7 +267,7 @@ export default function HeroSideBySide(): JSX.Element {
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 			{checkoutState ? (
 				<PricingCheckoutDialog
 					clientSecret={checkoutState.clientSecret}
