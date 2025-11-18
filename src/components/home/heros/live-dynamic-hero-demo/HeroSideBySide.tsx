@@ -1,14 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useCallback, useRef } from "react";
-
 import {
 	type HeroVideoPreviewHandle,
 	resolveHeroThumbnailSrc,
 	useHeroVideoConfig,
 } from "@external/dynamic-hero";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useCallback, useRef } from "react";
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
