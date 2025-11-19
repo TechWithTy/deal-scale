@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { MagicCard } from "@/components/magicui/magic-card";
-import { AuroraText } from "@/components/magicui/aurora-text";
 import {
 	DEFAULT_PERSONA_KEY,
 	PERSONA_LABELS,
@@ -172,9 +171,9 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 				<div className="mx-auto flex max-w-xl flex-col items-center gap-3">
 					<PersonaSwitcher />
 					{goal ? (
-						<p className="text-sm font-medium text-white/70">
-							<span className="mr-1 text-white/60">Primary goal:</span>
-							<AuroraText className="font-semibold">{goal}</AuroraText>
+						<p className="text-sm font-medium text-black/70 dark:text-white/70">
+							<span className="mr-1 text-black/60 dark:text-white/60">Primary goal:</span>
+							<span className="font-semibold text-black dark:text-white">{goal}</span>
 						</p>
 					) : null}
 				</div>

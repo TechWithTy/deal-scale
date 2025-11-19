@@ -3,14 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-import { AuroraText } from "@/components/magicui/aurora-text";
 import {
 	AnimatedBeamNetwork,
 	type AnimatedBeamNetworkNode,
 } from "@/components/ui/animated-beam-network";
 import { Badge } from "@/components/ui/badge";
 import { ThreeDMarquee } from "@/components/ui/3d-marquee";
-import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { cn } from "@/lib/utils";
 import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
@@ -240,30 +238,12 @@ export function ConnectAnythingHero(): JSX.Element {
 					className="mb-6 max-w-4xl text-balance text-center font-black text-4xl leading-tight tracking-tight sm:text-5xl sm:leading-[1.1] md:text-6xl md:leading-[1.08] lg:text-7xl lg:leading-[1.06]"
 				>
 					<div className="space-y-1 sm:space-y-2">
-						<AuroraText
-							speed={1.6}
-							colors={[
-								"#38bdf8",
-								"#a855f7",
-								"#f97316",
-								"#38bdf8",
-							]}
-							className="block w-full bg-clip-text text-transparent drop-shadow-[0_6px_18px_rgba(59,130,246,0.35)]"
-						>
+						<span className="block w-full text-black dark:text-white">
 							Connect Anything.
-						</AuroraText>
-						<AuroraText
-							speed={1.4}
-							colors={[
-								"#38bdf8",
-								"#a855f7",
-								"#f97316",
-								"#38bdf8",
-							]}
-							className="block w-full bg-clip-text text-transparent drop-shadow-[0_6px_18px_rgba(249,115,22,0.3)]"
-						>
+						</span>
+						<span className="block w-full text-black dark:text-white">
 							Automate Everything.
-						</AuroraText>
+						</span>
 					</div>
 				</motion.h1>
 				<AnimatePresence mode="wait">
@@ -275,14 +255,9 @@ export function ConnectAnythingHero(): JSX.Element {
 						transition={{ duration: 0.6, ease: "easeInOut" }}
 						className="max-w-2xl text-center min-h-[3.5rem]"
 					>
-						<AnimatedGradientText
-							speed={2.4}
-							colorFrom="#22d3ee"
-							colorTo="#f472b6"
-							className="font-semibold text-lg text-slate-900 tracking-tight drop-shadow-[0_4px_18px_rgba(14,116,144,0.25)] dark:text-slate-100 md:text-xl"
-						>
+						<span className="font-semibold text-lg text-black tracking-tight dark:text-white md:text-xl">
 							{HERO_MESSAGES[activeMessageIndex]}
-						</AnimatedGradientText>
+						</span>
 					</motion.div>
 				</AnimatePresence>
 				<motion.p

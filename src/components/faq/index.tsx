@@ -45,7 +45,7 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 								className={cn(
 									"overflow-hidden border border-transparent transition duration-300 ease-out",
 									isHero
-										? "rounded-3xl border-cyan-400/60 bg-gradient-to-br from-cyan-500/25 via-blue-600/20 to-slate-950 shadow-cyan-500/30 shadow-xl"
+										? "rounded-3xl border-cyan-400/60 bg-gradient-to-br from-cyan-500/10 via-blue-600/10 to-slate-100 shadow-cyan-500/20 shadow-xl dark:from-cyan-500/25 dark:via-blue-600/20 dark:to-slate-950 dark:shadow-cyan-500/30"
 										: "rounded-xl border-border/40 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg",
 								)}
 							>
@@ -53,13 +53,13 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 									className={cn(
 										"px-6 py-4 text-left text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus dark:text-foreground",
 										isHero
-											? "flex flex-col gap-2 text-cyan-100 sm:flex-row sm:items-center sm:justify-between"
+											? "flex flex-col gap-2 text-black sm:flex-row sm:items-center sm:justify-between dark:text-cyan-100"
 											: "hover:text-primary",
 									)}
 								>
 									{isHero ? (
 										<>
-											<span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-cyan-200/90">
+											<span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-black/80 dark:text-cyan-200/90">
 												<span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400/70 text-sm font-bold text-slate-950">
 													★
 												</span>
@@ -76,7 +76,7 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 								<AccordionContent
 									className={cn(
 										"px-6 pb-4 text-muted-foreground dark:text-muted-foreground",
-										isHero ? "text-cyan-50/95 sm:text-base" : undefined,
+										isHero ? "text-black/80 sm:text-base dark:text-cyan-50/95" : undefined,
 									)}
 								>
 									{item.answer}

@@ -276,7 +276,7 @@ export async function generateMetadata(): Promise<Metadata> {
 	).slice(0, 48);
 	const heroDescription =
 		LIVE_COPY.subtitle ||
-		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale’s AI Sales Agents.";
+		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale's AI Sales Assistants.";
 	const aiOutreachDescription = AI_OUTREACH_STUDIO_SEO.description;
 	const combinedDescriptionSegments = [
 		outreachTagline,
@@ -337,7 +337,7 @@ const Index = async ({
 	const canonicalUrl = homepageSeo.canonical ?? "https://dealscale.io";
 	const heroDescription =
 		LIVE_COPY.subtitle ||
-		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale’s AI Sales Agents.";
+		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale's AI Sales Assistants.";
 	const personaAudienceLabel =
 		PERSONA_LABEL.replace(/^For\s+/i, "").trim() || PERSONA_LABEL;
 	const personaPromise = `We orchestrate every deal touchpoint so ${personaAudienceLabel} stay in deal mode.`;
@@ -362,7 +362,7 @@ const Index = async ({
 		name: homepageSeo.title ? `${homepageSeo.title} Blog` : "DealScale Blog",
 		description:
 			homepageSeo.description ??
-			"DealScale’s latest deep dives on AI sales agents, automation, and real estate growth.",
+			"DealScale's latest deep dives on AI sales assistants, automation, and real estate growth.",
 		posts,
 	});
 	const heroServiceSchema = buildServiceSchema({

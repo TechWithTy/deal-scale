@@ -153,7 +153,7 @@ const HERO_COPY_V7 = {
 export type HeroPersonaKey = keyof typeof HERO_COPY_V7.personas;
 
 export const DEFAULT_PERSONA: HeroPersonaKey = "investor";
-export const DEFAULT_PERSONA_DISPLAY = "AI Sales Coworkers";
+export const DEFAULT_PERSONA_DISPLAY = "AI Sales Teammates";
 
 const PERSONA_LABEL = "For Real Estate Investors";
 const PERSONA_GOAL = "Automate deal flow conversations";

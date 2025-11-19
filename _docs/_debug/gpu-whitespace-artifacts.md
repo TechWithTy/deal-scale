@@ -37,3 +37,4 @@ White gaps or seams between sections can appear when GPU-promoted layers (`trans
 - [ ] Add browser matrix visual tests before re-enabling full GPU hints by default. 
 
 
+

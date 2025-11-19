@@ -69,7 +69,7 @@ export function PlanTypeToggle({
 	}
 
 	return (
-		<div className="flex flex-wrap items-center justify-center gap-2 pt-4">
+		<div className="flex flex-wrap items-center justify-center gap-2 pt-4 pb-2">
 			{orderedTypes.map((type) => (
 				<div key={type} className="relative">
 					{type === "annual" ? (

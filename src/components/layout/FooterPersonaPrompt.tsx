@@ -64,10 +64,10 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="sm:max-w-lg">
 					<DialogHeader>
-						<DialogTitle>Select your persona</DialogTitle>
+						<DialogTitle>Who are you</DialogTitle>
 						<DialogDescription>
-							Choose the persona that best matches your workflow. We&apos;ll adapt
-							copy and CTAs instantly.
+							Select the persona that best matches your role. We&apos;ll personalize
+							your experience instantly.
 						</DialogDescription>
 					</DialogHeader>
 					<div className="grid gap-3 sm:grid-cols-2">

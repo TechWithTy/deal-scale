@@ -190,9 +190,9 @@ const Pricing: React.FC<PricingProps> = ({
 			<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
 
 			<div className="mx-auto max-w-7xl">
-				<div className="mb-16 text-center">
+				<div className="mb-12 text-center sm:mb-16">
 					<Header title={title} subtitle={subtitle} size="lg" />
-					<div className="mt-8 flex flex-col items-center">
+					<div className="mt-8 mb-6 flex flex-col items-center sm:mb-8">
 						<PlanTypeToggle
 							planType={planType}
 							availableTypes={availableTypes}
@@ -203,7 +203,7 @@ const Pricing: React.FC<PricingProps> = ({
 				</div>
 
 				{filteredPlans.length > 0 ? (
-					<div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+					<div className="grid grid-cols-1 gap-8 pt-4 md:grid-cols-3 md:pt-0">
 						{filteredPlans.map((plan) => (
 							<PricingCard
 								key={plan.id}

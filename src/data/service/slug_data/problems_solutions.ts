@@ -255,7 +255,7 @@ export const marketAnalysisProblemsSolutions: ServiceProblemSolution[] = [
 		problem:
 			"My outreach is generic and doesn't demonstrate deep market knowledge.",
 		solution:
-			"Arm your AI Sales Agents with your market analysis. The AI can then use these specific data points in conversations, building instant credibility and rapport with leads.",
+			"Arm your AI Sales Assistants with your market analysis. The AI can then use these specific data points in conversations, building instant credibility and rapport with leads.",
 	},
 ];
 
