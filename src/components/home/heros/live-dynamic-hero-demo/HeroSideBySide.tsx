@@ -33,8 +33,8 @@ export default function HeroSideBySide(): JSX.Element {
 		useHeroTrialCheckout();
 
 	const handlePreviewDemo = useCallback(() => {
-		// Scroll to video section (now below testimonials)
-		const videoSection = document.getElementById("hero-video-section");
+		// Scroll to video section (handled by CallDemoShowcase component)
+		const videoSection = document.getElementById("call-demo");
 		if (videoSection && typeof videoSection.scrollIntoView === "function") {
 			videoSection.scrollIntoView({ behavior: "smooth", block: "center" });
 		}

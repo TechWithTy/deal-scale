@@ -73,9 +73,6 @@ const MarketingCatalogPricing = dynamic(
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
 	loading: () => <TestimonialFallback />,
 });
-const HeroVideoSection = dynamic(
-	() => import("@/components/home/heros/live-dynamic-hero-demo/HeroVideoSection"),
-);
 const FeatureSectionActivity = dynamic(
 	() => import("@/components/home/FeatureSectionActivity"),
 	{
@@ -480,10 +477,6 @@ const Index = async ({
 						"Hear from our clients about their experiences with our services"
 					}
 				/>
-			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
-			<SectionWrapper id="hero-video-section" lazy={false}>
-				<HeroVideoSection />
 			</SectionWrapper>
 			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<SectionWrapper
