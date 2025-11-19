@@ -1,8 +1,13 @@
 "use client";
 
-import { useCallback } from "react";
-
+import {
+	type HeroVideoPreviewHandle,
+	resolveHeroThumbnailSrc,
+	useHeroVideoConfig,
+} from "@external/dynamic-hero";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useCallback, useRef } from "react";
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
@@ -15,12 +20,31 @@ import {
 	LIVE_PRIMARY_CTA,
 	LIVE_SECONDARY_CTA,
 	LIVE_SOCIAL_PROOF,
+	LIVE_VIDEO,
 	PERSONA_LABEL,
 } from "./_config";
+
+const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(
+	LIVE_VIDEO,
+	LIVE_VIDEO.poster,
+);
 
 const HeroAuroraDynamic = dynamic(
 	() => import("@external/dynamic-hero").then((mod) => mod.HeroAurora),
 	{ ssr: false, loading: () => null },
+);
+
+const HeroVideoPreviewDynamic = dynamic(
+	() => import("@external/dynamic-hero").then((mod) => mod.HeroVideoPreview),
+	{
+		ssr: false,
+		loading: () => (
+			<HeroVideoPreviewSkeleton
+				posterSrc={HERO_POSTER_FALLBACK}
+				alt="Product demo preview"
+			/>
+		),
+	},
 );
 
 const PricingCheckoutDialog = dynamic(
@@ -28,15 +52,56 @@ const PricingCheckoutDialog = dynamic(
 	{ ssr: false, loading: () => null },
 );
 
+function HeroVideoPreviewSkeleton({
+	posterSrc,
+	alt,
+}: {
+	posterSrc: string;
+	alt: string;
+}) {
+	return (
+		<div className="relative w-full overflow-hidden rounded-[32px] border border-border/40 bg-background/80 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.45)] ring-1 ring-border/30 backdrop-blur-lg">
+			<div className="relative w-full overflow-hidden rounded-[28px] border border-border/30 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.4)]">
+				<div className="relative aspect-video w-full">
+					<Image
+						src={posterSrc}
+						alt={alt}
+						fill
+						className="object-cover"
+						priority
+						sizes="(min-width: 1280px) 1024px, (min-width: 768px) 768px, 100vw"
+					/>
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export default function HeroSideBySide(): JSX.Element {
+	const videoSectionRef = useRef<HTMLDivElement | null>(null);
+	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
 	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
 		useHeroTrialCheckout();
 
+	const heroVideo = useHeroVideoConfig(LIVE_VIDEO);
+
 	const handlePreviewDemo = useCallback(() => {
-		// Scroll to video section (handled by CallDemoShowcase component)
-		const videoSection = document.getElementById("call-demo");
-		if (videoSection && typeof videoSection.scrollIntoView === "function") {
-			videoSection.scrollIntoView({ behavior: "smooth", block: "center" });
+		const node = videoSectionRef.current;
+		if (node && typeof node.scrollIntoView === "function") {
+			node.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+
+		const playVideo = () => {
+			videoPreviewRef.current?.play();
+		};
+
+		if (
+			typeof window !== "undefined" &&
+			typeof window.requestAnimationFrame === "function"
+		) {
+			window.requestAnimationFrame(playVideo);
+		} else {
+			playVideo();
 		}
 	}, []);
 
@@ -122,6 +187,25 @@ export default function HeroSideBySide(): JSX.Element {
 								{LIVE_SOCIAL_PROOF.caption ??
 									"Trusted by real estate investors nationwide"}
 							</p>
+						</div>
+					</div>
+				</div>
+
+				{/* Video Section - Directly below hero text */}
+				<div
+					ref={videoSectionRef}
+					id="hero-video-section"
+					className="container relative z-10 mx-auto w-full px-6 pb-12 md:px-10 md:pb-16 lg:px-12 lg:pb-20"
+				>
+					<div className="mx-auto w-full max-w-5xl">
+						<div className="flex w-full items-center justify-center">
+							<div className="w-full">
+								<HeroVideoPreviewDynamic
+									ref={videoPreviewRef}
+									video={heroVideo}
+									thumbnailAlt="Live dynamic hero video preview"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
