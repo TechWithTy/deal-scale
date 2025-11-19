@@ -84,6 +84,6 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 	return shouldHydrate ? (
 		<HeroSideBySide />
 	) : (
-		<HeroStaticFallback variant="static" />
+		<HeroStaticFallback />
 	);
 }

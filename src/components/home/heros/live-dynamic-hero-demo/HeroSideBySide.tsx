@@ -146,9 +146,9 @@ export default function HeroSideBySide(): JSX.Element {
 
 				<div className="container relative z-10 mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12 lg:py-20">
 					{/* Side-by-side layout: Text left, Video right */}
-					<div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-8 md:grid-cols-2 md:items-center md:gap-12 lg:gap-16">
+					<div className="mx-auto flex w-full max-w-7xl flex-col gap-8 md:flex-row md:items-start md:gap-12 lg:gap-16">
 						{/* Left Column: Text Content */}
-						<div className="flex flex-col gap-6 text-left md:gap-8">
+						<div className="flex flex-1 flex-col gap-6 text-left md:gap-6">
 							{/* Persona Badge */}
 							<span className="inline-flex w-fit items-center justify-center rounded-full border border-border/40 bg-background/70 px-5 py-1.5 font-semibold text-foreground/80 text-xs uppercase tracking-[0.4em]">
 								{PERSONA_LABEL}
@@ -197,7 +197,7 @@ export default function HeroSideBySide(): JSX.Element {
 						{/* Right Column: Video */}
 						<div
 							ref={videoSectionRef}
-							className="flex w-full items-center justify-center md:sticky md:top-24 md:self-start"
+							className="flex w-full flex-shrink-0 items-start justify-center md:w-auto md:max-w-lg"
 							data-beam-collider="true"
 						>
 							<div className="w-full">
@@ -212,11 +212,11 @@ export default function HeroSideBySide(): JSX.Element {
 				</div>
 			</section>
 
-			{/* Additional Content Below */}
+			{/* Additional Content Below - Full Width */}
 			<section className="relative z-10 w-full bg-background/50">
-				<div className="container mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12">
-					<div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
-						<div className="w-full max-w-2xl rounded-3xl border border-border/45 bg-background/85 px-5 py-5 text-center shadow-[0_16px_55px_-35px_rgba(37,99,235,0.35)] backdrop-blur-md sm:px-6 md:px-10">
+				<div className="w-full px-6 py-12 md:px-10 md:py-16 lg:px-12">
+					<div className="flex w-full flex-col gap-10">
+						<div className="mx-auto w-full max-w-4xl rounded-3xl border border-border/45 bg-background/85 px-5 py-5 text-center shadow-[0_16px_55px_-35px_rgba(37,99,235,0.35)] backdrop-blur-md sm:px-6 md:px-10">
 							<p className="font-medium text-foreground text-sm sm:text-base">
 								Start with a 90-second walkthrough of the investor pipeline
 								control center.
