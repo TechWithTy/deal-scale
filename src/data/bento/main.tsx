@@ -179,7 +179,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 		const primarySolution = personaCopy.solution[0] ?? "";
 		return {
 			title: "Automate deal flow conversations",
-			description: "Persona Spotlight: AI Sales Teammates",
+			description: "Persona Spotlight: AI Sales Coworkers",
 			icon: <CalendarCheck className="h-6 w-6 text-accent" />,
 			className: layout.startFour,
 			background: (
