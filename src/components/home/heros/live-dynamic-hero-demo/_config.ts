@@ -31,17 +31,16 @@ const HERO_COPY_V7 = {
 		},
 		investor: {
 			problem: [
+				"Losing Deals",
 				"losing track of off-market leads",
 				"chasing leads manually",
 			],
-		solution: [
-			"AI real estate deal flow automation",
-			"automated seller nurturing",
-		],
-			fear: [
-				"your next profitable deal slips",
-				"your deal pipeline dries up",
+			solution: [
+				"Automating Your Entire Real Estate Deal Flow",
+				"AI real estate deal flow automation",
+				"automated seller nurturing",
 			],
+			fear: ["your next profitable deal slips", "your deal pipeline dries up"],
 			hope: [
 				"you wake up to ready-to-close seller leads every week",
 				"you scale your portfolio while competitors chase spreadsheets",
@@ -158,7 +157,7 @@ export const DEFAULT_PERSONA_DISPLAY = "AI Sales Teammates";
 const PERSONA_LABEL = "For Real Estate Investors";
 const PERSONA_GOAL = "Automate deal flow conversations";
 const PERSONA_SOCIAL_PROOF =
-	"Real estate investors trust DealScale to automate deal flow outreach.";
+	"AI follow-up, sequencing, and CRM automation — every lead worked automatically.";
 
 const pickPersonaField = (field: "problem" | "solution" | "fear" | "hope") => {
 	const persona = HERO_COPY_V7.personas[DEFAULT_PERSONA];

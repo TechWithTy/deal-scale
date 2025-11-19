@@ -106,15 +106,17 @@ export default function HeroSideBySide(): JSX.Element {
 	}, []);
 
 	// Extract problem and solution from LIVE_COPY
-	const problem = LIVE_COPY?.values?.problem ?? "losing track of off-market leads";
-	const solution = LIVE_COPY?.values?.solution ?? "AI real estate deal flow automation";
+	const problem = LIVE_COPY?.values?.problem ?? "Losing Deals";
+	const solution =
+		LIVE_COPY?.values?.solution ??
+		"Automating Your Entire Real Estate Deal Flow";
 	const description =
 		typeof LIVE_COPY?.subtitle === "string"
 			? LIVE_COPY.subtitle
-			: "Deal Scale keeps motivated sellers warm with AI sales assistants so you can focus on closing.";
+			: "AI follow-up, sequencing, and CRM automation — every lead worked automatically.";
 
 	// Single combined statement
-	const combinedStatement = `Stop ${problem}, start ${solution}`;
+	const combinedStatement = `Stop ${problem}. Start ${solution}`;
 
 	return (
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
@@ -225,4 +227,3 @@ export default function HeroSideBySide(): JSX.Element {
 		</div>
 	);
 }
-
