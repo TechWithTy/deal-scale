@@ -75,7 +75,6 @@ const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
 });
 const HeroVideoSection = dynamic(
 	() => import("@/components/home/heros/live-dynamic-hero-demo/HeroVideoSection"),
-	{ ssr: false },
 );
 const FeatureSectionActivity = dynamic(
 	() => import("@/components/home/FeatureSectionActivity"),
