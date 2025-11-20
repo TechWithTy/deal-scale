@@ -1,5 +1,9 @@
+/**
+ * @vitest-environment jsdom
+ */
 import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import "@testing-library/jest-dom/vitest";
 
 import { ChunkErrorHandler } from "../ChunkErrorHandler";
 
