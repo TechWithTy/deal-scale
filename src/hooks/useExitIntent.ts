@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+	safeSessionStorageGetItem,
+	safeSessionStorageSetItem,
+} from "@/utils/storage/safeStorage";
 
 export interface UseExitIntentOptions {
 	/**
@@ -67,7 +71,7 @@ export function useExitIntent({
 		// Check if already triggered this session
 		if (oncePerSession) {
 			const wasTriggered =
-				sessionStorage.getItem(SESSION_STORAGE_KEY) === "true";
+				safeSessionStorageGetItem(SESSION_STORAGE_KEY) === "true";
 			if (wasTriggered || hasTriggeredRef.current) {
 				return;
 			}
@@ -84,7 +88,8 @@ export function useExitIntent({
 					setHasTriggered(true);
 
 					if (oncePerSession) {
-						sessionStorage.setItem(SESSION_STORAGE_KEY, "true");
+						// Safe to fail silently - just won't persist across page reloads
+						safeSessionStorageSetItem(SESSION_STORAGE_KEY, "true");
 					}
 
 					onExitIntent();
