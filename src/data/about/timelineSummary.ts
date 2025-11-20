@@ -77,7 +77,3 @@ export const timelineSummary: ManifestoSectionSummary[] = [
 		anchor: "closing-line",
 	},
 ];
-
-
-
-

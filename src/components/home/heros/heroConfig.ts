@@ -1,10 +1,10 @@
+import type { PersonaKey } from "@/data/personas/catalog";
+import type { Plan } from "@/types/service/plans";
 import type {
 	HeroCopy,
 	HeroCopyRotations,
 	ResolveHeroCopyOptions,
 } from "@external/dynamic-hero";
-import type { Plan } from "@/types/service/plans";
-import type { PersonaKey } from "@/data/personas/catalog";
 
 export const HERO_ROTATIONS: HeroCopyRotations = {
 	problems: [

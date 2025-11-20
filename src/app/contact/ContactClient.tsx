@@ -1,7 +1,6 @@
 "use client";
 
 import AuthGuard from "@/components/auth/AuthGuard";
-import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import ContactForm from "@/components/contact/form/ContactForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import {
@@ -11,9 +10,11 @@ import {
 import { Newsletter } from "@/components/contact/newsletter/Newsletter";
 import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import Testimonials from "@/components/home/Testimonials";
 import { betaTesterFormFields } from "@/data/contact/formFields";
 import type { BetaTesterFormValues } from "@/data/contact/formFields";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 import { useDataModule } from "@/stores/useDataModuleStore";
 import type { MultiselectField } from "@/types/contact/formFields";
 import type { CompanyLogoDictType } from "@/types/service/trusted-companies";
@@ -24,7 +25,6 @@ import type { Metadata } from "next";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { exitIntentEnabled } from "@/lib/config/exitIntent";
 
 import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
 

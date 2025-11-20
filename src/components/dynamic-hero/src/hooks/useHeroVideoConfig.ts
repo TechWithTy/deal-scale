@@ -29,7 +29,3 @@ export const useHeroVideoConfig = (
 	const config = useHeroVideoStoreBase((state) => state.config);
 	return config ?? fallback;
 };
-
-
-
-

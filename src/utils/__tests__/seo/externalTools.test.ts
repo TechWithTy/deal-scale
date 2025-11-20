@@ -6,8 +6,8 @@ import {
 	buildExternalToolProductSchema,
 	getExternalToolSeo,
 } from "@/utils/seo/externalTools";
-import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
 import { validateProductSchema } from "@/utils/seo/schema/validation";
+import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
 
 describe("external tools SEO utilities", () => {
 	it("returns static SEO metadata for a registered external tool slug", () => {
@@ -40,7 +40,8 @@ describe("external tools SEO utilities", () => {
 			faqs: [
 				{
 					question: "How do I export my results?",
-					answer: "Sign in and click the export button to download CSV results.",
+					answer:
+						"Sign in and click the export button to download CSV results.",
 				},
 				{
 					question: "Does the simulator save my inputs?",
@@ -50,9 +51,7 @@ describe("external tools SEO utilities", () => {
 		});
 
 		expect(schema["@type"]).toBe("FAQPage");
-		expect(schema["@id"]).toBe(
-			"https://app.dealscale.io/roi-simulator#faq",
-		);
+		expect(schema["@id"]).toBe("https://app.dealscale.io/roi-simulator#faq");
 		expect(schema.mainEntity).toHaveLength(2);
 	});
 
@@ -104,4 +103,3 @@ describe("external tools SEO utilities", () => {
 		expect(schema.offers.price).toBe("199.00");
 	});
 });
-

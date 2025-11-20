@@ -38,7 +38,10 @@ const FRESHNESS_LABELS: Record<
 
 const formatPublishedDate = (post: BeehiivPost): string => {
 	const raw =
-		post.published_at ?? post.publish_date ?? post.displayed_date ?? post.created;
+		post.published_at ??
+		post.publish_date ??
+		post.displayed_date ??
+		post.created;
 	if (typeof raw === "number") {
 		const ms = raw < 1_000_000_000_000 ? raw * 1000 : raw;
 		return new Date(ms).toLocaleDateString();
@@ -125,8 +128,7 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 		Array.isArray(featuredPost.authors) && featuredPost.authors.length > 0
 			? featuredPost.authors.join(", ")
 			: undefined;
-	const freshnessLabelMeta =
-		freshnessBadge && FRESHNESS_LABELS[freshnessBadge];
+	const freshnessLabelMeta = freshnessBadge && FRESHNESS_LABELS[freshnessBadge];
 
 	return (
 		<Suspense fallback={<div>Loading post...</div>}>
@@ -155,18 +157,18 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 						fill
 					/>
 					<div className="absolute top-4 left-4 flex flex-wrap gap-2">
-						<span className="rounded bg-primary/90 px-2 py-1 font-semibold text-xs text-black dark:text-white">
+						<span className="rounded bg-primary/90 px-2 py-1 font-semibold text-black text-xs dark:text-white">
 							Featured
 						</span>
 						{freshnessLabelMeta && (
 							<span
-								className={`rounded px-2 py-1 text-xs font-semibold ${freshnessLabelMeta.className}`}
+								className={`rounded px-2 py-1 font-semibold text-xs ${freshnessLabelMeta.className}`}
 							>
 								{freshnessLabelMeta.label}
 							</span>
 						)}
 						{personaLabel && (
-							<span className="rounded bg-secondary/90 px-2 py-1 text-xs font-semibold text-secondary-foreground">
+							<span className="rounded bg-secondary/90 px-2 py-1 font-semibold text-secondary-foreground text-xs">
 								Tailored for {personaLabel}
 							</span>
 						)}
@@ -231,7 +233,7 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 							</small>
 						)}
 						{personaGoal && (
-							<p className="max-w-2xl text-center text-xs text-primary/80 md:text-left">
+							<p className="max-w-2xl text-center text-primary/80 text-xs md:text-left">
 								{personaGoal}
 							</p>
 						)}

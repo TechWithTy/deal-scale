@@ -55,9 +55,7 @@ function toRounded(value: number) {
 	return Number(value.toFixed(3));
 }
 
-export function sanitizeMetricPayload(
-	payload: unknown,
-): MetricPayload | null {
+export function sanitizeMetricPayload(payload: unknown): MetricPayload | null {
 	if (!isRecord(payload)) {
 		return null;
 	}
@@ -165,4 +163,3 @@ export function sanitizeMetricPayload(
 
 	return null;
 }
-

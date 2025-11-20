@@ -1,3 +1,6 @@
+import { render } from "@testing-library/react";
+import React from "react";
+import { act } from "react";
 import {
 	afterEach,
 	beforeAll,
@@ -7,9 +10,6 @@ import {
 	it,
 	vi,
 } from "vitest";
-import { render } from "@testing-library/react";
-import React from "react";
-import { act } from "react";
 
 const pixelatedMocks = vi.hoisted(() => ({
 	mockComponent: vi.fn(() => <div data-testid="pixelated-card" />),

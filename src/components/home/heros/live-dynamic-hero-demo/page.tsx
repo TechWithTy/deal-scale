@@ -81,9 +81,5 @@ export default function LiveDynamicHeroDemoPage(): JSX.Element {
 
 	// Always render static fallback immediately for above-the-fold LCP
 	// Upgrade to interactive version when browser is ready (fast timeout for better UX)
-	return shouldHydrate ? (
-		<HeroSideBySide />
-	) : (
-		<HeroStaticFallback />
-	);
+	return shouldHydrate ? <HeroSideBySide /> : <HeroStaticFallback />;
 }

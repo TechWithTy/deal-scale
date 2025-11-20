@@ -32,9 +32,7 @@ const deriveGoal = (persona: PersonaKey): string => {
 	const personaConfig = HERO_COPY_V7.personas[persona];
 
 	return (
-		personaConfig.solution[0] ??
-		personaConfig.hope[0] ??
-		HERO_INVESTOR_GOAL
+		personaConfig.solution[0] ?? personaConfig.hope[0] ?? HERO_INVESTOR_GOAL
 	);
 };
 
@@ -61,4 +59,3 @@ export const ALL_PERSONA_KEYS = Object.keys(
 ) as PersonaKey[];
 
 export const DEFAULT_PERSONA_KEY: PersonaKey = HERO_DEFAULT_PERSONA;
-

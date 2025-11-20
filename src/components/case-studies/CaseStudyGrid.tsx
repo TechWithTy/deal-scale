@@ -202,7 +202,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 											{study.categories.map((category) => (
 												<span
 													key={category}
-													className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur-sm transition-colors hover:bg-white/20"
+													className="rounded-full border border-white/15 bg-white/10 px-3 py-1 font-medium text-white/80 text-xs backdrop-blur-sm transition-colors hover:bg-white/20"
 												>
 													{category}
 												</span>

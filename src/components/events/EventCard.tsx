@@ -1,9 +1,9 @@
 "use client";
 
 import VideoModal from "@/components/common/VideoModal"; // * Reusable modal for video embeds
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { MetallicHoverCard } from "@/components/ui/metallic-hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -81,7 +81,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
 		event.internalPath ?? (event.slug ? `/events/${event.slug}` : "#");
 	const ctaHref =
 		accessType === "external"
-			? event.externalUrl ?? fallbackInternalPath
+			? (event.externalUrl ?? fallbackInternalPath)
 			: fallbackInternalPath;
 	const imageSizes =
 		"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px";
@@ -96,7 +96,9 @@ const EventCard = ({ event, index }: EventCardProps) => {
 		}
 
 		const mediaQuery = window.matchMedia("(pointer: coarse)");
-		const updatePointerState = (event: MediaQueryListEvent | MediaQueryList) => {
+		const updatePointerState = (
+			event: MediaQueryListEvent | MediaQueryList,
+		) => {
 			setIsCoarsePointer(event.matches);
 		};
 
@@ -155,7 +157,10 @@ const EventCard = ({ event, index }: EventCardProps) => {
 				className="h-full"
 			>
 				{enableThreeD ? (
-					<CardContainer containerClassName="w-full py-0" className="h-full w-full">
+					<CardContainer
+						containerClassName="w-full py-0"
+						className="h-full w-full"
+					>
 						<CardBody className="h-full w-full">
 							<MetallicHoverCard
 								disableTilt
@@ -168,14 +173,17 @@ const EventCard = ({ event, index }: EventCardProps) => {
 									isPastEvent && "opacity-80",
 								)}
 							>
-								<CardItem translateZ={36} className="group/card flex h-full flex-col">
+								<CardItem
+									translateZ={36}
+									className="group/card flex h-full flex-col"
+								>
 									<CardItem
 										translateZ={96}
 										className="relative h-48 overflow-hidden rounded-[calc(1.5rem-4px)] bg-gradient-to-br from-white/70 via-white/45 to-white/20 dark:from-slate-900/70 dark:via-slate-900/40 dark:to-slate-900/25"
 									>
-									{!imageLoaded && (
-										<Skeleton className="pointer-events-none absolute inset-0 z-0 h-full w-full rounded-[inherit] bg-white/40 dark:bg-white/10" />
-									)}
+										{!imageLoaded && (
+											<Skeleton className="pointer-events-none absolute inset-0 z-0 h-full w-full rounded-[inherit] bg-white/40 dark:bg-white/10" />
+										)}
 										{event.isFeatured && (
 											<div className="absolute top-3 right-3 z-10 rounded-full bg-primary px-2 py-1 font-semibold text-black text-xs dark:text-white">
 												Featured
@@ -192,12 +200,12 @@ const EventCard = ({ event, index }: EventCardProps) => {
 											<Image
 												src={event.thumbnailImage}
 												alt={event.title}
-											className="z-10 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+												className="z-10 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105"
 												fill
 												priority={index < 3}
 												sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-											onLoadingComplete={handleImageLoad}
-											onError={handleImageError}
+												onLoadingComplete={handleImageLoad}
+												onError={handleImageError}
 											/>
 										) : (
 											<div className="flex h-full w-full items-center justify-center text-slate-500 dark:text-white/60">
@@ -244,8 +252,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
 											</Badge>
 										</div>
 
-										
-										<div className="mb-4 flex flex-col items-center space-y-2 text-sm text-slate-700 dark:text-white/70">
+										<div className="mb-4 flex flex-col items-center space-y-2 text-slate-700 text-sm dark:text-white/70">
 											<div className="flex items-center justify-center gap-2 md:justify-start">
 												<Calendar className="h-4 w-4 text-primary" />
 												<span>{formatDate(event.date)}</span>
@@ -263,49 +270,57 @@ const EventCard = ({ event, index }: EventCardProps) => {
 										<CardItem
 											as="p"
 											translateZ={32}
-											className="mb-5 line-clamp-3 text-sm text-slate-600 dark:text-white/80"
+											className="mb-5 line-clamp-3 text-slate-600 text-sm dark:text-white/80"
 										>
 											{event.description}
 										</CardItem>
 
-									<div className="mt-auto flex flex-col items-center gap-3">
-										<CardItem translateZ={28} as="div" className="w-full max-w-xs">
-											<Button
-												variant="default"
-												className="w-full gap-2 transition-colors group-hover/card:bg-primary"
-												asChild
+										<div className="mt-auto flex flex-col items-center gap-3">
+											<CardItem
+												translateZ={28}
+												as="div"
+												className="w-full max-w-xs"
 											>
-												{accessType === "external" ? (
+												<Button
+													variant="default"
+													className="w-full gap-2 transition-colors group-hover/card:bg-primary"
+													asChild
+												>
+													{accessType === "external" ? (
+														<a
+															href={ctaHref}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															View Event <ExternalLink className="h-4 w-4" />
+														</a>
+													) : (
+														<Link href={ctaHref}>
+															View Event <ArrowRight className="h-4 w-4" />
+														</Link>
+													)}
+												</Button>
+											</CardItem>
+											<CardItem
+												translateZ={20}
+												as="div"
+												className="w-full max-w-xs"
+											>
+												<Button
+													variant="secondary"
+													className="w-full gap-2 border border-primary/30 bg-white/70 text-primary transition-colors hover:border-primary hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white"
+													asChild
+												>
 													<a
-														href={ctaHref}
+														href="https://discord.gg/BNrsYRPtFN"
 														target="_blank"
 														rel="noopener noreferrer"
 													>
-														View Event <ExternalLink className="h-4 w-4" />
+														Join Community <ExternalLink className="h-4 w-4" />
 													</a>
-												) : (
-													<Link href={ctaHref}>
-														View Event <ArrowRight className="h-4 w-4" />
-													</Link>
-												)}
-											</Button>
-										</CardItem>
-										<CardItem translateZ={20} as="div" className="w-full max-w-xs">
-											<Button
-												variant="secondary"
-												className="w-full gap-2 border border-primary/30 bg-white/70 text-primary transition-colors hover:border-primary hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white"
-												asChild
-											>
-												<a
-													href="https://discord.gg/BNrsYRPtFN"
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													Join Community <ExternalLink className="h-4 w-4" />
-												</a>
-											</Button>
-										</CardItem>
-									</div>
+												</Button>
+											</CardItem>
+										</div>
 									</div>
 								</CardItem>
 							</MetallicHoverCard>
@@ -392,7 +407,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
 									</Badge>
 								</div>
 
-								<div className="mb-4 flex flex-col items-center space-y-2 text-sm text-slate-700 dark:text-white/70">
+								<div className="mb-4 flex flex-col items-center space-y-2 text-slate-700 text-sm dark:text-white/70">
 									<div className="flex items-center justify-center gap-2 md:justify-start">
 										<Calendar className="h-4 w-4 text-primary" />
 										<span>{formatDate(event.date)}</span>
@@ -407,7 +422,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
 									</div>
 								</div>
 
-								<p className="mb-5 line-clamp-3 text-sm text-slate-600 dark:text-white/80">
+								<p className="mb-5 line-clamp-3 text-slate-600 text-sm dark:text-white/80">
 									{event.description}
 								</p>
 
@@ -436,12 +451,12 @@ const EventCard = ({ event, index }: EventCardProps) => {
 										className="w-full max-w-xs gap-2 border border-primary/30 bg-white/70 text-primary transition-colors hover:border-primary hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white"
 										asChild
 									>
-									<a
-										href="https://discord.gg/BNrsYRPtFN"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										Join Community <ExternalLink className="h-4 w-4" />
+										<a
+											href="https://discord.gg/BNrsYRPtFN"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											Join Community <ExternalLink className="h-4 w-4" />
 										</a>
 									</Button>
 								</div>

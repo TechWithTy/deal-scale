@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
 import type React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/components/ui/SafeMotionDiv", () => ({
 	__esModule: true,

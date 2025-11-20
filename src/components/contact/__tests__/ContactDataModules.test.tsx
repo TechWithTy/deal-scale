@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const useDataModuleMock = vi.fn();
 
@@ -19,7 +19,10 @@ vi.mock("framer-motion", () => ({
 
 vi.mock("next/link", () => ({
 	__esModule: true,
-	default: ({ href, children }: { href: string; children: React.ReactNode }) => (
+	default: ({
+		href,
+		children,
+	}: { href: string; children: React.ReactNode }) => (
 		<a href={href}>{children}</a>
 	),
 }));

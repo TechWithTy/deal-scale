@@ -44,7 +44,7 @@ export function SectionWrapper({
 	className,
 	children,
 	lazy = true,
-    rootMargin = "1200px",
+	rootMargin = "1200px",
 	fallback,
 	fallbackLabel,
 }: SectionWrapperProps) {

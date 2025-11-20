@@ -112,10 +112,7 @@ const DEFAULT_SETTINGS: ExitIntentSettings = {
 };
 
 const VARIANT_SETTINGS: Partial<
-	Record<
-		ExitIntentVariant,
-		Pick<ExitIntentSettings, "desktop" | "mobile">
-	>
+	Record<ExitIntentVariant, Pick<ExitIntentSettings, "desktop" | "mobile">>
 > = {
 	contact: {
 		desktop: {
@@ -143,9 +140,7 @@ const VARIANT_SETTINGS: Partial<
 	},
 };
 
-function mergeSettings(
-	variant: ExitIntentVariant,
-): ExitIntentSettings {
+function mergeSettings(variant: ExitIntentVariant): ExitIntentSettings {
 	const overrides = VARIANT_SETTINGS[variant] ?? {};
 
 	return {
@@ -190,12 +185,8 @@ function EnabledExitIntentBoundary({
 		return merged;
 	}, [log, variant]);
 
-	const {
-		registerHandler,
-		unsubscribe,
-		resetState,
-		isUnsubscribed,
-	} = useExitIntent(settings);
+	const { registerHandler, unsubscribe, resetState, isUnsubscribed } =
+		useExitIntent(settings);
 
 	const copy = EXIT_INTENT_COPY[variant] ?? EXIT_INTENT_COPY[DEFAULT_VARIANT];
 	const resolvedPrimaryHref = primaryHref ?? copy.primaryHref;
@@ -323,24 +314,15 @@ function EnabledExitIntentBoundary({
 							</Button>
 							{resolvedPrimaryHref ? (
 								<Button asChild type="button">
-									<Link href={resolvedPrimaryHref}>
-										{copy.primaryCta}
-									</Link>
+									<Link href={resolvedPrimaryHref}>{copy.primaryCta}</Link>
 								</Button>
 							) : (
-								<Button
-									type="button"
-									onClick={() => setIsOpen(false)}
-								>
+								<Button type="button" onClick={() => setIsOpen(false)}>
 									{copy.primaryCta}
 								</Button>
 							)}
 						</div>
-						<Button
-							variant="ghost"
-							type="button"
-							onClick={handleKeepExploring}
-						>
+						<Button variant="ghost" type="button" onClick={handleKeepExploring}>
 							Keep exploring
 						</Button>
 					</DialogFooter>
@@ -365,4 +347,3 @@ export function ExitIntentBoundary(props: ExitIntentBoundaryProps) {
 }
 
 export default ExitIntentBoundary;
-

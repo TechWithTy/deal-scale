@@ -4,8 +4,8 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LegalDocument } from "../../../data/legal/legalDocuments";
-import LegalClient from "../LegalClient";
 import * as legalDocumentsModule from "../../../data/legal/legalDocuments";
+import LegalClient from "../LegalClient";
 
 type TestLegalDocument = LegalDocument;
 

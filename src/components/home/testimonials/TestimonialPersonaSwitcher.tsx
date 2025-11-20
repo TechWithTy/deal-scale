@@ -1,12 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import {
-	PERSONA_DISPLAY_ORDER,
-	PERSONA_LABELS,
-} from "@/data/personas/catalog";
-import { usePersonaStore } from "@/stores/usePersonaStore";
+import { PERSONA_DISPLAY_ORDER, PERSONA_LABELS } from "@/data/personas/catalog";
 import { cn } from "@/lib/utils";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import { motion, useReducedMotion } from "framer-motion";
 
 export const PersonaSwitcher = () => {
 	const { persona, setPersona } = usePersonaStore();
@@ -22,10 +19,10 @@ export const PersonaSwitcher = () => {
 						key={option}
 						type="button"
 						className={cn(
-							"relative z-10 flex flex-1 items-center justify-center rounded-full px-4 py-2 text-xs font-medium uppercase tracking-wide transition-colors sm:text-sm",
+							"relative z-10 flex flex-1 items-center justify-center rounded-full px-4 py-2 font-medium text-xs uppercase tracking-wide transition-colors sm:text-sm",
 							isActive
 								? "text-black dark:text-white"
-								: "text-black/70 hover:text-black dark:text-white/80 dark:hover:text-white focus-visible:text-black dark:focus-visible:text-white",
+								: "text-black/70 hover:text-black focus-visible:text-black dark:text-white/80 dark:focus-visible:text-white dark:hover:text-white",
 						)}
 						onClick={() => setPersona(option)}
 						aria-pressed={isActive}
@@ -50,4 +47,3 @@ export const PersonaSwitcher = () => {
 };
 
 PersonaSwitcher.displayName = "PersonaSwitcher";
-

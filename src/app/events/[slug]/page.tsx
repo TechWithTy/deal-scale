@@ -124,8 +124,8 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 	const AttendanceBadgeIcon = attendanceBadge.icon;
 	const registrationHref =
 		accessType === "external"
-			? event.externalUrl ?? buildEventUrl(event.slug)
-			: event.internalPath ?? buildEventUrl(event.slug);
+			? (event.externalUrl ?? buildEventUrl(event.slug))
+			: (event.internalPath ?? buildEventUrl(event.slug));
 	const RegistrationIcon =
 		accessType === "external" ? ExternalLink : ArrowRight;
 	const registrationLinkProps =
@@ -151,10 +151,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 								{accessBadge.label}
 							</Badge>
 							<Badge variant="outline" className="gap-1.5">
-								<AttendanceBadgeIcon
-									className="h-3.5 w-3.5"
-									aria-hidden
-								/>
+								<AttendanceBadgeIcon className="h-3.5 w-3.5" aria-hidden />
 								{attendanceBadge.label}
 							</Badge>
 						</div>
@@ -195,10 +192,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 							{event.description}
 						</p>
 						<Button asChild size="lg">
-							<Link
-								href={registrationHref}
-								{...registrationLinkProps}
-							>
+							<Link href={registrationHref} {...registrationLinkProps}>
 								Register now
 								<RegistrationIcon className="ml-2 h-4 w-4" />
 							</Link>
@@ -223,10 +217,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 							</li>
 						</ul>
 						<Button asChild variant="secondary" className="w-full">
-							<Link
-								href={registrationHref}
-								{...registrationLinkProps}
-							>
+							<Link href={registrationHref} {...registrationLinkProps}>
 								Visit event site
 								<RegistrationIcon className="ml-2 h-4 w-4" />
 							</Link>

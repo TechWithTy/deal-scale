@@ -1,15 +1,13 @@
 import type { FAQItem } from "@/types/faq";
 
-import { staticSeoMeta, defaultSeo } from "@/utils/seo/staticSeo";
 import type { SeoMeta } from "@/utils/seo/seo";
+import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
 
 import {
 	buildFAQPageSchema,
 	buildProductSchema,
 } from "@/utils/seo/schema/builders";
-import {
-	SCHEMA_CONTEXT,
-} from "@/utils/seo/schema/helpers";
+import { SCHEMA_CONTEXT } from "@/utils/seo/schema/helpers";
 import type { ProductSchema } from "@/utils/seo/schema/types";
 
 const EXTERNAL_TOOLS_BASE = "/external-tools";
@@ -22,9 +20,7 @@ const normalizePath = (slug: string): string => {
 		return trimmed;
 	}
 
-	const normalized = trimmed.startsWith("/")
-		? trimmed.slice(1)
-		: trimmed;
+	const normalized = trimmed.startsWith("/") ? trimmed.slice(1) : trimmed;
 
 	return `${EXTERNAL_TOOLS_BASE}/${normalized}`.replace(/\/{2,}/g, "/");
 };
@@ -135,6 +131,3 @@ export const buildExternalToolProductSchema = ({
 			availability,
 		},
 	});
-
-
-

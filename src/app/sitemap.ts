@@ -1,6 +1,6 @@
-import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { getAllProducts } from "@/data/products/index";
 import { getAllServices } from "@/data/service/services";
+import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { getAllCaseStudies } from "@/lib/caseStudies/case-studies";
 import type { BeehiivPost } from "@/types/behiiv";
@@ -190,7 +190,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	const externalEntries: MetadataRoute.Sitemap = [
 		{
-			url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ",
+			url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A",
 			changeFrequency: "daily",
 			priority: 0.4,
 		},
@@ -228,6 +228,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		},
 		{
 			url: `${baseUrl}/rss/youtube.xml`,
+			lastModified: new Date(),
+			changeFrequency: "hourly",
+			priority: 0.6,
+		},
+		{
+			url: `${baseUrl}/rss/github.xml`,
 			lastModified: new Date(),
 			changeFrequency: "hourly",
 			priority: 0.6,

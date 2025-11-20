@@ -1,13 +1,13 @@
 "use client";
 import AffiliateSuccess from "@/components/affiliate/AffiliateSuccess";
 import AuthGuard from "@/components/auth/AuthGuard";
-import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import AffiliateForm from "@/components/contact/form/AffiliateForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import { ContactSteps } from "@/components/contact/form/ContactSteps";
 import { Newsletter } from "@/components/contact/newsletter/Newsletter";
 import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import Testimonials from "@/components/home/Testimonials";
 import {
 	type AffiliateFormValues,
@@ -20,13 +20,13 @@ import {
 } from "@/data/service/slug_data/consultationSteps";
 import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 import type { DiscountCode } from "@/types/discount/discountCode";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import { exitIntentEnabled } from "@/lib/config/exitIntent";
 import { v4 as uuidv4 } from "uuid";
 // * Centralized SEO for /affiliate using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {

@@ -3,6 +3,7 @@
 import { ArrowDown } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
+import type { Plan } from "@/types/service/plans";
 import {
 	DEFAULT_HERO_SOCIAL_PROOF,
 	HeroAurora,
@@ -14,9 +15,7 @@ import {
 	resolveHeroCopy,
 } from "@external/dynamic-hero";
 import { useShallow } from "zustand/react/shallow";
-import type { Plan } from "@/types/service/plans";
 
-import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
 import { HeroMetricGrid } from "@/components/home/heros/HeroMetricGrid";
 import {
 	CTA_MICROCOPY,
@@ -28,14 +27,12 @@ import {
 	SECONDARY_CTA,
 } from "@/components/home/heros/heroConfig";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
+import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { LasersBackground } from "@/components/ui/lasers-background";
 import { LightRays } from "@/components/ui/light-rays";
 import { Pointer } from "@/components/ui/pointer";
-import {
-	DEFAULT_PERSONA_KEY,
-	PERSONA_LABELS,
-} from "@/data/personas/catalog";
+import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from "@/data/personas/catalog";
 import { usePersonaStore } from "@/stores/usePersonaStore";
 
 const MOCK_VIDEO: HeroVideoConfig = {

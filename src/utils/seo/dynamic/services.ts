@@ -1,7 +1,7 @@
 import type { ServiceItemData } from "@/types/service/services";
 import { getTestBaseUrl } from "@/utils/env";
-import type { SeoMeta } from "@/utils/seo/seo";
 import { getTestimonialReviewData } from "@/utils/seo/schema";
+import type { SeoMeta } from "@/utils/seo/seo";
 
 /**
  * Fetches SEO metadata for a service by slug.

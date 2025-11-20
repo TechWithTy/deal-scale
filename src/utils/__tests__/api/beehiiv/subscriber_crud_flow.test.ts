@@ -24,64 +24,64 @@ describeIfExternal("Beehiiv CRUD flow (integration)", () => {
 	it(
 		"performs full CRUD flow via real API",
 		async () => {
-		// Use the real hook and real API (no fetch mocking)
-		const { result } = renderHook(() => useNewsletterSubscribers());
-		let subscriber: Subscriber;
-		await act(async () => {
-			subscriber = await result.current.addSubscriber(testEmail);
-		});
-		expect(subscriber).toHaveProperty("email");
-		expect(subscriber.email).toBe(testEmail);
-		expect(["validating", "active"]).toContain(subscriber.status);
-		expect(result.current.error).toBeNull();
-		// Save subscriber ID for cleanup (if returned)
-		subscriberId = subscriber?.id || null;
-
-		// READ
-		let fetchedSub: Subscriber;
-		let attempts = 0;
-		while (!fetchedSub && attempts < 5) {
+			// Use the real hook and real API (no fetch mocking)
+			const { result } = renderHook(() => useNewsletterSubscribers());
+			let subscriber: Subscriber;
 			await act(async () => {
-				fetchedSub = await result.current.getSubscriberByEmail(testEmail);
+				subscriber = await result.current.addSubscriber(testEmail);
 			});
-			if (!fetchedSub) await new Promise((res) => setTimeout(res, 500)); // wait 0.5s
-			attempts++;
-		}
-		expect(fetchedSub).toBeDefined();
-		if (!fetchedSub) {
-			throw new Error(`Subscriber not found after ${attempts} attempts`);
-		}
-		expect(fetchedSub).toHaveProperty("email");
-		expect(fetchedSub.email).toBe(testEmail);
-		expect(fetchedSub).toHaveProperty("created");
-		expect(result.current.error).toBeNull();
-
-		// UPDATE (if id present)
-		if (fetchedSub?.id) {
-			let updatedSub: Subscriber;
-			await act(async () => {
-				updatedSub = await result.current.updateSubscription(fetchedSub.id, {
-					tier: "premium",
-				});
-			});
-			expect(updatedSub).toBeTruthy();
+			expect(subscriber).toHaveProperty("email");
+			expect(subscriber.email).toBe(testEmail);
+			expect(["validating", "active"]).toContain(subscriber.status);
 			expect(result.current.error).toBeNull();
-		}
+			// Save subscriber ID for cleanup (if returned)
+			subscriberId = subscriber?.id || null;
 
-		// DELETE
-		let removed = false;
-		await act(async () => {
-			removed = await result.current.removeSubscriber(testEmail);
-		});
-		expect(removed).toBe(true);
-		expect(result.current.error).toBeNull();
+			// READ
+			let fetchedSub: Subscriber;
+			let attempts = 0;
+			while (!fetchedSub && attempts < 5) {
+				await act(async () => {
+					fetchedSub = await result.current.getSubscriberByEmail(testEmail);
+				});
+				if (!fetchedSub) await new Promise((res) => setTimeout(res, 500)); // wait 0.5s
+				attempts++;
+			}
+			expect(fetchedSub).toBeDefined();
+			if (!fetchedSub) {
+				throw new Error(`Subscriber not found after ${attempts} attempts`);
+			}
+			expect(fetchedSub).toHaveProperty("email");
+			expect(fetchedSub.email).toBe(testEmail);
+			expect(fetchedSub).toHaveProperty("created");
+			expect(result.current.error).toBeNull();
 
-		// Confirm deletion
-		let afterDelete: Subscriber;
-		await act(async () => {
-			afterDelete = await result.current.getSubscriberByEmail(testEmail);
-		});
-		expect(afterDelete).toBeNull();
+			// UPDATE (if id present)
+			if (fetchedSub?.id) {
+				let updatedSub: Subscriber;
+				await act(async () => {
+					updatedSub = await result.current.updateSubscription(fetchedSub.id, {
+						tier: "premium",
+					});
+				});
+				expect(updatedSub).toBeTruthy();
+				expect(result.current.error).toBeNull();
+			}
+
+			// DELETE
+			let removed = false;
+			await act(async () => {
+				removed = await result.current.removeSubscriber(testEmail);
+			});
+			expect(removed).toBe(true);
+			expect(result.current.error).toBeNull();
+
+			// Confirm deletion
+			let afterDelete: Subscriber;
+			await act(async () => {
+				afterDelete = await result.current.getSubscriberByEmail(testEmail);
+			});
+			expect(afterDelete).toBeNull();
 		},
 		LONG_TIMEOUT,
 	);

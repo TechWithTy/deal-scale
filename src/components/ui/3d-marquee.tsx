@@ -68,9 +68,9 @@ export const ThreeDMarquee = ({
 					>
 						<div
 							className={cn(
-								"grid origin-center grid-cols-4 gap-5 sm:gap-7 lg:gap-8 w-[min(96vw,_700px)] h-[min(96vw,_700px)] sm:w-[min(92vw,_780px)] sm:h-[min(92vw,_780px)] lg:w-[900px] lg:h-[900px]",
+								"grid h-[min(96vw,_700px)] w-[min(96vw,_700px)] origin-center grid-cols-4 gap-5 sm:h-[min(92vw,_780px)] sm:w-[min(92vw,_780px)] sm:gap-7 lg:h-[900px] lg:w-[900px] lg:gap-8",
 								isHeroVariant &&
-									"w-[min(120vw,_960px)] h-[min(120vw,_960px)] sm:w-[min(110vw,_1040px)] sm:h-[min(110vw,_1040px)] lg:w-[1100px] lg:h-[1100px]",
+									"h-[min(120vw,_960px)] w-[min(120vw,_960px)] sm:h-[min(110vw,_1040px)] sm:w-[min(110vw,_1040px)] lg:h-[1100px] lg:w-[1100px]",
 							)}
 						>
 							{chunks.map((subarray, columnIndex) => {
@@ -110,7 +110,8 @@ export const ThreeDMarquee = ({
 														className={cn(
 															"flex h-28 w-40 items-center justify-center rounded-2xl bg-white/95 p-5 shadow-black/10 shadow-lg ring-1 ring-black/5 backdrop-blur-sm sm:h-32 sm:w-44 sm:p-6",
 															"dark:bg-slate-900/80 dark:shadow-slate-900/40 dark:ring-white/10",
-															isHeroVariant && "bg-white/85 dark:bg-slate-900/75",
+															isHeroVariant &&
+																"bg-white/85 dark:bg-slate-900/75",
 															itemClassName,
 														)}
 													>

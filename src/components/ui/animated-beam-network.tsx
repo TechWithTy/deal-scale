@@ -1,9 +1,9 @@
 "use client";
 
+import { Cloud, Globe, Layers, MessageCircle, Server, Zap } from "lucide-react";
+import { motion } from "motion/react";
 import { createRef, forwardRef, useMemo, useRef } from "react";
 import type { ReactNode } from "react";
-import { motion } from "motion/react";
-import { Cloud, Globe, Layers, MessageCircle, Server, Zap } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -176,14 +176,22 @@ export function AnimatedBeamNetwork({
 				{isBackground ? (
 					<div className="pointer-events-none absolute inset-0">
 						<motion.div
-							className="absolute left-1/2 top-1/2 h-[30rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.38)_0%,rgba(15,23,42,0)_68%)] blur-[90px]"
+							className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.38)_0%,rgba(15,23,42,0)_68%)] blur-[90px]"
 							animate={{ scale: [1, 1.08, 1], opacity: [0.7, 0.95, 0.7] }}
-							transition={{ duration: 6.5, repeat: Infinity, ease: [0.25, 0.1, 0.25, 1] }}
+							transition={{
+								duration: 6.5,
+								repeat: Number.POSITIVE_INFINITY,
+								ease: [0.25, 0.1, 0.25, 1],
+							}}
 						/>
 						<motion.div
-							className="absolute left-1/2 top-1/2 h-[20rem] w-[20rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(236,72,153,0.35)_0%,rgba(15,23,42,0)_70%)] blur-[80px]"
+							className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 h-[20rem] w-[20rem] rounded-full bg-[radial-gradient(circle,rgba(236,72,153,0.35)_0%,rgba(15,23,42,0)_70%)] blur-[80px]"
 							animate={{ scale: [0.95, 1.12, 0.95], opacity: [0.6, 0.9, 0.6] }}
-							transition={{ duration: 5.2, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
+							transition={{
+								duration: 5.2,
+								repeat: Number.POSITIVE_INFINITY,
+								ease: [0.45, 0, 0.55, 1],
+							}}
 						/>
 						<div className="absolute inset-0 bg-gradient-to-b from-background/25 via-transparent to-background/35 dark:from-slate-950/45 dark:via-transparent dark:to-slate-950/55" />
 					</div>
@@ -197,13 +205,13 @@ export function AnimatedBeamNetwork({
 				>
 					{isBackground ? null : (
 						<div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
-							<span className="text-xs font-semibold uppercase tracking-[0.38em] text-primary/70">
+							<span className="font-semibold text-primary/70 text-xs uppercase tracking-[0.38em]">
 								Real-Time Sync
 							</span>
-							<h2 className="text-balance text-3xl font-semibold text-foreground md:text-4xl">
+							<h2 className="text-balance font-semibold text-3xl text-foreground md:text-4xl">
 								{title}
 							</h2>
-							<p className="text-balance text-sm text-muted-foreground md:text-base">
+							<p className="text-balance text-muted-foreground text-sm md:text-base">
 								{description}
 							</p>
 						</div>
@@ -274,21 +282,21 @@ export function AnimatedBeamNetwork({
 											{shouldShowCenterLabel ? (
 												<div
 													ref={centerRef}
-													className="relative flex size-[4.25rem] items-center justify-center rounded-full border border-white/40 bg-white/90 text-center text-xs font-semibold uppercase tracking-[0.3em] text-foreground shadow-[0_0_90px_rgba(236,72,153,0.25)] backdrop-blur-md dark:border-white/10 dark:bg-slate-900/80 dark:text-foreground/80 sm:size-20 sm:text-sm"
+													className="relative flex size-[4.25rem] items-center justify-center rounded-full border border-white/40 bg-white/90 text-center font-semibold text-foreground text-xs uppercase tracking-[0.3em] shadow-[0_0_90px_rgba(236,72,153,0.25)] backdrop-blur-md sm:size-20 sm:text-sm dark:border-white/10 dark:bg-slate-900/80 dark:text-foreground/80"
 												>
 													{centerLabel}
 												</div>
 											) : centerContent ? (
 												<div
 													ref={centerRef}
-													className="relative flex size-[4.75rem] items-center justify-center rounded-full border border-white/25 bg-white/25 shadow-[0_0_80px_rgba(59,130,246,0.28)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/40 sm:size-[5.25rem]"
+													className="relative flex size-[4.75rem] items-center justify-center rounded-full border border-white/25 bg-white/25 shadow-[0_0_80px_rgba(59,130,246,0.28)] backdrop-blur-md sm:size-[5.25rem] dark:border-white/10 dark:bg-slate-950/40"
 												>
 													{centerContent}
 												</div>
 											) : (
 												<div
 													ref={centerRef}
-													className="relative size-[4.25rem] rounded-full border border-white/20 bg-white/15 shadow-[0_0_80px_rgba(59,130,246,0.2)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/40 sm:size-[4.75rem]"
+													className="relative size-[4.25rem] rounded-full border border-white/20 bg-white/15 shadow-[0_0_80px_rgba(59,130,246,0.2)] backdrop-blur-md sm:size-[4.75rem] dark:border-white/10 dark:bg-slate-950/40"
 												/>
 											)}
 										</div>
@@ -302,4 +310,3 @@ export function AnimatedBeamNetwork({
 		</section>
 	);
 }
-

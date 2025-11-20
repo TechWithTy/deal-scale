@@ -1,9 +1,9 @@
 "use client";
 
 import Header from "@/components/common/Header";
+import { useTheme } from "@/contexts/theme-context";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { useTheme } from "@/contexts/theme-context";
 
 const INSTAGRAM_PROFILE_URL =
 	"https://www.instagram.com/deal_scale/?utm_source=ig_embed&utm_campaign=loading";
@@ -41,11 +41,11 @@ const InstagramEmbed = ({ className }: InstagramEmbedProps) => {
 						data-testid="instagram-embed-loading"
 						aria-hidden={isLoading ? "false" : "true"}
 						className={cn(
-							"flex w-full items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/30 p-10 transition-all duration-300 dark:border-white/10 dark:bg-white/5",
+							"flex w-full items-center justify-center rounded-2xl border border-white/20 border-dashed bg-white/30 p-10 transition-all duration-300 dark:border-white/10 dark:bg-white/5",
 							isLoading ? "opacity-100" : "pointer-events-none opacity-0",
 						)}
 					>
-						<div className="flex flex-col items-center gap-3 text-center text-sm text-slate-600 dark:text-slate-200">
+						<div className="flex flex-col items-center gap-3 text-center text-slate-600 text-sm dark:text-slate-200">
 							<div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-300 border-t-transparent dark:border-white/30" />
 							<span>Loading the latest Deal Scale posts…</span>
 						</div>
@@ -70,7 +70,7 @@ const InstagramEmbed = ({ className }: InstagramEmbedProps) => {
 						referrerPolicy="no-referrer-when-downgrade"
 						allow="encrypted-media"
 					/>
-					<div className="mt-4 text-center text-sm font-medium text-black dark:text-white">
+					<div className="mt-4 text-center font-medium text-black text-sm dark:text-white">
 						If Instagram fails to load,{" "}
 						<a
 							className="underline transition hover:text-slate-700 dark:hover:text-white"

@@ -1,9 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const useDataModuleMock = vi.fn();
-const TrustedByScrollerMock = vi.fn(() => <div data-testid="trusted-scroller" />);
+const TrustedByScrollerMock = vi.fn(() => (
+	<div data-testid="trusted-scroller" />
+));
 
 vi.mock("@/stores/useDataModuleStore", () => ({
 	__esModule: true,

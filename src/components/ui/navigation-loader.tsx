@@ -1,8 +1,8 @@
 "use client";
 
-import { createPortal } from "react-dom";
-import { useEffect, useMemo, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { useNavigationLoaderStore } from "@/stores/navigation-loader";
 
@@ -102,7 +102,7 @@ export function NavigationLoader() {
 
 		return (
 			<div className="pointer-events-none fixed inset-x-0 top-0 z-[70] flex justify-center">
-				<div className="pointer-events-auto mt-3 flex items-center gap-2 rounded-full bg-background/90 px-4 py-2 text-xs font-medium text-muted-foreground shadow-lg ring-1 ring-border/40 backdrop-blur">
+				<div className="pointer-events-auto mt-3 flex items-center gap-2 rounded-full bg-background/90 px-4 py-2 font-medium text-muted-foreground text-xs shadow-lg ring-1 ring-border/40 backdrop-blur">
 					<Spinner size="sm" aria-label="Navigating" className="text-primary" />
 					<span aria-hidden>Navigating…</span>
 				</div>

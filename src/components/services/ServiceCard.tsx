@@ -120,7 +120,8 @@ const ServiceCard = (props: ServiceCardProps) => {
 					props.className,
 				)}
 			>
-				Unable to display service information. Please refresh the page or contact support.
+				Unable to display service information. Please refresh the page or
+				contact support.
 			</div>
 		);
 	}

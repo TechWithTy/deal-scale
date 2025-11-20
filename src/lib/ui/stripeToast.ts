@@ -12,7 +12,7 @@ const DEFAULT_SUCCESS_DURATION = 5000;
 const DEFAULT_ERROR_DURATION = 6000;
 
 export function startStripeToast(message: string): ToastHandlers {
-	const id = toast.loading(message, { duration: Infinity });
+	const id = toast.loading(message, { duration: Number.POSITIVE_INFINITY });
 
 	return {
 		id,

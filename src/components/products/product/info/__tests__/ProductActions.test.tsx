@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
+import { describe, expect, it, vi } from "vitest";
 
 const addItemMock = vi.fn();
 const useCartStoreMock = vi.fn(() => ({
@@ -41,7 +41,9 @@ describe("ProductActions", () => {
 			/>,
 		);
 
-		expect(screen.getByRole("button", { name: /add to cart/i })).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: /add to cart/i }),
+		).toBeInTheDocument();
 		expect(SocialShareMock).toHaveBeenCalled();
 	});
 });

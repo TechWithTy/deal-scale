@@ -4,8 +4,19 @@ import { XMLParser } from "fast-xml-parser";
 
 const SITE_URL = "https://dealscale.io";
 const BEEHIIV_FEED = "https://rss.beehiiv.com/feeds/th0QQipR7J.xml";
-const YOUTUBE_FEED =
-	"https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ";
+// Try multiple YouTube feed formats - YouTube may have changed their feed URLs
+// Note: Channel ID should include the -A suffix: UCphkra97DMNIAIvA1y8hZ-A
+const YOUTUBE_CHANNEL_ID =
+	process.env.YOUTUBE_CHANNEL_ID || "UCphkra97DMNIAIvA1y8hZ-A";
+const YOUTUBE_USERNAME = process.env.YOUTUBE_USERNAME || "DealScaleRealEstate";
+const YOUTUBE_FEEDS = [
+	`https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`,
+	`https://www.youtube.com/@${YOUTUBE_USERNAME}/videos.rss`,
+	`https://www.youtube.com/feeds/videos.xml?user=${YOUTUBE_USERNAME}`,
+];
+const GITHUB_FEED =
+	process.env.GITHUB_ATOM_FEED_URL ||
+	"https://github.com/organizations/Deal-Scale/TechWithTy.private.atom?token=AI72D5O5LGXJVYOGAX5W7WGHFMVCY";
 const CACHE_CONTROL = "s-maxage=900, stale-while-revalidate=3600";
 
 type HybridEntry = {
@@ -14,7 +25,7 @@ type HybridEntry = {
 	description: string;
 	pubDate: string;
 	guid: string;
-	source: "blog" | "youtube";
+	source: "blog" | "youtube" | "github";
 	categories?: string[];
 };
 
@@ -22,6 +33,9 @@ const parser = new XMLParser({
 	ignoreAttributes: false,
 	attributeNamePrefix: "@_",
 	trimValues: true,
+	parseAttributeValue: true,
+	parseTagValue: true,
+	processEntities: true,
 });
 
 const sanitize = (value: string): string =>
@@ -84,6 +98,140 @@ const buildBeehiivEntries = (feedXml: string): HybridEntry[] => {
 };
 
 const buildYouTubeEntries = (feedXml: string): HybridEntry[] => {
+	try {
+		const parsed = parser.parse(feedXml) as {
+			feed?: { entry?: any[] | any };
+			rss?: { channel?: { item?: any[] | any } };
+		};
+
+		// Handle both Atom (feed.entry) and RSS (rss.channel.item) formats
+		let entries: any[] = [];
+		if (parsed.feed?.entry) {
+			entries = ensureArray(parsed.feed.entry);
+		} else if (parsed.rss?.channel?.item) {
+			// Convert RSS format to Atom-like structure for unified processing
+			entries = ensureArray(parsed.rss.channel.item).map((item) => ({
+				title: item.title,
+				link: item.link,
+				published: item.pubDate,
+				updated: item.pubDate,
+				summary: item.description,
+				// Extract video ID from link
+				videoId: item.link?.match?.(/[?&]v=([a-zA-Z0-9_-]{11})/)?.[1],
+			}));
+		}
+
+		const mappedEntries: Array<HybridEntry | undefined> = entries.map(
+			(entry) => {
+				// Try multiple ways to extract videoId (handles different namespace formats)
+				const videoId =
+					entry["yt:videoId"]?.["#text"]?.toString?.().trim() ||
+					entry["yt:videoId"]?.toString?.().trim() ||
+					entry["yt:videoId"] ||
+					entry.videoId?.["#text"]?.toString?.().trim() ||
+					entry.videoId?.toString?.().trim() ||
+					entry.videoId;
+
+				if (!videoId) {
+					// Try extracting from link if videoId not found
+					const link = entry.link?.["@_href"] || entry.link;
+					if (typeof link === "string") {
+						const match = link.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+						if (match?.[1]) {
+							const extractedId = match[1];
+							const title =
+								entry.title?.["#text"]?.toString?.().trim() ||
+								entry.title?.toString?.().trim() ||
+								entry.title ||
+								"DealScale Video Update";
+							const description =
+								entry["media:group"]?.["media:description"]?.[
+									"#text"
+								]?.toString?.() ||
+								entry["media:group"]?.["media:description"]?.toString?.() ||
+								entry["media:group"]?.["media:description"] ||
+								entry.summary?.["#text"]?.toString?.() ||
+								entry.summary?.toString?.() ||
+								entry.summary ||
+								"Watch the latest automation insights from DealScale.";
+							const published = entry.published || entry.updated;
+							const keywords =
+								entry["media:group"]?.["media:keywords"]?.[
+									"#text"
+								]?.toString?.() ||
+								entry["media:group"]?.["media:keywords"]?.toString?.() ||
+								entry["media:group"]?.["media:keywords"];
+
+							return {
+								title: title.toString(),
+								link: `https://www.youtube.com/watch?v=${extractedId}`,
+								description: description.toString(),
+								pubDate: normalizeDate(published),
+								guid: `youtube-${extractedId}`,
+								source: "youtube" as const,
+								categories: ensureArray(
+									keywords ? keywords.split?.(",") : entry.category,
+								)
+									.map((keyword: unknown) => keyword?.toString?.().trim())
+									.filter((keyword: string | undefined): keyword is string =>
+										Boolean(keyword),
+									),
+							};
+						}
+					}
+					return undefined;
+				}
+
+				const title =
+					entry.title?.["#text"]?.toString?.().trim() ||
+					entry.title?.toString?.().trim() ||
+					entry.title ||
+					"DealScale Video Update";
+				const description =
+					entry["media:group"]?.["media:description"]?.[
+						"#text"
+					]?.toString?.() ||
+					entry["media:group"]?.["media:description"]?.toString?.() ||
+					entry["media:group"]?.["media:description"] ||
+					entry.summary?.["#text"]?.toString?.() ||
+					entry.summary?.toString?.() ||
+					entry.summary ||
+					"Watch the latest automation insights from DealScale.";
+				const published = entry.published || entry.updated;
+				const keywords =
+					entry["media:group"]?.["media:keywords"]?.["#text"]?.toString?.() ||
+					entry["media:group"]?.["media:keywords"]?.toString?.() ||
+					entry["media:group"]?.["media:keywords"];
+				const categories = ensureArray(
+					keywords ? keywords.split?.(",") : entry.category,
+				)
+					.map((keyword: unknown) => keyword?.toString?.().trim())
+					.filter((keyword: string | undefined): keyword is string =>
+						Boolean(keyword),
+					);
+
+				return {
+					title: title.toString(),
+					link: `https://www.youtube.com/watch?v=${videoId}`,
+					description: description.toString(),
+					pubDate: normalizeDate(published),
+					guid: `youtube-${videoId}`,
+					source: "youtube" as const,
+					categories,
+				};
+			},
+		);
+
+		return mappedEntries.filter((entry): entry is HybridEntry =>
+			Boolean(entry?.link),
+		);
+	} catch (error) {
+		console.error("Error parsing YouTube feed:", error);
+		return [];
+	}
+};
+
+const buildGitHubEntries = (feedXml: string): HybridEntry[] => {
 	const parsed = parser.parse(feedXml) as {
 		feed?: { entry?: any[] | any };
 	};
@@ -91,36 +239,43 @@ const buildYouTubeEntries = (feedXml: string): HybridEntry[] => {
 	const entries = ensureArray(parsed.feed?.entry);
 
 	const mappedEntries: Array<HybridEntry | undefined> = entries.map((entry) => {
-		const videoId = entry["yt:videoId"]?.toString?.().trim();
-		if (!videoId) return undefined;
+		const id = entry.id?.toString?.().trim();
+		if (!id) return undefined;
 
-		const title = entry.title?.toString?.().trim() ?? "DealScale Video Update";
+		const title = entry.title?.toString?.().trim() ?? "GitHub Activity";
+		const link =
+			entry.link?.["@_href"]?.toString?.().trim() ||
+			entry.link?.toString?.().trim() ||
+			"https://github.com/Deal-Scale";
+		const content = entry.content?.["#text"] || entry.content || "";
 		const description =
-			entry["media:group"]?.["media:description"] ??
-			"Watch the latest automation insights from DealScale.";
-		const published = entry.published ?? entry.updated;
-		const keywords = entry["media:group"]?.["media:keywords"];
-		const categories = ensureArray(
-			keywords ? keywords.split?.(",") : entry.category,
-		)
-			.map((keyword: unknown) => keyword?.toString?.().trim())
-			.filter((keyword: string | undefined): keyword is string =>
-				Boolean(keyword),
-			);
+			typeof content === "string"
+				? content.replace(/<[^>]+>/g, "").substring(0, 500) ||
+					"Latest activity from Deal-Scale organization on GitHub."
+				: "Latest activity from Deal-Scale organization on GitHub.";
+		const published = entry.published || entry.updated;
+		const author = entry.author?.name || "TechWithTy";
+
+		// Extract event type from title (fork, push, etc.)
+		const eventType = title.toLowerCase().includes("forked")
+			? "fork"
+			: title.toLowerCase().includes("pushed")
+				? "push"
+				: "activity";
 
 		return {
-			title,
-			link: `https://www.youtube.com/watch?v=${videoId}`,
+			title: `${title} by ${author}`,
+			link,
 			description: description.toString(),
 			pubDate: normalizeDate(published),
-			guid: `youtube-${videoId}`,
-			source: "youtube" as const,
-			categories,
+			guid: `github-${id}`,
+			source: "github" as const,
+			categories: [eventType, "github"],
 		};
 	});
 
 	return mappedEntries.filter((entry): entry is HybridEntry =>
-		Boolean(entry && entry.link),
+		Boolean(entry?.link),
 	);
 };
 
@@ -134,9 +289,15 @@ const buildChannelXml = (entries: HybridEntry[]): string => {
 			const sourceUrl =
 				entry.source === "youtube"
 					? "https://www.youtube.com/@DealScaleRealEstate"
-					: `${SITE_URL}/blog`;
+					: entry.source === "github"
+						? "https://github.com/Deal-Scale"
+						: `${SITE_URL}/blog`;
 			const sourceName =
-				entry.source === "youtube" ? "DealScale YouTube" : "DealScale Blog";
+				entry.source === "youtube"
+					? "DealScale YouTube"
+					: entry.source === "github"
+						? "Deal-Scale GitHub"
+						: "DealScale Blog";
 
 			return `<item>
 	<title>${sanitize(entry.title)}</title>
@@ -157,7 +318,7 @@ const buildChannelXml = (entries: HybridEntry[]): string => {
 <channel>
 	<title>DealScale Hybrid Feed</title>
 	<link>${SITE_URL}</link>
-	<description>Unified feed combining DealScale blog posts and YouTube videos.</description>
+	<description>Unified feed combining DealScale blog posts, YouTube videos, and GitHub activity.</description>
 	<language>en-us</language>
 	<lastBuildDate>${lastBuildDate}</lastBuildDate>
 ${itemsXml}
@@ -169,21 +330,57 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse,
 ) {
+	// Try YouTube feeds in order until one works
+	const fetchYouTubeFeed = async (): Promise<{
+		ok: boolean;
+		text: () => Promise<string>;
+		status: number;
+		statusText: string;
+	}> => {
+		for (const feedUrl of YOUTUBE_FEEDS) {
+			try {
+				const response = await fetch(feedUrl, {
+					headers: {
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						Accept:
+							"application/atom+xml, application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+					},
+				});
+				if (response.ok) {
+					console.log(`YouTube feed successful: ${feedUrl}`);
+					return response;
+				}
+				console.warn(`YouTube feed failed (${response.status}): ${feedUrl}`);
+			} catch (error) {
+				console.warn(`YouTube feed error for ${feedUrl}:`, error);
+			}
+		}
+		// Return a failed response if all feeds fail
+		return {
+			ok: false,
+			status: 404,
+			statusText: "Not Found",
+			text: async () => "",
+		};
+	};
+
 	try {
-		const [beehiivResult, youtubeResult] = await Promise.allSettled([
-			fetch(BEEHIIV_FEED, {
-				headers: {
-					"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
-					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-				},
-			}),
-			fetch(YOUTUBE_FEED, {
-				headers: {
-					"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
-					Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8",
-				},
-			}),
-		]);
+		const [beehiivResult, youtubeResult, githubResult] =
+			await Promise.allSettled([
+				fetch(BEEHIIV_FEED, {
+					headers: {
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+					},
+				}),
+				fetchYouTubeFeed(),
+				fetch(GITHUB_FEED, {
+					headers: {
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8",
+					},
+				}),
+			]);
 
 		const beehiivXml =
 			beehiivResult.status === "fulfilled" && beehiivResult.value.ok
@@ -193,16 +390,47 @@ export default async function handler(
 			youtubeResult.status === "fulfilled" && youtubeResult.value.ok
 				? await youtubeResult.value.text()
 				: "";
+		const githubXml =
+			githubResult.status === "fulfilled" && githubResult.value.ok
+				? await githubResult.value.text()
+				: "";
+
+		// Log feed fetch status for debugging
+		if (youtubeResult.status === "rejected") {
+			console.error("YouTube feed fetch failed:", youtubeResult.reason);
+		} else if (!youtubeResult.value.ok) {
+			console.error(
+				"YouTube feed returned error:",
+				youtubeResult.value.status,
+				youtubeResult.value.statusText,
+			);
+		} else if (youtubeXml) {
+			console.log(
+				"YouTube feed fetched successfully, length:",
+				youtubeXml.length,
+			);
+		}
+
+		const beehiivEntries = beehiivXml ? buildBeehiivEntries(beehiivXml) : [];
+		const youtubeEntries = youtubeXml ? buildYouTubeEntries(youtubeXml) : [];
+		const githubEntries = githubXml ? buildGitHubEntries(githubXml) : [];
+
+		console.log(
+			`Feed entries: Beehiiv=${beehiivEntries.length}, YouTube=${youtubeEntries.length}, GitHub=${githubEntries.length}`,
+		);
 
 		const combinedEntries = [
-			...(beehiivXml ? buildBeehiivEntries(beehiivXml) : []),
-			...(youtubeXml ? buildYouTubeEntries(youtubeXml) : []),
+			...beehiivEntries,
+			...youtubeEntries,
+			...githubEntries,
 		].sort(
 			(a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime(),
 		);
 
 		if (combinedEntries.length === 0) {
-			throw new Error("No entries available from Beehiiv or YouTube feeds.");
+			throw new Error(
+				"No entries available from Beehiiv, YouTube, or GitHub feeds.",
+			);
 		}
 
 		const feedXml = buildChannelXml(combinedEntries);

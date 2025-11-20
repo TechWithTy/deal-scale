@@ -116,7 +116,7 @@ function BlogContent() {
 
 	return (
 		<>
-			<div className="bg-background-dark/90 pb-8 pt-6 sm:pt-10">
+			<div className="bg-background-dark/90 pt-6 pb-8 sm:pt-10">
 				<Hero
 					badgeLeft="Investor Insights"
 					badgeRight="AI-Powered Strategies"

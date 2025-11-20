@@ -53,4 +53,3 @@ describe("PartnersClient", () => {
 		expect(h1Headings).toHaveLength(1);
 	});
 });
-

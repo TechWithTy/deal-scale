@@ -1,5 +1,7 @@
 "use client";
 
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/useCartStore";
 import { motion, useReducedMotion } from "framer-motion";
@@ -15,8 +17,6 @@ import {
 	ProductMetadata,
 	ProductSummary,
 } from "./card";
-import { useWaitCursor } from "@/hooks/useWaitCursor";
-import { startStripeToast } from "@/lib/ui/stripeToast";
 
 // Re-export types for convenience
 export type { CardProps as ProductCardProps };
@@ -160,7 +160,7 @@ const ProductCardNew = (props: CardProps) => {
 			<div className="mt-6 flex w-full flex-col space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
 				<button
 					type="button"
-					className="flex items-center justify-center gap-2 rounded-lg border border-slate-200/80 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200 dark:hover:bg-slate-900 dark:focus:ring-offset-slate-950"
+					className="flex items-center justify-center gap-2 rounded-lg border border-slate-200/80 bg-white px-4 py-2.5 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200 dark:focus:ring-offset-slate-950 dark:hover:bg-slate-900"
 					onClick={handleAddToCart}
 				>
 					<svg
@@ -184,7 +184,7 @@ const ProductCardNew = (props: CardProps) => {
 				</button>
 				<button
 					type="button"
-					className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-slate-950"
+					className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-sm text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:focus:ring-offset-slate-950 dark:hover:bg-blue-600"
 					onClick={handleInitiateCheckout}
 					disabled={isCheckoutLoading}
 				>

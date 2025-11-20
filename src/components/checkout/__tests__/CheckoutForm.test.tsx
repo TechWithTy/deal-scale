@@ -30,8 +30,12 @@ vi.mock("@/components/ui/dialog", () => ({
 	DialogDescription: ({ children }: { children: ReactNode }) => (
 		<div>{children}</div>
 	),
-	DialogFooter: ({ children }: { children: ReactNode }) => <div>{children}</div>,
-	DialogHeader: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+	DialogFooter: ({ children }: { children: ReactNode }) => (
+		<div>{children}</div>
+	),
+	DialogHeader: ({ children }: { children: ReactNode }) => (
+		<div>{children}</div>
+	),
 	DialogTitle: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));
 
@@ -56,7 +60,9 @@ const basePlan: Plan = {
 	cta: { text: "Sign Up", type: "checkout" as const },
 };
 
-const renderCheckoutForm = (props?: Partial<ComponentProps<typeof CheckoutForm>>) =>
+const renderCheckoutForm = (
+	props?: Partial<ComponentProps<typeof CheckoutForm>>,
+) =>
 	render(
 		<CheckoutForm
 			clientSecret="secret"
@@ -91,4 +97,3 @@ describe("CheckoutForm pay button label", () => {
 		).toBeInTheDocument();
 	});
 });
-

@@ -19,7 +19,3 @@ describe("mapSeoMetaToMetadata manifesto integration", () => {
 		);
 	});
 });
-
-
-
-

@@ -1,7 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DataModuleModule } from "@/data/__generated__/manifest";
 import type { DataModuleKey } from "@/data/__generated__/manifest";
 import { act, renderHook, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/data/__generated__/manifest", () => {
 	const loaderAlpha = vi.fn(async () => ({ default: "alpha" }));

@@ -18,7 +18,7 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.45, delay: 0.08 }}
-			className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-lg shadow-black/10 backdrop-blur"
+			className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-black/10 shadow-lg backdrop-blur"
 			aria-labelledby={`${title.replace(/\s+/g, "-").toLowerCase()}-heading`}
 		>
 			<h3
@@ -58,7 +58,7 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 							<h4 className="font-semibold text-sm text-white transition-colors group-hover:text-primary">
 								{post.title}
 							</h4>
-							<p className="mt-0.5 text-xs text-muted-foreground">
+							<p className="mt-0.5 text-muted-foreground text-xs">
 								{(() => {
 									const raw =
 										(post as any).published_at ?? (post as any).publish_date;

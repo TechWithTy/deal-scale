@@ -155,7 +155,8 @@ const ProductCard = (props: ProductCardProps) => {
 					props.className,
 				)}
 			>
-				Unable to display product information. Please refresh the page or contact support.
+				Unable to display product information. Please refresh the page or
+				contact support.
 			</div>
 		);
 	}

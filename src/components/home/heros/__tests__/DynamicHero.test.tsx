@@ -1,25 +1,16 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import React, { type ReactNode } from "react";
-import {
-	beforeAll,
-	beforeEach,
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
+import type React from "react";
+import type { ReactNode } from "react";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-import DynamicHeroDemoPage from "../DynamicHero";
+import { resetPersonaStore, usePersonaStore } from "@/stores/usePersonaStore";
 import { resolveHeroCopy } from "../../../dynamic-hero/src";
+import DynamicHeroDemoPage from "../DynamicHero";
 import {
 	QUICK_START_PERSONA_GOAL,
 	QUICK_START_PERSONA_KEY,
 } from "../heroConfig";
-import {
-	resetPersonaStore,
-	usePersonaStore,
-} from "@/stores/usePersonaStore";
 
 const pricingCheckoutDialogMock = vi.fn(
 	({ clientSecret }: { clientSecret: string }) => (
@@ -281,22 +272,24 @@ describe("DynamicHeroDemoPage", () => {
 	it("scrolls to the video preview and triggers playback when the secondary CTA is clicked", async () => {
 		render(<DynamicHeroDemoPage />);
 
-		fireEvent.click(screen.getByRole("button", { name: /preview guided demo/i }));
+		fireEvent.click(
+			screen.getByRole("button", { name: /preview guided demo/i }),
+		);
 
 		expect(scrollIntoViewMock).toHaveBeenCalledWith({
 			behavior: "smooth",
 			block: "center",
 		});
-		await waitFor(() => expect(heroModuleMocks.playVideo).toHaveBeenCalledTimes(1));
+		await waitFor(() =>
+			expect(heroModuleMocks.playVideo).toHaveBeenCalledTimes(1),
+		);
 	});
 
 	it("syncs the persona store with the Quick Start persona and goal", async () => {
 		render(<DynamicHeroDemoPage />);
 
 		await waitFor(() =>
-			expect(usePersonaStore.getState().persona).toBe(
-				QUICK_START_PERSONA_KEY,
-			),
+			expect(usePersonaStore.getState().persona).toBe(QUICK_START_PERSONA_KEY),
 		);
 		expect(usePersonaStore.getState().goal).toBe(QUICK_START_PERSONA_GOAL);
 	});

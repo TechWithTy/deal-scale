@@ -1,5 +1,5 @@
 import * as productAbTests from "@/data/products/copy";
-import type { ABTest, AbTestVariant, ABTestCopy } from "@/types/testing";
+import type { ABTest, ABTestCopy, AbTestVariant } from "@/types/testing";
 
 const isAbTest = (value: unknown): value is ABTest => {
 	if (!value || typeof value !== "object") {
@@ -50,7 +50,3 @@ describe("Product AB test copy", () => {
 		expect(missing).toEqual([]);
 	});
 });
-
-
-
-

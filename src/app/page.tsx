@@ -4,6 +4,7 @@ import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/featu
 import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import { BlogPreview } from "@/components/home/BlogPreview";
 import { ConnectAnythingHero } from "@/components/home/ConnectAnythingHero";
+import { UploadLeadsHero } from "@/components/home/UploadLeadsHero";
 // Above-the-fold components (eager load for LCP)
 import {
 	DEFAULT_PERSONA,
@@ -447,9 +448,17 @@ const Index = async ({
 			<SectionWrapper
 				id="connect-anything"
 				lazy={false}
-				fallbackLabel="Connect Anything"
+				fallbackLabel="Connect Any CRM"
 			>
 				<ConnectAnythingHero />
+			</SectionWrapper>
+			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<SectionWrapper
+				id="upload-leads"
+				lazy={false}
+				fallbackLabel="Upload Leads & Perform Actions"
+			>
+				<UploadLeadsHero />
 			</SectionWrapper>
 			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
 			<SectionWrapper

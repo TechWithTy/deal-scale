@@ -80,13 +80,14 @@ Browser Console Logs:
 			<div className="mx-auto flex max-w-2xl flex-col items-center text-center">
 				<h1 className="mb-4 font-bold text-4xl">Something Went Wrong</h1>
 				<p className="mb-6 text-lg text-muted-foreground">
-					We encountered an unexpected error. Please try again or return to the homepage.
+					We encountered an unexpected error. Please try again or return to the
+					homepage.
 				</p>
 
 				{/* Error Details (Collapsible) */}
 				<div className="mb-6 w-full rounded-lg border border-border bg-muted/50 p-4 text-left">
 					<details className="group">
-						<summary className="cursor-pointer font-semibold text-sm text-muted-foreground hover:text-foreground">
+						<summary className="cursor-pointer font-semibold text-muted-foreground text-sm hover:text-foreground">
 							Error Details
 						</summary>
 						<div className="mt-3 space-y-2 font-mono text-xs">
@@ -110,12 +111,10 @@ Browser Console Logs:
 						<Home className="mr-2 h-4 w-4" />
 						Return Home
 					</Button>
-					<Button
-						onClick={copyLogs}
-						variant="outline"
-						disabled={!logs}
-					>
-						<Copy className={`mr-2 h-4 w-4 ${copied ? "text-green-500" : ""}`} />
+					<Button onClick={copyLogs} variant="outline" disabled={!logs}>
+						<Copy
+							className={`mr-2 h-4 w-4 ${copied ? "text-green-500" : ""}`}
+						/>
 						{copied ? "Copied!" : "Copy Error Logs"}
 					</Button>
 					<Button onClick={reportIssue} variant="outline">
@@ -125,9 +124,9 @@ Browser Console Logs:
 				</div>
 
 				{/* Help Text */}
-				<p className="mt-6 text-sm text-muted-foreground">
-					If this problem persists, please copy the error logs and report the issue
-					so we can help resolve it.
+				<p className="mt-6 text-muted-foreground text-sm">
+					If this problem persists, please copy the error logs and report the
+					issue so we can help resolve it.
 				</p>
 			</div>
 		</div>

@@ -66,7 +66,8 @@ export function useExitIntent({
 
 		// Check if already triggered this session
 		if (oncePerSession) {
-			const wasTriggered = sessionStorage.getItem(SESSION_STORAGE_KEY) === "true";
+			const wasTriggered =
+				sessionStorage.getItem(SESSION_STORAGE_KEY) === "true";
 			if (wasTriggered || hasTriggeredRef.current) {
 				return;
 			}
@@ -97,8 +98,14 @@ export function useExitIntent({
 		return () => {
 			document.removeEventListener("mouseleave", handleMouseLeave);
 		};
-	}, [enabled, envEnabled, onExitIntent, minTimeOnPage, threshold, oncePerSession]);
+	}, [
+		enabled,
+		envEnabled,
+		onExitIntent,
+		minTimeOnPage,
+		threshold,
+		oncePerSession,
+	]);
 
 	return { hasTriggered };
 }
-

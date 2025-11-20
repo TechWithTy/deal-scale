@@ -1,24 +1,24 @@
 "use client";
 
 import AuthGuard from "@/components/auth/AuthGuard";
-import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import ContactPilotForm from "@/components/contact/form/ContactPilotForm";
 import { ContactSteps } from "@/components/contact/form/ContactSteps";
 import { Newsletter } from "@/components/contact/newsletter/Newsletter";
 import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import Testimonials from "@/components/home/Testimonials";
 import { priorityPilotFormFields } from "@/data/contact/pilotFormFields";
 import type { PriorityPilotFormValues } from "@/data/contact/pilotFormFields";
 import { pilotProgramSteps } from "@/data/service/slug_data/consultationSteps";
 import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 import type { MultiselectField } from "@/types/contact/formFields";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { exitIntentEnabled } from "@/lib/config/exitIntent";
 
 const Contact = () => {
 	const searchParams = useSearchParams();

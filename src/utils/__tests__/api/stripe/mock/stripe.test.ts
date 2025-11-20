@@ -1,4 +1,12 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 
 const stripeCtorMock = vi.fn().mockImplementation(() => ({
 	paymentIntents: {
@@ -10,8 +18,16 @@ const stripeCtorMock = vi.fn().mockImplementation(() => ({
 		constructEvent: vi.fn().mockReturnValue({ id: "evt_123" }),
 	},
 	subscriptions: {
-		create: vi.fn().mockResolvedValue({ id: "sub_123", latest_invoice: { id: "in_123" }, status: "active" }),
-		update: vi.fn().mockResolvedValue({ id: "sub_123", status: "active", latest_invoice: "in_123" }),
+		create: vi.fn().mockResolvedValue({
+			id: "sub_123",
+			latest_invoice: { id: "in_123" },
+			status: "active",
+		}),
+		update: vi.fn().mockResolvedValue({
+			id: "sub_123",
+			status: "active",
+			latest_invoice: "in_123",
+		}),
 		del: vi.fn().mockResolvedValue({ id: "sub_123" }),
 		cancel: vi.fn().mockResolvedValue({ id: "sub_123" }),
 	},

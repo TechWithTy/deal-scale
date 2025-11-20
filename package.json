@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "pnpm run check:env && next dev",
 		"dev-turbo": "pnpm run check:env && next dev --turbopack",
-		"build": "pnpm run check:meta && next build",
+		"build": "pnpm run check:chunk && pnpm run check:meta && next build",
 		"typecheck": "tsc --noEmit",
 		"postbuild": "pnpm run submit:sitemap",
 		"build:cf": "pnpm exec next-on-pages",
@@ -22,6 +22,7 @@
 		"start": "pnpm run check:env && next start",
 		"commit:stage": "git add . && pnpm exec lint-staged",
 		"check:env": "pnpm exec tsx tools/checks/check-analytics-env.ts",
+		"check:chunk": "pnpm exec tsx tools/checks/verify-chunk-error-handler.ts",
 		"check:meta": "pnpm exec tsx tools/checks/verify-meta-description.ts",
 		"landing:build": "rm -rf dist && pnpm run check:env && next build && next export -o dist",
 		"dev:vite": "pnpm exec tsx scripts/bundlers/ensure-preview-flag.ts vite:dev && pnpm exec vite --config tools/vite-preview/vite.config.ts",

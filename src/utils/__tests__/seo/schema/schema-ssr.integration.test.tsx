@@ -1,6 +1,6 @@
-import { vi } from "vitest";
 import React, { type ReactElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server.node";
+import { vi } from "vitest";
 
 import { caseStudies } from "@/data/caseStudy/caseStudies";
 import { mockProducts } from "@/data/products";
@@ -55,9 +55,7 @@ vi.mock("@/components/about/AboutUsSection", () => divMock("AboutUsSection"));
 vi.mock("@/components/case-studies/CaseStudyGrid", () =>
 	divMock("CaseStudyGrid"),
 );
-vi.mock("@/components/contact/form/ContactForm", () =>
-	divMock("ContactForm"),
-);
+vi.mock("@/components/contact/form/ContactForm", () => divMock("ContactForm"));
 vi.mock("@/components/contact/utils/TrustedByScroller", () =>
 	divMock("TrustedByScroller"),
 );
@@ -190,8 +188,9 @@ describe("JSON-LD SSR integration", () => {
 	beforeAll(() => {
 		// Silence server-side useLayoutEffect warnings by aliasing to useEffect.
 		// eslint-disable-next-line @typescript-eslint/unbound-method
-		(React as typeof React & { useLayoutEffect: typeof React.useEffect }).useLayoutEffect =
-			React.useEffect;
+		(
+			React as typeof React & { useLayoutEffect: typeof React.useEffect }
+		).useLayoutEffect = React.useEffect;
 	});
 
 	beforeEach(() => {
@@ -201,8 +200,11 @@ describe("JSON-LD SSR integration", () => {
 
 	afterAll(() => {
 		// Restore original implementation after suite completes.
-		(React as typeof React & { useLayoutEffect: typeof originalUseLayoutEffect }).useLayoutEffect =
-			originalUseLayoutEffect;
+		(
+			React as typeof React & {
+				useLayoutEffect: typeof originalUseLayoutEffect;
+			}
+		).useLayoutEffect = originalUseLayoutEffect;
 	});
 
 	it("renders organization and website schemas in the root layout", async () => {

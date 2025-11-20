@@ -69,7 +69,3 @@ export function ProgressiveBlur({
 		/>
 	);
 }
-
-
-
-

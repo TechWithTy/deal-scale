@@ -3,9 +3,9 @@ import type { BeehiivPost } from "@/types/behiiv";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { getTestBaseUrl } from "@/utils/env";
 
+import { getTestimonialReviewData } from "@/utils/seo/schema";
 import { resolveBeehiivDate } from "@/utils/seo/seo";
 import type { SeoMeta } from "@/utils/seo/seo";
-import { getTestimonialReviewData } from "@/utils/seo/schema";
 
 function toIsoDate(value: unknown): string | undefined {
 	if (value === null || value === undefined) {

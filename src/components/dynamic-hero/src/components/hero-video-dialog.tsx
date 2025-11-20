@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 
 import type { HeroVideoConfig } from "../types/video";
 import {
+	isVideoThumbnail,
 	resolveHeroThumbnailSrc,
 	resolveHeroVideoSrc,
 	shouldBypassImageOptimization,
-	isVideoThumbnail,
 } from "../utils/video";
 
 export interface HeroVideoDialogProps

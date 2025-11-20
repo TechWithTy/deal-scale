@@ -22,7 +22,9 @@ const resolveAssetUrl = (asset: string | undefined): string | undefined => {
 		? `${BASE_CANONICAL}${asset}`
 		: `${BASE_CANONICAL}/${asset}`;
 
-	return normalized.replace(/(?<!:)\/{2,}/g, "/").replace("https:/", "https://");
+	return normalized
+		.replace(/(?<!:)\/{2,}/g, "/")
+		.replace("https:/", "https://");
 };
 
 function resolvePartnerUrl(slug: string, link?: string): string {
@@ -64,9 +66,7 @@ export function buildPartnersItemListSchema(partners: CompanyLogoDictType) {
 	};
 }
 
-export function buildPartnersOrganizationSchema(
-	partners: CompanyLogoDictType,
-) {
+export function buildPartnersOrganizationSchema(partners: CompanyLogoDictType) {
 	return Object.entries(partners).map(([slug, partner]) => {
 		const url = resolvePartnerUrl(slug, partner.link);
 		const logo = resolveAssetUrl(partner.logo);

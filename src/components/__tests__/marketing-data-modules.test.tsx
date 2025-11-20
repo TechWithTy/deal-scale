@@ -1,6 +1,6 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("next-auth/react", () => ({
 	__esModule: true,
@@ -111,12 +111,12 @@ const TabsMock = vi.fn(({ children }: { children: React.ReactNode }) => (
 const TabsListMock = vi.fn(({ children }: { children: React.ReactNode }) => (
 	<div>{children}</div>
 ));
-const TabsTriggerMock = vi.fn(
-	({ children }: { children: React.ReactNode }) => <button>{children}</button>,
-);
-const TabsContentMock = vi.fn(
-	({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-);
+const TabsTriggerMock = vi.fn(({ children }: { children: React.ReactNode }) => (
+	<button>{children}</button>
+));
+const TabsContentMock = vi.fn(({ children }: { children: React.ReactNode }) => (
+	<div>{children}</div>
+));
 
 vi.mock("@/components/services/ServiceCard", () => ({
 	__esModule: true,

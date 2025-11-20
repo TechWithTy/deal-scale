@@ -1,9 +1,10 @@
 "use client";
 
 import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
-import { useWaitCursor } from "@/hooks/useWaitCursor";
 import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
 import { abTestExample } from "@/data/products/copy";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 import type { ProductType } from "@/types/products";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -12,7 +13,6 @@ import Breadcrumbs from "./Breadcrumbs";
 import ImageGallery from "./ImageGallery";
 import ProductInfo from "./ProductInfo";
 import ProductTabs from "./ProductTabs";
-import { startStripeToast } from "@/lib/ui/stripeToast";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)

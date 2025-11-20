@@ -1,9 +1,9 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Mock } from "vitest";
 import type { HeroVideoConfig } from "@external/dynamic-hero";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import type { ReactNode } from "react";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import type { Mock } from "vitest";
 import "@testing-library/jest-dom";
 
 const startTrialMock = vi.fn(() => Promise.resolve());
@@ -16,20 +16,32 @@ vi.mock("../../live-dynamic-hero-demo/LiveDynamicHeroClient", () => {
 		__esModule: true,
 		default: () => {
 			// Render buttons directly to match PersonaCTA mock structure
-			return React.createElement("div", {},
+			return React.createElement(
+				"div",
+				{},
 				React.createElement("p", {}, "AI real estate hero content"),
-				React.createElement("div", {},
-					React.createElement("button", {
-						type: "button",
-						onClick: startTrialMock,
-						"data-testid": "primary-cta"
-					}, "Get Started in 1 Click"),
-					React.createElement("button", {
-						type: "button",
-						onClick: playVideoMock
-					}, "See How It Works"),
-					React.createElement("p", {}, "Review the rollout steps")
-				)
+				React.createElement(
+					"div",
+					{},
+					React.createElement(
+						"button",
+						{
+							type: "button",
+							onClick: startTrialMock,
+							"data-testid": "primary-cta",
+						},
+						"Get Started in 1 Click",
+					),
+					React.createElement(
+						"button",
+						{
+							type: "button",
+							onClick: playVideoMock,
+						},
+						"See How It Works",
+					),
+					React.createElement("p", {}, "Review the rollout steps"),
+				),
 			);
 		},
 	};
@@ -91,8 +103,8 @@ vi.mock("@/components/providers/useDeferredLoad", () => ({
 
 vi.mock("@external/dynamic-hero", () => {
 	const React = require("react");
-	const resolveHeroCopy = vi.fn((input: unknown, fallback: unknown) =>
-		input ?? fallback,
+	const resolveHeroCopy = vi.fn(
+		(input: unknown, fallback: unknown) => input ?? fallback,
 	);
 	return {
 		HeroAurora: ({ children }: { children?: ReactNode }) => (
@@ -107,7 +119,8 @@ vi.mock("@external/dynamic-hero", () => {
 		}),
 		DEFAULT_HERO_SOCIAL_PROOF: { badges: [], testimonials: [] },
 		resolveHeroCopy,
-		useHeroVideoConfig: vi.fn((fallback?: HeroVideoConfig) =>
+		useHeroVideoConfig: vi.fn(
+			(fallback?: HeroVideoConfig) =>
 				fallback ?? {
 					src: "https://example.com/placeholder",
 					poster: "/placeholder.svg",
@@ -123,8 +136,9 @@ vi.mock("motion/react", () => ({
 	useInView: () => true,
 }));
 
-let LiveDynamicHeroDemoPage: typeof import("../../live-dynamic-hero-demo/page")
-	.default;
+let LiveDynamicHeroDemoPage: typeof import(
+	"../../live-dynamic-hero-demo/page",
+).default;
 
 beforeAll(async () => {
 	Object.defineProperty(window.HTMLElement.prototype, "scrollIntoView", {
@@ -161,13 +175,14 @@ beforeAll(async () => {
 			}
 		},
 	});
-	globalThis.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+	globalThis.requestAnimationFrame = (
+		callback: FrameRequestCallback,
+	): number => {
 		callback(0);
 		return 0;
 	};
-	LiveDynamicHeroDemoPage = (
-		await import("../../live-dynamic-hero-demo/page")
-	).default;
+	LiveDynamicHeroDemoPage = (await import("../../live-dynamic-hero-demo/page"))
+		.default;
 });
 
 beforeEach(() => {
@@ -210,9 +225,9 @@ describe("LiveDynamicHeroDemoPage", () => {
 
 	it("scrolls to the video preview and plays it when secondary CTA is clicked", async () => {
 		const scrollIntoView = vi.fn();
-		(window.HTMLElement.prototype.scrollIntoView as unknown as Mock).mockImplementation(
-			scrollIntoView,
-		);
+		(
+			window.HTMLElement.prototype.scrollIntoView as unknown as Mock
+		).mockImplementation(scrollIntoView);
 
 		render(<LiveDynamicHeroDemoPage />);
 
@@ -224,9 +239,8 @@ describe("LiveDynamicHeroDemoPage", () => {
 		// The mock calls playVideoMock directly, but real component would scroll first
 		// For the mock, we verify the click handler is called
 		await waitFor(() => expect(playVideoMock).toHaveBeenCalledTimes(1));
-		
+
 		// Note: scrollIntoView is tested in integration tests with the real component
 		// The mock simplifies this for unit testing
 	});
 });
-

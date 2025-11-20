@@ -139,8 +139,33 @@ const nextConfig: NextConfig = {
 				permanent: true,
 			},
 			{
+				source: "/rss/youtube.xml.ts",
+				destination: "/api/rss/youtube.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/github.xml",
+				destination: "/api/rss/github.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/github.xml.ts",
+				destination: "/api/rss/github.xml",
+				permanent: true,
+			},
+			{
 				source: "/rss/hybrid.xml",
 				destination: "/api/rss/hybrid.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/hybrid.xml.ts",
+				destination: "/api/rss/hybrid.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss.xml.ts",
+				destination: "/api/rss.xml",
 				permanent: true,
 			},
 			{
@@ -195,6 +220,9 @@ const nextConfig: NextConfig = {
 			];
 		}
 
+		// Cache static chunks aggressively since they have content hashes in filenames.
+		// If a chunk fails to load (e.g., after deployment), ChunkErrorHandler will
+		// automatically reload the page to fetch fresh chunks.
 		const cacheControl = isProd
 			? "public, max-age=31536000, immutable"
 			: "no-store, must-revalidate";

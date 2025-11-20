@@ -1,12 +1,12 @@
 "use client";
 
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import Image, { type StaticImageData } from "next/image";
-import type React from "react";
-import dynamic from "next/dynamic";
 import SafeMotionDiv from "@/components/ui/SafeMotionDiv";
 import SplinePlaceHolder from "@/components/ui/SplinePlaceHolder";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import Image, { type StaticImageData } from "next/image";
+import type React from "react";
 
 const LazySplineModel = dynamic(() => import("@/components/ui/spline-model"), {
 	ssr: false,

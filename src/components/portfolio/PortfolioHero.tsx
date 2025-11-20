@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import SplinePlaceHolder from "@/components/ui/SplinePlaceHolder";
+import { Button } from "@/components/ui/button";
 import { default_cal_slug } from "@/data/constants/booking";
 import { useCal } from "@/hooks/use-calendly";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { highlightKeyPhrases } from "@/utils/handle-highlight";
 import { ArrowRight } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import type React from "react";
-import dynamic from "next/dynamic";
 
 const SplineModel = dynamic(() => import("@/components/ui/spline-model"), {
 	ssr: false,

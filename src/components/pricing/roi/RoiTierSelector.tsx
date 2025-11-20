@@ -1,6 +1,5 @@
 "use client";
 
-import { Switch } from "@/components/ui/switch";
 import {
 	Select,
 	SelectContent,
@@ -8,8 +7,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
 import type { RoiTierConfig } from "@/lib/roi/types";
+import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 
 interface RoiTierSelectorProps {
@@ -68,8 +68,9 @@ export const RoiTierSelector = ({
 
 	const activeGroup = useMemo(() => {
 		return (
-			groups.find((group) => group.items.some((item) => item.key === activeTier)) ??
-			groups[0]
+			groups.find((group) =>
+				group.items.some((item) => item.key === activeTier),
+			) ?? groups[0]
 		);
 	}, [groups, activeTier]);
 
@@ -97,7 +98,7 @@ export const RoiTierSelector = ({
 							type="button"
 							onClick={() => handleGroupSelect(group.key)}
 							className={cn(
-								"rounded-full border px-4 py-2 text-sm font-semibold transition",
+								"rounded-full border px-4 py-2 font-semibold text-sm transition",
 								isActive
 									? "border-primary/60 bg-primary/10 text-primary"
 									: "border-border/60 bg-muted/20 text-muted-foreground hover:border-border",
@@ -128,7 +129,7 @@ export const RoiTierSelector = ({
 				</div>
 			) : null}
 			{showSetupToggle ? (
-				<div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
+				<div className="flex flex-wrap items-center gap-3 text-muted-foreground text-xs uppercase tracking-[0.25em]">
 					<span className="font-semibold">Display Options</span>
 					<div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/20 px-3 py-2">
 						<Switch
@@ -136,7 +137,11 @@ export const RoiTierSelector = ({
 							onCheckedChange={onToggleSetup}
 							disabled={!canToggleSetup}
 						/>
-						<span className={cn("font-semibold", !canToggleSetup && "opacity-60")}>Setup Investment</span>
+						<span
+							className={cn("font-semibold", !canToggleSetup && "opacity-60")}
+						>
+							Setup Investment
+						</span>
 					</div>
 				</div>
 			) : null}

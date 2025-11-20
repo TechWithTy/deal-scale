@@ -58,7 +58,9 @@ export async function POST(request: Request) {
 		if (!validation.success) {
 			const errorMessage =
 				validation.error.errors
-					.map((issue) => `${issue.path.join(".") || "payload"}: ${issue.message}`)
+					.map(
+						(issue) => `${issue.path.join(".") || "payload"}: ${issue.message}`,
+					)
 					.join("; ") || "Invalid payload";
 
 			return NextResponse.json(
@@ -147,9 +149,7 @@ export async function PUT(req: NextRequest) {
 				);
 			}
 
-			let validationResult:
-				| ReturnType<typeof validateDiscountCode>
-				| undefined;
+			let validationResult: ReturnType<typeof validateDiscountCode> | undefined;
 			if (metadata?.planId) {
 				validationResult = validateDiscountCode(discountCode, {
 					planId: metadata.planId,

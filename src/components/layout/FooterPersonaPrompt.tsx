@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -9,15 +10,14 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Sparkles } from "@/components/ui/magic/sparkles";
 import {
 	ALL_PERSONA_KEYS,
 	PERSONA_LABELS,
 	type PersonaKey,
 } from "@/data/personas/catalog";
-import { usePersonaStore } from "@/stores/usePersonaStore";
 import { cn } from "@/lib/utils";
+import { usePersonaStore } from "@/stores/usePersonaStore";
 
 const personaOptions: PersonaKey[] = ALL_PERSONA_KEYS;
 
@@ -35,18 +35,18 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				"flex flex-col items-center gap-2 text-center text-xs text-muted-foreground sm:text-sm md:items-start md:text-left",
+				"flex flex-col items-center gap-2 text-center text-muted-foreground text-xs sm:text-sm md:items-start md:text-left",
 				className,
 			)}
 		>
-			<p className="flex flex-wrap items-center justify-center gap-2 text-xs uppercase tracking-wide text-primary dark:text-emerald-200 md:justify-start">
+			<p className="flex flex-wrap items-center justify-center gap-2 text-primary text-xs uppercase tracking-wide md:justify-start dark:text-emerald-200">
 				Personalized experience for
 				<Button
 					variant="ghost"
 					size="sm"
 					className={cn(
-						"relative flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary shadow-sm transition-all hover:border-primary hover:bg-primary/20 focus-visible:ring-2 focus-visible:ring-primary/60 dark:border-emerald-200/40 dark:bg-emerald-200/10 dark:text-emerald-200",
-						"after:pointer-events-none after:absolute after:-inset-[3px] after:rounded-full after:bg-primary/30 after:opacity-0 after:blur-lg after:transition-opacity after:content-[''] hover:after:opacity-40",
+						"relative flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-semibold text-primary text-xs uppercase tracking-[0.12em] shadow-sm transition-all hover:border-primary hover:bg-primary/20 focus-visible:ring-2 focus-visible:ring-primary/60 dark:border-emerald-200/40 dark:bg-emerald-200/10 dark:text-emerald-200",
+						"after:-inset-[3px] after:pointer-events-none after:absolute after:rounded-full after:bg-primary/30 after:opacity-0 after:blur-lg after:transition-opacity after:content-[''] hover:after:opacity-40",
 					)}
 					onClick={() => setOpen(true)}
 				>
@@ -66,8 +66,8 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 					<DialogHeader>
 						<DialogTitle>Who are you</DialogTitle>
 						<DialogDescription>
-							Select the persona that best matches your role. We&apos;ll personalize
-							your experience instantly.
+							Select the persona that best matches your role. We&apos;ll
+							personalize your experience instantly.
 						</DialogDescription>
 					</DialogHeader>
 					<div className="grid gap-3 sm:grid-cols-2">
@@ -94,4 +94,3 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 		</div>
 	);
 }
-

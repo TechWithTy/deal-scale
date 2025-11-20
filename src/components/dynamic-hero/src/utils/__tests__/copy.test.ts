@@ -60,4 +60,3 @@ describe("resolveHeroCopy phrase constraints", () => {
 		);
 	});
 });
-

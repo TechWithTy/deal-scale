@@ -16,7 +16,8 @@ export const RoiCalculatorInputs = ({
 	estimator,
 	onChange,
 }: RoiCalculatorInputsProps) => {
-	const handleNumberChange = (field: keyof RoiInputs) =>
+	const handleNumberChange =
+		(field: keyof RoiInputs) =>
 		(event: React.ChangeEvent<HTMLInputElement>) => {
 			onChange(field, Number(event.target.value));
 		};

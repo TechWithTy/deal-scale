@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 type LoadingAnimationProps = {
 	ariaLive?: "assertive" | "polite" | "off";

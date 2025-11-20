@@ -1,10 +1,10 @@
 import { companyData } from "@/data/company";
 import { faqItems } from "@/data/faq/default";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import { buildPartnersOrganizationSchema } from "@/lib/partners/schemaBuilders";
 import type { BeehiivPost } from "@/types/behiiv";
 import type { CaseStudy } from "@/types/case-study";
 import type { FAQItem } from "@/types/faq";
-import { buildPartnersOrganizationSchema } from "@/lib/partners/schemaBuilders";
 import { defaultSeo } from "@/utils/seo/staticSeo";
 
 import {

@@ -6,10 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardStack } from "@/components/ui/card-stack";
 import { GlassCard } from "@/components/ui/glass-card";
+import { FOUNDERS_CIRCLE_DEADLINE } from "@/constants/foundersCircleDeadline";
 import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
 import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
 import { creditProducts } from "@/data/products/credits";
-import { FOUNDERS_CIRCLE_DEADLINE } from "@/constants/foundersCircleDeadline";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { useWaitCursor } from "@/hooks/useWaitCursor";
@@ -35,6 +35,8 @@ import {
 	useState,
 } from "react";
 import toast from "react-hot-toast";
+import { AffiliateCommissionModal } from "./AffiliateCommissionModal";
+import { AffiliatePartnerTeaser } from "./AffiliatePartnerTeaser";
 import {
 	PartnershipCard,
 	SelfHostedCard,
@@ -42,8 +44,6 @@ import {
 } from "./OneTimePlanCard";
 import { RecurringPlanCard } from "./RecurringPlanCard";
 import { RoiEstimatorModal } from "./RoiEstimatorModal";
-import { AffiliatePartnerTeaser } from "./AffiliatePartnerTeaser";
-import { AffiliateCommissionModal } from "./AffiliateCommissionModal";
 
 type PricingView = PricingInterval | "oneTime";
 

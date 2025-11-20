@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
+import { cn } from "@/lib/utils";
 import type {
 	PricingInterval,
 	RecurringPlan,
@@ -12,7 +13,6 @@ import type {
 import { Check, Users } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
 
 export interface RecurringPlanCardProps {
 	plan: RecurringPlan;

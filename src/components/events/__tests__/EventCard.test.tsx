@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/components/common/VideoModal", () => ({
 	__esModule: true,
@@ -81,6 +81,3 @@ describe("EventCard", () => {
 		expect(screen.getByText("Hybrid")).toBeInTheDocument();
 	});
 });
-
-
-

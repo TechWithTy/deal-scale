@@ -2,9 +2,9 @@
 
 import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import CatalogPricing from "@/components/pricing/CatalogPricing";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
 import type { PricingCatalog } from "@/types/service/plans";
 import { useSearchParams } from "next/navigation";
-import { exitIntentEnabled } from "@/lib/config/exitIntent";
 
 /**
  * Props for PricingClient, supporting callbackUrl for post-auth/payment redirects.

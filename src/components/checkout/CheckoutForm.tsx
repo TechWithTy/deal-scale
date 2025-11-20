@@ -387,11 +387,12 @@ export default function CheckoutForm({
 									Start your free trial — no charge today.
 								</span>
 								<span className="block">
-									We'll secure your payment method to automatically continue your {plan.name} plan at{" "}
+									We'll secure your payment method to automatically continue
+									your {plan.name} plan at{" "}
 									{formatPrice(
 										postTrialAmount ?? plan.price[planType].amount ?? 0,
-									)}
-									{" "}after the trial ends.
+									)}{" "}
+									after the trial ends.
 								</span>
 								<span className="block">
 									Cancel anytime before the trial ends with no charges.

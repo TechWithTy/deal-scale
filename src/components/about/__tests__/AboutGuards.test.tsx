@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const useDataModuleMock = vi.fn();
 
@@ -41,7 +41,8 @@ vi.mock("@/components/ui/timeline", () => ({
 }));
 
 const loadAboutHero = async () => (await import("../AboutHero")).default;
-const loadAboutTimeline = async () => (await import("../AboutTimeline")).default;
+const loadAboutTimeline = async () =>
+	(await import("../AboutTimeline")).default;
 
 describe("About components data module guards", () => {
 	beforeEach(() => {

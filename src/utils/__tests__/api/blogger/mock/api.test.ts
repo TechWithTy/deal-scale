@@ -19,13 +19,9 @@ let getPost: typeof import("@/lib/blogger/api").getPost;
 let getComments: typeof import("@/lib/blogger/api").getComments;
 
 beforeAll(async () => {
-	({
-		getBlogById,
-		getBlogByUrl,
-		getPosts,
-		getPost,
-		getComments,
-	} = await import("@/lib/blogger/api"));
+	({ getBlogById, getBlogByUrl, getPosts, getPost, getComments } = await import(
+		"@/lib/blogger/api"
+	));
 });
 
 describe("Blogger API client", () => {
