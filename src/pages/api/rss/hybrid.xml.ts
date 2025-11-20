@@ -62,10 +62,26 @@ const ensureArray = <T>(value: T | T[] | undefined | null): T[] => {
 	return Array.isArray(value) ? value : [value];
 };
 
-const buildBeehiivEntries = (feedXml: string): HybridEntry[] => {
-	const parsed = parser.parse(feedXml) as {
-		rss?: { channel?: { item?: any[] | any } };
+type BeehiivItem = {
+	title?: unknown;
+	link?: unknown;
+	description?: unknown;
+	"content:encoded"?: unknown;
+	guid?: { _text?: string } | string;
+	pubDate?: string;
+	category?: unknown | unknown[];
+};
+
+type BeehiivParsed = {
+	rss?: {
+		channel?: {
+			item?: BeehiivItem | BeehiivItem[];
+		};
 	};
+};
+
+const buildBeehiivEntries = (feedXml: string): HybridEntry[] => {
+	const parsed = parser.parse(feedXml) as BeehiivParsed;
 
 	const items = ensureArray(parsed.rss?.channel?.item);
 
@@ -77,12 +93,20 @@ const buildBeehiivEntries = (feedXml: string): HybridEntry[] => {
 				item.description ??
 				item["content:encoded"] ??
 				"Latest update from the DealScale blog.";
-			const guid = (item.guid?._text ?? item.guid ?? link ?? title).toString();
+			const guidValue =
+				typeof item.guid === "object" && item.guid?._text
+					? String(item.guid._text)
+					: typeof item.guid === "string"
+						? item.guid
+						: link || title;
+			const guid = guidValue.toString();
 			const categories = ensureArray(item.category)
-				.map((category: unknown) => category?.toString?.().trim())
-				.filter((category: string | undefined): category is string =>
-					Boolean(category),
-				);
+				.map((category: unknown) =>
+					typeof category === "string" || typeof category === "object"
+						? String(category).trim()
+						: "",
+				)
+				.filter((category: string): category is string => Boolean(category));
 
 			return {
 				title: title || "DealScale Blog Update",
@@ -97,28 +121,67 @@ const buildBeehiivEntries = (feedXml: string): HybridEntry[] => {
 		.filter((entry) => Boolean(entry.link));
 };
 
+type YouTubeEntry = {
+	title?: { "#text"?: string } | string;
+	link?: { "@_href"?: string } | string;
+	published?: string;
+	updated?: string;
+	summary?: { "#text"?: string } | string;
+	"yt:videoId"?: { "#text"?: string } | string;
+	videoId?: { "#text"?: string } | string;
+	"media:group"?: {
+		"media:description"?: { "#text"?: string } | string;
+		"media:keywords"?: { "#text"?: string } | string;
+	};
+	category?: unknown | unknown[];
+};
+
+type YouTubeParsed = {
+	feed?: {
+		entry?: YouTubeEntry | YouTubeEntry[];
+	};
+	rss?: {
+		channel?: {
+			item?:
+				| {
+						title?: string;
+						link?: string;
+						pubDate?: string;
+						description?: string;
+				  }
+				| Array<{
+						title?: string;
+						link?: string;
+						pubDate?: string;
+						description?: string;
+				  }>;
+		};
+	};
+};
+
 const buildYouTubeEntries = (feedXml: string): HybridEntry[] => {
 	try {
-		const parsed = parser.parse(feedXml) as {
-			feed?: { entry?: any[] | any };
-			rss?: { channel?: { item?: any[] | any } };
-		};
+		const parsed = parser.parse(feedXml) as YouTubeParsed;
 
 		// Handle both Atom (feed.entry) and RSS (rss.channel.item) formats
-		let entries: any[] = [];
+		let entries: YouTubeEntry[] = [];
 		if (parsed.feed?.entry) {
 			entries = ensureArray(parsed.feed.entry);
 		} else if (parsed.rss?.channel?.item) {
 			// Convert RSS format to Atom-like structure for unified processing
-			entries = ensureArray(parsed.rss.channel.item).map((item) => ({
-				title: item.title,
-				link: item.link,
-				published: item.pubDate,
-				updated: item.pubDate,
-				summary: item.description,
-				// Extract video ID from link
-				videoId: item.link?.match?.(/[?&]v=([a-zA-Z0-9_-]{11})/)?.[1],
-			}));
+			entries = ensureArray(parsed.rss.channel.item).map((item) => {
+				const link = typeof item.link === "string" ? item.link : "";
+				const videoIdMatch = link.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+				return {
+					title: item.title,
+					link: item.link,
+					published: item.pubDate,
+					updated: item.pubDate,
+					summary: item.description,
+					// Extract video ID from link
+					videoId: videoIdMatch?.[1],
+				} as YouTubeEntry;
+			});
 		}
 
 		const mappedEntries: Array<HybridEntry | undefined> = entries.map(
@@ -231,23 +294,54 @@ const buildYouTubeEntries = (feedXml: string): HybridEntry[] => {
 	}
 };
 
-const buildGitHubEntries = (feedXml: string): HybridEntry[] => {
-	const parsed = parser.parse(feedXml) as {
-		feed?: { entry?: any[] | any };
+type GitHubEntry = {
+	id?: string | { "#text"?: string };
+	title?: string | { "#text"?: string };
+	link?: { "@_href"?: string } | string;
+	content?: { "#text"?: string } | string;
+	published?: string;
+	updated?: string;
+	author?: { name?: string };
+};
+
+type GitHubParsed = {
+	feed?: {
+		entry?: GitHubEntry | GitHubEntry[];
 	};
+};
+
+const buildGitHubEntries = (feedXml: string): HybridEntry[] => {
+	const parsed = parser.parse(feedXml) as GitHubParsed;
 
 	const entries = ensureArray(parsed.feed?.entry);
 
 	const mappedEntries: Array<HybridEntry | undefined> = entries.map((entry) => {
-		const id = entry.id?.toString?.().trim();
+		const id =
+			typeof entry.id === "string"
+				? entry.id.trim()
+				: typeof entry.id === "object" && entry.id?.["#text"]
+					? String(entry.id["#text"]).trim()
+					: "";
 		if (!id) return undefined;
 
-		const title = entry.title?.toString?.().trim() ?? "GitHub Activity";
+		const title =
+			typeof entry.title === "string"
+				? entry.title.trim()
+				: typeof entry.title === "object" && entry.title?.["#text"]
+					? String(entry.title["#text"]).trim()
+					: "GitHub Activity";
 		const link =
-			entry.link?.["@_href"]?.toString?.().trim() ||
-			entry.link?.toString?.().trim() ||
-			"https://github.com/Deal-Scale";
-		const content = entry.content?.["#text"] || entry.content || "";
+			(typeof entry.link === "object" && entry.link?.["@_href"]
+				? String(entry.link["@_href"])
+				: typeof entry.link === "string"
+					? entry.link
+					: "") || "https://github.com/Deal-Scale";
+		const content =
+			(typeof entry.content === "object" && entry.content?.["#text"]
+				? String(entry.content["#text"])
+				: typeof entry.content === "string"
+					? entry.content
+					: "") || "";
 		const description =
 			typeof content === "string"
 				? content.replace(/<[^>]+>/g, "").substring(0, 500) ||

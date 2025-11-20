@@ -92,7 +92,7 @@ export const freeResourceProducts: ProductType[] = [
 		categories: [
 			ProductCategory.FreeResources,
 			ProductCategory.Automation,
-			ProductCategory.Monetize,
+			// Removed Monetize - users download free resources, they don't earn from them
 			ProductCategory.SalesScripts,
 		],
 		images: ["/products/workflows.png"],

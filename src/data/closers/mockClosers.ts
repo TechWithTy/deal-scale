@@ -10,6 +10,11 @@ export interface CloserProfile {
 	location: string;
 	bio: string;
 	hourlyRate: number;
+	commissionPercentage?: number; // Commission % for deal-based closings
+	saasSplit?: {
+		platformFee: number; // Platform commission %
+		closerFee: number; // What closer keeps %
+	}; // Hybrid SaaS split
 }
 
 export const mockClosers: CloserProfile[] = [
@@ -25,6 +30,11 @@ export const mockClosers: CloserProfile[] = [
 		location: "Austin, TX",
 		bio: "Certified real estate closer with over a decade of experience handling remote property closings. Specializes in wholesale real estate transactions, helping investors close deals faster with streamlined processes. Expert in coordinating title work, inspections, and final walkthroughs for residential and commercial properties across Texas.",
 		hourlyRate: 150,
+		commissionPercentage: 3.5,
+		saasSplit: {
+			platformFee: 15,
+			closerFee: 85,
+		},
 	},
 	{
 		id: "closer-2",
@@ -38,6 +48,11 @@ export const mockClosers: CloserProfile[] = [
 		location: "Miami, FL",
 		bio: "Licensed real estate closer focused on commercial property transactions and multi-family real estate closings. Has successfully closed over 300 commercial deals, including office buildings, retail spaces, and apartment complexes. Provides professional remote closing services with expertise in complex financing and due diligence coordination.",
 		hourlyRate: 200,
+		commissionPercentage: 4.0,
+		saasSplit: {
+			platformFee: 20,
+			closerFee: 80,
+		},
 	},
 	{
 		id: "closer-3",
@@ -51,6 +66,11 @@ export const mockClosers: CloserProfile[] = [
 		location: "Phoenix, AZ",
 		bio: "Top-rated remote real estate closer specializing in wholesale property transactions and fix-and-flip deals. Known for rapid turnaround times and clear communication throughout the closing process. Has closed nearly 900 real estate deals for wholesalers and investors, handling everything from contract review to final settlement.",
 		hourlyRate: 125,
+		commissionPercentage: 3.0,
+		saasSplit: {
+			platformFee: 12,
+			closerFee: 88,
+		},
 	},
 	{
 		id: "closer-4",
@@ -64,6 +84,11 @@ export const mockClosers: CloserProfile[] = [
 		location: "Atlanta, GA",
 		bio: "Experienced residential real estate closer committed to making property closings seamless for home buyers and sellers. Specializes in new construction closings and relocation transactions, ensuring all documentation is accurate and timelines are met. Provides personalized attention to every client throughout the remote closing process.",
 		hourlyRate: 140,
+		commissionPercentage: 3.0,
+		saasSplit: {
+			platformFee: 18,
+			closerFee: 82,
+		},
 	},
 	{
 		id: "closer-5",
@@ -142,6 +167,11 @@ export const mockClosers: CloserProfile[] = [
 		location: "Tampa, FL",
 		bio: "Top-performing real estate closer with extensive experience in wholesale transactions and assignment contracts. Has closed over 750 wholesale deals for real estate investors, specializing in double closings and simultaneous transactions. Known for exceptional responsiveness and expertise in navigating complex wholesale closing scenarios remotely.",
 		hourlyRate: 135,
+		commissionPercentage: 2.5,
+		saasSplit: {
+			platformFee: 10,
+			closerFee: 90,
+		},
 	},
 	{
 		id: "closer-11",

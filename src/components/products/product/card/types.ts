@@ -4,6 +4,7 @@ import type { ABTest } from "@/types/testing";
 export interface ProductCardProps
 	extends Pick<
 		ProductType,
+		| "id"
 		| "name"
 		| "description"
 		| "price"
@@ -58,6 +59,11 @@ export interface ProductActionsProps {
 	onPurchase: () => void;
 	isLoading: boolean;
 	onBeforePurchase?: () => Promise<boolean | void> | boolean | void;
+	// Custom button labels for marketplace products (e.g., closers)
+	addToCartLabel?: string;
+	purchaseLabel?: string;
+	addToCartIcon?: React.ReactNode;
+	purchaseIcon?: React.ReactNode;
 }
 
 export interface CheckoutDialogProps {

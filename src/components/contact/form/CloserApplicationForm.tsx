@@ -68,12 +68,13 @@ export default function CloserApplicationForm({
 		},
 	});
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (prefill) {
 			form.reset({ ...form.getValues(), ...prefill });
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [JSON.stringify(prefill)]);
+	}, [prefill]);
 
 	const onSubmit = async (data: CloserFormValues) => {
 		console.log("[CloserApplicationForm] onSubmit called", data);
@@ -123,29 +124,15 @@ export default function CloserApplicationForm({
 
 			<FormProvider {...form}>
 				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(onSubmit)}
-						className="space-y-6"
-					>
-						{closerFormFields.map((field) => {
-							const fieldProps = createFieldProps(field, form);
-							const renderProps: RenderFieldProps = {
-								...fieldProps,
-								field: form.control._formValues[
-									field.name
-								] as ControllerRenderProps<
-									CloserFormValues,
-									keyof CloserFormValues
-								>,
-							};
-
-							if (field.type === "checkbox") {
-								return (
-									<FormField
-										key={field.name}
-										control={form.control}
-										name={field.name as keyof CloserFormValues}
-										render={({ field: formField }) => (
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+						{closerFormFields.map((field) => (
+							<FormField
+								key={field.name}
+								control={form.control}
+								name={field.name as keyof CloserFormValues}
+								render={({ field: formField }) => {
+									if (field.type === "checkbox") {
+										return (
 											<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
 												<FormControl>
 													<Checkbox
@@ -163,111 +150,43 @@ export default function CloserApplicationForm({
 													<FormMessage />
 												</div>
 											</FormItem>
-										)}
-									/>
-								);
-							}
+										);
+									}
 
-							if (field.type === "select") {
-								return (
-									<FormField
-										key={field.name}
-										control={form.control}
-										name={field.name as keyof CloserFormValues}
-										render={({ field: formField }) => (
-											<FormItem>
-												<FormLabel>
-													{field.label}
-													{field.required && (
-														<span className="ml-1 text-red-500">*</span>
-													)}
-												</FormLabel>
-												<Select
-													onValueChange={formField.onChange}
-													defaultValue={formField.value as string}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder={field.placeholder} />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{field.options?.map((option) => (
-															<SelectItem key={option.value} value={option.value}>
-																{option.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								);
-							}
-
-							if (field.type === "textarea") {
-								return (
-									<FormField
-										key={field.name}
-										control={form.control}
-										name={field.name as keyof CloserFormValues}
-										render={({ field: formField }) => (
-											<FormItem>
-												<FormLabel>
-													{field.label}
-													{field.required && (
-														<span className="ml-1 text-red-500">*</span>
-													)}
-												</FormLabel>
-												<FormControl>
-													<Textarea
-														placeholder={field.placeholder}
-														{...formField}
-														value={formField.value as string}
-														rows={5}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								);
-							}
-
-							return (
-								<FormField
-									key={field.name}
-									control={form.control}
-									name={field.name as keyof CloserFormValues}
-									render={({ field: formField }) => (
-										<FormItem>
-											<FormLabel>
+									return (
+										<FormItem className="space-y-1">
+											<FormLabel className="text-black dark:text-white/70">
 												{field.label}
 												{field.required && (
 													<span className="ml-1 text-red-500">*</span>
 												)}
 											</FormLabel>
 											<FormControl>
-												<Input
-													type={field.type}
-													placeholder={field.placeholder}
-													{...formField}
-													value={formField.value as string}
-												/>
+												{renderFormField(
+													createFieldProps(
+														{
+															name: field.name,
+															type: field.type,
+															label: field.label,
+															placeholder: field.placeholder,
+															required: field.required,
+															options:
+																field.type === "select"
+																	? field.options
+																	: undefined,
+														} as FieldConfig,
+														formField,
+													),
+												)}
 											</FormControl>
 											<FormMessage />
 										</FormItem>
-									)}
-								/>
-							);
-						})}
+									);
+								}}
+							/>
+						))}
 
-						<Button
-							type="submit"
-							className="w-full"
-							disabled={isSubmitting}
-						>
+						<Button type="submit" className="w-full" disabled={isSubmitting}>
 							{isSubmitting ? (
 								<>
 									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -283,4 +202,3 @@ export default function CloserApplicationForm({
 		</div>
 	);
 }
-

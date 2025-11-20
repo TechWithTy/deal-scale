@@ -27,7 +27,7 @@ export const workflowProducts: WorkflowProductType[] = [
 		categories: [
 			ProductCategory.Workflows,
 			ProductCategory.Automation,
-			ProductCategory.Monetize,
+			// Removed Monetize - users BUY these workflows, they don't earn from them
 		],
 		images: ["/products/workflows.png"],
 		types: [
@@ -60,7 +60,7 @@ export const workflowProducts: WorkflowProductType[] = [
 		categories: [
 			ProductCategory.Workflows,
 			ProductCategory.Automation,
-			ProductCategory.Monetize,
+			// Removed Monetize - users BUY these workflows, they don't earn from them
 		],
 		images: ["/products/workflows.png"],
 		types: [
@@ -93,7 +93,7 @@ export const workflowProducts: WorkflowProductType[] = [
 		categories: [
 			ProductCategory.Workflows,
 			ProductCategory.Automation,
-			ProductCategory.Monetize,
+			// Removed Monetize - users BUY these workflows, they don't earn from them
 		],
 		images: ["/products/workflows.png"],
 		types: [{ name: "Standard", value: "standard", price: 299 }],

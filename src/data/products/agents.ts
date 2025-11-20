@@ -16,7 +16,7 @@ export const agentProducts: ProductType[] = [
 		categories: [
 			ProductCategory.Agents,
 			ProductCategory.Automation,
-			ProductCategory.Monetize,
+			// Removed Monetize - users BUY these agents, they don't earn from them
 			ProductCategory.Voices,
 		],
 		images: [BASE_AGENT_IMAGE],
@@ -129,7 +129,7 @@ export const agentProducts: ProductType[] = [
 		licenseName: LicenseType.Proprietary,
 		categories: [
 			ProductCategory.Agents,
-			ProductCategory.Monetize,
+			// Removed Monetize - users BUY these agents, they don't earn from them
 			ProductCategory.Automation,
 			ProductCategory.Prompts,
 		],

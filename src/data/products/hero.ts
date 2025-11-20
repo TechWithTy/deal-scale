@@ -28,7 +28,7 @@ export const DEFAULT_GRID: HeroGridItem[] = [
 		rowSpan: 2,
 	},
 	{
-		src: "products/closers.png",
+		src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200&h=800&fit=crop&q=80",
 		alt: "Remote Closers Marketplace",
 		label: "Remote Closers",
 		categoryId: "remote-closers",
