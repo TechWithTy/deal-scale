@@ -29,7 +29,6 @@ global.PromiseRejectionEvent =
 describe("ChunkErrorHandler", () => {
 	let mockReload: ReturnType<typeof vi.fn>;
 	let mockSessionStorage: Storage;
-	let originalWindow: typeof window;
 	let originalLocation: Location;
 
 	beforeEach(() => {
@@ -59,9 +58,6 @@ describe("ChunkErrorHandler", () => {
 			writable: true,
 			configurable: true,
 		});
-
-		// Store original window for cleanup
-		originalWindow = window;
 	});
 
 	afterEach(() => {
