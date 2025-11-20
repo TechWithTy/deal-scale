@@ -26,7 +26,7 @@ describe("DynamicFaqSection", () => {
 		);
 
 		expect(screen.getByTestId("persona-next-step")).toHaveTextContent(
-			/Drop in your driving-for-dollars or probate leads, enable the "Motivated Seller Surge" workflow, and let DealScale run AI voice \+ SMS follow-up instantly\. You\u2019ll get qualified callbacks and hot leads posted to your CRM the same day\./,
+			/Drop in your driving-for-dollars or probate leads, enable the "Outreach Surge" workflow, and let DealScale run AI voice \+ SMS follow-up instantly\. You\u2019ll get qualified callbacks and hot leads posted to your CRM the same day\./,
 		);
 
 		expect(screen.getByTestId("persona-advanced-faq")).toHaveTextContent(

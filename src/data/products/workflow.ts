@@ -15,15 +15,15 @@ export interface WorkflowProductType extends ProductType {
 
 export const workflowProducts: WorkflowProductType[] = [
 	{
-		id: "motivated-seller-workflow",
-		name: "Motivated Seller Automation Workflow",
+		id: "outreach-workflow",
+		name: "Outreach Automation Workflow",
 		abTest: motivatedSellerWorkflowABTests[0],
 		price: 499,
-		sku: "WF-MOTIVATED-SELLER",
-		slug: "motivated-seller-workflow",
+		sku: "WF-OUTREACH",
+		slug: "outreach-workflow",
 		licenseName: LicenseType.Proprietary,
 		description:
-			"Automate outreach, follow-up, and lead nurturing for motivated seller campaigns. Includes pre-built triggers, multi-channel messaging, and pipeline automation.",
+			"Automate outreach, follow-up, and lead nurturing for your campaigns. Includes pre-built triggers, multi-channel messaging, and pipeline automation.",
 		categories: [
 			ProductCategory.Workflows,
 			ProductCategory.Automation,
@@ -41,10 +41,10 @@ export const workflowProducts: WorkflowProductType[] = [
 			{
 				question: "What does this workflow automate?",
 				answer:
-					"This workflow automates lead intake, qualification, follow-up, and multi-channel communication for motivated seller campaigns.",
+					"This workflow automates lead intake, qualification, follow-up, and multi-channel communication for outreach campaigns.",
 			},
 		],
-		workflowId: "wf-001-motivated-seller",
+		workflowId: "wf-001-outreach",
 		userId: "user-assign-on-purchase",
 	},
 	{

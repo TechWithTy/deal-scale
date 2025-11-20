@@ -25,7 +25,7 @@ const stepVariants = {
 		transition: {
 			delay: i * 0.2,
 			duration: 0.4,
-			ease: [0.4, 0, 0.2, 1],
+			ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
 		},
 	}),
 };

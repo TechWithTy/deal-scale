@@ -127,7 +127,7 @@ export const PERSONA_NEXT_STEP_FAQ: Record<
 	investor: {
 		question: "Investor Playbook: How do I turn skip tracing into deals fast?",
 		answer:
-			'Drop in your driving-for-dollars or probate leads, enable the "Motivated Seller Surge" workflow, and let DealScale run AI voice + SMS follow-up instantly. You’ll get qualified callbacks and hot leads posted to your CRM the same day.',
+			'Drop in your driving-for-dollars or probate leads, enable the "Outreach Surge" workflow, and let DealScale run AI voice + SMS follow-up instantly. You’ll get qualified callbacks and hot leads posted to your CRM the same day.',
 	},
 	wholesaler: {
 		question: "Wholesaler Playbook: How do I keep my pipeline full?",

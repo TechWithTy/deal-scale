@@ -33,6 +33,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 	essentials: "Essentials",
 	notion: "Notion",
 	voices: "Voices",
+	"text-agents": "Text Agents",
 	leads: "Leads",
 	data: "Data",
 	monetize: "Monetize",
@@ -42,6 +43,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 	"free-resources": "Free Resources",
 	"sales-scripts": "Sales Scripts",
 	prompts: "Prompts",
+	"remote-closers": "Remote Closers",
 };
 
 const MONETIZE_PORTAL_URL = "https://app.dealscale.io";

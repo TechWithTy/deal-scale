@@ -30,6 +30,7 @@ export interface ProductImageProps {
 	imageUrl: string;
 	alt: string;
 	slug?: string;
+	categories?: ProductCategory[];
 }
 
 export interface ProductHeaderProps {
@@ -39,6 +40,7 @@ export interface ProductHeaderProps {
 	salesIncentive?: {
 		discountPercent?: number;
 	};
+	categories?: ProductCategory[];
 }
 
 export interface ProductSummaryProps {

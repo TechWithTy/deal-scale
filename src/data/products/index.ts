@@ -1,5 +1,6 @@
 import type { ProductType } from "@/types/products";
 import { agentProducts } from "./agents";
+import { closerProducts } from "./closers";
 import { creditProducts } from "./credits";
 import { essentialsProducts } from "./essentials";
 import { freeResourceProducts } from "./free-resources";
@@ -13,6 +14,7 @@ export const mockProducts: ProductType[] = [
 	...notionProducts,
 	...workflowProducts,
 	...agentProducts,
+	...closerProducts,
 ];
 
 export function getAllProducts(): ProductType[] {
