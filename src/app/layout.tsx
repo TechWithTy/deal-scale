@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					// type omitted; browsers infer from extension
 				/>
 			</head>
-			<body className="theme-cyberoni min-h-screen bg-background font-sans antialiased">
+			<body className="theme-dealscale min-h-screen bg-background font-sans antialiased">
 				<SchemaInjector schema={KNOWLEDGE_GRAPH_SCHEMA} />
 				<AppProviders
 					clarityProjectId={clarityProjectId}
