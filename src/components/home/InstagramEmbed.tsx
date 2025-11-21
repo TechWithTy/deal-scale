@@ -23,8 +23,8 @@ const InstagramEmbed = ({ className }: InstagramEmbedProps) => {
 		<section className={cn("px-4 py-12 sm:px-6 lg:px-8", className)}>
 			<div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-8">
 				<Header
-					title="Scenes From The Build"
-					subtitle="See behind-the-scenes clips, automation walkthroughs, and wins from the Deal Scale community."
+					title="The Deal Scale AI Wealth Engine in real life"
+					subtitle="Watch raw moments, automation breakthroughs, client wins, and behind-the-scenes clips from the Deal Scale community. Every post shows how agents, investors, and founders are building momentum, closing more deals, and automating the parts of business that used to slow them down"
 					size="lg"
 					className="text-center"
 				/>

@@ -78,6 +78,27 @@ export default {
 					DEFAULT: "hsl(var(--card))",
 					foreground: "hsl(var(--card-foreground))",
 				},
+				// Deal Scale Brand Colors
+				brand: {
+					primary: "hsl(var(--brand-primary))",
+					primaryHover: "hsl(var(--brand-primary-hover))",
+					accent: "hsl(var(--brand-accent))",
+					accentHover: "hsl(var(--brand-accent-hover))",
+					warm: "hsl(var(--brand-warm))",
+					warmHover: "hsl(var(--brand-warm-hover))",
+				},
+				// Deal Scale Surface System
+				surface: {
+					DEFAULT: "hsl(var(--surface))",
+					alt: "hsl(var(--surface-alt))",
+					elevated: "hsl(var(--surface-elevated))",
+				},
+				// Deal Scale Text System
+				text: {
+					main: "hsl(var(--text-main))",
+					subtle: "hsl(var(--text-subtle))",
+					muted: "hsl(var(--text-muted))",
+				},
 				cyber: {
 					blue: "#2D9CDB",
 					purple: "#6C63FF",

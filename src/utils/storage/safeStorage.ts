@@ -25,7 +25,10 @@ export function safeSessionStorageGetItem(key: string): string | null {
 		// - Storage quota exceeded
 		// - Cross-origin restrictions
 		// - Security policies
-		console.warn(`[safeSessionStorageGetItem] Failed to read sessionStorage key "${key}":`, error);
+		console.warn(
+			`[safeSessionStorageGetItem] Failed to read sessionStorage key "${key}":`,
+			error,
+		);
 		return null;
 	}
 }
@@ -34,10 +37,7 @@ export function safeSessionStorageGetItem(key: string): string | null {
  * Safely sets an item in sessionStorage.
  * Returns true if successful, false if storage is unavailable or throws an error.
  */
-export function safeSessionStorageSetItem(
-	key: string,
-	value: string,
-): boolean {
+export function safeSessionStorageSetItem(key: string, value: string): boolean {
 	try {
 		if (typeof window === "undefined" || !window.sessionStorage) {
 			return false;
@@ -86,15 +86,14 @@ export function isSessionStorageAvailable(): boolean {
 		if (typeof window === "undefined" || !window.sessionStorage) {
 			return false;
 		}
-		// Try to set and get a test item
+		// Try to set, get, and remove a test item
+		// This ensures all operations work, including getItem
 		const testKey = "__storage_test__";
 		window.sessionStorage.setItem(testKey, "test");
+		window.sessionStorage.getItem(testKey); // Test getItem as well
 		window.sessionStorage.removeItem(testKey);
 		return true;
 	} catch {
 		return false;
 	}
 }
-
-
-

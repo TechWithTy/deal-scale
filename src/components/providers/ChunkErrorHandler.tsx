@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import {
 	isSessionStorageAvailable,
 	safeSessionStorageGetItem,
 	safeSessionStorageSetItem,
 } from "@/utils/storage/safeStorage";
+import { useEffect } from "react";
 
 /**
  * Handles Next.js chunk loading errors that occur when:
@@ -64,13 +64,26 @@ export function ChunkErrorHandler() {
 					return;
 				}
 
-				const lastReload = safeSessionStorageGetItem(reloadKey);
+				// Try to get last reload time - if this throws, don't reload
+				let lastReload: string | null = null;
+				try {
+					lastReload = safeSessionStorageGetItem(reloadKey);
+				} catch (getItemError) {
+					// If getItem itself throws (not just returns null), don't reload
+					// This handles cases where storage is partially broken
+					console.warn(
+						"[ChunkErrorHandler] Failed to read reload timestamp, skipping reload to prevent issues",
+						getItemError,
+					);
+					return;
+				}
+
 				const now = Date.now();
 
 				// Only reload if we haven't reloaded in the last 5 seconds
 				const timeSinceLastReload = lastReload
 					? now - Number.parseInt(lastReload, 10)
-					: Infinity;
+					: Number.POSITIVE_INFINITY;
 
 				if (!lastReload || timeSinceLastReload > 5000) {
 					// Try to save reload timestamp before reloading
@@ -86,7 +99,10 @@ export function ChunkErrorHandler() {
 							}
 
 							// Safely attempt reload
-							if (window.location && typeof window.location.reload === "function") {
+							if (
+								window.location &&
+								typeof window.location.reload === "function"
+							) {
 								window.location.reload();
 							} else {
 								console.error(
@@ -139,7 +155,9 @@ export function ChunkErrorHandler() {
 
 				const isChunkError =
 					errorMessage.includes("Loading chunk") ||
-					errorMessage.includes("Failed to fetch dynamically imported module") ||
+					errorMessage.includes(
+						"Failed to fetch dynamically imported module",
+					) ||
 					errorMessage.includes("ChunkLoadError") ||
 					errorMessage.includes("Loading CSS chunk") ||
 					/Loading chunk \d+ failed/i.test(errorMessage);
@@ -165,13 +183,26 @@ export function ChunkErrorHandler() {
 					return;
 				}
 
-				const lastReload = safeSessionStorageGetItem(reloadKey);
+				// Try to get last reload time - if this throws, don't reload
+				let lastReload: string | null = null;
+				try {
+					lastReload = safeSessionStorageGetItem(reloadKey);
+				} catch (getItemError) {
+					// If getItem itself throws (not just returns null), don't reload
+					// This handles cases where storage is partially broken
+					console.warn(
+						"[ChunkErrorHandler] Failed to read reload timestamp, skipping reload to prevent issues",
+						getItemError,
+					);
+					return;
+				}
+
 				const now = Date.now();
 
 				// Only reload if we haven't reloaded in the last 5 seconds
 				const timeSinceLastReload = lastReload
 					? now - Number.parseInt(lastReload, 10)
-					: Infinity;
+					: Number.POSITIVE_INFINITY;
 
 				if (!lastReload || timeSinceLastReload > 5000) {
 					// Try to save reload timestamp before reloading
@@ -186,7 +217,10 @@ export function ChunkErrorHandler() {
 							}
 
 							// Safely attempt reload
-							if (window.location && typeof window.location.reload === "function") {
+							if (
+								window.location &&
+								typeof window.location.reload === "function"
+							) {
 								window.location.reload();
 							} else {
 								console.error(

@@ -1,15 +1,14 @@
 "use client";
 
-import React, {
+import {
 	type HTMLAttributes,
-	useImperativeHandle,
-	useCallback,
-	useState,
 	forwardRef,
+	useCallback,
+	useImperativeHandle,
+	useState,
 } from "react";
 
 import { Pointer } from "@/components/ui/pointer";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { cn } from "@/lib/utils";
 
 import type { HeroVideoConfig } from "../types/video";
@@ -76,6 +75,7 @@ export const HeroVideoPreview = forwardRef<
 
 			<div className="relative z-10 w-full">
 				<div className="relative w-full overflow-hidden rounded-[28px] border border-border/30 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.4)]">
+					{/* Show full video with clean aspect ratio - no blur, no clipping */}
 					<div className="aspect-video w-full">
 						<HeroVideoDialog
 							className="absolute inset-0"
@@ -89,24 +89,6 @@ export const HeroVideoPreview = forwardRef<
 				</div>
 				{!isPlaying ? <Pointer className="text-primary" /> : null}
 			</div>
-
-			{!isPlaying ? (
-				<>
-					<ProgressiveBlur
-						position="top"
-						height="28%"
-						className="hidden md:block"
-						blurLevels={[1, 2, 4, 8, 16, 24, 32, 48]}
-					/>
-					<ProgressiveBlur
-						position="bottom"
-						height="38%"
-						className="hidden md:block"
-						blurLevels={[1, 2, 4, 8, 16, 20, 28, 40]}
-					/>
-					<div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-background/85 to-background" />
-				</>
-			) : null}
 		</div>
 	);
 });

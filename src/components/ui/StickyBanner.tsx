@@ -13,7 +13,7 @@ export interface StickyBannerProps
 }
 
 // * Banner color variants
-const variantClasses = {
+const _variantClasses = {
 	default: "bg-primary text-primary-foreground border-primary",
 	success: "bg-green-500 text-white border-green-600",
 	warning: "bg-yellow-400 text-black border-yellow-500",
@@ -35,9 +35,18 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				ref={ref}
 				role="alert"
 				aria-live="assertive"
+				style={{
+					overflow: "visible",
+					minHeight: "auto",
+					height: "auto",
+					maxHeight: "none",
+				}}
 				className={cn(
-					// * Sticky, full-width, glassy, with gradient and neon/aurora highlight
-					"fade-in slide-in-from-top-2 sticky z-50 flex w-full animate-in flex-col gap-3 border-b px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
+					// * Sticky/Fixed, full-width, glassy, with gradient and neon/aurora highlight
+					"fade-in slide-in-from-top-2 z-[55] flex w-full animate-in flex-col gap-3 px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
+					// Ensure content is not clipped - allow banner to expand to fit content
+					"min-h-fit overflow-visible",
+					// Position is controlled by className prop - don't override here
 					// * Glass/gradient background for default and success
 					variant === "default"
 						? "border border-border bg-[linear-gradient(90deg,_hsl(var(--primary)/0.90)_0%,_hsl(var(--accent)/0.85)_100%)] text-glow text-primary-foreground"
@@ -48,9 +57,9 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 								: variant === "danger"
 									? "border border-[hsl(var(--destructive))] bg-[linear-gradient(90deg,_hsl(var(--destructive)/0.93)_0%,_hsl(var(--accent)/0.8)_100%)] text-[hsl(var(--destructive-foreground))]"
 									: "",
-					// * Neon/aurora highlight for default (optional)
+					// * Neon/aurora highlight for default (optional) - ensure it doesn't clip content
 					variant === "default"
-						? "before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(ellipse_at_top_left,_rgba(78,234,255,0.15)_0%,_transparent_70%)] before:content-['']"
+						? "before:pointer-events-none before:absolute before:inset-0 before:overflow-visible before:bg-[radial-gradient(ellipse_at_top_left,_rgba(78,234,255,0.15)_0%,_transparent_70%)] before:content-['']"
 						: "",
 					// * Glassy effect
 					"glass-card",
@@ -60,7 +69,7 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				)}
 				{...props}
 			>
-				<div className="flex min-w-0 flex-1 flex-col gap-2 md:flex-row md:items-center">
+				<div className="relative z-10 flex min-w-0 flex-1 flex-col gap-2 overflow-visible md:flex-row md:items-center">
 					{children}
 				</div>
 				<Button

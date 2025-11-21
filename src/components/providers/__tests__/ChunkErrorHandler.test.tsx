@@ -2,7 +2,6 @@
  * @vitest-environment jsdom
  */
 import { render } from "@testing-library/react";
-import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 
@@ -298,7 +297,15 @@ describe("ChunkErrorHandler", () => {
 
 			// Should NOT reload because it's within 5 seconds
 			expect(mockReload).not.toHaveBeenCalled();
-			expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
+			// isSessionStorageAvailable() calls setItem with "__storage_test__" to test storage
+			// So we should only check that setItem was NOT called with the reload key
+			const setItemCalls = (
+				mockSessionStorage.setItem as ReturnType<typeof vi.fn>
+			).mock.calls;
+			const reloadKeyCalls = setItemCalls.filter(
+				(call) => call[0] === "chunk-error-reload",
+			);
+			expect(reloadKeyCalls.length).toBe(0);
 		});
 
 		it("should allow reload if last reload was more than 5 seconds ago", () => {
@@ -599,13 +606,15 @@ describe("ChunkErrorHandler", () => {
 
 	describe("SessionStorage edge cases", () => {
 		it("should handle sessionStorage.getItem throwing an error", () => {
+			// Make getItem throw for all keys, which will make isSessionStorageAvailable return false
+			// This simulates a scenario where storage is completely broken
 			(
 				mockSessionStorage.getItem as ReturnType<typeof vi.fn>
 			).mockImplementation(() => {
 				throw new Error("sessionStorage unavailable");
 			});
 
-			// Should not crash, but also won't reload (error in getItem prevents reload)
+			// Should not crash, but also won't reload (storage unavailable prevents reload)
 			expect(() => {
 				render(<ChunkErrorHandler />);
 				const errorEvent = new ErrorEvent("error", {
@@ -615,7 +624,7 @@ describe("ChunkErrorHandler", () => {
 				window.dispatchEvent(errorEvent);
 			}).not.toThrow();
 
-			// Reload should not be called because getItem threw
+			// Reload should not be called because storage is unavailable
 			expect(mockReload).not.toHaveBeenCalled();
 		});
 

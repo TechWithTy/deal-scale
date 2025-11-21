@@ -19,8 +19,11 @@ export function BetaStickyBanner() {
 	const isClosed = countdown.isExpired;
 
 	return (
-		<div className="flex w-full flex-col items-center gap-2 text-center text-xs sm:text-sm md:flex-row md:items-center md:justify-between md:gap-4 md:text-left">
-			<div className="flex flex-col items-center gap-1 text-center md:flex-row md:items-center md:gap-3 md:text-left">
+		<div
+			className="flex w-full flex-col items-center gap-2 overflow-visible text-center text-xs sm:text-sm md:flex-row md:items-center md:justify-between md:gap-4 md:text-left"
+			style={{ minHeight: "auto", height: "auto" }}
+		>
+			<div className="flex flex-col items-center gap-1 overflow-visible text-center md:flex-row md:items-center md:gap-3 md:text-left">
 				<span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 font-semibold text-white tracking-wide backdrop-blur-sm dark:bg-white/15">
 					<span className="hidden whitespace-nowrap text-[0.65rem] text-primary-foreground/80 uppercase tracking-[0.18em] md:inline">
 						🆓 5 AI Credits
@@ -38,11 +41,6 @@ export function BetaStickyBanner() {
 				<span
 					className="inline-flex items-center rounded-full bg-emerald-500/20 px-3 py-1 font-mono font-semibold text-[0.7rem] text-emerald-100 uppercase tracking-[0.18em] shadow-sm md:text-[0.68rem] md:leading-none lg:text-xs"
 					aria-live="polite"
-					aria-label={
-						isClosed
-							? "Founders Circle applications have closed."
-							: `Founders Circle applications close in ${countdown.formatted}.`
-					}
 				>
 					{isClosed
 						? "Applications closed"

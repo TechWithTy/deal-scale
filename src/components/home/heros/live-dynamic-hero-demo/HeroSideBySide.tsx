@@ -147,8 +147,8 @@ export default function HeroSideBySide(): JSX.Element {
 		<div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
 			<HeroAuroraDynamic className="z-0 opacity-80 dark:opacity-90" />
 
-			<section className="relative z-0 w-full overflow-hidden">
-				<div className="pointer-events-none absolute inset-0">
+			<section className="relative z-0 w-full overflow-x-hidden overflow-y-visible">
+				<div className="pointer-events-none absolute inset-0 overflow-hidden">
 					<InteractiveGridPattern
 						width={72}
 						height={72}
@@ -180,12 +180,12 @@ export default function HeroSideBySide(): JSX.Element {
 					<div className="absolute inset-0 z-[5] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.24)_0%,rgba(15,23,42,0)_55%)] opacity-35 dark:opacity-50" />
 				</div>
 
-				<div className="container relative z-10 mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12 lg:py-20">
+				<div className="container relative z-10 mx-auto w-full px-4 pt-24 pb-12 sm:px-6 sm:pt-28 md:px-10 md:pt-32 md:pb-16 lg:px-12 lg:pt-36 lg:pb-20">
 					{/* Centered text content */}
-					<div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 text-center md:gap-8">
+					<div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 overflow-x-visible text-center md:gap-8">
 						{/* Persona Badge */}
-						<span className="inline-flex items-center justify-center rounded-full border border-border/40 bg-background/70 px-5 py-1.5 font-semibold text-foreground/80 text-xs uppercase tracking-[0.4em]">
-							{PERSONA_LABEL}
+						<span className="inline-flex max-w-[calc(100vw-2rem)] shrink-0 items-center justify-center rounded-full border border-border/40 bg-background/70 px-2 py-1.5 font-semibold text-foreground/80 text-[8px] uppercase leading-tight tracking-[0.05em] sm:max-w-fit sm:px-3 sm:text-[10px] sm:tracking-[0.15em] md:px-4 md:text-xs md:tracking-[0.25em]">
+							<span className="whitespace-nowrap">{PERSONA_LABEL}</span>
 						</span>
 
 						{/* Single Combined Statement */}
