@@ -493,7 +493,7 @@ export function ReactivateCampaignInput({
 					</div>
 
 					{/* File Upload Section */}
-					<div className="flex items-center gap-3 border-white/10 border-t pt-3">
+					<div className="flex items-center gap-2 border-white/10 border-t pt-3 sm:gap-3">
 						<input
 							ref={fileInputRef}
 							type="file"
@@ -509,9 +509,11 @@ export function ReactivateCampaignInput({
 							onClick={() => fileInputRef.current?.click()}
 							disabled={isProcessing}
 							className="border-white/20 bg-white/5 text-white hover:bg-white/10"
+							title="Upload CSV/Excel"
+							aria-label="Upload CSV/Excel"
 						>
-							<Upload className="mr-2 h-4 w-4" />
-							Upload CSV/Excel
+							<Upload className="h-4 w-4 sm:mr-2" />
+							<span className="hidden sm:inline">Upload CSV/Excel</span>
 						</Button>
 						<Button
 							type="button"
@@ -520,9 +522,11 @@ export function ReactivateCampaignInput({
 							onClick={handleDownloadExample}
 							disabled={isProcessing}
 							className="border-white/10 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white"
+							title="Example CSV"
+							aria-label="Example CSV"
 						>
-							<Download className="mr-2 h-4 w-4" />
-							Example CSV
+							<Download className="h-4 w-4 sm:mr-2" />
+							<span className="hidden sm:inline">Example CSV</span>
 						</Button>
 
 						{uploadedFile && (
@@ -547,12 +551,12 @@ export function ReactivateCampaignInput({
 						)}
 
 						{/* Enrich Toggle with Popover */}
-						<div className="ml-auto flex items-center gap-2">
+						<div className="ml-auto flex items-center gap-1.5 sm:gap-2">
 							<Label
 								htmlFor="enrich"
-								className="flex cursor-pointer items-center gap-1.5 text-sm text-white/90"
+								className="flex cursor-pointer items-center gap-1 text-sm text-white/90 sm:gap-1.5"
 							>
-								Enrich
+								<span className="hidden sm:inline">Enrich</span>
 								<Popover>
 									<PopoverTrigger asChild>
 										<button
