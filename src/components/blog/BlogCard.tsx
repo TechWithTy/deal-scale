@@ -14,9 +14,14 @@ import { truncateSubtitle, truncateTitle } from "./BlogGrid";
 type BlogCardProps = {
 	post: BeehiivPost;
 	className?: string;
+	aspectRatio?: "square" | "landscape" | "portrait" | "auto";
 };
 
-export function BlogCard({ post, className = "" }: BlogCardProps) {
+export function BlogCard({
+	post,
+	className = "",
+	aspectRatio = "landscape",
+}: BlogCardProps) {
 	// Extract web stats safely
 	const webStats = post.stats?.web;
 	const emailStats = (post.stats as any)?.email as
@@ -50,46 +55,53 @@ export function BlogCard({ post, className = "" }: BlogCardProps) {
 			? emailStats.click_rate
 			: undefined;
 
+	// Helper function to determine aspect ratio class
+	const getAspectRatioClass = () => {
+		switch (aspectRatio) {
+			case "square":
+				return "aspect-square"; // 1:1 (4:4)
+			case "portrait":
+				return "aspect-[9/16]"; // 9:16
+			case "landscape":
+			default:
+				return "aspect-video"; // 16:9
+		}
+	};
+
 	return (
 		<Card className={`transition-colors ${className}`}>
-			<CardHeader className="relative h-48 overflow-hidden p-0">
-				{post.thumbnail_url && typeof post.thumbnail_url === "string" ? (
-					<Link href={post.web_url || "/"} aria-label={`Read ${post.title}`}>
-						<Image
-							src={post.thumbnail_url}
-							alt={post.title}
-							className="h-full w-full object-contain"
-							width={800}
-							height={450}
-							style={{
-								position: "absolute",
-								top: "50%",
-								left: "50%",
-								transform: "translate(-50%, -50%)",
-								maxWidth: "100%",
-								maxHeight: "100%",
-							}}
-						/>
-					</Link>
-				) : (
-					<Link href={post.web_url || "/"} aria-label={`Read ${post.title}`}>
-						<Image
-							src="/placeholder.jpg"
-							alt="No image available"
-							className="h-full w-full object-contain"
-							width={800}
-							height={450}
-							style={{
-								position: "absolute",
-								top: "50%",
-								left: "50%",
-								transform: "translate(-50%, -50%)",
-								maxWidth: "100%",
-								maxHeight: "100%",
-							}}
-						/>
-					</Link>
-				)}
+			<CardHeader className="relative overflow-hidden p-0">
+				<div className={`relative w-full ${getAspectRatioClass()}`}>
+					{post.thumbnail_url && typeof post.thumbnail_url === "string" ? (
+						<Link
+							href={post.web_url || "/"}
+							aria-label={`Read ${post.title}`}
+							className="block h-full w-full"
+						>
+							<Image
+								src={post.thumbnail_url}
+								alt={post.title}
+								className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+								fill
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							/>
+						</Link>
+					) : (
+						<Link
+							href={post.web_url || "/"}
+							aria-label={`Read ${post.title}`}
+							className="block h-full w-full"
+						>
+							<Image
+								src="/placeholder.jpg"
+								alt="No image available"
+								className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+								fill
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							/>
+						</Link>
+					)}
+				</div>
 			</CardHeader>
 			<CardContent className="flex-1 pt-6 pr-6 pl-4">
 				<div className="mb-3 flex flex-wrap justify-center gap-2">

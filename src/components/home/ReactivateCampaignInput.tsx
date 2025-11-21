@@ -29,6 +29,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dynamic from "next/dynamic";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
 import { toast } from "sonner";
@@ -88,6 +89,7 @@ export function ReactivateCampaignInput({
 	>([]);
 	const [showPaymentModal, setShowPaymentModal] = useState(false);
 	const [paymentCompleted, setPaymentCompleted] = useState(false);
+	const [showEnrichInfo, setShowEnrichInfo] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const { checkoutState, startTrial, closeCheckout, isTrialLoading } =
@@ -499,7 +501,7 @@ export function ReactivateCampaignInput({
 					</div>
 
 					{/* File Upload Section */}
-					<div className="flex flex-col gap-3 border-slate-200/50 dark:border-white/10 border-t pt-3 sm:flex-row sm:items-center sm:gap-3">
+					<div className="flex flex-col gap-3 border-slate-200/50 dark:border-white/10 border-t pt-3">
 						<input
 							ref={fileInputRef}
 							type="file"
@@ -508,34 +510,36 @@ export function ReactivateCampaignInput({
 							className="hidden"
 							disabled={isProcessing}
 						/>
-						{/* File Upload Buttons Row */}
-						<div className="flex flex-wrap items-center gap-2 sm:gap-3">
-							<Button
-								type="button"
-								variant="outline"
-								size="sm"
-								onClick={() => fileInputRef.current?.click()}
-								disabled={isProcessing}
-								className="shrink-0 border-slate-300/50 bg-slate-50/80 text-slate-700 hover:bg-slate-100 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-								title="Upload CSV/Excel"
-								aria-label="Upload CSV/Excel"
-							>
-								<Upload className="h-4 w-4 sm:mr-2" />
-								<span className="hidden sm:inline">Upload CSV/Excel</span>
-							</Button>
-							<Button
-								type="button"
-								variant="ghost"
-								size="sm"
-								onClick={handleDownloadExample}
-								disabled={isProcessing}
-								className="shrink-0 border-slate-300/30 bg-slate-50/60 text-slate-600 hover:bg-slate-100 hover:text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/80 dark:hover:bg-white/10 dark:hover:text-white"
-								title="Example CSV"
-								aria-label="Example CSV"
-							>
-								<Download className="h-4 w-4 sm:mr-2" />
-								<span className="hidden sm:inline">Example CSV</span>
-							</Button>
+						{/* File Upload Buttons Row with Enrich Toggle on same line when no file */}
+						<div className={`flex flex-wrap items-center gap-2 sm:gap-3 ${uploadedFile ? "flex-col sm:flex-row" : ""}`}>
+							<div className="flex flex-wrap items-center gap-2 sm:gap-3">
+								<Button
+									type="button"
+									variant="outline"
+									size="sm"
+									onClick={() => fileInputRef.current?.click()}
+									disabled={isProcessing}
+									className="shrink-0 border-slate-300/50 bg-slate-50/80 text-slate-700 hover:bg-slate-100 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+									title="Upload CSV/Excel"
+									aria-label="Upload CSV/Excel"
+								>
+									<Upload className="h-4 w-4 sm:mr-2" />
+									<span className="hidden sm:inline">Upload CSV/Excel</span>
+								</Button>
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									onClick={handleDownloadExample}
+									disabled={isProcessing}
+									className="shrink-0 border-slate-300/30 bg-slate-50/60 text-slate-600 hover:bg-slate-100 hover:text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/80 dark:hover:bg-white/10 dark:hover:text-white"
+									title="Example CSV"
+									aria-label="Example CSV"
+								>
+									<Download className="h-4 w-4 sm:mr-2" />
+									<span className="hidden sm:inline">Example CSV</span>
+								</Button>
+							</div>
 
 							{uploadedFile && (
 								<div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg bg-slate-50/80 dark:bg-white/5 px-2 py-1.5 sm:px-3 sm:py-2">
@@ -559,80 +563,94 @@ export function ReactivateCampaignInput({
 									</button>
 								</div>
 							)}
-						</div>
 
-						{/* Enrich Toggle with Popover */}
-						<div className="flex items-center justify-end gap-1.5 sm:ml-auto sm:gap-2">
+							{/* Enrich Toggle with Info - on same line when no file, new line when file uploaded */}
+							<div className={`flex items-center gap-1.5 sm:gap-2 ${uploadedFile ? "w-full sm:w-auto sm:ml-auto" : "ml-auto"}`}>
 							<Label
 								htmlFor="enrich"
 								className="flex cursor-pointer items-center gap-1 text-sm text-slate-700 dark:text-white/90 sm:gap-1.5"
 							>
 								<span className="hidden sm:inline">Enrich</span>
-								<Popover>
-									<PopoverTrigger asChild>
-										<button
-											type="button"
-											className="focus:outline-none"
-											aria-label="Learn more about enrichment"
-											onClick={(e) => e.preventDefault()}
-										>
-											<Info className="h-3.5 w-3.5 text-sky-400 opacity-80 transition-opacity hover:opacity-100" />
-										</button>
-									</PopoverTrigger>
-									<PopoverContent
-										className="z-50 w-80 border-sky-500/30 bg-background-dark text-white"
-										side="top"
-										align="end"
+								{/* Mobile: Use Dialog, Desktop: Use Popover */}
+								<>
+									<button
+										type="button"
+										className="focus:outline-none sm:hidden"
+										aria-label="Learn more about enrichment"
+										onClick={(e) => {
+											e.preventDefault();
+											e.stopPropagation();
+											setShowEnrichInfo(true);
+										}}
 									>
-										<div className="space-y-3">
-											<div>
-												<h4 className="mb-2 font-semibold text-base text-white">
-													What is Enrichment?
-												</h4>
-												<p className="text-sm text-white/80 leading-relaxed">
-													Automatically enhance your contact data with verified
-													phone numbers, email addresses, and additional
-													information to improve your outreach success rate.
-												</p>
+										<Info className="h-4 w-4 text-sky-500 opacity-90 transition-opacity active:opacity-100 dark:text-sky-400" />
+									</button>
+									<Popover>
+										<PopoverTrigger asChild>
+											<button
+												type="button"
+												className="hidden focus:outline-none sm:block"
+												aria-label="Learn more about enrichment"
+											>
+												<Info className="h-3.5 w-3.5 text-sky-500 opacity-80 transition-opacity hover:opacity-100 dark:text-sky-400" />
+											</button>
+										</PopoverTrigger>
+										<PopoverContent
+											className="z-50 w-80 border-sky-500/30 bg-background-dark text-white"
+											side="top"
+											align="end"
+										>
+											<div className="space-y-3">
+												<div>
+													<h4 className="mb-2 font-semibold text-base text-white">
+														What is Enrichment?
+													</h4>
+													<p className="text-sm text-white/80 leading-relaxed">
+														Automatically enhance your contact data with verified
+														phone numbers, email addresses, and additional
+														information to improve your outreach success rate.
+													</p>
+												</div>
+												<div>
+													<h5 className="mb-2 font-semibold text-sky-400 text-sm">
+														What you get:
+													</h5>
+													<ul className="space-y-1.5 text-sm text-white/80">
+														<li className="flex items-start gap-2">
+															<span className="mt-0.5 text-sky-400">✓</span>
+															<span>
+																Verified contact information (phone, email)
+															</span>
+														</li>
+														<li className="flex items-start gap-2">
+															<span className="mt-0.5 text-sky-400">✓</span>
+															<span>Enhanced lead data for better targeting</span>
+														</li>
+														<li className="flex items-start gap-2">
+															<span className="mt-0.5 text-sky-400">✓</span>
+															<span>
+																Higher conversion rates with accurate contacts
+															</span>
+														</li>
+														<li className="flex items-start gap-2">
+															<span className="mt-0.5 text-sky-400">✓</span>
+															<span>Time saved on manual data verification</span>
+														</li>
+													</ul>
+												</div>
 											</div>
-											<div>
-												<h5 className="mb-2 font-semibold text-sky-400 text-sm">
-													What you get:
-												</h5>
-												<ul className="space-y-1.5 text-sm text-white/80">
-													<li className="flex items-start gap-2">
-														<span className="mt-0.5 text-sky-400">✓</span>
-														<span>
-															Verified contact information (phone, email)
-														</span>
-													</li>
-													<li className="flex items-start gap-2">
-														<span className="mt-0.5 text-sky-400">✓</span>
-														<span>Enhanced lead data for better targeting</span>
-													</li>
-													<li className="flex items-start gap-2">
-														<span className="mt-0.5 text-sky-400">✓</span>
-														<span>
-															Higher conversion rates with accurate contacts
-														</span>
-													</li>
-													<li className="flex items-start gap-2">
-														<span className="mt-0.5 text-sky-400">✓</span>
-														<span>Time saved on manual data verification</span>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</PopoverContent>
-								</Popover>
+										</PopoverContent>
+									</Popover>
+								</>
 							</Label>
 							<Switch
 								id="enrich"
 								checked={skipTrace}
 								onCheckedChange={setSkipTrace}
 								disabled={isProcessing}
-								className="shrink-0"
+								className="shrink-0 h-7 w-12 border-2 border-slate-300/50 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 data-[state=unchecked]:bg-slate-200/80 dark:border-slate-600/50 dark:data-[state=checked]:bg-sky-500 dark:data-[state=checked]:border-sky-500 dark:data-[state=unchecked]:bg-slate-700/80 [&>span]:h-6 [&>span]:w-6 [&>span]:shadow-md"
 							/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -653,6 +671,110 @@ export function ReactivateCampaignInput({
 						<div className="mt-4">
 							<ProcessingStatusList steps={processingSteps} />
 						</div>
+					</DialogContent>
+				</Dialog>
+
+				{/* Enrich Info Dialog for Mobile */}
+				<Dialog open={showEnrichInfo} onOpenChange={setShowEnrichInfo}>
+					<DialogContent className="border-sky-500/30 bg-slate-900/95 backdrop-blur-xl sm:max-w-md [&>button]:text-white [&>button]:hover:text-white/80 [&>button]:hover:bg-white/10">
+						<DialogHeader>
+							<DialogTitle className="text-white">
+								Enrichment & AI Outreach
+							</DialogTitle>
+							<DialogDescription className="text-white/70">
+								Learn about our data enrichment and AI automation features
+							</DialogDescription>
+						</DialogHeader>
+						<Tabs defaultValue="enrichment" className="w-full">
+							<TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
+								<TabsTrigger value="enrichment" className="text-white data-[state=active]:bg-sky-500 data-[state=active]:text-white">
+									Enrichment
+								</TabsTrigger>
+								<TabsTrigger value="ai-outreach" className="text-white data-[state=active]:bg-sky-500 data-[state=active]:text-white">
+									AI Outreach
+								</TabsTrigger>
+							</TabsList>
+							<TabsContent value="enrichment" className="space-y-3 pt-4">
+								<div>
+									<h4 className="mb-2 font-semibold text-base text-white">
+										What is Enrichment?
+									</h4>
+									<p className="text-sm text-white/80 leading-relaxed">
+										Automatically enhance your contact data with verified
+										phone numbers, email addresses, and additional
+										information to improve your outreach success rate.
+									</p>
+								</div>
+								<div>
+									<h5 className="mb-2 font-semibold text-sky-400 text-sm">
+										What you get:
+									</h5>
+									<ul className="space-y-1.5 text-sm text-white/80">
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>
+												Verified contact information (phone, email)
+											</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>Enhanced lead data for better targeting</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>
+												Higher conversion rates with accurate contacts
+											</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>Time saved on manual data verification</span>
+										</li>
+									</ul>
+								</div>
+							</TabsContent>
+							<TabsContent value="ai-outreach" className="space-y-3 pt-4">
+								<div>
+									<h4 className="mb-2 font-semibold text-base text-white">
+										What is AI Outreach?
+									</h4>
+									<p className="text-sm text-white/80 leading-relaxed">
+										AI Outreach is DealScale's intelligent automation system that handles your entire lead engagement workflow. It uses advanced AI to make calls, send personalized messages, and nurture leads automatically—so you can focus on closing deals instead of chasing contacts.
+									</p>
+								</div>
+								<div>
+									<h5 className="mb-2 font-semibold text-sky-400 text-sm">
+										Key Features:
+									</h5>
+									<ul className="space-y-1.5 text-sm text-white/80">
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>
+												AI-powered voice calls that sound natural and human
+											</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>Automated SMS and email follow-up sequences</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>
+												CRM integration that syncs every interaction automatically
+											</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>24/7 lead nurturing that never sleeps</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>Personalized messaging based on lead behavior and data</span>
+										</li>
+									</ul>
+								</div>
+							</TabsContent>
+						</Tabs>
 					</DialogContent>
 				</Dialog>
 

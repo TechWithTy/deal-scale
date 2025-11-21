@@ -37,7 +37,7 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				aria-live="assertive"
 				className={cn(
 					// * Sticky, full-width, glassy, with gradient and neon/aurora highlight
-					"fade-in slide-in-from-top-2 sticky z-50 flex w-full animate-in flex-col gap-3 border-b px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
+					"fade-in slide-in-from-top-2 sticky z-50 flex w-full animate-in flex-col gap-3 px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
 					// * Glass/gradient background for default and success
 					variant === "default"
 						? "border border-border bg-[linear-gradient(90deg,_hsl(var(--primary)/0.90)_0%,_hsl(var(--accent)/0.85)_100%)] text-glow text-primary-foreground"

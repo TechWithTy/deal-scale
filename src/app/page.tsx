@@ -424,14 +424,12 @@ const Index = async ({
 			<SchemaInjector schema={blogSchema} />
 			<LiveDynamicHero />
 			<TrustedByScroller variant="default" items={companyLogos} />
-			{/* Separator for mobile only with half margin */}
-			<div className="sm:hidden">
-				<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
-			</div>
+			{/* Separator - no margin/padding for seamless flow */}
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper id="call-demo" lazy={false} fallbackLabel="Call Demo">
 				<CallDemoShowcase />
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="feature-activity"
 				lazy={false}
@@ -444,7 +442,7 @@ const Index = async ({
 					</div>
 				</>
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="connect-anything"
 				lazy={false}
@@ -452,7 +450,7 @@ const Index = async ({
 			>
 				<ConnectAnythingHero />
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="upload-leads"
 				lazy={false}
@@ -460,7 +458,7 @@ const Index = async ({
 			>
 				<UploadLeadsHero />
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="case-studies"
 				lazy={false}
@@ -473,7 +471,7 @@ const Index = async ({
 					showCategoryFilter={false}
 				/>
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="testimonials"
 				lazy={false}
@@ -487,7 +485,7 @@ const Index = async ({
 					}
 				/>
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="pricing"
 				rootMargin="1200px"
@@ -503,11 +501,11 @@ const Index = async ({
 					showPilotBlurb={false}
 				/>
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper id="about" rootMargin="1200px">
 				<AboutUsSection />
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="client-bento"
 				rootMargin="1200px"
@@ -515,7 +513,7 @@ const Index = async ({
 			>
 				<ClientBento />
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="blog-preview"
 				rootMargin="1200px"
@@ -523,7 +521,7 @@ const Index = async ({
 			>
 				<BlogPreview title="Latest Blogs" posts={posts} />
 			</SectionWrapper>
-			<Separator className="mx-auto mt-16 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper id="faq" rootMargin="1200px" fallback={<FaqFallback />}>
 				<Faq
 					title="Frequently Asked Questions"
@@ -531,7 +529,7 @@ const Index = async ({
 					faqItems={faqItems}
 				/>
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="contact"
 				rootMargin="1200px"
@@ -541,7 +539,7 @@ const Index = async ({
 					<ContactForm />
 				</div>
 			</SectionWrapper>
-			<Separator className="mx-auto my-12 max-w-7xl border-white/10" />
+			<Separator className="w-full border-white/10" />
 			<SectionWrapper
 				id="instagram"
 				rootMargin="1200px"

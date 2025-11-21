@@ -14,8 +14,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
+import { AI_OUTREACH_STUDIO_ANCHOR } from "@/data/home/aiOutreachStudio";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Youtube } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import Header from "../common/Header";
@@ -125,19 +126,77 @@ export function BlogPreview({
 	return (
 		<section id="blog" className={`px-4 py-8 sm:px-6 lg:px-8 ${className}`}>
 			<div className="mx-auto max-w-7xl">
-				<div className="mb-8 flex flex-col items-center sm:flex-row sm:items-center sm:justify-between">
+				<div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
 					<Header title={title} size="lg" className="mb-12" />
 					{showViewAll && (
-						<Button
-							asChild
-							variant="outline"
-							className="w-fit border-primary/30 text-primary hover:bg-primary/10"
-						>
-							<Link href="/blogs" className="flex items-center justify-center">
-								View All Articles
-								<ArrowRight className="ml-2 h-4 w-4" />
-							</Link>
-						</Button>
+						<div className="flex flex-wrap items-center gap-3">
+							<Button
+								variant="outline"
+								className="w-fit border-primary/30 text-primary hover:bg-primary/10"
+								onClick={(e) => {
+									e.preventDefault();
+									console.log("[View Shorts] Button clicked");
+									
+									// Dispatch custom event to trigger video mode
+									window.dispatchEvent(
+										new CustomEvent("play-youtube-shorts", {
+											detail: { autoplay: true },
+										}),
+									);
+									console.log("[View Shorts] Event dispatched");
+									
+									// Smooth scroll to AI Outreach Demo section, centering the demo area
+									setTimeout(() => {
+										const element = document.getElementById(AI_OUTREACH_STUDIO_ANCHOR);
+										console.log("[View Shorts] Looking for element:", AI_OUTREACH_STUDIO_ANCHOR, element);
+										
+										if (element) {
+											// Find the actual demo/phone container within the section
+											const demoContainer = element.querySelector('[class*="PhoneShell"], [class*="Iphone"], iframe');
+											const targetElement = demoContainer || element;
+											
+											// Calculate offset to center the demo area
+											const headerHeight = 100;
+											const viewportHeight = window.innerHeight;
+											const elementRect = targetElement.getBoundingClientRect();
+											const elementTop = elementRect.top + window.pageYOffset;
+											
+											// Center the element in viewport
+											const offsetPosition = elementTop - (viewportHeight / 2) + (elementRect.height / 2) - headerHeight;
+											
+											console.log("[View Shorts] Scrolling to:", {
+												elementTop,
+												viewportHeight,
+												offsetPosition,
+												elementHeight: elementRect.height,
+											});
+											
+											window.scrollTo({
+												top: Math.max(0, offsetPosition),
+												behavior: "smooth",
+											});
+										} else {
+											console.error("[View Shorts] Element not found:", AI_OUTREACH_STUDIO_ANCHOR);
+										}
+									}, 200);
+								}}
+							>
+								<div className="flex items-center justify-center">
+									<Youtube className="mr-2 h-4 w-4" />
+									View Shorts
+								</div>
+							</Button>
+							<Button
+								asChild
+								variant="default"
+								className="w-fit bg-gradient-to-r from-primary to-focus text-white shadow-lg hover:opacity-90 hover:shadow-xl"
+							>
+								<Link href="/blogs" className="flex items-center justify-center">
+									View All Articles
+									<ArrowRight className="ml-2 h-4 w-4" />
+								</Link>
+							</Button>
+						</div>
 					)}
 				</div>
 
@@ -217,21 +276,26 @@ export function BlogPreview({
 				)}
 
 				{shouldUseCarousel && (
-					<div className="mt-4 flex justify-center space-x-1.5 md:mt-6 md:space-x-2">
-						{indicatorIndices.map((index) => (
-							<button
-								key={index}
-								type="button"
-								className={cn(
-									"h-2 w-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 md:h-3 md:w-3",
-									displayActiveDot === index
-										? "w-4 bg-primary md:w-6"
-										: "bg-neutral-300 hover:bg-neutral-400/80 dark:bg-white/20 dark:hover:bg-white/40",
-								)}
-								onClick={() => api?.scrollTo(index)}
-								aria-label={`Go to slide ${index + 1}`}
-							/>
-						))}
+					<div className="mt-4 flex flex-col items-center gap-3 md:mt-6">
+						<div className="flex justify-center space-x-1.5 md:space-x-2">
+							{indicatorIndices.map((index) => (
+								<button
+									key={index}
+									type="button"
+									className={cn(
+										"h-2 w-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 md:h-3 md:w-3",
+										displayActiveDot === index
+											? "w-4 bg-primary md:w-6"
+											: "bg-neutral-300 hover:bg-neutral-400/80 dark:bg-white/20 dark:hover:bg-white/40",
+									)}
+									onClick={() => api?.scrollTo(index)}
+									aria-label={`Go to slide ${index + 1}`}
+								/>
+							))}
+						</div>
+						<p className="text-muted-foreground text-xs md:text-sm">
+							Showing {visibleItemsCount} of {safePosts.length} articles
+						</p>
 					</div>
 				)}
 			</div>

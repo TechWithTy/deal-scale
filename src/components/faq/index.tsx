@@ -6,13 +6,23 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { FAQProps } from "@/types/faq";
 import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import type React from "react";
+import { useState } from "react";
 import Header from "../common/Header";
 
 const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
+	const [showAll, setShowAll] = useState(false);
+	const DEFAULT_SHOW_COUNT = 5;
+	const visibleItems = showAll
+		? faqItems
+		: faqItems.slice(0, DEFAULT_SHOW_COUNT);
+	const hasMore = faqItems.length > DEFAULT_SHOW_COUNT;
+
 	return (
 		<motion.div
 			initial={{ opacity: 0 }}
@@ -35,7 +45,8 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 					defaultValue={faqItems.length > 0 ? "item-0" : undefined}
 					className="flex flex-col gap-3"
 				>
-					{faqItems.map((item, index) => {
+					{visibleItems.map((item, index) => {
+						// Since we slice from the start, index matches original index
 						const isHero = index === 0;
 						return (
 							<AccordionItem
@@ -87,6 +98,19 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 						);
 					})}
 				</Accordion>
+
+				{hasMore && !showAll && (
+					<div className="mt-8 flex justify-center">
+						<Button
+							variant="outline"
+							onClick={() => setShowAll(true)}
+							className="group flex items-center gap-2 border-primary/40 bg-background/80 hover:bg-primary/10 hover:border-primary/60"
+						>
+							Load More FAQs
+							<ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+						</Button>
+					</div>
+				)}
 
 				<div className="mt-16 text-center">
 					<p className="mb-4 text-muted-foreground">

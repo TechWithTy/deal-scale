@@ -177,7 +177,7 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 				>
 					{shouldAnimate ? (
 						<div
-							className={`relative flex h-16 items-center overflow-hidden ${gpuDepthClass}`}
+							className={`relative flex min-h-[100px] items-center overflow-hidden ${gpuDepthClass}`}
 							ref={containerRef}
 							onMouseEnter={() => controls.stop()}
 							onMouseLeave={() => restartAnimationRef.current()}

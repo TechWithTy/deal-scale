@@ -55,6 +55,9 @@ type TextDemoMessage = {
 const CALL_DEMO_PLAYLIST_SRC =
 	"https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=0&mute=1&rel=0&playsinline=1&modestbranding=1";
 
+const CALL_DEMO_PLAYLIST_AUTOPLAY_SRC =
+	"https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=1&mute=0&rel=0&playsinline=1&modestbranding=1";
+
 const TEXT_DEMO_MESSAGES: readonly TextDemoMessage[] = [
 	{
 		sender: "AI",
@@ -262,6 +265,16 @@ const CallDemoInteractive = () => {
 		"text",
 	);
 	const [isTextDemoPlaying, setIsTextDemoPlaying] = useState(false);
+	const [shouldAutoplayVideo, setShouldAutoplayVideo] = useState(false);
+
+	// Debug: Log state changes
+	useEffect(() => {
+		console.log("[CallDemo] State changed", {
+			callDemoMode,
+			activePreview,
+			shouldAutoplayVideo,
+		});
+	}, [callDemoMode, activePreview, shouldAutoplayVideo]);
 
 	const hasTriggeredTextLeadCaptureRef = useRef(false);
 	const textLeadCaptureTimeoutRef = useRef<number | null>(null);
@@ -284,12 +297,15 @@ const CallDemoInteractive = () => {
 		setActivePreview("call");
 		setCallDemoKey(Date.now());
 		setCallDemoMode("live");
+		setShouldAutoplayVideo(false);
 	}, []);
 
 	const handleSwitchPreview = useCallback((type: PreviewType) => {
 		setActivePreview(type);
 		if (type === "text") {
 			setCallDemoMode("video");
+			// Reset autoplay when switching away from video
+			setShouldAutoplayVideo(false);
 		}
 	}, []);
 
@@ -310,6 +326,8 @@ const CallDemoInteractive = () => {
 		}
 		setActivePreview("call");
 		setCallDemoMode("video");
+		// Keep autoplay enabled when returning to shorts from text demo
+		// This maintains the playing state
 	}, []);
 
 	const handleStartTextDemo = useCallback(() => {
@@ -337,6 +355,40 @@ const CallDemoInteractive = () => {
 			}
 		}
 	}, [activePreview]);
+
+	// Listen for custom event to play YouTube shorts
+	useEffect(() => {
+		const handlePlayShorts = (event: CustomEvent) => {
+			console.log("[CallDemo] play-youtube-shorts event received", event.detail);
+			
+			// First switch to video mode
+			console.log("[CallDemo] Switching to call preview and video mode");
+			setActivePreview("call");
+			setCallDemoMode("video");
+			
+			// Wait a moment for the mode switch to complete, then enable autoplay
+			// This ensures the iframe container is ready before we switch to autoplay URL
+			setTimeout(() => {
+				console.log("[CallDemo] Enabling autoplay");
+				setShouldAutoplayVideo(true);
+				// Keep autoplay enabled - don't reset it automatically
+				// It will only reset when user switches to a different mode
+			}, 500);
+		};
+
+		window.addEventListener(
+			"play-youtube-shorts",
+			handlePlayShorts as EventListener,
+		);
+		console.log("[CallDemo] Event listener registered for play-youtube-shorts");
+
+		return () => {
+			window.removeEventListener(
+				"play-youtube-shorts",
+				handlePlayShorts as EventListener,
+			);
+		};
+	}, []);
 
 	useInterval(
 		advanceTextMessage,
@@ -640,6 +692,15 @@ const CallDemoInteractive = () => {
 		}
 
 		if (callDemoMode === "video") {
+			const videoSrc = shouldAutoplayVideo
+				? CALL_DEMO_PLAYLIST_AUTOPLAY_SRC
+				: CALL_DEMO_PLAYLIST_SRC;
+
+			console.log("[CallDemo] Rendering video mode", {
+				shouldAutoplayVideo,
+				videoSrc: videoSrc.substring(0, 100) + "...",
+			});
+
 			return (
 				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
 					<PhoneShell>
@@ -650,9 +711,13 @@ const CallDemoInteractive = () => {
 						>
 							<>
 								<iframe
+									key={`video-${shouldAutoplayVideo ? "autoplay" : "default"}-${callDemoKey}`}
 									title="Call demo playlist preview"
 									className="size-full"
-									src={CALL_DEMO_PLAYLIST_SRC}
+									src={videoSrc}
+									onLoad={() => {
+										console.log("[CallDemo] YouTube iframe loaded", { shouldAutoplayVideo });
+									}}
 									loading="lazy"
 									allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
 									referrerPolicy="strict-origin-when-cross-origin"
@@ -749,6 +814,15 @@ const CallDemoInteractive = () => {
 				</div>
 			);
 		}
+		const fallbackVideoSrc = shouldAutoplayVideo
+			? CALL_DEMO_PLAYLIST_AUTOPLAY_SRC
+			: CALL_DEMO_PLAYLIST_SRC;
+
+		console.log("[CallDemo] Rendering fallback video mode", {
+			shouldAutoplayVideo,
+			videoSrc: fallbackVideoSrc.substring(0, 100) + "...",
+		});
+
 		return (
 			<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
 				<PhoneShell>
@@ -759,9 +833,13 @@ const CallDemoInteractive = () => {
 					>
 						<>
 							<iframe
+								key={`video-fallback-${shouldAutoplayVideo ? "autoplay" : "default"}-${callDemoKey}`}
 								title="Call demo playlist preview"
 								className="size-full"
-								src={CALL_DEMO_PLAYLIST_SRC}
+								src={fallbackVideoSrc}
+								onLoad={() => {
+									console.log("[CallDemo] YouTube iframe (fallback) loaded", { shouldAutoplayVideo });
+								}}
 								loading="lazy"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
 								referrerPolicy="strict-origin-when-cross-origin"
@@ -790,6 +868,7 @@ const CallDemoInteractive = () => {
 		activeTextIndex,
 		callDemoKey,
 		callDemoMode,
+		shouldAutoplayVideo,
 		handleCallDemoComplete,
 		handleCallHandoffAccept,
 		handleCallHandoffCancel,
@@ -874,33 +953,33 @@ const CallDemoInteractive = () => {
 								))}
 							</div>
 							<div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white/80 p-5 text-slate-900 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-white">
-								<p className="text-slate-500 text-xs uppercase tracking-[0.25em] dark:text-white/60">
+								<p className="text-center text-slate-500 text-xs uppercase tracking-[0.25em] sm:text-left dark:text-white/60">
 									Session Monitor
 								</p>
-								<h3 className="mt-2 font-semibold text-slate-900 text-xl dark:text-white">
+								<h3 className="mt-2 text-center font-semibold text-slate-900 text-xl sm:text-left dark:text-white">
 									Automate your follow-ups, not your relationships.
 								</h3>
-								<p className="mt-3 text-slate-600 text-sm dark:text-white/70">
+								<p className="mt-3 text-center text-slate-600 text-sm sm:text-left dark:text-white/70">
 									Build call and SMS workflows in seconds. Customize tone,
 									timing, and goals, then let DealScale handle the outreach and
 									sync every interaction directly to your CRM so you can focus
 									on {resolvedGoalLower}.
 								</p>
-								<div className="mt-4 flex flex-col items-start gap-4 rounded-xl bg-slate-900/5 p-4 text-slate-700 text-sm sm:flex-row sm:items-center dark:bg-black/30 dark:text-white/70">
+								<div className="mt-4 flex flex-col items-center gap-4 rounded-xl bg-slate-900/5 p-4 text-slate-700 text-sm sm:flex-row sm:items-start dark:bg-black/30 dark:text-white/70">
 									<Image
 										src="/avatars/Customer.jpg"
 										alt="Customer avatar"
 										width={40}
 										height={40}
-										className="size-10 rounded-full border border-slate-200/80 object-cover dark:border-white/20"
+										className="size-10 shrink-0 rounded-full border border-slate-200/80 object-cover dark:border-white/20"
 									/>
-									<div className="flex min-h-[4rem] flex-col gap-2 text-left">
+									<div className="flex min-h-[4rem] flex-col gap-2 text-center sm:text-left">
 										<TypingAnimation
 											words={[...SESSION_MONITOR_DIALOG]}
 											className="text-slate-900 text-sm leading-relaxed dark:text-white"
-											typeSpeed={40}
-											deleteSpeed={30}
-											pauseDelay={2200}
+											typeSpeed={60}
+											deleteSpeed={40}
+											pauseDelay={3000}
 											loop
 											showCursor={false}
 											startOnView={true}
@@ -910,9 +989,10 @@ const CallDemoInteractive = () => {
 										<TypingAnimation
 											words={[...SESSION_MONITOR_STATUS]}
 											className="text-[11px] text-slate-500 uppercase tracking-[0.18em] sm:text-xs dark:text-white/50"
-											typeSpeed={42}
-											deleteSpeed={28}
-											pauseDelay={2000}
+											typeSpeed={50}
+											deleteSpeed={35}
+											pauseDelay={2500}
+											delay={6500}
 											loop
 											showCursor={false}
 											startOnView={true}

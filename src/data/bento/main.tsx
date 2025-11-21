@@ -35,7 +35,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 		background: (
 			<Lottie
 				animationData={launchLoading}
-				className="h-36 w-36 opacity-85"
+				className="h-36 w-36 opacity-60"
 				loop
 				autoplay
 			/>
@@ -43,14 +43,14 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="font-semibold text-white text-xl leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.5)]">
 						Launch in One Click
 					</h3>
-					<p className="font-medium text-sm text-white/80">
+					<p className="font-medium text-sm text-white/90 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 						Import, connect, and go live instantly
 					</p>
 				</div>
-				<p className="text-sm text-white/75 leading-6">
+				<p className="text-sm text-white/90 leading-6 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 					Upload your seller list, connect your CRM, and spin up your first AI
 					campaign in a single click—before your coffee cools.
 				</p>
@@ -71,7 +71,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 		background: (
 			<Lottie
 				animationData={dealScaleOutcome}
-				className="h-44 w-44 opacity-85"
+				className="h-44 w-44 opacity-60"
 				loop
 				autoplay
 			/>
@@ -79,14 +79,14 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="font-semibold text-white text-xl leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.5)]">
 						AI That Works While You Sleep
 					</h3>
-					<p className="font-medium text-sm text-white/80">
+					<p className="font-medium text-sm text-white/90 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 						Never miss a hot lead again
 					</p>
 				</div>
-				<p className="text-sm text-white/75 leading-6">
+				<p className="text-sm text-white/90 leading-6 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 					Your AI responds instantly to every text, call, or form. It
 					pre-qualifies, nurtures, and books appointments around the clock so no
 					opportunity slips away.
@@ -108,7 +108,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 		background: (
 			<Lottie
 				animationData={appointmentSetting}
-				className="h-36 w-36 opacity-85"
+				className="h-36 w-36 opacity-60"
 				loop
 				autoplay
 			/>
@@ -116,14 +116,14 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="font-semibold text-white text-xl leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.5)]">
 						Appointments, Not Just Leads
 					</h3>
-					<p className="font-medium text-sm text-white/80">
+					<p className="font-medium text-sm text-white/90 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 						Your calendar, always full
 					</p>
 				</div>
-				<p className="text-sm text-white/75 leading-6">
+				<p className="text-sm text-white/90 leading-6 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 					AI-qualified, sales-ready appointments land directly on your calendar.
 					You focus on closing while the system handles every follow-up.
 				</p>
@@ -144,7 +144,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 		background: (
 			<Lottie
 				animationData={marketAnalysis}
-				className="h-36 w-36 opacity-85"
+				className="h-36 w-36 opacity-60"
 				loop
 				autoplay
 			/>
@@ -152,14 +152,14 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="font-semibold text-white text-xl leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.5)]">
 						Unlimited Skip Tracing
 					</h3>
-					<p className="font-medium text-sm text-white/80">
+					<p className="font-medium text-sm text-white/90 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 						Data that does not cost you extra
 					</p>
 				</div>
-				<p className="text-sm text-white/75 leading-6">
+				<p className="text-sm text-white/90 leading-6 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 					Build hyper-targeted lists from more than 140 million property
 					records. Unlimited, high-quality owner data is included with every
 					plan, turning skip tracing into a growth multiplier.
@@ -185,7 +185,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 			background: (
 				<Lottie
 					animationData={voiceWave}
-					className="h-40 w-40 opacity-85"
+					className="h-40 w-40 opacity-60"
 					loop
 					autoplay
 				/>
@@ -193,16 +193,16 @@ export const MainBentoFeatures: BentoFeature[] = [
 			content: (
 				<div className="space-y-4 rounded-2xl bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 p-4 text-left text-foreground shadow-[0_24px_60px_-38px_rgba(99,102,241,0.45)] backdrop-blur-md sm:p-6">
 					<div className="space-y-1">
-						<p className="font-semibold text-accent text-xs uppercase tracking-wide">
+						<p className="font-semibold text-accent text-xs uppercase tracking-wide [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 							{PERSONA_LABEL}
 						</p>
-						<h3 className="font-semibold text-white text-xl leading-tight">
+						<h3 className="font-semibold text-white text-xl leading-tight [text-shadow:0_1px_2px_rgba(0,0,0,0.5)]">
 							{PERSONA_GOAL}
 						</h3>
 					</div>
-					<div className="space-y-3 text-sm text-white/75">
-						<p className="font-medium text-white/80">{primarySolution}</p>
-						<p>{primaryHope}</p>
+					<div className="space-y-3 text-sm text-white/90">
+						<p className="font-medium text-white/90 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">{primarySolution}</p>
+						<p className="[text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">{primaryHope}</p>
 					</div>
 					<Badge
 						variant="secondary"

@@ -21,6 +21,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { ThemeToggle } from "../theme/theme-toggle";
@@ -180,6 +181,7 @@ type MobileNavProps = {
 	isAuthLoading: boolean;
 	onSignOut: () => void;
 	onSignIn: () => void;
+	onSignUp: () => void;
 };
 
 const MobileNav = ({
@@ -189,8 +191,33 @@ const MobileNav = ({
 	isAuthLoading,
 	onSignOut,
 	onSignIn,
+	onSignUp,
 }: MobileNavProps) => {
 	const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({});
+	const { resolvedTheme } = useTheme();
+	const [mounted, setMounted] = useState(false);
+	const [isDark, setIsDark] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+		// Check both resolvedTheme and HTML class as fallback
+		const checkDarkMode = () => {
+			const htmlHasDark = document.documentElement.classList.contains("dark");
+			const themeIsDark = resolvedTheme === "dark";
+			setIsDark(themeIsDark || htmlHasDark);
+		};
+		
+		checkDarkMode();
+		
+		// Watch for theme changes
+		const observer = new MutationObserver(checkDarkMode);
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class"],
+		});
+		
+		return () => observer.disconnect();
+	}, [resolvedTheme]);
 
 	const toggleSubmenu = (title) => {
 		setOpenSubmenus((prev) => ({
@@ -202,60 +229,95 @@ const MobileNav = ({
 	return (
 		<div
 			className={cn(
-				"fixed inset-0 z-[100] flex flex-col items-center bg-transparent backdrop-blur-xl transition-all duration-300",
+				"fixed inset-0 z-[9999] flex h-screen min-h-screen flex-col backdrop-blur-xl transition-all duration-300",
+				"bg-white/95 dark:bg-slate-950/98",
 				isOpen
 					? "visible opacity-100"
 					: "pointer-events-none invisible opacity-0",
 			)}
 			style={{
-				top: "var(--header-height, 0px)",
+				height: "100vh",
+				minHeight: "100vh",
+				backgroundColor: isDark ? "rgb(2, 6, 23)" : "rgba(255, 255, 255, 0.95)",
 			}}
 		>
 			{/* biome-ignore lint/nursery/useSortedClasses: z-index ordering is intentional */}
 			<div className="absolute inset-0 overflow-hidden -z-10">
 				{/* biome-ignore lint/nursery/useSortedClasses: flex utilities grouped for readability */}
-				<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-					<PixelatedCanvas
-						src="https://assets.aceternity.com/manu-red.png"
-						width={900}
-						height={1400}
-						cellSize={4}
-						dotScale={0.96}
-						backgroundColor="rgba(7, 13, 27, 0.55)"
-						dropoutStrength={0.1}
-						interactive
-						distortionStrength={10}
-						distortionRadius={220}
-						jitterStrength={3.5}
-						jitterSpeed={0.75}
-						followSpeed={0.06}
-						tintColor="rgba(78, 234, 255, 0.7)"
-						tintStrength={0.4}
-						autoAnimate={isOpen}
-						autoAnimateRadius={260}
-						autoAnimateSpeed={0.22}
-						className="pointer-events-none h-[140%] w-[140%] max-w-none opacity-90"
-					/>
-				</div>
+				{isOpen && (
+					<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+						{isDark ? (
+							<PixelatedCanvas
+								src="https://assets.aceternity.com/manu-red.png"
+								width={900}
+								height={1400}
+								cellSize={4}
+								dotScale={0.96}
+								backgroundColor="rgba(7, 13, 27, 0.55)"
+								dropoutStrength={0.1}
+								interactive
+								distortionStrength={10}
+								distortionRadius={220}
+								jitterStrength={3.5}
+								jitterSpeed={0.75}
+								followSpeed={0.06}
+								tintColor="rgba(78, 234, 255, 0.7)"
+								tintStrength={0.4}
+								autoAnimate={isOpen}
+								autoAnimateRadius={104}
+								autoAnimateSpeed={0.088}
+								className="pointer-events-none h-[140%] w-[140%] max-w-none opacity-90"
+							/>
+						) : (
+							<PixelatedCanvas
+								src="https://assets.aceternity.com/manu-red.png"
+								width={900}
+								height={1400}
+								cellSize={4}
+								dotScale={0.96}
+								backgroundColor="rgba(255, 255, 255, 0.4)"
+								dropoutStrength={0.1}
+								interactive
+								distortionStrength={10}
+								distortionRadius={220}
+								jitterStrength={3.5}
+								jitterSpeed={0.75}
+								followSpeed={0.06}
+								tintColor="rgba(12, 99, 152, 0.5)"
+								tintStrength={0.3}
+								autoAnimate={isOpen}
+								autoAnimateRadius={104}
+								autoAnimateSpeed={0.088}
+								className="pointer-events-none h-[140%] w-[140%] max-w-none opacity-60"
+							/>
+						)}
+					</div>
+				)}
 				{/* biome-ignore lint/nursery/useSortedClasses: gradient utility ordering is intentional */}
-				<div className="absolute bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.4),_transparent_70%)] inset-0 pointer-events-none" />
+				{isDark && (
+					<div className="absolute bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.4),_transparent_70%)] inset-0 pointer-events-none" />
+				)}
 				{/* biome-ignore lint/nursery/useSortedClasses: gradient utility ordering is intentional */}
-				<div className="absolute bg-gradient-to-b from-[#050d1d]/15 inset-0 pointer-events-none to-[#050d1d]/60 via-[#050d1d]/25" />
+				{isDark ? (
+					<div className="absolute bg-gradient-to-b from-[#050d1d]/15 inset-0 pointer-events-none to-[#050d1d]/60 via-[#050d1d]/25" />
+				) : (
+					<div className="absolute bg-gradient-to-b from-sky-50/30 inset-0 pointer-events-none to-white/60 via-slate-50/40" />
+				)}
 			</div>
 
-			<div className="absolute top-0 z-40 flex w-full justify-end px-6 py-4">
+			<div className="absolute top-[52px] right-0 z-40 flex w-full justify-end px-4 py-3 sm:top-[60px] sm:px-6 sm:py-4 lg:top-[68px]">
 				<button
 					onClick={onClose}
 					type="button"
-					className="p-2 text-black transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:text-white"
+					className="p-2 text-slate-900 transition-colors hover:text-slate-700 hover:bg-slate-100/50 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:text-white dark:hover:text-white dark:hover:bg-white/10"
 					aria-label="Close menu"
 				>
 					<X className="h-6 w-6" />
 				</button>
 			</div>
 
-			<div className="z-10 w-full overflow-y-auto px-6 pt-20">
-				<ul className="mx-auto flex max-h-[calc(100vh-var(--header-height)-8rem)] w-full max-w-md flex-col space-y-2">
+			<div className="relative z-10 flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-[76px] pb-8 sm:px-6 sm:pt-[84px] sm:pb-10 lg:pt-[92px]">
+				<ul className="mx-auto flex w-full max-w-md flex-col space-y-2 pb-6">
 					{navItems.map((item) => (
 						<li key={item.title} className="w-full">
 							{item.children ? (
@@ -263,34 +325,34 @@ const MobileNav = ({
 									<button
 										onClick={() => toggleSubmenu(item.title)}
 										type="button"
-										className="flex w-full items-center justify-between rounded-md px-4 py-3 text-center text-black transition-colors hover:bg-white/10 hover:text-black dark:text-white dark:text-white/80"
+										className="flex w-full items-center justify-between rounded-md px-4 py-3 text-center text-slate-900 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
 									>
 										<span className="flex-grow font-medium text-base">
 											{item.title}
 										</span>
 										<ChevronDown
 											className={cn(
-												"ml-2 h-4 w-4 transition-transform duration-200",
+												"ml-2 h-4 w-4 text-slate-700 transition-transform duration-200 dark:text-white/80",
 												openSubmenus[item.title] && "rotate-180 transform",
 											)}
 										/>
 									</button>
 									<div
 										className={cn(
-											"overflow-hidden transition-all duration-300",
+											"transition-all duration-300",
 											openSubmenus[item.title]
-												? "mt-1 mb-2 max-h-[calc(100vh-16rem)] opacity-100"
-												: "max-h-0 opacity-0",
+												? "mt-1 mb-2 max-h-[calc(100vh-20rem)] overflow-y-auto opacity-100"
+												: "max-h-0 overflow-hidden opacity-0",
 										)}
 									>
-										<ul className="space-y-2 py-2">
+										<ul className="space-y-2 py-2 pb-4">
 											{item.children.map((child) => (
 												<li key={child.title} className="flex justify-center">
 													{child.image ||
 													child.ctaTitle ||
 													child.ctaSubtitle ||
 													child.ctaButton ? (
-														<div className="w-full max-w-md rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm">
+														<div className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-4 text-slate-900 shadow-sm dark:border-border dark:bg-card dark:text-card-foreground">
 															{child.image && (
 																<div className="relative mb-3 h-24 w-full overflow-hidden rounded-md">
 																	<Image
@@ -306,7 +368,7 @@ const MobileNav = ({
 																	{child.ctaTitle || child.title}
 																</span>
 																{child.ctaSubtitle && (
-																	<span className="text-muted-foreground text-sm">
+																	<span className="text-slate-600 text-sm dark:text-muted-foreground">
 																		{child.ctaSubtitle}
 																	</span>
 																)}
@@ -335,12 +397,12 @@ const MobileNav = ({
 							)}
 						</li>
 					))}
-					<li className="mt-4 border-white/10 border-t pt-4">
+					<li className="mt-4 border-slate-200 border-t pt-4 dark:border-white/10">
 						<div className="flex justify-center">
 							<ThemeToggle
 								variant="ghost"
 								size="sm"
-								className="text-black hover:bg-white/10 hover:text-black dark:text-white dark:text-white/80"
+								className="text-slate-900 hover:bg-slate-100 hover:text-slate-900 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
 							/>
 						</div>
 					</li>
@@ -359,30 +421,55 @@ const MobileNav = ({
 						</li>
 					)}
 					{!isAuthenticated && !isAuthLoading && (
-						<li className="pt-2">
-							<Button
-								variant="default"
-								className="w-full"
-								onClick={() => {
-									onClose();
-									onSignIn();
-								}}
-							>
-								Sign in
-							</Button>
-						</li>
+						<>
+							<li className="pt-2">
+								<Button
+									variant="default"
+									className="w-full"
+									onClick={() => {
+										onClose();
+										onSignUp();
+									}}
+								>
+									Sign up
+								</Button>
+							</li>
+							<li className="pt-2">
+								<Button
+									variant="outline"
+									className="w-full"
+									onClick={() => {
+										onClose();
+										onSignIn();
+									}}
+								>
+									Sign in
+								</Button>
+							</li>
+						</>
 					)}
 				</ul>
 			</div>
 
-			<div className="mt-auto mb-8 w-full max-w-[200px] px-6">
-				<Image
-					width={400}
-					height={400}
-					src="/company/logos/Deal_Scale_Horizontal_White.png"
-					alt="Logo"
-					className="h-auto w-full"
-				/>
+			<div className="mt-auto mb-8 flex w-full justify-center px-6">
+				<div className="w-full max-w-[200px]">
+					{/* Black logo for light mode */}
+					<Image
+						width={400}
+						height={400}
+						src="/company/logos/DealScale_Horizontal_Black.png"
+						alt="Deal Scale"
+						className="h-auto w-full block dark:hidden"
+					/>
+					{/* White logo for dark mode */}
+					<Image
+						width={400}
+						height={400}
+						src="/company/logos/Deal_Scale_Horizontal_White.png"
+						alt="Deal Scale"
+						className="h-auto w-full hidden dark:block"
+					/>
+				</div>
 			</div>
 		</div>
 	);
@@ -431,13 +518,17 @@ export default function Navbar() {
 		openAuthModal("signin");
 	};
 
+	const handleSignUp = () => {
+		openAuthModal("signup");
+	};
+
 	return (
 		<>
 			<nav
-				className="fixed top-0 right-0 left-0 z-50 bg-background px-6 py-4 lg:px-8"
+				className="fixed top-0 right-0 left-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur-sm px-4 py-3 sm:px-6 sm:py-4 lg:px-8"
 				aria-label="Main navigation"
 			>
-				<div className="mx-auto flex max-w-7xl items-center justify-between">
+				<div className="mx-auto flex max-w-7xl items-center justify-between h-[52px] sm:h-[60px] lg:h-[68px]">
 					<Link href="/" className="z-20 flex items-center">
 						{/* Black logo for light mode */}
 						<Image
@@ -490,6 +581,7 @@ export default function Navbar() {
 						isAuthLoading={status === "loading"}
 						onSignOut={handleSignOut}
 						onSignIn={handleSignIn}
+						onSignUp={handleSignUp}
 					/>
 				</div>
 			</nav>
@@ -500,7 +592,7 @@ export default function Navbar() {
 				open={showBanner}
 				onClose={() => setShowBanner(false)}
 				variant="default"
-				className="top-[56px] px-2 py-2 text-sm lg:top-[64px] lg:px-4 lg:py-3 lg:text-base"
+				className="top-[52px] px-2 py-2 text-sm sm:top-[60px] lg:top-[68px] lg:px-4 lg:py-3 lg:text-base border-t-0"
 			>
 				<BetaStickyBanner />
 			</StickyBanner>
