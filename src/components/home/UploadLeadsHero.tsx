@@ -78,7 +78,7 @@ export function UploadLeadsHero(): JSX.Element {
 		<section
 			className={cn(
 				"relative flex w-full flex-col items-center justify-center overflow-hidden",
-				"min-h-[400px] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-16 sm:min-h-[450px] sm:py-20 md:min-h-[500px] lg:py-24",
+				"min-h-[400px] bg-gradient-to-br from-slate-50 via-white to-slate-100 py-16 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 sm:min-h-[450px] sm:py-20 md:min-h-[500px] lg:py-24",
 				gpuContainerClass,
 			)}
 		>
@@ -90,7 +90,7 @@ export function UploadLeadsHero(): JSX.Element {
 					className="w-full"
 				>
 					{/* Search/Upload Bar Container */}
-					<div className="relative flex w-full items-center gap-3 rounded-2xl border border-sky-500/30 bg-white/10 px-4 py-4 shadow-[0_8px_30px_rgba(59,130,246,0.2)] backdrop-blur-xl transition-all duration-300 focus-within:border-sky-400 focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.4)] dark:border-sky-500/40 dark:bg-slate-800/30 dark:focus-within:border-sky-500 dark:focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.3)]">
+					<div className="relative flex w-full items-center gap-3 rounded-2xl border border-sky-400/50 bg-white/80 px-4 py-4 shadow-[0_8px_30px_rgba(59,130,246,0.15)] backdrop-blur-xl transition-all duration-300 focus-within:border-sky-500 focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.3)] dark:border-sky-500/40 dark:bg-slate-800/30 dark:focus-within:border-sky-500 dark:focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.3)]">
 						{/* Input Field */}
 						<Input
 							type="text"
@@ -102,7 +102,7 @@ export function UploadLeadsHero(): JSX.Element {
 									handleAction();
 								}
 							}}
-							className="flex-1 border-0 bg-transparent text-base text-white placeholder:text-slate-300 focus-visible:ring-0 focus-visible:ring-offset-0 dark:text-white dark:placeholder:text-slate-400"
+							className="flex-1 border-0 bg-transparent text-base text-slate-900 placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:text-white dark:placeholder:text-slate-400"
 						/>
 
 						{/* Action Button */}
@@ -139,7 +139,7 @@ export function UploadLeadsHero(): JSX.Element {
 										"inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-medium text-xs transition-all",
 										badge.color,
 										isActive &&
-											"shadow-lg ring-2 ring-sky-400 ring-offset-2 dark:ring-sky-500",
+											"shadow-lg ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-sky-500 dark:ring-offset-slate-900",
 									)}
 								>
 									<Icon className="h-3.5 w-3.5" />
@@ -155,7 +155,7 @@ export function UploadLeadsHero(): JSX.Element {
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-					className="mt-8 max-w-2xl text-center text-slate-300 text-sm md:text-base"
+					className="mt-8 max-w-2xl text-center text-slate-600 text-sm dark:text-slate-300 md:text-base"
 				>
 					Upload your lead lists, enrich data, automate outreach, and sync
 					everything back to your CRM—all in one seamless workflow.

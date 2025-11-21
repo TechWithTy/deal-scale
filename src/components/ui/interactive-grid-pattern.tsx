@@ -52,7 +52,7 @@ const InteractiveGridPatternComponent = ({
 			width={svgWidth}
 			height={svgHeight}
 			className={cn(
-				"absolute inset-0 h-full w-full border border-gray-400/30",
+				"absolute inset-0 h-full w-full border border-gray-400/30 dark:border-gray-600/30",
 				className,
 			)}
 			{...props}
@@ -65,7 +65,7 @@ const InteractiveGridPatternComponent = ({
 					width={width}
 					height={height}
 					className={cn(
-						"fill-transparent stroke-gray-400/30 transition-colors duration-500 ease-out hover:fill-gray-300/30",
+						"fill-transparent stroke-gray-400/30 transition-colors duration-500 ease-out hover:fill-gray-300/30 dark:stroke-gray-600/30 dark:hover:fill-gray-700/30",
 						squaresClassName,
 					)}
 				/>
