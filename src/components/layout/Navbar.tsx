@@ -22,8 +22,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ThemeToggle } from "../theme/theme-toggle";
 import { BetaStickyBanner } from "./BetaStickyBanner";
@@ -475,8 +474,18 @@ const MobileNav = ({
 export default function Navbar() {
 	const [showBanner, setShowBanner] = useState(false);
 	const [showNavbar, setShowNavbar] = useState(true);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const lastScrollY = useRef(0);
 	const scrollThreshold = 10; // Minimum scroll distance to trigger show/hide
+	const mobileMenuOpenRef = useRef(false);
+
+	const hasMounted = useHasMounted();
+	const [bannerMounted, setBannerMounted] = useState(false);
+
+	// Sync mobileMenuOpen to ref for use in scroll handler
+	useEffect(() => {
+		mobileMenuOpenRef.current = mobileMenuOpen;
+	}, [mobileMenuOpen]);
 
 	// Track scroll direction and control navbar/banner visibility
 	useEffect(() => {
@@ -486,17 +495,27 @@ export default function Navbar() {
 		let ticking = false;
 
 		const handleScroll = () => {
-			if (!isMounted || ticking) return;
+			// Don't handle scroll when mobile menu is open
+			if (!isMounted || ticking || mobileMenuOpenRef.current) {
+				if (ticking) ticking = false;
+				return;
+			}
 
 			ticking = true;
 			requestAnimationFrame(() => {
-				if (!isMounted) return;
+				if (!isMounted || mobileMenuOpenRef.current) {
+					ticking = false;
+					return;
+				}
 
 				const currentScrollY = window.scrollY;
 				const scrollDifference = Math.abs(currentScrollY - lastScrollY.current);
 
 				// Only update if scrolled enough to avoid jitter
-				if (scrollDifference < scrollThreshold) {
+				// Use slightly higher threshold on mobile for smoother experience
+				const threshold =
+					window.innerWidth < 640 ? scrollThreshold * 1.5 : scrollThreshold;
+				if (scrollDifference < threshold) {
 					ticking = false;
 					return;
 				}
@@ -534,10 +553,6 @@ export default function Navbar() {
 		};
 	}, []);
 
-	const hasMounted = useHasMounted();
-	const [bannerMounted, setBannerMounted] = useState(false);
-
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const { status } = useSession();
 	const openAuthModal = useAuthModal((state) => state.open);
 
@@ -546,8 +561,14 @@ export default function Navbar() {
 		if (mobileMenuOpen) {
 			document.body.style.overflow = "hidden";
 			// Keep navbar visible when mobile menu is open
+			// Also reset scroll position tracking to prevent banner from appearing
+			// when menu closes if user was scrolling
 			setShowNavbar(true);
 			setShowBanner(false);
+			// Reset scroll tracking when menu opens to prevent issues when it closes
+			if (typeof window !== "undefined") {
+				lastScrollY.current = window.scrollY;
+			}
 		} else {
 			document.body.style.overflow = "auto";
 		}
