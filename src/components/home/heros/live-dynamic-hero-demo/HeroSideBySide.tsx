@@ -91,14 +91,22 @@ export default function HeroSideBySide(): JSX.Element {
 	const { resolvedTheme } = useTheme();
 	const isMobile = useIsMobile();
 	const [particleColor, setParticleColor] = useState("#ffffff");
+	const [particleSize, setParticleSize] = useState(2);
+	const [particleQuantity, setParticleQuantity] = useState(isMobile ? 60 : 120);
 
-	// Update particle color based on theme
+	// Update particle color and properties based on theme
 	useEffect(() => {
-		setParticleColor(resolvedTheme === "dark" ? "#ffffff" : "#000000");
-	}, [resolvedTheme]);
-
-	// Performance: Reduce particle count on mobile for better performance
-	const particleQuantity = isMobile ? 40 : 80;
+		if (resolvedTheme === "dark") {
+			setParticleColor("#ffffff");
+			setParticleSize(2);
+			setParticleQuantity(isMobile ? 60 : 120);
+		} else {
+			// Light mode: use subtle gray instead of black, smaller size, fewer particles
+			setParticleColor("#94a3b8"); // slate-400 - much more subtle
+			setParticleSize(1.2);
+			setParticleQuantity(isMobile ? 30 : 60);
+		}
+	}, [resolvedTheme, isMobile]);
 
 	const heroVideo = useHeroVideoConfig(LIVE_VIDEO);
 
@@ -141,35 +149,35 @@ export default function HeroSideBySide(): JSX.Element {
 
 			<section className="relative z-0 w-full overflow-hidden">
 				<div className="pointer-events-none absolute inset-0">
-					{/* Particles Background - Performance Optimized */}
+					<InteractiveGridPattern
+						width={72}
+						height={72}
+						className="z-[1] opacity-20 dark:opacity-40 md:opacity-25 md:dark:opacity-50"
+						squares={[20, 20]}
+						squaresClassName="stroke-border/25 dark:stroke-border/50"
+					/>
+					{/* Particles Background - Performance Optimized - Above grid, below gradients */}
 					<Particles
-						className="absolute inset-0 z-[1]"
+						className="absolute inset-0 z-[2] opacity-60 dark:opacity-100"
 						quantity={particleQuantity}
 						ease={80}
 						staticity={50}
-						size={1.2}
+						size={particleSize}
 						color={particleColor}
 						vx={0}
 						vy={0}
 					/>
-					<InteractiveGridPattern
-						width={72}
-						height={72}
-						className="z-[2] opacity-20 md:opacity-25"
-						squares={[20, 20]}
-						squaresClassName="stroke-border/25"
-					/>
-					<div className="absolute inset-0 z-[3] bg-gradient-to-b from-background/20 via-background/50 to-background" />
+					<div className="absolute inset-0 z-[3] bg-gradient-to-b from-background/5 via-background/20 to-background/40" />
 
 					<InteractiveGridPattern
 						width={48}
 						height={48}
-						className="z-[4] opacity-[0.35]"
+						className="z-[4] opacity-[0.35] dark:opacity-[0.55]"
 						squares={[34, 34]}
-						squaresClassName="stroke-border/20"
+						squaresClassName="stroke-border/20 dark:stroke-border/40"
 					/>
 
-					<div className="absolute inset-0 z-[5] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.24)_0%,rgba(15,23,42,0)_55%)] opacity-35" />
+					<div className="absolute inset-0 z-[5] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.24)_0%,rgba(15,23,42,0)_55%)] opacity-35 dark:opacity-50" />
 				</div>
 
 				<div className="container relative z-10 mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12 lg:py-20">

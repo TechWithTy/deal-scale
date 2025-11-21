@@ -32,7 +32,11 @@ const {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
-		<html lang="en" className={`${sansFont.variable} ${monoFont.variable}`}>
+		<html
+			lang="en"
+			className={`${sansFont.variable} ${monoFont.variable}`}
+			suppressHydrationWarning
+		>
 			<head>
 				{/* Preload small hero logo to stabilize LCP visual */}
 				<link

@@ -433,67 +433,73 @@ export function ReactivateCampaignInput({
 				className="w-full"
 			>
 				{/* Search/Upload Bar Container */}
-				<div className="relative flex w-full flex-col gap-3 rounded-2xl border border-sky-500/30 bg-white/10 px-4 py-4 shadow-[0_8px_30px_rgba(59,130,246,0.2)] backdrop-blur-xl transition-all duration-300 focus-within:border-sky-400 focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.4)] dark:border-sky-500/40 dark:bg-slate-800/30 dark:focus-within:border-sky-500 dark:focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.3)]">
+				<div className="relative flex w-full flex-col gap-3 rounded-2xl border border-sky-500/30 bg-white/10 px-4 py-4 shadow-[0_8px_30px_rgba(59,130,246,0.2)] backdrop-blur-xl transition-all duration-300 focus-within:border-sky-400 focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.4)] dark:border-sky-500/40 dark:bg-slate-800/30 dark:focus-within:border-sky-500 dark:focus-within:shadow-[0_8px_30px_rgba(59,130,246,0.3)] bg-white/80 dark:bg-white/10 border-sky-400/50 dark:border-sky-500/40">
 					{/* Search Input */}
-					<div className="relative flex items-center gap-3">
-						<Search className="h-5 w-5 shrink-0 text-sky-400 opacity-70" />
-						<div className="relative flex-1">
-							<Input
-								ref={inputRef}
-								type="text"
-								value={searchValue}
-								onChange={(e) => setSearchValue(e.target.value)}
-								onFocus={() => setIsFocused(true)}
-								onBlur={() => setIsFocused(false)}
-								onKeyDown={(e) => {
-									if (e.key === "Enter" && !isProcessing) {
-										handleActivate();
-									}
-								}}
-								className="flex-1 border-0 bg-transparent text-base text-white placeholder:text-transparent focus-visible:ring-0 focus-visible:ring-offset-0 dark:text-white"
-								disabled={isProcessing}
-							/>
-							{/* Animated Placeholder Overlay */}
-							{!searchValue && !isFocused && (
-								<div className="pointer-events-none absolute inset-0 flex items-center">
-									<TypingAnimation
-										words={PLACEHOLDER_OPTIONS}
-										typeSpeed={80}
-										deleteSpeed={40}
-										pauseDelay={2000}
-										loop={true}
-										startOnView={false}
-										showCursor={true}
-										blinkCursor={true}
-										cursorStyle="line"
-										className="text-base text-slate-300 dark:text-slate-400"
-										as="span"
-									/>
-								</div>
-							)}
+					<div className="relative flex flex-col gap-2">
+						<div className="relative flex items-center gap-3">
+							<Search className="h-5 w-5 shrink-0 text-sky-500 opacity-70 dark:text-sky-400" />
+							<div className="relative flex-1">
+								<Input
+									ref={inputRef}
+									type="text"
+									value={searchValue}
+									onChange={(e) => setSearchValue(e.target.value)}
+									onFocus={() => setIsFocused(true)}
+									onBlur={() => setIsFocused(false)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter" && !isProcessing) {
+											handleActivate();
+										}
+									}}
+									className="flex-1 border-0 bg-transparent text-base text-slate-900 placeholder:text-transparent focus-visible:ring-0 focus-visible:ring-offset-0 dark:text-white"
+									disabled={isProcessing}
+								/>
+								{/* Animated Placeholder Overlay */}
+								{!searchValue && !isFocused && (
+									<div className="pointer-events-none absolute inset-0 flex items-center">
+										<TypingAnimation
+											words={PLACEHOLDER_OPTIONS}
+											typeSpeed={80}
+											deleteSpeed={40}
+											pauseDelay={2000}
+											loop={true}
+											startOnView={false}
+											showCursor={true}
+											blinkCursor={true}
+											cursorStyle="line"
+											className="text-base text-slate-500 dark:text-slate-400"
+											as="span"
+										/>
+									</div>
+								)}
+							</div>
+							<Button
+								type="button"
+								onClick={handleActivate}
+								disabled={isProcessing || contacts.length === 0}
+								className="h-10 w-10 shrink-0 rounded-full bg-sky-500 p-0 text-white shadow-lg transition-all hover:bg-sky-600 hover:shadow-xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+								aria-label="Activate campaign"
+								title={
+									contacts.length === 0
+										? "Upload a file first"
+										: "Activate campaign"
+								}
+							>
+								{isProcessing ? (
+									<Loader2 className="h-5 w-5 animate-spin" />
+								) : (
+									<Play className="h-5 w-5" fill="currentColor" />
+								)}
+							</Button>
 						</div>
-						<Button
-							type="button"
-							onClick={handleActivate}
-							disabled={isProcessing || contacts.length === 0}
-							className="h-10 w-10 rounded-full bg-sky-500 p-0 text-white shadow-lg transition-all hover:bg-sky-600 hover:shadow-xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-							aria-label="Activate campaign"
-							title={
-								contacts.length === 0
-									? "Upload a file first"
-									: "Activate campaign"
-							}
-						>
-							{isProcessing ? (
-								<Loader2 className="h-5 w-5 animate-spin" />
-							) : (
-								<Play className="h-5 w-5" fill="currentColor" />
-							)}
-						</Button>
+						{/* Mobile-only hint */}
+						<p className="text-xs text-slate-600 dark:text-white/60 sm:hidden">
+							Upload your lead list
+						</p>
 					</div>
 
 					{/* File Upload Section */}
-					<div className="flex items-center gap-2 border-white/10 border-t pt-3 sm:gap-3">
+					<div className="flex flex-col gap-3 border-slate-200/50 dark:border-white/10 border-t pt-3 sm:flex-row sm:items-center sm:gap-3">
 						<input
 							ref={fileInputRef}
 							type="file"
@@ -502,59 +508,64 @@ export function ReactivateCampaignInput({
 							className="hidden"
 							disabled={isProcessing}
 						/>
-						<Button
-							type="button"
-							variant="outline"
-							size="sm"
-							onClick={() => fileInputRef.current?.click()}
-							disabled={isProcessing}
-							className="border-white/20 bg-white/5 text-white hover:bg-white/10"
-							title="Upload CSV/Excel"
-							aria-label="Upload CSV/Excel"
-						>
-							<Upload className="h-4 w-4 sm:mr-2" />
-							<span className="hidden sm:inline">Upload CSV/Excel</span>
-						</Button>
-						<Button
-							type="button"
-							variant="ghost"
-							size="sm"
-							onClick={handleDownloadExample}
-							disabled={isProcessing}
-							className="border-white/10 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white"
-							title="Example CSV"
-							aria-label="Example CSV"
-						>
-							<Download className="h-4 w-4 sm:mr-2" />
-							<span className="hidden sm:inline">Example CSV</span>
-						</Button>
+						{/* File Upload Buttons Row */}
+						<div className="flex flex-wrap items-center gap-2 sm:gap-3">
+							<Button
+								type="button"
+								variant="outline"
+								size="sm"
+								onClick={() => fileInputRef.current?.click()}
+								disabled={isProcessing}
+								className="shrink-0 border-slate-300/50 bg-slate-50/80 text-slate-700 hover:bg-slate-100 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+								title="Upload CSV/Excel"
+								aria-label="Upload CSV/Excel"
+							>
+								<Upload className="h-4 w-4 sm:mr-2" />
+								<span className="hidden sm:inline">Upload CSV/Excel</span>
+							</Button>
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								onClick={handleDownloadExample}
+								disabled={isProcessing}
+								className="shrink-0 border-slate-300/30 bg-slate-50/60 text-slate-600 hover:bg-slate-100 hover:text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/80 dark:hover:bg-white/10 dark:hover:text-white"
+								title="Example CSV"
+								aria-label="Example CSV"
+							>
+								<Download className="h-4 w-4 sm:mr-2" />
+								<span className="hidden sm:inline">Example CSV</span>
+							</Button>
 
-						{uploadedFile && (
-							<div className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2">
-								<FileIcon className="h-4 w-4 text-sky-400" />
-								<span className="text-sm text-white">{uploadedFile.name}</span>
-								{contacts.length > 0 && (
-									<Badge variant="secondary" className="ml-2">
-										{contacts.length} contacts
-									</Badge>
-								)}
-								<button
-									type="button"
-									onClick={handleRemoveFile}
-									disabled={isProcessing}
-									className="ml-2 rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white"
-									aria-label="Remove file"
-								>
-									<X className="h-3 w-3" />
-								</button>
-							</div>
-						)}
+							{uploadedFile && (
+								<div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg bg-slate-50/80 dark:bg-white/5 px-2 py-1.5 sm:px-3 sm:py-2">
+									<FileIcon className="h-4 w-4 shrink-0 text-sky-500 dark:text-sky-400" />
+									<span className="min-w-0 truncate text-xs text-slate-700 dark:text-white sm:text-sm">
+										{uploadedFile.name}
+									</span>
+									{contacts.length > 0 && (
+										<Badge variant="secondary" className="ml-auto shrink-0 sm:ml-2">
+											{contacts.length} contacts
+										</Badge>
+									)}
+									<button
+										type="button"
+										onClick={handleRemoveFile}
+										disabled={isProcessing}
+										className="ml-1 shrink-0 rounded-full p-1 text-slate-500 hover:bg-slate-200 hover:text-slate-700 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white sm:ml-2"
+										aria-label="Remove file"
+									>
+										<X className="h-3 w-3" />
+									</button>
+								</div>
+							)}
+						</div>
 
 						{/* Enrich Toggle with Popover */}
-						<div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+						<div className="flex items-center justify-end gap-1.5 sm:ml-auto sm:gap-2">
 							<Label
 								htmlFor="enrich"
-								className="flex cursor-pointer items-center gap-1 text-sm text-white/90 sm:gap-1.5"
+								className="flex cursor-pointer items-center gap-1 text-sm text-slate-700 dark:text-white/90 sm:gap-1.5"
 							>
 								<span className="hidden sm:inline">Enrich</span>
 								<Popover>
@@ -620,6 +631,7 @@ export function ReactivateCampaignInput({
 								checked={skipTrace}
 								onCheckedChange={setSkipTrace}
 								disabled={isProcessing}
+								className="shrink-0"
 							/>
 						</div>
 					</div>

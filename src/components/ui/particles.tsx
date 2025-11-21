@@ -181,7 +181,8 @@ export const Particles: React.FC<ParticlesProps> = ({
     const translateY = 0
     const pSize = Math.floor(Math.random() * 2) + size
     const alpha = 0
-    const targetAlpha = parseFloat((Math.random() * 0.4 + 0.3).toFixed(1))
+    // Lower opacity for better subtlety - range from 0.2 to 0.6 instead of 0.5 to 1.0
+    const targetAlpha = parseFloat((Math.random() * 0.4 + 0.2).toFixed(1))
     const dx = (Math.random() - 0.5) * 0.1
     const dy = (Math.random() - 0.5) * 0.1
     const magnetism = 0.1 + Math.random() * 4
@@ -264,7 +265,7 @@ export const Particles: React.FC<ParticlesProps> = ({
         remapValue(closestEdge, 0, 20, 0, 1).toFixed(2)
       )
       if (remapClosestEdge > 1) {
-        circle.alpha += 0.02
+        circle.alpha += 0.03
         if (circle.alpha > circle.targetAlpha) {
           circle.alpha = circle.targetAlpha
         }
