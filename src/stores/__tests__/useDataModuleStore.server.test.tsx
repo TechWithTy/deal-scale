@@ -2,9 +2,9 @@
  * @vitest-environment node
  */
 
-import { afterEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { renderToString } from "react-dom/server";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/data/__generated__/manifest", () => {
 	const loaderAlpha = vi.fn(async () => ({ default: "alpha" }));

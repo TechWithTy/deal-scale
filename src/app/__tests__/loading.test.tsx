@@ -1,7 +1,7 @@
 "use client";
 
-import Loading from "../loading";
 import { render, screen } from "@testing-library/react";
+import Loading from "../loading";
 
 describe("app/loading", () => {
 	it("exposes an accessible loading spinner label", () => {
@@ -29,4 +29,3 @@ describe("App route loading fallback", () => {
 		expect(screen.getByTestId("loading-animation")).toContainElement(spinner);
 	});
 });
-

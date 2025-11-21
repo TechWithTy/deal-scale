@@ -6,8 +6,7 @@
 		"useIgnoreFile": false
 	},
 	"files": {
-		"ignoreUnknown": false,
-		"experimentalScannerIgnores": ["**/_depr/**"]
+		"ignoreUnknown": false
 	},
 	"linter": {
 		"enabled": true,

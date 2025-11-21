@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "pnpm run check:env && next dev",
 		"dev-turbo": "pnpm run check:env && next dev --turbopack",
-		"build": "pnpm run check:meta && next build",
+		"build": "pnpm run check:chunk && pnpm run check:meta && next build",
 		"typecheck": "tsc --noEmit",
 		"postbuild": "pnpm run submit:sitemap",
 		"build:cf": "pnpm exec next-on-pages",
@@ -22,6 +22,7 @@
 		"start": "pnpm run check:env && next start",
 		"commit:stage": "git add . && pnpm exec lint-staged",
 		"check:env": "pnpm exec tsx tools/checks/check-analytics-env.ts",
+		"check:chunk": "pnpm exec tsx tools/checks/verify-chunk-error-handler.ts",
 		"check:meta": "pnpm exec tsx tools/checks/verify-meta-description.ts",
 		"landing:build": "rm -rf dist && pnpm run check:env && next build && next export -o dist",
 		"dev:vite": "pnpm exec tsx scripts/bundlers/ensure-preview-flag.ts vite:dev && pnpm exec vite --config tools/vite-preview/vite.config.ts",
@@ -57,7 +58,6 @@
 		"seo:lhci": "bash .github/scripts/seo-lhci.sh",
 		"contact:test": "bash .github/scripts/contact-test.sh",
 		"doctor:rspack": "pnpm run build:rspack && pnpm dlx @rsdoctor/cli analyze --profile .rsdoctor/manifest.json",
-
 		"perf:lighthouse:local": "pnpm dlx lighthouse@12 http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/local",
 		"perf:lighthouse:prod-local": "lighthouse http://localhost:3000/ --preset=perf --output=json --output=html --output-path=reports/lighthouse/prod",
 		"perf:lighthouse:prod": "pnpm dlx lighthouse@12 https://dealscale.io/ --preset=perf --throttling.cpuSlowdownMultiplier=4 --throttling.downloadThroughputKbps=1500 --throttling.uploadThroughputKbps=750 --output=json --output=html --output-path=reports/lighthouse/prod",
@@ -147,6 +147,7 @@
 		"@tailwindcss/typography": "^0.5.15",
 		"@tanstack/react-query": "^5.72.1",
 		"@types/leaflet": "^1.9.20",
+		"@types/papaparse": "^5.5.0",
 		"@upstash/ratelimit": "^2.0.6",
 		"@upstash/redis": "^1.35.3",
 		"analytics": "^0.8.19",
@@ -179,6 +180,7 @@
 		"next-mdx-remote": "^5.0.0",
 		"next-themes": "^0.3.0",
 		"ngrok": "5.0.0-beta.2",
+		"papaparse": "^5.5.3",
 		"postcss": "^8.4.47",
 		"react": "^18.3.1",
 		"react-day-picker": "^8.10.1",
@@ -205,6 +207,7 @@
 		"tailwindcss-animate": "^1.0.7",
 		"uuid": "^11.1.0",
 		"vaul": "^0.9.3",
+		"xlsx": "^0.18.5",
 		"zod": "^3.25.67",
 		"zustand": "^5.0.6"
 	},

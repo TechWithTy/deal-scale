@@ -13,6 +13,7 @@ import { ThemeProvider } from "@/contexts/theme-context";
 
 import type { AnalyticsConfig } from "@/lib/analytics/config";
 
+import { ChunkErrorHandler } from "./ChunkErrorHandler";
 import NextAuthProvider from "./NextAuthProvider";
 
 const SuspenseFallback = () => (
@@ -78,6 +79,7 @@ export function AppProviders({
 	return (
 		<AnalyticsConsentProvider defaultConsent={defaultAnalyticsConsent}>
 			<ThemeProvider>
+				<ChunkErrorHandler />
 				<BodyThemeSync />
 				<Suspense fallback={<SuspenseFallback />}>
 					<Toaster />

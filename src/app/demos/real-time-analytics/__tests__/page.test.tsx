@@ -1,14 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-	afterAll,
-	beforeAll,
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
 import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
@@ -82,18 +75,16 @@ let warnSpy: ReturnType<typeof vi.spyOn> | undefined;
 
 beforeAll(() => {
 	const originalWarn = console.warn.bind(console);
-	warnSpy = vi
-		.spyOn(console, "warn")
-		.mockImplementation((message, ...args) => {
-			if (
-				typeof message === "string" &&
-				message.includes("The width(0) and height(0) of chart")
-			) {
-				return;
-			}
+	warnSpy = vi.spyOn(console, "warn").mockImplementation((message, ...args) => {
+		if (
+			typeof message === "string" &&
+			message.includes("The width(0) and height(0) of chart")
+		) {
+			return;
+		}
 
-			originalWarn(message, ...args);
-		});
+		originalWarn(message, ...args);
+	});
 });
 
 afterAll(() => {

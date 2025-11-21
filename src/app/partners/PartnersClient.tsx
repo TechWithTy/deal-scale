@@ -1,7 +1,7 @@
 "use client";
 
-import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
 import { CTASection } from "@/components/common/CTASection";
+import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
 import { AuroraText } from "@/components/magicui/aurora-text";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -80,7 +80,7 @@ function PartnersHero() {
 							Build revenue driving partnerships with DealScale
 						</AuroraText>
 					</h1>
-					<p className="text-muted-foreground text-lg">
+					<p className="text-lg text-muted-foreground">
 						Collaborate with our team to unlock new growth, expand your
 						capabilities, and deliver differentiated value to your clients. We
 						co-create go-to-market motions, share product insights, and ensure
@@ -95,7 +95,9 @@ function PartnersHero() {
 							asChild
 							className="border-primary/50 px-8 py-6 text-base"
 						>
-							<Link href="/contact?type=integration">Book a Discovery Call</Link>
+							<Link href="/contact?type=integration">
+								Book a Discovery Call
+							</Link>
 						</Button>
 					</div>
 				</div>

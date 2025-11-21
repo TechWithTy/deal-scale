@@ -1,5 +1,5 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
 import type { ExitIntentSettings } from "@external/use-exit-intent";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import ExitIntentBoundary, {
@@ -187,11 +187,8 @@ describe("ExitIntentBoundary", () => {
 
 		triggerExitIntent("trigger");
 
-		fireEvent.click(
-			screen.getByRole("button", { name: "Keep exploring" }),
-		);
+		fireEvent.click(screen.getByRole("button", { name: "Keep exploring" }));
 
 		expect(resetStateMock).toHaveBeenCalledTimes(1);
 	});
 });
-

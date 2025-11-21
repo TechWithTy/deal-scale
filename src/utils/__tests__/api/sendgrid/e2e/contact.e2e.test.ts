@@ -1,8 +1,8 @@
+import { NextRequest } from "next/server";
 /**
  * @jest-environment node
  */
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { NextRequest } from "next/server";
 
 vi.mock("@/lib/externalRequests/sendgrid", () => ({
 	addToSendGrid: vi.fn(),
@@ -14,7 +14,9 @@ let mockedAddToSendGrid: ReturnType<typeof vi.fn>;
 beforeAll(async () => {
 	({ POST } = await import("@/app/api/contact/route"));
 	const sendgridModule = await import("@/lib/externalRequests/sendgrid");
-	mockedAddToSendGrid = sendgridModule.addToSendGrid as ReturnType<typeof vi.fn>;
+	mockedAddToSendGrid = sendgridModule.addToSendGrid as ReturnType<
+		typeof vi.fn
+	>;
 });
 
 describe("POST /api/contact (E2E)", () => {

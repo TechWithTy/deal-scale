@@ -28,7 +28,7 @@ describe("navigation loader store", () => {
 		const { startNavigation, finishNavigation } =
 			useNavigationLoaderStore.getState();
 
-		let navigationId: number = 0;
+		let navigationId = 0;
 		act(() => {
 			navigationId = startNavigation();
 		});

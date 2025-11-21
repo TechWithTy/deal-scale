@@ -1,0 +1,203 @@
+export interface CloserProfile {
+	id: string;
+	name: string;
+	title: string;
+	image: string;
+	rating: number;
+	reviews: number;
+	dealsClosed: number;
+	specialties: string[];
+	location: string;
+	bio: string;
+	hourlyRate: number;
+	commissionPercentage?: number; // Commission % for deal-based closings
+	saasSplit?: {
+		platformFee: number; // Platform commission %
+		closerFee: number; // What closer keeps %
+	}; // Hybrid SaaS split
+}
+
+export const mockClosers: CloserProfile[] = [
+	{
+		id: "closer-1",
+		name: "Sarah Martinez",
+		title: "Senior Real Estate Closer",
+		image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
+		rating: 4.9,
+		reviews: 127,
+		dealsClosed: 523,
+		specialties: ["Residential", "Commercial", "Wholesaling"],
+		location: "Austin, TX",
+		bio: "Certified real estate closer with over a decade of experience handling remote property closings. Specializes in wholesale real estate transactions, helping investors close deals faster with streamlined processes. Expert in coordinating title work, inspections, and final walkthroughs for residential and commercial properties across Texas.",
+		hourlyRate: 150,
+		commissionPercentage: 3.5,
+		saasSplit: {
+			platformFee: 15,
+			closerFee: 85,
+		},
+	},
+	{
+		id: "closer-2",
+		name: "Michael Chen",
+		title: "Commercial Real Estate Specialist",
+		image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+		rating: 4.8,
+		reviews: 89,
+		dealsClosed: 312,
+		specialties: ["Commercial", "Multi-Family", "Investment"],
+		location: "Miami, FL",
+		bio: "Licensed real estate closer focused on commercial property transactions and multi-family real estate closings. Has successfully closed over 300 commercial deals, including office buildings, retail spaces, and apartment complexes. Provides professional remote closing services with expertise in complex financing and due diligence coordination.",
+		hourlyRate: 200,
+		commissionPercentage: 4.0,
+		saasSplit: {
+			platformFee: 20,
+			closerFee: 80,
+		},
+	},
+	{
+		id: "closer-3",
+		name: "Jessica Thompson",
+		title: "Wholesale Deal Closer",
+		image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
+		rating: 5.0,
+		reviews: 203,
+		dealsClosed: 892,
+		specialties: ["Wholesaling", "Fix & Flip", "Land"],
+		location: "Phoenix, AZ",
+		bio: "Top-rated remote real estate closer specializing in wholesale property transactions and fix-and-flip deals. Known for rapid turnaround times and clear communication throughout the closing process. Has closed nearly 900 real estate deals for wholesalers and investors, handling everything from contract review to final settlement.",
+		hourlyRate: 125,
+		commissionPercentage: 3.0,
+		saasSplit: {
+			platformFee: 12,
+			closerFee: 88,
+		},
+	},
+	{
+		id: "closer-4",
+		name: "David Rodriguez",
+		title: "Residential Closer",
+		image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
+		rating: 4.7,
+		reviews: 156,
+		dealsClosed: 445,
+		specialties: ["Residential", "New Construction", "Relocation"],
+		location: "Atlanta, GA",
+		bio: "Experienced residential real estate closer committed to making property closings seamless for home buyers and sellers. Specializes in new construction closings and relocation transactions, ensuring all documentation is accurate and timelines are met. Provides personalized attention to every client throughout the remote closing process.",
+		hourlyRate: 140,
+		commissionPercentage: 3.0,
+		saasSplit: {
+			platformFee: 18,
+			closerFee: 82,
+		},
+	},
+	{
+		id: "closer-5",
+		name: "Amanda Foster",
+		title: "Investment Property Specialist",
+		image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face",
+		rating: 4.9,
+		reviews: 178,
+		dealsClosed: 634,
+		specialties: ["Investment", "Rental", "1031 Exchange"],
+		location: "Dallas, TX",
+		bio: "Licensed real estate closer with extensive experience in investment property transactions and rental property acquisitions. Expert in 1031 exchanges, helping real estate investors defer capital gains taxes while growing their portfolios. Handles complex investment closings with precision and attention to detail.",
+		hourlyRate: 175,
+	},
+	{
+		id: "closer-6",
+		name: "James Wilson",
+		title: "Multi-Family Closer",
+		image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+		rating: 4.8,
+		reviews: 94,
+		dealsClosed: 287,
+		specialties: ["Multi-Family", "Apartment Buildings", "Portfolio"],
+		location: "Denver, CO",
+		bio: "Specialized multi-family real estate closer with deep expertise in apartment building transactions and portfolio acquisitions. Navigates complex financing structures, commercial lending requirements, and multi-unit property closings. Provides professional remote closing services for real estate investors building large-scale rental portfolios.",
+		hourlyRate: 185,
+	},
+	{
+		id: "closer-7",
+		name: "Rachel Kim",
+		title: "Fix & Flip Closer",
+		image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
+		rating: 4.9,
+		reviews: 142,
+		dealsClosed: 567,
+		specialties: ["Fix & Flip", "Short Sales", "Distressed Properties"],
+		location: "Las Vegas, NV",
+		bio: "Professional real estate closer specializing in fix-and-flip transactions and distressed property closings. Expert in navigating short sales, foreclosure proceedings, and time-sensitive investor deals. Provides fast, efficient remote closing services for real estate investors who need quick turnarounds on renovation projects.",
+		hourlyRate: 160,
+	},
+	{
+		id: "closer-8",
+		name: "Robert Taylor",
+		title: "Land Acquisition Specialist",
+		image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+		rating: 4.8,
+		reviews: 76,
+		dealsClosed: 234,
+		specialties: ["Land", "Development", "Rural Properties"],
+		location: "Nashville, TN",
+		bio: "Experienced real estate closer focused on land acquisitions and rural property transactions. Handles vacant land sales, development deals, and agricultural property closings. Expert in zoning verification, easement documentation, and land use compliance for remote property closings across Tennessee and surrounding states.",
+		hourlyRate: 145,
+	},
+	{
+		id: "closer-9",
+		name: "Maria Garcia",
+		title: "Relocation Closer",
+		image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&crop=face",
+		rating: 4.9,
+		reviews: 165,
+		dealsClosed: 489,
+		specialties: ["Relocation", "Corporate Housing", "Residential"],
+		location: "San Diego, CA",
+		bio: "Certified real estate closer specializing in relocation transactions and corporate housing deals. Provides seamless remote closing services for families and professionals moving across state lines. Expert in coordinating long-distance closings, ensuring all parties are informed and documentation is completed accurately for smooth transitions.",
+		hourlyRate: 170,
+	},
+	{
+		id: "closer-10",
+		name: "Kevin Patel",
+		title: "Wholesale Transaction Expert",
+		image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
+		rating: 5.0,
+		reviews: 201,
+		dealsClosed: 756,
+		specialties: ["Wholesaling", "Assignment Contracts", "Double Closings"],
+		location: "Tampa, FL",
+		bio: "Top-performing real estate closer with extensive experience in wholesale transactions and assignment contracts. Has closed over 750 wholesale deals for real estate investors, specializing in double closings and simultaneous transactions. Known for exceptional responsiveness and expertise in navigating complex wholesale closing scenarios remotely.",
+		hourlyRate: 135,
+		commissionPercentage: 2.5,
+		saasSplit: {
+			platformFee: 10,
+			closerFee: 90,
+		},
+	},
+	{
+		id: "closer-11",
+		name: "Emily Johnson",
+		title: "Luxury Property Closer",
+		image: "https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=400&h=400&fit=crop&crop=face",
+		rating: 4.9,
+		reviews: 98,
+		dealsClosed: 267,
+		specialties: ["Luxury", "High-End Residential", "Estate Properties"],
+		location: "Beverly Hills, CA",
+		bio: "Premium real estate closer specializing in luxury property transactions and high-end residential closings. Provides white-glove service for estate sales, celebrity transactions, and luxury real estate deals. Expert in handling complex financial structures, trust transfers, and confidential closings for discerning clients seeking professional remote closing services.",
+		hourlyRate: 250,
+	},
+	{
+		id: "closer-12",
+		name: "Thomas Anderson",
+		title: "Portfolio Closer",
+		image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&h=400&fit=crop&crop=face",
+		rating: 4.8,
+		reviews: 87,
+		dealsClosed: 312,
+		specialties: ["Portfolio Acquisitions", "Bulk Deals", "Investment"],
+		location: "Chicago, IL",
+		bio: "Experienced real estate closer focused on portfolio acquisitions and bulk property transactions. Specializes in closing multiple properties simultaneously for real estate investors expanding their holdings. Provides efficient remote closing services for investors purchasing entire property portfolios, ensuring all transactions are coordinated seamlessly.",
+		hourlyRate: 195,
+	},
+];
+

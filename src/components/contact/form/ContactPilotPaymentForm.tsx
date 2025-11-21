@@ -67,7 +67,9 @@ export default function ContactPilotPaymentForm({
 	const handlePayment = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!stripe || !elements) {
-			toast.error("Payment system is still loading. Please wait a moment and try again.");
+			toast.error(
+				"Payment system is still loading. Please wait a moment and try again.",
+			);
 			return;
 		}
 		setIsProcessing(true);

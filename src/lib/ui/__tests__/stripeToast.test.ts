@@ -31,7 +31,7 @@ describe("startStripeToast", () => {
 		const handlers = startStripeToast("Working…");
 
 		expect(toastMocks.loading).toHaveBeenCalledWith("Working…", {
-			duration: Infinity,
+			duration: Number.POSITIVE_INFINITY,
 		});
 		expect(handlers.id).toBe("toast-id");
 	});
@@ -58,4 +58,3 @@ describe("startStripeToast", () => {
 		});
 	});
 });
-

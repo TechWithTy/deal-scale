@@ -1,11 +1,11 @@
 "use client";
 
-import { create } from "zustand";
 import {
 	DEFAULT_PERSONA_KEY,
 	PERSONA_GOALS,
 	type PersonaKey,
 } from "@/data/personas/catalog";
+import { create } from "zustand";
 
 const deriveGoal = (persona: PersonaKey): string =>
 	PERSONA_GOALS[persona] ?? PERSONA_GOALS[DEFAULT_PERSONA_KEY];
@@ -37,4 +37,3 @@ export const usePersonaStore = create<PersonaState>((set) => ({
 }));
 
 export const resetPersonaStore = () => usePersonaStore.getState().reset();
-

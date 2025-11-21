@@ -1,12 +1,12 @@
-/**
- * @vitest-environment node
- */
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { GET } from "@/app/api/auth/oauth/credentials/route";
 import fetch, {
 	Request as NodeFetchRequest,
 	Response as NodeFetchResponse,
 } from "node-fetch";
+/**
+ * @vitest-environment node
+ */
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import {
 	createSession,
 	mockFetchResponse,

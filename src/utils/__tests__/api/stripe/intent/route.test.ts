@@ -5,7 +5,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { POST, PUT } from "@/app/api/stripe/intent/route";
-import { NextResponse } from "next/server";
+import type { NextResponse } from "next/server";
 
 const stripeMocks = vi.hoisted(() => ({
 	retrieve: vi.fn(),
@@ -44,9 +44,10 @@ afterEach(() => {
 
 describe("POST /api/stripe/intent validation", () => {
 	it("returns 400 when body is missing", async () => {
-		const response = (await POST(
-			buildPostRequest(),
-		)) as NextResponse<{ error: string; details?: string }>;
+		const response = (await POST(buildPostRequest())) as NextResponse<{
+			error: string;
+			details?: string;
+		}>;
 
 		expect(response.status).toBe(400);
 		const payload = await response.json();
@@ -181,4 +182,3 @@ describe("PUT /api/stripe/intent discount handling", () => {
 		expect(payload.amount).toBe(100000);
 	});
 });
-

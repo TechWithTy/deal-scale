@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
-import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, beforeAll } from "vitest";
+import React from "react";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import { AnimatedBeamNetwork } from "../animated-beam-network";
 

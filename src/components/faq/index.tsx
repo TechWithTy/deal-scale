@@ -59,8 +59,8 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 								>
 									{isHero ? (
 										<>
-											<span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-black/80 dark:text-cyan-200/90">
-												<span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400/70 text-sm font-bold text-slate-950">
+											<span className="inline-flex items-center gap-2 font-semibold text-black/80 text-xs uppercase tracking-wide dark:text-cyan-200/90">
+												<span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400/70 font-bold text-slate-950 text-sm">
 													★
 												</span>
 												Featured Insight · Investors
@@ -76,7 +76,9 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 								<AccordionContent
 									className={cn(
 										"px-6 pb-4 text-muted-foreground dark:text-muted-foreground",
-										isHero ? "text-black/80 sm:text-base dark:text-cyan-50/95" : undefined,
+										isHero
+											? "text-black/80 sm:text-base dark:text-cyan-50/95"
+											: undefined,
 									)}
 								>
 									{item.answer}

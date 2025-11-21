@@ -1,11 +1,12 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 
 type MockMarqueeImage = { src: string; alt?: string };
 
-type ConnectAnythingHeroType = typeof import("../ConnectAnythingHero")
-	.ConnectAnythingHero;
+type ConnectAnythingHeroType = typeof import(
+	"../ConnectAnythingHero",
+).ConnectAnythingHero;
 
 let ConnectAnythingHero: ConnectAnythingHeroType;
 let latestImages: MockMarqueeImage[] = [];
@@ -32,7 +33,7 @@ describe("ConnectAnythingHero", () => {
 		expect(
 			screen.getByRole("heading", {
 				level: 1,
-				name: /connect anything\. automate everything\./i,
+				name: /connect any crm/i,
 			}),
 		).toBeInTheDocument();
 		expect(

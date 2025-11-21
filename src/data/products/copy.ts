@@ -1169,10 +1169,10 @@ export const buyerLeadNurtureWorkflowABTests = defineAbTests([
 
 export const motivatedSellerWorkflowABTests = defineAbTests([
 	{
-		id: "ab-test-motivated-seller-workflow-v1",
-		name: "Motivated Seller Automation Workflow Copy Test",
+		id: "ab-test-outreach-workflow-v1",
+		name: "Outreach Automation Workflow Copy Test",
 		description:
-			"Testing copy variants (Time Savings vs. Deal Closing) for the Motivated Seller Workflow to optimize sales.",
+			"Testing copy variants (Time Savings vs. Deal Closing) for the Outreach Workflow to optimize sales.",
 		variants: [
 			{
 				name: "V1 - Autopilot & Efficiency",
@@ -1180,9 +1180,9 @@ export const motivatedSellerWorkflowABTests = defineAbTests([
 				copy: {
 					cta: "Put Your Outreach on Autopilot",
 					buttonCta: "Get the Workflow",
-					tagline: "Find Motivated Sellers in Your Sleep.",
+					tagline: "Automate Your Outreach in Your Sleep.",
 					subtitle:
-						"The all-in-one workflow to automate your outreach, follow-up, and lead nurturing for motivated sellers.",
+						"The all-in-one workflow to automate your outreach, follow-up, and lead nurturing.",
 					whatsInItForMe:
 						"This workflow runs your outreach campaigns 24/7, freeing you from tedious manual follow-ups so you can focus on closing deals.",
 					target_audience:
@@ -1206,7 +1206,7 @@ export const motivatedSellerWorkflowABTests = defineAbTests([
 					buttonCta: "Install Workflow",
 					tagline: "Never Let a Hot Lead Go Cold.",
 					subtitle:
-						"The ultimate workflow to convert more motivated seller leads into profitable, lookalike off-market deals identified by our prediction features.",
+						"The ultimate workflow to convert more leads into profitable, lookalike off-market deals identified by our prediction features.",
 					whatsInItForMe:
 						"By instantly and persistently following up with every lead, this workflow ensures you engage hot prospects at the perfect moment, maximizing your conversions.",
 					target_audience:
@@ -1225,7 +1225,7 @@ export const motivatedSellerWorkflowABTests = defineAbTests([
 		],
 		startDate: new Date("2023-11-01T09:00:00.000Z"),
 		isActive: true,
-		tags: ["Workflows", "Automation", "Motivated Seller", "Copywriting"],
+		tags: ["Workflows", "Automation", "Outreach", "Copywriting"],
 	},
 ]);
 

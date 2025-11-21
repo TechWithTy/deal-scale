@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
 	IconBrightnessDown,
@@ -28,6 +27,7 @@ import {
 	useScroll,
 	useTransform,
 } from "motion/react";
+import Image from "next/image";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -158,7 +158,7 @@ export const MacbookScroll = ({
 				rotate={rotate}
 				translate={translate}
 				alt={imageAlt}
-		priority={!isEmbedded}
+				priority={!isEmbedded}
 			/>
 			{/* Base area */}
 			<div className="-z-10 relative h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">

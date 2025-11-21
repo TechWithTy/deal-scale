@@ -22,8 +22,8 @@ export const isVectorOrAnimatedThumbnail = (src: string): boolean =>
 
 export const shouldBypassImageOptimization = (src: string): boolean =>
 	isVectorOrAnimatedThumbnail(src) ||
-		!hasOptimizedThumbnailExtension(src) ||
-		VIDEO_THUMBNAIL_EXTENSIONS.some((extension) => src.endsWith(extension));
+	!hasOptimizedThumbnailExtension(src) ||
+	VIDEO_THUMBNAIL_EXTENSIONS.some((extension) => src.endsWith(extension));
 
 export const isVideoThumbnail = (src: string): boolean =>
 	VIDEO_THUMBNAIL_EXTENSIONS.some((extension) => src.endsWith(extension));

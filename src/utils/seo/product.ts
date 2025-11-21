@@ -1,8 +1,8 @@
 import { mockProducts } from "@/data/products";
 import type { ProductType } from "@/types/products";
 import { getTestBaseUrl } from "@/utils/env";
-import type { SeoMeta } from "@/utils/seo/seo";
 import { getTestimonialReviewData } from "@/utils/seo/schema";
+import type { SeoMeta } from "@/utils/seo/seo";
 
 /**
  * Fetch a product by slug (replace with real DB or API call in production)

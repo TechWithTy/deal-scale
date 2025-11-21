@@ -1,3 +1,6 @@
+import { render } from "@testing-library/react";
+import React from "react";
+import { act } from "react";
 import {
 	afterEach,
 	beforeAll,
@@ -7,9 +10,6 @@ import {
 	it,
 	vi,
 } from "vitest";
-import { render } from "@testing-library/react";
-import React from "react";
-import { act } from "react";
 import { usePersonaStore } from "../../../stores/usePersonaStore";
 
 const pixelatedMocks = vi.hoisted(() => ({
@@ -273,4 +273,3 @@ describe("CallDemoShowcase text scroll behavior", () => {
 		expect(mockScrollTo).not.toHaveBeenCalled();
 	});
 });
-

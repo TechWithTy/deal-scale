@@ -5,8 +5,8 @@
 "use client";
 import { useAuthModal } from "@/components/auth/use-auth-store";
 import { usePagination } from "@/hooks/use-pagination";
-import { ProductCategory, type ProductType } from "@/types/products";
 import { cn } from "@/lib/utils";
+import { ProductCategory, type ProductType } from "@/types/products";
 import { useSession } from "next-auth/react";
 import type React from "react";
 import {
@@ -33,6 +33,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 	essentials: "Essentials",
 	notion: "Notion",
 	voices: "Voices",
+	"text-agents": "Text Agents",
 	leads: "Leads",
 	data: "Data",
 	monetize: "Monetize",
@@ -42,6 +43,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 	"free-resources": "Free Resources",
 	"sales-scripts": "Sales Scripts",
 	prompts: "Prompts",
+	"remote-closers": "Remote Closers",
 };
 
 const MONETIZE_PORTAL_URL = "https://app.dealscale.io";
@@ -171,6 +173,35 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 						.includes(activeCategory),
 			);
 		}
+		
+		// For Monetize category: Only show marketplace entry points where users can EARN income
+		if (activeCategory === ProductCategory.Monetize) {
+			filtered = filtered.filter((product) => {
+				// Exclude products where users BUY things (they don't earn from these):
+				// 1. Individual closers (users hire them, closers earn but buyers don't)
+				const isIndividualCloser = product.id?.startsWith("closer-") || product.sku?.startsWith("DS-CLOSER-");
+				// 2. Individual workflows (users BUY these, they don't earn from them)
+				const isIndividualWorkflow = product.id?.includes("-workflow") || product.sku?.startsWith("WF-");
+				// 3. Individual agents (users BUY these, they don't earn from them)
+				const isIndividualAgent = product.id?.includes("-agent") || product.id?.includes("-concierge") || product.sku?.startsWith("AG-");
+				// 4. Free resources (users download these for free, they don't earn from them)
+				const isFreeResource = product.categories?.includes(ProductCategory.FreeResources);
+				// 5. Products with price > 0 where users pay (not earn)
+				const isBuyableProduct = product.price > 0 && !product.id?.includes("marketplace") && !product.sku?.includes("MARKETPLACE");
+				
+				// Exclude these - only show marketplace entry points where users can APPLY/SELL to earn
+				if (isIndividualCloser || isIndividualWorkflow || isIndividualAgent || isFreeResource || isBuyableProduct) {
+					return false;
+				}
+				
+				// Include only marketplace entry points where users can EARN:
+				// - Remote Closers marketplace (users can APPLY to become closers and earn)
+				// - Sales Scripts marketplace (users can SELL scripts and earn)
+				// - Other marketplace entry points (where users can monetize their content)
+				return true;
+			});
+		}
+		
 		if (searchTerm.trim()) {
 			const term = searchTerm.trim().toLowerCase();
 			filtered = filtered.filter(
@@ -360,7 +391,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 									{canShowPagination && (
 										<div className="flex items-center justify-center gap-2">
 											<button
-												className="rounded-md border border-slate-300 bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+												className="rounded-md border border-slate-300 bg-slate-200 px-3 py-1 font-medium text-slate-700 text-sm shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
 												onClick={prevPage}
 												disabled={page === 1}
 												type="button"
@@ -376,7 +407,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 													<button
 														key={pageNum}
 														className={cn(
-															"rounded-md border px-3 py-1 text-sm font-semibold transition",
+															"rounded-md border px-3 py-1 font-semibold text-sm transition",
 															isActive
 																? "border-blue-500 bg-blue-600 text-white shadow-sm dark:border-blue-400 dark:bg-blue-500 dark:text-slate-950"
 																: "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800",
@@ -390,7 +421,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 												);
 											})}
 											<button
-												className="rounded-md border border-slate-300 bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+												className="rounded-md border border-slate-300 bg-slate-200 px-3 py-1 font-medium text-slate-700 text-sm shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
 												onClick={nextPage}
 												disabled={page === totalPages}
 												type="button"

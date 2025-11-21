@@ -45,7 +45,7 @@ export const AuroraText = memo(
 				{blurStyle ? (
 					<span
 						aria-hidden="true"
-						className="pointer-events-none absolute inset-0 select-none animate-aurora bg-[length:200%_auto] bg-clip-text text-transparent"
+						className="pointer-events-none absolute inset-0 animate-aurora select-none bg-[length:200%_auto] bg-clip-text text-transparent"
 						style={blurStyle}
 					>
 						{children}

@@ -1,17 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import React from "react";
 import type { PersonaKey } from "@/data/personas/catalog";
-import {
-	resetPersonaStore,
-	usePersonaStore,
-} from "@/stores/usePersonaStore";
+import { resetPersonaStore, usePersonaStore } from "@/stores/usePersonaStore";
+import { render, screen } from "@testing-library/react";
+import type React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const CardStackMock = vi.fn(
-	({ items }: { items?: Array<{ id: string }> }) => (
-		<div data-testid="card-stack" data-count={items?.length ?? 0} />
-	),
-);
+const CardStackMock = vi.fn(({ items }: { items?: Array<{ id: string }> }) => (
+	<div data-testid="card-stack" data-count={items?.length ?? 0} />
+));
 vi.mock("@/components/ui/card-stack", () => ({
 	__esModule: true,
 	CardStack: CardStackMock,
@@ -56,8 +51,9 @@ describe("FeatureSectionActivity", () => {
 
 		expect(screen.getByTestId("card-stack")).toBeInTheDocument();
 		expect(CardStackMock).toHaveBeenCalled();
-		const [{ items }] =
-			CardStackMock.mock.calls[CardStackMock.mock.calls.length - 1] ?? [{}];
+		const [{ items }] = CardStackMock.mock.calls[
+			CardStackMock.mock.calls.length - 1
+		] ?? [{}];
 		expect((items ?? []).length).toBeGreaterThan(0);
 	});
 
@@ -70,9 +66,7 @@ describe("FeatureSectionActivity", () => {
 			screen.getAllByText(/Agents/i, { selector: "span" }).length,
 		).toBeGreaterThan(0);
 		expect(
-			screen.getByText((content) =>
-				content.includes(TEST_PERSONA_GOAL),
-			),
+			screen.getByText((content) => content.includes(TEST_PERSONA_GOAL)),
 		).toBeInTheDocument();
 	});
 });

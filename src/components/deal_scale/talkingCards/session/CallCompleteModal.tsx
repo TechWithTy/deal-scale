@@ -8,9 +8,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { cn } from "@/lib/utils";
 import { Loader2, X } from "lucide-react";
-import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { useEffect, useRef, useState } from "react";
 
 interface CallCompleteModalProps {

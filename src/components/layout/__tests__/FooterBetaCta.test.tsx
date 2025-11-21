@@ -1,5 +1,5 @@
-import { render, screen, act } from "@testing-library/react";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { FooterBetaCta } from "../FooterBetaCta";
 
@@ -20,10 +20,7 @@ describe("FooterBetaCta", () => {
 		expect(await screen.findByText(/Closes in/i)).toBeInTheDocument();
 		expect(
 			screen.getByRole("link", { name: /request early access/i }),
-		).toHaveAttribute(
-			"href",
-			"/contact?utm_source=founders-circle-footer",
-		);
+		).toHaveAttribute("href", "/contact?utm_source=founders-circle-footer");
 	});
 
 	it("updates countdown timer", async () => {
@@ -37,4 +34,3 @@ describe("FooterBetaCta", () => {
 		expect(await screen.findByText(/6d 23h 59m 59s/i)).toBeInTheDocument();
 	});
 });
-

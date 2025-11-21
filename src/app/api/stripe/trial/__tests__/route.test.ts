@@ -27,4 +27,3 @@ describe("Stripe trial API config", () => {
 		vi.resetModules();
 	});
 });
-

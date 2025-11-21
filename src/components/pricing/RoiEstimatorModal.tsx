@@ -1,21 +1,18 @@
 "use client";
 
 import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
-import type { ROIEstimator } from "@/types/service/plans";
-import { useEffect, useMemo, useState } from "react";
 import {
 	coerceInputs,
 	computeTierResult,
@@ -23,11 +20,14 @@ import {
 	resolveTierConfigs,
 } from "@/lib/roi/calculator";
 import type { RoiInputs } from "@/lib/roi/types";
-import { RoiTierSelector } from "./roi/RoiTierSelector";
+import { cn } from "@/lib/utils";
+import type { ROIEstimator } from "@/types/service/plans";
+import { useEffect, useMemo, useState } from "react";
 import { RoiCalculatorInputs } from "./roi/RoiCalculatorInputs";
 import { RoiMetricsGrid } from "./roi/RoiMetricsGrid";
 import { RoiResultTabs } from "./roi/RoiResultTabs";
 import { RoiSnapshot } from "./roi/RoiSnapshot";
+import { RoiTierSelector } from "./roi/RoiTierSelector";
 
 interface RoiEstimatorModalProps {
 	open: boolean;

@@ -1,10 +1,7 @@
-import { act, render, screen } from "@testing-library/react";
 import Testimonials from "@/components/home/Testimonials";
-import {
-	resetPersonaStore,
-	usePersonaStore,
-} from "@/stores/usePersonaStore";
-import { beforeAll, afterEach, describe, expect, test, vi } from "vitest";
+import { resetPersonaStore, usePersonaStore } from "@/stores/usePersonaStore";
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 
 vi.mock("@/components/home/testimonials/TestimonialPersonaSwitcher", () => ({
 	PersonaSwitcher: () => null,
@@ -47,9 +44,7 @@ describe("Testimonials", () => {
 		expect(
 			screen.getByTestId("testimonial-spotlight-container"),
 		).toBeInTheDocument();
-		expect(
-			screen.getByTestId("testimonial-orbit-accent"),
-		).toBeInTheDocument();
+		expect(screen.getByTestId("testimonial-orbit-accent")).toBeInTheDocument();
 	});
 
 	test("switches testimonial content when persona changes", async () => {
@@ -73,4 +68,3 @@ describe("Testimonials", () => {
 		expect(screen.getByText("Maya Thompson")).toBeInTheDocument();
 	});
 });
-

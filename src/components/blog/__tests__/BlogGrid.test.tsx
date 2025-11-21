@@ -1,6 +1,6 @@
-import { describe, expect, it, beforeEach, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
 import { resetPersonaStore } from "@/stores/usePersonaStore";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const pushMock = vi.fn();
 const searchParamsState = { value: "" };
@@ -24,8 +24,7 @@ vi.mock("@/components/blog/BlogCard", () => ({
 	default: () => <div data-testid="blog-card" />,
 }));
 
-const loadBlogGrid = async () =>
-	(await import("../BlogGrid")).default;
+const loadBlogGrid = async () => (await import("../BlogGrid")).default;
 
 describe("BlogGrid", () => {
 	beforeEach(() => {

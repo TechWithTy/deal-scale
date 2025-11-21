@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { pricingCatalog } from "../service/slug_data/pricing";
 
 describe("pricingCatalog dataset", () => {
@@ -25,6 +25,3 @@ describe("pricingCatalog dataset", () => {
 		).toBeGreaterThan(3);
 	});
 });
-
-
-

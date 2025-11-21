@@ -76,4 +76,3 @@ export default function HeroVideoSection(): JSX.Element {
 		</section>
 	);
 }
-

@@ -7,6 +7,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 import type {
 	CompanyLogoDictType,
 	CompanyPartner,
@@ -16,7 +17,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 // ! Removed CompanyRenderer import, rendering images directly below.
 
 interface TrustedByMarqueeProps {
@@ -155,10 +155,10 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 		: "";
 
 	return (
-    <TooltipProvider delayDuration={150}>
-            <div
+		<TooltipProvider delayDuration={150}>
+			<div
 				className={`my-5 flex w-full flex-col ${gpuShellClass}`}
-				style={{ overflowClipMargin: '24px' }}
+				style={{ overflowClipMargin: "24px" }}
 			>
 				{variant === "default" && (
 					<div className="mb-4 text-center">
@@ -168,13 +168,13 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
 						/>
 					</div>
 				)}
-                <div
+				<div
 					className={`relative w-full overflow-hidden rounded-xl p-4 text-center ${gpuShellClass} ${
 						variant === "secondary"
 							? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
 							: "border border-white/10 bg-background-dark/50"
 					} backdrop-blur-sm`}
-                >
+				>
 					{shouldAnimate ? (
 						<div
 							className={`relative flex h-16 items-center overflow-hidden ${gpuDepthClass}`}

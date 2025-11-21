@@ -1,10 +1,10 @@
 "use client";
 
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { startStripeToast } from "@/lib/ui/stripeToast";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
 import { Loader2 } from "lucide-react";
-import { useNavigationRouter } from "@/hooks/useNavigationRouter";
-import { startStripeToast } from "@/lib/ui/stripeToast";
 // External imports
 import { useEffect, useState } from "react";
 
@@ -13,12 +13,12 @@ import { Button } from "@/components/ui/button";
 import { useProductSelection } from "@/contexts/ProductSelectionContext";
 import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
 import { calculateShippingCost, getShippingInfo } from "@/data/shipping";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
 import { cn } from "@/lib/utils";
 import type { DiscountCode } from "@/types/discount/discountCode";
 import type { ProductType } from "@/types/products";
 import { type ShippingOption, TAX_RATE } from "@/types/products/shipping";
 import toast from "react-hot-toast";
-import { useWaitCursor } from "@/hooks/useWaitCursor";
 
 import { CheckoutFooter } from "./CheckoutFooter";
 // Local component imports
@@ -164,7 +164,9 @@ export function ProductCheckoutForm({
 		e.preventDefault();
 
 		if (!stripe || !elements) {
-			setError("Payment system is still loading. Please wait a moment and try again.");
+			setError(
+				"Payment system is still loading. Please wait a moment and try again.",
+			);
 			return;
 		}
 

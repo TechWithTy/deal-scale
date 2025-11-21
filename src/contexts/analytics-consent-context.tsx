@@ -1,8 +1,8 @@
 "use client";
 
 import {
-	createContext,
 	type ReactNode,
+	createContext,
 	useCallback,
 	useContext,
 	useEffect,
@@ -94,7 +94,3 @@ export function useAnalyticsConsent(): AnalyticsConsentValue {
 	}
 	return context;
 }
-
-
-
-

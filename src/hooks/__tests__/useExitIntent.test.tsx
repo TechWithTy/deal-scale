@@ -109,4 +109,3 @@ describe("useExitIntent", () => {
 		expect(onExitIntent).not.toHaveBeenCalled();
 	});
 });
-

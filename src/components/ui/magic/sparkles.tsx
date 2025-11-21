@@ -1,7 +1,7 @@
 "use client";
 
-import { Sparkles as LucideSparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Sparkles as LucideSparkles } from "lucide-react";
 
 export interface SparklesProps
 	extends React.ComponentPropsWithoutRef<typeof LucideSparkles> {}
@@ -21,6 +21,3 @@ export function Sparkles({ className, ...props }: SparklesProps) {
 		/>
 	);
 }
-
-
-

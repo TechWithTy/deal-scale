@@ -24,7 +24,9 @@ type NewsletterEmailInputProps = {
  * Minimal newsletter email input for embedding in Hero or other CTAs.
  * Handles validation, submission, and user feedback.
  */
-export function NewsletterEmailInput({ layout = "default" }: NewsletterEmailInputProps) {
+export function NewsletterEmailInput({
+	layout = "default",
+}: NewsletterEmailInputProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isSubscribed, setIsSubscribed] = useState(false);

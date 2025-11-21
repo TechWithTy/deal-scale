@@ -1,5 +1,5 @@
 import type { ROIEstimator, RoiEstimatorTier } from "@/types/service/plans";
-import {
+import type {
 	ComputeTierResultOptions,
 	RoiCostBreakdown,
 	RoiInputs,
@@ -27,10 +27,9 @@ const defaultSelfHostedTier: RoiEstimatorTier = {
 export const resolveTierConfigs = (
 	estimator: ROIEstimator,
 ): RoiTierConfig[] => {
-	const entries = Object.entries(estimator.tiers ?? {}) as Array<[
-		RoiTierKey,
-		RoiEstimatorTier,
-	]>;
+	const entries = Object.entries(estimator.tiers ?? {}) as Array<
+		[RoiTierKey, RoiEstimatorTier]
+	>;
 
 	if (!entries.length) {
 		const key: RoiTierKey = "selfHosted";
@@ -38,8 +37,7 @@ export const resolveTierConfigs = (
 			{
 				key,
 				tier: defaultSelfHostedTier,
-				showSetupDefault:
-					estimator.tiers?.[key]?.showSetupByDefault ?? true,
+				showSetupDefault: estimator.tiers?.[key]?.showSetupByDefault ?? true,
 				group: "selfHosted",
 				groupLabel: "Self-Hosted",
 				isGroupDefault: true,
@@ -110,7 +108,8 @@ const computeCostBreakdown = (
 	annualRevenueHigh: number,
 ): RoiCostBreakdown => {
 	const monthlyCost = tier.costs?.monthly;
-	const annualCost = tier.costs?.annual ?? (monthlyCost ? monthlyCost * 12 : undefined);
+	const annualCost =
+		tier.costs?.annual ?? (monthlyCost ? monthlyCost * 12 : undefined);
 	const oneTimeCost = tier.costs?.oneTime;
 	const setupRange = computeSetupRange(tier, annualRevenueHigh);
 
@@ -162,7 +161,8 @@ export const computeTierResult = (
 	const annualPlanCost = costBreakdown.annualCost ?? 0;
 	const annualPlanCostAsMonthly = annualPlanCost / 12;
 
-	const totalMonthlyCost = monthlyPlanCost + annualPlanCostAsMonthly + monthlyOperatingCost;
+	const totalMonthlyCost =
+		monthlyPlanCost + annualPlanCostAsMonthly + monthlyOperatingCost;
 
 	const gainLow = grossGainLow - totalMonthlyCost;
 	const gainHigh = grossGainHigh - totalMonthlyCost;
@@ -180,7 +180,10 @@ export const computeTierResult = (
 	const monthlyNetBenefit = grossGainHigh - totalMonthlyCost;
 
 	const netMonthlyForPayback = Math.max(gainHigh, 0.0001);
-	const paybackMonths = netMonthlyForPayback > 0 ? (setupHigh + oneTimeCost) / netMonthlyForPayback : Infinity;
+	const paybackMonths =
+		netMonthlyForPayback > 0
+			? (setupHigh + oneTimeCost) / netMonthlyForPayback
+			: Number.POSITIVE_INFINITY;
 
 	return {
 		gainLow,
@@ -221,10 +224,15 @@ export const coerceInputs = (
 	estimator: ROIEstimator,
 	partial?: Partial<RoiInputs>,
 ): RoiInputs => ({
-	averageDealAmount: partial?.averageDealAmount ?? estimator.exampleInput.averageDealAmount,
-	monthlyDealsClosed: partial?.monthlyDealsClosed ?? estimator.exampleInput.monthlyDealsClosed,
+	averageDealAmount:
+		partial?.averageDealAmount ?? estimator.exampleInput.averageDealAmount,
+	monthlyDealsClosed:
+		partial?.monthlyDealsClosed ?? estimator.exampleInput.monthlyDealsClosed,
 	averageTimePerDealHours:
-		partial?.averageTimePerDealHours ?? estimator.exampleInput.averageTimePerDealHours,
+		partial?.averageTimePerDealHours ??
+		estimator.exampleInput.averageTimePerDealHours,
 	industry: partial?.industry ?? estimator.exampleInput.industry,
-	monthlyOperatingCost: partial?.monthlyOperatingCost ?? estimator.exampleInput.monthlyOperatingCost,
+	monthlyOperatingCost:
+		partial?.monthlyOperatingCost ??
+		estimator.exampleInput.monthlyOperatingCost,
 });

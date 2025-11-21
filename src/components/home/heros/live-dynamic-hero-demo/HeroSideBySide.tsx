@@ -7,12 +7,18 @@ import {
 } from "@external/dynamic-hero";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
+import { ReactivateCampaignInput } from "@/components/home/ReactivateCampaignInput";
+import type { BadgeMetrics } from "@/components/home/ReactivateCampaignBadges";
+import { Particles } from "@/components/ui/particles";
+import { useTheme } from "next-themes";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import {
 	LIVE_COPY,
@@ -82,6 +88,17 @@ export default function HeroSideBySide(): JSX.Element {
 	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
 	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
 		useHeroTrialCheckout();
+	const { resolvedTheme } = useTheme();
+	const isMobile = useIsMobile();
+	const [particleColor, setParticleColor] = useState("#ffffff");
+
+	// Update particle color based on theme
+	useEffect(() => {
+		setParticleColor(resolvedTheme === "dark" ? "#ffffff" : "#000000");
+	}, [resolvedTheme]);
+
+	// Performance: Reduce particle count on mobile for better performance
+	const particleQuantity = isMobile ? 40 : 80;
 
 	const heroVideo = useHeroVideoConfig(LIVE_VIDEO);
 
@@ -124,24 +141,35 @@ export default function HeroSideBySide(): JSX.Element {
 
 			<section className="relative z-0 w-full overflow-hidden">
 				<div className="pointer-events-none absolute inset-0">
+					{/* Particles Background - Performance Optimized */}
+					<Particles
+						className="absolute inset-0 z-[1]"
+						quantity={particleQuantity}
+						ease={80}
+						staticity={50}
+						size={1.2}
+						color={particleColor}
+						vx={0}
+						vy={0}
+					/>
 					<InteractiveGridPattern
 						width={72}
 						height={72}
-						className="opacity-20 md:opacity-25"
+						className="z-[2] opacity-20 md:opacity-25"
 						squares={[20, 20]}
 						squaresClassName="stroke-border/25"
 					/>
-					<div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
+					<div className="absolute inset-0 z-[3] bg-gradient-to-b from-background/20 via-background/50 to-background" />
 
 					<InteractiveGridPattern
 						width={48}
 						height={48}
-						className="opacity-[0.35]"
+						className="z-[4] opacity-[0.35]"
 						squares={[34, 34]}
 						squaresClassName="stroke-border/20"
 					/>
 
-					<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.24)_0%,rgba(15,23,42,0)_55%)] opacity-35" />
+					<div className="absolute inset-0 z-[5] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.24)_0%,rgba(15,23,42,0)_55%)] opacity-35" />
 				</div>
 
 				<div className="container relative z-10 mx-auto w-full px-6 py-12 md:px-10 md:py-16 lg:px-12 lg:py-20">
@@ -161,6 +189,15 @@ export default function HeroSideBySide(): JSX.Element {
 						<p className="max-w-3xl text-base text-muted-foreground leading-relaxed sm:text-lg md:text-xl dark:text-neutral-300">
 							{description}
 						</p>
+
+						{/* Reactivate Campaign Search Input */}
+						<div className="mt-4 w-full max-w-4xl">
+							<ReactivateCampaignInput
+								onActivationComplete={(metrics: BadgeMetrics) => {
+									console.log("Activation complete with metrics:", metrics);
+								}}
+							/>
+						</div>
 
 						{/* CTAs */}
 						<div className="mt-2 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">

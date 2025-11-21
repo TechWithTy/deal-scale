@@ -24,7 +24,7 @@ export const buildSocialProfiles = (): string[] => {
 	// Include careers page URL in sameAs for entity linking
 	const CAREERS_URL = "https://dealscale.zohorecruit.com/jobs/Careers";
 	const YOUTUBE_FEED =
-		"https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ";
+		"https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A";
 
 	const authorityLinks = [
 		"https://www.g2.com/products/dealscale",

@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { createElement } from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const plausibleInit = vi.fn();
 
@@ -10,10 +10,14 @@ vi.mock("@plausible-analytics/tracker", () => ({
 }));
 
 const analyticsSpy = vi.fn((props: { config: Record<string, unknown> }) =>
-	createElement("div", { "data-testid": "analytics", "data-config": JSON.stringify(props.config) }),
+	createElement("div", {
+		"data-testid": "analytics",
+		"data-config": JSON.stringify(props.config),
+	}),
 );
 
-const AnalyticsComponent = (props: { config: Record<string, unknown> }) => analyticsSpy(props);
+const AnalyticsComponent = (props: { config: Record<string, unknown> }) =>
+	analyticsSpy(props);
 
 vi.mock("@/components/analytics/Analytics", () => ({
 	__esModule: true,
@@ -180,7 +184,9 @@ describe("DeferredThirdParties", () => {
 						clarityId: "clarity-id",
 					}),
 			} as Response;
-			fetchMock.mockResolvedValueOnce(failingResponse).mockResolvedValueOnce(successResponse);
+			fetchMock
+				.mockResolvedValueOnce(failingResponse)
+				.mockResolvedValueOnce(successResponse);
 
 			const { DeferredThirdParties } = await import("../DeferredThirdParties");
 

@@ -12,7 +12,17 @@ const coverageFloor = Number.isFinite(requestedCoverageFloor)
 	: 5;
 
 export default defineConfig({
-	plugins: [react()],
+	plugins: [
+		react({
+			jsxRuntime: "automatic",
+		}),
+	],
+	define: {
+		// Ensure NODE_ENV is set correctly for tests
+		"process.env.NODE_ENV": JSON.stringify(
+			process.env.NODE_ENV || "test",
+		),
+	},
 	test: {
 		globals: true,
 		environment: "jsdom",

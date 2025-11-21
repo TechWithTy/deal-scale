@@ -115,7 +115,7 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5 }}
-				className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-lg shadow-black/10 backdrop-blur"
+				className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-black/10 shadow-lg backdrop-blur"
 			>
 				<NewsletterFooter />
 			</motion.div>

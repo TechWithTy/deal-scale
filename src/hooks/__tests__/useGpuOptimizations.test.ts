@@ -1,7 +1,7 @@
 "use client";
 
-import { renderHook, waitFor, act } from "@testing-library/react";
-import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
+import { act, renderHook, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGpuOptimizations } from "../useGpuOptimizations";
 
@@ -48,7 +48,9 @@ describe("useGpuOptimizations", () => {
 		originalMatchMedia = window.matchMedia;
 		mock = createMockMatchMedia(false);
 		window.matchMedia = vi.fn().mockReturnValue(mock);
-		setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/129.0.0 Safari/537.36");
+		setUserAgent(
+			"Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/129.0.0 Safari/537.36",
+		);
 	});
 
 	afterEach(() => {
@@ -110,4 +112,3 @@ function setUserAgent(value: string) {
 		configurable: true,
 	});
 }
-

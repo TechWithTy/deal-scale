@@ -10,10 +10,7 @@ import type {
 } from "@/types/service/plans";
 import { buildProductSchema, buildServiceSchema } from "./builders";
 import { buildAbsoluteUrl } from "./helpers";
-import {
-	DEFAULT_AVAILABILITY,
-	DEFAULT_PRICE_CURRENCY,
-} from "./transformers";
+import { DEFAULT_AVAILABILITY, DEFAULT_PRICE_CURRENCY } from "./transformers";
 import type { ProductSchema, ServiceSchema } from "./types";
 
 type BuildPricingJsonLdOptions = {
@@ -67,9 +64,10 @@ const buildOneTimePlanService = (plan: OneTimePlan): ServiceSchema => {
 	const aiCreditsSummary = isSelfHosted
 		? `${plan.aiCredits.plan} — ${plan.aiCredits.description}`
 		: "";
-	const notesSummary = isSelfHosted && plan.notes?.length
-		? plan.notes.slice(0, 2).join(" • ")
-		: "";
+	const notesSummary =
+		isSelfHosted && plan.notes?.length
+			? plan.notes.slice(0, 2).join(" • ")
+			: "";
 	const idealFor = plan.idealFor ? `Ideal for ${plan.idealFor}.` : "";
 
 	const descriptionParts = [
@@ -87,7 +85,9 @@ const buildOneTimePlanService = (plan: OneTimePlan): ServiceSchema => {
 		name: plan.name,
 		description: descriptionParts || plan.idealFor || plan.name,
 		url: buildPlanUrl(plan.id, "one-time"),
-		serviceType: isSelfHosted ? "Self-Hosted Deployment" : "Channel Partnership",
+		serviceType: isSelfHosted
+			? "Self-Hosted Deployment"
+			: "Channel Partnership",
 		category: isSelfHosted ? "Enterprise Deployment" : "Partner Program",
 		offers: {
 			price: plan.pricingModel || "Contact for pricing",
@@ -110,9 +110,7 @@ const formatUnlimitedValue = (value: UnlimitedValue | undefined): string => {
 			: String(value);
 };
 
-const buildCreditsSummary = (
-	credits?: PricingCredits,
-): string => {
+const buildCreditsSummary = (credits?: PricingCredits): string => {
 	if (!credits) {
 		return "";
 	}
@@ -149,10 +147,10 @@ const buildSeatsSummary = (seats?: SeatAllocation): string => {
 	const extras =
 		typeof seats.additionalSeat === "number"
 			? `Additional seats ${new Intl.NumberFormat("en-US", {
-				style: "currency",
-				currency: DEFAULT_PRICE_CURRENCY,
-				maximumFractionDigits: 0,
-			}).format(seats.additionalSeat)}.`
+					style: "currency",
+					currency: DEFAULT_PRICE_CURRENCY,
+					maximumFractionDigits: 0,
+				}).format(seats.additionalSeat)}.`
 			: "";
 
 	return [`${included} seats included.`, extras].filter(Boolean).join(" ");
@@ -176,4 +174,3 @@ export const buildPricingJsonLd = ({
 
 	return [...monthlyPlans, ...annualPlans, ...oneTimePlans];
 };
-

@@ -139,7 +139,7 @@ export function FeaturePanel({
 						className="overflow-hidden rounded-2xl border border-border/40 bg-background/60"
 					>
 						{highlight.visual ? (
-							<div className="relative h-40 w-full border-b border-border/40 bg-background/50">
+							<div className="relative h-40 w-full border-border/40 border-b bg-background/50">
 								<Image
 									src={highlight.visual}
 									alt={`${highlight.title} visualization`}
@@ -152,42 +152,42 @@ export function FeaturePanel({
 						) : null}
 						<div className="flex flex-col gap-3 p-4">
 							<div className="flex items-start justify-between gap-3">
-							<h3 className="font-semibold text-base text-foreground">
-								{highlight.title}
-							</h3>
-							{highlight.metric ? (
-								<span
-									className={cn(
-										iconClasses,
-										"border-blue-500/25 bg-blue-500/10 text-blue-700 dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100",
-									)}
-								>
-									{(() => {
-										const parts = extractNumericValueParts(
-											highlight.metric?.value ?? "",
-										);
+								<h3 className="font-semibold text-base text-foreground">
+									{highlight.title}
+								</h3>
+								{highlight.metric ? (
+									<span
+										className={cn(
+											iconClasses,
+											"border-blue-500/25 bg-blue-500/10 text-blue-700 dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100",
+										)}
+									>
+										{(() => {
+											const parts = extractNumericValueParts(
+												highlight.metric?.value ?? "",
+											);
 
-										if (!parts) {
-											return highlight.metric?.value;
-										}
+											if (!parts) {
+												return highlight.metric?.value;
+											}
 
-										const tickerKey = `${feature.id}-${highlight.title}-${highlight.metric?.value}-${activeFeatureId}`;
+											const tickerKey = `${feature.id}-${highlight.title}-${highlight.metric?.value}-${activeFeatureId}`;
 
-										return (
-											<span className="inline-flex items-baseline gap-1">
-												<NumberTicker
-													key={tickerKey}
-													value={parts.value}
-													decimalPlaces={parts.decimalPlaces}
-												/>
-												{parts.suffix ? (
-													<span>{parts.suffix.trimStart()}</span>
-												) : null}
-											</span>
-										);
-									})()}
-								</span>
-							) : null}
+											return (
+												<span className="inline-flex items-baseline gap-1">
+													<NumberTicker
+														key={tickerKey}
+														value={parts.value}
+														decimalPlaces={parts.decimalPlaces}
+													/>
+													{parts.suffix ? (
+														<span>{parts.suffix.trimStart()}</span>
+													) : null}
+												</span>
+											);
+										})()}
+									</span>
+								) : null}
 							</div>
 							<p className="text-muted-foreground text-sm">
 								{highlight.description}
@@ -220,7 +220,7 @@ export function FeaturePanel({
 										return metric.value;
 									}
 
-								const tickerKey = `${feature.id}-${metric.label}-${metric.value}-${activeFeatureId}`;
+									const tickerKey = `${feature.id}-${metric.label}-${metric.value}-${activeFeatureId}`;
 
 									return (
 										<span className="inline-flex items-baseline gap-1">

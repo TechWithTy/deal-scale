@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import * as React from "react";
 import type { ProductType } from "@/types/products";
 import { ProductCategory } from "@/types/products";
 import type { ABTest } from "@/types/testing";
 import { render, screen } from "@testing-library/react";
+import * as React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("next/navigation", () => ({
 	useRouter: () => ({

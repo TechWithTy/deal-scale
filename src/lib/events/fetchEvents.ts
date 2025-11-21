@@ -10,9 +10,7 @@ import {
 
 const EVENTS_REQUEST_TIMEOUT_MS = 3_000;
 
-function isValidEventsPayload(
-	value: unknown,
-): value is { events: unknown[] } {
+function isValidEventsPayload(value: unknown): value is { events: unknown[] } {
 	if (typeof value !== "object" || !value) {
 		return false;
 	}

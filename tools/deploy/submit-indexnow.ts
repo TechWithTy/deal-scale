@@ -1,6 +1,6 @@
 const DEFAULT_HOST = "https://dealscale.io";
-const DEFAULT_KEY = "06663aa83dc949d6bde61889ae81d42f";
-const DEFAULT_ENDPOINT = "https://api.indexnow.org/indexnow";
+const DEFAULT_KEY = "fccf3556b5fa455699db2554f79a235e";
+const DEFAULT_ENDPOINT = "https://www.bing.com/indexnow";
 
 function resolveHost(): string {
 	const fromEnv = process.env.INDEXNOW_HOST?.trim();
@@ -70,7 +70,16 @@ function resolveUrlList(host: string): string[] {
 	const relativeUrls =
 		fromEnv && fromEnv.length > 0
 			? fromEnv
-			: ["/", "/portfolio", "/blogs", "/rss.xml"];
+			: [
+					"/",
+					"/portfolio",
+					"/blogs",
+					"/rss.xml",
+					"/rss/hybrid.xml",
+					"/rss/youtube.xml",
+					"/rss/github.xml",
+					"/sitemap.xml",
+				];
 
 	return relativeUrls.map((path) => {
 		try {
@@ -107,7 +116,6 @@ export async function submitIndexNow(): Promise<void> {
 
 	const host = resolveHost();
 	const key = resolveKey();
-	const keyLocation = resolveKeyLocation(host, key);
 	const urlList = resolveUrlList(host);
 	const endpoint = resolveEndpoint();
 
@@ -118,7 +126,6 @@ export async function submitIndexNow(): Promise<void> {
 	const payload = {
 		host: new URL(host).hostname,
 		key,
-		keyLocation,
 		urlList,
 	};
 

@@ -17,10 +17,10 @@ interface BentoPageProps {
 const BentoPage: React.FC<BentoPageProps> = ({ title, subtitle, features }) => {
 	return (
 		<div
-			className="py-12 text-black dark:text-white transform-gpu will-change-transform will-change-opacity"
+			className="transform-gpu py-12 text-black will-change-opacity will-change-transform dark:text-white"
 			style={{ overflowClipMargin: "24px" }}
 		>
-			<div className="mx-auto max-w-7xl px-4 sm:px-6 transform-gpu will-change-transform will-change-opacity">
+			<div className="mx-auto max-w-7xl transform-gpu px-4 will-change-opacity will-change-transform sm:px-6">
 				<Header title={title} subtitle={subtitle} className="mb-12" />
 				<MagicBentoGrid className="lg:grid-rows-3">
 					{features.map((feature) => (
@@ -31,14 +31,14 @@ const BentoPage: React.FC<BentoPageProps> = ({ title, subtitle, features }) => {
 							Icon={() => <>{feature.icon}</>}
 							href="#"
 							cta="Learn more"
-							className={`group relative overflow-hidden bg-background-dark/80 text-foreground shadow-[0_16px_45px_-30px_rgba(14,165,233,0.35)] transition-all duration-300 transform-gpu will-change-transform will-change-opacity dark:bg-background-dark/90 ${feature.className ?? ""}`}
+							className={`group relative transform-gpu overflow-hidden bg-background-dark/80 text-foreground shadow-[0_16px_45px_-30px_rgba(14,165,233,0.35)] transition-all duration-300 will-change-opacity will-change-transform dark:bg-background-dark/90 ${feature.className ?? ""}`}
 							background={
-								<div className="pointer-events-none absolute inset-0 flex items-center justify-center transition-all duration-300 transform-gpu will-change-transform will-change-opacity group-hover:blur-sm group-hover:opacity-70">
+								<div className="pointer-events-none absolute inset-0 flex transform-gpu items-center justify-center transition-all duration-300 will-change-opacity will-change-transform group-hover:opacity-70 group-hover:blur-sm">
 									{feature.background}
 								</div>
 							}
 						>
-							<div className="relative z-10 flex flex-col gap-4 rounded-2xl bg-background/95 p-5 text-left text-foreground shadow-[0_15px_45px_-30px_rgba(14,165,233,0.35)] ring-1 ring-border/40 transition-all duration-300 ease-out transform-gpu will-change-transform will-change-opacity dark:bg-background/85 dark:text-foreground group-hover:bg-background group-hover:ring-accent/50">
+							<div className="relative z-10 flex transform-gpu flex-col gap-4 rounded-2xl bg-background/95 p-5 text-left text-foreground shadow-[0_15px_45px_-30px_rgba(14,165,233,0.35)] ring-1 ring-border/40 transition-all duration-300 ease-out will-change-opacity will-change-transform group-hover:bg-background group-hover:ring-accent/50 dark:bg-background/85 dark:text-foreground">
 								{feature.content}
 							</div>
 						</MagicBentoCard>

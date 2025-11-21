@@ -10,8 +10,8 @@ import { CardStack } from "@/components/ui/card-stack";
 import { GlareCard } from "@/components/ui/glare-card";
 import type { ActivityEvent } from "@/data/activity/activityStream";
 import { activityStream } from "@/data/activity/activityStream";
-import { cn } from "@/lib/utils";
 import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
+import { cn } from "@/lib/utils";
 
 import {
 	LIVE_COPY,
@@ -98,8 +98,8 @@ const formatEventForStack = (
 });
 
 export default function FeatureSectionActivity(): JSX.Element {
-    const sectionRef = useRef<HTMLElement | null>(null);
-    const [inView, setInView] = useState(false);
+	const sectionRef = useRef<HTMLElement | null>(null);
+	const [inView, setInView] = useState(false);
 	const enableGpu = useGpuOptimizations();
 	const gpuShellClass = enableGpu
 		? "transform-gpu will-change-transform will-change-opacity"
@@ -166,36 +166,36 @@ export default function FeatureSectionActivity(): JSX.Element {
 		return () => observer.disconnect();
 	}, []);
 
-    return (
-        <section
-            ref={sectionRef}
-            className={cn(
+	return (
+		<section
+			ref={sectionRef}
+			className={cn(
 				"relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background/80 to-background",
 				gpuShellClass,
 			)}
-            style={{ overflowClipMargin: "24px" }}
-        >
-            <div
+			style={{ overflowClipMargin: "24px" }}
+		>
+			<div
 				className={cn(
 					"pointer-events-none absolute inset-0 opacity-70",
 					gpuDepthClass,
 				)}
 			>
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
-                <div
+				<div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
+				<div
 					className={cn(
 						"-right-40 sm:-right-32 lg:-right-20 absolute top-10 h-[28rem] w-[28rem] blur-[80px] sm:top-20 sm:h-[34rem] sm:w-[34rem] lg:top-12 lg:h-[38rem] lg:w-[38rem]",
 						gpuDepthClass,
 					)}
 				>
-                    <ClientLottie
-                        animationData={ambientFlow}
-                        loop={inView && !prefersReducedMotion}
-                        autoPlay={inView && !prefersReducedMotion}
-                        className="h-full w-full opacity-70 mix-blend-screen"
-                    />
-                </div>
-            </div>
+					<ClientLottie
+						animationData={ambientFlow}
+						loop={inView && !prefersReducedMotion}
+						autoPlay={inView && !prefersReducedMotion}
+						className="h-full w-full opacity-70 mix-blend-screen"
+					/>
+				</div>
+			</div>
 
 			<div className="relative grid gap-14 px-6 py-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:px-12 xl:px-16">
 				<div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left lg:gap-8">

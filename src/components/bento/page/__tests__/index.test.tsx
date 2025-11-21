@@ -1,6 +1,6 @@
-import BentoPage from "..";
-import { render, screen } from "@testing-library/react";
 import type { BentoFeature } from "@/types/bento/features";
+import { render, screen } from "@testing-library/react";
+import BentoPage from "..";
 
 describe("BentoPage", () => {
 	const features: BentoFeature[] = [
@@ -28,4 +28,3 @@ describe("BentoPage", () => {
 		expect(screen.getByText("Route leads automatically")).toBeInTheDocument();
 	});
 });
-

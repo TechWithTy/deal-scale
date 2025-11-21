@@ -16,6 +16,7 @@ type CheckoutMode = "payment" | "setup";
 type PricingCheckoutDialogProps = {
 	clientSecret: string;
 	onClose: () => void;
+	onSuccess?: () => void;
 	plan: Plan;
 	planType: PlanType;
 	mode: CheckoutMode;
@@ -37,6 +38,7 @@ const stripePromise = (() => {
 export default function PricingCheckoutDialog({
 	clientSecret,
 	onClose,
+	onSuccess,
 	plan,
 	planType,
 	mode,

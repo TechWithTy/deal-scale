@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const YOUTUBE_FEED =
-	"https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ";
+const YOUTUBE_FEED = process.env.YOUTUBE_CHANNEL_ID
+	? `https://www.youtube.com/feeds/videos.xml?channel_id=${process.env.YOUTUBE_CHANNEL_ID}`
+	: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A";
 const CACHE_CONTROL = "s-maxage=900, stale-while-revalidate=3600";
 
 export default async function handler(
@@ -34,7 +35,3 @@ export default async function handler(
 			);
 	}
 }
-
-
-
-

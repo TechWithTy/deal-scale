@@ -65,13 +65,12 @@ describe("IntentModal", () => {
 		);
 
 		expect(screen.getByText("Drawer content")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "Close modal" })).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: "Close modal" }),
+		).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument();
 
 		fireEvent.click(screen.getByRole("button", { name: "Close modal" }));
 		expect(handleClose).toHaveBeenCalled();
 	});
 });
-
-
-

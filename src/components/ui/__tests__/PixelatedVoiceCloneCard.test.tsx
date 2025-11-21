@@ -1,9 +1,9 @@
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import type { ComponentProps, ReactNode } from "react";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import userEvent from "@testing-library/user-event";
 
 import { PixelatedVoiceCloneCard } from "../pixelated-voice-clone-card";
 import type * as textRevealCardModule from "../text-reveal-card";
@@ -100,7 +100,8 @@ describe("PixelatedVoiceCloneCard", () => {
 				dispatchEvent: vi.fn(() => false),
 			}))
 			.mockName("matchMedia");
-		globalThis.matchMedia = mockMatchMedia as unknown as typeof globalThis.matchMedia;
+		globalThis.matchMedia =
+			mockMatchMedia as unknown as typeof globalThis.matchMedia;
 
 		class MockResizeObserver implements ResizeObserver {
 			private readonly callback: ResizeObserverCallback;

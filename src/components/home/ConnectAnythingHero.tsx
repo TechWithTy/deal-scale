@@ -3,15 +3,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import {
 	AnimatedBeamNetwork,
 	type AnimatedBeamNetworkNode,
 } from "@/components/ui/animated-beam-network";
 import { Badge } from "@/components/ui/badge";
-import { ThreeDMarquee } from "@/components/ui/3d-marquee";
-import { NumberTicker } from "@/components/magicui/number-ticker";
-import { cn } from "@/lib/utils";
 import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
+import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
 import Image from "next/image";
 
@@ -181,40 +181,39 @@ export function ConnectAnythingHero(): JSX.Element {
 		return () => window.clearInterval(intervalId);
 	}, []);
 
-    return (
-        <section
-        className={cn(
-                "relative flex w-full flex-col items-center justify-center overflow-hidden",
-                "min-h-[720px] bg-transparent py-24 pb-28 sm:min-h-[760px] sm:py-28 sm:pb-32 md:min-h-[calc(100vh-120px)] lg:py-32 lg:pb-36",
+	return (
+		<section
+			className={cn(
+				"relative flex w-full flex-col items-center justify-center overflow-hidden",
+				"min-h-[720px] bg-transparent py-24 pb-28 sm:min-h-[760px] sm:py-28 sm:pb-32 md:min-h-[calc(100vh-120px)] lg:py-32 lg:pb-36",
 				gpuContainerClass,
-            )}
-            style={{ overflowClipMargin: '24px' }}
-        >
-            <div className={cn(
-				"pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent",
-				gpuDepthClass,
-			)} />
-            <AnimatedBeamNetwork
-                variant="background"
-                nodes={BEAM_NETWORK_NODES}
-                showLabels={false}
-                showCenterLabel={false}
-                centerContent={
-                    <Image
-                        src="/logos/DealScale%20Transparent%20Logo/Deal%20Scale%20No%20Text.png"
-                        alt="DealScale core logo"
-                        width={56}
-                        height={56}
-                        priority={false}
-                        className="h-12 w-12 object-contain md:h-14 md:w-14"
-                    />
-                }
-                className={cn(
-					"absolute inset-0 -z-20 h-full w-full",
+			)}
+			style={{ overflowClipMargin: "24px" }}
+		>
+			<div
+				className={cn(
+					"pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent",
 					gpuDepthClass,
 				)}
-            />
-            <div className="relative z-20 flex w-full max-w-5xl flex-col items-center px-6 text-center">
+			/>
+			<AnimatedBeamNetwork
+				variant="background"
+				nodes={BEAM_NETWORK_NODES}
+				showLabels={false}
+				showCenterLabel={false}
+				centerContent={
+					<Image
+						src="/logos/DealScale%20Transparent%20Logo/Deal%20Scale%20No%20Text.png"
+						alt="DealScale core logo"
+						width={56}
+						height={56}
+						priority={false}
+						className="h-12 w-12 object-contain md:h-14 md:w-14"
+					/>
+				}
+				className={cn("-z-20 absolute inset-0 h-full w-full", gpuDepthClass)}
+			/>
+			<div className="relative z-20 flex w-full max-w-5xl flex-col items-center px-6 text-center">
 				<motion.div
 					initial={{ opacity: 0, y: -18 }}
 					animate={{ opacity: 1, y: 0 }}
@@ -223,12 +222,12 @@ export function ConnectAnythingHero(): JSX.Element {
 				>
 					<Badge
 						variant="outline"
-						className="rounded-full border-white/30 bg-white/20 px-5 py-2 text-xs font-medium uppercase tracking-[0.34em] text-slate-900 shadow-[0_8px_30px_rgba(59,130,246,0.25)] backdrop-blur-md dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100"
+						className="rounded-full border-white/30 bg-white/20 px-5 py-2 font-medium text-slate-900 text-xs uppercase tracking-[0.34em] shadow-[0_8px_30px_rgba(59,130,246,0.25)] backdrop-blur-md dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100"
 					>
 						<span className="mr-2 inline-flex items-center justify-center rounded-full bg-sky-500/20 p-1 text-sky-600 dark:text-sky-300">
 							<Sparkles className="h-3.5 w-3.5" />
 						</span>
-						Unified Automation Layer
+						CRM Outreach Layer
 					</Badge>
 				</motion.div>
 				<motion.h1
@@ -239,10 +238,7 @@ export function ConnectAnythingHero(): JSX.Element {
 				>
 					<div className="space-y-1 sm:space-y-2">
 						<span className="block w-full text-black dark:text-white">
-							Connect Anything.
-						</span>
-						<span className="block w-full text-black dark:text-white">
-							Automate Everything.
+							Connect Any CRM
 						</span>
 					</div>
 				</motion.h1>
@@ -253,9 +249,9 @@ export function ConnectAnythingHero(): JSX.Element {
 						animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
 						exit={{ opacity: 0, y: -12, clipPath: "inset(0 0 100% 0)" }}
 						transition={{ duration: 0.6, ease: "easeInOut" }}
-						className="max-w-2xl text-center min-h-[3.5rem]"
+						className="min-h-[3.5rem] max-w-2xl text-center"
 					>
-						<span className="font-semibold text-lg text-black tracking-tight dark:text-white md:text-xl">
+						<span className="font-semibold text-black text-lg tracking-tight md:text-xl dark:text-white">
 							{HERO_MESSAGES[activeMessageIndex]}
 						</span>
 					</motion.div>
@@ -264,16 +260,20 @@ export function ConnectAnythingHero(): JSX.Element {
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
-					className="mt-5 max-w-3xl text-sm text-slate-900 drop-shadow-[0_6px_14px_rgba(15,23,42,0.2)] dark:text-slate-100/85 md:text-base"
+					className="mt-5 max-w-3xl text-slate-900 text-sm drop-shadow-[0_6px_14px_rgba(15,23,42,0.2)] md:text-base dark:text-slate-100/85"
 				>
-					DealScale keeps your existing CRM stack in sync, enriches every touchpoint, and orchestrates automations across all platforms, with primary integrations for Kestra, Make, Zapier, and n8n.
+					DealScale keeps your existing CRM stack in sync, enriches every
+					touchpoint, and orchestrates automations across all platforms, with
+					primary integrations for Kestra, Make, Zapier, and n8n.
 				</motion.p>
 				<motion.ul
 					initial="hidden"
 					animate="visible"
 					variants={{
 						hidden: {},
-						visible: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
+						visible: {
+							transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+						},
 					}}
 					className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3"
 				>
@@ -290,22 +290,22 @@ export function ConnectAnythingHero(): JSX.Element {
 								<NumberTicker
 									value={metric.value}
 									decimalPlaces={metric.decimalPlaces ?? 0}
-									className="text-3xl font-semibold text-slate-900 dark:text-white"
+									className="font-semibold text-3xl text-slate-900 dark:text-white"
 								/>
 								{metric.suffix ? (
-									<span className="text-lg font-semibold uppercase tracking-wide text-slate-800 dark:text-white/90">
+									<span className="font-semibold text-lg text-slate-800 uppercase tracking-wide dark:text-white/90">
 										{metric.suffix}
 									</span>
 								) : null}
 							</div>
-							<p className="mt-1 text-sm text-slate-600 dark:text-slate-200/90">
+							<p className="mt-1 text-slate-600 text-sm dark:text-slate-200/90">
 								{metric.label}
 							</p>
 						</motion.li>
 					))}
 				</motion.ul>
 			</div>
-			<div className="absolute inset-0 z-10 pointer-events-none">
+			<div className="pointer-events-none absolute inset-0 z-10">
 				<ThreeDMarquee
 					variant="hero"
 					images={HERO_IMAGES}

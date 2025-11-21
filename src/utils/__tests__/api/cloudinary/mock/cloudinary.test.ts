@@ -21,7 +21,7 @@ let deleteImage: typeof import("@/lib/externalRequests/cloudinary").deleteImage;
 
 beforeAll(async () => {
 	({ uploadFile, deleteFile, uploadImage, deleteImage } = await import(
-		"@/lib/externalRequests/cloudinary",
+		"@/lib/externalRequests/cloudinary"
 	));
 });
 

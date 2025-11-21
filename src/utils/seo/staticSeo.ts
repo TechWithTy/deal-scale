@@ -132,8 +132,7 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		image: STATIC_SEO_META["/affiliate"].image,
 		keywords: STATIC_SEO_META["/affiliate"].keywords || DEFAULT_SEO.keywords,
 		priority: STATIC_SEO_META["/affiliate"].priority ?? 0.75,
-		changeFrequency:
-			STATIC_SEO_META["/affiliate"].changeFrequency ?? "monthly",
+		changeFrequency: STATIC_SEO_META["/affiliate"].changeFrequency ?? "monthly",
 		siteName: DEFAULT_SEO.siteName,
 		type: "website",
 	},

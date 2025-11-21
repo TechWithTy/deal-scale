@@ -1,25 +1,25 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { Button } from "@/components/ui/button";
 import {
 	DEFAULT_PERSONA_KEY,
 	PERSONA_LABELS,
 	type PersonaKey,
 } from "@/data/personas/catalog";
 import { getTestimonialsForPersona } from "@/data/personas/testimonialsByPersona";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 import { usePersonaStore } from "@/stores/usePersonaStore";
 import type { Testimonial } from "@/types/testimonial";
 import { type Variants, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Header from "../common/Header";
-import { PersonaSwitcher } from "./testimonials/TestimonialPersonaSwitcher";
 import { TestimonialAvatar } from "./testimonials/TestimonialAvatar";
+import { PersonaSwitcher } from "./testimonials/TestimonialPersonaSwitcher";
 import { TestimonialStars } from "./testimonials/TestimonialStars";
 import { TestimonialTabs } from "./testimonials/TestimonialTabs";
 import type { TabKey } from "./testimonials/tabConfig";
-import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
 
 interface TestimonialsProps {
 	testimonials: Testimonial[];
@@ -127,24 +127,24 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	) as Variants;
 
 	return (
-    <motion.section
-        id="testimonials"
-        className={`relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8 ${gpuShellClass}`}
-        style={{ overflowClipMargin: '24px' }}
+		<motion.section
+			id="testimonials"
+			className={`relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8 ${gpuShellClass}`}
+			style={{ overflowClipMargin: "24px" }}
 			initial={shouldReduceMotion ? undefined : { opacity: 0 }}
 			animate={shouldReduceMotion ? undefined : { opacity: 1 }}
 			transition={shouldReduceMotion ? undefined : { duration: 0.5 }}
 		>
 			<div
 				data-testid="testimonial-spotlight-container"
-				className="pointer-events-none absolute inset-0 -z-10"
+				className="-z-10 pointer-events-none absolute inset-0"
 			>
-            <div
+				<div
 					className={`absolute top-10 left-[12%] h-72 w-72 rounded-full bg-glow-gradient opacity-25 blur-3xl ${gpuDepthClass}`}
 				/>
-            <motion.div
-                data-testid="testimonial-orbit-accent"
-                className={`absolute right-[14%] bottom-5 h-72 w-72 rounded-full bg-blue-pulse opacity-20 blur-3xl ${gpuDepthClass}`}
+				<motion.div
+					data-testid="testimonial-orbit-accent"
+					className={`absolute right-[14%] bottom-5 h-72 w-72 rounded-full bg-blue-pulse opacity-20 blur-3xl ${gpuDepthClass}`}
 					animate={
 						shouldReduceMotion
 							? undefined
@@ -171,9 +171,13 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 				<div className="mx-auto flex max-w-xl flex-col items-center gap-3">
 					<PersonaSwitcher />
 					{goal ? (
-						<p className="text-sm font-medium text-black/70 dark:text-white/70">
-							<span className="mr-1 text-black/60 dark:text-white/60">Primary goal:</span>
-							<span className="font-semibold text-black dark:text-white">{goal}</span>
+						<p className="font-medium text-black/70 text-sm dark:text-white/70">
+							<span className="mr-1 text-black/60 dark:text-white/60">
+								Primary goal:
+							</span>
+							<span className="font-semibold text-black dark:text-white">
+								{goal}
+							</span>
 						</p>
 					) : null}
 				</div>
@@ -218,7 +222,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 									<p className="text-black text-sm sm:text-sm dark:text-white/60">
 										{currentTestimonial.role}
 									</p>
-									<p className="mt-1 text-xs uppercase tracking-widest text-primary/80">
+									<p className="mt-1 text-primary/80 text-xs uppercase tracking-widest">
 										{personaLabel}
 									</p>
 								</div>
@@ -229,19 +233,19 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 									{personaSpecificTestimonials
 										.slice(0, 5)
 										.map((testimonial, index) => (
-										<motion.button
-											key={testimonial.id}
-											className={`h-2 w-2 rounded-full border border-white/20 transition-all duration-300 sm:h-3 sm:w-3 ${
-												currentIndex === index
-													? "w-4 bg-primary sm:w-6"
-													: "bg-white/10 hover:bg-white/20"
-											}`}
-											onClick={() => setCurrentIndex(index)}
-											aria-label={`View testimonial ${index + 1}`}
-											whileHover={{ scale: 1.2 }}
-											whileTap={{ scale: 0.9 }}
-										/>
-									))}
+											<motion.button
+												key={testimonial.id}
+												className={`h-2 w-2 rounded-full border border-white/20 transition-all duration-300 sm:h-3 sm:w-3 ${
+													currentIndex === index
+														? "w-4 bg-primary sm:w-6"
+														: "bg-white/10 hover:bg-white/20"
+												}`}
+												onClick={() => setCurrentIndex(index)}
+												aria-label={`View testimonial ${index + 1}`}
+												whileHover={{ scale: 1.2 }}
+												whileTap={{ scale: 0.9 }}
+											/>
+										))}
 								</div>
 
 								<div className="flex items-center justify-center gap-2">

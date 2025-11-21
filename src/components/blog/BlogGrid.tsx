@@ -1,16 +1,16 @@
 "use client";
 
+import type { PersonaKey } from "@/data/personas/catalog";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { usePersonaStore } from "@/stores/usePersonaStore";
 import type {
 	BeehiivPost,
 	BeehiivPostContentEmailStats,
 	BeehiivPostContentWebStats,
 } from "@/types/behiiv";
-import type { PersonaKey } from "@/data/personas/catalog";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import React, { Suspense, lazy, useMemo } from "react";
-import { useNavigationRouter } from "@/hooks/useNavigationRouter";
-import { usePersonaStore } from "@/stores/usePersonaStore";
 import FeaturedBlogCard from "./FeaturedBlogCard";
 const BlogCard = lazy(() =>
 	import("./BlogCard").then((mod) => ({ default: mod.BlogCard })),

@@ -12,15 +12,15 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { act } from "react";
 
 import React from "react";
+import {
+	resetPersonaStore,
+	usePersonaStore,
+} from "../../../stores/usePersonaStore";
 import { CallDemoShowcase } from "../CallDemoShowcase";
 import {
 	QUICK_START_PERSONA_GOAL,
 	QUICK_START_PERSONA_KEY,
 } from "../heros/heroConfig";
-import {
-	resetPersonaStore,
-	usePersonaStore,
-} from "../../../stores/usePersonaStore";
 
 describe("CallDemoShowcase", () => {
 	beforeAll(() => {

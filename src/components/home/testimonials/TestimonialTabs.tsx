@@ -23,7 +23,10 @@ export function TestimonialTabs({
 	testimonial,
 }: TestimonialTabsProps) {
 	return (
-		<Tabs value={activeTab} onValueChange={(value) => onTabChange(value as TabKey)}>
+		<Tabs
+			value={activeTab}
+			onValueChange={(value) => onTabChange(value as TabKey)}
+		>
 			<TabsList className="mx-auto mb-6 flex w-full max-w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 p-1 shadow-lg shadow-primary/5 backdrop-blur sm:max-w-2xl">
 				<div className="scrollbar-hide -mx-2 flex w-full flex-nowrap items-center justify-start gap-2 overflow-x-auto px-3 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-1">
 					{TAB_KEYS.map((tab) => {
@@ -32,7 +35,7 @@ export function TestimonialTabs({
 							<TabsTrigger
 								key={tab}
 								value={tab}
-								className="flex min-w-[120px] flex-none items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors data-[state=active]:bg-primary/25 data-[state=active]:text-black sm:min-w-[140px] sm:flex-1 sm:px-6 sm:text-base dark:text-white/70 data-[state=active]:dark:text-white"
+								className="flex min-w-[120px] flex-none items-center justify-center whitespace-nowrap rounded-full px-4 py-2 font-medium text-sm transition-colors data-[state=active]:bg-primary/25 data-[state=active]:text-black sm:min-w-[140px] sm:flex-1 sm:px-6 sm:text-base dark:text-white/70 data-[state=active]:dark:text-white"
 								data-active={isActive}
 							>
 								{TAB_LABELS[tab]}

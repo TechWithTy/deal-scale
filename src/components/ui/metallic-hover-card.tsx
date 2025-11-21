@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "react";
-import { useCallback, useEffect, useRef, type ReactNode } from "react";
+import { type ReactNode, useCallback, useEffect, useRef } from "react";
 
 type MetallicHoverCardProps = {
 	children: ReactNode;

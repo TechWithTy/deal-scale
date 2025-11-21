@@ -843,12 +843,12 @@ const CallDemoInteractive = () => {
 				contentClassName: "flex h-full flex-col gap-6",
 				content: (
 					<div className="relative z-20 flex h-full flex-col gap-8">
-						<div className="flex flex-col gap-3 text-balance items-center text-center md:items-center md:text-center">
+						<div className="flex flex-col items-center gap-3 text-balance text-center md:items-center md:text-center">
+							<span className="inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-900/5 px-3 py-1 font-semibold text-[0.65rem] text-slate-700 tracking-[0.25em] dark:border-white/15 dark:bg-white/10 dark:text-white/80">
+								{personaLabel}
+							</span>
 							<p className="font-medium text-slate-500 text-sm uppercase tracking-[0.3em] dark:text-white/60">
 								{AI_OUTREACH_STUDIO_HEADING}
-								<span className="ml-2 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-900/5 px-3 py-1 font-semibold text-[0.65rem] text-slate-700 tracking-[0.25em] dark:border-white/15 dark:bg-white/10 dark:text-white/80">
-									{personaLabel}
-								</span>
 							</p>
 							<h2 className="font-semibold text-3xl text-slate-900 md:text-4xl lg:text-5xl dark:text-white">
 								{heroTagline}
@@ -973,6 +973,8 @@ const CallDemoInteractive = () => {
 			callDemoMode,
 			handleRestartCallDemo,
 			handleSwitchPreview,
+			heroDescription,
+			heroTagline,
 			personaLabel,
 			renderPreview,
 			resolvedGoalLower,
@@ -985,9 +987,9 @@ const CallDemoInteractive = () => {
 				id={AI_OUTREACH_STUDIO_ANCHOR}
 				className="relative isolate overflow-hidden py-24"
 			>
-			<div className="-z-10 pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),_transparent_55%)]" />
-			<div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
-				<LayoutGrid
+				<div className="-z-10 pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),_transparent_55%)]" />
+				<div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
+					<LayoutGrid
 						cards={cards}
 						interactive={false}
 						showThumbnails={false}
@@ -1009,25 +1011,25 @@ const CallDemoInteractive = () => {
 };
 
 const StaticCallDemoPreview = () => {
-    useEffect(() => {
-        console.log("[StaticCallDemoPreview] rendered");
-    }, []);
+	useEffect(() => {
+		console.log("[StaticCallDemoPreview] rendered");
+	}, []);
 
-    // Compute static hero text using current persona/goal, matching interactive version
-    const { persona, goal } = usePersonaStore(
-        useShallow((state) => ({
-            persona: state.persona,
-            goal: state.goal,
-        })),
-    );
-    const resolvedGoal = goal ?? "Automate deal flow conversations";
-    const personaSeo = useMemo(
-        () => buildPersonaAiOutreachStudioSeo({ persona, goal: resolvedGoal }),
-        [persona, resolvedGoal],
-    );
-    const heroTagline = personaSeo.headline ?? AI_OUTREACH_STUDIO_TAGLINE;
-    const heroDescription =
-        personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
+	// Compute static hero text using current persona/goal, matching interactive version
+	const { persona, goal } = usePersonaStore(
+		useShallow((state) => ({
+			persona: state.persona,
+			goal: state.goal,
+		})),
+	);
+	const resolvedGoal = goal ?? "Automate deal flow conversations";
+	const personaSeo = useMemo(
+		() => buildPersonaAiOutreachStudioSeo({ persona, goal: resolvedGoal }),
+		[persona, resolvedGoal],
+	);
+	const heroTagline = personaSeo.headline ?? AI_OUTREACH_STUDIO_TAGLINE;
+	const heroDescription =
+		personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
 
 	return (
 		<section

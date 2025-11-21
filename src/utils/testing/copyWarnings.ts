@@ -83,7 +83,3 @@ export const collectCopyWarnings = (
 		};
 	});
 };
-
-
-
-

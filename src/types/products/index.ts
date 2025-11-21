@@ -68,6 +68,7 @@ export enum ProductCategory {
 	Essentials = "essentials",
 	Notion = "notion",
 	Voices = "voices",
+	TextAgents = "text-agents",
 	Leads = "leads",
 	Data = "data",
 	Monetize = "monetize",
@@ -77,6 +78,7 @@ export enum ProductCategory {
 	FreeResources = "free-resources",
 	SalesScripts = "sales-scripts",
 	Prompts = "prompts",
+	RemoteClosers = "remote-closers",
 }
 
 /** Metadata describing an associated downloadable file or external free resource. */

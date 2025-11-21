@@ -1,12 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import {
-	afterEach,
-	beforeEach,
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useNewsletterSubscribers } from "@/hooks/beehiiv/use-news-letter-subscribers";
 import type { Subscriber } from "@/types/behiiv";

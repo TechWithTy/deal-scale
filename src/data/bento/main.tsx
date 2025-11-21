@@ -43,20 +43,20 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="text-xl font-semibold text-white leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight">
 						Launch in One Click
 					</h3>
-					<p className="text-sm font-medium text-white/80">
+					<p className="font-medium text-sm text-white/80">
 						Import, connect, and go live instantly
 					</p>
 				</div>
-				<p className="text-sm leading-6 text-white/75">
+				<p className="text-sm text-white/75 leading-6">
 					Upload your seller list, connect your CRM, and spin up your first AI
 					campaign in a single click—before your coffee cools.
 				</p>
 				<Badge
 					variant="secondary"
-					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 font-semibold text-accent-foreground text-xs"
 				>
 					AI campaign live in under 60 seconds
 				</Badge>
@@ -79,21 +79,21 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="text-xl font-semibold text-white leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight">
 						AI That Works While You Sleep
 					</h3>
-					<p className="text-sm font-medium text-white/80">
+					<p className="font-medium text-sm text-white/80">
 						Never miss a hot lead again
 					</p>
 				</div>
-				<p className="text-sm leading-6 text-white/75">
+				<p className="text-sm text-white/75 leading-6">
 					Your AI responds instantly to every text, call, or form. It
 					pre-qualifies, nurtures, and books appointments around the clock so no
 					opportunity slips away.
 				</p>
 				<Badge
 					variant="secondary"
-					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 font-semibold text-accent-foreground text-xs"
 				>
 					Replies 24/7 — zero delays
 				</Badge>
@@ -116,20 +116,20 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="text-xl font-semibold text-white leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight">
 						Appointments, Not Just Leads
 					</h3>
-					<p className="text-sm font-medium text-white/80">
+					<p className="font-medium text-sm text-white/80">
 						Your calendar, always full
 					</p>
 				</div>
-				<p className="text-sm leading-6 text-white/75">
+				<p className="text-sm text-white/75 leading-6">
 					AI-qualified, sales-ready appointments land directly on your calendar.
 					You focus on closing while the system handles every follow-up.
 				</p>
 				<Badge
 					variant="secondary"
-					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 font-semibold text-accent-foreground text-xs"
 				>
 					Calendar auto-filled with sales-ready calls
 				</Badge>
@@ -152,21 +152,21 @@ export const MainBentoFeatures: BentoFeature[] = [
 		content: (
 			<div className="space-y-4 text-foreground">
 				<div className="space-y-1">
-					<h3 className="text-xl font-semibold text-white leading-tight">
+					<h3 className="font-semibold text-white text-xl leading-tight">
 						Unlimited Skip Tracing
 					</h3>
-					<p className="text-sm font-medium text-white/80">
+					<p className="font-medium text-sm text-white/80">
 						Data that does not cost you extra
 					</p>
 				</div>
-				<p className="text-sm leading-6 text-white/75">
+				<p className="text-sm text-white/75 leading-6">
 					Build hyper-targeted lists from more than 140 million property
 					records. Unlimited, high-quality owner data is included with every
 					plan, turning skip tracing into a growth multiplier.
 				</p>
 				<Badge
 					variant="secondary"
-					className="w-fit rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground"
+					className="w-fit rounded-full bg-accent/15 px-3 py-1 font-semibold text-accent-foreground text-xs"
 				>
 					Unlimited owner data included
 				</Badge>
@@ -191,12 +191,12 @@ export const MainBentoFeatures: BentoFeature[] = [
 				/>
 			),
 			content: (
-				<div className="space-y-4 rounded-2xl bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 p-4 text-left shadow-[0_24px_60px_-38px_rgba(99,102,241,0.45)] backdrop-blur-md sm:p-6 text-foreground">
+				<div className="space-y-4 rounded-2xl bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 p-4 text-left text-foreground shadow-[0_24px_60px_-38px_rgba(99,102,241,0.45)] backdrop-blur-md sm:p-6">
 					<div className="space-y-1">
-						<p className="text-xs font-semibold uppercase tracking-wide text-accent">
+						<p className="font-semibold text-accent text-xs uppercase tracking-wide">
 							{PERSONA_LABEL}
 						</p>
-						<h3 className="text-xl font-semibold text-white leading-tight">
+						<h3 className="font-semibold text-white text-xl leading-tight">
 							{PERSONA_GOAL}
 						</h3>
 					</div>
@@ -206,7 +206,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 					</div>
 					<Badge
 						variant="secondary"
-						className="w-fit rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur-sm"
+						className="w-fit rounded-full bg-primary/20 px-3 py-1 font-semibold text-primary-foreground text-xs backdrop-blur-sm"
 					>
 						Your voice, your pipeline, 24/7
 					</Badge>

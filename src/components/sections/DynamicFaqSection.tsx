@@ -106,7 +106,7 @@ export const DynamicFaqSection = ({
 						type="button"
 						onClick={() => setPersona(key)}
 						className={cn(
-							"rounded-full px-4 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+							"rounded-full px-4 py-1.5 font-medium text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
 							persona === key
 								? "bg-primary text-primary-foreground shadow-inner shadow-primary/35"
 								: "text-muted-foreground hover:bg-primary/10",
@@ -128,9 +128,9 @@ export const DynamicFaqSection = ({
 					value="featured"
 					className="overflow-hidden rounded-3xl border border-cyan-400/60 bg-gradient-to-br from-cyan-500/30 via-blue-600/25 to-slate-950 shadow-cyan-500/25 shadow-xl transition hover:shadow-2xl"
 				>
-					<AccordionTrigger className="flex flex-col gap-2 px-6 py-6 text-left text-lg font-semibold text-cyan-100 sm:flex-row sm:items-center sm:justify-between">
-						<span className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-cyan-200/90">
-							<span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400/70 text-sm font-bold text-slate-950">
+					<AccordionTrigger className="flex flex-col gap-2 px-6 py-6 text-left font-semibold text-cyan-100 text-lg sm:flex-row sm:items-center sm:justify-between">
+						<span className="inline-flex items-center gap-2 font-medium text-cyan-200/90 text-sm uppercase tracking-wide">
+							<span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400/70 font-bold text-slate-950 text-sm">
 								★
 							</span>
 							Featured Insight · {personaLabel}
@@ -138,7 +138,7 @@ export const DynamicFaqSection = ({
 						<span className="text-base sm:text-lg">{featuredFaq.question}</span>
 					</AccordionTrigger>
 					<AccordionContent
-						className="px-6 pb-6 text-base leading-relaxed text-cyan-50/95"
+						className="px-6 pb-6 text-base text-cyan-50/95 leading-relaxed"
 						data-testid="featured-faq-answer"
 					>
 						{featuredFaq.answers[persona]}
@@ -173,7 +173,7 @@ export const DynamicFaqSection = ({
 					defaultValue="advanced"
 					collapsible
 					data-testid="persona-advanced-faq"
-					className="w-full overflow-hidden rounded-3xl border border-fuchsia-400/70 bg-gradient-to-br from-fuchsia-600/45 via-purple-600/30 to-indigo-900/70 shadow-fuchsia-500/35 shadow-2xl"
+					className="w-full overflow-hidden rounded-3xl border border-fuchsia-400/70 bg-gradient-to-br from-fuchsia-600/45 via-purple-600/30 to-indigo-900/70 shadow-2xl shadow-fuchsia-500/35"
 				>
 					<AccordionItem value="advanced">
 						<AccordionTrigger className="flex flex-col gap-2 px-6 py-5 text-left font-semibold text-fuchsia-50 text-lg">

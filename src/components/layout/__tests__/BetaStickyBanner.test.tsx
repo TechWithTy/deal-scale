@@ -1,5 +1,5 @@
-import { render, screen, act } from "@testing-library/react";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BetaStickyBanner } from "../BetaStickyBanner";
 
@@ -17,9 +17,7 @@ describe("BetaStickyBanner", () => {
 	it("renders beta access CTA copy", () => {
 		render(<BetaStickyBanner />);
 
-		expect(
-			screen.getByText(/founders circle access/i),
-		).toBeInTheDocument();
+		expect(screen.getByText(/founders circle access/i)).toBeInTheDocument();
 		expect(
 			screen.getByRole("link", { name: /request early access/i }),
 		).toHaveAttribute("href", "/contact?utm_source=founders-circle");
@@ -33,9 +31,6 @@ describe("BetaStickyBanner", () => {
 			await Promise.resolve();
 		});
 
-		expect(
-			await screen.findByText(/6d 23h 59m 59s/i),
-		).toBeInTheDocument();
+		expect(await screen.findByText(/6d 23h 59m 59s/i)).toBeInTheDocument();
 	});
 });
-
