@@ -319,6 +319,9 @@ const CallDemoInteractive = () => {
 	}, [openLeadCaptureModal]);
 
 	const handleCancelTextDemo = useCallback(() => {
+		console.log(
+			"[CallDemo] Cancel text demo - returning to shorts with autoplay",
+		);
 		hasTriggeredTextLeadCaptureRef.current = false;
 		if (textLeadCaptureTimeoutRef.current) {
 			window.clearTimeout(textLeadCaptureTimeoutRef.current);
@@ -326,8 +329,11 @@ const CallDemoInteractive = () => {
 		}
 		setActivePreview("call");
 		setCallDemoMode("video");
-		// Keep autoplay enabled when returning to shorts from text demo
-		// This maintains the playing state
+		// Enable autoplay when returning to shorts from text demo
+		setTimeout(() => {
+			console.log("[CallDemo] Enabling autoplay for shorts");
+			setShouldAutoplayVideo(true);
+		}, 300);
 	}, []);
 
 	const handleStartTextDemo = useCallback(() => {
@@ -359,13 +365,16 @@ const CallDemoInteractive = () => {
 	// Listen for custom event to play YouTube shorts
 	useEffect(() => {
 		const handlePlayShorts = (event: CustomEvent) => {
-			console.log("[CallDemo] play-youtube-shorts event received", event.detail);
-			
+			console.log(
+				"[CallDemo] play-youtube-shorts event received",
+				event.detail,
+			);
+
 			// First switch to video mode
 			console.log("[CallDemo] Switching to call preview and video mode");
 			setActivePreview("call");
 			setCallDemoMode("video");
-			
+
 			// Wait a moment for the mode switch to complete, then enable autoplay
 			// This ensures the iframe container is ready before we switch to autoplay URL
 			setTimeout(() => {
@@ -698,7 +707,7 @@ const CallDemoInteractive = () => {
 
 			console.log("[CallDemo] Rendering video mode", {
 				shouldAutoplayVideo,
-				videoSrc: videoSrc.substring(0, 100) + "...",
+				videoSrc: `${videoSrc.substring(0, 100)}...`,
 			});
 
 			return (
@@ -716,7 +725,9 @@ const CallDemoInteractive = () => {
 									className="size-full"
 									src={videoSrc}
 									onLoad={() => {
-										console.log("[CallDemo] YouTube iframe loaded", { shouldAutoplayVideo });
+										console.log("[CallDemo] YouTube iframe loaded", {
+											shouldAutoplayVideo,
+										});
 									}}
 									loading="lazy"
 									allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
@@ -820,7 +831,7 @@ const CallDemoInteractive = () => {
 
 		console.log("[CallDemo] Rendering fallback video mode", {
 			shouldAutoplayVideo,
-			videoSrc: fallbackVideoSrc.substring(0, 100) + "...",
+			videoSrc: `${fallbackVideoSrc.substring(0, 100)}...`,
 		});
 
 		return (
@@ -838,7 +849,9 @@ const CallDemoInteractive = () => {
 								className="size-full"
 								src={fallbackVideoSrc}
 								onLoad={() => {
-									console.log("[CallDemo] YouTube iframe (fallback) loaded", { shouldAutoplayVideo });
+									console.log("[CallDemo] YouTube iframe (fallback) loaded", {
+										shouldAutoplayVideo,
+									});
 								}}
 								loading="lazy"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"

@@ -18,12 +18,13 @@ import { useHasMounted } from "@/hooks/useHasMounted";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
+import { createPortal } from "react-dom";
 import { ThemeToggle } from "../theme/theme-toggle";
 import { BetaStickyBanner } from "./BetaStickyBanner";
 
@@ -195,7 +196,7 @@ const MobileNav = ({
 }: MobileNavProps) => {
 	const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({});
 	const { resolvedTheme } = useTheme();
-	const [mounted, setMounted] = useState(false);
+	const [_mounted, setMounted] = useState(false);
 	const [isDark, setIsDark] = useState(false);
 
 	useEffect(() => {
@@ -206,16 +207,16 @@ const MobileNav = ({
 			const themeIsDark = resolvedTheme === "dark";
 			setIsDark(themeIsDark || htmlHasDark);
 		};
-		
+
 		checkDarkMode();
-		
+
 		// Watch for theme changes
 		const observer = new MutationObserver(checkDarkMode);
 		observer.observe(document.documentElement, {
 			attributes: true,
 			attributeFilter: ["class"],
 		});
-		
+
 		return () => observer.disconnect();
 	}, [resolvedTheme]);
 
@@ -241,11 +242,9 @@ const MobileNav = ({
 				backgroundColor: isDark ? "rgb(2, 6, 23)" : "rgba(255, 255, 255, 0.95)",
 			}}
 		>
-			{/* biome-ignore lint/nursery/useSortedClasses: z-index ordering is intentional */}
-			<div className="absolute inset-0 overflow-hidden -z-10">
-				{/* biome-ignore lint/nursery/useSortedClasses: flex utilities grouped for readability */}
+			<div className="-z-10 absolute inset-0 overflow-hidden">
 				{isOpen && (
-					<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+					<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
 						{isDark ? (
 							<PixelatedCanvas
 								src="https://assets.aceternity.com/manu-red.png"
@@ -293,15 +292,13 @@ const MobileNav = ({
 						)}
 					</div>
 				)}
-				{/* biome-ignore lint/nursery/useSortedClasses: gradient utility ordering is intentional */}
 				{isDark && (
-					<div className="absolute bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.4),_transparent_70%)] inset-0 pointer-events-none" />
+					<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.4),_transparent_70%)]" />
 				)}
-				{/* biome-ignore lint/nursery/useSortedClasses: gradient utility ordering is intentional */}
 				{isDark ? (
-					<div className="absolute bg-gradient-to-b from-[#050d1d]/15 inset-0 pointer-events-none to-[#050d1d]/60 via-[#050d1d]/25" />
+					<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050d1d]/15 via-[#050d1d]/25 to-[#050d1d]/60" />
 				) : (
-					<div className="absolute bg-gradient-to-b from-sky-50/30 inset-0 pointer-events-none to-white/60 via-slate-50/40" />
+					<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-sky-50/30 via-slate-50/40 to-white/60" />
 				)}
 			</div>
 
@@ -309,7 +306,7 @@ const MobileNav = ({
 				<button
 					onClick={onClose}
 					type="button"
-					className="p-2 text-slate-900 transition-colors hover:text-slate-700 hover:bg-slate-100/50 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:text-white dark:hover:text-white dark:hover:bg-white/10"
+					className="rounded-md p-2 text-slate-900 transition-colors hover:bg-slate-100/50 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
 					aria-label="Close menu"
 				>
 					<X className="h-6 w-6" />
@@ -459,7 +456,7 @@ const MobileNav = ({
 						height={400}
 						src="/company/logos/DealScale_Horizontal_Black.png"
 						alt="Deal Scale"
-						className="h-auto w-full block dark:hidden"
+						className="block h-auto w-full dark:hidden"
 					/>
 					{/* White logo for dark mode */}
 					<Image
@@ -467,7 +464,7 @@ const MobileNav = ({
 						height={400}
 						src="/company/logos/Deal_Scale_Horizontal_White.png"
 						alt="Deal Scale"
-						className="h-auto w-full hidden dark:block"
+						className="hidden h-auto w-full dark:block"
 					/>
 				</div>
 			</div>
@@ -477,29 +474,80 @@ const MobileNav = ({
 
 export default function Navbar() {
 	const [showBanner, setShowBanner] = useState(false);
-	const observeRef = useRef<HTMLDivElement>(null);
+	const [showNavbar, setShowNavbar] = useState(true);
+	const lastScrollY = useRef(0);
+	const scrollThreshold = 10; // Minimum scroll distance to trigger show/hide
 
+	// Track scroll direction and control navbar/banner visibility
 	useEffect(() => {
-		const ref = observeRef.current;
-		if (!ref) return;
-		const observer = new window.IntersectionObserver(
-			([entry]) => setShowBanner(!entry.isIntersecting),
-			{ threshold: 0 },
-		);
-		observer.observe(ref);
-		return () => observer.disconnect();
+		if (typeof window === "undefined") return;
+
+		let isMounted = true;
+		let ticking = false;
+
+		const handleScroll = () => {
+			if (!isMounted || ticking) return;
+
+			ticking = true;
+			requestAnimationFrame(() => {
+				if (!isMounted) return;
+
+				const currentScrollY = window.scrollY;
+				const scrollDifference = Math.abs(currentScrollY - lastScrollY.current);
+
+				// Only update if scrolled enough to avoid jitter
+				if (scrollDifference < scrollThreshold) {
+					ticking = false;
+					return;
+				}
+
+				// At top of page: always show navbar, hide banner
+				if (currentScrollY <= 0) {
+					setShowNavbar(true);
+					setShowBanner(false);
+					lastScrollY.current = currentScrollY;
+					ticking = false;
+					return;
+				}
+
+				// Scrolling down: hide navbar, show banner
+				if (currentScrollY > lastScrollY.current) {
+					setShowNavbar(false);
+					setShowBanner(true);
+				}
+				// Scrolling up: show navbar, hide banner
+				else if (currentScrollY < lastScrollY.current) {
+					setShowNavbar(true);
+					setShowBanner(false);
+				}
+
+				lastScrollY.current = currentScrollY;
+				ticking = false;
+			});
+		};
+
+		window.addEventListener("scroll", handleScroll, { passive: true });
+
+		return () => {
+			isMounted = false;
+			window.removeEventListener("scroll", handleScroll);
+		};
 	}, []);
 
 	const hasMounted = useHasMounted();
+	const [bannerMounted, setBannerMounted] = useState(false);
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const { data: session, status } = useSession();
+	const { status } = useSession();
 	const openAuthModal = useAuthModal((state) => state.open);
 
 	useEffect(() => {
 		if (!hasMounted) return;
 		if (mobileMenuOpen) {
 			document.body.style.overflow = "hidden";
+			// Keep navbar visible when mobile menu is open
+			setShowNavbar(true);
+			setShowBanner(false);
 		} else {
 			document.body.style.overflow = "auto";
 		}
@@ -507,6 +555,11 @@ export default function Navbar() {
 			document.body.style.overflow = "auto";
 		};
 	}, [mobileMenuOpen, hasMounted]);
+
+	// Mount banner portal after client-side hydration
+	useEffect(() => {
+		setBannerMounted(true);
+	}, []);
 
 	const isAuthenticated = status === "authenticated";
 
@@ -525,10 +578,13 @@ export default function Navbar() {
 	return (
 		<>
 			<nav
-				className="fixed top-0 right-0 left-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur-sm px-4 py-3 sm:px-6 sm:py-4 lg:px-8"
+				className={cn(
+					"fixed top-0 right-0 left-0 z-[60] border-border/40 border-b bg-background/95 px-4 py-3 backdrop-blur-sm transition-transform duration-300 ease-in-out sm:px-6 sm:py-4 lg:px-8",
+					showNavbar ? "translate-y-0" : "-translate-y-full",
+				)}
 				aria-label="Main navigation"
 			>
-				<div className="mx-auto flex max-w-7xl items-center justify-between h-[52px] sm:h-[60px] lg:h-[68px]">
+				<div className="mx-auto flex h-[52px] max-w-7xl items-center justify-between sm:h-[60px] lg:h-[68px]">
 					<Link href="/" className="z-20 flex items-center">
 						{/* Black logo for light mode */}
 						<Image
@@ -585,17 +641,30 @@ export default function Navbar() {
 					/>
 				</div>
 			</nav>
-			{/* Marker for IntersectionObserver */}
-			<div ref={observeRef} style={{ height: 1 }} aria-hidden="true" />
-			{/* StickyBanner appears after scrolling down */}
-			<StickyBanner
-				open={showBanner}
-				onClose={() => setShowBanner(false)}
-				variant="default"
-				className="top-[52px] px-2 py-2 text-sm sm:top-[60px] lg:top-[68px] lg:px-4 lg:py-3 lg:text-base border-t-0"
-			>
-				<BetaStickyBanner />
-			</StickyBanner>
+			{/* StickyBanner appears when scrolling down, navbar appears when scrolling up */}
+			{/* Render banner via portal to body to prevent clipping by parent containers */}
+			{bannerMounted &&
+				typeof window !== "undefined" &&
+				createPortal(
+					<StickyBanner
+						open={showBanner}
+						onClose={() => setShowBanner(false)}
+						variant="default"
+						className={cn(
+							"fixed right-0 left-0 z-[55] border-t-0 px-2 py-2 text-sm transition-transform duration-300 ease-in-out sm:px-4 sm:py-2 lg:px-4 lg:py-3 lg:text-base",
+							showBanner ? "top-0 translate-y-0" : "-translate-y-full",
+						)}
+						style={{
+							overflow: "visible",
+							minHeight: "auto",
+							height: "auto",
+							maxHeight: "none",
+						}}
+					>
+						<BetaStickyBanner />
+					</StickyBanner>,
+					document.body,
+				)}
 		</>
 	);
 }

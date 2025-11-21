@@ -73,7 +73,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 	const resolvedCaseStudies =
 		caseStudies.length > 0 ? caseStudies : moduleCaseStudies;
 
-	const { activeCategory, setActiveCategory, CategoryFilter } =
+	const { activeCategory, CategoryFilter } =
 		useCategoryFilter(moduleCategories);
 
 	// * If limit is set, ignore category filtering and show latest case studies
@@ -202,7 +202,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 											{study.categories.map((category) => (
 												<span
 													key={category}
-													className="rounded-full border border-white/15 bg-white/10 px-3 py-1 font-medium text-white/80 text-xs backdrop-blur-sm transition-colors hover:bg-white/20"
+													className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 font-medium text-primary text-xs backdrop-blur-sm transition-colors hover:bg-primary/20 dark:border-white/15 dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/20"
 												>
 													{category}
 												</span>
