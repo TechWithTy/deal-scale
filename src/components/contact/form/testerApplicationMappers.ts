@@ -33,7 +33,7 @@ export const mapBetaTesterApplication = (
 		company: data.companyName.trim(),
 		icp_type: data.icpType,
 		employee_count: data.employeeCount,
-		deals_closed_last_year: data.dealsClosedLastYear,
+		deals_closed_last_year: data.avgDealsClosedPerMonth,
 		pain_points: sanitizeArray(data.painPoints),
 		terms_accepted: Boolean(data.termsAccepted),
 	};
@@ -61,7 +61,7 @@ export const mapPilotTesterApplication = (
 		company: data.companyName.trim(),
 		icp_type: data.icpType,
 		employee_count: data.teamSizeAcquisitions,
-		deals_closed_last_year: data.dealsClosedLastYear,
+		deals_closed_last_year: data.avgDealsClosedPerMonth,
 		pain_points: sanitizeArray(data.primaryChallenge),
 		terms_accepted: extras.termsAccepted ?? true,
 		team_size_acquisitions: data.teamSizeAcquisitions,

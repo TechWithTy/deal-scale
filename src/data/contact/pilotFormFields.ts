@@ -100,9 +100,9 @@ export const priorityPilotFormSchema = z.object({
 	teamSizeAcquisitions: z
 		.string()
 		.min(1, { message: "Please specify your acquisitions team size." }),
-	dealsClosedLastYear: z
+	avgDealsClosedPerMonth: z
 		.string()
-		.min(1, { message: "Please provide your recent deal volume." }),
+		.min(1, { message: "Please select your average deals closed per month." }),
 	avgDealSize: z
 		.string()
 		.optional()
@@ -126,7 +126,7 @@ export const priorityPilotFormSchema = z.object({
 	// Section 3: Strategic Goals & Needs
 	primaryChallenge: z
 		.array(z.string())
-		.nonempty({ message: "Please select at least one pain point." }),
+		.nonempty({ message: "Please select at least one follow-up frustration." }),
 	urgencyNeed: z.string().min(1, {
 		message: "Please select how urgent your need is.",
 	}),
@@ -151,6 +151,7 @@ export const priorityPilotFormSchema = z.object({
 	paymentAgreement: z.boolean().refine((val) => val === true, {
 		message: "You must acknowledge the payment step.",
 	}),
+	affiliateSignup: z.boolean().optional(),
 });
 
 export type PriorityPilotFormValues = z.infer<typeof priorityPilotFormSchema>;
@@ -205,16 +206,16 @@ export const priorityPilotFormFields: FieldConfig[] = [
 		onChange: (value: string) => {},
 	},
 	{
-		name: "dealsClosedLastYear",
-		label: "How many deals did you close in the last 12 months?",
+		name: "avgDealsClosedPerMonth",
+		label: "Avg Deals Closed Per Month",
 		type: "select",
-		placeholder: "Select deal volume",
+		placeholder: "Select average deals per month",
 		options: [
-			{ value: "0-5", label: "0-5" },
+			{ value: "0-1", label: "0-1" },
+			{ value: "2-3", label: "2-3" },
+			{ value: "4-5", label: "4-5" },
 			{ value: "6-10", label: "6-10" },
-			{ value: "11-20", label: "11-20" },
-			{ value: "21-50", label: "21-50" },
-			{ value: "51+", label: "51+" },
+			{ value: "11+", label: "11+" },
 		],
 		value: "",
 		onChange: (value: string) => {},
@@ -250,9 +251,10 @@ export const priorityPilotFormFields: FieldConfig[] = [
 	// --- Section 3: Your Strategic Goals ---
 	{
 		name: "primaryChallenge",
-		label: "What are your biggest pain points? (Select all that apply)",
+		label:
+			"What frustrates you the most about follow-up? (Select all that apply)",
 		type: "multiselect", // Now matches schema
-		placeholder: "Select your biggest challenges",
+		placeholder: "Select what frustrates you most",
 		options: painPointOptions,
 		value: [],
 		onChange: (value: string[]) => {},
@@ -340,6 +342,14 @@ export const priorityPilotFormFields: FieldConfig[] = [
 	{
 		name: "newsletter",
 		label: "I would like to receive updates and news from Deal Scale.",
+		type: "checkbox",
+		value: false,
+		onChange: (checked: boolean) => {},
+	},
+	{
+		name: "affiliateSignup",
+		label:
+			"I'm interested in the affiliate program - Make up to $50,000 per referral",
 		type: "checkbox",
 		value: false,
 		onChange: (checked: boolean) => {},
