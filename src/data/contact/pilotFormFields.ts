@@ -43,6 +43,14 @@ const currentCrmOptions = [
 	{ value: "none", label: "None / Other" },
 ];
 
+const urgencyNeedOptions = [
+	{ value: "asap", label: "I need something ASAP" },
+	{ value: "actively_exploring", label: "I'm actively exploring" },
+	{ value: "curious_not_ready", label: "I'm curious but not ready" },
+	{ value: "comparing_options", label: "Just comparing options" },
+	{ value: "just_browsing", label: "Just browsing" },
+];
+
 const interestedFeatureOptions = [
 	{
 		value: "ai_virtual_agents",
@@ -95,6 +103,19 @@ export const priorityPilotFormSchema = z.object({
 	dealsClosedLastYear: z
 		.string()
 		.min(1, { message: "Please provide your recent deal volume." }),
+	avgDealSize: z
+		.string()
+		.optional()
+		.refine(
+			(val) => {
+				if (!val || val.trim() === "") return true; // Optional field
+				// Remove $ and commas, then check if it's a valid number
+				const cleaned = val.replace(/[$,]/g, "");
+				const num = Number.parseFloat(cleaned);
+				return !Number.isNaN(num) && num >= 0;
+			},
+			{ message: "Please enter a valid amount in USD" },
+		),
 	primaryDealSources: z
 		.array(z.string())
 		.nonempty({ message: "Select at least one primary deal source." }),
@@ -106,6 +127,18 @@ export const priorityPilotFormSchema = z.object({
 	primaryChallenge: z
 		.array(z.string())
 		.nonempty({ message: "Please select at least one pain point." }),
+	urgencyNeed: z.string().min(1, {
+		message: "Please select how urgent your need is.",
+	}),
+	uniqueLeadGeneration: z
+		.string()
+		.min(10, {
+			message:
+				"Please provide at least 10 characters describing your unique lead generation approach.",
+		})
+		.max(1000, {
+			message: "Please keep your response under 1000 characters.",
+		}),
 	successMetrics: z.string().min(30, {
 		message:
 			"Please describe what success would look like in at least 30 characters.",
@@ -187,6 +220,14 @@ export const priorityPilotFormFields: FieldConfig[] = [
 		onChange: (value: string) => {},
 	},
 	{
+		name: "avgDealSize",
+		label: "Average Deal Size (USD)",
+		type: "number",
+		placeholder: "$50,000",
+		value: "",
+		onChange: (value: string) => {},
+	},
+	{
 		name: "primaryDealSources",
 		label:
 			"What are your current primary sources for deals? (Select all that apply)",
@@ -239,6 +280,27 @@ export const priorityPilotFormFields: FieldConfig[] = [
 		},
 	},
 	{
+		name: "urgencyNeed",
+		label: "How urgent is your need for a system like this?",
+		type: "select",
+		placeholder: "Select your urgency level",
+		options: urgencyNeedOptions,
+		value: "",
+		onChange: (value: string) => {},
+	},
+	{
+		name: "uniqueLeadGeneration",
+		label:
+			"Is there anything unique about how you generate or contact leads that we should know to support you properly?",
+		type: "textarea",
+		placeholder:
+			"Please describe your unique lead generation or contact methods...",
+		value: "",
+		onChange: (value: string) => {},
+		minLength: 10,
+		maxLength: 1000,
+	},
+	{
 		name: "successMetrics",
 		label:
 			"What would a 'huge win' look like after 3 months of using Deal Scale?",
@@ -250,7 +312,8 @@ export const priorityPilotFormFields: FieldConfig[] = [
 	},
 	{
 		name: "dealDocuments",
-		label: "Optional: Upload proof of your last 3 deals (HUDs, etc.)",
+		label:
+			"Priority Access: Optional: Upload proof of your last 3 deals (HUDs, etc.)",
 		type: "file",
 		accept: ".pdf,.docx",
 		multiple: true,

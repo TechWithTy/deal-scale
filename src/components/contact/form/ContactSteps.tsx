@@ -1,3 +1,7 @@
+"use client";
+
+import { AuroraText } from "@/components/magicui/aurora-text";
+import { useTheme } from "next-themes";
 // src/components/contact/ContactSteps.tsx
 // ! ContactSteps component now takes steps as a typed prop
 // * Enforces type safety and renders dynamic step numbers
@@ -23,10 +27,78 @@ interface ContactStepsProps {
  */
 // ! Defensive: steps must be defined and an array
 export function ContactSteps({ steps, title }: ContactStepsProps) {
+	const { theme, resolvedTheme } = useTheme();
+	const isDark = resolvedTheme === "dark" || theme === "dark";
+
 	if (!Array.isArray(steps) || steps.length === 0) {
 		// ? Optionally render a fallback or nothing
 		return null;
 	}
+
+	// Helper function to render description with aurora text highlights
+	const renderDescription = (description: string, stepNumber: number) => {
+		// Words/phrases to highlight with aurora text per step
+		const highlightWordsByStep: Record<number, string[]> = {
+			1: ["exclusive group", "tailored support", "strategic access"],
+			2: [
+				"free AI-powered calling and texting",
+				"private newsletter access",
+				"locked insider pricing",
+				"exclusive early adopter bonuses",
+			],
+			3: [
+				"influence the roadmap",
+				"vote on the features",
+				"experimental tools",
+			],
+			4: [
+				"free AI calls and texts",
+				"private operator community",
+				"top 1% of producers",
+			],
+		};
+
+		const highlightWords = highlightWordsByStep[stepNumber] || [];
+
+		if (highlightWords.length === 0) {
+			return description;
+		}
+
+		// Create a regex pattern that matches any of the highlight words
+		const pattern = new RegExp(
+			`(${highlightWords.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+			"gi",
+		);
+
+		const parts = description.split(pattern);
+		return (
+			<>
+				{parts.map((part, index) => {
+					const shouldHighlight = highlightWords.some(
+						(word) => part.toLowerCase() === word.toLowerCase(),
+					);
+					const uniqueKey = `${part}-${index}`;
+					if (shouldHighlight) {
+						return (
+							<AuroraText
+								key={uniqueKey}
+								colors={
+									isDark
+										? ["#FF0080", "#7928CA", "#0070F3", "#38bdf8"]
+										: ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef"]
+								}
+								className="font-semibold"
+							>
+								{part}
+							</AuroraText>
+						);
+					}
+					return <React.Fragment key={uniqueKey}>{part}</React.Fragment>;
+				})}
+			</>
+		);
+	};
+
 	return (
 		<div className="mb-8 rounded-xl border border-white/10 bg-background-dark/50 p-8 backdrop-blur-sm">
 			<h2 className="mb-6 text-center font-bold text-2xl text-black dark:text-white">
@@ -44,7 +116,7 @@ export function ContactSteps({ steps, title }: ContactStepsProps) {
 								{step.title}
 							</h3>
 							<p className="text-black text-sm dark:text-white/70">
-								{step.description}
+								{renderDescription(step.description, step.number)}
 							</p>
 						</div>
 					</div>

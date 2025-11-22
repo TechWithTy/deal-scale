@@ -39,6 +39,7 @@ import { FileIcon, Loader2 } from "lucide-react";
 import Image from "next/image";
 
 import Header from "@/components/common/Header";
+import { AuroraText } from "@/components/magicui/aurora-text";
 import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown";
 import {
 	type BetaTesterFormValues,
@@ -46,6 +47,7 @@ import {
 	betaTesterFormSchema,
 } from "@/data/contact/formFields";
 import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
+import { useTheme } from "next-themes";
 import { mapBetaTesterApplication } from "./testerApplicationMappers";
 
 export default function ContactForm({
@@ -54,6 +56,8 @@ export default function ContactForm({
 	prefill?: Partial<BetaTesterFormValues>;
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { theme, resolvedTheme } = useTheme();
+	const isDark = resolvedTheme === "dark" || theme === "dark";
 
 	const baseDefaults = useMemo<Partial<BetaTesterFormValues>>(
 		() => ({
@@ -65,6 +69,9 @@ export default function ContactForm({
 			icpType: "",
 			employeeCount: "",
 			dealsClosedLastYear: "",
+			avgDealSize: undefined,
+			urgencyNeed: "",
+			uniqueLeadGeneration: "",
 			dealDocuments: [],
 			termsAccepted: false,
 		}),
@@ -233,7 +240,23 @@ export default function ContactForm({
 									<FormItem className="space-y-1">
 										{field.type !== "checkbox" && (
 											<FormLabel className="text-black dark:text-white/70">
-												{field.label}
+												{field.name === "dealDocuments" ? (
+													<>
+														<AuroraText
+															colors={
+																isDark
+																	? ["#FF0080", "#7928CA", "#0070F3", "#38bdf8"]
+																	: ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef"]
+															}
+															className="font-semibold"
+														>
+															Priority Access:
+														</AuroraText>{" "}
+														{field.label.replace("Priority Access: ", "")}
+													</>
+												) : (
+													field.label
+												)}
 											</FormLabel>
 										)}
 										<FormControl>

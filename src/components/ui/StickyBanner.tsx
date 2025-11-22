@@ -1,3 +1,4 @@
+import { Z_INDEX } from "@/lib/constants/z-index";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import * as React from "react";
@@ -36,6 +37,7 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				role="alert"
 				aria-live="assertive"
 				style={{
+					zIndex: Z_INDEX.STICKY_BANNER,
 					overflow: "visible",
 					minHeight: "auto",
 					height: "auto",
@@ -43,7 +45,7 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				}}
 				className={cn(
 					// * Sticky/Fixed, full-width, glassy, with gradient and neon/aurora highlight
-					"fade-in slide-in-from-top-2 z-[55] flex w-full animate-in flex-col gap-3 px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
+					"fade-in slide-in-from-top-2 flex w-full animate-in flex-col gap-3 px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
 					// Ensure content is not clipped - allow banner to expand to fit content
 					"min-h-fit overflow-visible",
 					// Position is controlled by className prop - don't override here

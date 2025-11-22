@@ -14,7 +14,7 @@ export interface BaseField {
 }
 
 export type TextInputField = BaseField & {
-	type: "text" | "email" | "tel" | "url" | "password";
+	type: "text" | "email" | "tel" | "url" | "password" | "number";
 	value?: string;
 	onChange?: (value: string) => void;
 };

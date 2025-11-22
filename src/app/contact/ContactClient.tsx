@@ -1,6 +1,5 @@
 "use client";
 
-import AuthGuard from "@/components/auth/AuthGuard";
 import ContactForm from "@/components/contact/form/ContactForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import {
@@ -290,45 +289,44 @@ const Contact = () => {
 	const shouldRenderExitIntent = exitIntentEnabled();
 
 	const content = (
-		<AuthGuard>
-			<div className="container mx-auto px-6 py-24">
-				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
-					<div className="lg:col-span-7">
-						<ContactForm prefill={prefill} />
-					</div>
-					<div className="flex flex-col lg:col-span-5">
-						<ScheduleMeeting />
-						{isStepsError ? (
-							<div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
-								Unable to load next steps right now.
-							</div>
-						) : isStepsLoading ? (
-							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-								Loading next steps…
-							</div>
-						) : hasSteps ? (
-							<ContactSteps steps={steps} />
-						) : (
-							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-								Next steps coming soon.
-							</div>
-						)}
-						{isLogosError ? (
-							<div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
-								Unable to load trusted partners right now.
-							</div>
-						) : isLogosLoading ? (
-							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-								Loading trusted partners…
-							</div>
-						) : hasLogos ? (
-							<TrustedByMarquee items={companyLogos} />
-						) : (
-							<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-								Trusted partners coming soon.
-							</div>
-						)}
-						{/* <div className="relative w-full mt-10 overflow-hidden py-4 text-center bg-background-dark/50 border border-white/10 rounded-xl p-6 backdrop-blur-sm animate-float">
+		<div className="container mx-auto px-6 pt-32 pb-24">
+			<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
+				<div className="lg:col-span-7">
+					<ContactForm prefill={prefill} />
+				</div>
+				<div className="flex flex-col lg:col-span-5">
+					<ScheduleMeeting />
+					{isStepsError ? (
+						<div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
+							Unable to load next steps right now.
+						</div>
+					) : isStepsLoading ? (
+						<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+							Loading next steps…
+						</div>
+					) : hasSteps ? (
+						<ContactSteps steps={steps} />
+					) : (
+						<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+							Next steps coming soon.
+						</div>
+					)}
+					{isLogosError ? (
+						<div className="mt-6 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
+							Unable to load trusted partners right now.
+						</div>
+					) : isLogosLoading ? (
+						<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+							Loading trusted partners…
+						</div>
+					) : hasLogos ? (
+						<TrustedByMarquee items={companyLogos} />
+					) : (
+						<div className="mt-6 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+							Trusted partners coming soon.
+						</div>
+					)}
+					{/* <div className="relative w-full mt-10 overflow-hidden py-4 text-center bg-background-dark/50 border border-white/10 rounded-xl p-6 backdrop-blur-sm animate-float">
               <Image
                 src="/CyberOni-Wording_white.png"
                 alt="CyberOni Logo"
@@ -337,34 +335,33 @@ const Contact = () => {
                 className="mx-auto glow-outline"
               />
             </div> */}
-					</div>
 				</div>
-				<ContactInfo />
-
-				{isTestimonialsError ? (
-					<div className="my-12 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
-						Unable to load testimonials right now.
-					</div>
-				) : isTestimonialsLoading ? (
-					<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-						Loading testimonials…
-					</div>
-				) : hasTestimonials ? (
-					<Testimonials
-						testimonials={testimonials}
-						title={"What Our Clients Say"}
-						subtitle={
-							"Hear from our clients about their experiences with our services"
-						}
-					/>
-				) : (
-					<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
-						Testimonials coming soon.
-					</div>
-				)}
-				<Newsletter />
 			</div>
-		</AuthGuard>
+			<ContactInfo />
+
+			{isTestimonialsError ? (
+				<div className="my-12 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">
+					Unable to load testimonials right now.
+				</div>
+			) : isTestimonialsLoading ? (
+				<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+					Loading testimonials…
+				</div>
+			) : hasTestimonials ? (
+				<Testimonials
+					testimonials={testimonials}
+					title={"What Our Clients Say"}
+					subtitle={
+						"Hear from our clients about their experiences with our services"
+					}
+				/>
+			) : (
+				<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">
+					Testimonials coming soon.
+				</div>
+			)}
+			<Newsletter />
+		</div>
 	);
 
 	return shouldRenderExitIntent ? (

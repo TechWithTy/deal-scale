@@ -91,6 +91,14 @@ export const painPointOptions: ContactFormOption[] = [
 	},
 ];
 
+export const urgencyNeedOptions: ContactFormOption[] = [
+	{ value: "asap", label: "I need something ASAP" },
+	{ value: "actively_exploring", label: "I'm actively exploring" },
+	{ value: "curious_not_ready", label: "I'm curious but not ready" },
+	{ value: "comparing_options", label: "Just comparing options" },
+	{ value: "just_browsing", label: "Just browsing" },
+];
+
 export const betaTesterFormSchema = z.object({
 	firstName: z.string().optional(),
 	lastName: z.string().optional(),
@@ -111,12 +119,37 @@ export const betaTesterFormSchema = z.object({
 	dealsClosedLastYear: z
 		.string()
 		.min(1, { message: "Please select the number of deals closed" }),
+	avgDealSize: z
+		.string()
+		.optional()
+		.refine(
+			(val) => {
+				if (!val || val.trim() === "") return true; // Optional field
+				// Remove $ and commas, then check if it's a valid number
+				const cleaned = val.replace(/[$,]/g, "");
+				const num = Number.parseFloat(cleaned);
+				return !Number.isNaN(num) && num >= 0;
+			},
+			{ message: "Please enter a valid amount in USD" },
+		),
 	wantedFeatures: z.array(z.string()).nonempty({
 		message: "Please select at least one feature you're interested in.",
 	}),
 	painPoints: z
 		.array(z.string())
 		.nonempty({ message: "Please select at least one pain point." }),
+	urgencyNeed: z.string().min(1, {
+		message: "Please select how urgent your need is.",
+	}),
+	uniqueLeadGeneration: z
+		.string()
+		.min(10, {
+			message:
+				"Please provide at least 10 characters describing your unique lead generation approach.",
+		})
+		.max(1000, {
+			message: "Please keep your response under 1000 characters.",
+		}),
 	dealDocuments: z.array(z.instanceof(File)).optional(),
 	termsAccepted: z.boolean().refine((val) => val === true, {
 		message: "You must accept the terms and conditions",
@@ -182,6 +215,14 @@ export const betaTesterFormFields: FieldConfig[] = [
 		onChange: (value: string) => {},
 	},
 	{
+		name: "avgDealSize",
+		label: "Average Deal Size (USD)",
+		type: "number",
+		placeholder: "$50,000",
+		value: "",
+		onChange: (value: string) => {},
+	},
+	{
 		name: "painPoints",
 		label: "What are your biggest pain points? (Select all that apply)",
 		type: "multiselect", // Assuming a component that handles multi-select
@@ -211,8 +252,30 @@ export const betaTesterFormFields: FieldConfig[] = [
 		},
 	},
 	{
+		name: "urgencyNeed",
+		label: "How urgent is your need for a system like this?",
+		type: "select",
+		placeholder: "Select your urgency level",
+		options: urgencyNeedOptions,
+		value: "",
+		onChange: (value: string) => {},
+	},
+	{
+		name: "uniqueLeadGeneration",
+		label:
+			"Is there anything unique about how you generate or contact leads that we should know to support you properly?",
+		type: "textarea",
+		placeholder:
+			"Please describe your unique lead generation or contact methods...",
+		value: "",
+		onChange: (value: string) => {},
+		minLength: 10,
+		maxLength: 1000,
+	},
+	{
 		name: "dealDocuments",
-		label: "Optional: Upload proof of your last 3 deals (HUDs, etc.)",
+		label:
+			"Priority Access: Optional: Upload proof of your last 3 deals (HUDs, etc.)",
 		type: "file",
 		accept: ".pdf,.docx,",
 		multiple: true,

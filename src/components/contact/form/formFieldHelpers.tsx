@@ -166,6 +166,56 @@ export const renderFormField = (field: RenderFieldProps<FieldConfig>) => {
 				</div>
 			);
 		}
+		case "number": {
+			// Format USD currency input
+			const formatUSD = (value: string): string => {
+				// Remove all non-digit characters except decimal point
+				const cleaned = value.replace(/[^\d.]/g, "");
+				// Split by decimal point
+				const parts = cleaned.split(".");
+				// Only allow one decimal point
+				if (parts.length > 2) {
+					return `${parts[0]}.${parts.slice(1).join("")}`;
+				}
+				// Format the integer part with commas
+				const integerPart = parts[0] || "";
+				const formattedInteger = integerPart.replace(
+					/\B(?=(\d{3})+(?!\d))/g,
+					",",
+				);
+				// Combine with decimal part if exists
+				return parts.length > 1
+					? `${formattedInteger}.${parts[1].slice(0, 2)}`
+					: formattedInteger;
+			};
+
+			return (
+				<div className="relative">
+					<span className="-translate-y-1/2 absolute top-1/2 left-3 text-muted-foreground">
+						$
+					</span>
+					<Input
+						type="text"
+						placeholder={field.placeholder}
+						className="border-white/10 bg-white/5 pl-7 focus:border-primary"
+						value={field.value as string}
+						onChange={(e) => {
+							let value = e.target.value;
+							// Remove $ prefix if user types it
+							value = value.replace(/^\$/, "");
+							// Format as USD
+							const formatted = formatUSD(value);
+							(field.onChange as (v: string) => void)(
+								formatted ? `$${formatted}` : "",
+							);
+						}}
+						minLength={field.minLength}
+						maxLength={field.maxLength}
+						pattern={field.pattern}
+					/>
+				</div>
+			);
+		}
 		default: {
 			const [showPassword, setShowPassword] = useState(false);
 			const isSensitive = field.sensitive;

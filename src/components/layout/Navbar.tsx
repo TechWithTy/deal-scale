@@ -15,6 +15,7 @@ import {
 import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
 import { navItems } from "@/data/layout/nav";
 import { useHasMounted } from "@/hooks/useHasMounted";
+import { Z_INDEX } from "@/lib/constants/z-index";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -600,9 +601,10 @@ export default function Navbar() {
 		<>
 			<nav
 				className={cn(
-					"fixed top-0 right-0 left-0 z-[60] border-border/40 border-b bg-background/95 px-4 py-3 backdrop-blur-sm transition-transform duration-300 ease-in-out sm:px-6 sm:py-4 lg:px-8",
+					"fixed top-0 right-0 left-0 border-border/40 border-b bg-background/95 px-4 py-3 backdrop-blur-sm transition-transform duration-300 ease-in-out sm:px-6 sm:py-4 lg:px-8",
 					showNavbar ? "translate-y-0" : "-translate-y-full",
 				)}
+				style={{ zIndex: Z_INDEX.NAVBAR }}
 				aria-label="Main navigation"
 			>
 				<div className="mx-auto flex h-[52px] max-w-7xl items-center justify-between sm:h-[60px] lg:h-[68px]">
@@ -672,10 +674,11 @@ export default function Navbar() {
 						onClose={() => setShowBanner(false)}
 						variant="default"
 						className={cn(
-							"fixed right-0 left-0 z-[55] border-t-0 px-2 py-2 text-sm transition-transform duration-300 ease-in-out sm:px-4 sm:py-2 lg:px-4 lg:py-3 lg:text-base",
+							"fixed right-0 left-0 border-t-0 px-2 py-2 text-sm transition-transform duration-300 ease-in-out sm:px-4 sm:py-2 lg:px-4 lg:py-3 lg:text-base",
 							showBanner ? "top-0 translate-y-0" : "-translate-y-full",
 						)}
 						style={{
+							zIndex: Z_INDEX.STICKY_BANNER,
 							overflow: "visible",
 							minHeight: "auto",
 							height: "auto",
