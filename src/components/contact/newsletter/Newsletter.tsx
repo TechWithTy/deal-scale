@@ -81,6 +81,7 @@ export const Newsletter = () => {
 			if (!response.ok) {
 				setError(result.message || "Subscription failed");
 				toast.error(result.message || "Subscription failed");
+				setIsSubmitting(false);
 				return;
 			}
 			toast.success("Thank you for subscribing to our newsletter!");
