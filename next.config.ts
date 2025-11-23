@@ -20,7 +20,7 @@ const createBundleAnalyzer = (): ((config: NextConfig) => NextConfig) => {
 		return analyzer({
 			enabled: true,
 		});
-	} catch (error) {
+	} catch (_error) {
 		console.warn(
 			"Skipping bundle analyzer because '@next/bundle-analyzer' is not installed.",
 		);
@@ -290,6 +290,23 @@ const nextConfig: NextConfig = {
 				],
 			},
 		];
+	},
+	// Webpack configuration to fix minify plugin issues
+	webpack: (config, { isServer }) => {
+		// Fix for WebpackError constructor issue in minify-webpack-plugin
+		if (!isServer) {
+			config.resolve.fallback = {
+				...config.resolve.fallback,
+				fs: false,
+				net: false,
+				tls: false,
+			};
+		}
+
+		// Ensure webpack is properly available for plugins
+		config.plugins = config.plugins || [];
+
+		return config;
 	},
 };
 
