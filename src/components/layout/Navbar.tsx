@@ -65,7 +65,7 @@ const NavLink = ({ item, onClick, className = "" }) => {
 	);
 };
 
-const MegaMenuLink = ({ href, title, icon, className, onClick }) => {
+const MegaMenuLink = ({ href, title, icon, className, onClick = undefined }) => {
 	const isHighlighted =
 		title.toLowerCase().includes("contact") ||
 		title.toLowerCase().includes("schedule");
@@ -82,7 +82,7 @@ const MegaMenuLink = ({ href, title, icon, className, onClick }) => {
 					"rounded-md border-2 border-primary/60 bg-gradient-to-r from-primary to-focus px-4 py-2 font-bold text-white shadow-md transition-opacity hover:opacity-90 dark:border-primary/80 dark:text-white dark:shadow-lg",
 				className,
 			)}
-			onClick={onClick}
+			onClick={onClick || undefined}
 		>
 			{icon && <span className="mr-2">{icon}</span>}
 			{title}
