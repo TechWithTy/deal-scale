@@ -189,6 +189,6 @@ export const landingContentGaps: LandingGapContentConfig = {
 	contactForm: {
 		title: "Founders Circle Application",
 		subtitle:
-			"Request early access to unlock 5 AI credits, priority onboarding, and a direct vote on upcoming features.",
+			"Request early access to make AI calling and texting in exchange for feedback for the platform, priority onboarding, and a direct vote on upcoming features.",
 	},
 };

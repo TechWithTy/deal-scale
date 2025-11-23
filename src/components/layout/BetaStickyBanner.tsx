@@ -26,7 +26,7 @@ export function BetaStickyBanner() {
 			<div className="flex flex-col items-center gap-1 overflow-visible text-center md:flex-row md:items-center md:gap-3 md:text-left">
 				<span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 font-semibold text-white tracking-wide backdrop-blur-sm dark:bg-white/15">
 					<span className="hidden whitespace-nowrap text-[0.65rem] text-primary-foreground/80 uppercase tracking-[0.18em] md:inline">
-						🆓 5 AI Credits
+						Follow Up For Free
 					</span>
 					<span className="whitespace-nowrap text-white text-xs uppercase tracking-[0.12em]">
 						Founders Circle Access

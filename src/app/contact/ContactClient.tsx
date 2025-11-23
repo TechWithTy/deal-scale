@@ -11,6 +11,7 @@ import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
 import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import Testimonials from "@/components/home/Testimonials";
+import { AffiliatePartnerTeaser } from "@/components/pricing/AffiliatePartnerTeaser";
 import { betaTesterFormFields } from "@/data/contact/formFields";
 import type { BetaTesterFormValues } from "@/data/contact/formFields";
 import { exitIntentEnabled } from "@/lib/config/exitIntent";
@@ -338,6 +339,10 @@ const Contact = () => {
 				</div>
 			</div>
 			<ContactInfo />
+
+			<div className="mt-16">
+				<AffiliatePartnerTeaser />
+			</div>
 
 			{isTestimonialsError ? (
 				<div className="my-12 rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-center text-destructive-foreground">

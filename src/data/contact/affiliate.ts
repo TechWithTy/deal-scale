@@ -7,13 +7,16 @@ const accountTypeOptions = [
 	{ value: "savings", label: "Savings" },
 ];
 
-// --- Zod Schema Definition ---
-// ! Sensitive fields: Routing and Account Number must be handled securely on backend (never log, encrypt at rest)
-export const affiliateFormSchema = z.object({
-	// Section 1: Contact Info (pulled from user account)
+// --- Zod Schema Definitions ---
 
-	// * Network size question added for affiliate reach
-	// * Network size as single select for optimal ranges
+// Step 1: Application Schema (Qualification Only)
+export const affiliateApplicationSchema = z.object({
+	// Section 1: Real Estate Experience
+	hasRealEstateExperience: z.enum(["yes", "no", "indirect"], {
+		required_error: "Please indicate your real estate experience.",
+	}),
+
+	// Section 2: Network Size
 	networkSize: z.enum(
 		["1-100", "101-1,000", "1,001-10,000", "10,001-100,000", "100,001+"],
 		{
@@ -21,12 +24,30 @@ export const affiliateFormSchema = z.object({
 		},
 	),
 
-	// Section 2: Social Handles
+	// Section 3: Social Handles
 	social: z.string().min(2, { message: "Social handle is required." }),
-
 	website: z.string().optional(),
 
-	// Section 3: Direct Deposit (Sensitive)
+	// Section 4: Agreement & Consent
+	termsAccepted: z.boolean().refine((val) => val === true, {
+		message: "You must accept the Affiliate Terms.",
+	}),
+	infoAccurate: z.boolean().refine((val) => val === true, {
+		message: "You must confirm your information is accurate.",
+	}),
+
+	// Section 5: Newsletter/Beta Signup
+	newsletterBeta: z.boolean().optional(),
+});
+
+export type AffiliateApplicationValues = z.infer<
+	typeof affiliateApplicationSchema
+>;
+
+// Step 2: Payment Setup Schema (Banking Info - After Approval)
+// ! Sensitive fields: Routing and Account Number must be handled securely on backend (never log, encrypt at rest)
+export const affiliatePaymentSchema = z.object({
+	// Section 1: Direct Deposit (Sensitive)
 	bankName: z.string().min(2, { message: "Bank name is required." }),
 	routingNumber: z
 		.string()
@@ -40,31 +61,21 @@ export const affiliateFormSchema = z.object({
 		required_error: "Please select account type.",
 	}),
 	w9: z.any().optional(), // File upload, validate on backend
-
-	// Section 4: Agreement & Consent
-	termsAccepted: z.boolean().refine((val) => val === true, {
-		message: "You must accept the Affiliate Terms.",
-	}),
-	infoAccurate: z.boolean().refine((val) => val === true, {
-		message: "You must confirm your information is accurate.",
-	}),
-
-	// Section 5: Newsletter/Beta Signup
-	newsletterBeta: z.boolean().optional(),
-
-	// Section 6: Real Estate Experience
-	hasRealEstateExperience: z.enum(["yes", "no", "indirect"], {
-		required_error: "Please indicate your real estate experience.",
-	}),
 });
 
+export type AffiliatePaymentValues = z.infer<typeof affiliatePaymentSchema>;
+
+// Legacy schema for backward compatibility (deprecated)
+export const affiliateFormSchema = affiliateApplicationSchema.merge(
+	affiliatePaymentSchema,
+);
 export type AffiliateFormValues = z.infer<typeof affiliateFormSchema>;
 
 // --- Form Field Configuration ---
-export const affiliateFormFields: FieldConfig[] = [
-	// --- Section 1: Contact Info (pulled from user account) ---
 
-	// --- Section 6: Real Estate Experience ---
+// Step 1: Application Fields (Qualification Only)
+export const affiliateApplicationFields: FieldConfig[] = [
+	// Section 1: Real Estate Experience
 	{
 		name: "hasRealEstateExperience",
 		label: "Do you have direct real estate experience?",
@@ -77,8 +88,7 @@ export const affiliateFormFields: FieldConfig[] = [
 		value: "",
 		onChange: (value: string) => {},
 	},
-	// * Network size field for affiliate reach
-	// * Network size single select for optimal ranges
+	// Section 2: Network Size
 	{
 		name: "networkSize",
 		label: "What is the approximate size of your network?",
@@ -93,14 +103,13 @@ export const affiliateFormFields: FieldConfig[] = [
 		value: "",
 		onChange: (value: string) => {},
 	},
-	// --- Section 2: Social Handles ---
+	// Section 3: Social Handles
 	{
 		name: "social",
 		label: "Social Handle or URL (required)",
 		type: "text",
 		placeholder: "@yourhandle or https://social.com/yourprofile",
 		value: "",
-
 		onChange: (value: string) => {},
 	},
 	{
@@ -111,7 +120,35 @@ export const affiliateFormFields: FieldConfig[] = [
 		value: "",
 		onChange: (value: string) => {},
 	},
-	// --- Section 3: Direct Deposit ---
+	// Section 4: Agreement & Consent
+	{
+		name: "termsAccepted",
+		label:
+			"I agree to the Affiliate Terms & authorize Deal Scale to process payments to this account.",
+		type: "checkbox",
+		value: false,
+		onChange: (checked: boolean) => {},
+	},
+	{
+		name: "infoAccurate",
+		label: "I confirm the information provided is accurate.",
+		type: "checkbox",
+		value: false,
+		onChange: (checked: boolean) => {},
+	},
+	// Section 5: Newsletter/Beta Signup
+	{
+		name: "newsletterBeta",
+		label: "Sign me up for the Deal Scale newsletter and beta testing program.",
+		type: "checkbox",
+		value: false,
+		onChange: (checked: boolean) => {},
+	},
+];
+
+// Step 2: Payment Setup Fields (Banking Info - After Approval)
+export const affiliatePaymentFields: FieldConfig[] = [
+	// Section 1: Direct Deposit (Sensitive)
 	{
 		name: "bankName",
 		label: "Bank Name",
@@ -157,28 +194,10 @@ export const affiliateFormFields: FieldConfig[] = [
 		value: [],
 		onChange: (value: File[]) => {},
 	},
-	// --- Section 4: Agreement & Consent ---
-	{
-		name: "termsAccepted",
-		label:
-			"I agree to the Affiliate Terms & authorize Deal Scale to process payments to this account.",
-		type: "checkbox",
-		value: false,
-		onChange: (checked: boolean) => {},
-	},
-	{
-		name: "infoAccurate",
-		label: "I confirm the information provided is accurate.",
-		type: "checkbox",
-		value: false,
-		onChange: (checked: boolean) => {},
-	},
-	// --- Section 5: Newsletter/Beta Signup ---
-	{
-		name: "newsletterBeta",
-		label: "Sign me up for the Deal Scale newsletter and beta testing program.",
-		type: "checkbox",
-		value: false,
-		onChange: (checked: boolean) => {},
-	},
+];
+
+// Legacy field array for backward compatibility (deprecated)
+export const affiliateFormFields: FieldConfig[] = [
+	...affiliateApplicationFields,
+	...affiliatePaymentFields,
 ];

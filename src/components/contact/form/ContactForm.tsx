@@ -47,7 +47,9 @@ import {
 	betaTesterFormSchema,
 } from "@/data/contact/formFields";
 import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
+import { buildAffiliateRedirectUrl } from "@/utils/affiliateRedirect";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import { mapBetaTesterApplication } from "./testerApplicationMappers";
 
 export default function ContactForm({
@@ -56,6 +58,7 @@ export default function ContactForm({
 	prefill?: Partial<BetaTesterFormValues>;
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const router = useRouter();
 	const { theme, resolvedTheme } = useTheme();
 	const isDark = resolvedTheme === "dark" || theme === "dark";
 
@@ -220,7 +223,7 @@ export default function ContactForm({
 			<div className="-z-10 absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-focus/10 opacity-60 blur-lg dark:from-primary/30 dark:to-focus/20" />
 			<Header
 				title="Founders Circle Application"
-				subtitle="Request early access to unlock 5 AI credits, priority onboarding, and a direct vote on upcoming features."
+				subtitle="Request early access to make AI calling and texting in exchange for feedback for the platform, priority onboarding, and a direct vote on upcoming features."
 				size="md"
 				className="mb-12 md:mb-16"
 			/>
@@ -264,6 +267,7 @@ export default function ContactForm({
 										<FormControl>
 											{renderFormField(
 												createFieldProps<FieldConfig>(field, formField),
+												isDark,
 											)}
 										</FormControl>
 										<FormMessage />

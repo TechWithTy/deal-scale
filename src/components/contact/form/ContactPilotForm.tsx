@@ -53,7 +53,9 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { buildAffiliateRedirectUrl } from "@/utils/affiliateRedirect";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import ContactPilotPaymentForm from "./ContactPilotPaymentForm";
 
 import {
@@ -73,6 +75,7 @@ export default function ContactPilotForm({
 		null,
 	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const router = useRouter();
 	const { theme, resolvedTheme } = useTheme();
 	const isDark = resolvedTheme === "dark" || theme === "dark";
 
@@ -263,6 +266,19 @@ export default function ContactPilotForm({
 										"Payment successful, but we couldn't subscribe you to the newsletter.",
 									);
 								}
+
+								// If affiliate signup was checked, redirect to affiliate page with prefilled data
+								if (formData.affiliateSignup) {
+									const affiliateUrl = buildAffiliateRedirectUrl(formData);
+									toast.success(
+										"Payment successful! Redirecting to affiliate sign-up...",
+									);
+									// Small delay to show success message before redirect
+									setTimeout(() => {
+										router.push(affiliateUrl);
+									}, 1500);
+									return;
+								}
 							}
 						} catch (err) {
 							console.error("Beehiiv subscription failed:", err);
@@ -331,6 +347,7 @@ export default function ContactPilotForm({
 										<FormControl>
 											{renderFormField(
 												createFieldProps(fieldConfig, formField),
+												isDark,
 											)}
 										</FormControl>
 										<FormMessage />

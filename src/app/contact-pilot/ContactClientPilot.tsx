@@ -8,6 +8,7 @@ import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
 import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
 import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import Testimonials from "@/components/home/Testimonials";
+import { AffiliatePartnerTeaser } from "@/components/pricing/AffiliatePartnerTeaser";
 import { priorityPilotFormFields } from "@/data/contact/pilotFormFields";
 import type { PriorityPilotFormValues } from "@/data/contact/pilotFormFields";
 import { pilotProgramSteps } from "@/data/service/slug_data/consultationSteps";
@@ -166,6 +167,10 @@ const Contact = () => {
 				</div>
 			</div>
 			<ContactInfo />
+
+			<div className="mt-16">
+				<AffiliatePartnerTeaser />
+			</div>
 
 			<Testimonials
 				testimonials={generalDealScaleTestimonials}

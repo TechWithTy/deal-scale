@@ -1,6 +1,7 @@
 // formFieldHelpers.tsx
 // * Shared helpers for field prop creation and rendering for all contact forms
 
+import { AuroraText } from "@/components/magicui/aurora-text";
 import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -59,7 +60,10 @@ export const createFieldProps = <
 };
 
 // Helper to render the correct UI component based on field type
-export const renderFormField = (field: RenderFieldProps<FieldConfig>) => {
+export const renderFormField = (
+	field: RenderFieldProps<FieldConfig>,
+	isDark?: boolean,
+) => {
 	switch (field.type) {
 		case "select":
 			return (
@@ -104,6 +108,32 @@ export const renderFormField = (field: RenderFieldProps<FieldConfig>) => {
 			);
 		case "checkbox": {
 			const inputId = `checkbox-${field.name}`;
+			const darkMode = isDark ?? false;
+
+			// Helper to render label with aurora text for $50,000
+			const renderCheckboxLabel = (label: string) => {
+				if (label.includes("$50,000")) {
+					const parts = label.split("$50,000");
+					return (
+						<>
+							{parts[0]}
+							<AuroraText
+								colors={
+									darkMode
+										? ["#FF0080", "#7928CA", "#0070F3", "#38bdf8"]
+										: ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef"]
+								}
+								className="font-semibold"
+							>
+								$50,000
+							</AuroraText>
+							{parts[1]}
+						</>
+					);
+				}
+				return label;
+			};
+
 			return (
 				<div className="flex items-center space-x-2">
 					<Checkbox
@@ -112,7 +142,7 @@ export const renderFormField = (field: RenderFieldProps<FieldConfig>) => {
 						onCheckedChange={field.onChange as (c: boolean) => void}
 					/>
 					<label htmlFor={inputId} className="text-black dark:text-white/70">
-						{field.label}
+						{renderCheckboxLabel(field.label)}
 					</label>
 				</div>
 			);
