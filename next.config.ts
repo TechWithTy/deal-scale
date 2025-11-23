@@ -154,6 +154,11 @@ const nextConfig: NextConfig = {
 				permanent: true,
 			},
 			{
+				source: "/hybrid.xml",
+				destination: "/api/rss/hybrid.xml",
+				permanent: true,
+			},
+			{
 				source: "/rss/hybrid.xml",
 				destination: "/api/rss/hybrid.xml",
 				permanent: true,
