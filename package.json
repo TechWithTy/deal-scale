@@ -175,7 +175,7 @@
 		"lucide-react": "^0.462.0",
 		"medium-blogs-fetcher": "^1.0.5",
 		"motion": "^12.19.1",
-		"next": "15.2.4",
+		"next": "16.0.3",
 		"next-auth": "^4.24.11",
 		"next-mdx-remote": "^5.0.0",
 		"next-themes": "^0.3.0",
