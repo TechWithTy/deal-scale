@@ -16,6 +16,7 @@ import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
 import { navItems } from "@/data/layout/nav";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { Z_INDEX } from "@/lib/constants/z-index";
+import { isBannerClosed, setBannerClosed } from "@/lib/utils/cookies";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -64,7 +65,7 @@ const NavLink = ({ item, onClick, className = "" }) => {
 	);
 };
 
-const MegaMenuLink = ({ href, title, icon, className }) => {
+const MegaMenuLink = ({ href, title, icon, className, onClick = undefined }) => {
 	const isHighlighted =
 		title.toLowerCase().includes("contact") ||
 		title.toLowerCase().includes("schedule");
@@ -81,6 +82,7 @@ const MegaMenuLink = ({ href, title, icon, className }) => {
 					"rounded-md border-2 border-primary/60 bg-gradient-to-r from-primary to-focus px-4 py-2 font-bold text-white shadow-md transition-opacity hover:opacity-90 dark:border-primary/80 dark:text-white dark:shadow-lg",
 				className,
 			)}
+			onClick={onClick || undefined}
 		>
 			{icon && <span className="mr-2">{icon}</span>}
 			{title}
@@ -380,6 +382,7 @@ const MobileNav = ({
 																child.icon && <child.icon className="h-4 w-4" />
 															}
 															className=""
+															onClick={onClose}
 														/>
 													)}
 												</li>
@@ -482,6 +485,12 @@ export default function Navbar() {
 
 	const hasMounted = useHasMounted();
 	const [bannerMounted, setBannerMounted] = useState(false);
+	const pathname = usePathname();
+
+	// Pages where banner should NOT show
+	const bannerExcludedPages = ["/contact", "/contact-pilot"];
+	// Pages where banner should ALWAYS show (if not closed)
+	const bannerAlwaysShowPages = ["/affiliate"];
 
 	// Sync mobileMenuOpen to ref for use in scroll handler
 	useEffect(() => {
@@ -521,6 +530,16 @@ export default function Navbar() {
 					return;
 				}
 
+				// Check if banner should be shown on current page
+				const currentPath = window.location.pathname;
+				const isExcludedPage = bannerExcludedPages.some((page) =>
+					currentPath.startsWith(page),
+				);
+				const isAffiliatePage = bannerAlwaysShowPages.some((page) =>
+					currentPath.startsWith(page),
+				);
+				const bannerClosed = isBannerClosed();
+
 				// At top of page: always show navbar, hide banner
 				if (currentScrollY <= 0) {
 					setShowNavbar(true);
@@ -530,10 +549,17 @@ export default function Navbar() {
 					return;
 				}
 
-				// Scrolling down: hide navbar, show banner
+				// Scrolling down: hide navbar, show banner (if allowed)
 				if (currentScrollY > lastScrollY.current) {
 					setShowNavbar(false);
-					setShowBanner(true);
+					// Only show banner if:
+					// 1. Not on excluded pages (contact, contact-pilot)
+					// 2. Either on affiliate page OR not closed
+					if (!isExcludedPage && (isAffiliatePage || !bannerClosed)) {
+						setShowBanner(true);
+					} else {
+						setShowBanner(false);
+					}
 				}
 				// Scrolling up: show navbar, hide banner
 				else if (currentScrollY < lastScrollY.current) {
@@ -552,7 +578,7 @@ export default function Navbar() {
 			isMounted = false;
 			window.removeEventListener("scroll", handleScroll);
 		};
-	}, []);
+	}, [pathname]);
 
 	const { status } = useSession();
 	const openAuthModal = useAuthModal((state) => state.open);
@@ -671,7 +697,11 @@ export default function Navbar() {
 				createPortal(
 					<StickyBanner
 						open={showBanner}
-						onClose={() => setShowBanner(false)}
+						onClose={() => {
+							setShowBanner(false);
+							// Save closed state in cookie for 24 hours
+							setBannerClosed();
+						}}
 						variant="default"
 						className={cn(
 							"fixed right-0 left-0 border-t-0 px-2 py-2 text-sm transition-transform duration-300 ease-in-out sm:px-4 sm:py-2 lg:px-4 lg:py-3 lg:text-base",
