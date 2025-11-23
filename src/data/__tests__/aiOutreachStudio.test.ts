@@ -4,7 +4,7 @@ vi.mock("@/utils/seo/staticSeo", () => ({
 	getStaticSeo: () => ({
 		title: "Home | Deal Scale",
 		description: "Home description",
-		canonical: "https://dealscale.io",
+		canonical: "https://leadorchestra.com",
 		keywords: ["BaseKeyword"],
 		image: "/banners/main.png",
 		siteName: "Deal Scale",

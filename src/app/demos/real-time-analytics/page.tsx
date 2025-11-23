@@ -16,7 +16,7 @@ const REAL_TIME_ANALYTICS_PATH = "/demos/real-time-analytics";
 const REAL_TIME_ANALYTICS_SEO = getStaticSeo(REAL_TIME_ANALYTICS_PATH);
 const REAL_TIME_ANALYTICS_CANONICAL =
 	REAL_TIME_ANALYTICS_SEO.canonical ??
-	`https://dealscale.io${REAL_TIME_ANALYTICS_PATH}`;
+	`https://leadorchestra.com${REAL_TIME_ANALYTICS_PATH}`;
 
 const FEATURE_KEYWORDS = Array.from(
 	new Set(

@@ -10,7 +10,7 @@ import { headers } from "next/headers";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/linktree");
-	const baseUrl = seo.canonical || "https://dealscale.io/linktree";
+	const baseUrl = seo.canonical || "https://leadorchestra.com/linktree";
 
 	return {
 		...mapSeoMetaToMetadata(seo),

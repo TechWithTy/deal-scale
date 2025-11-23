@@ -4,7 +4,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import LinkedInProvider from "next-auth/providers/linkedin";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
 
 interface DealScaleUser {
 	id?: string;

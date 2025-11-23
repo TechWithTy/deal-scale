@@ -8,7 +8,7 @@ import type {
 } from "../../../types/api-keys";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
 
 function validateCreateRequest(body: CreateApiKeyRequest): string | null {
 	if (

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const CANONICAL_ORIGIN = "https://dealscale.io";
+const CANONICAL_ORIGIN = "https://leadorchestra.com";
 const ALLOWED_ROUTES = [
 	"/",
 	"/blogs",

@@ -10,7 +10,7 @@ NEXTAUTH_SECRET=b99jxDeNdI9ezGqJy52tc1CrO2aUICfPOQhQbC4RzgU=
 NEXTAUTH_URL=http://localhost:3000
 
 # DealScale API (optional - defaults to production)
-DEALSCALE_API_BASE=https://api.dealscale.io
+DEALSCALE_API_BASE=https://api.leadorchestra.com
 
 # OAuth Providers (when ready)
 LINKEDIN_CLIENT_ID=your_linkedin_client_id

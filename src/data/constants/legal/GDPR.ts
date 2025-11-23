@@ -28,7 +28,7 @@ Under the GDPR, you have the following rights regarding your personal data:
 - **The right to object:** You have the right to object to the processing of your personal data in certain circumstances.
 - **Rights in relation to automated decision making and profiling:** You have rights regarding automated individual decision-making and profiling.
 
-To exercise any of these rights, please contact our Data Protection Officer at **dpo@dealscale.io**.
+To exercise any of these rights, please contact our Data Protection Officer at **dpo@leadorchestra.com**.
 
 ### Data Transfers
 
@@ -43,5 +43,5 @@ We have implemented robust technical and organizational measures to ensure a lev
 For any questions or concerns regarding our GDPR compliance or your personal data, please contact us:
 
 **Data Protection Officer**
-Email: **dpo@dealscale.io**
+Email: **dpo@leadorchestra.com**
 `;

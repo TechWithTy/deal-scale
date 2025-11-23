@@ -170,6 +170,7 @@
   "transcripts",
   "ui",
   "ui-magic",
+  "utils",
   "ux",
   "values",
   "vite-preview",

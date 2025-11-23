@@ -42,5 +42,5 @@ We will ensure that any subcontractors that create, receive, maintain, or transm
 
 For any questions regarding our HIPAA compliance, please contact our Security Officer at:
 
-**Email:** **security@dealscale.io**
+**Email:** **security@leadorchestra.com**
 `;

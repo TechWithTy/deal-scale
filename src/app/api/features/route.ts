@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { FeatureStatus } from "../../../types/features";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
 
 /**
  * Get the feature catalog with current vote counts.

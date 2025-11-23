@@ -30,12 +30,12 @@ if (isExternalIntegrationEnabled) {
 skipExternalTest("SendGrid addToSendGrid SEGMENT integration");
 describeIfExternal("SendGrid addToSendGrid SEGMENT integration", () => {
 	it("adds a contact to the SENDGRID_TEST_SEGMENT with test_segment custom field set to True", async () => {
-		const testEmail = `segment-test-${Date.now()}@dealscale.io`;
+		const testEmail = `segment-test-${Date.now()}@leadorchestra.com`;
 		const lead: Lead = {
 			firstName: "Segment",
 			lastName: "Tester",
 			companyName: "Deal Scale",
-			landingPage: "https://dealscale.io",
+			landingPage: "https://leadorchestra.com",
 			email: testEmail,
 			phone: "555-555-5555",
 			postal_code: "94102",

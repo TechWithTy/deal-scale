@@ -18,7 +18,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 			title: "Blogs | Deal Scale",
 			description:
 				"See the latest insights, stories, and updates for real estate investors and wholesalers from the Deal Scale team.",
-			canonical: "https://dealscale.io/blogs",
+			canonical: "https://leadorchestra.com/blogs",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 			priority: 0.8,
@@ -31,7 +31,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 			title: "Beta Test Sign Up | Deal Scale",
 			description:
 				"Get in touch with Deal Scale for expert AI-powered real estate solutions and support.",
-			canonical: "https://dealscale.io/contact",
+			canonical: "https://leadorchestra.com/contact",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 			priority: 0.7,
@@ -44,7 +44,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 			title: "Case Studies | Deal Scale",
 			description:
 				"Check out real-world solutions and success stories from real estate professionals using Deal Scale and its Technologies.",
-			canonical: "https://dealscale.io/case-studies",
+			canonical: "https://leadorchestra.com/case-studies",
 			image: "/banners/CaseStudy2.png",
 			keywords: DEFAULT_SEO.keywords,
 			priority: 0.8,
@@ -56,7 +56,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 		{
 			title: "Cookie Policy | Deal Scale",
 			description: "How we use cookies and similar technologies.",
-			canonical: "https://dealscale.io/cookies",
+			canonical: "https://leadorchestra.com/cookies",
 			image: DEFAULT_SEO.image,
 			keywords: [
 				"Cookie Policy",
@@ -73,7 +73,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 			title: "Events | Deal Scale",
 			description:
 				"Stay updated on upcoming Deal Scale events, webinars, and real estate industry opportunities powered by AI.",
-			canonical: "https://dealscale.io/events",
+			canonical: "https://leadorchestra.com/events",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 		},
@@ -85,7 +85,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 				"DealScale FAQ | AI Voice, SMS, and Skip Tracing Automation for Real Estate Agents & Investors",
 			description:
 				"Learn how DealScale automates skip tracing, AI voice outreach, SMS, and social lead qualification while staying TCPA and GDPR compliant. Discover ROI examples, voice cloning, CRM syncs, and compliance with the 2026 Colorado AI Act.",
-			canonical: "https://dealscale.io/faq",
+			canonical: "https://leadorchestra.com/faq",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 		},
@@ -96,7 +96,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 			title: "Portfolio | Deal Scale",
 			description:
 				"Browse Deal Scale's portfolio to see AI-powered real estate solutions in action.",
-			canonical: "https://dealscale.io/portfolio",
+			canonical: "https://leadorchestra.com/portfolio",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 		},
@@ -106,7 +106,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 		{
 			title: "Privacy Policy | Deal Scale",
 			description: "How we collect, use, and protect your data.",
-			canonical: "https://dealscale.io/privacy",
+			canonical: "https://leadorchestra.com/privacy",
 			image: DEFAULT_SEO.image,
 			keywords: [
 				"Privacy Policy",
@@ -122,7 +122,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 		{
 			title: "Terms of Service | Deal Scale",
 			description: "Your legal agreement for using Deal Scale.",
-			canonical: "https://dealscale.io/tos",
+			canonical: "https://leadorchestra.com/tos",
 			image: DEFAULT_SEO.image,
 			keywords: [
 				"Terms of Service",
@@ -137,7 +137,7 @@ const cases: Array<[string, StaticSeoExpectation]> = [
 			title: "Features | Deal Scale",
 			description:
 				"Check out powerful features of Deal Scale's AI, including automated lead nurturing, outreach, and our AI Caller.",
-			canonical: "https://dealscale.io/features",
+			canonical: "https://leadorchestra.com/features",
 			image: "/banners/Feature.png",
 			keywords: [...DEFAULT_SEO.keywords],
 		},

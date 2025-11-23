@@ -3,7 +3,7 @@ import { staticSeoMeta } from "@/utils/seo/staticSeo";
 
 const SCHEMA_CONTEXT = "https://schema.org";
 const BASE_CANONICAL = (
-	staticSeoMeta["/partners"]?.canonical || "https://dealscale.io/partners"
+	staticSeoMeta["/partners"]?.canonical || "https://leadorchestra.com/partners"
 ).replace(/\/$/, "");
 
 const isAbsoluteUrl = (value: string | undefined): boolean =>

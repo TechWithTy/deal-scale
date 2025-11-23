@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
 
 export async function POST(req: NextRequest) {
 	const body = await req.json();

@@ -19,7 +19,7 @@ const mockPosts: BeehiivPost[] = [
 		pubDate: "2025-04-16T00:00:00Z",
 		meta_default_description: "A summary of the test blog post.",
 		thumbnail_url: "https://example.com/image.jpg",
-		web_url: "https://dealscale.io/p/test-blog-post",
+		web_url: "https://leadorchestra.com/p/test-blog-post",
 		published_at: "2025-04-16T00:00:00Z",
 		displayed_date: Date.parse("2025-04-16T00:00:00Z"),
 		content_tags: ["Technology", "AI"],
@@ -80,8 +80,8 @@ const mockBlog: BeehiivPost = {
 	title: "Test Blog Post",
 	subtitle: "An in-depth look at our test subject",
 	meta_default_description: "A summary of the test blog post.",
-	thumbnail_url: "https://dealscale.io/images/test-blog-thumbnail.jpg",
-	web_url: "https://dealscale.io/blogs/test-blog-post",
+	thumbnail_url: "https://leadorchestra.com/images/test-blog-thumbnail.jpg",
+	web_url: "https://leadorchestra.com/blogs/test-blog-post",
 	publish_date: Date.parse("2025-04-16T00:00:00Z"),
 	displayed_date: Date.parse("2025-04-16T00:00:00Z"),
 	content_tags: ["Technology", "AI"],
@@ -94,7 +94,7 @@ describe("getBlogSeo", () => {
 		expect(seo.title).toBe("Test Blog Post | Blog | Deal Scale");
 		expect(seo.description).toBe("A summary of the test blog post.");
 		expect(seo.image).toBe(
-			"https://dealscale.io/images/test-blog-thumbnail.jpg",
+			"https://leadorchestra.com/images/test-blog-thumbnail.jpg",
 		);
 		expect(seo.type).toBe("article");
 		expect(seo.datePublished).toBe("2025-04-16T00:00:00.000Z");
@@ -116,7 +116,7 @@ describe("getBlogSeo", () => {
 });
 
 describe("getBlogMetadata", () => {
-	const pageUrl = "https://dealscale.io/p/test-blog-post";
+	const pageUrl = "https://leadorchestra.com/p/test-blog-post";
 	const blogId = "test-blog-id";
 
 	it("returns full Next.js metadata for a valid blog post", async () => {

@@ -75,8 +75,8 @@ export function SocialShare({
 		return paramString ? `?${paramString}` : "";
 	}, []);
 
-	// Always use dealscale.io as the domain for sharing
-	const PRODUCTION_DOMAIN = "https://dealscale.io";
+	// Always use leadorchestra.com as the domain for sharing
+	const PRODUCTION_DOMAIN = "https://leadorchestra.com";
 
 	// Get the current URL if none is provided
 	const url = useMemo(() => {
@@ -87,7 +87,7 @@ export function SocialShare({
 				// Clean up any empty query parameters
 				url.search = cleanUrlParams(new URLSearchParams(url.search));
 				// Ensure we're using the production domain
-				url.hostname = "dealscale.io";
+				url.hostname = "leadorchestra.com";
 				url.protocol = "https:";
 				return url.toString();
 			}

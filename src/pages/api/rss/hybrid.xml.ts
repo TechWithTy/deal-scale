@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { XMLParser } from "fast-xml-parser";
 
-const SITE_URL = "https://dealscale.io";
+const SITE_URL = "https://leadorchestra.com";
 const BEEHIIV_FEED = "https://rss.beehiiv.com/feeds/th0QQipR7J.xml";
 // Try multiple YouTube feed formats - YouTube may have changed their feed URLs
 // Note: Channel ID should include the -A suffix: UCphkra97DMNIAIvA1y8hZ-A
@@ -435,7 +435,7 @@ export default async function handler(
 			try {
 				const response = await fetch(feedUrl, {
 					headers: {
-						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://leadorchestra.com)",
 						Accept:
 							"application/atom+xml, application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
@@ -463,14 +463,14 @@ export default async function handler(
 			await Promise.allSettled([
 				fetch(BEEHIIV_FEED, {
 					headers: {
-						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://leadorchestra.com)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
 				fetchYouTubeFeed(),
 				fetch(GITHUB_FEED, {
 					headers: {
-						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://leadorchestra.com)",
 						Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
