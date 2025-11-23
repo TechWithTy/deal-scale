@@ -32,6 +32,7 @@ import {
 import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
 
 import Header from "@/components/common/Header";
+import { AuroraText } from "@/components/magicui/aurora-text";
 import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -52,6 +53,9 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { buildAffiliateRedirectUrl } from "@/utils/affiliateRedirect";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import ContactPilotPaymentForm from "./ContactPilotPaymentForm";
 
 import {
@@ -71,6 +75,9 @@ export default function ContactPilotForm({
 		null,
 	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const router = useRouter();
+	const { theme, resolvedTheme } = useTheme();
+	const isDark = resolvedTheme === "dark" || theme === "dark";
 
 	// Base defaults derived from field config values
 	const baseDefaults = useMemo(() => {
@@ -259,6 +266,19 @@ export default function ContactPilotForm({
 										"Payment successful, but we couldn't subscribe you to the newsletter.",
 									);
 								}
+
+								// If affiliate signup was checked, redirect to affiliate page with prefilled data
+								if (formData.affiliateSignup) {
+									const affiliateUrl = buildAffiliateRedirectUrl(formData);
+									toast.success(
+										"Payment successful! Redirecting to affiliate sign-up...",
+									);
+									// Small delay to show success message before redirect
+									setTimeout(() => {
+										router.push(affiliateUrl);
+									}, 1500);
+									return;
+								}
 							}
 						} catch (err) {
 							console.error("Beehiiv subscription failed:", err);
@@ -305,12 +325,29 @@ export default function ContactPilotForm({
 									<FormItem className="space-y-1">
 										{fieldConfig.type !== "checkbox" && (
 											<FormLabel className="text-black dark:text-white/70">
-												{fieldConfig.label}
+												{fieldConfig.name === "dealDocuments" ? (
+													<>
+														<AuroraText
+															colors={
+																isDark
+																	? ["#FF0080", "#7928CA", "#0070F3", "#38bdf8"]
+																	: ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef"]
+															}
+															className="font-semibold"
+														>
+															Priority Access:
+														</AuroraText>{" "}
+														{fieldConfig.label.replace("Priority Access: ", "")}
+													</>
+												) : (
+													fieldConfig.label
+												)}
 											</FormLabel>
 										)}
 										<FormControl>
 											{renderFormField(
 												createFieldProps(fieldConfig, formField),
+												isDark,
 											)}
 										</FormControl>
 										<FormMessage />

@@ -4,6 +4,7 @@ import CheckoutForm, {
 	type PlanType,
 } from "@/components/checkout/CheckoutForm";
 import { Button } from "@/components/ui/button";
+import { Z_INDEX } from "@/lib/constants/z-index";
 import type { Plan } from "@/types/service/plans";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -68,7 +69,10 @@ export default function PricingCheckoutDialog({
 
 	if (!stripePromise) {
 		return (
-			<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
+			<div
+				className="fixed inset-0 flex items-center justify-center bg-black/70 p-6"
+				style={{ zIndex: Z_INDEX.CHECKOUT_DIALOG }}
+			>
 				<div className="w-full max-w-sm rounded-2xl bg-background-dark p-8 text-center shadow-xl">
 					<p className="mb-4 font-semibold text-lg text-white">
 						We couldn't initialize the checkout experience.
@@ -85,7 +89,10 @@ export default function PricingCheckoutDialog({
 	}
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 sm:p-6">
+		<div
+			className="fixed inset-0 flex items-center justify-center bg-black/70 p-4 sm:p-6"
+			style={{ zIndex: Z_INDEX.CHECKOUT_DIALOG }}
+		>
 			<div className="relative w-full max-w-lg rounded-3xl bg-background-dark/95 p-6 shadow-2xl backdrop-blur">
 				<button
 					type="button"
@@ -103,7 +110,8 @@ export default function PricingCheckoutDialog({
 						mode={mode}
 						context={context}
 						postTrialAmount={postTrialAmount}
-						onSuccess={onClose}
+						onSuccess={onSuccess || onClose}
+						onCancel={onClose}
 					/>
 				</Elements>
 			</div>

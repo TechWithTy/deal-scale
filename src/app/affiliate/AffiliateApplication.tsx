@@ -1,7 +1,7 @@
 "use client";
-import AffiliateSuccess from "@/components/affiliate/AffiliateSuccess";
+import AffiliateApplicationForm from "@/components/affiliate/AffiliateApplicationForm";
+import AffiliateApplicationSuccess from "@/components/affiliate/AffiliateApplicationSuccess";
 import AuthGuard from "@/components/auth/AuthGuard";
-import AffiliateForm from "@/components/contact/form/AffiliateForm";
 import { ContactInfo } from "@/components/contact/form/ContactInfo";
 import { ContactSteps } from "@/components/contact/form/ContactSteps";
 import { Newsletter } from "@/components/contact/newsletter/Newsletter";
@@ -10,24 +10,18 @@ import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
 import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
 import Testimonials from "@/components/home/Testimonials";
 import {
-	type AffiliateFormValues,
-	affiliateFormFields,
+	type AffiliateApplicationValues,
+	affiliateApplicationFields,
 } from "@/data/contact/affiliate";
-import { discountCodes } from "@/data/discount";
-import {
-	affiliateProgramSteps,
-	pilotProgramSteps,
-} from "@/data/service/slug_data/consultationSteps";
+import { affiliateProgramSteps } from "@/data/service/slug_data/consultationSteps";
 import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { exitIntentEnabled } from "@/lib/config/exitIntent";
-import type { DiscountCode } from "@/types/discount/discountCode";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 // * Centralized SEO for /affiliate using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/affiliate");
@@ -38,10 +32,11 @@ const AffiliateApplication = () => {
 	const searchParams = useSearchParams();
 
 	const prefill = useMemo(() => {
-		const result: Partial<AffiliateFormValues> = {};
+		const result: Partial<AffiliateApplicationValues> = {};
 		if (!searchParams) return result;
-		for (const field of affiliateFormFields) {
-			const name = field.name as keyof AffiliateFormValues;
+		// Only prefill Step 1 (application) fields, not payment fields
+		for (const field of affiliateApplicationFields) {
+			const name = field.name as keyof AffiliateApplicationValues;
 			const raw = searchParams.get(field.name);
 			if (raw == null) continue;
 			switch (field.type) {
@@ -67,45 +62,11 @@ const AffiliateApplication = () => {
 		}
 		return result;
 	}, [searchParams]);
-	const [success, setSuccess] = useState(false);
-	const [affiliateId, setAffiliateId] = useState<string>("");
-	const [discountCode, setDiscountCode] = useState<DiscountCode | null>(null);
+	const [applicationSubmitted, setApplicationSubmitted] = useState(false);
 
-	// Handler to be passed to AffiliateForm
-	const handleSuccess = (id: string, social: string) => {
-		setAffiliateId(id);
-		// Generate a unique discount code using social handle and uuid
-		const codeId = uuidv4();
-		// Extract handle from @handle or from a URL
-		let handle = social.trim();
-		if (handle.startsWith("@")) {
-			handle = handle.slice(1);
-		} else if (handle.startsWith("http")) {
-			try {
-				const url = new URL(handle);
-				const path = url.pathname.split("/").filter(Boolean);
-				if (path.length > 0) handle = path[path.length - 1];
-			} catch {
-				// fallback to original
-			}
-		}
-		handle = handle.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
-		const shortId = `${handle}-${codeId.slice(0, 6).toUpperCase()}`;
-		const discountCode: DiscountCode = {
-			id: shortId,
-			code: shortId,
-			expires: new Date("2025-12-31T23:59:59Z"),
-			affiliateId: shortId,
-			created: new Date(),
-			maxUses: 100,
-			usedCount: 0,
-			discountPercent: 10,
-			isActive: true,
-			description: `10% off for Deal Scale affiliate referrals via ${social}`,
-		};
-		setAffiliateId(shortId);
-		setDiscountCode(discountCode);
-		setSuccess(true);
+	// Handler to be passed to AffiliateApplicationForm
+	const handleSuccess = () => {
+		setApplicationSubmitted(true);
 	};
 
 	const shouldRenderExitIntent = exitIntentEnabled();
@@ -115,13 +76,13 @@ const AffiliateApplication = () => {
 			<div className="container mx-auto px-6 py-24">
 				<div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
 					<div className="lg:col-span-7">
-						{success && discountCode ? (
-							<AffiliateSuccess
-								affiliateId={affiliateId || "AFFILIATE-12345"}
-								discountCode={discountCode}
-							/>
+						{applicationSubmitted ? (
+							<AffiliateApplicationSuccess />
 						) : (
-							<AffiliateForm onSuccess={handleSuccess} prefill={prefill} />
+							<AffiliateApplicationForm
+								onSuccess={handleSuccess}
+								prefill={prefill}
+							/>
 						)}
 					</div>
 					<div className="flex flex-col lg:col-span-5">

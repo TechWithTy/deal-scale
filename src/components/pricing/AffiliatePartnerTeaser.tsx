@@ -33,9 +33,8 @@ export const AffiliatePartnerTeaser = ({
 					<p className="text-muted-foreground text-sm sm:text-base">
 						Coaches, masterminds, and community leaders convert AI wins into
 						recurring income. Share a VIP link, unlock exclusive pricing, and
-						earn up to
+						earn up to{" "}
 						<span className="font-semibold text-primary">
-							{" "}
 							50% recurring commission
 						</span>
 						{commissionAmount ? (

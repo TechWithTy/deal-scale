@@ -39,6 +39,7 @@ import { FileIcon, Loader2 } from "lucide-react";
 import Image from "next/image";
 
 import Header from "@/components/common/Header";
+import { AuroraText } from "@/components/magicui/aurora-text";
 import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown";
 import {
 	type BetaTesterFormValues,
@@ -46,6 +47,9 @@ import {
 	betaTesterFormSchema,
 } from "@/data/contact/formFields";
 import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
+import { buildAffiliateRedirectUrl } from "@/utils/affiliateRedirect";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import { mapBetaTesterApplication } from "./testerApplicationMappers";
 
 export default function ContactForm({
@@ -54,6 +58,9 @@ export default function ContactForm({
 	prefill?: Partial<BetaTesterFormValues>;
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const router = useRouter();
+	const { theme, resolvedTheme } = useTheme();
+	const isDark = resolvedTheme === "dark" || theme === "dark";
 
 	const baseDefaults = useMemo<Partial<BetaTesterFormValues>>(
 		() => ({
@@ -64,8 +71,13 @@ export default function ContactForm({
 			phone: undefined,
 			icpType: "",
 			employeeCount: "",
-			dealsClosedLastYear: "",
+			avgDealsClosedPerMonth: "",
+			avgDealSize: undefined,
+			urgencyNeed: "",
+			uniqueLeadGeneration: "",
 			dealDocuments: [],
+			newsletterSignup: false,
+			affiliateSignup: false,
 			termsAccepted: false,
 		}),
 		[],
@@ -211,7 +223,7 @@ export default function ContactForm({
 			<div className="-z-10 absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-focus/10 opacity-60 blur-lg dark:from-primary/30 dark:to-focus/20" />
 			<Header
 				title="Founders Circle Application"
-				subtitle="Request early access to unlock 5 AI credits, priority onboarding, and a direct vote on upcoming features."
+				subtitle="Request early access to make AI calling and texting in exchange for feedback for the platform, priority onboarding, and a direct vote on upcoming features."
 				size="md"
 				className="mb-12 md:mb-16"
 			/>
@@ -233,12 +245,29 @@ export default function ContactForm({
 									<FormItem className="space-y-1">
 										{field.type !== "checkbox" && (
 											<FormLabel className="text-black dark:text-white/70">
-												{field.label}
+												{field.name === "dealDocuments" ? (
+													<>
+														<AuroraText
+															colors={
+																isDark
+																	? ["#FF0080", "#7928CA", "#0070F3", "#38bdf8"]
+																	: ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef"]
+															}
+															className="font-semibold"
+														>
+															Priority Access:
+														</AuroraText>{" "}
+														{field.label.replace("Priority Access: ", "")}
+													</>
+												) : (
+													field.label
+												)}
 											</FormLabel>
 										)}
 										<FormControl>
 											{renderFormField(
 												createFieldProps<FieldConfig>(field, formField),
+												isDark,
 											)}
 										</FormControl>
 										<FormMessage />

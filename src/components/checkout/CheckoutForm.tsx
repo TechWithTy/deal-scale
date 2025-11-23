@@ -46,6 +46,7 @@ type PayButtonLabelParams = {
 export interface CheckoutFormProps {
 	clientSecret: string;
 	onSuccess: () => void;
+	onCancel?: () => void;
 	plan: Plan;
 	service?: ServiceItemData; // * Add service to props for more specific validation
 	planType: PlanType;
@@ -60,6 +61,7 @@ export interface CheckoutFormProps {
 export default function CheckoutForm({
 	clientSecret,
 	onSuccess,
+	onCancel,
 	plan,
 	service,
 	planType,
@@ -518,24 +520,41 @@ export default function CheckoutForm({
 								? "No charge today. Add your payment method to secure your Basic plan after the trial."
 								: "Click a payment method to continue."}
 						</p>
-						<Button
-							type="submit"
-							disabled={!stripe || loading}
-							className="mt-4 w-full py-2"
-							aria-live="assertive"
-						>
-							{loading ? (
-								<>
-									<Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
-									<span className="sr-only">Processing checkout…</span>
-									<span aria-hidden>Processing…</span>
-								</>
-							) : isTrial ? (
-								"Activate Free Trial"
-							) : (
-								resolvedPayButtonLabel
-							)}
-						</Button>
+						<div className="space-y-3">
+							<Button
+								type="submit"
+								disabled={!stripe || loading}
+								className="w-full py-2"
+								aria-live="assertive"
+							>
+								{loading ? (
+									<>
+										<Loader2
+											className="mr-2 h-4 w-4 animate-spin"
+											aria-hidden
+										/>
+										<span className="sr-only">Processing checkout…</span>
+										<span aria-hidden>Processing…</span>
+									</>
+								) : isTrial ? (
+									"Activate Free Trial"
+								) : (
+									resolvedPayButtonLabel
+								)}
+							</Button>
+							<Button
+								type="button"
+								variant="outline"
+								onClick={() => {
+									onCancel?.();
+									onSuccess(); // Close dialog
+								}}
+								disabled={loading}
+								className="w-full py-2"
+							>
+								Cancel
+							</Button>
+						</div>
 					</form>
 				</div>
 

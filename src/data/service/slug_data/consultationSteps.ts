@@ -7,27 +7,27 @@ export interface ConsultationStep {
 export const betaSignupSteps: ConsultationStep[] = [
 	{
 		number: 1,
-		title: "Request Founders Circle Access",
+		title: "Request Your Spot in the Founders Circle",
 		description:
-			"Start your Founders Circle application. We only approve a limited number of operators so every member receives tailored support and direct influence over the roadmap.",
+			"Begin your application to join an exclusive group of operators shaping the future of AI deal flow. Entry is limited to ensure every member receives tailored support and strategic access.",
 	},
 	{
 		number: 2,
-		title: "Unlock Founders Circle Perks",
+		title: "Unlock Elite-Level Access",
 		description:
-			"Complete a short profile about your business goals. Unlock your Founders Circle perks—5 AI credits, exclusive newsletter access, locked pricing, and bonus credits upon approval.",
+			"Complete a short profile to activate your perks: free AI-powered calling and texting during beta, private newsletter access, locked insider pricing, and exclusive early adopter bonuses.",
 	},
 	{
 		number: 3,
-		title: "Gain Early Access",
+		title: "Step Into Early Access",
 		description:
-			"As a Founders Circle member, your feedback directly shapes our roadmap. Vote on upcoming features and secure priority access to every release before public launch.",
+			"Founders Circle members don't wait in line. You influence the roadmap, vote on the features you want built next, and receive every release before the public, including experimental tools.",
 	},
 	{
 		number: 4,
-		title: "You're In!",
+		title: "Welcome to the Inner Circle",
 		description:
-			"Welcome aboard! Watch for your onboarding email with your 5 AI credits, Founders Circle community access, and everything you need to automate your deal flow.",
+			"You're officially in. Your onboarding email includes access to free AI calls and texts, your private operator community, and the workflows you need to automate deal flow like the top 1% of producers.",
 	},
 ];
 export const affiliateProgramSteps: ConsultationStep[] = [

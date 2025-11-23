@@ -36,12 +36,12 @@ export const employeeCountOptions: ContactFormOption[] = [
 	{ value: "51_plus", label: "51+" },
 ];
 
-export const dealsClosedOptions: ContactFormOption[] = [
-	{ value: "0_5", label: "0-5" },
+export const avgDealsClosedPerMonthOptions: ContactFormOption[] = [
+	{ value: "0_1", label: "0-1" },
+	{ value: "2_3", label: "2-3" },
+	{ value: "4_5", label: "4-5" },
 	{ value: "6_10", label: "6-10" },
-	{ value: "11_20", label: "11-20" },
-	{ value: "21_50", label: "21-50" },
-	{ value: "51_plus", label: "51+" },
+	{ value: "11_plus", label: "11+" },
 ];
 
 export const featureOptions: ContactFormOption[] = getAllServices().map(
@@ -91,6 +91,14 @@ export const painPointOptions: ContactFormOption[] = [
 	},
 ];
 
+export const urgencyNeedOptions: ContactFormOption[] = [
+	{ value: "asap", label: "I need something ASAP" },
+	{ value: "actively_exploring", label: "I'm actively exploring" },
+	{ value: "curious_not_ready", label: "I'm curious but not ready" },
+	{ value: "comparing_options", label: "Just comparing options" },
+	{ value: "just_browsing", label: "Just browsing" },
+];
+
 export const betaTesterFormSchema = z.object({
 	firstName: z.string().optional(),
 	lastName: z.string().optional(),
@@ -108,16 +116,43 @@ export const betaTesterFormSchema = z.object({
 	employeeCount: z
 		.string()
 		.min(1, { message: "Please select the number of employees" }),
-	dealsClosedLastYear: z
+	avgDealsClosedPerMonth: z
 		.string()
-		.min(1, { message: "Please select the number of deals closed" }),
+		.min(1, { message: "Please select your average deals closed per month" }),
+	avgDealSize: z
+		.string()
+		.optional()
+		.refine(
+			(val) => {
+				if (!val || val.trim() === "") return true; // Optional field
+				// Remove $ and commas, then check if it's a valid number
+				const cleaned = val.replace(/[$,]/g, "");
+				const num = Number.parseFloat(cleaned);
+				return !Number.isNaN(num) && num >= 0;
+			},
+			{ message: "Please enter a valid amount in USD" },
+		),
 	wantedFeatures: z.array(z.string()).nonempty({
 		message: "Please select at least one feature you're interested in.",
 	}),
 	painPoints: z
 		.array(z.string())
-		.nonempty({ message: "Please select at least one pain point." }),
+		.nonempty({ message: "Please select at least one follow-up frustration." }),
+	urgencyNeed: z.string().min(1, {
+		message: "Please select how urgent your need is.",
+	}),
+	uniqueLeadGeneration: z
+		.string()
+		.min(10, {
+			message:
+				"Please provide at least 10 characters describing your unique lead generation approach.",
+		})
+		.max(1000, {
+			message: "Please keep your response under 1000 characters.",
+		}),
 	dealDocuments: z.array(z.instanceof(File)).optional(),
+	newsletterSignup: z.boolean().optional(),
+	affiliateSignup: z.boolean().optional(),
 	termsAccepted: z.boolean().refine((val) => val === true, {
 		message: "You must accept the terms and conditions",
 	}),
@@ -173,19 +208,28 @@ export const betaTesterFormFields: FieldConfig[] = [
 		onChange: (value: string) => {},
 	},
 	{
-		name: "dealsClosedLastYear",
-		label: "Deals Closed Last Year",
+		name: "avgDealsClosedPerMonth",
+		label: "Avg Deals Closed Per Month",
 		type: "select",
-		placeholder: "Select number of deals",
-		options: dealsClosedOptions,
+		placeholder: "Select average deals per month",
+		options: avgDealsClosedPerMonthOptions,
+		value: "",
+		onChange: (value: string) => {},
+	},
+	{
+		name: "avgDealSize",
+		label: "Average Deal Size (USD)",
+		type: "number",
+		placeholder: "$50,000",
 		value: "",
 		onChange: (value: string) => {},
 	},
 	{
 		name: "painPoints",
-		label: "What are your biggest pain points? (Select all that apply)",
+		label:
+			"What frustrates you the most about follow-up? (Select all that apply)",
 		type: "multiselect", // Assuming a component that handles multi-select
-		placeholder: "Select your biggest challenges",
+		placeholder: "Select what frustrates you most",
 		options: painPointOptions,
 		value: [],
 		onChange: (value: string[]) => {},
@@ -211,13 +255,50 @@ export const betaTesterFormFields: FieldConfig[] = [
 		},
 	},
 	{
+		name: "urgencyNeed",
+		label: "How urgent is your need for a system like this?",
+		type: "select",
+		placeholder: "Select your urgency level",
+		options: urgencyNeedOptions,
+		value: "",
+		onChange: (value: string) => {},
+	},
+	{
+		name: "uniqueLeadGeneration",
+		label:
+			"Is there anything unique about how you generate or contact leads that we should know to support you properly?",
+		type: "textarea",
+		placeholder:
+			"Please describe your unique lead generation or contact methods...",
+		value: "",
+		onChange: (value: string) => {},
+		minLength: 10,
+		maxLength: 1000,
+	},
+	{
 		name: "dealDocuments",
-		label: "Optional: Upload proof of your last 3 deals (HUDs, etc.)",
+		label:
+			"Priority Access: Optional: Upload proof of your last 3 deals (HUDs, etc.)",
 		type: "file",
 		accept: ".pdf,.docx,",
 		multiple: true,
 		value: [],
 		onChange: (value: File[]) => {},
+	},
+	{
+		name: "newsletterSignup",
+		label: "I would like to receive updates and news from Deal Scale.",
+		type: "checkbox",
+		value: false,
+		onChange: (checked: boolean) => {},
+	},
+	{
+		name: "affiliateSignup",
+		label:
+			"I'm interested in the affiliate program - Make up to $50,000 per referral",
+		type: "checkbox",
+		value: false,
+		onChange: (checked: boolean) => {},
 	},
 	{
 		name: "termsAccepted",
