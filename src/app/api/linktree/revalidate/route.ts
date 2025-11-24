@@ -1,9 +1,10 @@
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST() {
 	try {
-		await revalidateTag("link-tree");
+		// Revalidate the linktree path (Next.js 16 changed revalidateTag API)
+		revalidatePath("/linktree");
 		return NextResponse.json({ ok: true });
 	} catch (err) {
 		const msg = err instanceof Error ? err.message : "revalidate failed";
