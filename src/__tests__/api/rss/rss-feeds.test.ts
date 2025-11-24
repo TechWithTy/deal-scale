@@ -100,7 +100,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../rss.xml")).default;
+			const handler = (await import("../../../pages/api/rss.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -123,7 +123,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../rss.xml")).default;
+			const handler = (await import("../../../pages/api/rss.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -154,7 +154,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../youtube.xml")).default;
+			const handler = (await import("../../../pages/api/rss/youtube.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -176,7 +176,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../youtube.xml")).default;
+			const handler = (await import("../../../pages/api/rss/youtube.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -207,7 +207,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../github.xml")).default;
+			const handler = (await import("../../../pages/api/rss/github.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -229,7 +229,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../github.xml")).default;
+			const handler = (await import("../../../pages/api/rss/github.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -294,7 +294,7 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -339,7 +339,7 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -382,7 +382,7 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -437,7 +437,7 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -488,7 +488,7 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -518,7 +518,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../rss.xml")).default;
+			const handler = (await import("../../../pages/api/rss.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -546,7 +546,7 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../rss.xml")).default;
+			const handler = (await import("../../../pages/api/rss.xml")).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 

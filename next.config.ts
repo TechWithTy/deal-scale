@@ -291,23 +291,6 @@ const nextConfig: NextConfig = {
 			},
 		];
 	},
-	// Webpack configuration to fix minify plugin issues
-	webpack: (config, { isServer }) => {
-		// Fix for WebpackError constructor issue in minify-webpack-plugin
-		if (!isServer) {
-			config.resolve.fallback = {
-				...config.resolve.fallback,
-				fs: false,
-				net: false,
-				tls: false,
-			};
-		}
-
-		// Ensure webpack is properly available for plugins
-		config.plugins = config.plugins || [];
-
-		return config;
-	},
 };
 
 export default withBundleAnalyzer(nextConfig);

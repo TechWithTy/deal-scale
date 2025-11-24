@@ -263,7 +263,7 @@ export async function POST(req: NextRequest) {
 
 		// Trigger UI revalidation (ensure your data fetch uses this tag)
 		try {
-			revalidateTag("link-tree");
+			await revalidateTag("link-tree");
 		} catch (e) {
 			if (debug) console.log("[notion-webhook] revalidate error", e);
 		}
