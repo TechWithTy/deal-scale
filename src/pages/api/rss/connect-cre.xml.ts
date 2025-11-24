@@ -14,7 +14,7 @@ export default async function handler(
 	try {
 		const response = await fetch(CONNECT_CRE_FEED, {
 			headers: {
-				"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://leadorchestra.com)",
+				"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
 				Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 			},
 		});

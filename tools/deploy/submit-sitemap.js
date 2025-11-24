@@ -1,4 +1,4 @@
-const DEFAULT_CANONICAL = "https://leadorchestra.com";
+const DEFAULT_CANONICAL = "https://dealscale.io";
 
 /**
  * Resolve the canonical base URL for sitemap submissions.

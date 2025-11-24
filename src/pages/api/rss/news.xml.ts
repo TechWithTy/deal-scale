@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { XMLParser } from "fast-xml-parser";
 
-const SITE_URL = "https://leadorchestra.com";
+const SITE_URL = "https://dealscale.io";
 const INMAN_FEED = "https://feeds.feedburner.com/inmannews";
 const REIT_FEED = process.env.REIT_RSS_FEED_URL || "https://www.reit.com/feed";
 const CONNECT_CRE_FEED =
@@ -184,37 +184,37 @@ export default async function handler(
 			await Promise.allSettled([
 				fetch(INMAN_FEED, {
 					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://leadorchestra.com)",
+						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
 				fetch(REIT_FEED, {
 					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://leadorchestra.com)",
+						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
 				fetch(CONNECT_CRE_FEED, {
 					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://leadorchestra.com)",
+						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
 				fetch(WORLD_PROPERTY_JOURNAL_FEED, {
 					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://leadorchestra.com)",
+						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
 				fetch(FIRST_TUESDAY_FEED, {
 					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://leadorchestra.com)",
+						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
 				fetch(NAR_FEED, {
 					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://leadorchestra.com)",
+						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),

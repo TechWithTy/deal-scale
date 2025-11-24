@@ -14,6 +14,9 @@ const YOUTUBE_FEEDS = [
 	`https://www.youtube.com/@${YOUTUBE_USERNAME}/videos.rss`,
 	`https://www.youtube.com/feeds/videos.xml?user=${YOUTUBE_USERNAME}`,
 ];
+const GITHUB_FEED =
+	process.env.GITHUB_ATOM_FEED_URL ||
+	"https://github.com/organizations/Deal-Scale/TechWithTy.private.atom?token=AI72D5O5LGXJVYOGAX5W7WGHFMVCY";
 const CACHE_CONTROL = "s-maxage=900, stale-while-revalidate=3600";
 
 type HybridEntry = {
@@ -291,6 +294,85 @@ const buildYouTubeEntries = (feedXml: string): HybridEntry[] => {
 	}
 };
 
+type GitHubEntry = {
+	id?: string | { "#text"?: string };
+	title?: string | { "#text"?: string };
+	link?: { "@_href"?: string } | string;
+	content?: { "#text"?: string } | string;
+	published?: string;
+	updated?: string;
+	author?: { name?: string };
+};
+
+type GitHubParsed = {
+	feed?: {
+		entry?: GitHubEntry | GitHubEntry[];
+	};
+};
+
+const buildGitHubEntries = (feedXml: string): HybridEntry[] => {
+	const parsed = parser.parse(feedXml) as GitHubParsed;
+
+	const entries = ensureArray(parsed.feed?.entry);
+
+	const mappedEntries: Array<HybridEntry | undefined> = entries.map((entry) => {
+		const id =
+			typeof entry.id === "string"
+				? entry.id.trim()
+				: typeof entry.id === "object" && entry.id?.["#text"]
+					? String(entry.id["#text"]).trim()
+					: "";
+		if (!id) return undefined;
+
+		const title =
+			typeof entry.title === "string"
+				? entry.title.trim()
+				: typeof entry.title === "object" && entry.title?.["#text"]
+					? String(entry.title["#text"]).trim()
+					: "GitHub Activity";
+		const link =
+			(typeof entry.link === "object" && entry.link?.["@_href"]
+				? String(entry.link["@_href"])
+				: typeof entry.link === "string"
+					? entry.link
+					: "") || "https://github.com/Deal-Scale";
+		const content =
+			(typeof entry.content === "object" && entry.content?.["#text"]
+				? String(entry.content["#text"])
+				: typeof entry.content === "string"
+					? entry.content
+					: "") || "";
+		const description =
+			typeof content === "string"
+				? content.replace(/<[^>]+>/g, "").substring(0, 500) ||
+					"Latest activity from Deal-Scale organization on GitHub."
+				: "Latest activity from Deal-Scale organization on GitHub.";
+		const published = entry.published || entry.updated;
+		const author = entry.author?.name || "TechWithTy";
+
+		// Extract event type from title (fork, push, etc.)
+		const eventType = title.toLowerCase().includes("forked")
+			? "fork"
+			: title.toLowerCase().includes("pushed")
+				? "push"
+				: "activity";
+
+		return {
+			title: `${title} by ${author}`,
+			link,
+			description: description.toString(),
+			pubDate: normalizeDate(published),
+			guid: `github-${id}`,
+			source: "github" as const,
+			categories: [eventType, "github"],
+		};
+	});
+
+	return mappedEntries.filter((entry): entry is HybridEntry =>
+		Boolean(entry?.link),
+	);
+};
+
 const buildChannelXml = (entries: HybridEntry[]): string => {
 	const itemsXml = entries
 		.map((entry) => {
@@ -301,11 +383,15 @@ const buildChannelXml = (entries: HybridEntry[]): string => {
 			const sourceUrl =
 				entry.source === "youtube"
 					? "https://www.youtube.com/@DealScaleRealEstate"
-					: `${SITE_URL}/blog`;
+					: entry.source === "github"
+						? "https://github.com/Deal-Scale"
+						: `${SITE_URL}/blog`;
 			const sourceName =
 				entry.source === "youtube"
 					? "DealScale YouTube"
-					: "DealScale Blog";
+					: entry.source === "github"
+						? "Deal-Scale GitHub"
+						: "DealScale Blog";
 
 			return `<item>
 	<title>${sanitize(entry.title)}</title>
@@ -324,9 +410,9 @@ const buildChannelXml = (entries: HybridEntry[]): string => {
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-		<title>DealScale Hybrid Feed</title>
+	<title>DealScale Private Hybrid Feed</title>
 	<link>${SITE_URL}</link>
-	<description>Unified feed combining DealScale blog posts and YouTube videos.</description>
+	<description>Private unified feed combining DealScale blog posts, YouTube videos, and GitHub activity.</description>
 	<language>en-us</language>
 	<lastBuildDate>${lastBuildDate}</lastBuildDate>
 ${itemsXml}
@@ -373,7 +459,7 @@ export default async function handler(
 	};
 
 	try {
-		const [beehiivResult, youtubeResult] =
+		const [beehiivResult, youtubeResult, githubResult] =
 			await Promise.allSettled([
 				fetch(BEEHIIV_FEED, {
 					headers: {
@@ -382,6 +468,12 @@ export default async function handler(
 					},
 				}),
 				fetchYouTubeFeed(),
+				fetch(GITHUB_FEED, {
+					headers: {
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8",
+					},
+				}),
 			]);
 
 		const beehiivXml =
@@ -391,6 +483,10 @@ export default async function handler(
 		const youtubeXml =
 			youtubeResult.status === "fulfilled" && youtubeResult.value.ok
 				? await youtubeResult.value.text()
+				: "";
+		const githubXml =
+			githubResult.status === "fulfilled" && githubResult.value.ok
+				? await githubResult.value.text()
 				: "";
 
 		// Log feed fetch status for debugging
@@ -411,14 +507,16 @@ export default async function handler(
 
 		const beehiivEntries = beehiivXml ? buildBeehiivEntries(beehiivXml) : [];
 		const youtubeEntries = youtubeXml ? buildYouTubeEntries(youtubeXml) : [];
+		const githubEntries = githubXml ? buildGitHubEntries(githubXml) : [];
 
 		console.log(
-			`Feed entries: Beehiiv=${beehiivEntries.length}, YouTube=${youtubeEntries.length}`,
+			`Feed entries: Beehiiv=${beehiivEntries.length}, YouTube=${youtubeEntries.length}, GitHub=${githubEntries.length}`,
 		);
 
 		const combinedEntries = [
 			...beehiivEntries,
 			...youtubeEntries,
+			...githubEntries,
 		].sort(
 			(a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime(),
 		);
@@ -428,9 +526,9 @@ export default async function handler(
 			const emptyFeed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-		<title>DealScale Hybrid Feed</title>
+	<title>DealScale Private Hybrid Feed</title>
 	<link>${SITE_URL}</link>
-	<description>Unified feed combining DealScale blog posts and YouTube videos.</description>
+	<description>Private unified feed combining DealScale blog posts, YouTube videos, and GitHub activity.</description>
 	<language>en-us</language>
 	<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 	<item>
@@ -454,13 +552,13 @@ export default async function handler(
 		res.setHeader("Cache-Control", CACHE_CONTROL);
 		res.status(200).send(feedXml);
 	} catch (error) {
-		console.error("Error building hybrid RSS feed:", error);
+		console.error("Error building private hybrid RSS feed:", error);
 		const errorFeed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-	<title>DealScale Hybrid Feed Error</title>
+	<title>DealScale Private Hybrid Feed Error</title>
 	<link>${SITE_URL}</link>
-	<description>Hybrid feed temporarily unavailable. Please try again later.</description>
+	<description>Private hybrid feed temporarily unavailable. Please try again later.</description>
 	<language>en-us</language>
 	<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 	<item>
@@ -477,3 +575,4 @@ export default async function handler(
 		res.status(502).send(errorFeed);
 	}
 }
+
