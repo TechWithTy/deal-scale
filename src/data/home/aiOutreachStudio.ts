@@ -107,7 +107,7 @@ export const buildPersonaAiOutreachStudioSeo = ({
 }: PersonaSeoInput = {}): AiOutreachStudioSeo => {
 	const personaLabel = resolvePersonaLabel(persona);
 	const personaGoal = resolvePersonaGoal(persona, goal);
-	const personaHeadline = `${AI_OUTREACH_STUDIO_TAGLINE} for ${personaLabel}`;
+	const personaHeadline = AI_OUTREACH_STUDIO_TAGLINE;
 	// Convert plural persona labels to singular (e.g., "Real Estate Investors" -> "Real Estate Investor")
 	const singularPersonaLabel = personaLabel.replace(/s$/, "");
 	// Remove "automate" from goal if it already starts with it to avoid duplication
