@@ -556,7 +556,7 @@ export default function Navbar() {
 					// 1. Not on excluded pages (contact, contact-pilot)
 					// 2. Either on affiliate page OR not closed
 					if (!isExcludedPage && (isAffiliatePage || !bannerClosed)) {
-						setShowBanner(true);
+					setShowBanner(true);
 					} else {
 						setShowBanner(false);
 					}

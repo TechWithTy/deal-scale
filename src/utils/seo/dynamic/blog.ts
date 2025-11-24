@@ -45,11 +45,7 @@ export async function getSeoMetadataForPost(id: string): Promise<SeoMeta> {
 	const post = posts.find((p) => p.id === id);
 	// Always build a fallback canonical URL for not-found
 	const fallbackCanonical = `${getTestBaseUrl()}/blogs/${id}`;
-	// Normalize web_url to replace dealscale.io with leadorchestra.com
-	const normalizedWebUrl = post?.web_url
-		? post.web_url.replace(/dealscale\.io/gi, "leadorchestra.com")
-		: undefined;
-	const pageUrl = normalizedWebUrl || fallbackCanonical;
+	const pageUrl = post?.web_url || fallbackCanonical;
 	const { aggregateRating } = getTestimonialReviewData();
 
 	if (!post) {
