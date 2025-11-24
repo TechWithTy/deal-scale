@@ -169,8 +169,94 @@ const nextConfig: NextConfig = {
 				permanent: true,
 			},
 			{
+				source: "/hybrid-private.xml",
+				destination: "/api/rss/hybrid-private.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/hybrid-private.xml",
+				destination: "/api/rss/hybrid-private.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/hybrid-private.xml.ts",
+				destination: "/api/rss/hybrid-private.xml",
+				permanent: true,
+			},
+			{
 				source: "/rss.xml.ts",
 				destination: "/api/rss.xml",
+				permanent: true,
+			},
+			// News feed routes
+			{
+				source: "/news.xml",
+				destination: "/api/rss/news.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/news.xml",
+				destination: "/api/rss/news.xml",
+				permanent: true,
+			},
+			{
+				source: "/inman.xml",
+				destination: "/api/rss/inman.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/inman.xml",
+				destination: "/api/rss/inman.xml",
+				permanent: true,
+			},
+			{
+				source: "/reit.xml",
+				destination: "/api/rss/reit.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/reit.xml",
+				destination: "/api/rss/reit.xml",
+				permanent: true,
+			},
+			{
+				source: "/connect-cre.xml",
+				destination: "/api/rss/connect-cre.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/connect-cre.xml",
+				destination: "/api/rss/connect-cre.xml",
+				permanent: true,
+			},
+			{
+				source: "/world-property-journal.xml",
+				destination: "/api/rss/world-property-journal.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/world-property-journal.xml",
+				destination: "/api/rss/world-property-journal.xml",
+				permanent: true,
+			},
+			{
+				source: "/first-tuesday.xml",
+				destination: "/api/rss/first-tuesday.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/first-tuesday.xml",
+				destination: "/api/rss/first-tuesday.xml",
+				permanent: true,
+			},
+			{
+				source: "/nar.xml",
+				destination: "/api/rss/nar.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/nar.xml",
+				destination: "/api/rss/nar.xml",
 				permanent: true,
 			},
 			{
