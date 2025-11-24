@@ -99,8 +99,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const blogPosts = await Promise.all(
 		posts.map(async (post) => {
 			const seo = await getSeoMetadataForPost(post.id);
+			// Normalize web_url to replace dealscale.io with leadorchestra.com
+			const normalizedWebUrl = post.web_url
+				? post.web_url.replace(/dealscale\.io/gi, "leadorchestra.com")
+				: "";
 			return {
-				url: seo?.canonical || post.web_url || "",
+				url: seo?.canonical || normalizedWebUrl || "",
 				lastModified:
 					typeof post.published_at === "string" ||
 					typeof post.published_at === "number"

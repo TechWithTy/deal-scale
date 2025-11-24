@@ -6,18 +6,18 @@ exports[`buildManifestoSchema > creates a CreativeWorkSeries with list items and
   "description": "DealScale was created to give real estate operators the freedom that comes from automated deal flow instead of manual grind.",
   "name": "1️⃣ Origin Story",
   "position": 1,
-  "url": "https://dealscale.io/about#origin-story",
+  "url": "https://leadorchestra.com/about#origin-story",
 }
 `;
 
 exports[`buildManifestoSchema > creates a CreativeWorkSeries with list items and anchors > manifesto-first-part 1`] = `
 {
-  "@id": "https://dealscale.io/about#manifesto-origin-story",
+  "@id": "https://leadorchestra.com/about#manifesto-origin-story",
   "@type": "CreativeWork",
   "description": "DealScale was created to give real estate operators the freedom that comes from automated deal flow instead of manual grind.",
   "headline": "Automation-first freedom for real estate pros",
   "name": "1️⃣ Origin Story",
   "position": 1,
-  "url": "https://dealscale.io/about#origin-story",
+  "url": "https://leadorchestra.com/about#origin-story",
 }
 `;
