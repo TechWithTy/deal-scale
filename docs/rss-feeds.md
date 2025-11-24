@@ -6,10 +6,10 @@ DealScale exposes four RSS endpoints so marketing, search crawlers, and AI agent
 
 | Endpoint | Source | Description | Cache-Control |
 | --- | --- | --- | --- |
-| `https://dealscale.io/rss.xml` | Beehiiv | Mirrors the Beehiiv newsletter feed through our domain. Content type: `application/rss+xml`. | `s-maxage=3600, stale-while-revalidate=86400` |
-| `https://dealscale.io/rss/youtube.xml` | YouTube Channel | Proxies the YouTube channel feed so video updates are attributed to dealscale.io. Content type: `application/atom+xml`. | `s-maxage=900, stale-while-revalidate=3600` |
-| `https://dealscale.io/rss/github.xml` | GitHub Activity | Proxies the GitHub organization activity feed (forks, pushes, etc.) so development activity is attributed to dealscale.io. Content type: `application/atom+xml`. | `s-maxage=900, stale-while-revalidate=3600` |
-| `https://dealscale.io/rss/hybrid.xml` | Beehiiv + YouTube + GitHub | Combines blog posts, videos, and GitHub activity into a single RSS 2.0 channel sorted by publish date. Each item includes a `<source>` tag indicating `DealScale Blog`, `DealScale YouTube`, or `Deal-Scale GitHub`. | `s-maxage=900, stale-while-revalidate=3600` |
+| `https://leadorchestra.com/rss.xml` | Beehiiv | Mirrors the Beehiiv newsletter feed through our domain. Content type: `application/rss+xml`. | `s-maxage=3600, stale-while-revalidate=86400` |
+| `https://leadorchestra.com/rss/youtube.xml` | YouTube Channel | Proxies the YouTube channel feed so video updates are attributed to leadorchestra.com. Content type: `application/atom+xml`. | `s-maxage=900, stale-while-revalidate=3600` |
+| `https://leadorchestra.com/rss/github.xml` | GitHub Activity | Proxies the GitHub organization activity feed (forks, pushes, etc.) so development activity is attributed to leadorchestra.com. Content type: `application/atom+xml`. | `s-maxage=900, stale-while-revalidate=3600` |
+| `https://leadorchestra.com/rss/hybrid.xml` | Beehiiv + YouTube + GitHub | Combines blog posts, videos, and GitHub activity into a single RSS 2.0 channel sorted by publish date. Each item includes a `<source>` tag indicating `DealScale Blog`, `DealScale YouTube`, or `Deal-Scale GitHub`. | `s-maxage=900, stale-while-revalidate=3600` |
 
 All four feeds are implemented as serverless API routes under `src/pages/api/rss/*.xml.ts`. They fetch upstream content with custom user-agent headers to avoid rate limiting, gracefully handle upstream outages (returning a minimal fallback RSS response), and are reverse-proxied via `next.config.ts` redirects so the canonical URLs are short and stable.
 
@@ -27,13 +27,13 @@ This format enables CRMs, Zapier-type automations, and search crawlers to ingest
 
 ## Video Sitemap
 
-In addition to the feeds, we maintain a first-party video sitemap at `https://dealscale.io/videos/sitemap.xml`. It is generated from the YouTube RSS feed via:
+In addition to the feeds, we maintain a first-party video sitemap at `https://leadorchestra.com/videos/sitemap.xml`. It is generated from the YouTube RSS feed via:
 
 ```bash
 pnpm run sitemap:videos
 ```
 
-This script lives in `scripts/video/generate-video-sitemap.ts`, uses `fast-xml-parser`, and writes to `public/videos/sitemap.xml`. The sitemap includes `video:video` metadata (thumbnail, publication date, duration, tags) so Google and Bing can surface rich video snippets tied to the dealscale.io domain.
+This script lives in `scripts/video/generate-video-sitemap.ts`, uses `fast-xml-parser`, and writes to `public/videos/sitemap.xml`. The sitemap includes `video:video` metadata (thumbnail, publication date, duration, tags) so Google and Bing can surface rich video snippets tied to the leadorchestra.com domain.
 
 ## Discoverability & Submission
 
@@ -64,7 +64,7 @@ Feeds return XML; expect a 502 response when upstream services are unreachable (
 - GitHub feed URL: The GitHub Atom feed URL can be configured via the `GITHUB_ATOM_FEED_URL` environment variable. If not set, it defaults to the Deal-Scale organization private feed.
 - Video sitemap: schedule `pnpm run sitemap:videos` (e.g., CI step or cron) to stay synchronized with new uploads.
 
-By keeping all RSS and video surfaces under dealscale.io, we strengthen domain authority, simplify partner integrations, and provide reliable machine-readable content to search engines and AI agents.
+By keeping all RSS and video surfaces under leadorchestra.com, we strengthen domain authority, simplify partner integrations, and provide reliable machine-readable content to search engines and AI agents.
 
 
 

@@ -79,7 +79,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 ### 8. Configure Environment
 Add to `.env`:
 ```env
-DEALSCALE_API_BASE=https://api.dealscale.io
+DEALSCALE_API_BASE=https://api.leadorchestra.com
 ```
 
 ### 9. Update API Endpoints

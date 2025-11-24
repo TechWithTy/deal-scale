@@ -31,7 +31,7 @@ describe("partner schema builder", () => {
 			}),
 		);
 		expect(schema.itemListElement[1].item.url).toBe(
-			"https://dealscale.io/partners#beta",
+			"https://leadorchestra.com/partners#beta",
 		);
 	});
 });

@@ -46,7 +46,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 	"remote-closers": "Remote Closers",
 };
 
-const MONETIZE_PORTAL_URL = "https://app.dealscale.io";
+const MONETIZE_PORTAL_URL = "https://app.leadorchestra.com";
 const MONETIZE_CATEGORY_OVERRIDES: Partial<
 	Record<
 		ProductCategory,

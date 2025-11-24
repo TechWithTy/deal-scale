@@ -15,7 +15,7 @@ describe("external tools SEO utilities", () => {
 
 		expect(meta).toMatchObject({
 			title: "ROI Simulator | Deal Scale",
-			canonical: "https://app.dealscale.io/roi-simulator",
+			canonical: "https://app.leadorchestra.com/roi-simulator",
 			keywords: expect.arrayContaining(["roi calculator"]),
 			priority: 0.85,
 			changeFrequency: "weekly",
@@ -34,7 +34,7 @@ describe("external tools SEO utilities", () => {
 
 	it("builds FAQPage schema for external tool FAQs", () => {
 		const schema = buildExternalToolFaqSchema({
-			canonicalUrl: "https://app.dealscale.io/roi-simulator",
+			canonicalUrl: "https://app.leadorchestra.com/roi-simulator",
 			name: "ROI Simulator FAQs",
 			description: "Frequently asked questions about the ROI simulator.",
 			faqs: [
@@ -51,13 +51,13 @@ describe("external tools SEO utilities", () => {
 		});
 
 		expect(schema["@type"]).toBe("FAQPage");
-		expect(schema["@id"]).toBe("https://app.dealscale.io/roi-simulator#faq");
+		expect(schema["@id"]).toBe("https://app.leadorchestra.com/roi-simulator#faq");
 		expect(schema.mainEntity).toHaveLength(2);
 	});
 
 	it("builds HowTo schema that mirrors calculator steps", () => {
 		const schema = buildExternalToolHowToSchema({
-			canonicalUrl: "https://app.dealscale.io/roi-simulator",
+			canonicalUrl: "https://app.leadorchestra.com/roi-simulator",
 			name: "How to calculate real estate ROI",
 			description: "Step-by-step guide to run the ROI simulator.",
 			totalTime: "PT5M",
@@ -85,21 +85,21 @@ describe("external tools SEO utilities", () => {
 
 	it("maps marketing slug to canonical app domain", () => {
 		const entry = staticSeoMeta["/external-tools/roi-simulator"];
-		expect(entry?.canonical).toBe("https://app.dealscale.io/roi-simulator");
+		expect(entry?.canonical).toBe("https://app.leadorchestra.com/roi-simulator");
 	});
 
 	it("builds Product schema for external tool upsell blocks", () => {
 		const schema = buildExternalToolProductSchema({
 			name: "Deal Scale Pro",
 			description: "Unlock saved ROI scenarios, CRM sync, and automation.",
-			url: "https://dealscale.io/pricing",
+			url: "https://leadorchestra.com/pricing",
 			image: "/banners/pro-plan.png",
 			price: "199.00",
 			priceCurrency: "USD",
 		});
 
 		expect(() => validateProductSchema(schema)).not.toThrow();
-		expect(schema["@id"]).toBe("https://dealscale.io/pricing#product");
+		expect(schema["@id"]).toBe("https://leadorchestra.com/pricing#product");
 		expect(schema.offers.price).toBe("199.00");
 	});
 });

@@ -27,7 +27,7 @@ Equip DealScale with structured, conversational, and context-rich experiences th
 - Bundle demo flows into stepwise HowTo schema for quick-start guides.
 
 ### 4. Private App Context Bridging
-- Publish a controlled SoftwareApplication schema describing app.dealscale.io while keeping the app gated.
+- Publish a controlled SoftwareApplication schema describing app.leadorchestra.com while keeping the app gated.
 - Craft public onboarding overviews that highlight in-app capabilities without exposing private routes.
 - Provide sanitized screenshots and workflow diagrams that assistants can reference.
 

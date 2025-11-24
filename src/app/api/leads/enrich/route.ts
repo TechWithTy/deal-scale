@@ -7,7 +7,7 @@ import type {
 } from "../../../../types/enrichment";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
 
 function validateRequest(body: EnrichmentRequestBody): string | null {
 	if (!body || typeof body !== "object") {

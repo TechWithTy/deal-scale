@@ -21,7 +21,7 @@ export const companyData: FooterProps = {
 		{ href: "/about", label: "About Us" },
 	],
 	contactInfo: {
-		email: "sam.scaler@dealscale.io",
+		email: "sam.scaler@leadorchestra.com",
 		phone: "+1 (720) 258-6576",
 		address: "3700 Quebec St\nDenver, CO 80207\nUSA",
 	},

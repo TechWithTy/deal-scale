@@ -26,7 +26,6 @@ import {
 	LIVE_SECONDARY_CTA,
 	LIVE_SOCIAL_PROOF,
 	LIVE_VIDEO,
-	PERSONA_GOAL,
 	PERSONA_LABEL,
 } from "./_config";
 
@@ -174,7 +173,7 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 					>
 						<p className="max-w-3xl text-center text-base text-muted-foreground sm:text-lg md:text-xl dark:text-neutral-300">
 							Automated investor deal flow from your CRM and market data, so you
-							can focus on evaluating profitable opportunities.
+							can focus on closing deals and doing more of what makes you happy.
 						</p>
 						<PersonaCTA
 							className="w-full max-w-5xl"

@@ -9,7 +9,7 @@ import { SCHEMA_CONTEXT } from "@/utils/seo/schema/helpers";
  */
 export function buildLinkTreeItemListSchema(
 	items: LinkTreeItem[],
-	baseUrl = "https://dealscale.io/linktree",
+	baseUrl = "https://leadorchestra.com/linktree",
 ): {
 	"@context": typeof SCHEMA_CONTEXT;
 	"@type": "ItemList";

@@ -52,14 +52,14 @@ describe("submitIndexNow", () => {
 		});
 
 		const body = JSON.parse(call[1]?.body as string);
-		expect(body.host).toBe("dealscale.io");
+		expect(body.host).toBe("leadorchestra.com");
 		expect(body.key).toBe("fccf3556b5fa455699db2554f79a235e");
-		expect(body.urlList).toContain("https://dealscale.io/");
-		expect(body.urlList).toContain("https://dealscale.io/rss.xml");
-		expect(body.urlList).toContain("https://dealscale.io/rss/hybrid.xml");
-		expect(body.urlList).toContain("https://dealscale.io/rss/youtube.xml");
-		expect(body.urlList).toContain("https://dealscale.io/rss/github.xml");
-		expect(body.urlList).toContain("https://dealscale.io/sitemap.xml");
+		expect(body.urlList).toContain("https://leadorchestra.com/");
+		expect(body.urlList).toContain("https://leadorchestra.com/rss.xml");
+		expect(body.urlList).toContain("https://leadorchestra.com/rss/hybrid.xml");
+		expect(body.urlList).toContain("https://leadorchestra.com/rss/youtube.xml");
+		expect(body.urlList).toContain("https://leadorchestra.com/rss/github.xml");
+		expect(body.urlList).toContain("https://leadorchestra.com/sitemap.xml");
 		expect(logSpy).toHaveBeenCalledWith(
 			expect.stringContaining("[indexnow] Submitting"),
 		);
@@ -114,10 +114,10 @@ describe("submitIndexNow", () => {
 		await submitIndexNow();
 
 		const body = JSON.parse(fetchMock.mock.calls[0][1]?.body as string);
-		expect(body.urlList).toContain("https://dealscale.io/custom1");
-		expect(body.urlList).toContain("https://dealscale.io/custom2");
-		expect(body.urlList).toContain("https://dealscale.io/custom3");
-		expect(body.urlList).not.toContain("https://dealscale.io/rss.xml");
+		expect(body.urlList).toContain("https://leadorchestra.com/custom1");
+		expect(body.urlList).toContain("https://leadorchestra.com/custom2");
+		expect(body.urlList).toContain("https://leadorchestra.com/custom3");
+		expect(body.urlList).not.toContain("https://leadorchestra.com/rss.xml");
 	});
 
 	it("includes all RSS feeds in default URL list", async () => {
@@ -126,10 +126,10 @@ describe("submitIndexNow", () => {
 		const body = JSON.parse(fetchMock.mock.calls[0][1]?.body as string);
 		const urlList = body.urlList as string[];
 
-		expect(urlList).toContain("https://dealscale.io/rss.xml");
-		expect(urlList).toContain("https://dealscale.io/rss/hybrid.xml");
-		expect(urlList).toContain("https://dealscale.io/rss/youtube.xml");
-		expect(urlList).toContain("https://dealscale.io/rss/github.xml");
+		expect(urlList).toContain("https://leadorchestra.com/rss.xml");
+		expect(urlList).toContain("https://leadorchestra.com/rss/hybrid.xml");
+		expect(urlList).toContain("https://leadorchestra.com/rss/youtube.xml");
+		expect(urlList).toContain("https://leadorchestra.com/rss/github.xml");
 	});
 
 	it("skips submission when INDEXNOW_SUBMIT_DISABLE is set", async () => {
@@ -231,9 +231,9 @@ describe("submitIndexNow", () => {
 
 		// Check for key pages
 		expect(urlList.length).toBeGreaterThanOrEqual(8);
-		expect(urlList).toContain("https://dealscale.io/");
-		expect(urlList).toContain("https://dealscale.io/portfolio");
-		expect(urlList).toContain("https://dealscale.io/blogs");
-		expect(urlList).toContain("https://dealscale.io/sitemap.xml");
+		expect(urlList).toContain("https://leadorchestra.com/");
+		expect(urlList).toContain("https://leadorchestra.com/portfolio");
+		expect(urlList).toContain("https://leadorchestra.com/blogs");
+		expect(urlList).toContain("https://leadorchestra.com/sitemap.xml");
 	});
 });

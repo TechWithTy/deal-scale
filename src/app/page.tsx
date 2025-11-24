@@ -335,7 +335,7 @@ const Index = async ({
 
 	const posts = await getLatestBeehiivPosts();
 	const homepageSeo = getStaticSeo("/");
-	const canonicalUrl = homepageSeo.canonical ?? "https://dealscale.io";
+	const canonicalUrl = homepageSeo.canonical ?? "https://leadorchestra.com";
 	const heroDescription =
 		LIVE_COPY.subtitle ||
 		"Automate investor deal flow, keep motivated sellers warm, and close more profitable real estate deals with Deal Scale's AI Sales Assistants.";

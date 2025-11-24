@@ -64,7 +64,7 @@ function parseDevRedirects(): Record<string, string> {
 	const raw = process.env.DEV_REDIRECTS?.trim();
 	if (raw) {
 		try {
-			// Try JSON first: { "live-demo": "https://app.dealscale.io" }
+			// Try JSON first: { "live-demo": "https://app.leadorchestra.com" }
 			const obj = JSON.parse(raw) as Record<string, string>;
 			for (const [k, v] of Object.entries(obj))
 				out[k.toLowerCase()] = String(v);
@@ -79,7 +79,7 @@ function parseDevRedirects(): Record<string, string> {
 		}
 	}
 	// Built-in minimal defaults for local testing
-	out["live-demo"] = "https://app.dealscale.io";
+	out["live-demo"] = "https://app.leadorchestra.com";
 	return out;
 }
 

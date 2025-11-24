@@ -20,7 +20,7 @@ const createBundleAnalyzer = (): ((config: NextConfig) => NextConfig) => {
 		return analyzer({
 			enabled: true,
 		});
-	} catch (error) {
+	} catch (_error) {
 		console.warn(
 			"Skipping bundle analyzer because '@next/bundle-analyzer' is not installed.",
 		);
@@ -69,7 +69,7 @@ const nextConfig: NextConfig = {
 		// Minimum Cache TTL (in seconds) for optimized images
 		minimumCacheTTL: isProd ? 60 : 0,
 		remotePatterns: [
-			{ protocol: "https", hostname: "dealscale.io" },
+			{ protocol: "https", hostname: "leadorchestra.com" },
 			{ protocol: "https", hostname: "vectorlogo.zone" },
 			{ protocol: "https", hostname: "placehold.co" },
 			{ protocol: "https", hostname: "cdn-images-1.medium.com" },
@@ -154,6 +154,11 @@ const nextConfig: NextConfig = {
 				permanent: true,
 			},
 			{
+				source: "/hybrid.xml",
+				destination: "/api/rss/hybrid.xml",
+				permanent: true,
+			},
+			{
 				source: "/rss/hybrid.xml",
 				destination: "/api/rss/hybrid.xml",
 				permanent: true,
@@ -176,19 +181,19 @@ const nextConfig: NextConfig = {
 			{
 				source: "/industries/investors",
 				destination:
-					"https://blog.dealscale.io/p/forget-zillow-the-best-investment-properties-are-invisible-and-ai-holds-the-key-a661",
+					"https://blog.leadorchestra.com/p/forget-zillow-the-best-investment-properties-are-invisible-and-ai-holds-the-key-a661",
 				permanent: true,
 			},
 			{
 				source: "/industries/wholesalers",
 				destination:
-					"https://blog.dealscale.io/p/the-top-1-of-wholesalers-use-ai-are-you-getting-left-behind-e8fd",
+					"https://blog.leadorchestra.com/p/the-top-1-of-wholesalers-use-ai-are-you-getting-left-behind-e8fd",
 				permanent: true,
 			},
 			{
 				source: "/industries/agents",
 				destination:
-					"https://blog.dealscale.io/p/your-real-estate-crm-is-broken-here-s-the-ai-upgrade-that-actually-converts-leads-e85a",
+					"https://blog.leadorchestra.com/p/your-real-estate-crm-is-broken-here-s-the-ai-upgrade-that-actually-converts-leads-e85a",
 				permanent: true,
 			},
 

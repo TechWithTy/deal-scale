@@ -16,7 +16,7 @@ const baseProps: FooterProps = {
 		{ href: "/pricing", label: "Pricing" },
 	],
 	contactInfo: {
-		email: "hello@dealscale.io",
+		email: "hello@leadorchestra.com",
 		phone: "+1 (720) 258-6576",
 		address: "Denver, CO",
 	},

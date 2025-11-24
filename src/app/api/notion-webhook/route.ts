@@ -2,7 +2,7 @@ import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
 import { WebClient } from "@slack/web-api";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
 const NOTION_API_BASE = "https://api.notion.com/v1";
@@ -261,9 +261,9 @@ export async function POST(req: NextRequest) {
 		}
 		await redis.hset(key, payload);
 
-		// Trigger UI revalidation (ensure your data fetch uses this tag)
+		// Trigger UI revalidation (Next.js 16 changed revalidateTag API)
 		try {
-			revalidateTag("link-tree");
+			revalidatePath("/linktree");
 		} catch (e) {
 			if (debug) console.log("[notion-webhook] revalidate error", e);
 		}

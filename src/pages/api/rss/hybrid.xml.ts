@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { XMLParser } from "fast-xml-parser";
 
-const SITE_URL = "https://dealscale.io";
+const SITE_URL = "https://leadorchestra.com";
 const BEEHIIV_FEED = "https://rss.beehiiv.com/feeds/th0QQipR7J.xml";
 // Try multiple YouTube feed formats - YouTube may have changed their feed URLs
 // Note: Channel ID should include the -A suffix: UCphkra97DMNIAIvA1y8hZ-A
@@ -435,7 +435,7 @@ export default async function handler(
 			try {
 				const response = await fetch(feedUrl, {
 					headers: {
-						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://leadorchestra.com)",
 						Accept:
 							"application/atom+xml, application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
@@ -463,14 +463,14 @@ export default async function handler(
 			await Promise.allSettled([
 				fetch(BEEHIIV_FEED, {
 					headers: {
-						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://leadorchestra.com)",
 						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
 				fetchYouTubeFeed(),
 				fetch(GITHUB_FEED, {
 					headers: {
-						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://leadorchestra.com)",
 						Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8",
 					},
 				}),
@@ -521,10 +521,29 @@ export default async function handler(
 			(a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime(),
 		);
 
+		// If no entries, return a valid RSS feed with a message item
 		if (combinedEntries.length === 0) {
-			throw new Error(
-				"No entries available from Beehiiv, YouTube, or GitHub feeds.",
-			);
+			const emptyFeed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+	<title>DealScale Hybrid Feed</title>
+	<link>${SITE_URL}</link>
+	<description>Unified feed combining DealScale blog posts, YouTube videos, and GitHub activity.</description>
+	<language>en-us</language>
+	<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+	<item>
+		<title>No Content Available</title>
+		<link>${SITE_URL}</link>
+		<description>Feed sources are currently unavailable. Please check back later.</description>
+		<pubDate>${new Date().toUTCString()}</pubDate>
+		<guid isPermaLink="false">empty-feed-${Date.now()}</guid>
+	</item>
+</channel>
+</rss>`;
+			res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
+			res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			res.status(200).send(emptyFeed);
+			return;
 		}
 
 		const feedXml = buildChannelXml(combinedEntries);
@@ -534,10 +553,25 @@ export default async function handler(
 		res.status(200).send(feedXml);
 	} catch (error) {
 		console.error("Error building hybrid RSS feed:", error);
-		res
-			.status(502)
-			.send(
-				'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>DealScale Hybrid Feed Error</title><description>Hybrid feed temporarily unavailable.</description></channel></rss>',
-			);
+		const errorFeed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+	<title>DealScale Hybrid Feed Error</title>
+	<link>${SITE_URL}</link>
+	<description>Hybrid feed temporarily unavailable. Please try again later.</description>
+	<language>en-us</language>
+	<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+	<item>
+		<title>Feed Temporarily Unavailable</title>
+		<link>${SITE_URL}</link>
+		<description>We're experiencing issues fetching feed content. Please try again later.</description>
+		<pubDate>${new Date().toUTCString()}</pubDate>
+		<guid isPermaLink="false">error-${Date.now()}</guid>
+	</item>
+</channel>
+</rss>`;
+		res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.status(502).send(errorFeed);
 	}
 }

@@ -5,7 +5,7 @@ import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
 const SCHEMA_CONTEXT = "https://schema.org";
 const ITEM_LIST_ORDER_ASC = "https://schema.org/ItemListOrderAscending";
 const EVENTS_CANONICAL_BASE = (
-	staticSeoMeta["/events"]?.canonical || "https://dealscale.io/events"
+	staticSeoMeta["/events"]?.canonical || "https://leadorchestra.com/events"
 ).replace(/\/$/, "");
 
 export function buildEventUrl(slug: string): string {

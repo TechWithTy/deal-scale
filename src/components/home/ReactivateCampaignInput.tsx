@@ -393,10 +393,10 @@ export function ReactivateCampaignInput({
 				// Call completion callback
 				onActivationComplete?.(calculatedMetrics);
 
-				// Redirect to app.dealscale.io after a short delay
+				// Redirect to app.leadorchestra.com after a short delay
 				setTimeout(() => {
-					console.log("[ReactivateCampaign] Redirecting to app.dealscale.io");
-					window.location.href = "https://app.dealscale.io";
+					console.log("[ReactivateCampaign] Redirecting to app.leadorchestra.com");
+					window.location.href = "https://app.leadorchestra.com";
 				}, 2000);
 			}, 1600);
 		} catch (error) {

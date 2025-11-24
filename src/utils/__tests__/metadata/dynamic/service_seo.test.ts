@@ -18,7 +18,7 @@ describe("getServiceSeo", () => {
 			mockService.description ?? defaultSeo.description,
 		);
 		expect(seo.canonical).toBe(
-			"https://dealscale.io/features/ai-inbound-agent",
+			"https://leadorchestra.com/features/ai-inbound-agent",
 		);
 		expect(seo.image).toBe(defaultSeo.image);
 		expect(seo.type).toBe("article");

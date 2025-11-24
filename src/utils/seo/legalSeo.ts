@@ -4,11 +4,11 @@ import { legalDocuments } from "@/data/legal/legalDocuments";
 import type { SeoMeta } from "./seo";
 
 function resolveSiteOrigin(): string {
-	const fallback = DEFAULT_SEO.canonical ?? "https://dealscale.io";
+	const fallback = DEFAULT_SEO.canonical ?? "https://leadorchestra.com";
 	const candidates = [
 		process.env.NEXT_PUBLIC_SITE_URL,
 		fallback,
-		"https://dealscale.io",
+		"https://leadorchestra.com",
 	];
 
 	for (const candidate of candidates) {
@@ -33,7 +33,7 @@ function resolveSiteOrigin(): string {
 		}
 	}
 
-	return "https://dealscale.io";
+	return "https://leadorchestra.com";
 }
 
 const SITE_ORIGIN = resolveSiteOrigin();

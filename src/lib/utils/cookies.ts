@@ -61,3 +61,4 @@ export function clearBannerClosed(): void {
 	document.cookie = `${BANNER_CLOSED_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
 
+
