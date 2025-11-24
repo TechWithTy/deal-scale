@@ -69,7 +69,7 @@ const nextConfig: NextConfig = {
 		// Minimum Cache TTL (in seconds) for optimized images
 		minimumCacheTTL: isProd ? 60 : 0,
 		remotePatterns: [
-			{ protocol: "https", hostname: "leadorchestra.com" },
+			{ protocol: "https", hostname: "dealscale.io" },
 			{ protocol: "https", hostname: "vectorlogo.zone" },
 			{ protocol: "https", hostname: "placehold.co" },
 			{ protocol: "https", hostname: "cdn-images-1.medium.com" },
@@ -169,8 +169,94 @@ const nextConfig: NextConfig = {
 				permanent: true,
 			},
 			{
+				source: "/hybrid-private.xml",
+				destination: "/api/rss/hybrid-private.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/hybrid-private.xml",
+				destination: "/api/rss/hybrid-private.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/hybrid-private.xml.ts",
+				destination: "/api/rss/hybrid-private.xml",
+				permanent: true,
+			},
+			{
 				source: "/rss.xml.ts",
 				destination: "/api/rss.xml",
+				permanent: true,
+			},
+			// News feed routes
+			{
+				source: "/news.xml",
+				destination: "/api/rss/news.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/news.xml",
+				destination: "/api/rss/news.xml",
+				permanent: true,
+			},
+			{
+				source: "/inman.xml",
+				destination: "/api/rss/inman.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/inman.xml",
+				destination: "/api/rss/inman.xml",
+				permanent: true,
+			},
+			{
+				source: "/reit.xml",
+				destination: "/api/rss/reit.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/reit.xml",
+				destination: "/api/rss/reit.xml",
+				permanent: true,
+			},
+			{
+				source: "/connect-cre.xml",
+				destination: "/api/rss/connect-cre.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/connect-cre.xml",
+				destination: "/api/rss/connect-cre.xml",
+				permanent: true,
+			},
+			{
+				source: "/world-property-journal.xml",
+				destination: "/api/rss/world-property-journal.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/world-property-journal.xml",
+				destination: "/api/rss/world-property-journal.xml",
+				permanent: true,
+			},
+			{
+				source: "/first-tuesday.xml",
+				destination: "/api/rss/first-tuesday.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/first-tuesday.xml",
+				destination: "/api/rss/first-tuesday.xml",
+				permanent: true,
+			},
+			{
+				source: "/nar.xml",
+				destination: "/api/rss/nar.xml",
+				permanent: true,
+			},
+			{
+				source: "/rss/nar.xml",
+				destination: "/api/rss/nar.xml",
 				permanent: true,
 			},
 			{
@@ -181,19 +267,19 @@ const nextConfig: NextConfig = {
 			{
 				source: "/industries/investors",
 				destination:
-					"https://blog.leadorchestra.com/p/forget-zillow-the-best-investment-properties-are-invisible-and-ai-holds-the-key-a661",
+					"https://blog.dealscale.io/p/forget-zillow-the-best-investment-properties-are-invisible-and-ai-holds-the-key-a661",
 				permanent: true,
 			},
 			{
 				source: "/industries/wholesalers",
 				destination:
-					"https://blog.leadorchestra.com/p/the-top-1-of-wholesalers-use-ai-are-you-getting-left-behind-e8fd",
+					"https://blog.dealscale.io/p/the-top-1-of-wholesalers-use-ai-are-you-getting-left-behind-e8fd",
 				permanent: true,
 			},
 			{
 				source: "/industries/agents",
 				destination:
-					"https://blog.leadorchestra.com/p/your-real-estate-crm-is-broken-here-s-the-ai-upgrade-that-actually-converts-leads-e85a",
+					"https://blog.dealscale.io/p/your-real-estate-crm-is-broken-here-s-the-ai-upgrade-that-actually-converts-leads-e85a",
 				permanent: true,
 			},
 

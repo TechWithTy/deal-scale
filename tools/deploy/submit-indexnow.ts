@@ -1,4 +1,4 @@
-const DEFAULT_HOST = "https://leadorchestra.com";
+const DEFAULT_HOST = "https://dealscale.io";
 const DEFAULT_KEY = "fccf3556b5fa455699db2554f79a235e";
 const DEFAULT_ENDPOINT = "https://www.bing.com/indexnow";
 

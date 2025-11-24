@@ -12,7 +12,7 @@ export default async function handler(
 	try {
 		const response = await fetch(GITHUB_FEED, {
 			headers: {
-				"User-Agent": "DealScaleGitHubRSSProxy/1.0 (+https://leadorchestra.com)",
+				"User-Agent": "DealScaleGitHubRSSProxy/1.0 (+https://dealscale.io)",
 				Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8",
 			},
 		});

@@ -279,6 +279,7 @@ const CallDemoInteractive = () => {
 	const hasTriggeredTextLeadCaptureRef = useRef(false);
 	const textLeadCaptureTimeoutRef = useRef<number | null>(null);
 	const textScrollContainerRef = useRef<HTMLDivElement | null>(null);
+	const phoneContainerRef = useRef<HTMLDivElement | null>(null);
 
 	const openLeadCaptureModal = useCallback((origin: "call" | "text") => {
 		setLeadCaptureOrigin(origin);
@@ -293,21 +294,41 @@ const CallDemoInteractive = () => {
 		setActiveTextIndex((prev) => (prev + 1) % TEXT_DEMO_MESSAGES_COUNT);
 	}, []);
 
+	const scrollToPhone = useCallback(() => {
+		if (phoneContainerRef.current) {
+			phoneContainerRef.current.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		}
+	}, []);
+
 	const handleRestartCallDemo = useCallback(() => {
 		setActivePreview("call");
 		setCallDemoKey(Date.now());
 		setCallDemoMode("live");
 		setShouldAutoplayVideo(false);
-	}, []);
+		// Scroll to phone after a short delay to ensure state updates
+		setTimeout(() => {
+			scrollToPhone();
+		}, 100);
+	}, [scrollToPhone]);
 
-	const handleSwitchPreview = useCallback((type: PreviewType) => {
-		setActivePreview(type);
-		if (type === "text") {
-			setCallDemoMode("video");
-			// Reset autoplay when switching away from video
-			setShouldAutoplayVideo(false);
-		}
-	}, []);
+	const handleSwitchPreview = useCallback(
+		(type: PreviewType) => {
+			setActivePreview(type);
+			if (type === "text") {
+				setCallDemoMode("video");
+				// Reset autoplay when switching away from video
+				setShouldAutoplayVideo(false);
+			}
+			// Scroll to phone after a short delay to ensure state updates
+			setTimeout(() => {
+				scrollToPhone();
+			}, 100);
+		},
+		[scrollToPhone],
+	);
 
 	const handleEndTextDemo = useCallback(() => {
 		hasTriggeredTextLeadCaptureRef.current = false;
@@ -1047,7 +1068,11 @@ const CallDemoInteractive = () => {
 					"col-span-1 flex min-h-[26rem] items-center justify-center md:col-span-2 md:min-h-[34rem] xl:col-span-1 xl:col-start-3",
 				contentClassName:
 					"flex w-full items-center justify-center bg-transparent",
-				content: renderPreview(),
+				content: (
+					<div ref={phoneContainerRef} className="w-full">
+						{renderPreview()}
+					</div>
+				),
 			},
 		],
 		[
