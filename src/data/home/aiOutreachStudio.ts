@@ -108,9 +108,11 @@ export const buildPersonaAiOutreachStudioSeo = ({
 	const personaLabel = resolvePersonaLabel(persona);
 	const personaGoal = resolvePersonaGoal(persona, goal);
 	const personaHeadline = `${AI_OUTREACH_STUDIO_TAGLINE} for ${personaLabel}`;
-	const personaDescription = `AI outreach automation for ${toLowerFragment(
-		personaLabel,
-	)} teams to ${toLowerFragment(personaGoal)}. ${
+	// Convert plural persona labels to singular (e.g., "Real Estate Investors" -> "Real Estate Investor")
+	const singularPersonaLabel = personaLabel.replace(/s$/, "");
+	const personaDescription = `${toLowerFragment(
+		singularPersonaLabel,
+	)} teams to automate ${toLowerFragment(personaGoal)}. ${
 		AI_OUTREACH_STUDIO_DESCRIPTION
 	}`;
 
