@@ -110,9 +110,11 @@ export const buildPersonaAiOutreachStudioSeo = ({
 	const personaHeadline = `${AI_OUTREACH_STUDIO_TAGLINE} for ${personaLabel}`;
 	// Convert plural persona labels to singular (e.g., "Real Estate Investors" -> "Real Estate Investor")
 	const singularPersonaLabel = personaLabel.replace(/s$/, "");
-	const personaDescription = `${toLowerFragment(
+	const descriptionStart = `${toLowerFragment(
 		singularPersonaLabel,
-	)} teams to automate ${toLowerFragment(personaGoal)}. ${
+	)} teams to automate ${toLowerFragment(personaGoal)}.`;
+	// Capitalize first letter of the description
+	const personaDescription = `${descriptionStart.charAt(0).toUpperCase()}${descriptionStart.slice(1)} ${
 		AI_OUTREACH_STUDIO_DESCRIPTION
 	}`;
 
