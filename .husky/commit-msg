@@ -1,10 +1,5 @@
-npx --no-install commitlint --edit "$1"
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
 
-
-
-
-
-
-
-
-
+message_file="${1%$'\r'}"
+npx --no-install commitlint --edit "$message_file"
