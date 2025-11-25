@@ -19,6 +19,9 @@ export const SessionView = ({
 	showEndButton,
 	autoStart = false,
 	variant = "default",
+	audioUrl,
+	audioStartTime,
+	audioEndTime,
 }: {
 	transcript: Transcript;
 	onCallEnd?: (opts: { manual: boolean }) => void;
@@ -28,6 +31,9 @@ export const SessionView = ({
 	showEndButton?: boolean;
 	autoStart?: boolean;
 	variant?: "default" | "compact";
+	audioUrl?: string;
+	audioStartTime?: number;
+	audioEndTime?: number;
 }) => {
 	const [playingDemo, setPlayingDemo] = useState(false);
 	const [aiActive, setAiActive] = useState(false);
@@ -213,8 +219,11 @@ export const SessionView = ({
 			{/* Audio Manager */}
 			<AudioManager
 				callStatus={callStatus}
+				audioUrl={audioUrl}
 				playAudio={shouldPlayAudio}
 				onAudioEnd={handleAudioEnd}
+				startTime={audioStartTime}
+				endTime={audioEndTime}
 			/>
 
 			{/* Transcript Player */}

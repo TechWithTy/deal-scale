@@ -8,6 +8,8 @@ interface AudioManagerProps {
 	audioUrl?: string;
 	playAudio: boolean; // New prop to explicitly control playback
 	onAudioEnd?: () => void; // Callback when audio finishes playing
+	startTime?: number; // Start time in seconds
+	endTime?: number; // End time in seconds
 }
 
 export const AudioManager = ({
@@ -15,6 +17,8 @@ export const AudioManager = ({
 	audioUrl = "/calls/example-call-yt.mp3",
 	playAudio: shouldPlay,
 	onAudioEnd,
+	startTime = 0,
+	endTime,
 }: AudioManagerProps) => {
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const [isLoaded, setIsLoaded] = useState(false);
@@ -40,8 +44,18 @@ export const AudioManager = ({
 			onAudioEnd?.();
 		};
 
+		const handleTimeUpdate = () => {
+			if (endTime !== undefined && audio.currentTime >= endTime) {
+				audio.pause();
+				isPlayingRef.current = false;
+				console.log(`Audio reached end time: ${endTime} seconds`);
+				onAudioEnd?.();
+			}
+		};
+
 		audio.addEventListener("canplaythrough", handleCanPlay);
 		audio.addEventListener("ended", handleEnded);
+		audio.addEventListener("timeupdate", handleTimeUpdate);
 
 		// Cleanup
 		return () => {
@@ -49,10 +63,11 @@ export const AudioManager = ({
 			audio.pause();
 			audio.removeEventListener("canplaythrough", handleCanPlay);
 			audio.removeEventListener("ended", handleEnded);
+			audio.removeEventListener("timeupdate", handleTimeUpdate);
 			audioRef.current = null;
 			isPlayingRef.current = false;
 		};
-	}, [audioUrl, onAudioEnd]);
+	}, [audioUrl, onAudioEnd, endTime]);
 
 	// Handle audio playback based on playAudio prop
 	useEffect(() => {
@@ -67,14 +82,20 @@ export const AudioManager = ({
 			shouldPlay,
 			"currentTime:",
 			audio.currentTime,
+			"startTime:",
+			startTime,
 		);
 		if (shouldPlay) {
 			if (!isPlayingRef.current) {
+				// Set currentTime to startTime when starting playback
+				audio.currentTime = startTime;
 				audio
 					.play()
 					.then(() => {
 						isPlayingRef.current = true;
-						console.log("Audio playback started successfully via prop.");
+						console.log(
+							`Audio playback started successfully via prop at ${startTime}s.`,
+						);
 					})
 					.catch((error) => {
 						console.error("Error playing audio via prop:", error);
@@ -91,7 +112,7 @@ export const AudioManager = ({
 			}
 		}
 		// This effect now directly controls play/pause based on shouldPlay
-	}, [shouldPlay, isLoaded]);
+	}, [shouldPlay, isLoaded, startTime]);
 
 	return null; // This is a non-visual component
 };

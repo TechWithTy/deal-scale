@@ -22,8 +22,13 @@ export function TestimonialTabs({
 	fadeInUp,
 	testimonial,
 }: TestimonialTabsProps) {
+	// Use a stable ID to prevent hydration mismatches with Radix UI's random ID generation
+	// This ensures server and client render the same IDs
+	const tabsId = "testimonial-tabs";
+
 	return (
 		<Tabs
+			id={tabsId}
 			value={activeTab}
 			onValueChange={(value) => onTabChange(value as TabKey)}
 		>

@@ -15,6 +15,7 @@ const NavigationMenu = React.forwardRef<
 			"relative z-10 flex max-w-max flex-1 items-center justify-center",
 			className,
 		)}
+		suppressHydrationWarning
 		{...props}
 	>
 		{children}
@@ -55,6 +56,7 @@ const NavigationMenuTrigger = React.forwardRef<
 			"data-[state=open]:text-opacity-100",
 			className,
 		)}
+		suppressHydrationWarning
 		{...props}
 	>
 		{children}

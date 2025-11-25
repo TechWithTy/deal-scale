@@ -11,7 +11,7 @@ import { memo, useEffect, useId, useRef, useState } from "react";
 const FEATURE_CARDS = [
 	{
 		key: "before",
-		title: "Before",
+		title: "Your Voice",
 		description: "Flat, robotic delivery that breaks connection.",
 		className:
 			"border border-red-200 bg-gradient-to-br from-red-100 via-red-50 to-red-200/80 text-red-900 dark:border-red-500/30 dark:from-red-700/25 dark:via-red-600/20 dark:to-red-900/35 dark:text-red-50/90",
@@ -19,7 +19,7 @@ const FEATURE_CARDS = [
 	},
 	{
 		key: "after",
-		title: "After",
+		title: "Cloned Voice",
 		description: "Expressive, human tone that builds trust instantly.",
 		className:
 			"border border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-emerald-200/80 text-emerald-900 dark:border-emerald-300/35 dark:from-emerald-600/20 dark:via-emerald-500/15 dark:to-emerald-900/30 dark:text-emerald-50/90",
@@ -307,7 +307,7 @@ const PixelatedVoiceOverlayComponent = ({
 										</svg>
 										{isPlaying ? (
 											<span className="-bottom-1 absolute rounded-full bg-sky-400 px-2 py-0.5 font-semibold text-[0.625rem] text-white uppercase tracking-[0.32em] shadow-sm">
-												{afterActive ? "After" : "Before"}
+												{afterActive ? "Cloned Voice" : "Your Voice"}
 											</span>
 										) : null}
 									</span>
