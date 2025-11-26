@@ -455,18 +455,35 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 
 	console.log(`[useDataModule] Creating useEffect for key: "${key}"`);
 	useEffect(() => {
+		// Force log to both console and ensure it runs
+		if (typeof window !== "undefined") {
+			console.log(
+				`[useDataModule] useEffect executed (CLIENT) for key: "${key}"`,
+			);
+		}
 		const currentStatus = store.getState().status;
 		console.log(
 			`[useDataModule] useEffect executed for key: "${key}", status: ${currentStatus}`,
 		);
 		if (currentStatus === "idle") {
 			console.log(`[useDataModule] Triggering load for key: "${key}"`);
-			void store
-				.getState()
-				.load()
-				.catch((error) => {
-					console.error(`[useDataModule] Load error for key "${key}":`, error);
+			const loadPromise = store.getState().load();
+			if (loadPromise) {
+				void loadPromise.catch((error) => {
+					console.error(
+						`[useDataModule] Load error for key "${key}":`,
+						error,
+					);
+					console.error(
+						`[useDataModule] Load error stack:`,
+						error instanceof Error ? error.stack : String(error),
+					);
 				});
+			} else {
+				console.warn(
+					`[useDataModule] load() returned undefined for key: "${key}"`,
+				);
+			}
 		} else {
 			console.log(
 				`[useDataModule] Skipping load for key: "${key}", status is: ${currentStatus}`,
