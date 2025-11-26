@@ -29,7 +29,12 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 
 	// Debug: Log current persona for troubleshooting
 	if (typeof window !== "undefined") {
-		console.log("[FooterPersonaPrompt] Current persona:", persona, "Label:", activePersonaLabel);
+		console.log(
+			"[FooterPersonaPrompt] Current persona:",
+			persona,
+			"Label:",
+			activePersonaLabel,
+		);
 	}
 
 	const handleSelectPersona = (key: PersonaKey) => {
@@ -88,14 +93,16 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 									className={cn(
 										"justify-start rounded-xl border py-4 text-left font-medium text-sm transition",
 										isActive
-											? "border-2 border-primary bg-primary text-white shadow-lg hover:bg-primary/90 dark:border-emerald-200 dark:bg-emerald-200 dark:text-gray-900 dark:hover:bg-emerald-200/90 [&>span]:!text-white [&>span]:dark:!text-gray-900"
+											? "[&>span]:!text-white [&>span]:dark:!text-gray-900 border-2 border-primary bg-primary text-white shadow-lg hover:bg-primary/90 dark:border-emerald-200 dark:bg-emerald-200 dark:text-gray-900 dark:hover:bg-emerald-200/90"
 											: "border-primary/20 bg-background/80 text-foreground hover:border-primary hover:bg-primary/10",
 									)}
 									onClick={() => handleSelectPersona(key)}
 								>
-									<span className={cn(isActive && "font-semibold")}>{label}</span>
+									<span className={cn(isActive && "font-semibold")}>
+										{label}
+									</span>
 									{isActive && (
-										<span className="ml-auto text-xs font-bold opacity-90">
+										<span className="ml-auto font-bold text-xs opacity-90">
 											✓
 										</span>
 									)}
