@@ -23,6 +23,8 @@ export const AudioManager = ({
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const isPlayingRef = useRef(false);
+	const hasCalledEndRef = useRef(false);
+	const timeCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
 	// Initialize audio element
 	useEffect(() => {
@@ -41,21 +43,19 @@ export const AudioManager = ({
 		const handleEnded = () => {
 			console.log("Audio playback ended");
 			isPlayingRef.current = false;
-			onAudioEnd?.();
-		};
-
-		const handleTimeUpdate = () => {
-			if (endTime !== undefined && audio.currentTime >= endTime) {
-				audio.pause();
-				isPlayingRef.current = false;
-				console.log(`Audio reached end time: ${endTime} seconds`);
+			if (!hasCalledEndRef.current) {
+				hasCalledEndRef.current = true;
 				onAudioEnd?.();
+			}
+			// Clear time check interval when audio naturally ends
+			if (timeCheckIntervalRef.current) {
+				clearInterval(timeCheckIntervalRef.current);
+				timeCheckIntervalRef.current = null;
 			}
 		};
 
 		audio.addEventListener("canplaythrough", handleCanPlay);
 		audio.addEventListener("ended", handleEnded);
-		audio.addEventListener("timeupdate", handleTimeUpdate);
 
 		// Cleanup
 		return () => {
@@ -63,11 +63,15 @@ export const AudioManager = ({
 			audio.pause();
 			audio.removeEventListener("canplaythrough", handleCanPlay);
 			audio.removeEventListener("ended", handleEnded);
-			audio.removeEventListener("timeupdate", handleTimeUpdate);
+			if (timeCheckIntervalRef.current) {
+				clearInterval(timeCheckIntervalRef.current);
+				timeCheckIntervalRef.current = null;
+			}
 			audioRef.current = null;
 			isPlayingRef.current = false;
+			hasCalledEndRef.current = false;
 		};
-	}, [audioUrl, onAudioEnd, endTime]);
+	}, [audioUrl, onAudioEnd]);
 
 	// Handle audio playback based on playAudio prop
 	useEffect(() => {
@@ -87,6 +91,9 @@ export const AudioManager = ({
 		);
 		if (shouldPlay) {
 			if (!isPlayingRef.current) {
+				// Reset end flag when starting new playback
+				hasCalledEndRef.current = false;
+
 				// Set currentTime to startTime when starting playback
 				audio.currentTime = startTime;
 				audio
@@ -96,6 +103,42 @@ export const AudioManager = ({
 						console.log(
 							`Audio playback started successfully via prop at ${startTime}s.`,
 						);
+
+						// Start time checking if endTime is defined
+						if (endTime !== undefined) {
+							// Clear any existing interval
+							if (timeCheckIntervalRef.current) {
+								clearInterval(timeCheckIntervalRef.current);
+							}
+
+							// Start new interval to check time frequently
+							timeCheckIntervalRef.current = setInterval(() => {
+								if (!audioRef.current || !isPlayingRef.current) {
+									return;
+								}
+
+								const currentAudio = audioRef.current;
+								if (
+									endTime !== undefined &&
+									currentAudio.currentTime >= endTime
+								) {
+									currentAudio.pause();
+									isPlayingRef.current = false;
+									console.log(
+										`Audio reached end time: ${endTime} seconds (currentTime: ${currentAudio.currentTime.toFixed(2)}s)`,
+									);
+									if (!hasCalledEndRef.current) {
+										hasCalledEndRef.current = true;
+										onAudioEnd?.();
+									}
+									// Clear the interval since we've stopped
+									if (timeCheckIntervalRef.current) {
+										clearInterval(timeCheckIntervalRef.current);
+										timeCheckIntervalRef.current = null;
+									}
+								}
+							}, 50); // Check every 50ms for precise timing
+						}
 					})
 					.catch((error) => {
 						console.error("Error playing audio via prop:", error);
@@ -107,12 +150,17 @@ export const AudioManager = ({
 				audio.pause();
 				isPlayingRef.current = false;
 				console.log("Audio playback paused via prop.");
+				// Clear time check interval when paused
+				if (timeCheckIntervalRef.current) {
+					clearInterval(timeCheckIntervalRef.current);
+					timeCheckIntervalRef.current = null;
+				}
 				// Optionally reset currentTime if desired when playAudio becomes false
 				// audio.currentTime = 0;
 			}
 		}
 		// This effect now directly controls play/pause based on shouldPlay
-	}, [shouldPlay, isLoaded, startTime]);
+	}, [shouldPlay, isLoaded, startTime, endTime, onAudioEnd]);
 
 	return null; // This is a non-visual component
 };
