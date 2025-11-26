@@ -97,9 +97,15 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 	let showViewAll = false;
 
 	if (typeof limit === "number") {
-		// todo: If caseStudies have a 'date' or 'createdAt', sort by newest first. Otherwise, use array order.
+		// Sort: featured first, then by date if available, otherwise array order
 		visibleStudies = [...resolvedCaseStudies]
-			// .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Uncomment if date exists
+			.sort((a, b) => {
+				// Featured items first
+				if (a.featured && !b.featured) return -1;
+				if (!a.featured && b.featured) return 1;
+				// If both featured or both not featured, maintain original order
+				return 0;
+			})
 			.slice(0, limit);
 		showViewAll = showViewAllButton && resolvedCaseStudies.length > limit;
 	} else {
@@ -117,7 +123,12 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 			: resolvedCaseStudies.filter((cs) =>
 					cs.categories.includes(activeCategory),
 				);
-		visibleStudies = filteredStudies;
+		// Sort: featured first
+		visibleStudies = filteredStudies.sort((a, b) => {
+			if (a.featured && !b.featured) return -1;
+			if (!a.featured && b.featured) return 1;
+			return 0;
+		});
 		showViewAll = showViewAllButton && filteredStudies.length > 0;
 	}
 
@@ -181,7 +192,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 			<div className="mx-auto max-w-7xl">
 				{/* Optionally render the category filter */}
 				{showCategoryFilter && CategoryFilter && <CategoryFilter />}
-				<div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid grid-cols-1 items-start justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
 					{visibleStudies.map((study) => (
 						<motion.div
 							key={study.id}
@@ -194,15 +205,15 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 							<Link href={`/case-studies/${study.slug}`} passHref>
 								<GlassCard
 									highlighted={study.featured}
-									className="hover:-translate-y-2 flex h-full flex-col transition-all duration-300"
+									className="hover:-translate-y-2 flex flex-col transition-all duration-300"
 								>
 									<div className="relative">
 										{study.featured && (
-											<div className="absolute top-4 left-4 z-10 rounded bg-focus px-2 py-1 font-medium text-black text-xs dark:text-white">
-												Featured
+											<div className="absolute top-3 left-3 z-10 rounded-full border-2 border-white/90 bg-primary px-3 py-1 font-bold text-white text-xs shadow-lg backdrop-blur-sm">
+												⭐ Featured
 											</div>
 										)}
-										<div className="relative h-48 overflow-hidden">
+										<div className="relative h-48 overflow-hidden rounded-t-lg">
 											<Image
 												src={study.thumbnailImage}
 												alt={study.title}
@@ -213,24 +224,24 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 											/>
 										</div>
 									</div>
-									<div className="flex flex-grow flex-col p-6">
+									<div className="flex flex-col p-6">
 										<div className="mb-3 flex flex-wrap items-center justify-center gap-2">
-											{study.categories.map((category) => (
+											{study.categories.slice(0, 3).map((category) => (
 												<span
 													key={category}
-													className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 font-medium text-primary text-xs backdrop-blur-sm transition-colors hover:bg-primary/20 dark:border-white/15 dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/20"
+													className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 font-medium text-primary text-xs backdrop-blur-sm transition-colors hover:bg-primary/20 dark:border-white/15 dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/20"
 												>
 													{category}
 												</span>
 											))}
 										</div>
-										<h3 className="mb-2 text-center font-semibold text-xl transition-colors group-hover:text-primary">
+										<h3 className="mb-2 text-center font-semibold text-xl leading-tight transition-colors group-hover:text-primary">
 											{study.title}
 										</h3>
-										<p className="mb-4 line-clamp-2 text-center text-black text-sm dark:text-white/70">
+										<p className="mb-4 line-clamp-3 text-center text-black text-sm dark:text-white/70">
 											{study.subtitle}
 										</p>
-										<span className="inline-flex items-center justify-center text-primary text-sm transition-colors hover:text-tertiary">
+										<span className="mt-auto inline-flex items-center justify-center text-primary text-sm transition-colors hover:text-tertiary">
 											<FileText className="mr-1 h-4 w-4" /> View Case
 										</span>
 									</div>
