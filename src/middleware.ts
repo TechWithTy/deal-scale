@@ -322,7 +322,9 @@ export async function middleware(req: NextRequest) {
 		pathname.startsWith("/linktree") ||
 		pathname.startsWith("/favicon") ||
 		pathname.startsWith("/assets/") ||
-		pathname.match(/\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt)$/i)
+		pathname.match(
+			/\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|mp3|wav|ogg|m4a|mp4|webm)$/i,
+		)
 	) {
 		return NextResponse.next();
 	}
