@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import {
 	FOUNDERS_CIRCLE_DEADLINE,
 	FOUNDERS_CIRCLE_DEADLINE_ISO,
@@ -7,8 +9,6 @@ import {
 import { useCountdown } from "@/hooks/useCountdown";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { Button } from "../ui/button";
 
 /**
