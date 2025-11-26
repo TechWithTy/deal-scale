@@ -816,6 +816,160 @@ export const caseStudies: CaseStudy[] = [
 		featured: false,
 		redirectToContact: false,
 	},
+	{
+		id: "rei-operator-deal-flow-2025-01",
+		title:
+			"How a Mid-Size Real Estate Investor (REI Operator) Scaled Deal Flow: 40+ Qualified Leads, 5 Closing Deals ($120K+) in 45 Days",
+		subtitle:
+			"A real-estate investing firm with an existing rental portfolio and acquisition pipeline struggled to keep up with new leads from multiple sources. By implementing Deal Scale's unified lead ingestion, AI scoring, multi-channel outreach, CRM integration, and automated follow-up workflows, they processed 100% of inbound and sourced leads, generated 40+ qualified leads, closed 5 deals totaling over $120,000 net profit, all within 45 days, without adding headcount.",
+		referenceLink: null,
+		slug: "rei-operator-automated-deal-pipeline-2025",
+		categories: [
+			"real-estate-automation",
+			"lead-scoring",
+			"pipeline-management",
+			"workflow-automation",
+		],
+		industries: [
+			"real-estate-investing",
+			"property-acquisition",
+			"wholesaling",
+		],
+		copyright: {
+			title:
+				"Want to turn every lead into a repeatable, automated acquisition machine?",
+			subtitle:
+				"Book a Deal Scale demo and see how you can process 100% of your leads, automatically follow up, and close more deals, without adding staff.",
+			ctaText: "Book a Deal Scale demo",
+			ctaLink: "/contact",
+		},
+		tags: [
+			"Real Estate Investing",
+			"Deal Flow",
+			"Lead Scoring",
+			"Pipeline Automation",
+			"Property Acquisition",
+			"REI Operator",
+		],
+		clientName: "REI Operator (Mid-Size Real Estate Investor)",
+		clientDescription:
+			"Mid-size real-estate operator/investor focusing on acquisition of off-market properties and rental/flip deals. Small operations team: 2 acquisitions managers, 1 acquisitions coordinator; no dedicated SDR/outreach team.",
+		featuredImage: "/case-studies/rei-operator-deal-flow.png",
+		thumbnailImage: "/case-studies/rei-operator-deal-flow.png",
+		businessChallenges: [
+			"Multiple lead sources: public MLS searches, bandit signs, direct mail responses, investor networks, leads scattered across spreadsheets, email inboxes, and legacy CRM.",
+			"High lead volume but low follow-up consistency, many leads went cold, or were missed entirely.",
+			"Time-consuming manual qualification and follow-up; long delays in outreach caused many sellers to go with other buyers.",
+			"No systematic way to score leads, prioritize high-potential deals, nurture cold leads, or track conversion rates.",
+		],
+		lastModified: new Date("2025-01-20T10:00:00.000Z"),
+		howItWorks: [
+			{
+				stepNumber: 1,
+				title: "Unified Lead Ingestion & Data Normalization",
+				subtitle: "Consolidate all lead sources into canonical schema",
+				description:
+					"All lead sources (spreadsheets, web forms, direct mail responses manually entered, legacy CRM) were fed into a canonical Deal Scale lead schema. Duplicate detection, deduplication, and enrichment (firmographic data, property/address info, seller history, publicly available property data) to ensure clean, standardized data for scoring.",
+				icon: "Database",
+				label: "ingest",
+				positionLabel: "step-1",
+				payload: [],
+			},
+			{
+				stepNumber: 2,
+				title: "AI-Driven Lead Scoring & Prioritization",
+				subtitle: "Rank leads based on intent and deal-fit criteria",
+				description:
+					"Deal Scale's lookalike & embedding-based scoring engine ranked leads based on intent, property characteristics, historical seller behavior, and deal-fit criteria. Top 20–25% of leads automatically flagged as 'high-priority' and queued for immediate outreach; others routed to a lower-touch nurturing stream.",
+				icon: "BrainCircuit",
+				label: "score",
+				positionLabel: "step-2",
+				payload: [],
+			},
+			{
+				stepNumber: 3,
+				title: "Automated Multi-Channel Outreach & Follow-Up",
+				subtitle: "Email → SMS → phone-call → calendar link",
+				description:
+					"High-priority leads received automated outreach via email → SMS → phone-call → calendar link for property evaluation calls. Lower-priority leads entered drip-nurture sequences (occasional check-ins, property-value estimate offers, 'we buy houses' marketing) to keep pipeline warm, without manual effort.",
+				icon: "Zap",
+				label: "outreach",
+				positionLabel: "step-3",
+				payload: [],
+			},
+			{
+				stepNumber: 4,
+				title: "CRM Sync + Pipeline Management + Deal Tracking",
+				subtitle: "Real-time pipeline visibility and deal tracking",
+				description:
+					"Outbound and inbound responses automatically synced to CRM. Lead status, engagement, follow-ups, property evaluation appointments, offer submissions, all tracked centrally. Dashboard for real-time pipeline view: total leads processed, high-priority leads flagged, outreach attempts count, response rates, appointments booked, offers submitted, deals closed, profit per deal, etc.",
+				icon: "BarChartBig",
+				label: "track",
+				positionLabel: "step-4",
+				payload: [],
+			},
+			{
+				stepNumber: 5,
+				title: "Automated Re-Engagement / Evergreen Nurture",
+				subtitle: "Keep cold leads warm with automated nurture",
+				description:
+					"Cold leads (no response after initial outreach) were re-entered into nurture streams after 60 days (e.g. 'still interested in selling?', 'market update', value-add content). Leads that resurfaced were re-scored and re-prioritized, increasing chances of capturing deals that might have been missed otherwise.",
+				icon: "RefreshCw",
+				label: "nurture",
+				positionLabel: "step-5",
+				payload: [],
+			},
+		],
+		businessOutcomes: [
+			{
+				title: "Rapid Deal Flow Expansion",
+				subtitle:
+					"Scaled deal flow dramatically without increasing headcount or overhead, keeping margins high.",
+			},
+			{
+				title: "Evergreen Deal Pipeline",
+				subtitle:
+					"Built a scalable, repeatable acquisition process with continuous nurture and re-engagement, creating a long-term evergreen pipeline.",
+			},
+		],
+		solutions: [
+			"Unified lead ingestion & data normalization: All lead sources consolidated into canonical schema with duplicate detection and enrichment.",
+			"AI-driven lead scoring & prioritization: Top 20–25% of leads automatically flagged as high-priority for immediate outreach.",
+			"Automated multi-channel outreach & follow-up: High-priority leads receive automated sequences; lower-priority leads enter drip-nurture streams.",
+			"CRM sync + pipeline management + deal tracking: Real-time dashboard tracking all pipeline metrics, appointments, offers, and closed deals.",
+			"Automated re-engagement / evergreen nurture: Cold leads re-entered into nurture streams after 60 days, keeping pipeline warm.",
+		],
+		description:
+			"A real-estate investing firm with an existing rental portfolio and acquisition pipeline struggled to keep up with new leads from multiple sources (property owner leads, off-market leads, referrals). By implementing Deal Scale's unified lead ingestion, AI scoring, multi-channel outreach, CRM integration, and automated follow-up workflows, they processed 100% of inbound and sourced leads, generated 40+ qualified leads, closed 5 deals totaling over $120,000 net profit (after rehab/transaction costs), all within 45 days, without adding headcount. The firm now has a scalable, repeatable acquisition process with continuous nurture and re-engagement, creating an evergreen deal pipeline that eliminates missed deals due to manual follow-up gaps.",
+		results: [
+			{
+				title: "Inbound & sourced leads processed",
+				value: "~30% → 100%",
+			},
+			{
+				title: "Qualified high-priority leads generated",
+				value: "5–8/month → 40+ in 45 days",
+			},
+			{
+				title: "Outreach speed (first contact after lead)",
+				value: "12–48 hrs → < 15 minutes",
+			},
+			{
+				title: "Response / engagement rate",
+				value: "~10% → 28%",
+			},
+			{
+				title: "Deals closed",
+				value: "1–2 per quarter → 5 in 45 days",
+			},
+			{
+				title: "Net profit from closed deals",
+				value: "$30–50K per quarter → $120K+ in 45 days",
+			},
+		],
+		featured: true,
+		redirectToContact: false,
+	},
 ];
 
 export const caseStudyCategories: Category[] = [
