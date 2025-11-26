@@ -31,6 +31,7 @@ import type {
 	ServiceSchema,
 	ServiceSchemaInput,
 	SoftwareApplicationSchema,
+	TechArticleSchema,
 	WebPageReference,
 	WebSiteSchema,
 } from "./types";
@@ -732,5 +733,51 @@ export const buildBlogSchema = ({
 			"@id": ORGANIZATION_ID,
 		},
 		blogPost: blogPosts.length > 0 ? blogPosts : undefined,
+	};
+};
+
+export interface BuildTechArticleSchemaOptions {
+	headline: string;
+	url: string;
+	description?: string;
+	mainEntityOfPage?: string;
+	sameAs?: string[];
+	keywords?: string[];
+	image?: string;
+	datePublished?: string;
+	dateModified?: string;
+}
+
+export const buildTechArticleSchema = (
+	options: BuildTechArticleSchemaOptions,
+): TechArticleSchema => {
+	const canonicalUrl = buildAbsoluteUrl(options.url);
+	const mainEntityUrl = options.mainEntityOfPage
+		? options.mainEntityOfPage
+		: canonicalUrl;
+
+	return {
+		"@context": SCHEMA_CONTEXT,
+		"@type": "TechArticle",
+		"@id": `${canonicalUrl}#tech-article`,
+		url: canonicalUrl,
+		headline: options.headline,
+		description: options.description,
+		datePublished: options.datePublished,
+		dateModified: options.dateModified || options.datePublished,
+		inLanguage: "en",
+		mainEntityOfPage: {
+			"@type": "WebPage",
+			"@id": mainEntityUrl,
+		},
+		publisher: {
+			"@type": "Organization",
+			"@id": ORGANIZATION_ID,
+			name: companyData.companyName,
+			url: defaultSeo.canonical,
+		},
+		sameAs: options.sameAs || [],
+		image: options.image ? buildAbsoluteUrl(options.image) : undefined,
+		keywords: options.keywords,
 	};
 };

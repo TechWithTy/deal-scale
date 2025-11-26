@@ -350,7 +350,7 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 	"/external-tools/roi-simulator": {
 		title: "ROI Simulator | Deal Scale",
 		description:
-			"Model rehab budgets, marketing spend, and close rates with Deal Scale’s ROI simulator before you launch a campaign.",
+			"Model rehab budgets, marketing spend, and close rates with Deal Scale's ROI simulator before you launch a campaign.",
 		canonical: "https://app.leadorchestra.com/roi-simulator",
 		keywords: [
 			"roi calculator",
@@ -361,6 +361,24 @@ export const STATIC_SEO_META: Record<string, SeoMeta> = {
 		],
 		image: DEFAULT_SEO.image,
 		priority: 0.85,
+		changeFrequency: "weekly",
+	},
+	"/awesome-real-estate-investing": {
+		title: "Awesome Real Estate Investing – Curated List | Deal Scale",
+		description:
+			"Discover the ultimate curated list of real estate investing resources, tools, platforms, and educational content. Open-source collection maintained by Deal Scale for investors, agents, and wholesalers.",
+		canonical: "https://dealscale.io/awesome-real-estate-investing",
+		keywords: [
+			"real estate investing resources",
+			"real estate tools",
+			"real estate platforms",
+			"real estate education",
+			"curated list",
+			"awesome list",
+			...DEFAULT_SEO.keywords,
+		],
+		image: DEFAULT_SEO.image,
+		priority: 0.9,
 		changeFrequency: "weekly",
 	},
 };

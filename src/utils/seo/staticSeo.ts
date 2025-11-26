@@ -243,6 +243,21 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		priority: 0.6,
 		changeFrequency: "weekly",
 	},
+	"/awesome-real-estate-investing": {
+		title: STATIC_SEO_META["/awesome-real-estate-investing"].title,
+		description: STATIC_SEO_META["/awesome-real-estate-investing"].description,
+		canonical: STATIC_SEO_META["/awesome-real-estate-investing"].canonical,
+		image: STATIC_SEO_META["/awesome-real-estate-investing"].image,
+		keywords:
+			STATIC_SEO_META["/awesome-real-estate-investing"].keywords ||
+			DEFAULT_SEO.keywords,
+		priority: STATIC_SEO_META["/awesome-real-estate-investing"].priority ?? 0.9,
+		changeFrequency:
+			STATIC_SEO_META["/awesome-real-estate-investing"].changeFrequency ??
+			"weekly",
+		siteName: DEFAULT_SEO.siteName,
+		type: DEFAULT_SEO.type,
+	},
 	...buildLegalSeoMetaMap(),
 };
 

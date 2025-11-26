@@ -19,6 +19,7 @@ export const companyData: FooterProps = {
 		{ href: "/pricing", label: "Pricing" },
 		{ href: "/blogs", label: "Blog" },
 		{ href: "/about", label: "About Us" },
+		{ href: "/awesome-real-estate-investing", label: "Resources" },
 	],
 	contactInfo: {
 		email: "sam.scaler@leadorchestra.com",

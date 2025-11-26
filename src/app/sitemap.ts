@@ -194,6 +194,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: "daily",
 			priority: 0.4,
 		},
+		{
+			url: "https://github.com/Deal-Scale/awesome-real-estate-investing",
+			lastModified: new Date(),
+			changeFrequency: "weekly",
+			priority: 0.6,
+		},
+		{
+			url: "https://deal-scale.github.io/awesome-real-estate-investing/",
+			lastModified: new Date(),
+			changeFrequency: "weekly",
+			priority: 0.7,
+		},
 	];
 
 	const allowedExternalUrls = new Set(
