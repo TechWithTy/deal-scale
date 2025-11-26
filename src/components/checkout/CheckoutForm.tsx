@@ -390,9 +390,9 @@ export default function CheckoutForm({
 								</span>
 								<span className="block">
 									We'll secure your payment method to automatically continue
-									your {plan.name} plan at{" "}
+									your DealScale plan at{" "}
 									{formatPrice(
-										postTrialAmount ?? plan.price[planType].amount ?? 0,
+										postTrialAmount ?? plan.price[planType].amount ?? 2000,
 									)}{" "}
 									after the trial ends.
 								</span>
