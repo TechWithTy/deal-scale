@@ -1,13 +1,13 @@
+import type { Metadata } from "next";
 import { dataModules } from "@/data/__generated__/modules";
 import { featureTimeline } from "@/data/features/feature_timeline";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import {
-	SchemaInjector,
 	buildFAQPageSchema,
 	buildRoadmapSchema,
+	SchemaInjector,
 } from "@/utils/seo/schema";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
-import type { Metadata } from "next";
 import ServiceHomeClient from "./ServiceHomeClient";
 
 // * Centralized SEO for /features using getStaticSeo helper

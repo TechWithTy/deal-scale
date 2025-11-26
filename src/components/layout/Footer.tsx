@@ -133,7 +133,7 @@ export const Footer: React.FC<FooterProps> = ({
 						</div>
 					</div>
 
-					<div className="text-center md:col-span-2 lg:col-span-1">
+					<div className="text-center md:col-span-1 lg:col-span-1">
 						<h3 className="mb-4 font-semibold text-lg">Quick Links</h3>
 						<ul className="space-y-3">
 							{quickLinks.map((link) => (
@@ -150,7 +150,7 @@ export const Footer: React.FC<FooterProps> = ({
 						</ul>
 					</div>
 
-					<div className="flex flex-col items-center text-center md:col-span-2 md:items-center md:text-center lg:col-span-1 lg:items-start lg:text-left">
+					<div className="flex flex-col items-center text-center md:col-span-1 md:items-center md:text-center lg:col-span-1 lg:items-start lg:text-left">
 						<h3 className="mb-4 font-semibold text-lg">Get in Touch</h3>
 						<ul className="w-full space-y-3">
 							<li>
