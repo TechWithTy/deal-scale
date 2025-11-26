@@ -748,14 +748,14 @@ export const CatalogPricing = ({
 
 	return (
 		<>
-			<section id="pricing" className="relative px-6 lg:px-8">
+			<section id="pricing" className="relative px-6 pt-20 lg:px-8 lg:pt-24">
 				<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
 				<div className="mx-auto max-w-6xl">
 					<header className="text-center">
 						<p className="text-primary/70 text-xs uppercase tracking-wide">
 							Pricing
 						</p>
-						<h2 className="mt-2 font-semibold text-4xl text-foreground">
+						<h2 className="mt-2 font-semibold text-4xl text-foreground md:mx-4 lg:mx-6">
 							{title}
 						</h2>
 						<p className="mt-4 text-muted-foreground">{subtitle}</p>

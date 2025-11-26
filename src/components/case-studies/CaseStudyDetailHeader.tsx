@@ -1,11 +1,11 @@
+import { SocialShare } from "@/components/common/social/share/SocialShare";
 import { Button } from "@/components/ui/button";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import type { CaseStudy } from "@/types/case-study";
 import { motion } from "framer-motion";
-import { ChevronLeft, Eye, Share } from "lucide-react";
+import { ChevronLeft, Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
 interface CaseStudyDetailHeaderProps {
@@ -16,11 +16,6 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 	const hasMounted = useHasMounted();
 
 	if (!hasMounted) return null;
-
-	const handleShare = () => {
-		navigator.clipboard.writeText(window.location.href);
-		toast.success("You can now share this case study with others");
-	};
 
 	return (
 		<section className="relative overflow-hidden bg-background-dark px-4 pt-20 pb-16 sm:px-6 lg:px-8">
@@ -81,14 +76,14 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 							))}
 						</div>
 						<div className="flex justify-center gap-4 sm:justify-start">
-							<Button
-								variant="default"
+							<SocialShare
+								showShareButton
+								showLabels
+								title={caseStudy.title}
+								text={caseStudy.subtitle}
 								size="sm"
-								onClick={handleShare}
-								className="border border-primary/80 bg-primary text-primary-foreground hover:bg-primary/90"
-							>
-								<Share className="mr-2 h-4 w-4" /> Share
-							</Button>
+								variant="default"
+							/>
 							{caseStudy.referenceLink && (
 								<Link
 									href={caseStudy.referenceLink}
