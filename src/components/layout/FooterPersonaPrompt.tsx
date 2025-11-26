@@ -35,11 +35,11 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				"flex flex-col items-center gap-2 text-center text-muted-foreground text-xs sm:text-sm md:items-start md:text-left",
+				"flex flex-col items-center gap-2 text-center text-muted-foreground text-xs sm:text-sm",
 				className,
 			)}
 		>
-			<p className="flex flex-wrap items-center justify-center gap-2 text-primary text-xs uppercase tracking-wide md:justify-start dark:text-emerald-200">
+			<p className="flex flex-wrap items-center justify-center gap-2 text-primary text-xs uppercase tracking-wide dark:text-emerald-200">
 				Personalized experience for
 				<Button
 					variant="ghost"

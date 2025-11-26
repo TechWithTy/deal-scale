@@ -25,7 +25,7 @@ export function FooterBetaCta({ className = "" }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				"flex w-full flex-col items-center gap-2 text-center sm:gap-3 md:items-center md:text-center lg:items-start lg:text-left",
+				"flex w-full flex-col items-center gap-2 text-center sm:gap-3",
 				className,
 			)}
 		>
@@ -49,15 +49,15 @@ export function FooterBetaCta({ className = "" }: { className?: string }) {
 					</time>
 				)}
 			</div>
-			<p className="text-muted-foreground text-xs md:mx-auto md:max-w-xs md:text-sm dark:text-white/60">
+			<p className="mx-auto max-w-xs text-center text-muted-foreground text-xs md:text-sm dark:text-white/60">
 				Try DealScale free before public launch and help shape the roadmap.
 			</p>
-			<div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:gap-3 md:w-full md:flex-row md:justify-center md:gap-3 lg:w-auto lg:justify-start">
+			<div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:justify-center sm:gap-3">
 				<Link
 					href="/contact?utm_source=founders-circle-footer"
-					className="flex w-full justify-center lg:w-auto lg:justify-start"
+					className="flex w-full justify-center sm:w-auto"
 				>
-					<Button className="flex w-full items-center justify-center bg-gradient-to-r from-primary to-focus text-black transition-opacity hover:opacity-90 md:w-auto dark:text-white">
+					<Button className="flex w-full items-center justify-center bg-gradient-to-r from-primary to-focus text-black transition-opacity hover:opacity-90 sm:w-auto dark:text-white">
 						Request Early Access <ArrowRight className="ml-2 h-4 w-4" />
 					</Button>
 				</Link>
@@ -65,11 +65,11 @@ export function FooterBetaCta({ className = "" }: { className?: string }) {
 					href="https://discord.gg/BNrsYRPtFN"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="flex w-full justify-center lg:w-auto lg:justify-start"
+					className="flex w-full justify-center sm:w-auto"
 				>
 					<Button
 						variant="outline"
-						className="flex w-full items-center justify-center border-primary/40 bg-background/70 text-primary transition hover:bg-primary/10 lg:w-auto"
+						className="flex w-full items-center justify-center border-primary/40 bg-background/70 text-primary transition hover:bg-primary/10 sm:w-auto"
 					>
 						Join Community <ArrowRight className="ml-2 h-4 w-4" />
 					</Button>
