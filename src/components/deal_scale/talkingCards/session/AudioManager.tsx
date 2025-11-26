@@ -1,7 +1,7 @@
 "use client";
 
-import type { LineStatus } from "@/types/transcript";
 import { useEffect, useRef, useState } from "react";
+import type { LineStatus } from "@/types/transcript";
 
 interface AudioManagerProps {
 	callStatus: LineStatus;
@@ -14,7 +14,7 @@ interface AudioManagerProps {
 
 export const AudioManager = ({
 	callStatus,
-	audioUrl = "/calls/example-call-yt.mp3",
+	audioUrl = "/demos/audio/SuccessFull Call_Zip_TimeZone_needs_fix.wav",
 	playAudio: shouldPlay,
 	onAudioEnd,
 	startTime = 0,
