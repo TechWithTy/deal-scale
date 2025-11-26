@@ -453,7 +453,7 @@ export const CatalogPricing = ({
 
 			const legacyPlan = toLegacyPlan(basicPlan, "monthly");
 			legacyPlan.price.monthly.amount = 0;
-			legacyPlan.price.monthly.description = "Free trial — no charge today";
+			legacyPlan.price.monthly.description = "Free trial, no charge today";
 			legacyPlan.price.monthly.features = [
 				"No charge today. Keep your Basic access after the trial by staying active.",
 				...legacyPlan.price.monthly.features,
@@ -468,7 +468,7 @@ export const CatalogPricing = ({
 				postTrialAmount: basicPlan.price,
 			});
 			stripeToast.success(
-				"Free trial ready. Complete checkout to start your trial — no charge today.",
+				"Free trial ready. Complete checkout to start your trial, no charge today.",
 			);
 		} catch (error) {
 			stripeToast.error(
@@ -748,14 +748,14 @@ export const CatalogPricing = ({
 
 	return (
 		<>
-			<section id="pricing" className="relative px-6 lg:px-8">
+			<section id="pricing" className="relative px-6 pt-20 lg:px-8 lg:pt-24">
 				<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
 				<div className="mx-auto max-w-6xl">
 					<header className="text-center">
 						<p className="text-primary/70 text-xs uppercase tracking-wide">
 							Pricing
 						</p>
-						<h2 className="mt-2 font-semibold text-4xl text-foreground">
+						<h2 className="mt-2 font-semibold text-4xl text-foreground md:mx-4 lg:mx-6">
 							{title}
 						</h2>
 						<p className="mt-4 text-muted-foreground">{subtitle}</p>
@@ -804,7 +804,7 @@ export const CatalogPricing = ({
 												<p className="text-muted-foreground text-xs">
 													After the trial you can continue with the Basic plan
 													at ${basicPlan?.price.toLocaleString() ?? "2,000"}
-													/mo—cancel anytime before the renewal.
+													/mo, cancel anytime before the renewal.
 												</p>
 											</div>
 											<ul className="list-none space-y-3 text-center text-muted-foreground text-sm">
@@ -996,7 +996,7 @@ export const CatalogPricing = ({
 										"Self-Hosted / AI Enablement License"
 									}
 									description={
-										selfHostedPlan?.pricingModel ?? "Custom — Contact Sales"
+										selfHostedPlan?.pricingModel ?? "Custom: Contact Sales"
 									}
 									features={
 										selfHostedPlan?.includes ?? [

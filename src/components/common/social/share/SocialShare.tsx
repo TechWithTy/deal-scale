@@ -13,6 +13,7 @@ import type {
 	SocialPlatform,
 	SocialShareBaseProps,
 } from "@/types/social/share";
+import { defaultSeo } from "@/utils/seo/staticSeo";
 import { useShareToSocial } from "@/utils/shareToSocial";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -49,7 +50,7 @@ export function SocialShare({
 	size = "default",
 	variant = "outline",
 	shareTitle = "Share to:",
-	maxButtons = 3,
+	maxButtons: _maxButtons = 3,
 	position = "left",
 	shareTexts = {},
 	shareTemplates = {},
@@ -75,20 +76,29 @@ export function SocialShare({
 		return paramString ? `?${paramString}` : "";
 	}, []);
 
-	// Always use leadorchestra.com as the domain for sharing
-	const PRODUCTION_DOMAIN = "https://leadorchestra.com";
+	// Get the production domain from environment variable or fallback to SEO canonical
+	const getProductionDomain = useCallback(() => {
+		if (process.env.NEXT_PUBLIC_SITE_URL) {
+			return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, "");
+		}
+		// Fallback to canonical URL from SEO config
+		return defaultSeo.canonical || "https://dealscale.io";
+	}, []);
 
 	// Get the current URL if none is provided
 	const url = useMemo(() => {
 		try {
+			const productionDomain = getProductionDomain();
+
 			// Use provided URL or construct from current location
 			if (propUrl) {
 				const url = new URL(propUrl);
 				// Clean up any empty query parameters
 				url.search = cleanUrlParams(new URLSearchParams(url.search));
 				// Ensure we're using the production domain
-				url.hostname = "leadorchestra.com";
-				url.protocol = "https:";
+				const domainUrl = new URL(productionDomain);
+				url.hostname = domainUrl.hostname;
+				url.protocol = domainUrl.protocol;
 				return url.toString();
 			}
 
@@ -106,7 +116,7 @@ export function SocialShare({
 			}
 
 			// Construct final URL with the production domain
-			const fullUrl = `${PRODUCTION_DOMAIN}${cleanPathname}${cleanSearch}`;
+			const fullUrl = `${productionDomain}${cleanPathname}${cleanSearch}`;
 
 			// Validate URL
 			new URL(fullUrl); // Will throw if invalid
@@ -115,7 +125,7 @@ export function SocialShare({
 			console.error("Error constructing share URL:", error);
 			return "";
 		}
-	}, [propUrl, pathname, searchParams, cleanUrlParams]);
+	}, [propUrl, pathname, searchParams, cleanUrlParams, getProductionDomain]);
 
 	// Get page metadata on client side
 	useEffect(() => {
@@ -250,17 +260,17 @@ export function SocialShare({
 		);
 	};
 
-	const renderShareButtons = () => {
-		// Get all available platforms
-		const platforms = useMemo(
-			() =>
-				Object.entries(platformConfigs).map(([key, config]) => ({
-					key: key as SocialPlatform,
-					...config,
-				})) as Array<PlatformConfig & { key: SocialPlatform }>,
-			[],
-		);
+	// Get all available platforms (moved outside render function to fix hook rules)
+	const platforms = useMemo(
+		() =>
+			Object.entries(platformConfigs).map(([key, config]) => ({
+				key: key as SocialPlatform,
+				...config,
+			})) as Array<PlatformConfig & { key: SocialPlatform }>,
+		[],
+	);
 
+	const renderShareButtons = () => {
 		return (
 			<div
 				className={cn(

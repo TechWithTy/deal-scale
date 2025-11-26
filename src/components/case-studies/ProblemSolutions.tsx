@@ -64,13 +64,13 @@ export const ProblemSolutions: React.FC<ProblemSolutionsProps> = ({
 
 				<motion.div
 					variants={container}
-					className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 sm:grid-cols-2"
+					className="mt-10 grid auto-rows-min grid-cols-1 gap-6 sm:mt-12 sm:grid-cols-2"
 				>
 					{caseStudy.results.map((result) => (
 						<motion.div
 							key={result.title}
 							variants={item}
-							className="glass-card rounded-xl p-6 text-center transition-colors hover:bg-primary/10 sm:text-left"
+							className="glass-card h-auto rounded-xl p-6 text-center transition-colors hover:bg-primary/10 sm:text-left"
 						>
 							<dt className="font-medium text-primary text-sm">
 								{result.title}

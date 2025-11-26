@@ -40,6 +40,9 @@ const nextConfig: NextConfig = {
 			"@radix-ui/react-icons",
 		],
 	},
+	// Disable source maps in development to reduce console noise
+	// Source maps can cause parsing errors with Turbopack
+	productionBrowserSourceMaps: false,
 	// Compiler optimizations
 	compiler: {
 		// Remove console.log in production (except console.error/warn)

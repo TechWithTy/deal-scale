@@ -27,6 +27,16 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 
 	const activePersonaLabel = PERSONA_LABELS[persona] ?? "Select persona";
 
+	// Debug: Log current persona for troubleshooting
+	if (typeof window !== "undefined") {
+		console.log(
+			"[FooterPersonaPrompt] Current persona:",
+			persona,
+			"Label:",
+			activePersonaLabel,
+		);
+	}
+
 	const handleSelectPersona = (key: PersonaKey) => {
 		setPersona(key);
 		setOpen(false);
@@ -35,11 +45,11 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				"flex flex-col items-center gap-2 text-center text-muted-foreground text-xs sm:text-sm md:items-start md:text-left",
+				"flex flex-col items-center gap-2 text-center text-muted-foreground text-xs sm:text-sm",
 				className,
 			)}
 		>
-			<p className="flex flex-wrap items-center justify-center gap-2 text-primary text-xs uppercase tracking-wide md:justify-start dark:text-emerald-200">
+			<p className="flex flex-wrap items-center justify-center gap-2 text-primary text-xs uppercase tracking-wide dark:text-emerald-200">
 				Personalized experience for
 				<Button
 					variant="ghost"
@@ -47,6 +57,8 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 					className={cn(
 						"relative flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-semibold text-primary text-xs uppercase tracking-[0.12em] shadow-sm transition-all hover:border-primary hover:bg-primary/20 focus-visible:ring-2 focus-visible:ring-primary/60 dark:border-emerald-200/40 dark:bg-emerald-200/10 dark:text-emerald-200",
 						"after:-inset-[3px] after:pointer-events-none after:absolute after:rounded-full after:bg-primary/30 after:opacity-0 after:blur-lg after:transition-opacity after:content-[''] hover:after:opacity-40",
+						persona === "investor" &&
+							"ring-2 ring-primary/50 ring-offset-2 dark:ring-emerald-200/50",
 					)}
 					onClick={() => setOpen(true)}
 				>
@@ -54,7 +66,7 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 						className="h-4 w-4 text-primary dark:text-emerald-200"
 						aria-hidden="true"
 					/>
-					{activePersonaLabel}
+					<span className="font-bold">{activePersonaLabel}</span>
 					<Sparkles
 						className="h-4 w-4 text-primary dark:text-emerald-200"
 						aria-hidden="true"
@@ -79,12 +91,21 @@ export function FooterPersonaPrompt({ className }: { className?: string }) {
 									key={key}
 									variant={isActive ? "default" : "outline"}
 									className={cn(
-										"justify-start rounded-xl border border-primary/20 bg-background/80 py-4 text-left text-sm transition hover:border-primary hover:bg-primary/10",
-										isActive && "shadow-lg",
+										"justify-start rounded-xl border py-4 text-left font-medium text-sm transition",
+										isActive
+											? "[&>span]:!text-white [&>span]:dark:!text-gray-900 border-2 border-primary bg-primary text-white shadow-lg hover:bg-primary/90 dark:border-emerald-200 dark:bg-emerald-200 dark:text-gray-900 dark:hover:bg-emerald-200/90"
+											: "border-primary/20 bg-background/80 text-foreground hover:border-primary hover:bg-primary/10",
 									)}
 									onClick={() => handleSelectPersona(key)}
 								>
-									{label}
+									<span className={cn(isActive && "font-semibold")}>
+										{label}
+									</span>
+									{isActive && (
+										<span className="ml-auto font-bold text-xs opacity-90">
+											✓
+										</span>
+									)}
 								</Button>
 							);
 						})}

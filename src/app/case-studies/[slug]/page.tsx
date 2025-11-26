@@ -6,8 +6,8 @@ import type { CaseStudy } from "@/types/case-study";
 import { getTestBaseUrl } from "@/utils/env";
 import { getSeoMetadataForCaseStudy } from "@/utils/seo/dynamic/case-studies";
 import {
-	SchemaInjector,
 	buildCaseStudyCreativeWorkSchema,
+	SchemaInjector,
 } from "@/utils/seo/schema";
 import CaseStudyPageClient from "./CaseStudyPageClient";
 
@@ -17,13 +17,17 @@ import CaseStudyPageClient from "./CaseStudyPageClient";
 
 export async function generateMetadata({
 	params,
-}: { params: Promise<{ slug: string }> }) {
+}: {
+	params: Promise<{ slug: string }>;
+}) {
 	const { slug } = await params;
 	return getSeoMetadataForCaseStudy(slug);
 }
 
-export default async function CaseStudyPage(props: unknown) {
-	const { params } = props as { params: { slug: string } };
+export default async function CaseStudyPage(props: {
+	params: Promise<{ slug: string }>;
+}) {
+	const params = await props.params;
 	const caseStudy = await getCaseStudyBySlug(params.slug);
 	let relatedCaseStudies: CaseStudy[] = [];
 

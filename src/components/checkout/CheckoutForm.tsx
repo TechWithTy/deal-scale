@@ -401,7 +401,7 @@ export default function CheckoutForm({
 						{isTrial ? (
 							<>
 								<span className="block font-semibold text-primary">
-									Start your free trial — no charge today.
+									Start your free trial, no charge today.
 								</span>
 								<span className="block">
 									We'll secure your payment method to automatically continue

@@ -138,7 +138,7 @@ export default function HeroSideBySide(): JSX.Element {
 	const description =
 		typeof LIVE_COPY?.subtitle === "string"
 			? LIVE_COPY.subtitle
-			: "AI follow-up, sequencing, and CRM automation — every lead worked automatically.";
+			: "AI follow-up, sequencing, and CRM automation, every lead worked automatically.";
 
 	// Single combined statement
 	const combinedStatement = `Stop ${problem}. Start ${solution}`;

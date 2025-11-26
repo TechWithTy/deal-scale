@@ -78,7 +78,7 @@ export function UploadLeadsHero(): JSX.Element {
 		<section
 			className={cn(
 				"relative flex w-full flex-col items-center justify-center overflow-hidden",
-				"min-h-[400px] bg-gradient-to-br from-slate-50 via-white to-slate-100 py-16 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 sm:min-h-[450px] sm:py-20 md:min-h-[500px] lg:py-24",
+				"min-h-[400px] bg-gradient-to-br from-slate-50 via-white to-slate-100 py-16 sm:min-h-[450px] sm:py-20 md:min-h-[500px] lg:py-24 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950",
 				gpuContainerClass,
 			)}
 		>
@@ -155,10 +155,10 @@ export function UploadLeadsHero(): JSX.Element {
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-					className="mt-8 max-w-2xl text-center text-slate-600 text-sm dark:text-slate-300 md:text-base"
+					className="mt-8 max-w-2xl text-center text-slate-600 text-sm md:text-base dark:text-slate-300"
 				>
 					Upload your lead lists, enrich data, automate outreach, and sync
-					everything back to your CRM—all in one seamless workflow.
+					everything back to your CRM, all in one seamless workflow.
 				</motion.p>
 			</div>
 		</section>

@@ -105,7 +105,7 @@ const HERO_COPY_V7 = {
 			],
 		},
 	},
-	template: "Stop {problem}, start {solution} — before {fear}. Imagine {hope}.",
+	template: "Stop {problem}, start {solution}, before {fear}. Imagine {hope}.",
 	ctas: {
 		primary: [
 			"Try DealScale Free",
@@ -132,7 +132,7 @@ const HERO_COPY_V7 = {
 	demo_mode: {
 		enabled: true,
 		headline_variant:
-			"Automate Real Estate & Mortgage Outreach with AI — See DealScale in Action",
+			"Automate Real Estate & Mortgage Outreach with AI, See DealScale in Action",
 		cta: "Start Interactive Demo",
 	},
 	metadata: {
@@ -157,7 +157,7 @@ export const DEFAULT_PERSONA_DISPLAY = "AI Sales Teammates";
 const PERSONA_LABEL = "For Real Estate Investors";
 const PERSONA_GOAL = "Automate deal flow conversations";
 const PERSONA_SOCIAL_PROOF =
-	"AI follow-up, sequencing, and CRM automation — every lead worked automatically.";
+	"AI follow-up, sequencing, and CRM automation, every lead worked automatically.";
 
 const pickPersonaField = (field: "problem" | "solution" | "fear" | "hope") => {
 	const persona = HERO_COPY_V7.personas[DEFAULT_PERSONA];

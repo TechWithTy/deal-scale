@@ -47,7 +47,7 @@ export const affiliateProgramSteps: ConsultationStep[] = [
 		number: 3,
 		title: "Earn Up to $4,500 per Sale",
 		description:
-			"You’ll earn 10% of every transaction made with your code, up to $4,500 per sale. Commissions are paid out monthly—no cap on total earnings!",
+			"You'll earn 10% of every transaction made with your code, up to $4,500 per sale. Commissions are paid out monthly, no cap on total earnings!",
 	},
 	{
 		number: 4,
@@ -68,7 +68,7 @@ export const pilotProgramSteps: ConsultationStep[] = [
 		number: 2,
 		title: "Lock-In Exclusive Pilot Pricing",
 		description:
-			"By joining the Pilot Program, you guarantee early adopter pricing, protected for 2 years—regardless of future price increases. Enjoy maximum value and ROI as new features are released.",
+			"By joining the Pilot Program, you guarantee early adopter pricing, protected for 2 years, regardless of future price increases. Enjoy maximum value and ROI as new features are released.",
 	},
 	{
 		number: 3,

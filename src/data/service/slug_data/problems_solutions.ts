@@ -19,7 +19,7 @@ export const leadGenProblemsSolutions: ServiceProblemSolution[] = [
 	{
 		problem: "Difficulty Scaling Your Business",
 		solution:
-			"Build a scalable lookalike audience expansion engine—grounded in the rapport-building steps from How to Win Friends and Influence People—that grows with you, allowing you to enter new markets and expand your operations without adding headcount.",
+			"Build a scalable lookalike audience expansion engine, grounded in the rapport-building steps from How to Win Friends and Influence People, that grows with you, allowing you to enter new markets and expand your operations without adding headcount.",
 	},
 ];
 
@@ -90,7 +90,7 @@ export const phoneNumberHunterProblemsSolutions: ServiceProblemSolution[] = [
 		problem:
 			"Manually researching phone numbers or paying for expensive skip tracing tools just to qualify a handful of leads eats into your budget.",
 		solution:
-			"Use our unlimited lookup tool, included free with your subscription, to skip trace and qualify numbers in seconds—no extra cost or credits needed.",
+			"Use our unlimited lookup tool, included free with your subscription, to skip trace and qualify numbers in seconds, no extra cost or credits needed.",
 	},
 	{
 		problem:
@@ -335,7 +335,7 @@ export const aiInboundAgentProblemsSolutions: ServiceProblemSolution[] = [
 		problem:
 			"By the time you call a lead back from a voicemail, they've already gone cold or called a competitor.",
 		solution:
-			"Our system engages leads at the moment of peak motivation—when they are actively calling you—dramatically increasing your conversion rates.",
+			"Our system engages leads at the moment of peak motivation, when they are actively calling you, dramatically increasing your conversion rates.",
 	},
 ];
 
@@ -597,7 +597,7 @@ export const marketAnalyzerProblemsSolutions: ServiceProblemSolution[] = [
 		problem:
 			"Choosing a new market to invest in feels like a blind bet, with no easy way to gauge its potential for growth or cash flow.",
 		solution:
-			"Our tool provides the fundamental data you need—rent averages, historical trends, and market composition—to analyze a market's health and de-risk your investment decisions.",
+			"Our tool provides the fundamental data you need: rent averages, historical trends, and market composition, to analyze a market's health and de-risk your investment decisions.",
 	},
 	{
 		problem:

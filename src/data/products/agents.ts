@@ -31,7 +31,7 @@ export const agentProducts: ProductType[] = [
 			{
 				question: "What does the Atlas voice agent handle?",
 				answer:
-					"Atlas manages the entire call flow—from greeting the homeowner to capturing property details and booking appointments on your calendar.",
+					"Atlas manages the entire call flow, from greeting the homeowner to capturing property details and booking appointments on your calendar.",
 			},
 			{
 				question: "Can I customize the call script?",

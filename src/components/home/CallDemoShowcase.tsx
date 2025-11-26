@@ -15,7 +15,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AnimatedList } from "@/components/ui/animatedList";
+import { AnimatedList, Notification } from "@/components/ui/animatedList";
 import { Iphone } from "@/components/ui/iphone";
 import { LayoutGrid } from "@/components/ui/layout-grid";
 import { SparklesText } from "@/components/ui/sparkles-text";
@@ -151,11 +151,13 @@ const PhoneShell = ({
 }) => (
 	<div
 		className={cn(
-			"relative w-full max-w-[22rem] rounded-[3.25rem] bg-slate-900/45 p-3 shadow-[0_35px_80px_rgba(15,23,42,0.55)] ring-1 ring-slate-800/45 backdrop-blur-md sm:max-w-[24rem] md:max-w-[26rem] dark:bg-slate-900/70 dark:ring-white/12",
+			"relative w-full max-w-[22rem] rounded-[3.25rem] p-3 backdrop-blur-md shadow-[0_35px_80px_rgba(15,23,42,0.55)] ring-1 sm:max-w-[24rem] md:max-w-[26rem]",
+			"bg-slate-800/60 ring-slate-700/50",
+			"dark:bg-slate-900/70 dark:ring-white/12",
 			className,
 		)}
 	>
-		<div className="pointer-events-none absolute inset-0 rounded-[3.25rem] bg-gradient-to-b from-white/8 via-transparent to-black/40 dark:from-white/12 dark:via-transparent dark:to-black/65" />
+		<div className="pointer-events-none absolute inset-0 rounded-[3.25rem] bg-gradient-to-b from-white/5 via-transparent to-black/30 dark:from-white/12 dark:via-transparent dark:to-black/65" />
 		<div className="relative">{children}</div>
 	</div>
 );
@@ -169,52 +171,100 @@ const CallHandoffCard = ({
 	onQueue: () => void;
 	onCancel: () => void;
 }) => {
+	// Value propositions to show in animated list
+	const valueProps = [
+		{
+			name: "AI-Powered Calls",
+			description: "Natural conversations that convert leads into appointments",
+			icon: "🤖",
+			color: "#00C9A7",
+		},
+		{
+			name: "CRM Integration",
+			description: "Seamlessly syncs with GoHighLevel, HubSpot, and more",
+			icon: "🔗",
+			color: "#1E86FF",
+		},
+		{
+			name: "24/7 Availability",
+			description: "Never miss a lead with round-the-clock AI calling",
+			icon: "⏰",
+			color: "#FFB800",
+		},
+		{
+			name: "Real-Time Analytics",
+			description: "Track performance and optimize your outreach strategy",
+			icon: "📊",
+			color: "#FF3D71",
+		},
+	];
+
 	return (
-		<div className="relative flex h-full flex-col items-center justify-between rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-6 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
-			<div className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/8 via-transparent to-black/60" />
-			<div className="relative flex w-full flex-col items-center gap-4 text-center">
-				<span className="rounded-full bg-emerald-500/15 px-3 py-1 font-semibold text-[10px] text-emerald-200 uppercase tracking-[0.3em]">
-					Incoming Call
-				</span>
-				<div className="flex flex-col items-center gap-2">
-					<div className="size-16 overflow-hidden rounded-full border border-emerald-400/30 shadow-inner">
-						<Image
-							src="/avatars/Customer.jpg"
-							alt="Caller avatar"
-							width={64}
-							height={64}
-							className="size-full object-cover"
-						/>
+		<div className="relative flex h-full min-h-0 flex-col items-center justify-between rounded-[28px] border border-slate-300/30 bg-white/95 p-6 text-slate-900 shadow-[0_30px_90px_rgba(15,23,42,0.15)] dark:border-white/10 dark:bg-slate-950/90 dark:text-white dark:shadow-[0_30px_90px_rgba(15,23,42,0.45)]">
+			<div className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/30 via-transparent to-slate-100/50 dark:from-white/8 dark:via-transparent dark:to-black/60" />
+			<div className="relative flex w-full flex-shrink-0 flex-col gap-4">
+				<div className="flex w-full flex-col items-center gap-4 text-center">
+					<span className="rounded-full bg-emerald-500/15 px-3 py-1 font-semibold text-[10px] text-emerald-600 uppercase tracking-[0.3em] dark:text-emerald-200">
+						Incoming Call
+					</span>
+					<div className="flex flex-col items-center gap-2">
+						<div className="size-16 overflow-hidden rounded-full border border-emerald-400/50 shadow-inner dark:border-emerald-400/30">
+							<Image
+								src="/avatars/Customer.jpg"
+								alt="Caller avatar"
+								width={64}
+								height={64}
+								className="size-full object-cover"
+							/>
+						</div>
+						<h3 className="font-semibold text-lg text-slate-900 dark:text-white">Jordan, DealScale AI Rep</h3>
+						<p className="text-slate-600 text-sm dark:text-slate-300">
+							Lead is ready to confirm. Est. commission: $15,000. Accept and we&apos;ll sync the handoff to
+							your CRM.
+						</p>
 					</div>
-					<h3 className="font-semibold text-lg">Jordan, DealScale AI Rep</h3>
-					<p className="text-slate-300 text-sm">
-						Lead is ready to confirm. Accept and we&apos;ll sync the handoff to
-						your CRM.
-					</p>
 				</div>
 			</div>
-			<div className="relative flex w-full flex-col gap-3">
-				<button
-					type="button"
-					onClick={onAccept}
-					className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 font-semibold text-sm text-white shadow-emerald-500/40 shadow-lg transition hover:bg-emerald-400"
-				>
-					Accept Appointment
-				</button>
-				<button
-					type="button"
-					onClick={onQueue}
-					className="inline-flex w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 font-medium text-sm text-white transition hover:bg-white/10"
-				>
-					Send to Follow-up Queue
-				</button>
-				<button
-					type="button"
-					onClick={onCancel}
-					className="inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-transparent px-5 py-2.5 font-medium text-sm text-white transition hover:bg-white/10"
-				>
-					Cancel
-				</button>
+			{/* Animated Value Propositions List - Scrollable */}
+			<div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+				<div className="flex-1 overflow-y-auto pr-1">
+					<AnimatedList delay={150} className="gap-3">
+						{valueProps.map((item) => (
+							<Notification
+								key={item.name}
+								name={item.name}
+								description={item.description}
+								icon={item.icon}
+								color={item.color}
+								time=""
+								className="!bg-slate-100/90 !backdrop-blur-md !border-slate-200/60 !text-slate-900 hover:!bg-slate-200/90 [&_figcaption]:!text-slate-900 [&_p]:!text-slate-700 dark:!bg-white/10 dark:!border-white/20 dark:!text-white dark:hover:!bg-white/15 dark:[&_figcaption]:!text-white dark:[&_p]:!text-white/70"
+							/>
+						))}
+					</AnimatedList>
+				</div>
+			</div>
+			<div className="relative flex w-full flex-shrink-0 flex-col gap-3">
+					<button
+						type="button"
+						onClick={onAccept}
+						className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 font-semibold text-sm text-white shadow-emerald-500/40 shadow-lg transition hover:bg-emerald-400 dark:bg-emerald-500 dark:hover:bg-emerald-400"
+					>
+						Accept Appointment
+					</button>
+					<button
+						type="button"
+						onClick={onQueue}
+						className="inline-flex w-full items-center justify-center rounded-full border border-slate-300/30 bg-slate-50/90 px-5 py-2.5 font-medium text-sm text-slate-900 transition hover:bg-slate-100/90 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+					>
+						Send to Follow-up Queue
+					</button>
+					<button
+						type="button"
+						onClick={onCancel}
+						className="inline-flex w-full items-center justify-center rounded-full border border-slate-300/20 bg-transparent px-5 py-2.5 font-medium text-sm text-slate-700 transition hover:bg-slate-100/50 dark:border-white/10 dark:text-white dark:hover:bg-white/10"
+					>
+						Cancel
+					</button>
 			</div>
 		</div>
 	);
@@ -530,8 +580,9 @@ const CallDemoInteractive = () => {
 								<div
 									className={cn(
 										"rounded-full px-3 py-1",
-										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-										"bg-slate-900/70 backdrop-blur",
+										"font-semibold text-[10px] uppercase tracking-[0.3em]",
+										"bg-slate-800/80 text-white backdrop-blur",
+										"dark:bg-slate-900/70 dark:text-white",
 									)}
 								>
 									AI Text Demo
@@ -758,8 +809,9 @@ const CallDemoInteractive = () => {
 								<div
 									className={cn(
 										"rounded-full px-3 py-1",
-										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-										"bg-slate-950/55 backdrop-blur",
+										"font-semibold text-[10px] uppercase tracking-[0.3em]",
+										"bg-slate-800/80 text-white backdrop-blur",
+										"dark:bg-slate-950/55 dark:text-white",
 									)}
 								>
 									Shorts
@@ -783,8 +835,9 @@ const CallDemoInteractive = () => {
 								<div
 									className={cn(
 										"rounded-full px-3 py-1",
-										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-										"bg-emerald-500/40 backdrop-blur",
+										"font-semibold text-[10px] uppercase tracking-[0.3em]",
+										"bg-emerald-500/60 text-white backdrop-blur",
+										"dark:bg-emerald-500/40 dark:text-white",
 									)}
 								>
 									Handoff Ready
@@ -813,16 +866,17 @@ const CallDemoInteractive = () => {
 								<div
 									className={cn(
 										"rounded-full px-3 py-1",
-										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-										"bg-slate-950/65 backdrop-blur",
+										"font-semibold text-[10px] uppercase tracking-[0.3em]",
+										"bg-slate-800/80 text-white backdrop-blur",
+										"dark:bg-slate-950/65 dark:text-white",
 									)}
 								>
 									Live Call Demo
 								</div>
 							</div>
-							<div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-900/50 bg-slate-950/85 p-3 text-white shadow-[0_30px_90px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-950/90">
-								<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/40 dark:from-white/10 dark:via-transparent dark:to-black/60" />
-								<div className="relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-black/35 p-2 shadow-inner dark:bg-black/25">
+							<div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-300/30 bg-slate-50/95 p-3 shadow-[0_30px_90px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-950/90 dark:text-white">
+								<div className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/20 via-transparent to-slate-100/50 dark:from-white/10 dark:via-transparent dark:to-black/60" />
+								<div className="relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-white/80 p-2 shadow-inner dark:bg-black/25">
 									<SessionMonitor
 										key={callDemoKey}
 										transcript={demoTranscript}
@@ -876,8 +930,9 @@ const CallDemoInteractive = () => {
 							<div
 								className={cn(
 									"rounded-full px-3 py-1",
-									"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
-									"bg-slate-950/55 backdrop-blur",
+									"font-semibold text-[10px] uppercase tracking-[0.3em]",
+									"bg-slate-800/80 text-white backdrop-blur",
+									"dark:bg-slate-950/55 dark:text-white",
 								)}
 							>
 								Shorts

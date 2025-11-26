@@ -133,7 +133,7 @@ export const marketMetricsSnapshotABTest: ABTest = {
 				subtitle:
 					"Always-fresh KPIs curated from MLS, census, and Deal Scale's proprietary dataset.",
 				description:
-					"Monitor the metrics that matter before you deploy marketing dollars—inventory shifts, rent velocity, and neighborhood absorption trends.",
+					"Monitor the metrics that matter before you deploy marketing dollars: inventory shifts, rent velocity, and neighborhood absorption trends.",
 				whatsInItForMe:
 					"Spot which submarkets deserve campaigns this week without pulling a dozen reports.",
 				target_audience: "Data-driven investors and marketing leads",

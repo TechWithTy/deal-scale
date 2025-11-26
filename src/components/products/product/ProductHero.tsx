@@ -199,9 +199,7 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 					{testimonial?.quote}
 				</blockquote>
 				{testimonial?.author && (
-					<cite className="font-medium text-primary">
-						— {testimonial.author}
-					</cite>
+					<cite className="font-medium text-primary">{testimonial.author}</cite>
 				)}
 			</div>
 		</div>

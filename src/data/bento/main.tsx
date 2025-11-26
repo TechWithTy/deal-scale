@@ -52,7 +52,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 				</div>
 				<p className="text-sm text-white/90 leading-6 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
 					Upload your seller list, connect your CRM, and spin up your first AI
-					campaign in a single click—before your coffee cools.
+					campaign in a single click, before your coffee cools.
 				</p>
 				<Badge
 					variant="secondary"
@@ -95,7 +95,7 @@ export const MainBentoFeatures: BentoFeature[] = [
 					variant="secondary"
 					className="w-fit rounded-full bg-accent/15 px-3 py-1 font-semibold text-accent-foreground text-xs"
 				>
-					Replies 24/7 — zero delays
+					Replies 24/7, zero delays
 				</Badge>
 			</div>
 		),
@@ -201,8 +201,12 @@ export const MainBentoFeatures: BentoFeature[] = [
 						</h3>
 					</div>
 					<div className="space-y-3 text-sm text-white/90">
-						<p className="font-medium text-white/90 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">{primarySolution}</p>
-						<p className="[text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">{primaryHope}</p>
+						<p className="font-medium text-white/90 [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
+							{primarySolution}
+						</p>
+						<p className="[text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
+							{primaryHope}
+						</p>
 					</div>
 					<Badge
 						variant="secondary"

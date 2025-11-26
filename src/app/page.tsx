@@ -493,7 +493,7 @@ const Index = async ({
 			>
 				<MarketingCatalogPricing
 					title="Success-Based Pricing"
-					subtitle="Pay for outcomes, not promises—pilot pricing stays locked for 2 years."
+					subtitle="Pay for outcomes, not promises. Pilot pricing stays locked for 2 years."
 					catalog={pricingCatalog}
 					showFreePreview={false}
 					showUpgradeStack={false}

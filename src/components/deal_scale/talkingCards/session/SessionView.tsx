@@ -301,7 +301,7 @@ export const SessionView = ({
 								"z-10 transition-all duration-300 hover:z-20 hover:scale-105 hover:shadow-xl",
 								aiActive && "border-primary/50",
 								isCompact &&
-									"min-w-0 rounded-2xl border-white/5 bg-slate-900/80 p-4 text-sm",
+									"min-w-0 rounded-2xl border-slate-200/50 bg-white/90 p-4 text-sm dark:border-white/5 dark:bg-slate-900/80",
 							)}
 							transcriptText={
 								currentLine?.speaker === "ai" ? currentLine.text : ""

@@ -2,7 +2,6 @@
 import CaseStudyGrid from "@/components/case-studies/CaseStudyGrid";
 import { CTASection } from "@/components/common/CTASection";
 import { useCategoryFilter } from "@/hooks/use-category-filter";
-import { usePagination } from "@/hooks/use-pagination";
 import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
 import { useDataModule } from "@/stores/useDataModuleStore";
 import { useEffect, useMemo } from "react";
@@ -17,6 +16,15 @@ export default function CaseStudiesClient() {
 			error,
 		}),
 	);
+
+	// Debug logging
+	console.log("[CaseStudiesClient] Status:", status);
+	console.log("[CaseStudiesClient] Case studies count:", caseStudies.length);
+	console.log(
+		"[CaseStudiesClient] Case studies:",
+		caseStudies.map((s) => ({ id: s.id, title: s.title, slug: s.slug })),
+	);
+	console.log("[CaseStudiesClient] Error:", error);
 
 	const hasModuleData = caseStudies.length > 0;
 	const telemetryDetail = useMemo(() => ({ scope: "listing-page" }), []);
@@ -37,21 +45,6 @@ export default function CaseStudiesClient() {
 
 		return caseStudies.filter((study) => study.categories.includes(category));
 	}, [activeCategory, caseStudies, hasModuleData]);
-
-	const { pagedItems: paginatedCaseStudies, setPage } = usePagination(
-		filteredCaseStudies,
-		{
-			itemsPerPage: 6,
-			initialPage: 1,
-			enableShowAll: true,
-		},
-	);
-
-	// Reset to first page when filter changes
-	// biome-ignore lint/correctness/useExhaustiveDependencies: category scope handled intentionally
-	useEffect(() => {
-		setPage(1);
-	}, [activeCategory]);
 
 	const guardDetail = useMemo(
 		() => ({ ...telemetryDetail, activeCategory }),
@@ -75,7 +68,7 @@ export default function CaseStudiesClient() {
 
 	return (
 		<>
-			<CaseStudyGrid caseStudies={paginatedCaseStudies} />
+			<CaseStudyGrid caseStudies={filteredCaseStudies} />
 			<CTASection
 				title="Ready to Achieve Similar Results?"
 				description="Let's discuss how our expertise can transform your business challenges into opportunities for growth and innovation."

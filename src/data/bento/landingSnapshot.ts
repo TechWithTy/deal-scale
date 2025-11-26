@@ -42,7 +42,7 @@ export const landingBentoFeatureSeeds: BentoFeatureSeed[] = [
 		title: "Appointments on Your Calendar",
 		size: "md",
 		summary:
-			"Delivers sales-ready appointments straight to your calendar—no extra tools required.",
+			"Delivers sales-ready appointments straight to your calendar, no extra tools required.",
 		description:
 			"Automated scheduling keeps your pipeline full while your team focuses on high-value conversations.",
 	},

@@ -2,7 +2,6 @@
 
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { AnimatedList, Notification } from "@/components/ui/animatedList";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -91,34 +90,6 @@ export const CallCompleteModal = ({
 
 	const { title: modalTitle, description: modalDescription } = content[variant];
 
-	// Value propositions to show in animated list
-	const valueProps = [
-		{
-			name: "AI-Powered Calls",
-			description: "Natural conversations that convert leads into appointments",
-			icon: "🤖",
-			color: "#00C9A7",
-		},
-		{
-			name: "CRM Integration",
-			description: "Seamlessly syncs with GoHighLevel, HubSpot, and more",
-			icon: "🔗",
-			color: "#1E86FF",
-		},
-		{
-			name: "24/7 Availability",
-			description: "Never miss a lead with round-the-clock AI calling",
-			icon: "⏰",
-			color: "#FFB800",
-		},
-		{
-			name: "Real-Time Analytics",
-			description: "Track performance and optimize your outreach strategy",
-			icon: "📊",
-			color: "#FF3D71",
-		},
-	];
-
 	return (
 		<Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
 			<DialogContent
@@ -145,24 +116,6 @@ export const CallCompleteModal = ({
 						role="alert"
 					>
 						{error}
-					</div>
-				)}
-
-				{/* Animated Value Propositions List */}
-				{variant === "complete" && (
-					<div className="my-4 max-h-[300px] overflow-hidden">
-						<AnimatedList delay={150} className="gap-3">
-							{valueProps.map((item) => (
-								<Notification
-									key={item.name}
-									name={item.name}
-									description={item.description}
-									icon={item.icon}
-									color={item.color}
-									time=""
-								/>
-							))}
-						</AnimatedList>
 					</div>
 				)}
 

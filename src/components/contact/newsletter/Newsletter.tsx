@@ -112,7 +112,7 @@ export const Newsletter = () => {
 					Get actionable AI-powered strategies to fill your calendar with
 					qualified sellers, uncover exclusive lookalike off-market deals
 					powered by our similarity features, and scale your real estate
-					business—without the burnout. Join Deal Scale’s Pipeline & Profit for
+					business without the burnout. Join Deal Scale's Pipeline & Profit for
 					proven automation tactics, expert insights, and real results. No
 					fluff, just what moves the needle.
 				</p>

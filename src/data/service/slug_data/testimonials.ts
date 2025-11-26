@@ -40,7 +40,7 @@ export const generalDealScaleTestimonials: Testimonial[] = [
 		problem:
 			"Our team used separate tools for lead lists, a clunky CRM, and manual outreach. Nothing was integrated, data was siloed, and our process was inefficient and difficult to scale.",
 		solution:
-			"Deal Scale unified our entire workflow. We now have an integrated system for lookalike audience expansion guided by relationship-first playbooks, data enrichment, multi-channel outreach, and pipeline management—all powered by intelligent automation.",
+			"Deal Scale unified our entire workflow. We now have an integrated system for lookalike audience expansion guided by relationship-first playbooks, data enrichment, multi-channel outreach, and pipeline management, all powered by intelligent automation.",
 
 		rating: 5,
 		company: "Apex Capital Ventures",
@@ -201,11 +201,11 @@ export const domainReconTestimonials: Testimonial[] = [
 		name: "Kimberly Torres",
 		role: "Residential Real Estate Agent",
 		content:
-			"I used to go into cold calls with barely any information. Now, before I ever pick up the phone, I run a lead’s email or company website through Domain Recon. In seconds, I get a full picture—company size, social links, recent news, and even key decision makers. I can personalize my outreach, ask smarter questions, and prequalify leads faster. The conversations are so much warmer and my close rate has noticeably improved.",
+			"I used to go into cold calls with barely any information. Now, before I ever pick up the phone, I run a lead's email or company website through Domain Recon. In seconds, I get a full picture: company size, social links, recent news, and even key decision makers. I can personalize my outreach, ask smarter questions, and prequalify leads faster. The conversations are so much warmer and my close rate has noticeably improved.",
 		problem:
 			"Going into lead outreach blindly meant I missed key context, wasted time on unqualified prospects, and struggled to build rapport quickly.",
 		solution:
-			"Domain Recon transforms a simple website into a detailed dossier—revealing company details, team members, and digital presence. I use these insights to prequalify leads and tailor my approach for each conversation.",
+			"Domain Recon transforms a simple website into a detailed dossier, revealing company details, team members, and digital presence. I use these insights to prequalify leads and tailor my approach for each conversation.",
 		image: "/images/testimonials/kimberly-torres.jpg",
 		rating: 5,
 		company: "Torres Realty Group",
@@ -294,7 +294,7 @@ export const performanceHubTestimonials: Testimonial[] = [
 		problem:
 			"My day was a mix of strategic planning and being bogged down by repetitive administrative tasks.",
 		solution:
-			"The AI Command Center acts as both a strategist—creating tasks for my team—and an assistant—automating the manual tasks I create for myself. It has fundamentally changed how I spend my time.",
+			"The AI Command Center acts as both a strategist, creating tasks for my team, and an assistant, automating the manual tasks I create for myself. It has fundamentally changed how I spend my time.",
 		image: "/images/testimonials/samantha-jones.jpg",
 		rating: 5,
 		company: "Bluebird Properties",

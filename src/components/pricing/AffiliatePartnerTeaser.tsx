@@ -77,7 +77,7 @@ export const AffiliatePartnerTeaser = ({
 				</ul>
 				<p className="max-w-3xl text-muted-foreground text-xs sm:text-sm">
 					Picture a student closing their first AI-assisted deal and thanking
-					you on stage—while you collect every month they stay. That&apos;s the
+					you on stage, while you collect every month they stay. That&apos;s the
 					partnership we built for creators.
 				</p>
 				<div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-center">

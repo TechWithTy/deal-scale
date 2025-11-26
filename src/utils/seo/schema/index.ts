@@ -28,6 +28,7 @@ export {
 	testimonialReviewSchemas,
 } from "./reviewData";
 export { buildManifestoSchema } from "./manifesto";
+export { buildRoadmapSchema } from "./roadmap";
 export {
 	organizationSchema,
 	productSchema,

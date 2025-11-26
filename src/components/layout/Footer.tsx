@@ -44,8 +44,6 @@ export interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({
-	companyName,
-	companyLegalName,
 	companyDescription,
 	socialLinks,
 	quickLinks,
@@ -54,7 +52,6 @@ export const Footer: React.FC<FooterProps> = ({
 	termsOfServiceLink,
 	cookiePolicyLink,
 }) => {
-	const currentYear = new Date().getFullYear();
 	type SocialLinkKey = Exclude<
 		keyof FooterProps["socialLinks"],
 		"mediumUsername"
@@ -133,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({
 						</div>
 					</div>
 
-					<div className="text-center md:col-span-2 lg:col-span-1">
+					<div className="text-center md:col-span-1 lg:col-span-1">
 						<h3 className="mb-4 font-semibold text-lg">Quick Links</h3>
 						<ul className="space-y-3">
 							{quickLinks.map((link) => (
@@ -150,7 +147,7 @@ export const Footer: React.FC<FooterProps> = ({
 						</ul>
 					</div>
 
-					<div className="flex flex-col items-center text-center md:col-span-2 md:items-center md:text-center lg:col-span-1 lg:items-start lg:text-left">
+					<div className="flex flex-col items-center text-center md:col-span-1 lg:col-span-1">
 						<h3 className="mb-4 font-semibold text-lg">Get in Touch</h3>
 						<ul className="w-full space-y-3">
 							<li>
@@ -160,8 +157,8 @@ export const Footer: React.FC<FooterProps> = ({
 									className="flex items-center justify-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
 									rel="noreferrer"
 								>
-									<Mail className="mr-2 h-4 w-4" />
-									{contactInfo.email}
+									<Mail className="mr-2 h-4 w-4 flex-shrink-0" />
+									<span className="break-words">{contactInfo.email}</span>
 								</a>
 							</li>
 							<li>
@@ -171,21 +168,21 @@ export const Footer: React.FC<FooterProps> = ({
 									className="flex items-center justify-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
 									rel="noreferrer"
 								>
-									<Phone className="mr-2 h-4 w-4" />
-									{contactInfo.phone}
+									<Phone className="mr-2 h-4 w-4 flex-shrink-0" />
+									<span>{contactInfo.phone}</span>
 								</a>
 							</li>
 							<li>
 								<div className="flex items-center justify-center text-black dark:text-white">
 									<MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
-									<span>{contactInfo.address}</span>
+									<span className="break-words">{contactInfo.address}</span>
 								</div>
 							</li>
 						</ul>
-						<div className="mt-4 flex w-full justify-center lg:justify-start">
+						<div className="mt-4 flex w-full justify-center">
 							<FooterBetaCta className="w-full max-w-sm" />
 						</div>
-						<FooterPersonaPrompt className="mt-4 text-center md:mt-6 md:text-center lg:text-left" />
+						<FooterPersonaPrompt className="mt-4 text-center" />
 					</div>
 
 					<div className="col-span-1 flex flex-col items-center md:col-span-2 md:text-center lg:col-span-1">

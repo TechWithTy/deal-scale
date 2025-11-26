@@ -134,7 +134,7 @@ export const pricingCatalog: PricingCatalog = {
 			{
 				id: "selfHosted",
 				name: "Self-Hosted / AI Enablement License",
-				pricingModel: "Custom — Contact Sales",
+				pricingModel: "Custom: Contact Sales",
 				ctaPrimary: {
 					label: "Contact Sales",
 					type: "contactSales",

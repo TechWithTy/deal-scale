@@ -394,7 +394,7 @@ export const proprietaryVoiceCloningFAQ: FAQProps = {
 			question:
 				"How does Deal Scale's technology clone my voice so accurately?",
 			answer:
-				"You provide a brief, clear audio sample via our secure platform. Deal Scale's advanced, proprietary AI then meticulously analyzes its unique acoustic properties—such as tone, pitch, and inflection—to construct a precise and remarkably natural-sounding digital replica. This entire process is powered and secured by our in-house technology.",
+				"You provide a brief, clear audio sample via our secure platform. Deal Scale's advanced, proprietary AI then meticulously analyzes its unique acoustic properties, such as tone, pitch, and inflection, to construct a precise and remarkably natural-sounding digital replica. This entire process is powered and secured by our in-house technology.",
 		},
 		{
 			question:
