@@ -1,3 +1,8 @@
+import { motion } from "framer-motion";
+import { ChevronLeft, Eye, Share2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
 import { SocialShare } from "@/components/common/social/share/SocialShare";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,11 +12,6 @@ import {
 } from "@/components/ui/popover";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import type { CaseStudy } from "@/types/case-study";
-import { motion } from "framer-motion";
-import { ChevronLeft, Eye, Share2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { v4 as uuidv4 } from "uuid";
 
 interface CaseStudyDetailHeaderProps {
 	caseStudy: CaseStudy;
@@ -142,7 +142,10 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 					</motion.div>
 				</div>
 
-				<div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3" style={{ gridAutoRows: 'min-content', alignItems: 'start' }}>
+				<div
+					className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3"
+					style={{ gridAutoRows: "min-content", alignItems: "start" }}
+				>
 					{caseStudy.results.map((result, index) => (
 						<motion.div
 							key={uuidv4()}
@@ -150,7 +153,7 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
 							className="glass-card h-auto self-start rounded-xl p-6 text-center"
-							style={{ height: 'auto' }}
+							style={{ height: "auto" }}
 						>
 							<h3 className="mb-2 font-bold text-4xl text-primary">
 								{result.value}

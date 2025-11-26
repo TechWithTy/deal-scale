@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "pnpm run check:env && next dev",
 		"dev-turbo": "pnpm run check:env && next dev --turbopack",
-		"build": "pnpm run check:chunk && pnpm run check:meta && next build",
+		"build": "pnpm run generate:data && pnpm run check:chunk && pnpm run check:meta && next build",
 		"typecheck": "tsc --noEmit",
 		"postbuild": "pnpm run submit:sitemap",
 		"build:cf": "pnpm exec next-on-pages",

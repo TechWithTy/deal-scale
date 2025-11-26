@@ -7,6 +7,8 @@ export const dataStores = {
 	"about/milestones": createDataModuleStore("about/milestones"),
 	"about/team": createDataModuleStore("about/team"),
 	"about/timeline": createDataModuleStore("about/timeline"),
+	"about/timelineSummary": createDataModuleStore("about/timelineSummary"),
+	"activity/activityStream": createDataModuleStore("activity/activityStream"),
 	affiliate: createDataModuleStore("affiliate"),
 	"auth/formFields": createDataModuleStore("auth/formFields"),
 	"auth/resetPassword": createDataModuleStore("auth/resetPassword"),
@@ -23,6 +25,7 @@ export const dataStores = {
 		"caseStudy/slugDetails/testimonials",
 	),
 	categories: createDataModuleStore("categories"),
+	"closers/mockClosers": createDataModuleStore("closers/mockClosers"),
 	company: createDataModuleStore("company"),
 	"constants/booking": createDataModuleStore("constants/booking"),
 	"constants/legal/cookies": createDataModuleStore("constants/legal/cookies"),
@@ -37,6 +40,7 @@ export const dataStores = {
 	"constants/seo": createDataModuleStore("constants/seo"),
 	"contact/affiliate": createDataModuleStore("contact/affiliate"),
 	"contact/authFormFields": createDataModuleStore("contact/authFormFields"),
+	"contact/closer": createDataModuleStore("contact/closer"),
 	"contact/formFields": createDataModuleStore("contact/formFields"),
 	"contact/pilotFormFields": createDataModuleStore("contact/pilotFormFields"),
 	discount: createDataModuleStore("discount"),
@@ -45,6 +49,7 @@ export const dataStores = {
 	),
 	events: createDataModuleStore("events"),
 	"faq/default": createDataModuleStore("faq/default"),
+	"faq/personaFaq": createDataModuleStore("faq/personaFaq"),
 	features: createDataModuleStore("features"),
 	"features/deal_scales_timeline": createDataModuleStore(
 		"features/deal_scales_timeline",
@@ -52,6 +57,7 @@ export const dataStores = {
 	"features/feature_timeline": createDataModuleStore(
 		"features/feature_timeline",
 	),
+	"home/aiOutreachStudio": createDataModuleStore("home/aiOutreachStudio"),
 	"landing/strapiLandingContent": createDataModuleStore(
 		"landing/strapiLandingContent",
 	),
@@ -60,9 +66,14 @@ export const dataStores = {
 	"medium/post": createDataModuleStore("medium/post"),
 	mlsProperties: createDataModuleStore("mlsProperties"),
 	partners: createDataModuleStore("partners"),
+	"personas/catalog": createDataModuleStore("personas/catalog"),
+	"personas/testimonialsByPersona": createDataModuleStore(
+		"personas/testimonialsByPersona",
+	),
 	portfolio: createDataModuleStore("portfolio"),
 	products: createDataModuleStore("products"),
 	"products/agents": createDataModuleStore("products/agents"),
+	"products/closers": createDataModuleStore("products/closers"),
 	"products/copy": createDataModuleStore("products/copy"),
 	"products/credits": createDataModuleStore("products/credits"),
 	"products/essentials": createDataModuleStore("products/essentials"),
@@ -72,6 +83,7 @@ export const dataStores = {
 	"products/free-resources": createDataModuleStore("products/free-resources"),
 	"products/hero": createDataModuleStore("products/hero"),
 	"products/license": createDataModuleStore("products/license"),
+	"products/monetize": createDataModuleStore("products/monetize"),
 	"products/notion": createDataModuleStore("products/notion"),
 	"products/reviews": createDataModuleStore("products/reviews"),
 	"products/sizingChart": createDataModuleStore("products/sizingChart"),
@@ -99,6 +111,9 @@ export const dataStores = {
 	),
 	"service/slug_data/pricing/other": createDataModuleStore(
 		"service/slug_data/pricing/other",
+	),
+	"service/slug_data/pricing/roiEstimator": createDataModuleStore(
+		"service/slug_data/pricing/roiEstimator",
 	),
 	"service/slug_data/problems_solutions": createDataModuleStore(
 		"service/slug_data/problems_solutions",
