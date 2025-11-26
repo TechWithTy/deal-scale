@@ -220,7 +220,9 @@ export default function CheckoutForm({
 					`You're all set! ${plan.name} will continue at ${formatPrice(
 						postTrialAmount && postTrialAmount > 0
 							? postTrialAmount
-							: plan.price[planType].amount && plan.price[planType].amount > 0
+							: plan.price[planType].amount &&
+							  typeof plan.price[planType].amount === "number" &&
+							  plan.price[planType].amount > 0
 								? plan.price[planType].amount
 								: 2000,
 					)} after your trial.`,
@@ -398,7 +400,9 @@ export default function CheckoutForm({
 									{formatPrice(
 										postTrialAmount && postTrialAmount > 0
 											? postTrialAmount
-											: plan.price[planType].amount && plan.price[planType].amount > 0
+											: plan.price[planType].amount &&
+											  typeof plan.price[planType].amount === "number" &&
+											  plan.price[planType].amount > 0
 												? plan.price[planType].amount
 												: 2000,
 									)}{" "}
@@ -578,7 +582,9 @@ export default function CheckoutForm({
 									{formatPrice(
 										postTrialAmount && postTrialAmount > 0
 											? postTrialAmount
-											: plan.price[planType].amount && plan.price[planType].amount > 0
+											: plan.price[planType].amount &&
+											  typeof plan.price[planType].amount === "number" &&
+											  plan.price[planType].amount > 0
 												? plan.price[planType].amount
 												: 2000,
 									)}{" "}
