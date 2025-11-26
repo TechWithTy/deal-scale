@@ -218,7 +218,11 @@ export default function CheckoutForm({
 				returnUrl.searchParams.append(
 					"subtitle",
 					`You're all set! ${plan.name} will continue at ${formatPrice(
-						postTrialAmount ?? plan.price[planType].amount,
+						postTrialAmount && postTrialAmount > 0
+							? postTrialAmount
+							: plan.price[planType].amount && plan.price[planType].amount > 0
+								? plan.price[planType].amount
+								: 2000,
 					)} after your trial.`,
 				);
 			} else {
@@ -392,7 +396,11 @@ export default function CheckoutForm({
 									We'll secure your payment method to automatically continue
 									your DealScale plan at{" "}
 									{formatPrice(
-										postTrialAmount ?? plan.price[planType].amount ?? 2000,
+										postTrialAmount && postTrialAmount > 0
+											? postTrialAmount
+											: plan.price[planType].amount && plan.price[planType].amount > 0
+												? plan.price[planType].amount
+												: 2000,
 									)}{" "}
 									after the trial ends.
 								</span>
@@ -567,7 +575,13 @@ export default function CheckoutForm({
 								</p>
 								<p className="mt-1 text-tertiary text-xs">
 									Your Basic plan will renew at{" "}
-									{formatPrice(postTrialAmount ?? plan.price[planType].amount)}{" "}
+									{formatPrice(
+										postTrialAmount && postTrialAmount > 0
+											? postTrialAmount
+											: plan.price[planType].amount && plan.price[planType].amount > 0
+												? plan.price[planType].amount
+												: 2000,
+									)}{" "}
 									per month after the trial.
 								</p>
 							</>
