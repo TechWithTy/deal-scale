@@ -188,6 +188,22 @@ export function createDataModuleStore<K extends DataModuleKey>(
 					console.log(
 						`[createDataModuleStore:${key}] Module loaded successfully`,
 					);
+					console.log(
+						`[createDataModuleStore:${key}] Module keys:`,
+						Object.keys(module),
+					);
+					if ("caseStudies" in module) {
+						const caseStudies = (module as { caseStudies?: unknown })
+							.caseStudies;
+						console.log(
+							`[createDataModuleStore:${key}] caseStudies count:`,
+							Array.isArray(caseStudies) ? caseStudies.length : "NOT ARRAY",
+						);
+					} else {
+						console.log(
+							`[createDataModuleStore:${key}] caseStudies NOT FOUND in module`,
+						);
+					}
 					set((state) => {
 						const nextState: DataModuleState<K> = {
 							...state,
@@ -445,7 +461,16 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 		);
 		if (currentStatus === "idle") {
 			console.log(`[useDataModule] Triggering load for key: "${key}"`);
-			void store.getState().load();
+			void store
+				.getState()
+				.load()
+				.catch((error) => {
+					console.error(`[useDataModule] Load error for key "${key}":`, error);
+				});
+		} else {
+			console.log(
+				`[useDataModule] Skipping load for key: "${key}", status is: ${currentStatus}`,
+			);
 		}
 	}, [store, key]);
 
