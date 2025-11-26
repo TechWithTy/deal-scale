@@ -484,6 +484,338 @@ export const caseStudies: CaseStudy[] = [
 		featured: true,
 		redirectToContact: false,
 	},
+	{
+		id: "case-crm-integration-2025-11",
+		title:
+			"How BetaCorp cut their sales cycle time by 3× after unified CRM integration with Deal Scale",
+		subtitle:
+			"Fragmented data and slow pipeline → streamlined CRM, unified sales data & faster conversions",
+		referenceLink: null,
+		slug: "betacorp-crm-integration-pipeline-2025",
+		categories: [
+			"crm-integration",
+			"workflow-automation",
+			"pipeline-management",
+		],
+		industries: ["manufacturing-software", "enterprise"],
+		copyright: {
+			title: "Need a unified sales workflow?",
+			subtitle: "Deal Scale can connect your silos and speed up sales.",
+			ctaText: "Contact us",
+			ctaLink: "/contact",
+		},
+		tags: [
+			"CRM integration",
+			"pipeline",
+			"automation",
+			"sales velocity",
+			"case-study",
+		],
+		clientName: "BetaCorp",
+		clientDescription:
+			"Enterprise-software vendor serving manufacturing firms, ~200 employees, multiple fragmented lead & deal sources (sheet, CRM, manual).",
+		featuredImage: "/images/case-betacorp-crm-hero.jpg",
+		thumbnailImage: "/images/case-betacorp-crm-thumb.jpg",
+		businessChallenges: [
+			"Leads and deals tracked in multiple places: spreadsheet, legacy CRM, manual logs",
+			"Lack of unified pipeline made forecasting and prioritization unreliable",
+			"Sales reps wasted time switching between systems; inconsistent follow-up and data loss",
+		],
+		lastModified: new Date("2025-11-26T10:00:00.000Z"),
+		howItWorks: [
+			{
+				stepNumber: 1,
+				title: "Audit lead & deal sources",
+				subtitle: "Inventory all lead and deal data sources",
+				description:
+					"Mapped all existing spreadsheets, CRM exports, manual forms, collected legacy deal logs and consolidated into centralized database.",
+				icon: "Database",
+				label: "audit",
+				positionLabel: "step-1",
+				payload: [],
+			},
+			{
+				stepNumber: 2,
+				title: "CRM integration & pipeline rationalization",
+				subtitle: "Unified pipeline schema and data model",
+				description:
+					"Built canonical lead/deal schema; migrated legacy data; mapped into unified pipeline, ensuring consistent data fields, tagging, stage definitions.",
+				icon: "Code",
+				label: "integrate",
+				positionLabel: "step-2",
+				payload: [],
+			},
+			{
+				stepNumber: 3,
+				title: "Automated workflows & reminders",
+				subtitle: "Auto-assignment, follow-up reminders, stage change triggers",
+				description:
+					"Configured automation: when lead converted to opportunity, auto-assign to rep; reminders if no contact in 7 days; automated pipeline status updates.",
+				icon: "Zap",
+				label: "automate",
+				positionLabel: "step-3",
+				payload: [],
+			},
+			{
+				stepNumber: 4,
+				title: "Reporting & forecasting dashboard",
+				subtitle: "Real-time deal pipeline visibility",
+				description:
+					"Built live dashboard tracking deals by stage, time-to-close averages, rep performance, and forecasting, enabling leadership to make data-driven decisions.",
+				icon: "BarChartBig",
+				label: "visualize",
+				positionLabel: "step-4",
+				payload: [],
+			},
+		],
+		businessOutcomes: [
+			{
+				title: "Sales cycle shortened",
+				subtitle: "Average time-to-close reduced by 66%",
+			},
+			{
+				title: "Pipeline visibility & reliability",
+				subtitle:
+					"Unified data + forecasting dashboard enabled accurate forecasts and better prioritization",
+			},
+		],
+		solutions: [
+			"CRM + data source consolidation",
+			"Canonical pipeline schema",
+			"Automated follow-up workflows & reminders",
+			"Real-time reporting dashboard",
+		],
+		techStacks: [
+			{
+				category: "data & backend",
+				libraries: [
+					{
+						name: "PostgreSQL",
+						description: "Central lead/deal database",
+						link: null,
+						lucideIcon: "Database",
+					},
+				],
+			},
+			{
+				category: "automation & orchestration",
+				libraries: [
+					{
+						name: "Workflow Engine (Lead Orchestra)",
+						description: "Handles automated triggers, reminders, assignment",
+						link: null,
+						lucideIcon: "Bolt",
+					},
+				],
+			},
+			{
+				category: "dashboard & reporting",
+				libraries: [
+					{
+						name: "React + Chart.js",
+						description: "Real-time deal pipeline dashboard",
+						link: null,
+						lucideIcon: "PieChart",
+					},
+				],
+			},
+		],
+		description:
+			"BetaCorp had been accruing leads and deals across spreadsheets, legacy CRM exports, and manual forms. This fragmented setup resulted in lost deals, inconsistent follow-up, and almost no reliable forecasting. Deal Scale performed a full audit of all lead/deal sources, migrated and normalized all records into a unified canonical schema, and consolidated into a single pipeline. We implemented automated workflows: leads were auto-assigned, follow-up reminders triggered automatically, and deal stages consistently updated. Finally, we built a real-time reporting dashboard giving leadership visibility into pipeline health, time-to-close averages, rep performance, and forecast accuracy. As a result the average sales cycle dropped by ~66%, conversion consistency improved, and forecasting for future revenue became reliable.",
+		results: [
+			{
+				title: "Average time-to-close before",
+				value: "90 days",
+			},
+			{
+				title: "Average time-to-close after",
+				value: "30 days",
+			},
+			{
+				title: "Forecast accuracy improvement",
+				value: "≈ 95%",
+			},
+			{
+				title: "Deal data consolidation",
+				value: "100% of pipelines unified",
+			},
+		],
+		featured: true,
+		redirectToContact: false,
+	},
+	{
+		id: "case-full-automation-2025-11",
+		title:
+			"From inbound lead to closed deal: 100% automated sales funnel for Gamma Ltd",
+		subtitle:
+			"Zero manual touch: AI scoring, automated follow-up, pipeline tracking, closed deals",
+		referenceLink: null,
+		slug: "gamma-full-automation-2025",
+		categories: [
+			"full-automation",
+			"lead-scoring",
+			"crm-automation",
+			"workflow",
+		],
+		industries: ["digital-services", "consulting"],
+		copyright: {
+			title: "Automate your sales funnel end-to-end",
+			subtitle:
+				"Let Deal Scale handle lead scoring, outreach, follow-ups, and deal closing.",
+			ctaText: "See how",
+			ctaLink: "/contact",
+		},
+		tags: [
+			"full automation",
+			"lead scoring",
+			"workflow automation",
+			"case-study",
+			"AI-sales",
+		],
+		clientName: "Gamma Ltd",
+		clientDescription:
+			"Boutique consulting firm specializing in industrial compliance, high-volume inbound leads, lean sales team (3 reps).",
+		featuredImage: "/images/case-gamma-automation-hero.jpg",
+		thumbnailImage: "/images/case-gamma-automation-thumb.jpg",
+		businessChallenges: [
+			"High volume of inbound leads, difficult to qualify manually at scale",
+			"Small sales team couldn't keep up with follow-up volume, delays in outreach, lost opportunities",
+			"Lack of consistent lead scoring, prioritization, and pipeline hygiene",
+		],
+		lastModified: new Date("2025-11-26T10:00:00.000Z"),
+		howItWorks: [
+			{
+				stepNumber: 1,
+				title: "AI-based lead scoring & prioritization",
+				subtitle:
+					"Automatically score inbound leads based on firmographics, intent, previous interaction data",
+				description:
+					"Inbound leads get auto-scored; only leads above threshold are routed to outreach queue.",
+				icon: "BrainCircuit",
+				label: "score",
+				positionLabel: "step-1",
+				payload: [],
+			},
+			{
+				stepNumber: 2,
+				title: "Automated multi-channel outreach",
+				subtitle: "Email → SMS → call → calendar link",
+				description:
+					"High-score leads are automatically enrolled in a 7-touch, multi-channel sequence with dynamic personalization via templates.",
+				icon: "Zap",
+				label: "outreach",
+				positionLabel: "step-2",
+				payload: [],
+			},
+			{
+				stepNumber: 3,
+				title: "CRM sync & pipeline update",
+				subtitle: "Sync responses to CRM and update deal status automatically",
+				description:
+					"Once a lead replies or books meeting, CRM automatically updates; tasks generated for follow-up; no manual data entry.",
+				icon: "DatabaseZap",
+				label: "sync",
+				positionLabel: "step-3",
+				payload: [],
+			},
+			{
+				stepNumber: 4,
+				title: "Automated nurturing & re-engagement",
+				subtitle: "If no response, schedule re-engagement after 30 days",
+				description:
+					"Leads that went cold get re-entered into a lower-touch nurturing sequence, keeps pipeline warm without manual effort.",
+				icon: "RefreshCw",
+				label: "nurture",
+				positionLabel: "step-4",
+				payload: [],
+			},
+		],
+		businessOutcomes: [
+			{
+				title: "Leads handled automatically",
+				subtitle: "100% of inbound leads processed via automation",
+			},
+			{
+				title: "Sales throughput increased",
+				subtitle: "Closed deals without additional headcount or manual labor",
+			},
+		],
+		solutions: [
+			"AI-driven lead scoring",
+			"Automated multi-channel outreach",
+			"CRM synchronization & pipeline management",
+			"Automated nurturing & re-engagement workflows",
+		],
+		techStacks: [
+			{
+				category: "AI & scoring",
+				libraries: [
+					{
+						name: "Embedding-based intent & firmographic model",
+						description:
+							"Scores leads automatically based on embeddings + heuristics",
+						link: null,
+						lucideIcon: "Brain",
+					},
+				],
+			},
+			{
+				category: "automation & workflow",
+				libraries: [
+					{
+						name: "Lead Orchestra workflow engine",
+						description: "Orchestrates outreach, follow-ups, re-engagements",
+						link: null,
+						lucideIcon: "Bolt",
+					},
+				],
+			},
+			{
+				category: "communication",
+				libraries: [
+					{
+						name: "Twilio + SendGrid",
+						description: "Handles automated SMS, call, email outreach",
+						link: null,
+						lucideIcon: "Mail",
+					},
+				],
+			},
+			{
+				category: "CRM & data sync",
+				libraries: [
+					{
+						name: "PostgreSQL + Webhooks",
+						description: "Syncs responses and updates CRM automatically",
+						link: null,
+						lucideIcon: "DatabaseZap",
+					},
+				],
+			},
+		],
+		description:
+			"Gamma Ltd receives hundreds of inbound leads per month, but their small sales team (3 reps) struggled to follow up fast enough, resulting in lost opportunities and low conversion. Deal Scale implemented full-funnel automation: AI-based lead scoring, dynamic multi-channel outreach, CRM sync, automated deal tracking and nurturing. As a result, 100% of inbound leads were processed automatically. Outreach response times dropped to under 30 minutes on average, deals closed, and Gamma scaled sales throughput, without hiring more sales staff. The system also continuously nurtured cold leads, keeping the pipeline healthy and evergreen.",
+		results: [
+			{
+				title: "Inbound leads processed automatically",
+				value: "100%",
+			},
+			{
+				title: "Average response time",
+				value: "< 30 minutes",
+			},
+			{
+				title: "Closed deals per month (post-automation)",
+				value: "4–6 (vs 1–2 before)",
+			},
+			{
+				title: "Sales team headcount",
+				value: "3 (no change)",
+			},
+		],
+		featured: false,
+		redirectToContact: false,
+	},
 ];
 
 export const caseStudyCategories: Category[] = [
