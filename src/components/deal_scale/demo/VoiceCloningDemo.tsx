@@ -79,7 +79,11 @@ export const VoiceCloningDemo = () => {
 			/>
 
 			{isModalOpen && (
-				<CallCompleteModal isOpen={isModalOpen} onClose={handleCloseModal} />
+				<CallCompleteModal
+					isOpen={isModalOpen}
+					onClose={handleCloseModal}
+					variant="complete"
+				/>
 			)}
 		</>
 	);
