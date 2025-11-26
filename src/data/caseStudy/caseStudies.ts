@@ -75,7 +75,7 @@ export const caseStudies: CaseStudy[] = [
 		],
 
 		description:
-			"The modern real estate agent's greatest challenge isn't a lack of leads; it's a lack of time. Industry-leading data from Salesforce confirms that nearly three-quarters of a sales professional's week is wasted on non-selling tasks. Deal Scale was built to solve this exact problem. By deploying AI-powered virtual agents, we automate the entire top-of-funnel process—from initial outreach and persistent follow-up to data entry and appointment setting. This allows our partners to transform their operations, shifting their team's focus from being busy to being productive.",
+			"The modern real estate agent's greatest challenge isn't a lack of leads; it's a lack of time. Industry-leading data from Salesforce confirms that nearly three-quarters of a sales professional's week is wasted on non-selling tasks. Deal Scale was built to solve this exact problem. By deploying AI-powered virtual agents, we automate the entire top-of-funnel process, from initial outreach and persistent follow-up to data entry and appointment setting. This allows our partners to transform their operations, shifting their team's focus from being busy to being productive.",
 		results: [
 			{
 				title: "Time Reclaimed for Selling Activities",
@@ -140,7 +140,7 @@ export const caseStudies: CaseStudy[] = [
 			{
 				title: "Superior Marketing ROI",
 				subtitle:
-					"Ensure no prospect is wasted. Instantaneous follow-up guarantees that every dollar invested in lookalike audience expansion—executed with relationship-first principles from How to Win Friends and Influence People—has the maximum possible impact.",
+					"Ensure no prospect is wasted. Instantaneous follow-up guarantees that every dollar invested in lookalike audience expansion, executed with relationship-first principles from How to Win Friends and Influence People, has the maximum possible impact.",
 			},
 		],
 		solutions: [
@@ -390,7 +390,7 @@ export const caseStudies: CaseStudy[] = [
 		],
 
 		description:
-			"McKinsey, a global authority on business strategy, has confirmed where AI makes the biggest difference: marketing and sales automation. The findings are clear—companies that adopt AI in these areas see significant cost savings and productivity gains. Deal Scale is the purpose-built application of this principle for the real estate industry. We leverage advanced AI to automate the entire lookalike audience expansion and nurturing process, infusing every touch with the rapport-building steps championed in How to Win Friends and Influence People. The result is a more efficient, cost-effective, and productive sales operation.",
+			"McKinsey, a global authority on business strategy, has confirmed where AI makes the biggest difference: marketing and sales automation. The findings are clear: companies that adopt AI in these areas see significant cost savings and productivity gains. Deal Scale is the purpose-built application of this principle for the real estate industry. We leverage advanced AI to automate the entire lookalike audience expansion and nurturing process, infusing every touch with the rapport-building steps championed in How to Win Friends and Influence People. The result is a more efficient, cost-effective, and productive sales operation.",
 		results: [
 			{
 				title: "Primary AI Impact Area (McKinsey)",

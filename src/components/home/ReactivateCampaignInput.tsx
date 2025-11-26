@@ -769,7 +769,7 @@ export function ReactivateCampaignInput({
 										What is AI Outreach?
 									</h4>
 									<p className="text-sm text-white/80 leading-relaxed">
-										AI Outreach is DealScale's intelligent automation system that handles your entire lead engagement workflow. It uses advanced AI to make calls, send personalized messages, and nurture leads automatically—so you can focus on closing deals instead of chasing contacts.
+										AI Outreach is DealScale's intelligent automation system that handles your entire lead engagement workflow. It uses advanced AI to make calls, send personalized messages, and nurture leads automatically, so you can focus on closing deals instead of chasing contacts.
 									</p>
 								</div>
 								<div>

@@ -41,7 +41,7 @@ const AUTHORITY_REVIEW_SCHEMAS: ReviewSchema[] = [
 		"@type": "Review",
 		name: "Real Estate Investor · DealScale",
 		reviewBody:
-			"DealScale’s AI agents handle our seller calls and follow-ups automatically — we’ve doubled our closing rate.",
+			"DealScale's AI agents handle our seller calls and follow-ups automatically, we've doubled our closing rate.",
 		author: {
 			"@type": "Person",
 			name: "Real Estate Investor",
@@ -276,7 +276,7 @@ const KNOWS_ABOUT = [
 ];
 
 const VALUE_PROPOSITION_POINTS = [
-	"Import anything—CSVs, CRMs, APIs",
+	"Import anything: CSVs, CRMs, APIs",
 	"Sync with any CRM including GoHighLevel, Salesforce, Pipedrive, Lofty, Follow Up Boss",
 	"Clone your voice and automate outreach",
 	"AI updates your CRM after every call",
@@ -328,7 +328,7 @@ export const buildKnowledgeGraphSchema = () => {
 				"@type": "PropertyValue",
 				name: "CoreNarrative",
 				value:
-					"DealScale automates the real estate grind—follow-up, CRM updates, outreach—so professionals can spend more time closing deals.",
+					"DealScale automates the real estate grind: follow-up, CRM updates, outreach, so professionals can spend more time closing deals.",
 			},
 			{
 				"@type": "PropertyValue",

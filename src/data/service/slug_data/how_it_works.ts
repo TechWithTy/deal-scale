@@ -51,7 +51,7 @@ export const generalHowItWorks: ServiceHowItWorks[] = [
 		title: "Scale",
 		subtitle: "Grow Your Pipeline",
 		description:
-			"Effortlessly scale your operations. Expand into new markets, manage outreach, and track results—all from one unified platform.",
+			"Effortlessly scale your operations. Expand into new markets, manage outreach, and track results, all from one unified platform.",
 		icon: "BarChart",
 		label: "Scale Results",
 		positionLabel: "left-[135px] top-[15px]",
@@ -383,7 +383,7 @@ export const snailMailHowItWorks: ServiceHowItWorks[] = [
 		title: "Launch Initial Contact",
 		subtitle: "The First Touchpoint",
 		description:
-			"With one click, our system sends the first piece of mail—typically a high-response 'Yellow Letter'—to every lead through our national print and mail network.",
+			"With one click, our system sends the first piece of mail, typically a high-response 'Yellow Letter', to every lead through our national print and mail network.",
 		icon: "Mail",
 		label: "Send First Mailer",
 		positionLabel: "left-[125px] top-[-5px]",
@@ -445,7 +445,7 @@ export const phoneNumberHunterHowItWorks: ServiceHowItWorks[] = [
 		title: "Review Report(s)",
 		subtitle: "Get Instant Insights",
 		description:
-			"In seconds, view a complete report for each number—detailing the owner's name, carrier, line type, location, spam score, and more.",
+			"In seconds, view a complete report for each number, detailing the owner's name, carrier, line type, location, spam score, and more.",
 		icon: "ShieldCheck",
 		label: "Analyze Data",
 		positionLabel: "left-[-40px] top-[50px]",

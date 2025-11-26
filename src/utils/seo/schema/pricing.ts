@@ -62,7 +62,7 @@ const buildOneTimePlanService = (plan: OneTimePlan): ServiceSchema => {
 		? `Requirements: ${plan.requirements.slice(0, 3).join(" • ")}`
 		: "";
 	const aiCreditsSummary = isSelfHosted
-		? `${plan.aiCredits.plan} — ${plan.aiCredits.description}`
+		? `${plan.aiCredits.plan}, ${plan.aiCredits.description}`
 		: "";
 	const notesSummary =
 		isSelfHosted && plan.notes?.length

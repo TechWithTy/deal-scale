@@ -92,7 +92,7 @@ const TIERS: Array<{
 		label: "Strategic Partner",
 		commission: "50% recurring · lifetime",
 		discount: "20% customer discount",
-		burden: "Combined burden 70% — reserved for strategic volume partners",
+		burden: "Combined burden 70%, reserved for strategic volume partners",
 		status: "top",
 		requirements: [
 			"50+ paying users",

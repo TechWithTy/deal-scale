@@ -19,7 +19,7 @@ export const socialLeadGenCopyright: ServiceCopyright = {
 export const snailMailCopyright: ServiceCopyright = {
 	title: "From Mailbox to Your Calendar, Untouched by Human Hands.",
 	subtitle:
-		"Launch powerful direct mail campaigns and let our AI Sales Agent do the rest—answering calls 24/7, qualifying leads, and booking sales-ready appointments directly for you.",
+		"Launch powerful direct mail campaigns and let our AI Sales Agent do the rest, answering calls 24/7, qualifying leads, and booking sales-ready appointments directly for you.",
 	ctaText: "See The Full Automation",
 	ctaLink: "/contact",
 };
@@ -43,7 +43,7 @@ export const emailIntelligenceCopyright: ServiceCopyright = {
 export const domainReconCopyright: ServiceCopyright = {
 	title: "The Website is Just the Front Door. We Find the Keys.",
 	subtitle:
-		"Go beyond the surface and uncover the critical intelligence—emails, names, and subdomains—behind any company website.",
+		"Go beyond the surface and uncover the critical intelligence: emails, names, and subdomains, behind any company website.",
 	ctaText: "Start Your First Recon",
 	ctaLink: "/contact",
 };

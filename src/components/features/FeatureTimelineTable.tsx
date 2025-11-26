@@ -134,7 +134,7 @@ export function FeatureTimelineTable({
 		const header =
 			"Deal Scale Delivery Roadmap (Alpha → Pilot → Launch Track)\n\n";
 		const intro =
-			"A strategic view of where Deal Scale is today and what's coming next.\n\nStatuses and progress come from our Product Ops layer—always live, always current.\n\n";
+			"A strategic view of where Deal Scale is today and what's coming next.\n\nStatuses and progress come from our Product Ops layer, always live, always current.\n\n";
 
 		const roadmapText = rows
 			.map((row) => {
@@ -199,7 +199,7 @@ export function FeatureTimelineTable({
 				</CardTitle>
 				<CardDescription className="text-pretty">
 					A strategic view of where Deal Scale is today and what's coming next.
-					Statuses and progress come from our Product Ops layer—always live,
+					Statuses and progress come from our Product Ops layer, always live,
 					always current.
 				</CardDescription>
 			</CardHeader>
@@ -207,8 +207,8 @@ export function FeatureTimelineTable({
 				<div className="max-h-[600px] overflow-y-auto">
 					<Table>
 						<TableCaption className="text-muted-foreground text-xs">
-							All status values are powered by our internal Product Ops
-							module—no screenshots, no stale decks, no manual updates.
+							All status values are powered by our internal Product Ops module,
+							no screenshots, no stale decks, no manual updates.
 						</TableCaption>
 						<TableHeader className="sticky top-0 z-10 bg-card">
 							<TableRow className="bg-muted/40 hover:bg-muted/40">

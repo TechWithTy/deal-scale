@@ -4,7 +4,7 @@ export const companyData: FooterProps = {
 	companyName: "Deal Scale",
 	companyLegalName: "Deal Scale LLC",
 	companyDescription:
-		"DealScale is an AI-powered real estate automation and CRM orchestration platform that automates lead generation, skip tracing, and AI-powered follow-up — helping agents, investors, and teams close more deals in less time.",
+		"DealScale is an AI-powered real estate automation and CRM orchestration platform that automates lead generation, skip tracing, and AI-powered follow-up, helping agents, investors, and teams close more deals in less time.",
 	socialLinks: {
 		linkedin: "https://www.linkedin.com/company/deal-scale/",
 		facebook: "https://www.facebook.com/profile.php?id=61576707389189",

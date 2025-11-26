@@ -41,9 +41,9 @@ export const PERSONA_FAQ_ITEMS: PersonaFaqItem[] = [
 		question: "How does voice cloning work?",
 		answers: {
 			agent:
-				"You record a short voice sample and DealScale securely trains a private model that replicates your tone and pacing. Your AI sounds like you—authentic, human, and fully exclusive to your account.",
+				"You record a short voice sample and DealScale securely trains a private model that replicates your tone and pacing. Your AI sounds like you, authentic, human, and fully exclusive to your account.",
 			investor:
-				"Record a brief voice sample once and DealScale creates your AI voice clone. It’s private, secure, and sounds like you when calling or texting sellers—building trust and saving time.",
+				"Record a brief voice sample once and DealScale creates your AI voice clone. It's private, secure, and sounds like you when calling or texting sellers, building trust and saving time.",
 			wholesaler:
 				"After a quick setup, DealScale clones your voice so sellers hear your tone and style when the AI calls. This builds trust and boosts response rates while you focus on deal analysis.",
 			agency:
@@ -59,7 +59,7 @@ export const PERSONA_FAQ_ITEMS: PersonaFaqItem[] = [
 			agent:
 				"Most agents see around a 3×–7× ROI within 60 days. Every $1 spent on DealScale returns roughly $5 in additional commissions from converted listings or referrals.",
 			investor:
-				"Investors typically generate $3–$8 in closed-deal revenue for every $1 spent within 90 days—often covering an annual plan with one wholesale or flip deal.",
+				"Investors typically generate $3–$8 in closed-deal revenue for every $1 spent within 90 days, often covering an annual plan with one wholesale or flip deal.",
 			wholesaler:
 				"Wholesalers usually see 4×–10× ROI. For example, closing one $10,000 assignment deal often pays for an entire year of DealScale Pro.",
 			agency:
@@ -76,7 +76,7 @@ export const PERSONA_FAQ_ITEMS: PersonaFaqItem[] = [
 			agent:
 				"Yes. DealScale automatically filters Do Not Call numbers, respects time-zone safe windows, and provides compliant voicemail drops. We also include disclosure templates to stay ahead of the 2026 Colorado AI Act.",
 			investor:
-				"DealScale handles compliance for every outreach—TCPA filtering, consent tracking, and AI transparency for upcoming laws like Colorado’s 2026 AI Act.",
+				"DealScale handles compliance for every outreach: TCPA filtering, consent tracking, and AI transparency for upcoming laws like Colorado's 2026 AI Act.",
 			wholesaler:
 				"Yes. All calls, texts, and voicemails are fully TCPA and carrier-compliant. Colorado AI transparency updates will be built in before 2026.",
 			agency:

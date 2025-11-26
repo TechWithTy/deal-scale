@@ -109,7 +109,7 @@ export const freeResourceProducts: ProductType[] = [
 			{
 				question: "Can I edit the templates for my market?",
 				answer:
-					"Absolutely—duplicate the Notion workspace and customize the scripts with your brand voice and service areas.",
+					"Absolutely, duplicate the Notion workspace and customize the scripts with your brand voice and service areas.",
 			},
 		],
 		resource: outreachResource,

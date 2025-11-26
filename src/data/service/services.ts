@@ -197,7 +197,7 @@ export const services: ServicesData = {
 			iconName: "Share",
 			title: "Automated Social Lookalike Audience Expansion",
 			description:
-				"Turn social media comments into closed deals. Our AI engages prospects, qualifies them with proven scripts, and nurtures them until they are ready for a sales call—then it books the appointment on your calendar or hot-transfers the live call directly to you.",
+				"Turn social media comments into closed deals. Our AI engages prospects, qualifies them with proven scripts, and nurtures them until they are ready for a sales call, then it books the appointment on your calendar or hot-transfers the live call directly to you.",
 			features: [
 				// Feature list updated to reflect the powerful outcome
 				"Automated Comment-to-DM Engagement",
@@ -567,7 +567,7 @@ export const services: ServicesData = {
 				dilemma:
 					"You find a property owned by an LLC with a basic website. The contact form is a black hole, and you have no idea who works there, what they do, or how to reach a real person.",
 				solution:
-					"Our Domain Recon tool acts as your digital investigator. It transforms a simple domain name into actionable intelligence—revealing direct emails, key names, and hidden assets so you can bypass gatekeepers and personalize your outreach.",
+					"Our Domain Recon tool acts as your digital investigator. It transforms a simple domain name into actionable intelligence, revealing direct emails, key names, and hidden assets so you can bypass gatekeepers and personalize your outreach.",
 				problemsAndSolutions: domainReconProblemsSolutions,
 				howItWorks: domainReconHowItWorks,
 				testimonials: domainReconTestimonials,
@@ -599,7 +599,7 @@ export const services: ServicesData = {
 				defaultZoom: 1,
 				slug: "social-profile-hunter",
 				dilemma:
-					"You have a single piece of contact info—a username from a forum or an email address—but no other context. You can't verify their identity, understand their background, or personalize your outreach, making your efforts feel like a shot in the dark.",
+					"You have a single piece of contact info, a username from a forum or an email address, but no other context. You can't verify their identity, understand their background, or personalize your outreach, making your efforts feel like a shot in the dark.",
 				solution:
 					"Our Social Profile Hunter instantly scans over 600 online platforms to create a complete map of your lead's digital footprint. It verifies their identity, uncovers their professional background, and gives you the crucial context needed to have an intelligent conversation.",
 				problemsAndSolutions: socialProfileHunterProblemsSolutions,
@@ -649,7 +649,7 @@ export const services: ServicesData = {
 			iconName: "DatabaseZap",
 			title: "Data Enrichment Suite",
 			description:
-				"A suite of premium, credit-based tools to verify, clean, and enrich your lead data. Turn any single piece of information—a phone, address, or name—into a complete, actionable lead profile.",
+				"A suite of premium, credit-based tools to verify, clean, and enrich your lead data. Turn any single piece of information, a phone, address, or name, into a complete, actionable lead profile.",
 			features: [
 				"Reverse Phone & Address Lookup",
 				"Bulk Phone Number Validation",
@@ -737,7 +737,7 @@ export const services: ServicesData = {
 				defaultZoom: 1,
 				slug: "ai-command-center",
 				dilemma:
-					"Your CRM is a passive database. It holds information but requires you to do all the thinking and all the work—creating tasks, deciding priorities, and performing every repetitive action yourself.",
+					"Your CRM is a passive database. It holds information but requires you to do all the thinking and all the work, creating tasks, deciding priorities, and performing every repetitive action yourself.",
 				solution:
 					"Our AI Command Center is an active partner. It doesn't just store your data; it analyzes it to proactively *add* tasks to your board, then offers to *complete* the repetitive tasks you've created, freeing you to focus on high-value actions.",
 				problemsAndSolutions: performanceHubProblemsSolutions,
@@ -953,7 +953,7 @@ export const services: ServicesData = {
 				dilemma:
 					"Your website attracts visitors, but many leave without a trace because there's no immediate, intelligent way to engage them, answer their questions, and guide them towards becoming a qualified lead.",
 				solution:
-					"Deal Scale's Embeddable AI Sales Chatbot transforms your website into an active sales assistant. It engages every visitor 24/7, provides instant answers, intelligently pre-qualifies them based on your criteria, and then seamlessly hands them off to your sales process by booking appointments or alerting your team—all automatically.",
+					"Deal Scale's Embeddable AI Sales Chatbot transforms your website into an active sales assistant. It engages every visitor 24/7, provides instant answers, intelligently pre-qualifies them based on your criteria, and then seamlessly hands them off to your sales process by booking appointments or alerting your team, all automatically.",
 				problemsAndSolutions: embeddableAIChatbotProblemsSolutions,
 				howItWorks: embeddableAIChatbotHowItWorks,
 				testimonials: embeddableAIChatbotTestimonials,

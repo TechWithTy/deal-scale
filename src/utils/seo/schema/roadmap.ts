@@ -48,7 +48,7 @@ export function buildRoadmapSchema(
 		name: options.name ?? "Deal Scale Delivery Roadmap",
 		description:
 			options.description ??
-			"A strategic view of where Deal Scale is today and what's coming next. Statuses and progress come from our Product Ops layer—always live, always current.",
+			"A strategic view of where Deal Scale is today and what's coming next. Statuses and progress come from our Product Ops layer, always live, always current.",
 		url: baseUrl,
 		numberOfItems: milestones.length,
 		itemListElement: milestones.map((milestone, index) => {
