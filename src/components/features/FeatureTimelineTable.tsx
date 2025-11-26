@@ -22,6 +22,54 @@ import { cn } from "@/lib/utils";
 import { ArrowDown, Check, Copy } from "lucide-react";
 import { useState } from "react";
 
+// Convert markdown links to plain text for copy (format: "text (url)")
+const convertLinksToText = (text: string): string => {
+	return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1 ($2)");
+};
+
+// Parse markdown-style links [text](url) and convert to JSX
+const parseLinks = (text: string) => {
+	const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+	const parts: (string | JSX.Element)[] = [];
+	let lastIndex = 0;
+	let key = 0;
+
+	let match: RegExpExecArray | null = null;
+	while (true) {
+		match = linkRegex.exec(text);
+		if (match === null) {
+			break;
+		}
+
+		// Add text before the link
+		if (match.index > lastIndex) {
+			parts.push(text.slice(lastIndex, match.index));
+		}
+
+		// Add the link
+		parts.push(
+			<a
+				key={key++}
+				href={match[2]}
+				target="_blank"
+				rel="noopener noreferrer"
+				className="font-medium text-primary underline-offset-4 hover:underline"
+			>
+				{match[1]}
+			</a>,
+		);
+
+		lastIndex = linkRegex.lastIndex;
+	}
+
+	// Add remaining text
+	if (lastIndex < text.length) {
+		parts.push(text.slice(lastIndex));
+	}
+
+	return parts.length > 0 ? parts : text;
+};
+
 export type FeatureTimelineMilestone = {
 	quarter: string;
 	status:
@@ -104,7 +152,7 @@ export function FeatureTimelineTable({
 											? "🔥"
 											: "📋";
 
-				return `## ${row.quarter} – ${row.initiative}\n\n**Status:** ${row.status} ${statusEmoji}\n\n**Focus:** ${row.focus}\n\n${row.summary}\n\n**What's Included:**\n\n${row.highlights.map((h) => `* ${h}`).join("\n")}\n\n---\n`;
+				return `## ${row.quarter} – ${row.initiative}\n\n**Status:** ${row.status} ${statusEmoji}\n\n**Focus:** ${row.focus}\n\n${row.summary}\n\n**What's Included:**\n\n${row.highlights.map((h) => `* ${convertLinksToText(h)}`).join("\n")}\n\n---\n`;
 			})
 			.join("\n");
 
@@ -208,9 +256,12 @@ export function FeatureTimelineTable({
 									</TableCell>
 									<TableCell className="align-top">
 										<ul className="space-y-2 text-muted-foreground text-sm">
-											{row.highlights.map((highlight) => (
-												<li key={highlight} className="leading-relaxed">
-													{highlight}
+											{row.highlights.map((highlight, idx) => (
+												<li
+													key={`${row.quarter}-${row.initiative}-${idx}`}
+													className="leading-relaxed"
+												>
+													{parseLinks(highlight)}
 												</li>
 											))}
 										</ul>
