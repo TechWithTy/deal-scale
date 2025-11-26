@@ -466,7 +466,7 @@ export const caseStudies: CaseStudy[] = [
 			"Realtime dashboard & reporting: Live metrics: lead response time, outreach attempts, booked demos, revenue pipeline, conversion rates.",
 		],
 		description:
-			"GlobalConsult was drowning in inbound leads with a response lag of 4–6 hours, manual triage, and many cold leads falling through cracks. By deploying Deal Scale's unified lead-capture, AI-based lead-scoring + automated outreach engine, GlobalConsult shrank lead-response time to under 2 minutes, improved demo booking rate from 8% → 30%, and increased monthly new-client revenue by 18%. GlobalConsult scaled inbound without hiring more staff, cut lead leakage, improved conversion quality, and increased revenue — demonstrating how Deal Scale's automation + AI + data backbone delivers real business impact quickly.",
+			"GlobalConsult was drowning in inbound leads with a response lag of 4–6 hours, manual triage, and many cold leads falling through cracks. By deploying Deal Scale's unified lead-capture, AI-based lead-scoring + automated outreach engine, GlobalConsult shrank lead-response time to under 2 minutes, improved demo booking rate from 8% → 30%, and increased monthly new-client revenue by 18%. GlobalConsult scaled inbound without hiring more staff, cut lead leakage, improved conversion quality, and increased revenue, demonstrating how Deal Scale's automation + AI + data backbone delivers real business impact quickly.",
 		results: [
 			{
 				title: "Average Lead Response Time",
