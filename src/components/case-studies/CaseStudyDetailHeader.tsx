@@ -30,7 +30,7 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 			</div>
 
 			<div className="relative mx-auto max-w-7xl">
-				<div className="mb-10 text-center sm:text-left">
+				<div className="mb-10 text-center lg:text-left">
 					<Link
 						href="/case-studies"
 						className="inline-flex items-center text-black transition-colors hover:text-black dark:text-white dark:text-white/70"
@@ -44,9 +44,9 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5 }}
-						className="w-full text-center sm:text-left lg:w-1/2"
+						className="w-full text-center lg:w-1/2 lg:text-left"
 					>
-						<div className="mb-4 flex flex-wrap justify-center gap-2 sm:justify-start">
+						<div className="mb-4 flex flex-wrap justify-center gap-2 lg:justify-start">
 							{caseStudy.categories.map((category) => (
 								<span
 									key={uuidv4()}
@@ -70,7 +70,7 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 							{caseStudy.subtitle}
 						</p>
 
-						<div className="mb-6 flex flex-wrap justify-center gap-2 sm:justify-start">
+						<div className="mb-6 flex flex-wrap justify-center gap-2 lg:justify-start">
 							{caseStudy.tags.map((tag) => (
 								<span
 									key={uuidv4()}
@@ -80,7 +80,7 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 								</span>
 							))}
 						</div>
-						<div className="flex justify-center gap-4 sm:justify-start">
+						<div className="flex justify-center gap-4 lg:justify-start">
 							<Popover>
 								<PopoverTrigger asChild>
 									<Button
@@ -142,14 +142,15 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 					</motion.div>
 				</div>
 
-				<div className="mt-12 grid auto-rows-min grid-cols-1 gap-6 md:grid-cols-3">
+				<div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3" style={{ gridAutoRows: 'min-content', alignItems: 'start' }}>
 					{caseStudy.results.map((result, index) => (
 						<motion.div
 							key={uuidv4()}
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-							className="glass-card h-auto rounded-xl p-6 text-center"
+							className="glass-card h-auto self-start rounded-xl p-6 text-center"
+							style={{ height: 'auto' }}
 						>
 							<h3 className="mb-2 font-bold text-4xl text-primary">
 								{result.value}
