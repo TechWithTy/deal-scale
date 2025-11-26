@@ -246,7 +246,7 @@ export const caseStudies: CaseStudy[] = [
 				value: "Proprietary AI Scoring",
 			},
 		],
-		featured: true,
+		featured: false,
 		redirectToContact: true,
 	},
 	{
@@ -481,7 +481,7 @@ export const caseStudies: CaseStudy[] = [
 				value: "+18%",
 			},
 		],
-		featured: true,
+		featured: false,
 		redirectToContact: false,
 	},
 	{
@@ -640,7 +640,7 @@ export const caseStudies: CaseStudy[] = [
 				value: "100% of pipelines unified",
 			},
 		],
-		featured: true,
+		featured: false,
 		redirectToContact: false,
 	},
 	{
