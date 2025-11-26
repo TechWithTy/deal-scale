@@ -147,14 +147,14 @@ export const Footer: React.FC<FooterProps> = ({
 						</ul>
 					</div>
 
-					<div className="flex flex-col items-start text-left md:col-span-1 lg:col-span-1">
+					<div className="flex flex-col items-center text-center md:col-span-1 lg:col-span-1">
 						<h3 className="mb-4 font-semibold text-lg">Get in Touch</h3>
 						<ul className="w-full space-y-3">
 							<li>
 								<a
 									target="_blank"
 									href={`mailto:${contactInfo.email}`}
-									className="flex items-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
+									className="flex items-center justify-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
 									rel="noreferrer"
 								>
 									<Mail className="mr-2 h-4 w-4 flex-shrink-0" />
@@ -165,7 +165,7 @@ export const Footer: React.FC<FooterProps> = ({
 								<a
 									target="_blank"
 									href={`tel:${contactInfo.phone}`}
-									className="flex items-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
+									className="flex items-center justify-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
 									rel="noreferrer"
 								>
 									<Phone className="mr-2 h-4 w-4 flex-shrink-0" />
@@ -173,16 +173,16 @@ export const Footer: React.FC<FooterProps> = ({
 								</a>
 							</li>
 							<li>
-								<div className="flex items-start text-black dark:text-white">
-									<MapPin className="mt-0.5 mr-2 h-4 w-4 flex-shrink-0" />
+								<div className="flex items-center justify-center text-black dark:text-white">
+									<MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
 									<span className="break-words">{contactInfo.address}</span>
 								</div>
 							</li>
 						</ul>
-						<div className="mt-4 flex w-full justify-center lg:justify-start">
+						<div className="mt-4 flex w-full justify-center">
 							<FooterBetaCta className="w-full max-w-sm" />
 						</div>
-						<FooterPersonaPrompt className="mt-4 text-center md:mt-6 md:text-center lg:text-left" />
+						<FooterPersonaPrompt className="mt-4 text-center" />
 					</div>
 
 					<div className="col-span-1 flex flex-col items-center md:col-span-2 md:text-center lg:col-span-1">
