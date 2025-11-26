@@ -44,8 +44,6 @@ export interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({
-	companyName,
-	companyLegalName,
 	companyDescription,
 	socialLinks,
 	quickLinks,
@@ -54,7 +52,6 @@ export const Footer: React.FC<FooterProps> = ({
 	termsOfServiceLink,
 	cookiePolicyLink,
 }) => {
-	const currentYear = new Date().getFullYear();
 	type SocialLinkKey = Exclude<
 		keyof FooterProps["socialLinks"],
 		"mediumUsername"
@@ -150,35 +147,35 @@ export const Footer: React.FC<FooterProps> = ({
 						</ul>
 					</div>
 
-					<div className="flex flex-col items-center text-center md:col-span-1 md:items-center md:text-center lg:col-span-1 lg:items-start lg:text-left">
+					<div className="flex flex-col items-start text-left md:col-span-1 lg:col-span-1">
 						<h3 className="mb-4 font-semibold text-lg">Get in Touch</h3>
 						<ul className="w-full space-y-3">
 							<li>
 								<a
 									target="_blank"
 									href={`mailto:${contactInfo.email}`}
-									className="flex items-center justify-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
+									className="flex items-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
 									rel="noreferrer"
 								>
-									<Mail className="mr-2 h-4 w-4" />
-									{contactInfo.email}
+									<Mail className="mr-2 h-4 w-4 flex-shrink-0" />
+									<span className="break-words">{contactInfo.email}</span>
 								</a>
 							</li>
 							<li>
 								<a
 									target="_blank"
 									href={`tel:${contactInfo.phone}`}
-									className="flex items-center justify-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
+									className="flex items-center text-black transition-colors hover:text-primary dark:text-white dark:hover:text-primary"
 									rel="noreferrer"
 								>
-									<Phone className="mr-2 h-4 w-4" />
-									{contactInfo.phone}
+									<Phone className="mr-2 h-4 w-4 flex-shrink-0" />
+									<span>{contactInfo.phone}</span>
 								</a>
 							</li>
 							<li>
-								<div className="flex items-center justify-center text-black dark:text-white">
-									<MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
-									<span>{contactInfo.address}</span>
+								<div className="flex items-start text-black dark:text-white">
+									<MapPin className="mt-0.5 mr-2 h-4 w-4 flex-shrink-0" />
+									<span className="break-words">{contactInfo.address}</span>
 								</div>
 							</li>
 						</ul>
