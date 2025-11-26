@@ -142,14 +142,14 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 					</motion.div>
 				</div>
 
-				<div className="mt-12 grid grid-cols-1 items-start gap-6 md:grid-cols-3">
+				<div className="mt-12 grid auto-rows-min grid-cols-1 gap-6 md:grid-cols-3">
 					{caseStudy.results.map((result, index) => (
 						<motion.div
 							key={uuidv4()}
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-							className="glass-card self-start rounded-xl p-6 text-center"
+							className="glass-card h-auto rounded-xl p-6 text-center"
 						>
 							<h3 className="mb-2 font-bold text-4xl text-primary">
 								{result.value}
