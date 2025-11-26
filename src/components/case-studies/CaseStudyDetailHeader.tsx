@@ -1,9 +1,14 @@
 import { SocialShare } from "@/components/common/social/share/SocialShare";
 import { Button } from "@/components/ui/button";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import type { CaseStudy } from "@/types/case-study";
 import { motion } from "framer-motion";
-import { ChevronLeft, Eye } from "lucide-react";
+import { ChevronLeft, Eye, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
@@ -66,7 +71,7 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 						</p>
 
 						<div className="mb-6 flex flex-wrap justify-center gap-2 sm:justify-start">
-							{caseStudy.tags.map((tag, index) => (
+							{caseStudy.tags.map((tag) => (
 								<span
 									key={uuidv4()}
 									className="rounded-full bg-white/5 px-3 py-1 text-black text-sm dark:text-white/70"
@@ -76,14 +81,30 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 							))}
 						</div>
 						<div className="flex justify-center gap-4 sm:justify-start">
-							<SocialShare
-								showShareButton
-								showLabels
-								title={caseStudy.title}
-								text={caseStudy.subtitle}
-								size="sm"
-								variant="default"
-							/>
+							<Popover>
+								<PopoverTrigger asChild>
+									<Button
+										variant="default"
+										size="sm"
+										className="border border-primary/80 bg-primary text-primary-foreground hover:bg-primary/90"
+									>
+										<Share2 className="mr-2 h-4 w-4" /> Share
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent
+									align="start"
+									side="bottom"
+									className="w-auto p-3"
+								>
+									<SocialShare
+										title={caseStudy.title}
+										text={caseStudy.subtitle}
+										size="sm"
+										variant="ghost"
+										showLabels
+									/>
+								</PopoverContent>
+							</Popover>
 							{caseStudy.referenceLink && (
 								<Link
 									href={caseStudy.referenceLink}
