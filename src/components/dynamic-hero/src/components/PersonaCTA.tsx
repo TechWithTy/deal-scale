@@ -1,14 +1,13 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import type { FC, ReactNode } from "react";
 import { useCallback, useMemo } from "react";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Pointer } from "@/components/ui/pointer";
 import { cn } from "@/lib/utils";
-
-import { AnimatePresence, motion } from "motion/react";
-import { z } from "zod";
 
 const ctaButtonSchema = z.object({
 	label: z.string().min(1).max(50),
