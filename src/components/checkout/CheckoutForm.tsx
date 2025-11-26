@@ -221,12 +221,21 @@ export default function CheckoutForm({
 						postTrialAmount && postTrialAmount > 0
 							? postTrialAmount
 							: plan.price[planType].amount &&
-							  typeof plan.price[planType].amount === "number" &&
-							  plan.price[planType].amount > 0
+									typeof plan.price[planType].amount === "number" &&
+									plan.price[planType].amount > 0
 								? plan.price[planType].amount
 								: 2000,
 					)} after your trial.`,
 				);
+				// Add source parameter for homepage hero flow to enable redirect to app.dealscale.io
+				if (context === "trial") {
+					returnUrl.searchParams.append("source", "homepage_hero");
+					// Extract payment intent ID from client secret for tracking
+					const paymentIntentId = clientSecret.split("_secret")[0];
+					if (paymentIntentId) {
+						returnUrl.searchParams.append("paymentIntentId", paymentIntentId);
+					}
+				}
 			} else {
 				returnUrl.searchParams.append("title", "Payment Successful!");
 				returnUrl.searchParams.append(
@@ -401,8 +410,8 @@ export default function CheckoutForm({
 										postTrialAmount && postTrialAmount > 0
 											? postTrialAmount
 											: plan.price[planType].amount &&
-											  typeof plan.price[planType].amount === "number" &&
-											  plan.price[planType].amount > 0
+													typeof plan.price[planType].amount === "number" &&
+													plan.price[planType].amount > 0
 												? plan.price[planType].amount
 												: 2000,
 									)}{" "}
@@ -583,8 +592,8 @@ export default function CheckoutForm({
 										postTrialAmount && postTrialAmount > 0
 											? postTrialAmount
 											: plan.price[planType].amount &&
-											  typeof plan.price[planType].amount === "number" &&
-											  plan.price[planType].amount > 0
+													typeof plan.price[planType].amount === "number" &&
+													plan.price[planType].amount > 0
 												? plan.price[planType].amount
 												: 2000,
 									)}{" "}

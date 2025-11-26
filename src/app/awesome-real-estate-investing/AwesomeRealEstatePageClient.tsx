@@ -14,7 +14,7 @@ import Link from "next/link";
 
 export default function AwesomeRealEstatePageClient() {
 	return (
-		<main className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
+		<main className="container mx-auto px-4 pt-28 pb-12 md:pt-20 md:pb-16 lg:py-20">
 			<div className="mx-auto max-w-4xl">
 				{/* Hero Section */}
 				<div className="mb-12 text-center">
@@ -63,7 +63,7 @@ export default function AwesomeRealEstatePageClient() {
 				</div>
 
 				{/* Features Grid */}
-				<div className="mb-12 grid gap-6 md:grid-cols-2">
+				<div className="mt-12 mb-12 grid gap-6 md:mt-0 md:grid-cols-2">
 					<Card>
 						<CardHeader>
 							<div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">

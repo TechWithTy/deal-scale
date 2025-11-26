@@ -3,7 +3,6 @@ import freedomsoftSvg from "../../../assets/svgs/integrations/FreedomSoft.svg";
 import gohighlevelSvg from "../../../assets/svgs/integrations/GHL.svg";
 import reisiftSvg from "../../../assets/svgs/integrations/REISift.svg";
 import resimpliSvg from "../../../assets/svgs/integrations/REsimpli.svg";
-import dialerSvg from "../../../assets/svgs/integrations/dialer.svg";
 import googleSheetsSvg from "../../../assets/svgs/integrations/google-sheets.svg";
 import instantlySvg from "../../../assets/svgs/integrations/instantly.svg";
 import podioSvg from "../../../assets/svgs/integrations/podio.svg";
@@ -17,16 +16,25 @@ export const leadGenIntegrations: TechStack[] = [
 		category: "Universal Connectivity",
 		libraries: [
 			{
+				name: "Google Sheets / Excel",
+				description:
+					"Directly export your targeted lead lists to Google Sheets or Microsoft Excel for easy analysis, sharing, and manual tracking.",
+				customSvg: googleSheetsSvg,
+				link: "https://www.google.com/sheets/about/",
+			},
+			{
 				name: "Universal CSV Export",
 				description:
 					"Export any lead list as a CSV file, making it compatible with virtually any CRM, dialer, or marketing platform on the market.",
 				customSvg: universalSvg,
+				link: "https://en.wikipedia.org/wiki/Comma-separated_values",
 			},
 			{
 				name: "Zapier",
 				description:
 					"Connect Deal Scale to thousands of other apps. Automatically send your lead lists to your CRM or start marketing campaigns without writing any code.",
 				customSvg: zapierSvg,
+				link: "https://zapier.com/",
 			},
 		],
 	},
@@ -38,36 +46,42 @@ export const leadGenIntegrations: TechStack[] = [
 				description:
 					"Directly import your lead lists to power your funnels, automate marketing, and manage client communication within the GoHighLevel platform.",
 				customSvg: gohighlevelSvg,
+				link: "https://www.gohighlevel.com/",
 			},
 			{
 				name: "Podio",
 				description:
 					"A favorite for its customizability. Directly import your Deal Scale lead lists to manage your entire wholesaling and investment workflow in Podio.",
 				customSvg: podioSvg,
+				link: "https://www.podio.com/",
 			},
 			{
 				name: "REISift",
 				description:
 					"The go-to for data management. Upload your lists to stack data, filter, and manage your leads with precision before pushing to your dialer or CRM.",
 				customSvg: reisiftSvg,
+				link: "https://www.reisift.com/",
 			},
 			{
 				name: "FreedomSoft",
 				description:
 					"Easily import your lead lists into this all-in-one   system to manage deals, run marketing campaigns, and automate your real estate business.",
 				customSvg: freedomsoftSvg,
+				link: "https://www.freedomsoft.com/",
 			},
 			{
 				name: "REsimpli",
 				description:
 					"Export your lists from Deal Scale and import into REsimpli to track your KPIs, manage leads, and run your entire business from one place.",
 				customSvg: resimpliSvg,
+				link: "https://www.resimpli.com/",
 			},
 			{
 				name: "Salesforce",
 				description:
 					"For larger teams. Seamlessly upload your lead lists to Salesforce to leverage its powerful deal tracking and enterprise-grade automation.",
 				customSvg: salesforceSvg,
+				link: "https://www.salesforce.com/",
 			},
 		],
 	},
@@ -79,24 +93,14 @@ export const leadGenIntegrations: TechStack[] = [
 				description:
 					"Upload your lead lists to Instantly to launch and scale your cold email outreach campaigns with industry-leading deliverability.",
 				customSvg: instantlySvg,
+				link: "https://instantly.ai/",
 			},
 			{
 				name: "Superhuman",
 				description:
 					"Import contacts from your CSV exports to the fastest email experience ever made, perfect for high-touch, individual outreach to key prospects.",
 				customSvg: superhumanSvg,
-			},
-			{
-				name: "SMS & Dialer Platforms",
-				description:
-					"Easily import your lists into any major dialing or SMS platform (e.g., BatchDialer, Smarter Contact, ReadyMode) to begin outreach immediately.",
-				customSvg: dialerSvg,
-			},
-			{
-				name: "Google Sheets / Excel",
-				description:
-					"Directly export your targeted lead lists to Google Sheets or Microsoft Excel for easy analysis, sharing, and manual tracking.",
-				customSvg: googleSheetsSvg,
+				link: "https://superhuman.com/",
 			},
 		],
 	},

@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
 	return (
 		<div className={`text-center ${className}`}>
 			<motion.h2
-				className={`relative z-10 mb-2 break-words font-bold text-black leading-normal dark:text-white ${h2} ${spacing}`}
+				className={`relative z-10 mb-2 break-words font-extrabold leading-tight ${h2} ${spacing} text-black dark:text-white`}
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5, delay: 0.2 }}
@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
 			</motion.h2>
 			{subtitle && (
 				<motion.p
-					className={`mx-auto max-w-2xl text-black leading-normal dark:text-white/80 ${p} ${spacing.replace("pt-", "mt-")}`}
+					className={`mx-auto max-w-2xl font-semibold text-black leading-relaxed dark:text-white/90 ${p} ${spacing.replace("pt-", "mt-")}`}
 					initial={{ opacity: 0, y: -20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5, delay: 0.3 }}

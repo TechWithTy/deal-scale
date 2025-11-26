@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -18,10 +19,18 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { ArrowDown, Check, Copy } from "lucide-react";
+import { useState } from "react";
 
 export type FeatureTimelineMilestone = {
 	quarter: string;
-	status: "Live" | "Limited Beta" | "In Build" | "Planned";
+	status:
+		| "Completed"
+		| "Alpha"
+		| "Active"
+		| "In Build"
+		| "Upcoming"
+		| "Planned";
 	initiative: string;
 	focus: string;
 	summary: string;
@@ -32,9 +41,11 @@ const statusVariant: Record<
 	FeatureTimelineMilestone["status"],
 	"default" | "secondary" | "outline"
 > = {
-	Live: "default",
-	"Limited Beta": "secondary",
+	Completed: "default",
+	Alpha: "secondary",
+	Active: "default",
 	"In Build": "outline",
+	Upcoming: "secondary",
 	Planned: "outline",
 };
 
@@ -43,13 +54,73 @@ type FeatureTimelineTableProps = {
 	className?: string;
 };
 
+const ITEMS_PER_PAGE = 3;
+
 export function FeatureTimelineTable({
 	rows,
 	className,
 }: FeatureTimelineTableProps) {
+	const [copied, setCopied] = useState(false);
+	const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+
 	if (!rows.length) {
 		return null;
 	}
+
+	const visibleRows = rows.slice(0, visibleCount);
+	const hasMore = visibleCount < rows.length;
+
+	const loadMore = () => {
+		setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, rows.length));
+	};
+
+	const scrollToUpcomingFeatures = () => {
+		const element = document.getElementById("upcoming-features");
+		if (element) {
+			element.scrollIntoView({ behavior: "smooth", block: "start" });
+		}
+	};
+
+	const formatRoadmapForCopy = () => {
+		const header =
+			"Deal Scale Delivery Roadmap (Alpha → Pilot → Launch Track)\n\n";
+		const intro =
+			"A strategic view of where Deal Scale is today and what's coming next.\n\nStatuses and progress come from our Product Ops layer—always live, always current.\n\n";
+
+		const roadmapText = rows
+			.map((row) => {
+				const statusEmoji =
+					row.status === "Completed"
+						? "✅"
+						: row.status === "Alpha"
+							? "🟣"
+							: row.status === "Active"
+								? "🟡"
+								: row.status === "In Build"
+									? "🔵"
+									: row.status === "Upcoming"
+										? "🔗"
+										: row.status === "Planned"
+											? "🔥"
+											: "📋";
+
+				return `## ${row.quarter} – ${row.initiative}\n\n**Status:** ${row.status} ${statusEmoji}\n\n**Focus:** ${row.focus}\n\n${row.summary}\n\n**What's Included:**\n\n${row.highlights.map((h) => `* ${h}`).join("\n")}\n\n---\n`;
+			})
+			.join("\n");
+
+		return header + intro + roadmapText;
+	};
+
+	const handleCopy = async () => {
+		const text = formatRoadmapForCopy();
+		try {
+			await navigator.clipboard.writeText(text);
+			setCopied(true);
+			setTimeout(() => setCopied(false), 2000);
+		} catch (err) {
+			console.error("Failed to copy:", err);
+		}
+	};
 
 	return (
 		<Card
@@ -58,77 +129,118 @@ export function FeatureTimelineTable({
 				className,
 			)}
 		>
-			<CardHeader className="gap-2">
-				<CardTitle className="text-balance text-2xl">
+			<CardHeader className="relative gap-2">
+				<div className="absolute top-4 right-4">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleCopy}
+						className="h-8 w-8 p-0"
+						aria-label="Copy roadmap"
+					>
+						{copied ? (
+							<Check className="h-4 w-4 text-primary" />
+						) : (
+							<Copy className="h-4 w-4" />
+						)}
+					</Button>
+				</div>
+				<CardTitle className="text-balance pr-10 text-2xl">
 					Delivery Roadmap
 				</CardTitle>
 				<CardDescription className="text-pretty">
-					A transparent view of what is live inside Deal Scale today, what is
-					enjoying limited beta access, and the initiatives we are building next
-					for revenue and acquisitions teams.
+					A strategic view of where Deal Scale is today and what's coming next.
+					Statuses and progress come from our Product Ops layer—always live,
+					always current.
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="pt-4">
-				<Table>
-					<TableCaption className="text-muted-foreground text-xs">
-						Status values update automatically from our product ops module—no
-						screenshots, no stale decks.
-					</TableCaption>
-					<TableHeader>
-						<TableRow className="bg-muted/40 hover:bg-muted/40">
-							<TableHead className="w-[110px] text-muted-foreground text-xs uppercase tracking-wide">
-								Quarter
-							</TableHead>
-							<TableHead className="min-w-[180px] text-muted-foreground text-xs uppercase tracking-wide">
-								Initiative
-							</TableHead>
-							<TableHead className="w-[110px] text-muted-foreground text-xs uppercase tracking-wide">
-								Status
-							</TableHead>
-							<TableHead className="min-w-[150px] text-muted-foreground text-xs uppercase tracking-wide">
-								Focus
-							</TableHead>
-							<TableHead className="min-w-[240px] text-muted-foreground text-xs uppercase tracking-wide">
-								What&apos;s Included
-							</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{rows.map((row) => (
-							<TableRow
-								key={`${row.quarter}-${row.initiative}`}
-								className="transition-colors hover:bg-muted/30"
-							>
-								<TableCell className="align-top font-medium text-foreground">
-									{row.quarter}
-								</TableCell>
-								<TableCell className="align-top font-semibold text-foreground">
-									{row.initiative}
-									<p className="mt-2 text-muted-foreground text-sm">
-										{row.summary}
-									</p>
-								</TableCell>
-								<TableCell className="align-top">
-									<Badge variant={statusVariant[row.status]}>
-										{row.status}
-									</Badge>
-								</TableCell>
-								<TableCell className="align-top text-muted-foreground text-sm">
-									{row.focus}
-								</TableCell>
-								<TableCell className="align-top">
-									<ul className="space-y-2 text-muted-foreground text-sm">
-										{row.highlights.map((highlight) => (
-											<li key={highlight} className="leading-relaxed">
-												{highlight}
-											</li>
-										))}
-									</ul>
-								</TableCell>
+				<div className="max-h-[600px] overflow-y-auto">
+					<Table>
+						<TableCaption className="text-muted-foreground text-xs">
+							All status values are powered by our internal Product Ops
+							module—no screenshots, no stale decks, no manual updates.
+						</TableCaption>
+						<TableHeader className="sticky top-0 z-10 bg-card">
+							<TableRow className="bg-muted/40 hover:bg-muted/40">
+								<TableHead className="w-[110px] text-muted-foreground text-xs uppercase tracking-wide">
+									Quarter
+								</TableHead>
+								<TableHead className="min-w-[180px] text-muted-foreground text-xs uppercase tracking-wide">
+									Initiative
+								</TableHead>
+								<TableHead className="w-[110px] text-muted-foreground text-xs uppercase tracking-wide">
+									Status
+								</TableHead>
+								<TableHead className="min-w-[150px] text-muted-foreground text-xs uppercase tracking-wide">
+									Focus
+								</TableHead>
+								<TableHead className="min-w-[240px] text-muted-foreground text-xs uppercase tracking-wide">
+									What&apos;s Included
+								</TableHead>
 							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+						</TableHeader>
+						<TableBody>
+							{visibleRows.map((row) => (
+								<TableRow
+									key={`${row.quarter}-${row.initiative}`}
+									className="transition-colors hover:bg-muted/30"
+								>
+									<TableCell className="align-top font-medium text-foreground">
+										{row.quarter}
+									</TableCell>
+									<TableCell className="align-top font-semibold text-foreground">
+										{row.initiative}
+										<p className="mt-2 text-muted-foreground text-sm">
+											{row.summary}
+										</p>
+									</TableCell>
+									<TableCell className="align-top">
+										<Badge
+											variant={statusVariant[row.status]}
+											className="whitespace-nowrap"
+										>
+											{row.status}
+										</Badge>
+									</TableCell>
+									<TableCell className="align-top text-muted-foreground text-sm">
+										{row.focus}
+									</TableCell>
+									<TableCell className="align-top">
+										<ul className="space-y-2 text-muted-foreground text-sm">
+											{row.highlights.map((highlight) => (
+												<li key={highlight} className="leading-relaxed">
+													{highlight}
+												</li>
+											))}
+										</ul>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</div>
+				{hasMore && (
+					<div className="mt-6 flex justify-center border-t pt-6">
+						<Button
+							variant="outline"
+							onClick={loadMore}
+							className="w-full border-primary/50 text-primary hover:border-primary hover:bg-primary/10 sm:w-auto dark:border-primary/50 dark:text-primary dark:hover:border-primary dark:hover:bg-primary/10"
+						>
+							Load More Roadmaps
+						</Button>
+					</div>
+				)}
+				<div className="mt-6 flex justify-center border-t pt-6">
+					<Button
+						variant="default"
+						onClick={scrollToUpcomingFeatures}
+						className="gap-2 bg-gradient-to-r from-primary via-primary to-focus text-white shadow-lg hover:from-primary/90 hover:via-primary/90 hover:to-focus/90 dark:from-primary dark:via-primary dark:to-focus dark:text-white dark:hover:from-primary/90 dark:hover:via-primary/90 dark:hover:to-focus/90"
+					>
+						Vote on Upcoming Features
+						<ArrowDown className="h-4 w-4" />
+					</Button>
+				</div>
 			</CardContent>
 		</Card>
 	);
