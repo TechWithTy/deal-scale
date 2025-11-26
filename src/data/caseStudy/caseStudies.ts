@@ -459,11 +459,11 @@ export const caseStudies: CaseStudy[] = [
 			},
 		],
 		solutions: [
-			"Unified lead capture + enrichment — All inbound leads (web-form, API, manual import) routed into canonical lead schema; enriched missing firmographics, de-duped duplicates.",
-			"AI-driven lead scoring & prioritization — Using embedding + firmographic model, leads automatically scored; only top-tier leads (top 25%) routed for immediate outreach.",
-			"Automated multi-channel outreach — High-score leads entered a multi-touch outreach queue (email → SMS → call → calendar link) with dynamic templates + personalization, triggered within minutes.",
-			"CRM sync & pipeline update — Response triggers auto-update CRM, assign to rep, create follow-up tasks; no manual data entry.",
-			"Realtime dashboard & reporting — Live metrics: lead response time, outreach attempts, booked demos, revenue pipeline, conversion rates.",
+			"Unified lead capture + enrichment: All inbound leads (web-form, API, manual import) routed into canonical lead schema; enriched missing firmographics, de-duped duplicates.",
+			"AI-driven lead scoring & prioritization: Using embedding + firmographic model, leads automatically scored; only top-tier leads (top 25%) routed for immediate outreach.",
+			"Automated multi-channel outreach: High-score leads entered a multi-touch outreach queue (email → SMS → call → calendar link) with dynamic templates + personalization, triggered within minutes.",
+			"CRM sync & pipeline update: Response triggers auto-update CRM, assign to rep, create follow-up tasks; no manual data entry.",
+			"Realtime dashboard & reporting: Live metrics: lead response time, outreach attempts, booked demos, revenue pipeline, conversion rates.",
 		],
 		description:
 			"GlobalConsult was drowning in inbound leads with a response lag of 4–6 hours, manual triage, and many cold leads falling through cracks. By deploying Deal Scale's unified lead-capture, AI-based lead-scoring + automated outreach engine, GlobalConsult shrank lead-response time to under 2 minutes, improved demo booking rate from 8% → 30%, and increased monthly new-client revenue by 18%. GlobalConsult scaled inbound without hiring more staff, cut lead leakage, improved conversion quality, and increased revenue — demonstrating how Deal Scale's automation + AI + data backbone delivers real business impact quickly.",
