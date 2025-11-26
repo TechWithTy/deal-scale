@@ -33,11 +33,43 @@ export const AudioManager = ({
 		audio.loop = false; // Don't loop the audio
 		audioRef.current = audio;
 
-		console.log("Audio element initialized");
+		console.log("Audio element initialized with URL:", audioUrl);
 
 		const handleCanPlay = () => {
 			console.log("Audio can play through");
 			setIsLoaded(true);
+		};
+
+		const handleError = (e: ErrorEvent) => {
+			console.error("Audio loading error:", e);
+			console.error("Audio error details:", {
+				code: audio.error?.code,
+				message: audio.error?.message,
+				url: audioUrl,
+			});
+			// Try to provide helpful error message
+			if (audio.error) {
+				switch (audio.error.code) {
+					case MediaError.MEDIA_ERR_ABORTED:
+						console.error("Audio loading aborted");
+						break;
+					case MediaError.MEDIA_ERR_NETWORK:
+						console.error("Network error loading audio");
+						break;
+					case MediaError.MEDIA_ERR_DECODE:
+						console.error(
+							"Audio decode error - file may be corrupted or unsupported format",
+						);
+						break;
+					case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+						console.error(
+							"Audio source not supported - check file format and path",
+						);
+						break;
+					default:
+						console.error("Unknown audio error");
+				}
+			}
 		};
 
 		const handleEnded = () => {
@@ -56,6 +88,7 @@ export const AudioManager = ({
 
 		audio.addEventListener("canplaythrough", handleCanPlay);
 		audio.addEventListener("ended", handleEnded);
+		audio.addEventListener("error", handleError);
 
 		// Cleanup
 		return () => {
@@ -63,6 +96,7 @@ export const AudioManager = ({
 			audio.pause();
 			audio.removeEventListener("canplaythrough", handleCanPlay);
 			audio.removeEventListener("ended", handleEnded);
+			audio.removeEventListener("error", handleError);
 			if (timeCheckIntervalRef.current) {
 				clearInterval(timeCheckIntervalRef.current);
 				timeCheckIntervalRef.current = null;
