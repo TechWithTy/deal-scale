@@ -72,8 +72,8 @@ export const VoiceCloningDemo = () => {
 				autoPlay={demoStage === "after" && autoPlay}
 				showEndButton={demoStage === "after"}
 				audioUrl="/demos/audio/Voice Cloning.mp3"
-				audioStartTime={demoStage === "before" ? 0 : 794}
-				audioEndTime={demoStage === "before" ? 794 : undefined}
+				audioStartTime={demoStage === "before" ? 0 : 12}
+				audioEndTime={demoStage === "before" ? 12 : undefined}
 			/>
 
 			{isModalOpen && (
