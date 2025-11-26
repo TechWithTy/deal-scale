@@ -14,7 +14,7 @@ export const demoTranscript: Transcript = {
 		lead: {
 			name: "Michael",
 			subtitle: "Qualified Home Seller",
-			avatar: "/avatars/Customer.jpg",
+			avatar: "https://i.pravatar.cc/200?img=12",
 		},
 	},
 	lines: [
