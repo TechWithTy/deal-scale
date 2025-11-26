@@ -14,7 +14,7 @@ interface AudioManagerProps {
 
 export const AudioManager = ({
 	callStatus,
-	audioUrl = "/demos/audio/SuccessFull Call_Zip_TimeZone_needs_fix.wav",
+	audioUrl = "/demos/audio/Prod SuccessFull Empathetic.wav",
 	playAudio: shouldPlay,
 	onAudioEnd,
 	startTime = 0,
