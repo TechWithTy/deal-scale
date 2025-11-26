@@ -1,15 +1,11 @@
 import type { CaseStudy, Category } from "@/types/case-study";
 import {
 	aiIntegrationHowItWorks,
-	aiPhoneAgentHowItWorks,
 	dealScaleProprietaryProcess,
 	followUpHowItWorks,
 	generalHowItWorks,
 	instantLeadEngagement,
-	leadGenHowItWorks,
-	offMarketAdvantageHowItWorks,
 } from "../service/slug_data/how_it_works";
-import { leadGenIntegrations } from "../service/slug_data/integrations";
 
 export type CaseStudyCopyright = {
 	title: string;
