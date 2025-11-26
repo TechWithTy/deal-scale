@@ -6,9 +6,6 @@ import { TechStackSection } from "@/components/common/TechStackSection";
 import { FeatureTimelineTable } from "@/components/features/FeatureTimelineTable";
 import UpcomingFeatures from "@/components/home/FeatureVote";
 import ServicesSection from "@/components/home/Services";
-import Hero from "@/components/home/heros/Hero";
-import HeroSessionMonitor from "@/components/home/heros/HeroSessionMonitor";
-import HeroSessionMonitorClientWithModal from "@/components/home/heros/HeroSessionMonitorClientWithModal";
 import { Separator } from "@/components/ui/separator";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useDataModule } from "@/stores/useDataModuleStore";
@@ -104,11 +101,11 @@ export default function ServiceHomeClient() {
 		<>
 			{/* <HeroSessionMonitorClientWithModal /> */}
 
-			<section className="px-6 md:py-20 lg:px-8">
+			<section className="px-6 pt-36 pb-6 md:pt-20 md:pb-20 lg:px-8">
 				<div className="mx-auto max-w-7xl">
 					<ServicesSection
-						title="Our Comprehensive Services"
-						subtitle="Tailored solutions to meet your business needs"
+						title="Automate the Work. Accelerate Wins."
+						subtitle="AI systems that turn leads, pipelines, and workflows into predictable growth."
 						showTabs={[
 							SERVICE_CATEGORIES.LEAD_GENERATION,
 							SERVICE_CATEGORIES.LEAD_PREQUALIFICATION,

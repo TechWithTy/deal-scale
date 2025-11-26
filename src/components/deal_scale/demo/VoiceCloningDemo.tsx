@@ -71,10 +71,19 @@ export const VoiceCloningDemo = () => {
 				onCallEnd={handleSessionEnd}
 				autoPlay={demoStage === "after" && autoPlay}
 				showEndButton={demoStage === "after"}
+				audioUrl={
+					demoStage === "before"
+						? "/demos/audio/cloning/before.mp3"
+						: "/demos/audio/cloning/after.mp3"
+				}
 			/>
 
 			{isModalOpen && (
-				<CallCompleteModal isOpen={isModalOpen} onClose={handleCloseModal} />
+				<CallCompleteModal
+					isOpen={isModalOpen}
+					onClose={handleCloseModal}
+					variant="complete"
+				/>
 			)}
 		</>
 	);

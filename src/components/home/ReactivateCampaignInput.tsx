@@ -34,6 +34,7 @@ import dynamic from "next/dynamic";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 import { parseContactFile, type ContactData } from "@/utils/csvParser";
 import {
 	ReactivateCampaignBadges,
@@ -94,6 +95,7 @@ export function ReactivateCampaignInput({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const { checkoutState, startTrial, closeCheckout, isTrialLoading } =
 		useHeroTrialCheckout();
+	const { data: session } = useSession();
 
 	const handleFileSelect = useCallback(
 		async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -393,10 +395,38 @@ export function ReactivateCampaignInput({
 				// Call completion callback
 				onActivationComplete?.(calculatedMetrics);
 
-				// Redirect to app.leadorchestra.com after a short delay
+				// Build redirect URL to app.dealscale.io with tracking parameters
+				const redirectUrl = new URL("https://app.dealscale.io");
+				
+				// Add user ID if available
+				if (session?.user?.id) {
+					redirectUrl.searchParams.append("userId", session.user.id);
+				}
+				
+				// Add contacts count
+				redirectUrl.searchParams.append("contactsCount", String(contacts.length));
+				
+				// Add payment intent ID if available from checkout state
+				if (checkoutState?.clientSecret) {
+					// Extract payment intent ID from client secret (format: "pi_xxx_secret_yyy")
+					const paymentIntentId = checkoutState.clientSecret.split("_secret")[0];
+					if (paymentIntentId) {
+						redirectUrl.searchParams.append("paymentIntentId", paymentIntentId);
+					}
+				}
+				
+				// Add source identifier
+				redirectUrl.searchParams.append("source", "homepage_hero");
+				
+				// Add activated contacts count from metrics
+				if (calculatedMetrics.contactsActivated > 0) {
+					redirectUrl.searchParams.append("activatedCount", String(calculatedMetrics.contactsActivated));
+				}
+
+				// Redirect to app.dealscale.io after a short delay
 				setTimeout(() => {
-					console.log("[ReactivateCampaign] Redirecting to app.leadorchestra.com");
-					window.location.href = "https://app.leadorchestra.com";
+					console.log("[ReactivateCampaign] Redirecting to app.dealscale.io with tracking:", redirectUrl.toString());
+					window.location.href = redirectUrl.toString();
 				}, 2000);
 			}, 1600);
 		} catch (error) {

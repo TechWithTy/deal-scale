@@ -218,9 +218,24 @@ export default function CheckoutForm({
 				returnUrl.searchParams.append(
 					"subtitle",
 					`You're all set! ${plan.name} will continue at ${formatPrice(
-						postTrialAmount ?? plan.price[planType].amount,
+						postTrialAmount && postTrialAmount > 0
+							? postTrialAmount
+							: plan.price[planType].amount &&
+									typeof plan.price[planType].amount === "number" &&
+									plan.price[planType].amount > 0
+								? plan.price[planType].amount
+								: 2000,
 					)} after your trial.`,
 				);
+				// Add source parameter for homepage hero flow to enable redirect to app.dealscale.io
+				if (context === "trial") {
+					returnUrl.searchParams.append("source", "homepage_hero");
+					// Extract payment intent ID from client secret for tracking
+					const paymentIntentId = clientSecret.split("_secret")[0];
+					if (paymentIntentId) {
+						returnUrl.searchParams.append("paymentIntentId", paymentIntentId);
+					}
+				}
 			} else {
 				returnUrl.searchParams.append("title", "Payment Successful!");
 				returnUrl.searchParams.append(
@@ -390,9 +405,15 @@ export default function CheckoutForm({
 								</span>
 								<span className="block">
 									We'll secure your payment method to automatically continue
-									your {plan.name} plan at{" "}
+									your DealScale plan at{" "}
 									{formatPrice(
-										postTrialAmount ?? plan.price[planType].amount ?? 0,
+										postTrialAmount && postTrialAmount > 0
+											? postTrialAmount
+											: plan.price[planType].amount &&
+													typeof plan.price[planType].amount === "number" &&
+													plan.price[planType].amount > 0
+												? plan.price[planType].amount
+												: 2000,
 									)}{" "}
 									after the trial ends.
 								</span>
@@ -567,7 +588,15 @@ export default function CheckoutForm({
 								</p>
 								<p className="mt-1 text-tertiary text-xs">
 									Your Basic plan will renew at{" "}
-									{formatPrice(postTrialAmount ?? plan.price[planType].amount)}{" "}
+									{formatPrice(
+										postTrialAmount && postTrialAmount > 0
+											? postTrialAmount
+											: plan.price[planType].amount &&
+													typeof plan.price[planType].amount === "number" &&
+													plan.price[planType].amount > 0
+												? plan.price[planType].amount
+												: 2000,
+									)}{" "}
 									per month after the trial.
 								</p>
 							</>

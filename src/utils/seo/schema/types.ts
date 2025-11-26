@@ -223,6 +223,31 @@ export type CreativeWorkSchema = {
 	}>;
 };
 
+export type TechArticleSchema = {
+	"@context": SchemaContext;
+	"@type": "TechArticle";
+	"@id": string;
+	url: string;
+	headline: string;
+	description?: string;
+	datePublished?: string;
+	dateModified?: string;
+	inLanguage?: string;
+	mainEntityOfPage?: {
+		"@type": "WebPage";
+		"@id": string;
+	};
+	publisher: {
+		"@type": "Organization";
+		"@id": string;
+		name: string;
+		url?: string;
+	};
+	sameAs?: string[];
+	image?: string;
+	keywords?: string[];
+};
+
 export type AnswerSchema = {
 	"@type": "Answer";
 	text: string;

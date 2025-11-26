@@ -1,8 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import type React from "react";
 import { Children, cloneElement } from "react";
+import { cn } from "@/lib/utils";
 
 // --- Skip Trace Example Data and Types ---
 
@@ -40,10 +40,14 @@ export const Notification = ({
 					<span className="text-lg">{icon}</span>
 				</div>
 				<div className="flex flex-col overflow-hidden">
-					<figcaption className="flex flex-row items-center whitespace-pre font-medium text-lg dark:text-white ">
+					<figcaption className="flex flex-row items-center whitespace-pre font-medium text-lg dark:text-white">
 						<span className="text-sm sm:text-lg">{name}</span>
-						<span className="mx-1">·</span>
-						<span className="text-gray-500 text-xs">{time}</span>
+						{time && (
+							<>
+								<span className="mx-1">·</span>
+								<span className="text-gray-500 text-xs">{time}</span>
+							</>
+						)}
 					</figcaption>
 					<p className="font-normal text-sm dark:text-white/60">
 						{description}

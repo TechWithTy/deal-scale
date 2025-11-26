@@ -19,6 +19,9 @@ export const SessionView = ({
 	showEndButton,
 	autoStart = false,
 	variant = "default",
+	audioUrl,
+	audioStartTime,
+	audioEndTime,
 }: {
 	transcript: Transcript;
 	onCallEnd?: (opts: { manual: boolean }) => void;
@@ -28,6 +31,9 @@ export const SessionView = ({
 	showEndButton?: boolean;
 	autoStart?: boolean;
 	variant?: "default" | "compact";
+	audioUrl?: string;
+	audioStartTime?: number;
+	audioEndTime?: number;
 }) => {
 	const [playingDemo, setPlayingDemo] = useState(false);
 	const [aiActive, setAiActive] = useState(false);
@@ -46,6 +52,8 @@ export const SessionView = ({
 	const [transcriptFinished, setTranscriptFinished] = useState(false); // New state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const autoStartRef = useRef(false);
+	const autoPlayRef = useRef(false);
+	const hasEndedRef = useRef(false);
 	const isCompact = variant === "compact";
 
 	// Use a ref to store the latest onCallEnd callback to avoid stale closures
@@ -61,6 +69,14 @@ export const SessionView = ({
 
 	// Restore Play Demo logic for demos that require it
 	const handlePlayDemo = useCallback(() => {
+		// Prevent starting if already playing
+		if (playingDemo || demoStarted) {
+			return;
+		}
+
+		// Reset end flag when starting new demo
+		hasEndedRef.current = false;
+
 		// Reset all states
 		setPlayingDemo(true);
 		setDemoStarted(true);
@@ -79,14 +95,18 @@ export const SessionView = ({
 			setCallStatus("speaking");
 			setShouldPlayAudio(true);
 		}, 1000);
-	}, []);
+	}, [playingDemo, demoStarted]);
 
 	// Auto play demo if autoPlay is true (for cloned voice)
 	useEffect(() => {
-		if (autoPlay) {
+		if (autoPlay && !autoPlayRef.current && !playingDemo && !demoStarted) {
+			autoPlayRef.current = true;
 			handlePlayDemo();
+		} else if (!autoPlay) {
+			// Reset ref when autoPlay becomes false
+			autoPlayRef.current = false;
 		}
-	}, [autoPlay, handlePlayDemo]);
+	}, [autoPlay, handlePlayDemo, playingDemo, demoStarted]);
 
 	useEffect(() => {
 		if (autoStart) {
@@ -102,6 +122,13 @@ export const SessionView = ({
 	// Handle call end - stop audio and clean up
 	// Accept a manual flag to distinguish between button and audio end
 	const handleEndCall = useCallback((manual = false) => {
+		// Prevent duplicate calls
+		if (hasEndedRef.current && !manual) {
+			return;
+		}
+
+		hasEndedRef.current = true;
+
 		// Stop any playing audio
 		const audioElements = document.getElementsByTagName("audio");
 		for (const audio of audioElements) {
@@ -213,8 +240,11 @@ export const SessionView = ({
 			{/* Audio Manager */}
 			<AudioManager
 				callStatus={callStatus}
+				audioUrl={audioUrl}
 				playAudio={shouldPlayAudio}
 				onAudioEnd={handleAudioEnd}
+				startTime={audioStartTime}
+				endTime={audioEndTime}
 			/>
 
 			{/* Transcript Player */}

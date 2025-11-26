@@ -19,8 +19,8 @@ const DEFAULT_IMAGE = "https://assets.aceternity.com/manu-red.png";
 
 const MAX_TILT_DEGREES = 12;
 
-const DEFAULT_BEFORE_AUDIO = "/calls/example-call-yt.mp3";
-const DEFAULT_AFTER_AUDIO = "/calls/example-call-yt.mp3";
+const DEFAULT_BEFORE_AUDIO = "/demos/audio/cloning/before.mp3";
+const DEFAULT_AFTER_AUDIO = "/demos/audio/cloning/after.mp3";
 
 const BEFORE_AUDIO_CAPTIONS_SRC = `data:text/vtt;charset=utf-8,${encodeURIComponent(
 	"WEBVTT\n\n00:00.000 --> 00:04.000\nOriginal seller script with monotone delivery.\n",
@@ -349,6 +349,7 @@ const PixelatedVoiceCloneCardComponent = ({
 
 			try {
 				setActiveTrack("after");
+				// Start after audio from beginning since it's a separate file
 				after.currentTime = 0;
 				if (after.preload !== "auto") after.load();
 				await after.play();
@@ -407,6 +408,7 @@ const PixelatedVoiceCloneCardComponent = ({
 					afterSrc: after.src,
 				});
 			}
+			// Set both audio files to start at 0 since they're separate files
 			before.currentTime = 0;
 			after.currentTime = 0;
 			if (before.preload !== "auto") before.load();

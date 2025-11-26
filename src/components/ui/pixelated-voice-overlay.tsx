@@ -11,7 +11,7 @@ import { memo, useEffect, useId, useRef, useState } from "react";
 const FEATURE_CARDS = [
 	{
 		key: "before",
-		title: "Before",
+		title: "Your Voice",
 		description: "Flat, robotic delivery that breaks connection.",
 		className:
 			"border border-red-200 bg-gradient-to-br from-red-100 via-red-50 to-red-200/80 text-red-900 dark:border-red-500/30 dark:from-red-700/25 dark:via-red-600/20 dark:to-red-900/35 dark:text-red-50/90",
@@ -19,7 +19,7 @@ const FEATURE_CARDS = [
 	},
 	{
 		key: "after",
-		title: "After",
+		title: "Cloned Voice",
 		description: "Expressive, human tone that builds trust instantly.",
 		className:
 			"border border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-emerald-200/80 text-emerald-900 dark:border-emerald-300/35 dark:from-emerald-600/20 dark:via-emerald-500/15 dark:to-emerald-900/30 dark:text-emerald-50/90",
@@ -257,7 +257,7 @@ const PixelatedVoiceOverlayComponent = ({
 											"relative w-full max-w-xs rounded-2xl p-4 backdrop-blur-md transition-all duration-300 sm:max-w-sm",
 											beforeCard.className,
 											beforeActive
-												? "ring-2 ring-red-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900"
+												? "ring-2 ring-red-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900 bg-red-50/95 dark:bg-red-900/40 shadow-xl"
 												: inactiveCardClasses,
 										)}
 									>
@@ -269,14 +269,19 @@ const PixelatedVoiceOverlayComponent = ({
 										) : null}
 										<p
 											className={cn(
-												"font-semibold text-xs uppercase tracking-[0.28em]",
+												"font-bold text-xs uppercase tracking-[0.28em]",
 												beforeCard.labelClassName,
-												beforeActive && "text-red-500 dark:text-red-200",
+												beforeActive && "text-red-700 dark:text-red-100 drop-shadow-sm",
 											)}
 										>
 											{beforeCard.title}
 										</p>
-										<p className="mt-3 text-slate-700 text-sm leading-relaxed sm:text-base dark:text-white/90">
+										<p className={cn(
+											"mt-3 text-sm leading-relaxed sm:text-base",
+											beforeActive 
+												? "text-red-900 font-medium dark:text-red-50 drop-shadow-sm" 
+												: "text-slate-700 dark:text-white/90"
+										)}>
 											{beforeCard.description}
 										</p>
 									</div>
@@ -307,7 +312,7 @@ const PixelatedVoiceOverlayComponent = ({
 										</svg>
 										{isPlaying ? (
 											<span className="-bottom-1 absolute rounded-full bg-sky-400 px-2 py-0.5 font-semibold text-[0.625rem] text-white uppercase tracking-[0.32em] shadow-sm">
-												{afterActive ? "After" : "Before"}
+												{afterActive ? "Cloned Voice" : "Your Voice"}
 											</span>
 										) : null}
 									</span>
@@ -317,7 +322,7 @@ const PixelatedVoiceOverlayComponent = ({
 											"relative w-full max-w-xs rounded-2xl p-4 backdrop-blur-md transition-all duration-300 sm:max-w-sm",
 											afterCard.className,
 											afterActive
-												? "ring-2 ring-emerald-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-900"
+												? "ring-2 ring-emerald-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-900 bg-emerald-50/95 dark:bg-emerald-900/40 shadow-xl"
 												: inactiveCardClasses,
 										)}
 									>
@@ -333,14 +338,19 @@ const PixelatedVoiceOverlayComponent = ({
 										) : null}
 										<p
 											className={cn(
-												"font-semibold text-xs uppercase tracking-[0.28em]",
+												"font-bold text-xs uppercase tracking-[0.28em]",
 												afterCard.labelClassName,
-												afterActive && "text-emerald-300",
+												afterActive && "text-emerald-700 dark:text-emerald-100 drop-shadow-sm",
 											)}
 										>
 											{afterCard.title}
 										</p>
-										<p className="mt-3 text-slate-700 text-sm leading-relaxed sm:text-base dark:text-white/90">
+										<p className={cn(
+											"mt-3 text-sm leading-relaxed sm:text-base",
+											afterActive 
+												? "text-emerald-900 font-medium dark:text-emerald-50 drop-shadow-sm" 
+												: "text-slate-700 dark:text-white/90"
+										)}>
 											{afterCard.description}
 										</p>
 									</div>

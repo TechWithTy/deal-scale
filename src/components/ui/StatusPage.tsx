@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, XCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 
@@ -15,6 +17,7 @@ interface StatusPageProps {
 export function StatusPage({ type, className = "" }: StatusPageProps) {
 	const router = useNavigationRouter();
 	const searchParams = useSearchParams();
+	const { data: session } = useSession();
 
 	const isSuccess = type === "success";
 	const Icon = isSuccess ? CheckCircle : XCircle;
@@ -33,7 +36,57 @@ export function StatusPage({ type, className = "" }: StatusPageProps) {
 	const ctaHref =
 		searchParams.get("ctaHref") || (isSuccess ? "/orders" : "/products");
 
+	// Redirect to app.dealscale.io if source is homepage_hero (list upload flow)
+	useEffect(() => {
+		const source = searchParams.get("source");
+		if (isSuccess && source === "homepage_hero") {
+			const redirectUrl = new URL("https://app.dealscale.io");
+			
+			// Add user ID if available
+			if (session?.user?.id) {
+				redirectUrl.searchParams.append("userId", session.user.id);
+			}
+			
+			// Add payment intent ID if available
+			const paymentIntentId = searchParams.get("paymentIntentId");
+			if (paymentIntentId) {
+				redirectUrl.searchParams.append("paymentIntentId", paymentIntentId);
+			}
+			
+			// Add source identifier
+			redirectUrl.searchParams.append("source", "homepage_hero");
+			
+			// Redirect after a short delay to show success message
+			const timer = setTimeout(() => {
+				console.log("[StatusPage] Redirecting to app.dealscale.io with tracking:", redirectUrl.toString());
+				window.location.href = redirectUrl.toString();
+			}, 2000);
+			
+			return () => clearTimeout(timer);
+		}
+	}, [isSuccess, searchParams, session]);
+
 	const handleCtaClick = () => {
+		// If source is homepage_hero, redirect to app.dealscale.io instead
+		const source = searchParams.get("source");
+		if (source === "homepage_hero") {
+			const redirectUrl = new URL("https://app.dealscale.io");
+			
+			if (session?.user?.id) {
+				redirectUrl.searchParams.append("userId", session.user.id);
+			}
+			
+			const paymentIntentId = searchParams.get("paymentIntentId");
+			if (paymentIntentId) {
+				redirectUrl.searchParams.append("paymentIntentId", paymentIntentId);
+			}
+			
+			redirectUrl.searchParams.append("source", "homepage_hero");
+			
+			window.location.href = redirectUrl.toString();
+			return;
+		}
+		
 		if (ctaHref) {
 			router.push(ctaHref);
 		}

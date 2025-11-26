@@ -98,6 +98,7 @@ export const TechStackSection = ({
 
 	const getGridColumns = (itemCount: number) => {
 		if (itemCount <= 2) return "grid-cols-2";
+		if (itemCount === 3) return "grid-cols-1 sm:grid-cols-3";
 		if (itemCount <= 4) return "grid-cols-2 md:grid-cols-4";
 		return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
 	};
@@ -125,21 +126,19 @@ export const TechStackSection = ({
 				>
 					<div
 						ref={tabsListRef}
-						className="scrollbar-hide mb-8 overflow-x-auto"
+						className="scrollbar-hide mb-8 flex justify-center overflow-x-auto"
 					>
-						<div className="flex justify-start md:justify-center">
-							<TabsList className="inline-flex whitespace-nowrap bg-background-dark/60 pl-4 backdrop-blur-md md:pl-0">
-								{stacks.map((stack, index) => (
-									<TabsTrigger
-										key={stack.category}
-										value={stack.category.toLowerCase()}
-										className={`px-4 py-2 ${index === 0 ? "ml-0" : ""}`}
-									>
-										{stack.category}
-									</TabsTrigger>
-								))}
-							</TabsList>
-						</div>
+						<TabsList className="!justify-center inline-flex whitespace-nowrap bg-background-dark/60 backdrop-blur-md">
+							{stacks.map((stack, index) => (
+								<TabsTrigger
+									key={stack.category}
+									value={stack.category.toLowerCase()}
+									className="px-4 py-2"
+								>
+									{stack.category}
+								</TabsTrigger>
+							))}
+						</TabsList>
 					</div>
 
 					{stacks.map((stack) => (
@@ -150,30 +149,58 @@ export const TechStackSection = ({
 						>
 							<div className="rounded-xl bg-background-dark/30 p-4 shadow-lg backdrop-blur-md sm:p-8">
 								<div
-									className={`grid ${getGridColumns(stack.libraries.length)} gap-4`}
+									className={`grid ${getGridColumns(stack.libraries.length)} gap-4 justify-items-center`}
 								>
 									{stack.libraries.map((lib) => (
 										<TooltipProvider key={lib.name}>
 											<Tooltip>
-												<TooltipTrigger className="w-full">
-													<div className="flex h-full cursor-pointer flex-col items-center justify-center rounded-lg border border-border/20 bg-background-dark/50 p-3 text-center shadow-inner backdrop-blur-sm hover:bg-background-dark/70 sm:p-4">
-														<div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 sm:mb-3 sm:h-12 sm:w-12">
-															{lib.customSvg ? (
-																<Image
-																	src={lib.customSvg}
-																	alt={lib.name}
-																	width={100}
-																	height={100}
-																	className="opacity-80"
-																/>
-															) : (
-																getLucideIconComponent(lib.lucideIcon)
-															)}
+												<TooltipTrigger asChild>
+													{lib.link ? (
+														<a
+															href={lib.link}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="w-full"
+														>
+															<div className="flex h-full cursor-pointer flex-col items-center justify-center rounded-lg border border-border/20 bg-background-dark/50 p-3 text-center shadow-inner backdrop-blur-sm hover:bg-background-dark/70 sm:p-4">
+																<div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 sm:mb-3 sm:h-12 sm:w-12">
+																	{lib.customSvg ? (
+																		<Image
+																			src={lib.customSvg}
+																			alt={lib.name}
+																			width={100}
+																			height={100}
+																			className="opacity-80"
+																		/>
+																	) : (
+																		getLucideIconComponent(lib.lucideIcon)
+																	)}
+																</div>
+																<p className="font-medium text-primary text-sm sm:text-base">
+																	{lib.name}
+																</p>
+															</div>
+														</a>
+													) : (
+														<div className="flex h-full cursor-pointer flex-col items-center justify-center rounded-lg border border-border/20 bg-background-dark/50 p-3 text-center shadow-inner backdrop-blur-sm hover:bg-background-dark/70 sm:p-4">
+															<div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 sm:mb-3 sm:h-12 sm:w-12">
+																{lib.customSvg ? (
+																	<Image
+																		src={lib.customSvg}
+																		alt={lib.name}
+																		width={100}
+																		height={100}
+																		className="opacity-80"
+																	/>
+																) : (
+																	getLucideIconComponent(lib.lucideIcon)
+																)}
+															</div>
+															<p className="font-medium text-primary text-sm sm:text-base">
+																{lib.name}
+															</p>
 														</div>
-														<p className="font-medium text-primary text-sm sm:text-base">
-															{lib.name}
-														</p>
-													</div>
+													)}
 												</TooltipTrigger>
 												<TooltipContent className="border border-primary/30 bg-background-dark/90">
 													<p className="text-primary/80">{lib.description}</p>

@@ -14,13 +14,7 @@ import {
 	type ServicesData,
 } from "@/types/service/services";
 import Link from "next/link";
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Header from "../common/Header";
 
 interface ServicesSectionProps {
@@ -299,7 +293,6 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		reset,
 		page,
 		totalPages,
-		setShowAll,
 	} = usePagination(filteredEntries, {
 		itemsPerPage: cardsPerPage,
 		initialPage: 1,
@@ -320,6 +313,7 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		};
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
+		// biome-ignore lint/correctness/useExhaustiveDependencies: getCardsPerPage is a pure function that doesn't need to be in deps
 	}, []);
 
 	const handleTabChange = (tab: ServiceCategoryValue) => {
@@ -366,7 +360,7 @@ const ServicesSection = (props: ServicesSectionProps) => {
 
 	// CRITICAL: This function must never throw or return undefined/null
 	// It's called during JSX rendering, so any errors here can cause hydration mismatches
-	const renderCardsForCategory = (categoryValue: ServiceCategoryValue) => {
+	const renderCardsForCategory = (_categoryValue: ServiceCategoryValue) => {
 		try {
 			const isLoading = ["idle", "loading"].includes(servicesStatus);
 			const hasEntries = filteredEntries.length > 0;
@@ -517,11 +511,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 				renderError,
 			);
 			return (
-				<>
-					<div className="py-12 text-center text-muted-foreground">
-						Unable to load services.
-					</div>
-				</>
+				<div className="py-12 text-center text-muted-foreground">
+					Unable to load services.
+				</div>
 			);
 		}
 	};
@@ -541,12 +533,16 @@ const ServicesSection = (props: ServicesSectionProps) => {
 			`[ServicesSection:${componentInstanceId.current}] Attempting to render JSX...`,
 		);
 		const jsxResult = (
-			<section id="services" className="px-4 py-6 md:px-6 md:py-16 lg:px-8">
+			<section
+				id="services"
+				className="px-4 pt-12 pb-6 md:px-6 md:pt-0 md:pb-16 lg:px-8"
+			>
 				<div className="mx-auto max-w-7xl">
-					<div className="mb-12 text-center">
+					<div className="mt-8 mb-12 text-center md:mt-0">
 						<Header
 							title={title}
 							subtitle={subtitle}
+							size="lg"
 							className="mb-12 md:mb-16"
 						/>
 					</div>
@@ -605,7 +601,10 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		);
 		// Return minimal valid structure to match server/client
 		return (
-			<section id="services" className="px-4 py-6 md:px-6 md:py-16 lg:px-8">
+			<section
+				id="services"
+				className="px-4 pt-12 pb-6 md:px-6 md:pt-0 md:pb-16 lg:px-8"
+			>
 				<div className="mx-auto max-w-7xl">
 					<div className="py-12 text-center text-muted-foreground">
 						Unable to render services section.

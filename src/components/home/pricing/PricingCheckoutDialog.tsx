@@ -8,7 +8,6 @@ import { Z_INDEX } from "@/lib/constants/z-index";
 import type { Plan } from "@/types/service/plans";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 
 type CheckoutContext = "standard" | "trial";
@@ -70,14 +69,14 @@ export default function PricingCheckoutDialog({
 	if (!stripePromise) {
 		return (
 			<div
-				className="fixed inset-0 flex items-center justify-center bg-black/70 p-6"
+				className="fixed inset-0 flex items-center justify-center p-6"
 				style={{ zIndex: Z_INDEX.CHECKOUT_DIALOG }}
 			>
-				<div className="w-full max-w-sm rounded-2xl bg-background-dark p-8 text-center shadow-xl">
-					<p className="mb-4 font-semibold text-lg text-white">
+				<div className="w-full max-w-sm rounded-2xl bg-background p-8 text-center shadow-xl">
+					<p className="mb-4 font-semibold text-lg">
 						We couldn't initialize the checkout experience.
 					</p>
-					<p className="mb-6 text-sm text-white/70">
+					<p className="mb-6 text-sm text-muted-foreground">
 						Please refresh the page or contact support for assistance.
 					</p>
 					<Button onClick={onClose} variant="secondary">
@@ -89,32 +88,17 @@ export default function PricingCheckoutDialog({
 	}
 
 	return (
-		<div
-			className="fixed inset-0 flex items-center justify-center bg-black/70 p-4 sm:p-6"
-			style={{ zIndex: Z_INDEX.CHECKOUT_DIALOG }}
-		>
-			<div className="relative w-full max-w-lg rounded-3xl bg-background-dark/95 p-6 shadow-2xl backdrop-blur">
-				<button
-					type="button"
-					onClick={onClose}
-					aria-label="Close checkout"
-					className="absolute top-4 right-4 rounded-full border border-white/10 bg-black/60 p-2 text-white transition hover:bg-black/80"
-				>
-					<X className="h-4 w-4" />
-				</button>
-				<Elements stripe={stripePromise} options={elementOptions}>
-					<CheckoutForm
-						clientSecret={clientSecret}
-						plan={plan}
-						planType={planType}
-						mode={mode}
-						context={context}
-						postTrialAmount={postTrialAmount}
-						onSuccess={onSuccess || onClose}
-						onCancel={onClose}
-					/>
-				</Elements>
-			</div>
-		</div>
+		<Elements stripe={stripePromise} options={elementOptions}>
+			<CheckoutForm
+				clientSecret={clientSecret}
+				plan={plan}
+				planType={planType}
+				mode={mode}
+				context={context}
+				postTrialAmount={postTrialAmount}
+				onSuccess={onSuccess || onClose}
+				onCancel={onClose}
+			/>
+		</Elements>
 	);
 }

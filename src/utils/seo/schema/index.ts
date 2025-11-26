@@ -10,6 +10,7 @@ export {
 	buildSoftwareApplicationSchema,
 	buildKnowledgeGraphSchema,
 	buildDatasetSchema,
+	buildTechArticleSchema,
 } from "./builders";
 export { buildActivityFeedSchema } from "./activityFeed";
 export {
@@ -61,6 +62,7 @@ export type {
 	AggregateRatingSchema,
 	WebSiteSchema,
 	SoftwareApplicationSchema,
+	TechArticleSchema,
 	WebPageReference,
 	ContactPointSchema,
 	PostalAddressSchema,

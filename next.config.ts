@@ -102,6 +102,7 @@ const nextConfig: NextConfig = {
 			{ protocol: "https", hostname: "thebuyoutcompany.com" },
 			{ protocol: "https", hostname: "www.cretech.com" },
 			{ protocol: "https", hostname: "www.housingwire.com" },
+			{ protocol: "https", hostname: "github.githubassets.com" },
 		],
 	},
 
