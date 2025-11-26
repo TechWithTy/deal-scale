@@ -28,7 +28,7 @@ const convertLinksToText = (text: string): string => {
 };
 
 // Parse markdown-style links [text](url) and convert to JSX
-const parseLinks = (text: string) => {
+const parseLinks = (text: string): (string | JSX.Element)[] => {
 	const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 	const parts: (string | JSX.Element)[] = [];
 	let lastIndex = 0;
@@ -67,7 +67,8 @@ const parseLinks = (text: string) => {
 		parts.push(text.slice(lastIndex));
 	}
 
-	return parts.length > 0 ? parts : text;
+	// Always return an array for consistent React rendering
+	return parts.length > 0 ? parts : [text];
 };
 
 export type FeatureTimelineMilestone = {
