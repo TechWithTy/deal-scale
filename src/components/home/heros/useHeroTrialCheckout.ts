@@ -84,6 +84,7 @@ export function useHeroTrialCheckout(): {
 				planType: "monthly",
 				mode: "setup",
 				context: "trial",
+				postTrialAmount: 2000, // Base tier price
 			});
 		} catch (error) {
 			if (error instanceof DOMException && error.name === "AbortError") {
