@@ -972,6 +972,19 @@ export const caseStudies: CaseStudy[] = [
 	},
 ];
 
+// Debug: Log case studies on module load
+if (typeof window === "undefined") {
+	// Server-side logging
+	console.log(
+		"[caseStudies.ts] Total case studies exported:",
+		caseStudies.length,
+	);
+	console.log(
+		"[caseStudies.ts] Case study IDs:",
+		caseStudies.map((s) => s.id),
+	);
+}
+
 export const caseStudyCategories: Category[] = [
 	{ id: "all", name: "All" },
 	...Array.from(new Set(caseStudies.flatMap((study) => study.categories))).map(

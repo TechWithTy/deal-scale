@@ -56,6 +56,22 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 	}));
 
 	const hasModuleCaseStudies = moduleCaseStudies.length > 0;
+
+	// Debug logging
+	console.log("[CaseStudyGrid] Props caseStudies count:", caseStudies.length);
+	console.log(
+		"[CaseStudyGrid] Module caseStudies count:",
+		moduleCaseStudies.length,
+	);
+	console.log(
+		"[CaseStudyGrid] Module caseStudies:",
+		moduleCaseStudies.map((s) => ({ id: s.id, title: s.title })),
+	);
+	console.log(
+		"[CaseStudyGrid] Resolved caseStudies count:",
+		caseStudies.length > 0 ? caseStudies.length : moduleCaseStudies.length,
+	);
+
 	const guardDetail = useMemo(
 		() => ({ providedViaProp: caseStudies.length > 0 }),
 		[caseStudies.length],

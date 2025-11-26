@@ -18,6 +18,15 @@ export default function CaseStudiesClient() {
 		}),
 	);
 
+	// Debug logging
+	console.log("[CaseStudiesClient] Status:", status);
+	console.log("[CaseStudiesClient] Case studies count:", caseStudies.length);
+	console.log(
+		"[CaseStudiesClient] Case studies:",
+		caseStudies.map((s) => ({ id: s.id, title: s.title, slug: s.slug })),
+	);
+	console.log("[CaseStudiesClient] Error:", error);
+
 	const hasModuleData = caseStudies.length > 0;
 	const telemetryDetail = useMemo(() => ({ scope: "listing-page" }), []);
 
