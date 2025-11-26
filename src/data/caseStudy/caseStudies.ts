@@ -408,6 +408,86 @@ export const caseStudies: CaseStudy[] = [
 		featured: false,
 		redirectToContact: false,
 	},
+	{
+		id: "globalconsult-lead-response-study-06",
+		title:
+			"How GlobalConsult cut lead-to-follow-up time from 6 h → under 2 min and boosted demo bookings by 22%",
+		subtitle:
+			"GlobalConsult (mid-market consulting firm) was drowning in inbound leads: response lag of 4–6 hours, manual triage, and many cold leads falling through cracks. By deploying Deal Scale's unified lead-capture, AI-based lead-scoring + automated outreach engine, GlobalConsult shrank lead-response time to under 2 minutes, improved demo booking rate from 8% → 30%, and increased monthly new-client revenue by 18%.",
+		slug: "globalconsult-lead-response-automation",
+		categories: [
+			"lead-conversion",
+			"sales-automation",
+			"lead-management",
+			"crm-integration",
+		],
+		industries: ["consulting", "professional-services"],
+		copyright: {
+			title: "Want to cut your lead-response time to under 2 minutes?",
+			subtitle:
+				"See how Deal Scale can automate your lead capture, scoring, and outreach to double your demo conversions.",
+			ctaText: "Book a demo with Deal Scale",
+			ctaLink: "/contact",
+		},
+		tags: [
+			"Lead Response Time",
+			"Demo Booking",
+			"Lead Scoring",
+			"CRM Integration",
+			"Multi-Channel Outreach",
+			"Revenue Growth",
+		],
+		clientName: "GlobalConsult",
+		clientDescription:
+			"Mid-market consulting firm specializing in business transformation and strategic advisory services.",
+		featuredImage: "/case-studies/globalconsult-lead-automation.png",
+		thumbnailImage: "/case-studies/globalconsult-lead-automation.png",
+		businessChallenges: [
+			"High inbound lead volume; manual qualification overload (small sales team).",
+			"Slow response times (4–6 hours) — many leads lost before contact.",
+			"No prioritization: all leads treated equally → wasted SDR bandwidth.",
+			"CRM fragmentation: some leads entered via web-form, others via spreadsheet, many duplicates, inconsistent data.",
+		],
+		lastModified: new Date("2025-01-15T10:00:00.000Z"),
+		howItWorks: instantLeadEngagement,
+		businessOutcomes: [
+			{
+				title: "Dramatic Response Time Improvement",
+				subtitle:
+					"Cut lead-to-follow-up time from 6 hours to under 2 minutes, ensuring no hot lead goes cold before contact.",
+			},
+			{
+				title: "Scaled Operations Without Headcount",
+				subtitle:
+					"Same SDR team handled 2.5× leads automatically, eliminating the need for additional hires while increasing revenue.",
+			},
+		],
+		solutions: [
+			"Unified lead capture + enrichment — All inbound leads (web-form, API, manual import) routed into canonical lead schema; enriched missing firmographics, de-duped duplicates.",
+			"AI-driven lead scoring & prioritization — Using embedding + firmographic model, leads automatically scored; only top-tier leads (top 25%) routed for immediate outreach.",
+			"Automated multi-channel outreach — High-score leads entered a multi-touch outreach queue (email → SMS → call → calendar link) with dynamic templates + personalization, triggered within minutes.",
+			"CRM sync & pipeline update — Response triggers auto-update CRM, assign to rep, create follow-up tasks; no manual data entry.",
+			"Realtime dashboard & reporting — Live metrics: lead response time, outreach attempts, booked demos, revenue pipeline, conversion rates.",
+		],
+		description:
+			"GlobalConsult was drowning in inbound leads with a response lag of 4–6 hours, manual triage, and many cold leads falling through cracks. By deploying Deal Scale's unified lead-capture, AI-based lead-scoring + automated outreach engine, GlobalConsult shrank lead-response time to under 2 minutes, improved demo booking rate from 8% → 30%, and increased monthly new-client revenue by 18%. GlobalConsult scaled inbound without hiring more staff, cut lead leakage, improved conversion quality, and increased revenue — demonstrating how Deal Scale's automation + AI + data backbone delivers real business impact quickly.",
+		results: [
+			{
+				title: "Average Lead Response Time",
+				value: "6 h → 1.8 min",
+			},
+			{
+				title: "Demo Booking Rate",
+				value: "8% → 30%",
+			},
+			{
+				title: "Monthly New-Client Revenue Increase",
+				value: "+18%",
+			},
+		],
+		featured: true,
+		redirectToContact: false,
+	},
 ];
 
 export const caseStudyCategories: Category[] = [
