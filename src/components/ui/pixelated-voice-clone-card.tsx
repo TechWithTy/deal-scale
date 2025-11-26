@@ -19,8 +19,8 @@ const DEFAULT_IMAGE = "https://assets.aceternity.com/manu-red.png";
 
 const MAX_TILT_DEGREES = 12;
 
-const DEFAULT_BEFORE_AUDIO = "/demos/audio/Voice Cloning.mp3";
-const DEFAULT_AFTER_AUDIO = "/demos/audio/Voice Cloning.mp3";
+const DEFAULT_BEFORE_AUDIO = "/demos/audio/cloning/before.mp3";
+const DEFAULT_AFTER_AUDIO = "/demos/audio/cloning/after.mp3";
 
 const BEFORE_AUDIO_CAPTIONS_SRC = `data:text/vtt;charset=utf-8,${encodeURIComponent(
 	"WEBVTT\n\n00:00.000 --> 00:04.000\nOriginal seller script with monotone delivery.\n",
@@ -349,8 +349,8 @@ const PixelatedVoiceCloneCardComponent = ({
 
 			try {
 				setActiveTrack("after");
-				// Set start time to 794 seconds (13:14) for cloned voice segment
-				after.currentTime = 794;
+				// Start after audio from beginning since it's a separate file
+				after.currentTime = 0;
 				if (after.preload !== "auto") after.load();
 				await after.play();
 				setIsCanvasAutoAnimating(true);
@@ -360,14 +360,6 @@ const PixelatedVoiceCloneCardComponent = ({
 					afterSrc: after.src,
 				});
 				stopPlayback();
-			}
-		};
-
-		const handleBeforeTimeUpdate = () => {
-			// Stop "before" audio at 794 seconds (13:14) to transition to "after"
-			if (before.currentTime >= 794) {
-				before.pause();
-				handleBeforeEnded();
 			}
 		};
 
@@ -383,12 +375,10 @@ const PixelatedVoiceCloneCardComponent = ({
 		};
 
 		before.addEventListener("ended", handleBeforeEnded);
-		before.addEventListener("timeupdate", handleBeforeTimeUpdate);
 		after.addEventListener("ended", handleAfterEnded);
 
 		return () => {
 			before.removeEventListener("ended", handleBeforeEnded);
-			before.removeEventListener("timeupdate", handleBeforeTimeUpdate);
 			after.removeEventListener("ended", handleAfterEnded);
 		};
 	}, [stopPlayback]);
@@ -418,10 +408,9 @@ const PixelatedVoiceCloneCardComponent = ({
 					afterSrc: after.src,
 				});
 			}
-			// Set before audio to start at 0 (your voice segment)
+			// Set both audio files to start at 0 since they're separate files
 			before.currentTime = 0;
-			// Set after audio to start at 794 seconds (13:14) for cloned voice segment
-			after.currentTime = 794;
+			after.currentTime = 0;
 			if (before.preload !== "auto") before.load();
 			if (after.preload !== "auto") after.load();
 			after.pause();
