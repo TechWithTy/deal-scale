@@ -23,7 +23,7 @@ export const demoTranscript: Transcript = {
 			speaker: "ai",
 			text: "Hi Michael, this is Jordan Martinez calling on behalf of Skyline Capital Group. I hope your day's going well. I'm reaching out about your home at 1457 Westbrook Avenue in Dallas, Texas. We're purchasing a few homes in the area this month, and I wanted to see if you might be open to reviewing a no-obligation cash offer. Do you have a moment?",
 			startTime: 0, // 0:00
-			duration: 18000, // 18 seconds
+			duration: 24000, // 24 seconds (extended by 6 seconds)
 			status: "pending",
 			animations: [{ type: "fadeIn", startAt: 0, duration: 500 }],
 			metadata: {
@@ -272,7 +272,7 @@ export const demoTranscript: Transcript = {
 			},
 		},
 	],
-	totalDuration: 154000, // 2:34 (154 seconds)
+	totalDuration: 160000, // 2:40 (160 seconds - extended by 6 seconds)
 	createdAt: now,
 	updatedAt: now,
 };

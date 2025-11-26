@@ -124,7 +124,7 @@ export const CallControls = ({
 						<Button
 							onClick={handleEndCallClick}
 							variant="destructive"
-							className="hidden h-14 w-14 rounded-full p-0 sm:flex"
+							className="flex h-14 w-14 rounded-full p-0"
 						>
 							<PhoneCall className="h-6 w-6" />
 						</Button>
