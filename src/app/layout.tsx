@@ -45,6 +45,35 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					href="/logos/DealScale%20Transparent%20Logo/Deal%20Scale%20No%20Text.png"
 					// type omitted; browsers infer from extension
 				/>
+				{/* Meta Pixel Base Code - Required for Meta Pixel Helper detection */}
+				{facebookPixelId && (
+					<>
+						<script
+							dangerouslySetInnerHTML={{
+								__html: `
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '${facebookPixelId}');
+`,
+							}}
+						/>
+						<noscript>
+							<img
+								height="1"
+								width="1"
+								style={{ display: "none" }}
+								src={`https://www.facebook.com/tr?id=${facebookPixelId}&ev=PageView&noscript=1`}
+								alt=""
+							/>
+						</noscript>
+					</>
+				)}
 			</head>
 			<body className="theme-dealscale min-h-screen bg-background font-sans antialiased">
 				<SchemaInjector schema={KNOWLEDGE_GRAPH_SCHEMA} />
