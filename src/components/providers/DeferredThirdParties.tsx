@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { Analytics } from "@/components/analytics/Analytics";
+import { useAnalyticsConsent } from "@/contexts/analytics-consent-context";
 import type {
 	AnalyticsConfig,
 	AnalyticsField,
 	AnalyticsIssue,
 } from "@/lib/analytics/config";
 
-import { Analytics } from "@/components/analytics/Analytics";
-import { useAnalyticsConsent } from "@/contexts/analytics-consent-context";
 import { useDeferredLoad } from "./useDeferredLoad";
 
 const ANALYTICS_FIELDS: AnalyticsField[] = [
@@ -106,32 +106,39 @@ const FacebookPixelScript = ({ pixelId }: { pixelId?: string }) => {
 			return;
 		}
 
-		if (window.fbq) {
-			// Already initialized
-			return;
-		}
-
-		let isMounted = true;
-
-		const load = async () => {
+		// Base pixel code is now in the head, so fbq should already be initialized
+		// We just need to track PageView after consent
+		if (typeof window.fbq === "function") {
 			try {
-				const ReactPixel = await import("react-facebook-pixel");
-				if (!isMounted) {
-					return;
-				}
-				ReactPixel.default.init(pixelId);
 				// Track initial page view
-				ReactPixel.default.pageView();
+				window.fbq("track", "PageView");
 			} catch (error) {
-				warnLog("Failed to initialize Facebook Pixel.", error);
+				warnLog("Failed to track Facebook Pixel PageView.", error);
 			}
-		};
+		} else {
+			// Fallback: If base code didn't load, use react-facebook-pixel library
+			let isMounted = true;
 
-		void load();
+			const load = async () => {
+				try {
+					const ReactPixel = await import("react-facebook-pixel");
+					if (!isMounted) {
+						return;
+					}
+					ReactPixel.default.init(pixelId);
+					// Track initial page view
+					ReactPixel.default.pageView();
+				} catch (error) {
+					warnLog("Failed to initialize Facebook Pixel.", error);
+				}
+			};
 
-		return () => {
-			isMounted = false;
-		};
+			void load();
+
+			return () => {
+				isMounted = false;
+			};
+		}
 	}, [pixelId]);
 
 	return null;

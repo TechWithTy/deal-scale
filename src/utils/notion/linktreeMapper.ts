@@ -40,6 +40,10 @@ export type MappedLinkTree = {
 	utm_content?: string;
 	utm_term?: string;
 	utm_offer?: string;
+	// Facebook Pixel tracking fields
+	facebookPixelEnabled?: boolean;
+	facebookPixelSource?: string;
+	facebookPixelIntent?: string;
 };
 
 export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
@@ -313,10 +317,42 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		return sel?.type === "select" ? sel.select?.name : undefined;
 	};
 
+	const getRichTextValue = (prop: unknown): string | undefined => {
+		const rt = prop as NotionRichTextProperty | undefined;
+		return rt?.type === "rich_text" ? rt.rich_text?.[0]?.plain_text : undefined;
+	};
+
 	// Handle "UTM Campaign (Relation)" property name - use it if available, otherwise fallback to "UTM Campaign"
 	const utmCampaignRelation = getSelectValue(props["UTM Campaign (Relation)"]);
 	const utmCampaignRegular = getSelectValue(props["UTM Campaign"]);
 	const utm_campaign = utmCampaignRelation || utmCampaignRegular;
+
+	// Extract Facebook Pixel fields
+	// Facebook Pixel Enabled can be checkbox or select
+	const fbPixelEnabledProp = props["Facebook Pixel Enabled"] as
+		| NotionCheckboxProperty
+		| NotionSelectProperty
+		| undefined;
+	let facebookPixelEnabled = false;
+	if (fbPixelEnabledProp?.type === "checkbox") {
+		facebookPixelEnabled = Boolean(fbPixelEnabledProp.checkbox);
+	} else if (fbPixelEnabledProp?.type === "select") {
+		const name = (fbPixelEnabledProp.select?.name ?? "")
+			.toString()
+			.toLowerCase();
+		facebookPixelEnabled =
+			name === "true" || name === "yes" || name === "enabled";
+	}
+
+	// Facebook Pixel Source - supports select or rich_text
+	const fbPixelSourceProp = props["Facebook Pixel Source"];
+	const facebookPixelSource =
+		getSelectValue(fbPixelSourceProp) || getRichTextValue(fbPixelSourceProp);
+
+	// Facebook Pixel Intent - supports select or rich_text
+	const fbPixelIntentProp = props["Facebook Pixel Intent"];
+	const facebookPixelIntent =
+		getSelectValue(fbPixelIntentProp) || getRichTextValue(fbPixelIntentProp);
 
 	return {
 		pageId: page.id,
@@ -341,5 +377,9 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		utm_content: getSelectValue(props["UTM Content"]),
 		utm_term: getSelectValue(props["UTM Term"]),
 		utm_offer: getSelectValue(props["UTM Offer"]),
+		// Facebook Pixel tracking fields
+		facebookPixelEnabled,
+		facebookPixelSource,
+		facebookPixelIntent,
 	};
 }

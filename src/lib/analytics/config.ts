@@ -113,6 +113,7 @@ const fieldDescriptors: EnvDescriptor[] = [
 		sources: [
 			{ key: "NEXT_PUBLIC_FACEBOOK_PIXEL_ID" },
 			{ key: "FACEBOOK_PIXEL_ID" },
+			{ key: "DEAL_SCALE_FB_Pixel_ID" },
 		],
 	},
 	{

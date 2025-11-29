@@ -136,6 +136,7 @@
   "products-workflow",
   "providers",
   "public",
+  "redirect",
   "reports",
   "roi",
   "rspack-preview",

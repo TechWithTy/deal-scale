@@ -31,3 +31,6 @@
 | `UTM Offer` | select | ai5skipUnlimited, Get Free AI  Calling Credits, Early Access, trending-zip-codes |
 | `UTM Source` | select | youtube, linkedin, facebook, email, cosw2025, business_card, csw_handout, linktree, landing-page, powerpoint-qr, Reddit, x-twitter, instagram, website, github, investor-application-general, beehiiv, tik-tok, blue-sky, wellfound, gumroad |
 | `Video` | files | - |
+| `Facebook Pixel Enabled` | select/checkbox | True, False, Yes, No, Enabled (enables Facebook Pixel tracking for this redirect) |
+| `Facebook Pixel Source` | select/rich_text | Value for Facebook Pixel "Lead" event "source" parameter (e.g., "Meta campaign") |
+| `Facebook Pixel Intent` | select/rich_text | Value for Facebook Pixel "Lead" event "intent" parameter (e.g., "MVP_Launch_BlackFriday") |
