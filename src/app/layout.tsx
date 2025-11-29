@@ -48,6 +48,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					<>
 						{/* biome-ignore lint/security/noDangerouslySetInnerHtml: Required by Meta Pixel specification */}
 						<script
+							// biome-ignore lint/security/noDangerouslySetInnerHtml: Required by Meta Pixel specification
 							dangerouslySetInnerHTML={{
 								__html: `
 !function(f,b,e,v,n,t,s)
