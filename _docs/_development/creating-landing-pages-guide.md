@@ -147,7 +147,7 @@ export const STATIC_SEO_META = {
 	"/services": {
 		title: "Services | Deal Scale",
 		description: "Comprehensive services to grow your real estate business.",
-		canonical: "https://leadorchestra.com/services",
+		canonical: "https://dealscale.io/services",
 		keywords: ["services", "real estate", ...DEFAULT_SEO.keywords],
 		image: DEFAULT_SEO.image,
 	},
@@ -702,7 +702,7 @@ export default async function ResourcesPage() {
 	const schema = buildWebPageSchema({
 		title: seo.title || "Resources",
 		description: seo.description || "Helpful resources for your business",
-		url: seo.canonical || "https://leadorchestra.com/resources",
+		url: seo.canonical || "https://dealscale.io/resources",
 	});
 	
 	return (
@@ -784,7 +784,7 @@ export const STATIC_SEO_META = {
 	"/resources": {
 		title: "Resources | Deal Scale",
 		description: "Helpful resources, guides, and tools for real estate professionals.",
-		canonical: "https://leadorchestra.com/resources",
+		canonical: "https://dealscale.io/resources",
 		keywords: ["resources", "guides", "tools", ...DEFAULT_SEO.keywords],
 		image: DEFAULT_SEO.image,
 	},

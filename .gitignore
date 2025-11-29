@@ -54,6 +54,9 @@ dev-debug.log
 coverage/
 reports/
 
+# Pixel mock server logs
+pixel-mock-server/logs.json
+
 # Task files
 # tasks.json
 # tasks/ 

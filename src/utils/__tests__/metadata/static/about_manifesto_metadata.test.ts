@@ -6,7 +6,7 @@ describe("mapSeoMetaToMetadata manifesto integration", () => {
 		const metadata = mapSeoMetaToMetadata({
 			title: "About DealScale",
 			description: "Discover DealScale's manifesto and mission.",
-			canonical: "https://leadorchestra.com/about",
+			canonical: "https://dealscale.io/about",
 			keywords: ["DealScale", "about"],
 			image: "/og-image.png",
 			manifestoSections: timelineSummary,
@@ -14,7 +14,7 @@ describe("mapSeoMetaToMetadata manifesto integration", () => {
 
 		expect(metadata.openGraph?.seeAlso).toEqual(
 			timelineSummary.map(
-				(section) => `https://leadorchestra.com/about#${section.anchor}`,
+				(section) => `https://dealscale.io/about#${section.anchor}`,
 			),
 		);
 	});

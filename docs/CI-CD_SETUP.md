@@ -62,7 +62,7 @@ docs/
 | `MAIN_DEPLOY_ENABLED` | `true` to build/push image and deploy to Hetzner in the deploy job. |
 | `MAIN_NOTIFY_ENABLED` | `true` to send Slack notifications from the deploy job. |
 | `MAIN_LHCI_ENABLED` | `true` to run Lighthouse E2E SEO/Perf against a live URL. |
-| `MAIN_LHCI_URL` | The public URL to test with Lighthouse (e.g., `https://app.leadorchestra.com`). |
+| `MAIN_LHCI_URL` | The public URL to test with Lighthouse (e.g., `https://app.dealscale.io`). |
 
 Set variables under **Settings  Secrets and variables  Actions  Variables**.
 

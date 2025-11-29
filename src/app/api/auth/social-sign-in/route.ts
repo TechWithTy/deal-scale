@@ -3,7 +3,7 @@ import { encryptOAuthToken } from "@/lib/security";
 import { getServerSession } from "next-auth";
 import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 // Social OAuth linkage endpoint - No session creation
 // POST /api/auth/social-sign-in

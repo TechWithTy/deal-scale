@@ -40,7 +40,7 @@ export const staticSeoMeta: Record<string, SeoMeta> = {
 		title: "Products | Deal Scale",
 		description:
 			"Browse our curated collection of digital and physical products from Deal Scale.",
-		canonical: "https://leadorchestra.com/products",
+		canonical: "https://dealscale.io/products",
 		image: DEFAULT_SEO.image,
 		keywords: [...DEFAULT_SEO.keywords, "products", "shop", "catalog"],
 		siteName: DEFAULT_SEO.siteName,

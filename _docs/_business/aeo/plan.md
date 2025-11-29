@@ -24,7 +24,7 @@
 - Prepare scripts and schema for Beehiiv blog posts to surface summary answers via `isPartOf` organization linkage.
 
 ### Milestone 4 – Private App Context Strategy (Weeks 6-7)
-- Publish SoftwareApplication schema referencing app.leadorchestra.com with anonymized feature descriptions.
+- Publish SoftwareApplication schema referencing app.dealscale.io with anonymized feature descriptions.
 - Produce marketing collateral summarizing onboarding flows, safeguarding proprietary steps.
 - Collaborate with product to define which in-app screenshots or diagrams can be publicly indexed.
 

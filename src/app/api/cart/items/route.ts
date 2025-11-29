@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { AddToCartRequest, CartResponse } from "../../../../types/cart";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 function normalizeRequest(body: AddToCartRequest): AddToCartRequest | null {
 	const quantity = body.quantity ?? 1;

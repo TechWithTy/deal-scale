@@ -15,8 +15,8 @@ NEXTAUTH_URL=http://localhost:3000
 
 ### DealScale API Configuration
 ```bash
-# DealScale API base URL (optional, defaults to https://api.leadorchestra.com)
-DEALSCALE_API_BASE=https://api.leadorchestra.com
+# DealScale API base URL (optional, defaults to https://api.dealscale.io)
+DEALSCALE_API_BASE=https://api.dealscale.io
 ```
 
 ### Social OAuth Providers
@@ -61,7 +61,7 @@ NEXTAUTH_SECRET=your-development-secret-here
 NEXTAUTH_URL=http://localhost:3000
 
 # DealScale API
-DEALSCALE_API_BASE=https://api.leadorchestra.com
+DEALSCALE_API_BASE=https://api.dealscale.io
 
 # LinkedIn OAuth (optional for development)
 LINKEDIN_CLIENT_ID=your-linkedin-client-id

@@ -83,7 +83,7 @@ describe("GET /api/auth/oauth/credentials", () => {
 		expect(response.status).toBe(200);
 		expect(json).toEqual(payload);
 		expect(global.fetch).toHaveBeenCalledWith(
-			"https://api.leadorchestra.com/api/v1/auth/oauth/credentials",
+			"https://api.dealscale.io/api/v1/auth/oauth/credentials",
 			expect.objectContaining({
 				method: "GET",
 				headers: expect.objectContaining({

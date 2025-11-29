@@ -8,7 +8,7 @@ describe("robots metadata", () => {
 
 		expect(config.host).toBeUndefined();
 		expect(config.sitemap).toEqual(
-			expect.arrayContaining(["https://leadorchestra.com/sitemap.xml"]),
+			expect.arrayContaining(["https://dealscale.io/sitemap.xml"]),
 		);
 
 		const rules = Array.isArray(config.rules) ? config.rules : [config.rules];

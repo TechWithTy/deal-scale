@@ -10,7 +10,7 @@ export default async function handler(
 	try {
 		const response = await fetch(BEEHIIV_FEED, {
 			headers: {
-				"User-Agent": "DealScaleRSSProxy/1.0 (+https://leadorchestra.com)",
+				"User-Agent": "DealScaleRSSProxy/1.0 (+https://dealscale.io)",
 				Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
 			},
 		});
@@ -49,10 +49,10 @@ async function notifyIndexNow(): Promise<void> {
 	}
 
 	const payload = {
-		host: "leadorchestra.com",
+		host: "dealscale.io",
 		key,
-		keyLocation: "https://leadorchestra.com/06663aa83dc949d6bde61889ae81d42f.txt",
-		urlList: ["https://leadorchestra.com/rss.xml"],
+		keyLocation: "https://dealscale.io/06663aa83dc949d6bde61889ae81d42f.txt",
+		urlList: ["https://dealscale.io/rss.xml"],
 	};
 
 	const response = await fetch("https://api.indexnow.org/indexnow", {

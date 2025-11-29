@@ -14,7 +14,7 @@ type ManifestoSection =
 function toAbsoluteImageUrl(image?: string): string | undefined {
 	if (!image) return undefined;
 	if (image.startsWith("http")) return image;
-	const base = process.env.NEXT_PUBLIC_SITE_URL || "https://leadorchestra.com";
+	const base = process.env.NEXT_PUBLIC_SITE_URL || "https://dealscale.io";
 	return `${base}${image.startsWith("/") ? "" : "/"}${image}`;
 }
 
@@ -44,7 +44,7 @@ export function mapSeoMetaToMetadata(seo: SeoMeta): Metadata {
 	const canonicalBase =
 		seo.canonical ||
 		process.env.NEXT_PUBLIC_SITE_URL ||
-		"https://leadorchestra.com/about";
+		"https://dealscale.io/about";
 
 	const seeAlsoLinks = manifestoSections
 		? manifestoSections.map((section, index) => {

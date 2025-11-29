@@ -41,5 +41,5 @@ We may update our Cookie Policy from time to time. We will notify you of any cha
 
 If you have any questions about our use of cookies, please contact us at:
 
-**Email:** privacy@leadorchestra.com
+**Email:** privacy@dealscale.io
 `;

@@ -7,7 +7,7 @@ import type {
 } from "../../../../types/testers";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 /**
  * Apply for beta or pilot tester program.

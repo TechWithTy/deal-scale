@@ -12,7 +12,7 @@ describe("schema builders", () => {
 		date: "2025-03-10",
 		time: "09:00",
 		description: "Discover how DealScale uses AI for modern deal management.",
-		externalUrl: "https://events.leadorchestra.com/ai-demo",
+		externalUrl: "https://events.dealscale.io/ai-demo",
 		category: "conference",
 		location: "Austin, TX",
 		accessType: "external",
@@ -26,7 +26,7 @@ describe("schema builders", () => {
 		expect(schema.itemListElement).toHaveLength(1);
 		expect(schema.itemListElement[0]).toEqual(
 			expect.objectContaining({
-				url: "https://leadorchestra.com/events/ai-demo",
+				url: "https://dealscale.io/events/ai-demo",
 				position: 1,
 			}),
 		);

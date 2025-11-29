@@ -21,7 +21,7 @@ function isValidEventsPayload(value: unknown): value is { events: unknown[] } {
 }
 
 function buildEventsEndpoint(): string {
-	const apiBase = process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	const apiBase = process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 	return `${apiBase.replace(/\/$/, "")}/api/v1/events`;
 }
 

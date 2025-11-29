@@ -23,7 +23,7 @@ import {
 	ProductSummary,
 } from "./card";
 
-const MONETIZE_PORTAL_URL = "https://app.leadorchestra.com";
+const MONETIZE_PORTAL_URL = "https://app.dealscale.io";
 
 const MONETIZE_CATEGORY_INFO: Record<
 	string,

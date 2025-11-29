@@ -18,12 +18,12 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.45, delay: 0.08 }}
-			className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-black/10 shadow-lg backdrop-blur"
+			className="rounded-2xl border border-border/50 bg-card/90 p-6 shadow-lg backdrop-blur"
 			aria-labelledby={`${title.replace(/\s+/g, "-").toLowerCase()}-heading`}
 		>
 			<h3
 				id={`${title.replace(/\s+/g, "-").toLowerCase()}-heading`}
-				className="mb-5 font-semibold text-lg text-white"
+				className="mb-5 font-semibold text-lg text-foreground"
 			>
 				{title}
 			</h3>
@@ -32,7 +32,7 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 					<Link
 						key={post.id}
 						href={typeof post.web_url === "string" ? post.web_url : "/"}
-						className="group flex items-start gap-3 rounded-xl border border-white/5 bg-white/5 p-3 transition hover:border-primary/60 hover:bg-primary/10"
+						className="group flex items-start gap-3 rounded-xl border border-border/30 bg-muted/30 p-3 transition hover:border-primary/60 hover:bg-primary/10"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -55,7 +55,7 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 							height={450}
 						/>
 						<div className="flex flex-col">
-							<h4 className="font-semibold text-sm text-white transition-colors group-hover:text-primary">
+							<h4 className="font-semibold text-sm text-foreground transition-colors group-hover:text-primary">
 								{post.title}
 							</h4>
 							<p className="mt-0.5 text-muted-foreground text-xs">

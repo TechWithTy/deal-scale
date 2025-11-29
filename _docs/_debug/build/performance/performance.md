@@ -6,7 +6,7 @@
 - **Device profile:** Emulated Moto G Power
 - **Network conditions:** Slow 4G throttling
 - **Scenario:** Initial page load, single page session
-- **Target URL:** `https://www.leadorchestra.com`
+- **Target URL:** `https://www.dealscale.io`
 
 ## Core Metrics
 | Metric | Observed | Target (Mobile) | Gap |

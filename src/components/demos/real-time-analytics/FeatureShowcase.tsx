@@ -29,7 +29,7 @@ const indicatorPalette = [
 ] as const;
 
 const ROI_CALCULATOR_URL =
-	"https://app.leadorchestra.com/external-tools/calculators/roi";
+	"https://app.dealscale.io/external-tools/calculators/roi";
 
 /**
  * FeatureShowcase renders the Macbook demo with contextual copy and metrics.

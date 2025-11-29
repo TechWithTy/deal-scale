@@ -9,7 +9,7 @@ import type {
 } from "../../../../types/prospecting";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 const ALLOWED_SOURCES: ProspectingSource[] = ["rentcast", "homeharvest"];
 const ALLOWED_PROPERTY_TYPES: PropertyType[] = [

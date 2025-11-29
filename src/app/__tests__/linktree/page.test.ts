@@ -6,7 +6,7 @@ vi.mock("@/utils/seo/staticSeo", () => {
 		__esModule: true,
 		getStaticSeo,
 		defaultSeo: {
-			canonical: "https://leadorchestra.com",
+			canonical: "https://dealscale.io",
 			title: "Deal Scale",
 			description: "Default description",
 		},
@@ -19,7 +19,7 @@ vi.mock("@/utils/seo/mapSeoMetaToMetadata", () => ({
 		title: seo.title || "Deal Scale",
 		description: seo.description || "Default description",
 		alternates: {
-			canonical: seo.canonical || "https://leadorchestra.com",
+			canonical: seo.canonical || "https://dealscale.io",
 		},
 	})),
 }));
@@ -34,7 +34,7 @@ describe("LinkTree Page Metadata", () => {
 		title: "Link Tree | Deal Scale",
 		description:
 			"Quick access to DealScale's most important links, resources, and pages.",
-		canonical: "https://leadorchestra.com/linktree",
+		canonical: "https://dealscale.io/linktree",
 		keywords: ["links", "resources"],
 		image: "/banners/main.png",
 		siteName: "Deal Scale",
@@ -72,7 +72,7 @@ describe("LinkTree Page Metadata", () => {
 			title: "DealScale Link Tree",
 			description:
 				"Quick access to DealScale's most important links, resources, and pages.",
-			url: "https://leadorchestra.com/linktree",
+			url: "https://dealscale.io/linktree",
 			type: "website",
 		});
 	});
@@ -91,7 +91,7 @@ describe("LinkTree Page Metadata", () => {
 		const metadata = await generateMetadata();
 
 		expect(mockedGetStaticSeo).toHaveBeenCalledWith("/linktree");
-		expect(metadata.openGraph?.url).toBe("https://leadorchestra.com/linktree");
+		expect(metadata.openGraph?.url).toBe("https://dealscale.io/linktree");
 	});
 
 	it("falls back to default URL if SEO not found", async () => {
@@ -101,6 +101,6 @@ describe("LinkTree Page Metadata", () => {
 
 		const metadata = await generateMetadata();
 
-		expect(metadata.openGraph?.url).toBe("https://leadorchestra.com/linktree");
+		expect(metadata.openGraph?.url).toBe("https://dealscale.io/linktree");
 	});
 });

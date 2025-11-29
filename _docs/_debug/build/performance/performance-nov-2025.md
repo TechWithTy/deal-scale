@@ -7,7 +7,7 @@
   - Mobile: Emulated Moto G Power, Slow 4G throttling
   - Desktop: Emulated Desktop, Custom throttling
 - **Scenario:** Initial page load, single page session
-- **Target URL:** `https://www.leadorchestra.com`
+- **Target URL:** `https://www.dealscale.io`
 
 ## 🎉 Major Improvements Since Sep 29, 2025
 
