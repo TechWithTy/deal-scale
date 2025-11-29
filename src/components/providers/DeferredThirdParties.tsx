@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { Analytics } from "@/components/analytics/Analytics";
+import { useAnalyticsConsent } from "@/contexts/analytics-consent-context";
 import type {
 	AnalyticsConfig,
 	AnalyticsField,
 	AnalyticsIssue,
 } from "@/lib/analytics/config";
 
-import { Analytics } from "@/components/analytics/Analytics";
-import { useAnalyticsConsent } from "@/contexts/analytics-consent-context";
 import { useDeferredLoad } from "./useDeferredLoad";
 
 const ANALYTICS_FIELDS: AnalyticsField[] = [
