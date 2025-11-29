@@ -1,3 +1,5 @@
+import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
+import type { NotionPage } from "@/utils/notion/notionTypes";
 import { NextResponse } from "next/server";
 
 const NOTION_API_BASE = "https://api.notion.com/v1";
@@ -61,6 +63,27 @@ export async function GET(req: Request) {
 		if (pageId) {
 			// Fire and forget increment
 			incrementCalls(pageId);
+		}
+
+		// Check if Facebook Pixel tracking is enabled
+		let facebookPixelEnabled = false;
+		let facebookPixelSource: string | undefined;
+		let facebookPixelIntent: string | undefined;
+
+		if (pageId && process.env.NOTION_KEY) {
+			try {
+				const notionPage = (await getNotionPage(pageId)) as NotionPage;
+				const mapped = mapNotionPageToLinkTree(notionPage);
+				facebookPixelEnabled = mapped.facebookPixelEnabled ?? false;
+				facebookPixelSource = mapped.facebookPixelSource;
+				facebookPixelIntent = mapped.facebookPixelIntent;
+			} catch (err) {
+				// If we can't fetch Notion data, continue with normal redirect
+				console.error(
+					"[redirect] Failed to fetch Notion page for Facebook Pixel check:",
+					err,
+				);
+			}
 		}
 
 		// Build 302 redirect safely
@@ -147,6 +170,30 @@ export async function GET(req: Request) {
 				{ ok: false, error: "invalid absolute URL" },
 				{ status: 400 },
 			);
+		}
+
+		// If Facebook Pixel tracking is enabled, redirect to client-side tracking page
+		if (facebookPixelEnabled) {
+			const redirectUrl = new URL("/redirect", reqUrl.origin);
+			redirectUrl.searchParams.set("to", location);
+			if (facebookPixelSource) {
+				redirectUrl.searchParams.set("fbSource", facebookPixelSource);
+			}
+			if (facebookPixelIntent) {
+				redirectUrl.searchParams.set("fbIntent", facebookPixelIntent);
+			}
+			// Preserve all other query parameters from the original request
+			for (const [key, value] of url.searchParams.entries()) {
+				if (
+					key !== "to" &&
+					key !== "pageId" &&
+					key !== "slug" &&
+					key !== "isFile"
+				) {
+					redirectUrl.searchParams.set(key, value);
+				}
+			}
+			return NextResponse.redirect(redirectUrl, 302);
 		}
 
 		// For file downloads, just 302 so the origin's headers control Content-Disposition

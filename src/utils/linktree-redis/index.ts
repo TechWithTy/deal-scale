@@ -71,6 +71,10 @@ export type LinkTreeItem = {
 	utm_content?: string;
 	utm_term?: string;
 	utm_offer?: string;
+	// Facebook Pixel tracking fields
+	facebookPixelEnabled?: boolean;
+	facebookPixelSource?: string;
+	facebookPixelIntent?: string;
 };
 
 function coerceBool(v: unknown): boolean {
@@ -440,6 +444,36 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 		const utmCampaignRegular = getUtmValue(props?.["UTM Campaign"]);
 		const utm_campaign = utmCampaignRelation || utmCampaignRegular;
 
+		// Extract Facebook Pixel fields
+		// Facebook Pixel Enabled can be checkbox or select
+		let facebookPixelEnabled = false;
+		const fbPixelEnabledProp = props?.["Facebook Pixel Enabled"];
+		if (fbPixelEnabledProp) {
+			if (isCheckboxProperty(fbPixelEnabledProp)) {
+				facebookPixelEnabled = Boolean(fbPixelEnabledProp.checkbox);
+			} else if (isSelectProperty(fbPixelEnabledProp)) {
+				const name = (fbPixelEnabledProp.select?.name ?? "")
+					.toString()
+					.toLowerCase();
+				facebookPixelEnabled =
+					name === "true" || name === "yes" || name === "enabled";
+			} else if (
+				fbPixelEnabledProp.type === "rich_text" ||
+				fbPixelEnabledProp.type === "title"
+			) {
+				const txt = readRichText(fbPixelEnabledProp) ?? "";
+				const name = txt.toLowerCase();
+				facebookPixelEnabled =
+					name === "true" || name === "yes" || name === "enabled";
+			}
+		}
+
+		// Facebook Pixel Source - supports select or rich_text
+		const facebookPixelSource = getUtmValue(props?.["Facebook Pixel Source"]);
+
+		// Facebook Pixel Intent - supports select or rich_text
+		const facebookPixelIntent = getUtmValue(props?.["Facebook Pixel Intent"]);
+
 		if (slug && linkTreeEnabled && (Boolean(destination) || hasFiles)) {
 			results.push({
 				slug,
@@ -462,6 +496,10 @@ async function fetchFromNotion(): Promise<LinkTreeItem[]> {
 				utm_content: getUtmValue(props?.["UTM Content"]),
 				utm_term: getUtmValue(props?.["UTM Term"]),
 				utm_offer: getUtmValue(props?.["UTM Offer"]),
+				// Facebook Pixel tracking fields
+				facebookPixelEnabled,
+				facebookPixelSource,
+				facebookPixelIntent,
 			});
 		}
 	}

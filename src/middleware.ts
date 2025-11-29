@@ -1,3 +1,5 @@
+import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
+import type { NotionPage } from "@/utils/notion/notionTypes";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -13,6 +15,9 @@ type Found = {
 	utm_redirect_url?: string;
 	pageId?: string;
 	nextCalls?: number;
+	facebookPixelEnabled?: boolean;
+	facebookPixelSource?: string;
+	facebookPixelIntent?: string;
 };
 
 function sanitizeUrlLike(input: string | undefined | null): string {
@@ -288,6 +293,24 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 					? callsProp.number
 					: 0;
 			const nextCalls = current + 1;
+
+			// Extract Facebook Pixel fields using mapper
+			let facebookPixelEnabled = false;
+			let facebookPixelSource: string | undefined;
+			let facebookPixelIntent: string | undefined;
+			try {
+				const mapped = mapNotionPageToLinkTree(page as NotionPage);
+				facebookPixelEnabled = mapped.facebookPixelEnabled ?? false;
+				facebookPixelSource = mapped.facebookPixelSource;
+				facebookPixelIntent = mapped.facebookPixelIntent;
+			} catch (err) {
+				// If mapping fails, continue without Facebook Pixel tracking
+				console.error(
+					"[middleware] Failed to extract Facebook Pixel fields:",
+					err,
+				);
+			}
+
 			const result: Found = {
 				destination,
 				utm_source,
@@ -300,6 +323,9 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 				utm_redirect_url,
 				pageId: page.id as string,
 				nextCalls,
+				facebookPixelEnabled,
+				facebookPixelSource,
+				facebookPixelIntent,
 			};
 			console.log(
 				`[middleware] Notion found pageId: ${result.pageId}, nextCalls: ${result.nextCalls}`,
@@ -459,6 +485,25 @@ export async function middleware(req: NextRequest) {
 			referer && new URL(referer).pathname.includes("/linktree");
 		const redirectSource = isFromLinkTree ? "Linktree" : "Direct";
 		url.searchParams.set("RedirectSource", redirectSource);
+
+		// If Facebook Pixel tracking is enabled, redirect to client-side tracking page
+		if (found.facebookPixelEnabled) {
+			const trackingUrl = new URL("/redirect", req.nextUrl.origin);
+			trackingUrl.searchParams.set("to", url.toString());
+			if (found.facebookPixelSource) {
+				trackingUrl.searchParams.set("fbSource", found.facebookPixelSource);
+			}
+			if (found.facebookPixelIntent) {
+				trackingUrl.searchParams.set("fbIntent", found.facebookPixelIntent);
+			}
+			// Preserve all query parameters from the original request
+			for (const [key, value] of req.nextUrl.searchParams.entries()) {
+				if (key !== "to" && key !== "fbSource" && key !== "fbIntent") {
+					trackingUrl.searchParams.set(key, value);
+				}
+			}
+			return NextResponse.redirect(trackingUrl);
+		}
 
 		// Increment Notion counter (fire-and-forget best-effort)
 		const NOTION_KEY = process.env.NOTION_KEY;

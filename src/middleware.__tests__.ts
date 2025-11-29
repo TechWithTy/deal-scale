@@ -447,3 +447,243 @@ describe("middleware redirects with UTM parameters", () => {
 		}
 	});
 });
+
+describe("middleware redirects with Facebook Pixel tracking", () => {
+	const createRequest = (
+		pathname: string,
+		searchParams?: URLSearchParams,
+	): NextRequest => {
+		const url = new URL(`https://example.com${pathname}`);
+		if (searchParams) {
+			searchParams.forEach((value, key) => {
+				url.searchParams.set(key, value);
+			});
+		}
+		return {
+			nextUrl: url,
+			headers: new Headers(),
+		} as NextRequest;
+	};
+
+	const createNotionResponseWithFacebookPixel = (
+		destination: string,
+		facebookPixelEnabled: boolean,
+		facebookPixelSource?: string,
+		facebookPixelIntent?: string,
+		utmParams?: {
+			utm_source?: string;
+			utm_campaign?: string;
+		},
+	) => {
+		const properties: Record<string, unknown> = {
+			Destination: {
+				type: "url",
+				url: destination,
+			},
+			"Redirects (Calls)": {
+				type: "number",
+				number: 0,
+			},
+			"Facebook Pixel Enabled": facebookPixelEnabled
+				? {
+						type: "select",
+						select: { name: "True" },
+					}
+				: {
+						type: "select",
+						select: { name: "False" },
+					},
+			...(facebookPixelSource && {
+				"Facebook Pixel Source": {
+					type: "select",
+					select: { name: facebookPixelSource },
+				},
+			}),
+			...(facebookPixelIntent && {
+				"Facebook Pixel Intent": {
+					type: "rich_text",
+					rich_text: [{ plain_text: facebookPixelIntent }],
+				},
+			}),
+		};
+
+		if (utmParams?.utm_source) {
+			properties["UTM Source"] = {
+				type: "select",
+				select: { name: utmParams.utm_source },
+			};
+		}
+
+		if (utmParams?.utm_campaign) {
+			properties["UTM Campaign"] = {
+				type: "select",
+				select: { name: utmParams.utm_campaign },
+			};
+		}
+
+		return {
+			results: [
+				{
+					id: "test-page-id",
+					properties,
+				},
+			],
+		};
+	};
+
+	test("redirects to client-side tracking page when Facebook Pixel is enabled", async () => {
+		(global.fetch as jest.Mock)
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () =>
+					createNotionResponseWithFacebookPixel(
+						"https://example.com/target",
+						true,
+						"Meta campaign",
+						"MVP_Launch_BlackFriday",
+					),
+			})
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({}),
+			});
+
+		const req = createRequest("/pilot");
+		const response = await middleware(req);
+
+		expect(response).toBeInstanceOf(NextResponse);
+		expect(response?.status).toBe(307); // Middleware uses 307
+
+		const location = response?.headers.get("location");
+		expect(location).toContain("/redirect");
+		expect(location).toContain("to=https%3A%2F%2Fexample.com%2Ftarget");
+		// URL encoding can use + or %20 for spaces
+		expect(location).toMatch(/fbSource=Meta[\s+%20]campaign/);
+		expect(location).toContain("fbIntent=MVP_Launch_BlackFriday");
+	});
+
+	test("uses direct redirect when Facebook Pixel is disabled", async () => {
+		(global.fetch as jest.Mock)
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () =>
+					createNotionResponseWithFacebookPixel(
+						"https://example.com/target",
+						false,
+					),
+			})
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({}),
+			});
+
+		const req = createRequest("/pilot");
+		const response = await middleware(req);
+
+		expect(response).toBeInstanceOf(NextResponse);
+		expect(response?.status).toBe(307);
+
+		const location = response?.headers.get("location");
+		expect(location).toContain("https://example.com/target");
+		expect(location).not.toContain("/redirect");
+	});
+
+	test("preserves UTM parameters when redirecting to tracking page", async () => {
+		(global.fetch as jest.Mock)
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () =>
+					createNotionResponseWithFacebookPixel(
+						"https://example.com/target",
+						true,
+						"Meta campaign",
+						"Launch",
+						{
+							utm_source: "linkedin",
+							utm_campaign: "beta2025",
+						},
+					),
+			})
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({}),
+			});
+
+		const req = createRequest("/pilot");
+		const response = await middleware(req);
+
+		const location = response?.headers.get("location");
+		expect(location).toContain("/redirect");
+		// URL encoding can use + or %20 for spaces
+		expect(location).toMatch(/fbSource=Meta[\s+%20]campaign/);
+		// UTM params should be in the 'to' parameter (URL-encoded, = becomes %3D)
+		expect(location).toMatch(/utm_source%3Dlinkedin|utm_source=linkedin/);
+		expect(location).toMatch(/utm_campaign%3Dbeta2025|utm_campaign=beta2025/);
+	});
+
+	test("handles Facebook Pixel with only source parameter", async () => {
+		(global.fetch as jest.Mock)
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () =>
+					createNotionResponseWithFacebookPixel(
+						"https://example.com/target",
+						true,
+						"Meta campaign",
+					),
+			})
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({}),
+			});
+
+		const req = createRequest("/pilot");
+		const response = await middleware(req);
+
+		const location = response?.headers.get("location");
+		expect(location).toContain("/redirect");
+		// URL encoding can use + or %20 for spaces
+		expect(location).toMatch(/fbSource=Meta[\s+%20]campaign/);
+		expect(location).not.toContain("fbIntent");
+	});
+
+	test("handles Facebook Pixel when mapper fails gracefully", async () => {
+		// Mock Notion response that will cause mapper to fail
+		(global.fetch as jest.Mock)
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({
+					results: [
+						{
+							id: "test-page-id",
+							properties: {
+								Destination: {
+									type: "url",
+									url: "https://example.com/target",
+								},
+								"Redirects (Calls)": {
+									type: "number",
+									number: 0,
+								},
+								// Invalid structure that might cause mapper issues
+								"Facebook Pixel Enabled": null,
+							},
+						},
+					],
+				}),
+			})
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({}),
+			});
+
+		const req = createRequest("/pilot");
+		const response = await middleware(req);
+
+		// Should fall back to direct redirect
+		expect(response).toBeInstanceOf(NextResponse);
+		const location = response?.headers.get("location");
+		expect(location).toContain("https://example.com/target");
+		expect(location).not.toContain("/redirect");
+	});
+});

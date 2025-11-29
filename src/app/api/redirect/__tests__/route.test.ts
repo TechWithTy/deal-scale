@@ -278,3 +278,302 @@ describe("redirect route with UTM parameter preservation", () => {
 		expect(location).not.toContain("utm_source=new-source");
 	});
 });
+
+describe("redirect route with Facebook Pixel tracking", () => {
+	const createRequest = (
+		to: string,
+		searchParams?: URLSearchParams,
+	): Request => {
+		const url = new URL("https://example.com/api/redirect");
+		url.searchParams.set("to", to);
+		if (searchParams) {
+			searchParams.forEach((value, key) => {
+				url.searchParams.set(key, value);
+			});
+		}
+		return new NodeRequest(url.toString()) as unknown as Request;
+	};
+
+	const createNotionPageWithFacebookPixel = (
+		facebookPixelEnabled: boolean,
+		facebookPixelSource?: string,
+		facebookPixelIntent?: string,
+	) => {
+		const props: Record<string, unknown> = {
+			Slug: {
+				type: "rich_text",
+				rich_text: [{ plain_text: "test-slug" }],
+			},
+			Title: {
+				type: "rich_text",
+				rich_text: [{ plain_text: "Test Title" }],
+			},
+			Destination: {
+				type: "url",
+				url: "https://example.com/target",
+			},
+			"Redirects (Calls)": {
+				type: "number",
+				number: 0,
+			},
+			"Link Tree Enabled": {
+				type: "select",
+				select: { name: "True" },
+			},
+			"Facebook Pixel Enabled": facebookPixelEnabled
+				? {
+						type: "select",
+						select: { name: "True" },
+					}
+				: {
+						type: "select",
+						select: { name: "False" },
+					},
+		};
+
+		if (facebookPixelSource) {
+			props["Facebook Pixel Source"] = {
+				type: "select",
+				select: { name: facebookPixelSource },
+			};
+		}
+
+		if (facebookPixelIntent) {
+			props["Facebook Pixel Intent"] = {
+				type: "rich_text",
+				rich_text: [{ plain_text: facebookPixelIntent }],
+			};
+		}
+
+		return {
+			id: "test-page-id",
+			properties: props,
+			icon: null,
+			cover: null,
+		};
+	};
+
+	test("redirects to client-side tracking page when Facebook Pixel is enabled", async () => {
+		const notionPageData = createNotionPageWithFacebookPixel(
+			true,
+			"Meta campaign",
+			"MVP_Launch_BlackFriday",
+		);
+
+		let getCallCount = 0;
+		// Mock fetch with separate counters for GET and PATCH
+		(global.fetch as jest.Mock).mockImplementation(
+			(url: string, options?: RequestInit) => {
+				// PATCH call for increment
+				if (options?.method === "PATCH") {
+					return Promise.resolve({
+						ok: true,
+					});
+				}
+				// GET calls
+				getCallCount++;
+				// First GET: incrementCalls
+				if (getCallCount === 1) {
+					return Promise.resolve({
+						ok: true,
+						json: async () => ({
+							properties: {
+								"Redirects (Calls)": { type: "number", number: 0 },
+							},
+						}),
+					});
+				}
+				// Second GET: Facebook Pixel check
+				return Promise.resolve({
+					ok: true,
+					json: async () => notionPageData,
+				});
+			},
+		);
+
+		const searchParams = new URLSearchParams();
+		searchParams.set("pageId", "test-page-id");
+		searchParams.set("utm_source", "test-source");
+
+		const req = createRequest("https://example.com/target", searchParams);
+		const response = await GET(req);
+
+		expect(response.status).toBe(302);
+		const location = response.headers.get("location");
+
+		// Debug: log the location to see what we got
+		if (!location?.includes("/redirect")) {
+			console.log("Location:", location);
+			console.log(
+				"Fetch calls:",
+				(global.fetch as jest.Mock).mock.calls.length,
+			);
+		}
+
+		// Should redirect to /redirect page
+		expect(location).toContain("/redirect");
+		expect(location).toContain("to=https%3A%2F%2Fexample.com%2Ftarget");
+		// URL encoding can use + or %20 for spaces
+		expect(location).toMatch(/fbSource=Meta[\s+%20]campaign/);
+		expect(location).toContain("fbIntent=MVP_Launch_BlackFriday");
+		// UTM params should be preserved
+		expect(location).toContain("utm_source=test-source");
+	});
+
+	test("uses direct redirect when Facebook Pixel is disabled", async () => {
+		let getCallCount = 0;
+		(global.fetch as jest.Mock).mockImplementation(
+			(url: string, options?: RequestInit) => {
+				if (options?.method === "PATCH") {
+					return Promise.resolve({ ok: true });
+				}
+				getCallCount++;
+				if (getCallCount === 1) {
+					return Promise.resolve({
+						ok: true,
+						json: async () => ({
+							properties: {
+								"Redirects (Calls)": { type: "number", number: 0 },
+							},
+						}),
+					});
+				}
+				return Promise.resolve({
+					ok: true,
+					json: async () => createNotionPageWithFacebookPixel(false),
+				});
+			},
+		);
+
+		const searchParams = new URLSearchParams();
+		searchParams.set("pageId", "test-page-id");
+
+		const req = createRequest("https://example.com/target", searchParams);
+		const response = await GET(req);
+
+		expect(response.status).toBe(302);
+		const location = response.headers.get("location");
+
+		// Should redirect directly to target, not to /redirect
+		expect(location).toBe("https://example.com/target");
+		expect(location).not.toContain("/redirect");
+	});
+
+	test("handles Facebook Pixel with only source parameter", async () => {
+		let getCallCount = 0;
+		(global.fetch as jest.Mock).mockImplementation(
+			(url: string, options?: RequestInit) => {
+				if (options?.method === "PATCH") {
+					return Promise.resolve({ ok: true });
+				}
+				getCallCount++;
+				if (getCallCount === 1) {
+					return Promise.resolve({
+						ok: true,
+						json: async () => ({
+							properties: {
+								"Redirects (Calls)": { type: "number", number: 0 },
+							},
+						}),
+					});
+				}
+				return Promise.resolve({
+					ok: true,
+					json: async () =>
+						createNotionPageWithFacebookPixel(true, "Meta campaign"),
+				});
+			},
+		);
+
+		const searchParams = new URLSearchParams();
+		searchParams.set("pageId", "test-page-id");
+
+		const req = createRequest("https://example.com/target", searchParams);
+		const response = await GET(req);
+
+		const location = response.headers.get("location");
+		expect(location).toContain("/redirect");
+		// URL encoding can use + or %20 for spaces
+		expect(location).toMatch(/fbSource=Meta[\s+%20]campaign/);
+		expect(location).not.toContain("fbIntent");
+	});
+
+	test("handles Facebook Pixel when Notion fetch fails gracefully", async () => {
+		let getCallCount = 0;
+		// Mock fetch - first call succeeds (for incrementCalls), second fails (for Facebook Pixel check)
+		(global.fetch as jest.Mock).mockImplementation(
+			(url: string, options?: RequestInit) => {
+				if (options?.method === "PATCH") {
+					return Promise.resolve({ ok: true });
+				}
+				getCallCount++;
+				if (getCallCount === 1) {
+					// First GET: incrementCalls succeeds
+					return Promise.resolve({
+						ok: true,
+						json: async () => ({
+							properties: {
+								"Redirects (Calls)": { type: "number", number: 0 },
+							},
+						}),
+					});
+				}
+				// Second GET: Facebook Pixel check fails
+				return Promise.reject(new Error("Notion API error"));
+			},
+		);
+
+		const searchParams = new URLSearchParams();
+		searchParams.set("pageId", "test-page-id");
+
+		const req = createRequest("https://example.com/target", searchParams);
+		const response = await GET(req);
+
+		// Should fall back to direct redirect
+		expect(response.status).toBe(302);
+		const location = response.headers.get("location");
+		expect(location).toBe("https://example.com/target");
+		expect(location).not.toContain("/redirect");
+	});
+
+	test("preserves all query parameters when redirecting to tracking page", async () => {
+		let getCallCount = 0;
+		(global.fetch as jest.Mock).mockImplementation(
+			(url: string, options?: RequestInit) => {
+				if (options?.method === "PATCH") {
+					return Promise.resolve({ ok: true });
+				}
+				getCallCount++;
+				if (getCallCount === 1) {
+					return Promise.resolve({
+						ok: true,
+						json: async () => ({
+							properties: {
+								"Redirects (Calls)": { type: "number", number: 0 },
+							},
+						}),
+					});
+				}
+				return Promise.resolve({
+					ok: true,
+					json: async () =>
+						createNotionPageWithFacebookPixel(true, "Meta campaign", "Launch"),
+				});
+			},
+		);
+
+		const searchParams = new URLSearchParams();
+		searchParams.set("pageId", "test-page-id");
+		searchParams.set("utm_source", "test");
+		searchParams.set("utm_campaign", "campaign");
+		searchParams.set("ref", "partner");
+
+		const req = createRequest("https://example.com/target", searchParams);
+		const response = await GET(req);
+
+		const location = response.headers.get("location");
+		expect(location).toContain("utm_source=test");
+		expect(location).toContain("utm_campaign=campaign");
+		expect(location).toContain("ref=partner");
+	});
+});

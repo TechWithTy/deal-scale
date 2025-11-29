@@ -8,6 +8,7 @@
  */
 
 import type {
+	NotionCheckboxProperty,
 	NotionFilesProperty,
 	NotionRichTextProperty,
 	NotionSelectProperty,
@@ -111,4 +112,13 @@ export interface LinkTreeNotionDatabaseProperties {
 
 	// Property: "Slug" (title)
 	Slug: NotionTitleProperty;
+
+	// Property: "Facebook Pixel Enabled" (select/checkbox)
+	"Facebook Pixel Enabled": NotionSelectProperty | NotionCheckboxProperty;
+
+	// Property: "Facebook Pixel Source" (select/rich_text)
+	"Facebook Pixel Source": NotionSelectProperty | NotionRichTextProperty;
+
+	// Property: "Facebook Pixel Intent" (select/rich_text)
+	"Facebook Pixel Intent": NotionSelectProperty | NotionRichTextProperty;
 }
