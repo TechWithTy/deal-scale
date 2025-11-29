@@ -3,11 +3,11 @@
  */
 
 import { XMLParser } from "fast-xml-parser";
+import type { NextApiRequest, NextApiResponse } from "next";
 import fetch, {
 	Request as NodeFetchRequest,
 	Response as NodeFetchResponse,
 } from "node-fetch";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock Next.js API types
@@ -45,7 +45,7 @@ const parser = new XMLParser({
 // Helper to validate RSS 2.0 structure
 const validateRSS2 = (xml: string): boolean => {
 	if (!xml || typeof xml !== "string") return false;
-	const hasRss = xml.includes("<rss") && xml.includes("version=\"2.0\"");
+	const hasRss = xml.includes("<rss") && xml.includes('version="2.0"');
 	const hasChannel = xml.includes("<channel>");
 	const hasTitle = xml.includes("<title>");
 	const hasLink = xml.includes("<link>");
@@ -86,7 +86,8 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/inman.xml")).default;
+			const handler = (await import("../../../pages/api/rss/inman.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -108,7 +109,8 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/inman.xml")).default;
+			const handler = (await import("../../../pages/api/rss/inman.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -202,7 +204,8 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/connect-cre.xml")).default;
+			const handler = (await import("../../../pages/api/rss/connect-cre.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -224,7 +227,8 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/connect-cre.xml")).default;
+			const handler = (await import("../../../pages/api/rss/connect-cre.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -260,7 +264,9 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/world-property-journal.xml")).default;
+			const handler = (
+				await import("../../../pages/api/rss/world-property-journal.xml")
+			).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -282,7 +288,9 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/world-property-journal.xml")).default;
+			const handler = (
+				await import("../../../pages/api/rss/world-property-journal.xml")
+			).default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -318,7 +326,8 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/first-tuesday.xml")).default;
+			const handler = (await import("../../../pages/api/rss/first-tuesday.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -340,7 +349,8 @@ describe("News RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/first-tuesday.xml")).default;
+			const handler = (await import("../../../pages/api/rss/first-tuesday.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -702,4 +712,3 @@ describe("News RSS Feeds", () => {
 		});
 	});
 });
-

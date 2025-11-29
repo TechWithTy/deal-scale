@@ -104,6 +104,3 @@ export default function AffiliatePendingApproval({
 		</div>
 	);
 }
-
-
-

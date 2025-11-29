@@ -69,6 +69,3 @@ export default function AffiliatePaymentSetupClient() {
 		content
 	);
 }
-
-
-

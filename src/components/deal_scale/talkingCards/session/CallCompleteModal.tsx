@@ -1,7 +1,5 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -12,6 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 interface CallCompleteModalProps {
 	/** Whether the modal is open */

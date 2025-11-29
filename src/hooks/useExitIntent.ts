@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import {
 	safeSessionStorageGetItem,
 	safeSessionStorageSetItem,
 } from "@/utils/storage/safeStorage";
+import { useEffect, useRef, useState } from "react";
 
 export interface UseExitIntentOptions {
 	/**

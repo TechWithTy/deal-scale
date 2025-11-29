@@ -104,7 +104,7 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 						<Button
 							variant="outline"
 							onClick={() => setShowAll(true)}
-							className="group flex items-center gap-2 border-primary/40 bg-background/80 hover:bg-primary/10 hover:border-primary/60"
+							className="group flex items-center gap-2 border-primary/40 bg-background/80 hover:border-primary/60 hover:bg-primary/10"
 						>
 							Load More FAQs
 							<ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />

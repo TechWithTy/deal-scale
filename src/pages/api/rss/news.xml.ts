@@ -81,10 +81,7 @@ type RSSParsed = {
 	};
 };
 
-const buildRSSEntries = (
-	feedXml: string,
-	sourceName: string,
-): NewsEntry[] => {
+const buildRSSEntries = (feedXml: string, sourceName: string): NewsEntry[] => {
 	try {
 		const parsed = parser.parse(feedXml) as RSSParsed;
 
@@ -180,45 +177,51 @@ export default async function handler(
 	res: NextApiResponse,
 ) {
 	try {
-		const [inmanResult, reitResult, connectCreResult, wpjResult, ftResult, narResult] =
-			await Promise.allSettled([
-				fetch(INMAN_FEED, {
-					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
-						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-					},
-				}),
-				fetch(REIT_FEED, {
-					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
-						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-					},
-				}),
-				fetch(CONNECT_CRE_FEED, {
-					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
-						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-					},
-				}),
-				fetch(WORLD_PROPERTY_JOURNAL_FEED, {
-					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
-						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-					},
-				}),
-				fetch(FIRST_TUESDAY_FEED, {
-					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
-						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-					},
-				}),
-				fetch(NAR_FEED, {
-					headers: {
-						"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
-						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-					},
-				}),
-			]);
+		const [
+			inmanResult,
+			reitResult,
+			connectCreResult,
+			wpjResult,
+			ftResult,
+			narResult,
+		] = await Promise.allSettled([
+			fetch(INMAN_FEED, {
+				headers: {
+					"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
+					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+				},
+			}),
+			fetch(REIT_FEED, {
+				headers: {
+					"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
+					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+				},
+			}),
+			fetch(CONNECT_CRE_FEED, {
+				headers: {
+					"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
+					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+				},
+			}),
+			fetch(WORLD_PROPERTY_JOURNAL_FEED, {
+				headers: {
+					"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
+					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+				},
+			}),
+			fetch(FIRST_TUESDAY_FEED, {
+				headers: {
+					"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
+					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+				},
+			}),
+			fetch(NAR_FEED, {
+				headers: {
+					"User-Agent": "DealScaleNewsRSSProxy/1.0 (+https://dealscale.io)",
+					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+				},
+			}),
+		]);
 
 		const inmanXml =
 			inmanResult.status === "fulfilled" && inmanResult.value.ok
@@ -245,7 +248,9 @@ export default async function handler(
 				? await narResult.value.text()
 				: "";
 
-		const inmanEntries = inmanXml ? buildRSSEntries(inmanXml, "Inman News") : [];
+		const inmanEntries = inmanXml
+			? buildRSSEntries(inmanXml, "Inman News")
+			: [];
 		const reitEntries = reitXml ? buildRSSEntries(reitXml, "REIT.com") : [];
 		const connectCreEntries = connectCreXml
 			? buildRSSEntries(connectCreXml, "Connect CRE")
@@ -253,9 +258,7 @@ export default async function handler(
 		const wpjEntries = wpjXml
 			? buildRSSEntries(wpjXml, "World Property Journal")
 			: [];
-		const ftEntries = ftXml
-			? buildRSSEntries(ftXml, "first tuesday")
-			: [];
+		const ftEntries = ftXml ? buildRSSEntries(ftXml, "first tuesday") : [];
 		const narEntries = narXml ? buildRSSEntries(narXml, "NAR") : [];
 
 		console.log(
@@ -327,4 +330,3 @@ export default async function handler(
 		res.status(502).send(errorFeed);
 	}
 }
-

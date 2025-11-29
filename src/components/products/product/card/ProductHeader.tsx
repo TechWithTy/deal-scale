@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ProductCategory } from "@/types/products";
+import Link from "next/link";
 import type { ProductHeaderProps } from "./types";
 
 const ProductHeader = ({

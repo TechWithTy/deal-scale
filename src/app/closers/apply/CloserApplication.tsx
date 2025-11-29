@@ -16,7 +16,3 @@ export default function CloserApplication() {
 		</main>
 	);
 }
-
-
-
-

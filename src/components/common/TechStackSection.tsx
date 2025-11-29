@@ -149,7 +149,7 @@ export const TechStackSection = ({
 						>
 							<div className="rounded-xl bg-background-dark/30 p-4 shadow-lg backdrop-blur-md sm:p-8">
 								<div
-									className={`grid ${getGridColumns(stack.libraries.length)} gap-4 justify-items-center`}
+									className={`grid ${getGridColumns(stack.libraries.length)} justify-items-center gap-4`}
 								>
 									{stack.libraries.map((lib) => (
 										<TooltipProvider key={lib.name}>

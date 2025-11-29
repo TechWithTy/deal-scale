@@ -41,9 +41,7 @@ export async function parseCSV(file: File): Promise<ParseResult> {
 					if (hasData) {
 						contacts.push(contact);
 					} else {
-						errors.push(
-							`Row with no data: ${JSON.stringify(row)}`,
-						);
+						errors.push(`Row with no data: ${JSON.stringify(row)}`);
 					}
 				}
 
@@ -95,18 +93,14 @@ export async function parseExcel(file: File): Promise<ParseResult> {
 					if (hasData) {
 						contacts.push(contact);
 					} else {
-						errors.push(
-							`Row with no data: ${JSON.stringify(row)}`,
-						);
+						errors.push(`Row with no data: ${JSON.stringify(row)}`);
 					}
 				}
 
 				resolve({ contacts, errors });
 			} catch (error) {
 				errors.push(
-					error instanceof Error
-						? error.message
-						: "Failed to parse Excel file",
+					error instanceof Error ? error.message : "Failed to parse Excel file",
 				);
 				resolve({ contacts, errors });
 			}
@@ -138,7 +132,9 @@ export async function parseContactFile(file: File): Promise<ParseResult> {
 
 	return {
 		contacts: [],
-		errors: [`Unsupported file type: ${fileExtension}. Please use CSV or Excel files.`],
+		errors: [
+			`Unsupported file type: ${fileExtension}. Please use CSV or Excel files.`,
+		],
 	};
 }
 

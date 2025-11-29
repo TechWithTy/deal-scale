@@ -8,9 +8,7 @@ export const closerFormSchema = z.object({
 	realEstateLicense: z
 		.string()
 		.min(1, { message: "Real estate license number is required." }),
-	licenseState: z
-		.string()
-		.min(2, { message: "License state is required." }),
+	licenseState: z.string().min(2, { message: "License state is required." }),
 	yearsExperience: z
 		.string()
 		.min(1, { message: "Please specify years of experience." }),
@@ -20,11 +18,10 @@ export const closerFormSchema = z.object({
 	availability: z
 		.string()
 		.min(1, { message: "Please specify your availability." }),
-	whyApply: z
-		.string()
-		.min(50, {
-			message: "Please provide at least 50 characters explaining why you want to become a closer.",
-		}),
+	whyApply: z.string().min(50, {
+		message:
+			"Please provide at least 50 characters explaining why you want to become a closer.",
+	}),
 	portfolioUrl: z.string().url().optional().or(z.literal("")),
 	termsAccepted: z.boolean().refine((val) => val === true, {
 		message: "You must accept the terms and conditions.",
@@ -193,7 +190,3 @@ export const closerFormFields: Array<{
 		required: true,
 	},
 ];
-
-
-
-

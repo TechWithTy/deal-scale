@@ -1,9 +1,9 @@
+import { mockClosers } from "@/data/closers/mockClosers";
 import {
 	LicenseType,
 	ProductCategory,
 	type ProductType,
 } from "@/types/products";
-import { mockClosers } from "@/data/closers/mockClosers";
 
 // Get top 3 closers (sorted by rating, then deals closed)
 const getTopClosers = () => {
@@ -21,7 +21,7 @@ const getTopClosers = () => {
 const topClosers = getTopClosers();
 
 // Convert closer to product
-const closerToProduct = (closer: typeof mockClosers[0]): ProductType => {
+const closerToProduct = (closer: (typeof mockClosers)[0]): ProductType => {
 	return {
 		id: `closer-${closer.id}`,
 		name: `${closer.name} - ${closer.title}`,
@@ -72,7 +72,9 @@ export const closerProducts: ProductType[] = [
 			ProductCategory.Monetize,
 			ProductCategory.AddOn,
 		],
-		images: ["https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200&h=800&fit=crop&q=80"],
+		images: [
+			"https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200&h=800&fit=crop&q=80",
+		],
 		types: [],
 		reviews: [],
 		colors: [],
@@ -103,4 +105,3 @@ export const closerProducts: ProductType[] = [
 	// Add top 3 closers as individual product cards
 	...topClosers.map(closerToProduct),
 ];
-

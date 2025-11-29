@@ -5,20 +5,20 @@ import {
 	resolveHeroThumbnailSrc,
 	useHeroVideoConfig,
 } from "@external/dynamic-hero";
+import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useCallback, useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import PersonaCTA from "@/components/cta/PersonaCTA";
+import type { BadgeMetrics } from "@/components/home/ReactivateCampaignBadges";
+import { ReactivateCampaignInput } from "@/components/home/ReactivateCampaignInput";
 import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
-import { ReactivateCampaignInput } from "@/components/home/ReactivateCampaignInput";
-import type { BadgeMetrics } from "@/components/home/ReactivateCampaignBadges";
 import { Particles } from "@/components/ui/particles";
-import { useTheme } from "next-themes";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTheme } from "next-themes";
 
 import {
 	LIVE_COPY,
@@ -152,7 +152,7 @@ export default function HeroSideBySide(): JSX.Element {
 					<InteractiveGridPattern
 						width={72}
 						height={72}
-						className="z-[1] opacity-20 dark:opacity-40 md:opacity-25 md:dark:opacity-50"
+						className="z-[1] opacity-20 md:opacity-25 dark:opacity-40 md:dark:opacity-50"
 						squares={[20, 20]}
 						squaresClassName="stroke-border/25 dark:stroke-border/50"
 					/>
@@ -184,7 +184,7 @@ export default function HeroSideBySide(): JSX.Element {
 					{/* Centered text content */}
 					<div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 overflow-x-visible text-center md:gap-8">
 						{/* Persona Badge */}
-						<span className="inline-flex max-w-[calc(100vw-2rem)] shrink-0 items-center justify-center rounded-full border border-border/40 bg-background/70 px-2 py-1.5 font-semibold text-foreground/80 text-[8px] uppercase leading-tight tracking-[0.05em] sm:max-w-fit sm:px-3 sm:text-[10px] sm:tracking-[0.15em] md:px-4 md:text-xs md:tracking-[0.25em]">
+						<span className="inline-flex max-w-[calc(100vw-2rem)] shrink-0 items-center justify-center rounded-full border border-border/40 bg-background/70 px-2 py-1.5 font-semibold text-[8px] text-foreground/80 uppercase leading-tight tracking-[0.05em] sm:max-w-fit sm:px-3 sm:text-[10px] sm:tracking-[0.15em] md:px-4 md:text-xs md:tracking-[0.25em]">
 							<span className="whitespace-nowrap">{PERSONA_LABEL}</span>
 						</span>
 

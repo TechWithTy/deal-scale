@@ -5,7 +5,7 @@ import { AppProviders } from "@/components/providers/AppProviders";
 import type { AnalyticsConfig } from "@/lib/analytics/config";
 import { getAnalyticsConfig } from "@/lib/analytics/config";
 import { monoFont, sansFont } from "@/styles/fonts";
-import { buildKnowledgeGraphSchema, SchemaInjector } from "@/utils/seo/schema";
+import { SchemaInjector, buildKnowledgeGraphSchema } from "@/utils/seo/schema";
 
 const KNOWLEDGE_GRAPH_SCHEMA = buildKnowledgeGraphSchema();
 

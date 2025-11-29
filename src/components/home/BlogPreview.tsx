@@ -10,11 +10,11 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@/components/ui/carousel";
+import { AI_OUTREACH_STUDIO_ANCHOR } from "@/data/home/aiOutreachStudio";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { cn } from "@/lib/utils";
 import type { BeehiivPost } from "@/types/behiiv";
-import { AI_OUTREACH_STUDIO_ANCHOR } from "@/data/home/aiOutreachStudio";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Youtube } from "lucide-react";
 import Link from "next/link";
@@ -136,7 +136,7 @@ export function BlogPreview({
 								onClick={(e) => {
 									e.preventDefault();
 									console.log("[View Shorts] Button clicked");
-									
+
 									// Dispatch custom event to trigger video mode
 									window.dispatchEvent(
 										new CustomEvent("play-youtube-shorts", {
@@ -144,39 +144,54 @@ export function BlogPreview({
 										}),
 									);
 									console.log("[View Shorts] Event dispatched");
-									
+
 									// Smooth scroll to AI Outreach Demo section, centering the demo area
 									setTimeout(() => {
-										const element = document.getElementById(AI_OUTREACH_STUDIO_ANCHOR);
-										console.log("[View Shorts] Looking for element:", AI_OUTREACH_STUDIO_ANCHOR, element);
-										
+										const element = document.getElementById(
+											AI_OUTREACH_STUDIO_ANCHOR,
+										);
+										console.log(
+											"[View Shorts] Looking for element:",
+											AI_OUTREACH_STUDIO_ANCHOR,
+											element,
+										);
+
 										if (element) {
 											// Find the actual demo/phone container within the section
-											const demoContainer = element.querySelector('[class*="PhoneShell"], [class*="Iphone"], iframe');
+											const demoContainer = element.querySelector(
+												'[class*="PhoneShell"], [class*="Iphone"], iframe',
+											);
 											const targetElement = demoContainer || element;
-											
+
 											// Calculate offset to center the demo area
 											const headerHeight = 100;
 											const viewportHeight = window.innerHeight;
 											const elementRect = targetElement.getBoundingClientRect();
 											const elementTop = elementRect.top + window.pageYOffset;
-											
+
 											// Center the element in viewport
-											const offsetPosition = elementTop - (viewportHeight / 2) + (elementRect.height / 2) - headerHeight;
-											
+											const offsetPosition =
+												elementTop -
+												viewportHeight / 2 +
+												elementRect.height / 2 -
+												headerHeight;
+
 											console.log("[View Shorts] Scrolling to:", {
 												elementTop,
 												viewportHeight,
 												offsetPosition,
 												elementHeight: elementRect.height,
 											});
-											
+
 											window.scrollTo({
 												top: Math.max(0, offsetPosition),
 												behavior: "smooth",
 											});
 										} else {
-											console.error("[View Shorts] Element not found:", AI_OUTREACH_STUDIO_ANCHOR);
+											console.error(
+												"[View Shorts] Element not found:",
+												AI_OUTREACH_STUDIO_ANCHOR,
+											);
 										}
 									}, 200);
 								}}
@@ -191,7 +206,10 @@ export function BlogPreview({
 								variant="default"
 								className="w-fit bg-gradient-to-r from-primary to-focus text-white shadow-lg hover:opacity-90 hover:shadow-xl"
 							>
-								<Link href="/blogs" className="flex items-center justify-center">
+								<Link
+									href="/blogs"
+									className="flex items-center justify-center"
+								>
 									View All Articles
 									<ArrowRight className="ml-2 h-4 w-4" />
 								</Link>

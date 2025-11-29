@@ -3,11 +3,11 @@
  */
 
 import { XMLParser } from "fast-xml-parser";
+import type { NextApiRequest, NextApiResponse } from "next";
 import fetch, {
 	Request as NodeFetchRequest,
 	Response as NodeFetchResponse,
 } from "node-fetch";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock Next.js API types
@@ -46,7 +46,7 @@ const parser = new XMLParser({
 const validateRSS2 = (xml: string): boolean => {
 	if (!xml || typeof xml !== "string") return false;
 	// Basic XML structure check - if it has the required elements, it's valid
-	const hasRss = xml.includes("<rss") && xml.includes("version=\"2.0\"");
+	const hasRss = xml.includes("<rss") && xml.includes('version="2.0"');
 	const hasChannel = xml.includes("<channel>");
 	const hasTitle = xml.includes("<title>");
 	const hasLink = xml.includes("<link>");
@@ -154,7 +154,8 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/youtube.xml")).default;
+			const handler = (await import("../../../pages/api/rss/youtube.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -176,7 +177,8 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/youtube.xml")).default;
+			const handler = (await import("../../../pages/api/rss/youtube.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -207,7 +209,8 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/github.xml")).default;
+			const handler = (await import("../../../pages/api/rss/github.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -229,7 +232,8 @@ describe("RSS Feeds", () => {
 			} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/github.xml")).default;
+			const handler = (await import("../../../pages/api/rss/github.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -294,7 +298,8 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -339,7 +344,8 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -382,7 +388,8 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -437,7 +444,8 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -488,7 +496,8 @@ describe("RSS Feeds", () => {
 				} as Response);
 
 			// @ts-expect-error - Dynamic import for test
-			const handler = (await import("../../../pages/api/rss/hybrid.xml")).default;
+			const handler = (await import("../../../pages/api/rss/hybrid.xml"))
+				.default;
 			const req = createMockRequest();
 			const res = createMockResponse();
 
@@ -559,4 +568,3 @@ describe("RSS Feeds", () => {
 		});
 	});
 });
-

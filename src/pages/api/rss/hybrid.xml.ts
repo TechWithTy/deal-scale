@@ -303,9 +303,7 @@ const buildChannelXml = (entries: HybridEntry[]): string => {
 					? "https://www.youtube.com/@DealScaleRealEstate"
 					: `${SITE_URL}/blog`;
 			const sourceName =
-				entry.source === "youtube"
-					? "DealScale YouTube"
-					: "DealScale Blog";
+				entry.source === "youtube" ? "DealScale YouTube" : "DealScale Blog";
 
 			return `<item>
 	<title>${sanitize(entry.title)}</title>
@@ -373,16 +371,15 @@ export default async function handler(
 	};
 
 	try {
-		const [beehiivResult, youtubeResult] =
-			await Promise.allSettled([
-				fetch(BEEHIIV_FEED, {
-					headers: {
-						"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
-						Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
-					},
-				}),
-				fetchYouTubeFeed(),
-			]);
+		const [beehiivResult, youtubeResult] = await Promise.allSettled([
+			fetch(BEEHIIV_FEED, {
+				headers: {
+					"User-Agent": "DealScaleHybridRSSProxy/1.0 (+https://dealscale.io)",
+					Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+				},
+			}),
+			fetchYouTubeFeed(),
+		]);
 
 		const beehiivXml =
 			beehiivResult.status === "fulfilled" && beehiivResult.value.ok
@@ -416,10 +413,7 @@ export default async function handler(
 			`Feed entries: Beehiiv=${beehiivEntries.length}, YouTube=${youtubeEntries.length}`,
 		);
 
-		const combinedEntries = [
-			...beehiivEntries,
-			...youtubeEntries,
-		].sort(
+		const combinedEntries = [...beehiivEntries, ...youtubeEntries].sort(
 			(a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime(),
 		);
 

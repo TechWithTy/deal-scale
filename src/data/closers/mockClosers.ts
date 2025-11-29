@@ -22,7 +22,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-1",
 		name: "Sarah Martinez",
 		title: "Senior Real Estate Closer",
-		image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
 		rating: 4.9,
 		reviews: 127,
 		dealsClosed: 523,
@@ -40,7 +41,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-2",
 		name: "Michael Chen",
 		title: "Commercial Real Estate Specialist",
-		image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
 		rating: 4.8,
 		reviews: 89,
 		dealsClosed: 312,
@@ -58,7 +60,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-3",
 		name: "Jessica Thompson",
 		title: "Wholesale Deal Closer",
-		image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
 		rating: 5.0,
 		reviews: 203,
 		dealsClosed: 892,
@@ -76,7 +79,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-4",
 		name: "David Rodriguez",
 		title: "Residential Closer",
-		image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
 		rating: 4.7,
 		reviews: 156,
 		dealsClosed: 445,
@@ -94,7 +98,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-5",
 		name: "Amanda Foster",
 		title: "Investment Property Specialist",
-		image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face",
 		rating: 4.9,
 		reviews: 178,
 		dealsClosed: 634,
@@ -107,7 +112,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-6",
 		name: "James Wilson",
 		title: "Multi-Family Closer",
-		image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
 		rating: 4.8,
 		reviews: 94,
 		dealsClosed: 287,
@@ -120,7 +126,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-7",
 		name: "Rachel Kim",
 		title: "Fix & Flip Closer",
-		image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
 		rating: 4.9,
 		reviews: 142,
 		dealsClosed: 567,
@@ -133,7 +140,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-8",
 		name: "Robert Taylor",
 		title: "Land Acquisition Specialist",
-		image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
 		rating: 4.8,
 		reviews: 76,
 		dealsClosed: 234,
@@ -146,7 +154,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-9",
 		name: "Maria Garcia",
 		title: "Relocation Closer",
-		image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&crop=face",
 		rating: 4.9,
 		reviews: 165,
 		dealsClosed: 489,
@@ -159,7 +168,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-10",
 		name: "Kevin Patel",
 		title: "Wholesale Transaction Expert",
-		image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
 		rating: 5.0,
 		reviews: 201,
 		dealsClosed: 756,
@@ -177,7 +187,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-11",
 		name: "Emily Johnson",
 		title: "Luxury Property Closer",
-		image: "https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=400&h=400&fit=crop&crop=face",
 		rating: 4.9,
 		reviews: 98,
 		dealsClosed: 267,
@@ -190,7 +201,8 @@ export const mockClosers: CloserProfile[] = [
 		id: "closer-12",
 		name: "Thomas Anderson",
 		title: "Portfolio Closer",
-		image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&h=400&fit=crop&crop=face",
+		image:
+			"https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&h=400&fit=crop&crop=face",
 		rating: 4.8,
 		reviews: 87,
 		dealsClosed: 312,
@@ -200,4 +212,3 @@ export const mockClosers: CloserProfile[] = [
 		hourlyRate: 195,
 	},
 ];
-

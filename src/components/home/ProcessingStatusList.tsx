@@ -1,8 +1,15 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Loader2, Phone, MessageSquare, Database, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+	CheckCircle2,
+	Database,
+	Loader2,
+	MessageSquare,
+	Phone,
+	Zap,
+} from "lucide-react";
 
 interface ProcessingStep {
 	id: string;
@@ -35,12 +42,7 @@ export function ProcessingStatusList({
 	className,
 }: ProcessingStatusListProps) {
 	return (
-		<div
-			className={cn(
-				"w-full space-y-2",
-				className,
-			)}
-		>
+		<div className={cn("w-full space-y-2", className)}>
 			<div className="space-y-2">
 				<AnimatePresence>
 					{steps.map((step, index) => (
@@ -53,10 +55,11 @@ export function ProcessingStatusList({
 							className={cn(
 								"flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors",
 								step.status === "processing" &&
-									"bg-sky-500/10 border border-sky-500/30",
+									"border border-sky-500/30 bg-sky-500/10",
 								step.status === "completed" &&
-									"bg-green-500/10 border border-green-500/30",
-								step.status === "pending" && "bg-white/5 border border-white/10",
+									"border border-green-500/30 bg-green-500/10",
+								step.status === "pending" &&
+									"border border-white/10 bg-white/5",
 							)}
 						>
 							<div
@@ -80,7 +83,7 @@ export function ProcessingStatusList({
 									{step.icon}
 									<span
 										className={cn(
-											"text-sm font-medium transition-colors",
+											"font-medium text-sm transition-colors",
 											step.status === "processing" && "text-sky-300",
 											step.status === "completed" && "text-green-300",
 											step.status === "pending" && "text-white/60",
@@ -97,4 +100,3 @@ export function ProcessingStatusList({
 		</div>
 	);
 }
-

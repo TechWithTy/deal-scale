@@ -31,9 +31,10 @@ export default async function handler(
 		res.status(200).send(xml);
 	} catch (error) {
 		console.error("Error fetching first tuesday RSS feed:", error);
-		res.status(502).send(
-			'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>first tuesday Feed Error</title><description>first tuesday RSS temporarily unavailable.</description></channel></rss>',
-		);
+		res
+			.status(502)
+			.send(
+				'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>first tuesday Feed Error</title><description>first tuesday RSS temporarily unavailable.</description></channel></rss>',
+			);
 	}
 }
-

@@ -16,8 +16,8 @@ import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
 import { navItems } from "@/data/layout/nav";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { Z_INDEX } from "@/lib/constants/z-index";
-import { isBannerClosed, setBannerClosed } from "@/lib/utils/cookies";
 import { cn } from "@/lib/utils";
+import { isBannerClosed, setBannerClosed } from "@/lib/utils/cookies";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
@@ -65,7 +65,13 @@ const NavLink = ({ item, onClick, className = "" }) => {
 	);
 };
 
-const MegaMenuLink = ({ href, title, icon, className, onClick = undefined }) => {
+const MegaMenuLink = ({
+	href,
+	title,
+	icon,
+	className,
+	onClick = undefined,
+}) => {
 	const isHighlighted =
 		title.toLowerCase().includes("contact") ||
 		title.toLowerCase().includes("schedule");
@@ -556,7 +562,7 @@ export default function Navbar() {
 					// 1. Not on excluded pages (contact, contact-pilot)
 					// 2. Either on affiliate page OR not closed
 					if (!isExcludedPage && (isAffiliatePage || !bannerClosed)) {
-					setShowBanner(true);
+						setShowBanner(true);
 					} else {
 						setShowBanner(false);
 					}
