@@ -206,7 +206,7 @@ export function buildJobPostingSchema(input: JobPostingInput): JobPostingSchema 
                         "@type": "Organization",
                         "@id": ORGANIZATION_ID,
                         name: input.hiringOrganizationName || "DealScale",
-                        sameAs: "https://www.leadorchestra.com",
+                        sameAs: "https://www.dealscale.io",
                 },
                 jobLocation: input.location && !input.location.remote ? {
                         "@type": "Place",
@@ -434,15 +434,15 @@ ZOHO_RECRUIT_API_URL=https://recruit.zoho.com/recruit/private/json/Jobs/getRecor
    - Verify Organization schema includes careers URL in `sameAs`
 
 2. **Sitemap Check**:
-   - Verify `/careers` appears in sitemap: `https://www.leadorchestra.com/sitemap.xml`
+   - Verify `/careers` appears in sitemap: `https://www.dealscale.io/sitemap.xml`
    - Submit updated sitemap to Google Search Console
 
 3. **Robots Check**:
    - Verify careers page allows indexing
-   - Test with: `curl -A "Googlebot" https://www.leadorchestra.com/careers`
+   - Test with: `curl -A "Googlebot" https://www.dealscale.io/careers`
 
 4. **Redirect Check**:
-   - Verify redirect works: `curl -I https://www.leadorchestra.com/careers`
+   - Verify redirect works: `curl -I https://www.dealscale.io/careers`
    - Should return `301` status with `Location: https://dealscale.zohorecruit.com/jobs/Careers`
 
 ### Phase 2 Validation

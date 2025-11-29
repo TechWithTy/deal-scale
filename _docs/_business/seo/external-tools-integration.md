@@ -32,7 +32,7 @@
 - Every route must export `generateMetadata` and pipe through `mapSeoMetaToMetadata`.
 - Maintain canonical entries inside `src/utils/seo/staticSeo.ts`:
   - Add `STATIC_SEO_META["/external-tools/<slug>"]`.
-  - When the canonical experience lives at `app.leadorchestra.com/<slug>`, set the canonical URL to that domain while keeping the marketing slug for routing.
+  - When the canonical experience lives at `app.dealscale.io/<slug>`, set the canonical URL to that domain while keeping the marketing slug for routing.
   - Wire into `staticSeoMeta` map with priority + change frequency.
 - Reference the route from primary navigation, footer, and relevant resource hubs to ensure crawl depth.
 - Provide an OG/Twitter image – reuse constants from `src/utils/seo/seo.ts` when possible.

@@ -100,23 +100,23 @@ Key internal docs:
 
 ## 📄 License
 
-This is proprietary software. All rights reserved. Unauthorized copying, modification, distribution, display, or use of this software, via any medium is strictly prohibited. For licensing inquiries, please contact us at [sam.scalerg@leadorchestra.com](mailto:sam.scalerg@leadorchestra.com).
+This is proprietary software. All rights reserved. Unauthorized copying, modification, distribution, display, or use of this software, via any medium is strictly prohibited. For licensing inquiries, please contact us at [sam.scaler@dealscale.io](mailto:sam.scaler@dealscale.io).
 
 ### Content Feeds
 
-- [`https://leadorchestra.com/rss.xml`](https://leadorchestra.com/rss.xml) — proxied Beehiiv newsletter feed.
-- [`https://leadorchestra.com/rss/youtube.xml`](https://leadorchestra.com/rss/youtube.xml) — proxied YouTube channel feed.
-- [`https://leadorchestra.com/rss/hybrid.xml`](https://leadorchestra.com/rss/hybrid.xml) — combined blog + video feed.
-- [`https://leadorchestra.com/videos/sitemap.xml`](https://leadorchestra.com/videos/sitemap.xml) — generated video sitemap. Run `pnpm run sitemap:videos` to refresh.
+- [`https://dealscale.io/rss.xml`](https://dealscale.io/rss.xml) — proxied Beehiiv newsletter feed.
+- [`https://dealscale.io/rss/youtube.xml`](https://dealscale.io/rss/youtube.xml) — proxied YouTube channel feed.
+- [`https://dealscale.io/rss/hybrid.xml`](https://dealscale.io/rss/hybrid.xml) — combined blog + video feed.
+- [`https://dealscale.io/videos/sitemap.xml`](https://dealscale.io/videos/sitemap.xml) — generated video sitemap. Run `pnpm run sitemap:videos` to refresh.
 - See [`docs/rss-feeds.md`](docs/rss-feeds.md) for implementation details and maintenance notes.
 
 ## 📞 Contact
 
-For business inquiries or support, please [contact our team](mailto:supportg@leadorchestra.com).
+For business inquiries or support, please [contact our team](mailto:support@dealscale.io).
 
 ## 💼 Commercial Use
 
-This software is available for commercial licensing. For pricing and licensing information, please contact our sales team at [sam.scaler@leadorchestra.com](mailto:sam.scaler@leadorchestra.com).
+This software is available for commercial licensing. For pricing and licensing information, please contact our sales team at [sam.scaler@dealscale.io](mailto:sam.scaler@dealscale.io).
 
 ## What technologies are used for this project?
 

@@ -47,5 +47,5 @@ All employees with access to PII are required to complete regular training on da
 
 ### 7. Contact
 
-For questions regarding this policy or our handling of PII, please contact our Data Protection Officer at **dpo@leadorchestra.com**.
+For questions regarding this policy or our handling of PII, please contact our Data Protection Officer at **dpo@dealscale.io**.
 `;

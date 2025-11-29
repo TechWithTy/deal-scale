@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { CheckoutRequest, CheckoutResponse } from "../../../../types/cart";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 /**
  * Checkout the user's cart and create a payment session.

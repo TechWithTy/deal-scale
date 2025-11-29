@@ -258,7 +258,7 @@ const particleQuantity = isMobile ? 40 : 80;
 ### Environment Variables
 
 ```env
-DEALSCALE_API_BASE=https://api.leadorchestra.com
+DEALSCALE_API_BASE=https://api.dealscale.io
 ```
 
 ### API Endpoints Required
@@ -386,7 +386,7 @@ Modify badge array in `ReactivateCampaignBadges.tsx`
 ### Redirect URL
 Change in `handleActivate` function:
 ```typescript
-window.location.href = "https://app.leadorchestra.com";
+window.location.href = "https://app.dealscale.io";
 ```
 
 ### Particle Settings

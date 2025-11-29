@@ -38,7 +38,7 @@ Out-of-scope: Migrating the external experience into our monorepo or proxying au
 ## 4. SEO Metadata Strategy
 1. **Static Metadata**
    - Extend `STATIC_SEO_META["/external-tools/<slug>"]` and `staticSeoMeta` in `src/utils/seo/staticSeo.ts`.
-   - Set canonical URLs to the authoritative app domain (`https://app.leadorchestra.com/<slug>`) while keeping the marketing slug for routing.
+   - Set canonical URLs to the authoritative app domain (`https://app.dealscale.io/<slug>`) while keeping the marketing slug for routing.
 2. **Dynamic Enhancements**
    - Add `getExternalToolSeo(slug)` helper in `src/utils/seo/externalTools.ts` returning `SeoMeta`.
    - Cover helper with tests under `src/utils/__tests__/seo/externalTools.test.ts`.

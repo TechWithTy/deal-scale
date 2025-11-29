@@ -445,7 +445,7 @@ NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=your-api-token-here
 
 # Production
-NEXT_PUBLIC_STRAPI_URL=https://cms.leadorchestra.com
+NEXT_PUBLIC_STRAPI_URL=https://cms.dealscale.io
 STRAPI_API_TOKEN=${STRAPI_API_TOKEN_SECRET}
 ```
 

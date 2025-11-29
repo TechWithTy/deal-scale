@@ -156,7 +156,7 @@ export const featureTimeline: FeatureTimelineMilestone[] = [
 			"Full voice automation",
 			"Multi-tenant dashboard",
 			"Real-time analytics refinement",
-			"Partner integrations ([Lead Orchestra](https://www.leadorchestra.com), [Anywhere](https://www.anywhere.com), [Apify](https://www.apify.com), [N8N](https://www.n8n.io), [Make](https://www.make.com), [Kestra](https://www.kestra.io), [GoHighLevel](https://www.gohighlevel.com), [Follow Up Boss](https://www.followupboss.com), [Bigger Pockets](https://www.biggerpockets.com))",
+			"Partner integrations ([Lead Orchestra](https://www.dealscale.io), [Anywhere](https://www.anywhere.com), [Apify](https://www.apify.com), [N8N](https://www.n8n.io), [Make](https://www.make.com), [Kestra](https://www.kestra.io), [GoHighLevel](https://www.gohighlevel.com), [Follow Up Boss](https://www.followupboss.com), [Bigger Pockets](https://www.biggerpockets.com))",
 			"Growth + sales machines built from your social outreach engine",
 		],
 	},

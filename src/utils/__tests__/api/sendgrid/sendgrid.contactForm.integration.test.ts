@@ -32,7 +32,7 @@ skipExternalTest("SendGrid contactForm REAL integration (sends real email)");
 describeIfExternal(
 	"SendGrid contactForm REAL integration (sends real email)",
 	() => {
-		const sender = process.env.SENDGRID_SUPPORT_EMAIL || "support@leadorchestra.com";
+		const sender = process.env.SENDGRID_SUPPORT_EMAIL || "support@dealscale.io";
 		const message = "Integration test message from contactForm.";
 		const subject = "Contact Form Integration Test";
 		const firstName = "Test";

@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { type NextRequest, NextResponse } from "next/server";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 interface ProfileSetupUpdateRequest {
 	basic_info_completed?: boolean;

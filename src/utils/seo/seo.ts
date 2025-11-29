@@ -362,7 +362,7 @@ export function getCaseStudySeo(cs: CaseStudy): SeoMeta {
 	return {
 		title: `${cs.title} | Case Study | Deal Scale`,
 		description: cs.subtitle || defaultSeo.description,
-		canonical: `https://leadorchestra.com/case-studies/${cs.slug}`,
+		canonical: `https://dealscale.io/case-studies/${cs.slug}`,
 		keywords: defaultSeo.keywords,
 		image: cs.featuredImage || defaultSeo.image,
 		type: "article",
@@ -374,7 +374,7 @@ export function getServiceSeo(service: ServiceItemData): SeoMeta {
 	return {
 		title: `${service.title} | Services | Deal Scale`,
 		description: service.description || defaultSeo.description,
-		canonical: `https://leadorchestra.com/features/${service.slugDetails.slug}`,
+		canonical: `https://dealscale.io/features/${service.slugDetails.slug}`,
 		keywords: defaultSeo.keywords,
 		image: defaultSeo.image,
 		type: "article",

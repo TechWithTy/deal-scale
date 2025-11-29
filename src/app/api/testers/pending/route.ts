@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { TesterType } from "../../../../types/testers";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 /**
  * Get pending tester applications for admin review.

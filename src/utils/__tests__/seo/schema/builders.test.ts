@@ -46,7 +46,7 @@ describe("schema builders", () => {
 	};
 
 	it("builds a CreativeWork schema with reviews for a case study", () => {
-		const canonical = "https://leadorchestra.com/case-studies/example-case-study";
+		const canonical = "https://dealscale.io/case-studies/example-case-study";
 		const related: CaseStudy[] = [
 			{
 				...baseCaseStudy,
@@ -81,7 +81,7 @@ describe("schema builders", () => {
 			]),
 			isRelatedTo: [
 				expect.objectContaining({
-					url: "https://leadorchestra.com/case-studies/related-case-study",
+					url: "https://dealscale.io/case-studies/related-case-study",
 				}),
 			],
 		});
@@ -106,7 +106,7 @@ describe("schema builders", () => {
 		];
 
 		const schema = buildFAQPageSchema({
-			canonicalUrl: "https://leadorchestra.com/features",
+			canonicalUrl: "https://dealscale.io/features",
 			name: "Deal Scale Features FAQs",
 			description: "Answers to common feature questions.",
 			faqs,
@@ -141,24 +141,24 @@ describe("schema builders", () => {
 				id: "1",
 				title: "Scale your outbound",
 				subtitle: "Tactics for real estate teams",
-				web_url: "https://blog.leadorchestra.com/scale-outbound",
+				web_url: "https://blog.dealscale.io/scale-outbound",
 				published_at: 1700000000,
 				content_tags: ["Outbound", "AI"],
-				thumbnail_url: "https://cdn.leadorchestra.com/img1.png",
+				thumbnail_url: "https://cdn.dealscale.io/img1.png",
 			},
 			{
 				id: "2",
 				title: "Automate lead follow up",
 				subtitle: "Playbooks that work",
-				web_url: "https://blog.leadorchestra.com/automate-follow-up",
+				web_url: "https://blog.dealscale.io/automate-follow-up",
 				published_at: 1700500000,
 				content_tags: ["Automation"],
-				thumbnail_url: "https://cdn.leadorchestra.com/img2.png",
+				thumbnail_url: "https://cdn.dealscale.io/img2.png",
 			},
 		];
 
 		const schema = buildBlogSchema({
-			canonicalUrl: "https://leadorchestra.com/blogs",
+			canonicalUrl: "https://dealscale.io/blogs",
 			name: "Deal Scale Blog",
 			description: "Insights on AI-powered deal flow.",
 			posts,
@@ -166,7 +166,7 @@ describe("schema builders", () => {
 
 		expect(schema).toMatchObject({
 			"@type": "Blog",
-			url: "https://leadorchestra.com/blogs",
+			url: "https://dealscale.io/blogs",
 			blogPost: expect.arrayContaining([
 				expect.objectContaining({
 					"@type": "BlogPosting",

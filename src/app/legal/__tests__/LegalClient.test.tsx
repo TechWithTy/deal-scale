@@ -103,7 +103,7 @@ describe("LegalClient", () => {
 		expect(screen.getByText(/last updated:\s*2024-07-23/i)).toBeInTheDocument();
 
 		const cardLink = screen.getByRole("link", { name: /open template/i });
-		expect(cardLink).toHaveAttribute("href", "https://leadorchestra.com/privacy");
+		expect(cardLink).toHaveAttribute("href", "https://dealscale.io/privacy");
 		expect(cardLink).toHaveAttribute("target", "_blank");
 
 		await user.click(card);
@@ -123,7 +123,7 @@ describe("LegalClient", () => {
 		});
 		expect(liveTemplateLink).toHaveAttribute(
 			"href",
-			"https://leadorchestra.com/privacy",
+			"https://dealscale.io/privacy",
 		);
 		expect(liveTemplateLink).toHaveAttribute("target", "_blank");
 		expect(liveTemplateLink).toHaveAttribute(
@@ -182,7 +182,7 @@ describe("LegalClient", () => {
 		expect(screen.getByText(/last updated:\s*2024-07-23/i)).toBeInTheDocument();
 
 		const cardLink = screen.getByRole("link", { name: /open template/i });
-		expect(cardLink).toHaveAttribute("href", "https://leadorchestra.com/tos");
+		expect(cardLink).toHaveAttribute("href", "https://dealscale.io/tos");
 
 		await userEvent.setup().click(
 			await screen.findByRole("heading", {
@@ -197,6 +197,6 @@ describe("LegalClient", () => {
 		const modalLink = dialogScope.getByRole("link", {
 			name: /open template/i,
 		});
-		expect(modalLink).toHaveAttribute("href", "https://leadorchestra.com/tos");
+		expect(modalLink).toHaveAttribute("href", "https://dealscale.io/tos");
 	});
 });

@@ -3,7 +3,7 @@
   <role name="System Architect">
     <description>
       You are responsible for orchestrating all Next.js app updates required for full SEO (search engine optimization) 
-      and AEO (answer engine optimization) capabilities across www.leadorchestra.com, blog.leadorchestra.com, and app.leadorchestra.com.
+      and AEO (answer engine optimization) capabilities across www.dealscale.io, blog.dealscale.io, and app.dealscale.io.
     </description>
   </role>
 
@@ -17,7 +17,7 @@
     <objective>Add /partners and /careers (Zoho Recruit integration) with structured data.</objective>
     <objective>Add /linktree (Notion-powered resource hub) with ItemList schema for discoverability.</objective>
     <objective>Ensure AI and search engines can parse all public pages for entity context.</objective>
-    <objective>Keep app.leadorchestra.com private yet contextually indexed as a SoftwareApplication schema.</objective>
+    <objective>Keep app.dealscale.io private yet contextually indexed as a SoftwareApplication schema.</objective>
   </objectives>
 
   <stylesheet>
@@ -27,7 +27,7 @@
   </stylesheet>
 
   <architecture>
-    <let name="domains" value='["www.leadorchestra.com","blog.leadorchestra.com","app.leadorchestra.com"]' />
+    <let name="domains" value='["www.dealscale.io","blog.dealscale.io","app.dealscale.io"]' />
     <let name="schemaDir" value="packages/seo-core/schema" />
     <let name="eventRoute" value="apps/www/app/events/[slug]/page.tsx" />
   </architecture>
@@ -54,7 +54,7 @@
       </schemaGenerators>
       <description>
         Export reusable JSON-LD builders and SchemaInjector component for all routes.
-        Use unified "@id": "https://www.leadorchestra.com/#organization" for entity linking.
+        Use unified "@id": "https://www.dealscale.io/#organization" for entity linking.
       </description>
     </task>
 
@@ -178,7 +178,7 @@
             "hiringOrganization": {
               "@type": "Organization",
               "name": "DealScale.io",
-              "sameAs": "https://www.leadorchestra.com"
+              "sameAs": "https://www.dealscale.io"
             },
             "jobLocation": {
               "@type": "Place",
@@ -204,10 +204,10 @@
   <phase id="enhancements" title="Cross-Domain SEO and Blog Integration">
     <task>
       <title>Inject Blog Schema on Beehiiv</title>
-      <domain>blog.leadorchestra.com</domain>
+      <domain>blog.dealscale.io</domain>
       <action>
         Add site-level <script type="application/ld+json"> for Blog and BlogPosting.
-        Reference main org ID using "isPartOf": { "@id": "https://www.leadorchestra.com/#organization" }.
+        Reference main org ID using "isPartOf": { "@id": "https://www.dealscale.io/#organization" }.
       </action>
     </task>
 
@@ -240,7 +240,7 @@
 
     <task>
       <title>Bot Snapshot Verification</title>
-      <command>curl -A "Googlebot" https://www.leadorchestra.com/events</command>
+      <command>curl -A "Googlebot" https://www.dealscale.io/events</command>
       <expect>Returns rendered HTML, not placeholder text.</expect>
     </task>
   </phase>

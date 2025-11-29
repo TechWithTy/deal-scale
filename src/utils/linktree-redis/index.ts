@@ -545,7 +545,7 @@ export function withUtm(
 
 		// Determine site host in a deterministic way for SSR + CSR to avoid hydration mismatches.
 		// Use a single source of truth that is embedded at build time on the client.
-		// Set NEXT_PUBLIC_SITE_HOST="localhost:3000" in dev, and "www.leadorchestra.com" in prod.
+		// Set NEXT_PUBLIC_SITE_HOST="localhost:3000" in dev, and "www.dealscale.io" in prod.
 		const sourceHost = process.env.NEXT_PUBLIC_SITE_HOST || "dealscale.ai";
 
 		// Skip UTM appending for signed/file URLs (e.g., Notion/S3 presigned URLs).

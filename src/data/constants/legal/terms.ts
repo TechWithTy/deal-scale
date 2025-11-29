@@ -66,5 +66,5 @@ We reserve the right to modify these Terms at any time. We will provide notice o
 
 If you have any questions about these Terms, please contact us at:
 
-**Email:** legal@leadorchestra.com
+**Email:** legal@dealscale.io
 `;

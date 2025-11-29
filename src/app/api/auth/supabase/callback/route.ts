@@ -9,7 +9,7 @@ import { encryptOAuthToken } from "@/lib/security";
 import type { Database } from "@/types/_postgresql/supabase";
 
 const DEALSCALE_API_BASE =
-	process.env.DEALSCALE_API_BASE || "https://api.leadorchestra.com";
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 function resolveRedirect(target?: string | null) {
 	if (!target) {

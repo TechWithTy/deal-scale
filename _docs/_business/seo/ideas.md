@@ -4,7 +4,7 @@
 Capture strategic opportunities to elevate DealScale's organic visibility across www, blog, and app surfaces while aligning with technical capabilities.
 
 ## Guiding Principles
-- **Entity-First Architecture:** All content should reinforce the canonical Organization graph node at `https://www.leadorchestra.com/#organization`.
+- **Entity-First Architecture:** All content should reinforce the canonical Organization graph node at `https://www.dealscale.io/#organization`.
 - **Multi-Domain Cohesion:** Ensure messaging and metadata stay synchronized across www, blog, and app domains.
 - **Incremental Delivery:** Ship schema coverage, crawl control, and content improvements in progressive slices tied to measurable KPIs.
 - **Data-Informed Iteration:** Pair every SEO enhancement with analytics hooks and validation paths.

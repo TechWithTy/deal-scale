@@ -17,11 +17,11 @@ jest.mock("@/lib/caseStudies/case-studies", () => ({
 
 jest.mock("@/utils/seo/dynamic/case-studies", () => ({
 	getSeoMetadataForCaseStudy: jest.fn().mockResolvedValue({
-		canonical: "https://leadorchestra.com/case-studies/ai-outreach",
+		canonical: "https://dealscale.io/case-studies/ai-outreach",
 		title: "AI Outreach Case Study",
 		description: "How Deal Scale automates outreach.",
 		keywords: ["ai", "outreach"],
-		image: "https://leadorchestra.com/images/case-study.jpg",
+		image: "https://dealscale.io/images/case-study.jpg",
 		changeFrequency: "monthly",
 		priority: 0.75,
 	}),
@@ -38,11 +38,11 @@ jest.mock("@/data/products/index", () => ({
 
 jest.mock("@/utils/seo/product", () => ({
 	getSeoMetadataForProduct: jest.fn().mockResolvedValue({
-		canonical: "https://leadorchestra.com/products/ai-agent",
+		canonical: "https://dealscale.io/products/ai-agent",
 		title: "AI Agent",
 		description: "AI agent product.",
 		keywords: ["ai"],
-		image: "https://leadorchestra.com/images/ai-agent.jpg",
+		image: "https://dealscale.io/images/ai-agent.jpg",
 		changeFrequency: "monthly",
 		priority: 0.65,
 	}),
@@ -61,11 +61,11 @@ jest.mock("@/data/service/services", () => ({
 
 jest.mock("@/utils/seo/dynamic/services", () => ({
 	getSeoMetadataForService: jest.fn().mockResolvedValue({
-		canonical: "https://leadorchestra.com/features/ai-caller",
+		canonical: "https://dealscale.io/features/ai-caller",
 		title: "AI Caller",
 		description: "AI caller service.",
 		keywords: ["caller"],
-		image: "https://leadorchestra.com/images/ai-caller.jpg",
+		image: "https://dealscale.io/images/ai-caller.jpg",
 		changeFrequency: "weekly",
 		priority: 0.85,
 	}),
@@ -78,7 +78,7 @@ describe("sitemap metadata", () => {
 		const entries = await sitemap();
 		const byUrl = (url: string) => entries.find((entry) => entry.url === url);
 
-		const baseUrl = "https://leadorchestra.com";
+		const baseUrl = "https://dealscale.io";
 
 		const events = byUrl(`${baseUrl}/events`);
 		expect(events).toBeDefined();
