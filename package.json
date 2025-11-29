@@ -24,6 +24,7 @@
 		"check:env": "pnpm exec tsx tools/checks/check-analytics-env.ts",
 		"check:chunk": "pnpm exec tsx tools/checks/verify-chunk-error-handler.ts",
 		"check:meta": "pnpm exec tsx tools/checks/verify-meta-description.ts",
+		"validate:sitemap": "pnpm exec tsx tools/validate-sitemap.ts",
 		"landing:build": "rm -rf dist && pnpm run check:env && next build && next export -o dist",
 		"dev:vite": "pnpm exec tsx scripts/bundlers/ensure-preview-flag.ts vite:dev && pnpm exec vite --config tools/vite-preview/vite.config.ts",
 		"build:vite": "pnpm exec tsx scripts/bundlers/ensure-preview-flag.ts vite:build && pnpm exec vite build --config tools/vite-preview/vite.config.ts",

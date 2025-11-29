@@ -1,9 +1,10 @@
+import type { MetadataRoute } from "next";
+
 import { getAllProducts } from "@/data/products/index";
 import { getAllServices } from "@/data/service/services";
 import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
 import { getAllCaseStudies } from "@/lib/caseStudies/case-studies";
-import type { BeehiivPost } from "@/types/behiiv";
 import { getTestBaseUrl } from "@/utils/env";
 import { getSeoMetadataForPost } from "@/utils/seo/dynamic/blog";
 import { getSeoMetadataForCaseStudy } from "@/utils/seo/dynamic/case-studies";
@@ -11,7 +12,6 @@ import { getSeoMetadataForService } from "@/utils/seo/dynamic/services";
 import { getSeoMetadataForProduct } from "@/utils/seo/product";
 import type { SeoMeta } from "@/utils/seo/seo";
 import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
-import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	// Resolve and normalize the canonical base URL
@@ -33,6 +33,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		return url.replace(/\/+$/g, "");
 	};
 	const baseUrl = normalize(defaultSeo.canonical || getTestBaseUrl());
+
+	// Validate baseUrl is not empty
+	if (!baseUrl || baseUrl.trim().length === 0) {
+		throw new Error(
+			"baseUrl is empty or invalid. Check defaultSeo.canonical or NEXT_PUBLIC_SITE_URL.",
+		);
+	}
+
 	// Static pages with SEO metadata for sitemap
 
 	const staticPaths = Array.from(new Set(["/", ...Object.keys(staticSeoMeta)]));
@@ -66,7 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			publishedTime: defaultValues.datePublished
 				? new Date(defaultValues.datePublished)
 				: undefined,
-			changefreq: defaultValues.changeFrequency,
+			changeFrequency: defaultValues.changeFrequency,
 			priority: defaultValues.priority,
 			canonical: defaultValues.canonical,
 			description: defaultValues.description,
@@ -82,7 +90,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		return {
 			url,
 			lastModified: new Date(),
-			changefreq: "monthly" as const,
+			changeFrequency: "monthly" as const,
 			priority: 0.5,
 			canonical: url,
 			title: `${partner.name} | Deal Scale Partner`,
@@ -94,25 +102,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	});
 
 	// Dynamic blog posts with SEO
-
-	const posts = await getLatestBeehiivPosts();
+	// Fetch ALL posts including scheduled ones for sitemap
+	const posts = await getLatestBeehiivPosts({
+		all: true,
+		includeScheduled: true,
+	});
 	const blogPosts = await Promise.all(
 		posts.map(async (post) => {
+			// Construct dealscale.io URL format: /blogs/{post_id}
+			// Don't use post.web_url as it's likely a Beehiiv URL
+			const url = `${baseUrl}/blogs/${post.id}`;
+
+			// Get SEO metadata for additional fields
 			const seo = await getSeoMetadataForPost(post.id);
+
 			return {
-				url: seo?.canonical || post.web_url || "",
+				url,
 				lastModified:
 					typeof post.published_at === "string" ||
 					typeof post.published_at === "number"
 						? new Date(post.published_at)
-						: new Date(),
-				canonical: seo?.canonical,
-				title: seo?.title,
+						: typeof post.publish_date === "string" ||
+								typeof post.publish_date === "number"
+							? new Date(post.publish_date)
+							: new Date(),
+				canonical: url,
+				title: seo?.title || post.title,
 				description: seo?.description,
 				keywords: seo?.keywords,
 				image: seo?.image,
-				type: "website",
-				changefreq: seo?.changeFrequency || "weekly",
+				type: "article" as const,
+				changeFrequency: seo?.changeFrequency || "weekly",
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
 		}),
@@ -132,7 +152,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				description: seo?.description,
 				keywords: seo?.keywords,
 				image: seo?.image,
-				changefreq: seo?.changeFrequency || "weekly",
+				changeFrequency: seo?.changeFrequency || "weekly",
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
 		}),
@@ -152,7 +172,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				keywords: seo?.keywords,
 				image: seo?.image,
 				type: "website",
-				changefreq: seo?.changeFrequency || "monthly",
+				changeFrequency: seo?.changeFrequency || "monthly",
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.6,
 			};
 		}),
@@ -168,14 +188,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			);
 			return {
 				url: `${baseUrl}/features/${service.slugDetails.slug}`,
-				lastModified: service.slugDetails.lastModified,
+				lastModified: service.slugDetails.lastModified || new Date(),
 				canonical: seo?.canonical,
 				title: seo?.title,
 				description: seo?.description,
 				image: seo?.image,
 				keywords: seo?.keywords,
 				type: "website",
-				changefreq: seo?.changeFrequency || "weekly",
+				changeFrequency: seo?.changeFrequency || "weekly",
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.8,
 			};
 		}),
@@ -187,30 +207,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	// 	url: `${baseUrl}/services/${service.slug}`,
 	// 	lastModified: service.lastModified,
 	// }));
-
-	const externalEntries: MetadataRoute.Sitemap = [
-		{
-			url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A",
-			changeFrequency: "daily",
-			priority: 0.4,
-		},
-		{
-			url: "https://github.com/Deal-Scale/awesome-real-estate-investing",
-			lastModified: new Date(),
-			changeFrequency: "weekly",
-			priority: 0.6,
-		},
-		{
-			url: "https://deal-scale.github.io/awesome-real-estate-investing/",
-			lastModified: new Date(),
-			changeFrequency: "weekly",
-			priority: 0.7,
-		},
-	];
-
-	const allowedExternalUrls = new Set(
-		externalEntries.map((entry) => entry.url),
-	);
 
 	const canonicalHost = (() => {
 		try {
@@ -262,19 +258,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: "daily",
 			priority: 0.6,
 		},
-	];
+	].filter((entry): entry is MetadataRoute.Sitemap[number] => {
+		// Ensure all supplemental entries have valid URLs
+		return !!(entry.url && entry.url.trim().length > 0);
+	});
 
-	return [
+	const allEntries = [
 		...supplementalEntries,
 		...staticPages,
 		...partnerEntries,
-		...blogPosts,
+		...blogPosts.filter(
+			(entry): entry is NonNullable<typeof entry> => entry !== null,
+		),
 		...caseStudyEntries,
 		...productEntries,
 		...serviceEntries,
-		...externalEntries,
-	].filter(
-		(entry) =>
-			isOnCanonicalHost(entry.url) || allowedExternalUrls.has(entry.url),
-	);
+	];
+
+	const filteredEntries = allEntries
+		.filter((entry): entry is NonNullable<typeof entry> => {
+			// Filter out null/undefined entries
+			if (!entry) return false;
+			// Filter out entries without URLs or with empty/whitespace-only URLs
+			const url = entry.url?.trim();
+			if (!url || url.length === 0) return false;
+			// Validate URL format
+			try {
+				new URL(url);
+			} catch {
+				return false;
+			}
+			// Filter to only canonical host URLs
+			return isOnCanonicalHost(url);
+		})
+		.map((entry) => {
+			// Ensure all entries have required fields with defaults
+			const url = entry.url?.trim();
+			if (!url || url.length === 0) {
+				// This should never happen due to filter above, but double-check
+				throw new Error(
+					`Entry missing URL after filtering: ${JSON.stringify(entry)}`,
+				);
+			}
+			return {
+				...entry,
+				url,
+				lastModified: entry.lastModified || new Date(),
+				changeFrequency: entry.changeFrequency || "weekly",
+				priority: entry.priority ?? 0.5,
+			};
+		})
+		// Final safety check - filter out any entries that somehow still have empty URLs
+		.filter((entry) => {
+			const url = entry.url?.trim();
+			return !!(url && url.length > 0);
+		});
+
+	return filteredEntries;
 }
