@@ -115,7 +115,7 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5 }}
-				className="rounded-2xl border border-white/10 bg-background-dark/90 p-6 shadow-black/10 shadow-lg backdrop-blur"
+				className="rounded-2xl border border-border/50 bg-card/90 p-6 shadow-lg backdrop-blur"
 			>
 				<NewsletterFooter />
 			</motion.div>
@@ -155,14 +155,14 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 				className="glass-card flex items-center justify-between rounded-xl p-6"
 			>
 				<div>
-					<h3 className="mb-1 font-semibold text-black text-xl dark:text-white">
+					<h3 className="mb-1 font-semibold text-xl text-foreground">
 						RSS Feed
 					</h3>
-					<p className="text-black text-sm dark:text-white/70">
+					<p className="text-sm text-muted-foreground">
 						Subscribe to our RSS feed
 					</p>
 				</div>
-				<Link href="/rss" target="_blank" rel="noopener noreferrer">
+				<Link href="/rss/hybrid.xml" target="_blank" rel="noopener noreferrer">
 					<Button
 						variant="outline"
 						size="default"

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-// Cache this route per unique query for 5 minutes (ISR-style caching)
-export const revalidate = 300;
+// Cache this route per unique query for 1 minute (ISR-style caching)
+export const revalidate = 60;
 
 // ! GET /api/beehiiv/posts - Fetch all posts from Beehiiv publication (server-side, CORS-safe)
 export async function GET(request: NextRequest) {
@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
 	const directionParam = search.get("direction") || "desc"; // asc | desc
 	const audienceParam = search.get("audience");
 	const platformParam = search.get("platform"); // web | email | both | all
-	const statusParam = search.get("status"); // draft | confirmed | archived | all
-	const hiddenFromFeedParam = search.get("hidden_from_feed"); // all | true | false
+	const statusParam = search.get("status") || "confirmed"; // draft | confirmed | archived | all (default: confirmed)
+	const hiddenFromFeedParam = search.get("hidden_from_feed") || "false"; // all | true | false (default: false)
 	// content_tags can be specified as repeated content_tags[] or comma-separated content_tags
 	const contentTagsRepeated = search.getAll("content_tags[]");
 	const contentTagsCsv = search.get("content_tags");
@@ -121,9 +121,8 @@ export async function GET(request: NextRequest) {
 				url.searchParams.set("direction", directionParam);
 				if (audienceParam) url.searchParams.set("audience", audienceParam);
 				if (platformParam) url.searchParams.set("platform", platformParam);
-				if (statusParam) url.searchParams.set("status", statusParam);
-				if (hiddenFromFeedParam)
-					url.searchParams.set("hidden_from_feed", hiddenFromFeedParam);
+				url.searchParams.set("status", statusParam);
+				url.searchParams.set("hidden_from_feed", hiddenFromFeedParam);
 				// content_tags[]
 				const tags: string[] = [
 					...contentTagsRepeated,
@@ -159,7 +158,7 @@ export async function GET(request: NextRequest) {
 				console.log(`[API] Page ${page} received ${pagePosts.length} post(s)`);
 				if (pagePosts.length === 0) break;
 				allPosts.push(...pagePosts);
-				// Filter out non-visible posts: drafts, scheduled (future-dated by day), hidden_from_feed
+				// Filter out non-visible posts: only confirmed status, scheduled (future-dated by day), hidden_from_feed
 				const visiblePosts = (allPosts as any[]).filter((p) => {
 					const s = (p as any)?.status;
 					const hidden = (p as any)?.hidden_from_feed === true;
@@ -169,7 +168,7 @@ export async function GET(request: NextRequest) {
 							(p as any)?.displayed_date,
 					);
 					const isFuture = isFutureByDay(ts);
-					return s !== "draft" && !hidden && (includeScheduled || !isFuture);
+					return s === "confirmed" && !hidden && (includeScheduled || !isFuture);
 				});
 				const normalizedVisible = visiblePosts.map((post) =>
 					ensurePublishedAt(post as Record<string, unknown>),
@@ -207,7 +206,7 @@ export async function GET(request: NextRequest) {
 						(p as any)?.displayed_date,
 				);
 				const isFuture = isFutureByDay(ts);
-				return s !== "draft" && !hidden && (includeScheduled || !isFuture);
+				return s === "confirmed" && !hidden && (includeScheduled || !isFuture);
 			});
 			const normalized = filtered.map((post) =>
 				ensurePublishedAt(post as Record<string, unknown>),
@@ -238,9 +237,8 @@ export async function GET(request: NextRequest) {
 				u.searchParams.set("direction", directionParam);
 				if (audienceParam) u.searchParams.set("audience", audienceParam);
 				if (platformParam) u.searchParams.set("platform", platformParam);
-				if (statusParam) u.searchParams.set("status", statusParam);
-				if (hiddenFromFeedParam)
-					u.searchParams.set("hidden_from_feed", hiddenFromFeedParam);
+				u.searchParams.set("status", statusParam);
+				u.searchParams.set("hidden_from_feed", hiddenFromFeedParam);
 				for (const t of new Set([
 					...contentTagsRepeated,
 					...(contentTagsCsv
@@ -264,7 +262,7 @@ export async function GET(request: NextRequest) {
 			);
 			const firstRes = await fetch(firstUrl.toString(), {
 				headers,
-				next: { revalidate: 300 },
+				next: { revalidate: 60 },
 			});
 			if (!firstRes.ok) {
 				return NextResponse.json(
@@ -291,7 +289,7 @@ export async function GET(request: NextRequest) {
 						? firstRes
 						: await fetch(pageUrl.toString(), {
 								headers,
-								next: { revalidate: 300 },
+								next: { revalidate: 60 },
 							});
 				if (!res.ok) break;
 				const data = p === 1 ? firstData : await res.json();
@@ -307,7 +305,7 @@ export async function GET(request: NextRequest) {
 							(it as any)?.displayed_date,
 					);
 					const isFuture = isFutureByDay(ts);
-					return s !== "draft" && !hidden && (includeScheduled || !isFuture);
+					return s === "confirmed" && !hidden && (includeScheduled || !isFuture);
 				});
 				filteredStream.push(
 					...visible.map((post) =>
