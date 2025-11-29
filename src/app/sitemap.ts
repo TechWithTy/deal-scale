@@ -63,7 +63,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			dateModified: seo.dateModified,
 			datePublished: seo.datePublished,
 			priority: seo.priority ?? 0.8,
-			changeFrequency: (seo.changeFrequency || "weekly") as const,
+			changeFrequency: (seo.changeFrequency ??
+				"weekly") as MetadataRoute.Sitemap[number]["changeFrequency"],
 		};
 
 		return {
@@ -74,7 +75,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			publishedTime: defaultValues.datePublished
 				? new Date(defaultValues.datePublished)
 				: undefined,
-			changeFrequency: defaultValues.changeFrequency,
+			changeFrequency:
+				defaultValues.changeFrequency as MetadataRoute.Sitemap[number]["changeFrequency"],
 			priority: defaultValues.priority,
 			canonical: defaultValues.canonical,
 			description: defaultValues.description,
@@ -115,6 +117,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 			// Get SEO metadata for additional fields
 			const seo = await getSeoMetadataForPost(post.id);
+			const changeFreq = seo?.changeFrequency || ("weekly" as const);
 
 			return {
 				url,
@@ -132,7 +135,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				keywords: seo?.keywords,
 				image: seo?.image,
 				type: "article" as const,
-				changeFrequency: (seo?.changeFrequency || "weekly") as const,
+				changeFrequency:
+					changeFreq as MetadataRoute.Sitemap[number]["changeFrequency"],
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
 		}),
@@ -152,7 +156,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				description: seo?.description,
 				keywords: seo?.keywords,
 				image: seo?.image,
-				changeFrequency: (seo?.changeFrequency || "weekly") as const,
+				changeFrequency: (seo?.changeFrequency ??
+					"weekly") as MetadataRoute.Sitemap[number]["changeFrequency"],
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
 		}),
@@ -172,7 +177,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				keywords: seo?.keywords,
 				image: seo?.image,
 				type: "website",
-				changeFrequency: (seo?.changeFrequency || "monthly") as const,
+				changeFrequency: (seo?.changeFrequency ??
+					"monthly") as MetadataRoute.Sitemap[number]["changeFrequency"],
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.6,
 			};
 		}),
@@ -195,7 +201,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				image: seo?.image,
 				keywords: seo?.keywords,
 				type: "website",
-				changeFrequency: (seo?.changeFrequency || "weekly") as const,
+				changeFrequency: (seo?.changeFrequency ??
+					"weekly") as MetadataRoute.Sitemap[number]["changeFrequency"],
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.8,
 			};
 		}),
@@ -258,7 +265,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: "daily" as const,
 			priority: 0.6,
 		},
-	].filter((entry): entry is MetadataRoute.Sitemap[number] => {
+	].filter((entry) => {
 		// Ensure all supplemental entries have valid URLs
 		return !!(entry.url && entry.url.trim().length > 0);
 	});
@@ -300,11 +307,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 					`Entry missing URL after filtering: ${JSON.stringify(entry)}`,
 				);
 			}
-			const validChangeFrequencies = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"] as const;
-			const changeFreq = entry.changeFrequency && validChangeFrequencies.includes(entry.changeFrequency as typeof validChangeFrequencies[number])
-				? (entry.changeFrequency as typeof validChangeFrequencies[number])
-				: "weekly" as const;
-			
+			const validChangeFrequencies = [
+				"always",
+				"hourly",
+				"daily",
+				"weekly",
+				"monthly",
+				"yearly",
+				"never",
+			] as const;
+			const changeFreq =
+				entry.changeFrequency &&
+				validChangeFrequencies.includes(
+					entry.changeFrequency as (typeof validChangeFrequencies)[number],
+				)
+					? (entry.changeFrequency as (typeof validChangeFrequencies)[number])
+					: ("weekly" as const);
+
 			return {
 				...entry,
 				url,

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { describe, it, expect, beforeAll, vi } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import sitemap from "../sitemap";
 
@@ -60,7 +60,7 @@ describe("Sitemap Validation", () => {
 				expect(entry.url).toBeTruthy();
 				expect(typeof entry.url).toBe("string");
 				expect(entry.url.trim().length).toBeGreaterThan(0);
-				
+
 				// Verify URL format
 				expect(() => new URL(entry.url)).not.toThrow();
 			}
@@ -69,7 +69,7 @@ describe("Sitemap Validation", () => {
 		it("should not have duplicate URLs", () => {
 			const urlSet = new Set<string>();
 			const duplicates: string[] = [];
-			
+
 			for (const entry of entries) {
 				if (entry.url) {
 					if (urlSet.has(entry.url)) {
@@ -78,7 +78,7 @@ describe("Sitemap Validation", () => {
 					urlSet.add(entry.url);
 				}
 			}
-			
+
 			expect(duplicates).toEqual([]);
 		});
 	});
@@ -125,7 +125,9 @@ describe("Sitemap Validation", () => {
 			];
 
 			for (const page of keyPages) {
-				const entry = entries.find((entry) => entry.url === `${baseUrl}${page}`);
+				const entry = entries.find(
+					(entry) => entry.url === `${baseUrl}${page}`,
+				);
 				expect(entry).toBeDefined();
 				expect(entry?.priority).toBeGreaterThan(0);
 			}
@@ -140,7 +142,9 @@ describe("Sitemap Validation", () => {
 			];
 
 			for (const feed of rssFeeds) {
-				const entry = entries.find((entry) => entry.url === `${baseUrl}${feed}`);
+				const entry = entries.find(
+					(entry) => entry.url === `${baseUrl}${feed}`,
+				);
 				expect(entry).toBeDefined();
 			}
 		});
@@ -156,7 +160,7 @@ describe("Sitemap Validation", () => {
 			const blogPosts = entries.filter((entry) =>
 				entry.url?.startsWith(`${baseUrl}/blogs/`),
 			);
-			
+
 			// Should have at least some blog posts if they exist
 			// Format: https://dealscale.io/blogs/{post_id}
 			for (const post of blogPosts) {
@@ -169,10 +173,12 @@ describe("Sitemap Validation", () => {
 			const caseStudies = entries.filter((entry) =>
 				entry.url?.startsWith(`${baseUrl}/case-studies/`),
 			);
-			
+
 			// Should have at least some case studies if they exist
 			for (const study of caseStudies) {
-				expect(study.url).toMatch(/^https:\/\/dealscale\.io\/case-studies\/[^/]+$/);
+				expect(study.url).toMatch(
+					/^https:\/\/dealscale\.io\/case-studies\/[^/]+$/,
+				);
 				expect(study.priority).toBeGreaterThan(0);
 			}
 		});
@@ -181,10 +187,12 @@ describe("Sitemap Validation", () => {
 			const products = entries.filter((entry) =>
 				entry.url?.startsWith(`${baseUrl}/products/`),
 			);
-			
+
 			// Should have at least some products if they exist
 			for (const product of products) {
-				expect(product.url).toMatch(/^https:\/\/dealscale\.io\/products\/[^/]+$/);
+				expect(product.url).toMatch(
+					/^https:\/\/dealscale\.io\/products\/[^/]+$/,
+				);
 				expect(product.priority).toBeGreaterThan(0);
 			}
 		});
@@ -193,10 +201,12 @@ describe("Sitemap Validation", () => {
 			const features = entries.filter((entry) =>
 				entry.url?.startsWith(`${baseUrl}/features/`),
 			);
-			
+
 			// Should have at least some features if they exist
 			for (const feature of features) {
-				expect(feature.url).toMatch(/^https:\/\/dealscale\.io\/features\/[^/]+$/);
+				expect(feature.url).toMatch(
+					/^https:\/\/dealscale\.io\/features\/[^/]+$/,
+				);
 				expect(feature.priority).toBeGreaterThan(0);
 			}
 		});
@@ -204,13 +214,15 @@ describe("Sitemap Validation", () => {
 
 	describe("Exclusions", () => {
 		it("should NOT include /careers (redirects externally)", () => {
-			const careers = entries.find((entry) => entry.url === `${baseUrl}/careers`);
+			const careers = entries.find(
+				(entry) => entry.url === `${baseUrl}/careers`,
+			);
 			expect(careers).toBeUndefined();
 		});
 
 		it("should NOT include external URLs (YouTube, GitHub direct links)", () => {
 			const externalDomains = ["youtube.com", "github.com", "beehiiv.com"];
-			
+
 			for (const entry of entries) {
 				if (entry.url) {
 					try {
@@ -234,9 +246,11 @@ describe("Sitemap Validation", () => {
 
 		it("should have key pages with appropriate priorities", () => {
 			const highPriorityPages = ["/", "/pricing", "/features", "/blogs"];
-			
+
 			for (const page of highPriorityPages) {
-				const entry = entries.find((entry) => entry.url === `${baseUrl}${page}`);
+				const entry = entries.find(
+					(entry) => entry.url === `${baseUrl}${page}`,
+				);
 				if (entry) {
 					expect(entry.priority).toBeGreaterThanOrEqual(0.7);
 				}
@@ -246,10 +260,11 @@ describe("Sitemap Validation", () => {
 
 	describe("Change Frequency Distribution", () => {
 		it("should have RSS feeds with hourly change frequency", () => {
-			const rssFeeds = entries.filter((entry) =>
-				entry.url?.includes("/rss") || entry.url?.includes("/videos/sitemap"),
+			const rssFeeds = entries.filter(
+				(entry) =>
+					entry.url?.includes("/rss") || entry.url?.includes("/videos/sitemap"),
 			);
-			
+
 			for (const feed of rssFeeds) {
 				expect(["hourly", "daily"]).toContain(feed.changeFrequency);
 			}
@@ -260,7 +275,7 @@ describe("Sitemap Validation", () => {
 				const url = entry.url?.replace(baseUrl, "") || "";
 				return !url.includes("/") || url.split("/").length === 2;
 			});
-			
+
 			for (const page of staticPages) {
 				expect(validChangeFrequencies).toContain(page.changeFrequency);
 			}
@@ -295,4 +310,3 @@ describe("Sitemap Validation", () => {
 		});
 	});
 });
-

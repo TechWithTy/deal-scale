@@ -1,5 +1,6 @@
+import { notFound, redirect } from "next/navigation";
+
 import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
-import { redirect, notFound } from "next/navigation";
 
 interface BlogPostPageProps {
 	params: Promise<{ id: string }>;
@@ -8,7 +9,7 @@ interface BlogPostPageProps {
 /**
  * Dynamic route handler for individual blog posts
  * Redirects to the actual Beehiiv URL to avoid broken links in sitemap
- * 
+ *
  * This allows sitemap to use dealscale.io URLs (required by Google Search Console)
  * while redirecting to Beehiiv content. The redirect passes SEO value to the destination URL.
  */
@@ -43,4 +44,3 @@ export default async function BlogPostPage(props: BlogPostPageProps) {
 		redirect("/blogs");
 	}
 }
-
