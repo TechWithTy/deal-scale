@@ -63,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			dateModified: seo.dateModified,
 			datePublished: seo.datePublished,
 			priority: seo.priority ?? 0.8,
-			changeFrequency: seo.changeFrequency || "weekly",
+			changeFrequency: (seo.changeFrequency || "weekly") as const,
 		};
 
 		return {
@@ -132,7 +132,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				keywords: seo?.keywords,
 				image: seo?.image,
 				type: "article" as const,
-				changeFrequency: seo?.changeFrequency || "weekly",
+				changeFrequency: (seo?.changeFrequency || "weekly") as const,
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
 		}),
@@ -152,7 +152,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				description: seo?.description,
 				keywords: seo?.keywords,
 				image: seo?.image,
-				changeFrequency: seo?.changeFrequency || "weekly",
+				changeFrequency: (seo?.changeFrequency || "weekly") as const,
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
 		}),
@@ -172,7 +172,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				keywords: seo?.keywords,
 				image: seo?.image,
 				type: "website",
-				changeFrequency: seo?.changeFrequency || "monthly",
+				changeFrequency: (seo?.changeFrequency || "monthly") as const,
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.6,
 			};
 		}),
@@ -195,7 +195,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				image: seo?.image,
 				keywords: seo?.keywords,
 				type: "website",
-				changeFrequency: seo?.changeFrequency || "weekly",
+				changeFrequency: (seo?.changeFrequency || "weekly") as const,
 				priority: typeof seo?.priority === "number" ? seo.priority : 0.8,
 			};
 		}),
@@ -231,31 +231,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		{
 			url: `${baseUrl}/rss.xml`,
 			lastModified: new Date(),
-			changeFrequency: "hourly",
+			changeFrequency: "hourly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/rss/youtube.xml`,
 			lastModified: new Date(),
-			changeFrequency: "hourly",
+			changeFrequency: "hourly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/rss/github.xml`,
 			lastModified: new Date(),
-			changeFrequency: "hourly",
+			changeFrequency: "hourly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/rss/hybrid.xml`,
 			lastModified: new Date(),
-			changeFrequency: "hourly",
+			changeFrequency: "hourly" as const,
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/videos/sitemap.xml`,
 			lastModified: new Date(),
-			changeFrequency: "daily",
+			changeFrequency: "daily" as const,
 			priority: 0.6,
 		},
 	].filter((entry): entry is MetadataRoute.Sitemap[number] => {
@@ -291,7 +291,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			// Filter to only canonical host URLs
 			return isOnCanonicalHost(url);
 		})
-		.map((entry) => {
+		.map((entry): MetadataRoute.Sitemap[number] => {
 			// Ensure all entries have required fields with defaults
 			const url = entry.url?.trim();
 			if (!url || url.length === 0) {
@@ -300,11 +300,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 					`Entry missing URL after filtering: ${JSON.stringify(entry)}`,
 				);
 			}
+			const validChangeFrequencies = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"] as const;
+			const changeFreq = entry.changeFrequency && validChangeFrequencies.includes(entry.changeFrequency as typeof validChangeFrequencies[number])
+				? (entry.changeFrequency as typeof validChangeFrequencies[number])
+				: "weekly" as const;
+			
 			return {
 				...entry,
 				url,
 				lastModified: entry.lastModified || new Date(),
-				changeFrequency: entry.changeFrequency || "weekly",
+				changeFrequency: changeFreq,
 				priority: entry.priority ?? 0.5,
 			};
 		})
