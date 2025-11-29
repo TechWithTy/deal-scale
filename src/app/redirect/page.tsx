@@ -1,5 +1,6 @@
 "use client";
 
+import { initFbqMock } from "@/lib/fbq-mock";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -16,6 +17,8 @@ export default function RedirectPage() {
 	const searchParams = useSearchParams();
 
 	useEffect(() => {
+		// Initialize mock fbq in development
+		initFbqMock();
 		// Get destination URL from query params
 		const destination = searchParams.get("to");
 		if (!destination) {
@@ -99,5 +102,5 @@ export default function RedirectPage() {
 	}, [router, searchParams]);
 
 	// Return blank page or minimal loading indicator
-	return <></>;
+	return null;
 }

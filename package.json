@@ -68,7 +68,10 @@
 		"generate:data": "pnpm exec tsx tools/data/generate-data-manifest.ts",
 		"export:landing": "node tools/run-ts.js tools/strapi/export-landing.ts",
 		"notion:schema": "node scripts/run-ts.js scripts/notion/fetchLinktreeSchema.ts",
-		"notion:schema:write": "node scripts/run-ts.js scripts/notion/fetchLinktreeSchema.ts --write"
+		"notion:schema:write": "node scripts/run-ts.js scripts/notion/fetchLinktreeSchema.ts --write",
+		"pixel:server": "node pixel-mock-server/server.js",
+		"pixel:test": "pnpm run pixel:server & pnpm run test tests/pixel-ingestion.test.ts",
+		"dev:with-pixel": "pnpm run pixel:server & pnpm run dev"
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,ts,tsx,json,css,md,html,scss}": [
