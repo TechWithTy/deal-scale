@@ -46,7 +46,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				{/* Meta Pixel Base Code - Required for Meta Pixel Helper detection */}
 				{facebookPixelId && (
 					<>
-						{/* biome-ignore lint/security/noDangerouslySetInnerHtml: Required by Meta Pixel specification */}
 						<script
 							// biome-ignore lint/security/noDangerouslySetInnerHtml: Required by Meta Pixel specification
 							dangerouslySetInnerHTML={{
