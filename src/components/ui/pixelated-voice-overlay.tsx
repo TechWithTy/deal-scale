@@ -257,7 +257,7 @@ const PixelatedVoiceOverlayComponent = ({
 											"relative w-full max-w-xs rounded-2xl p-4 backdrop-blur-md transition-all duration-300 sm:max-w-sm",
 											beforeCard.className,
 											beforeActive
-												? "ring-2 ring-red-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900 bg-red-50/95 dark:bg-red-900/40 shadow-xl"
+												? "bg-red-50/95 shadow-xl ring-2 ring-red-500 ring-offset-2 ring-offset-white dark:bg-red-900/40 dark:ring-offset-slate-900"
 												: inactiveCardClasses,
 										)}
 									>
@@ -271,17 +271,20 @@ const PixelatedVoiceOverlayComponent = ({
 											className={cn(
 												"font-bold text-xs uppercase tracking-[0.28em]",
 												beforeCard.labelClassName,
-												beforeActive && "text-red-700 dark:text-red-100 drop-shadow-sm",
+												beforeActive &&
+													"text-red-700 drop-shadow-sm dark:text-red-100",
 											)}
 										>
 											{beforeCard.title}
 										</p>
-										<p className={cn(
-											"mt-3 text-sm leading-relaxed sm:text-base",
-											beforeActive 
-												? "text-red-900 font-medium dark:text-red-50 drop-shadow-sm" 
-												: "text-slate-700 dark:text-white/90"
-										)}>
+										<p
+											className={cn(
+												"mt-3 text-sm leading-relaxed sm:text-base",
+												beforeActive
+													? "font-medium text-red-900 drop-shadow-sm dark:text-red-50"
+													: "text-slate-700 dark:text-white/90",
+											)}
+										>
 											{beforeCard.description}
 										</p>
 									</div>
@@ -322,7 +325,7 @@ const PixelatedVoiceOverlayComponent = ({
 											"relative w-full max-w-xs rounded-2xl p-4 backdrop-blur-md transition-all duration-300 sm:max-w-sm",
 											afterCard.className,
 											afterActive
-												? "ring-2 ring-emerald-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-900 bg-emerald-50/95 dark:bg-emerald-900/40 shadow-xl"
+												? "bg-emerald-50/95 shadow-xl ring-2 ring-emerald-400 ring-offset-2 ring-offset-white dark:bg-emerald-900/40 dark:ring-offset-slate-900"
 												: inactiveCardClasses,
 										)}
 									>
@@ -340,17 +343,20 @@ const PixelatedVoiceOverlayComponent = ({
 											className={cn(
 												"font-bold text-xs uppercase tracking-[0.28em]",
 												afterCard.labelClassName,
-												afterActive && "text-emerald-700 dark:text-emerald-100 drop-shadow-sm",
+												afterActive &&
+													"text-emerald-700 drop-shadow-sm dark:text-emerald-100",
 											)}
 										>
 											{afterCard.title}
 										</p>
-										<p className={cn(
-											"mt-3 text-sm leading-relaxed sm:text-base",
-											afterActive 
-												? "text-emerald-900 font-medium dark:text-emerald-50 drop-shadow-sm" 
-												: "text-slate-700 dark:text-white/90"
-										)}>
+										<p
+											className={cn(
+												"mt-3 text-sm leading-relaxed sm:text-base",
+												afterActive
+													? "font-medium text-emerald-900 drop-shadow-sm dark:text-emerald-50"
+													: "text-slate-700 dark:text-white/90",
+											)}
+										>
 											{afterCard.description}
 										</p>
 									</div>
@@ -477,7 +483,7 @@ const PixelatedVoiceOverlayComponent = ({
 				</div>
 				{!hasActiveTrack ? (
 					<div className="flex flex-col gap-3 text-center text-slate-600 sm:flex-row sm:items-center sm:justify-between sm:text-left dark:text-white/70">
-						<div className="flex flex-col gap-2 items-center sm:items-start">
+						<div className="flex flex-col items-center gap-2 sm:items-start">
 							<span className="text-slate-500 text-xs uppercase tracking-[0.28em] dark:text-white/50">
 								Audio Comparison
 							</span>
@@ -486,7 +492,7 @@ const PixelatedVoiceOverlayComponent = ({
 								timbre, pacing, and emotion.
 							</p>
 						</div>
-						<div className="flex flex-col gap-2 sm:flex-row sm:items-center items-center">
+						<div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center">
 							<button
 								type="button"
 								onClick={isPlaying ? onStop : onPlay}

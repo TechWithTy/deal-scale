@@ -76,7 +76,7 @@ export default function PricingCheckoutDialog({
 					<p className="mb-4 font-semibold text-lg">
 						We couldn't initialize the checkout experience.
 					</p>
-					<p className="mb-6 text-sm text-muted-foreground">
+					<p className="mb-6 text-muted-foreground text-sm">
 						Please refresh the page or contact support for assistance.
 					</p>
 					<Button onClick={onClose} variant="secondary">

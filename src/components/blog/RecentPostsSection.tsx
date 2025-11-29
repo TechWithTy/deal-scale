@@ -23,7 +23,7 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 		>
 			<h3
 				id={`${title.replace(/\s+/g, "-").toLowerCase()}-heading`}
-				className="mb-5 font-semibold text-lg text-foreground"
+				className="mb-5 font-semibold text-foreground text-lg"
 			>
 				{title}
 			</h3>
@@ -55,7 +55,7 @@ export function RecentPostsSection({ title, posts }: RecentPostsSectionProps) {
 							height={450}
 						/>
 						<div className="flex flex-col">
-							<h4 className="font-semibold text-sm text-foreground transition-colors group-hover:text-primary">
+							<h4 className="font-semibold text-foreground text-sm transition-colors group-hover:text-primary">
 								{post.title}
 							</h4>
 							<p className="mt-0.5 text-muted-foreground text-xs">

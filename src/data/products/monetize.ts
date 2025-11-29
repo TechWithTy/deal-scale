@@ -18,11 +18,10 @@ export const monetizeProducts: ProductType[] = [
 		licenseName: LicenseType.Proprietary,
 		description:
 			"Publish and sell your proven sales scripts to thousands of Deal Scale operators. Share your best cadences, email sequences, and messaging templates to earn recurring revenue.",
-		categories: [
-			ProductCategory.SalesScripts,
-			ProductCategory.Monetize,
+		categories: [ProductCategory.SalesScripts, ProductCategory.Monetize],
+		images: [
+			"https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=800&fit=crop&q=80",
 		],
-		images: ["https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=800&fit=crop&q=80"],
 		types: [],
 		reviews: [],
 		colors: [],
@@ -49,11 +48,10 @@ export const monetizeProducts: ProductType[] = [
 		licenseName: LicenseType.Proprietary,
 		description:
 			"Monetize your automation workflows by sharing them with the Deal Scale community. Sell your proven automations and earn revenue from thousands of operators who need your solutions.",
-		categories: [
-			ProductCategory.Workflows,
-			ProductCategory.Monetize,
+		categories: [ProductCategory.Workflows, ProductCategory.Monetize],
+		images: [
+			"https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop&q=80",
 		],
-		images: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop&q=80"],
 		types: [],
 		reviews: [],
 		colors: [],
@@ -80,11 +78,10 @@ export const monetizeProducts: ProductType[] = [
 		licenseName: LicenseType.Proprietary,
 		description:
 			"Monetize your voice agents and AI concierges by listing them on Deal Scale. Deploy your voice automation solutions to our network of clients and earn recurring revenue.",
-		categories: [
-			ProductCategory.Voices,
-			ProductCategory.Monetize,
+		categories: [ProductCategory.Voices, ProductCategory.Monetize],
+		images: [
+			"https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=1200&h=800&fit=crop&q=80",
 		],
-		images: ["https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=1200&h=800&fit=crop&q=80"],
 		types: [],
 		reviews: [],
 		colors: [],
@@ -103,7 +100,3 @@ export const monetizeProducts: ProductType[] = [
 		],
 	},
 ];
-
-
-
-

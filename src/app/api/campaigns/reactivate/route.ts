@@ -1,7 +1,7 @@
 import { authOptions } from "@/lib/authOptions";
+import type { ContactData } from "@/utils/csvParser";
 import { getServerSession } from "next-auth";
 import { type NextRequest, NextResponse } from "next/server";
-import type { ContactData } from "@/utils/csvParser";
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
@@ -29,29 +29,33 @@ const TIME_PER_CONTACT_HOURS = 0.25; // Estimated time per contact in hours (15 
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(authOptions);
-		
+
 		// Allow unauthenticated requests in development mode for testing
 		const isDevelopment = process.env.NODE_ENV === "development";
 		const hasAuth = session?.user && session?.dsTokens?.access_token;
-		
+
 		if (!isDevelopment && !hasAuth) {
 			return NextResponse.json(
-				{ 
+				{
 					error: "Unauthorized",
-					message: "Please sign in to activate campaigns"
-				}, 
-				{ status: 401 }
+					message: "Please sign in to activate campaigns",
+				},
+				{ status: 401 },
 			);
 		}
 
 		// Use a mock token in development if no session
-		const accessToken = hasAuth 
-			? session.dsTokens.access_token 
+		const accessToken = hasAuth
+			? session.dsTokens.access_token
 			: "dev-mock-token";
 
 		const body: ReactivateRequest = await req.json();
 
-		if (!body.contacts || !Array.isArray(body.contacts) || body.contacts.length === 0) {
+		if (
+			!body.contacts ||
+			!Array.isArray(body.contacts) ||
+			body.contacts.length === 0
+		) {
 			return NextResponse.json(
 				{ error: "Missing or empty contacts array" },
 				{ status: 400 },
@@ -215,10 +219,7 @@ async function batchActivateContacts(
 		const batchPromises = batch.map(async (contact) => {
 			try {
 				// First, create or get contact ID
-				const contactId = await getOrCreateContactId(
-					contact,
-					accessToken,
-				);
+				const contactId = await getOrCreateContactId(contact, accessToken);
 
 				if (!contactId) {
 					return {
@@ -346,4 +347,3 @@ async function getOrCreateContactId(
 			: `temp_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 	}
 }
-

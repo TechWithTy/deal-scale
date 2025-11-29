@@ -168,7 +168,9 @@ export async function GET(request: NextRequest) {
 							(p as any)?.displayed_date,
 					);
 					const isFuture = isFutureByDay(ts);
-					return s === "confirmed" && !hidden && (includeScheduled || !isFuture);
+					return (
+						s === "confirmed" && !hidden && (includeScheduled || !isFuture)
+					);
 				});
 				const normalizedVisible = visiblePosts.map((post) =>
 					ensurePublishedAt(post as Record<string, unknown>),
@@ -305,7 +307,9 @@ export async function GET(request: NextRequest) {
 							(it as any)?.displayed_date,
 					);
 					const isFuture = isFutureByDay(ts);
-					return s === "confirmed" && !hidden && (includeScheduled || !isFuture);
+					return (
+						s === "confirmed" && !hidden && (includeScheduled || !isFuture)
+					);
 				});
 				filteredStream.push(
 					...visible.map((post) =>

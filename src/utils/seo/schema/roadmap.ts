@@ -2,7 +2,7 @@ import type { FeatureTimelineMilestone } from "@/components/features/FeatureTime
 import { companyData } from "@/data/company";
 import { defaultSeo } from "@/utils/seo/staticSeo";
 
-import { buildAbsoluteUrl, ORGANIZATION_ID, SCHEMA_CONTEXT } from "./helpers";
+import { ORGANIZATION_ID, SCHEMA_CONTEXT, buildAbsoluteUrl } from "./helpers";
 
 export interface BuildRoadmapSchemaOptions {
 	url?: string;

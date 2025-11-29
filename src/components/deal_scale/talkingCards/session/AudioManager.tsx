@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import type { LineStatus } from "@/types/transcript";
+import { useEffect, useRef, useState } from "react";
 
 interface AudioManagerProps {
 	callStatus: LineStatus;

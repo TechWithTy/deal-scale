@@ -29,9 +29,10 @@ export default async function handler(
 		res.status(200).send(xml);
 	} catch (error) {
 		console.error("Error fetching World Property Journal RSS feed:", error);
-		res.status(502).send(
-			'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>World Property Journal Feed Error</title><description>World Property Journal RSS temporarily unavailable.</description></channel></rss>',
-		);
+		res
+			.status(502)
+			.send(
+				'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>World Property Journal Feed Error</title><description>World Property Journal RSS temporarily unavailable.</description></channel></rss>',
+			);
 	}
 }
-

@@ -470,10 +470,7 @@ export function useDataModule<K extends DataModuleKey, S = DataModuleState<K>>(
 			const loadPromise = store.getState().load();
 			if (loadPromise) {
 				void loadPromise.catch((error) => {
-					console.error(
-						`[useDataModule] Load error for key "${key}":`,
-						error,
-					);
+					console.error(`[useDataModule] Load error for key "${key}":`, error);
 					console.error(
 						`[useDataModule] Load error stack:`,
 						error instanceof Error ? error.stack : String(error),

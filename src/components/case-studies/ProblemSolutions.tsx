@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
 
 interface ProblemSolutionsProps {
 	caseStudy: CaseStudy;

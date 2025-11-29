@@ -575,4 +575,3 @@ export default async function handler(
 		res.status(502).send(errorFeed);
 	}
 }
-

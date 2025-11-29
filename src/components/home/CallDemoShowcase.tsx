@@ -151,7 +151,7 @@ const PhoneShell = ({
 }) => (
 	<div
 		className={cn(
-			"relative w-full max-w-[22rem] rounded-[3.25rem] p-3 backdrop-blur-md shadow-[0_35px_80px_rgba(15,23,42,0.55)] ring-1 sm:max-w-[24rem] md:max-w-[26rem]",
+			"relative w-full max-w-[22rem] rounded-[3.25rem] p-3 shadow-[0_35px_80px_rgba(15,23,42,0.55)] ring-1 backdrop-blur-md sm:max-w-[24rem] md:max-w-[26rem]",
 			"bg-slate-800/60 ring-slate-700/50",
 			"dark:bg-slate-900/70 dark:ring-white/12",
 			className,
@@ -217,10 +217,12 @@ const CallHandoffCard = ({
 								className="size-full object-cover"
 							/>
 						</div>
-						<h3 className="font-semibold text-lg text-slate-900 dark:text-white">Jordan, DealScale AI Rep</h3>
+						<h3 className="font-semibold text-lg text-slate-900 dark:text-white">
+							Jordan, DealScale AI Rep
+						</h3>
 						<p className="text-slate-600 text-sm dark:text-slate-300">
-							Lead is ready to confirm. Est. commission: $15,000. Accept and we&apos;ll sync the handoff to
-							your CRM.
+							Lead is ready to confirm. Est. commission: $15,000. Accept and
+							we&apos;ll sync the handoff to your CRM.
 						</p>
 					</div>
 				</div>
@@ -244,27 +246,27 @@ const CallHandoffCard = ({
 				</div>
 			</div>
 			<div className="relative flex w-full flex-shrink-0 flex-col gap-3">
-					<button
-						type="button"
-						onClick={onAccept}
-						className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 font-semibold text-sm text-white shadow-emerald-500/40 shadow-lg transition hover:bg-emerald-400 dark:bg-emerald-500 dark:hover:bg-emerald-400"
-					>
-						Accept Appointment
-					</button>
-					<button
-						type="button"
-						onClick={onQueue}
-						className="inline-flex w-full items-center justify-center rounded-full border border-slate-300/30 bg-slate-50/90 px-5 py-2.5 font-medium text-sm text-slate-900 transition hover:bg-slate-100/90 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-					>
-						Send to Follow-up Queue
-					</button>
-					<button
-						type="button"
-						onClick={onCancel}
-						className="inline-flex w-full items-center justify-center rounded-full border border-slate-300/20 bg-transparent px-5 py-2.5 font-medium text-sm text-slate-700 transition hover:bg-slate-100/50 dark:border-white/10 dark:text-white dark:hover:bg-white/10"
-					>
-						Cancel
-					</button>
+				<button
+					type="button"
+					onClick={onAccept}
+					className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 font-semibold text-sm text-white shadow-emerald-500/40 shadow-lg transition hover:bg-emerald-400 dark:bg-emerald-500 dark:hover:bg-emerald-400"
+				>
+					Accept Appointment
+				</button>
+				<button
+					type="button"
+					onClick={onQueue}
+					className="inline-flex w-full items-center justify-center rounded-full border border-slate-300/30 bg-slate-50/90 px-5 py-2.5 font-medium text-slate-900 text-sm transition hover:bg-slate-100/90 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+				>
+					Send to Follow-up Queue
+				</button>
+				<button
+					type="button"
+					onClick={onCancel}
+					className="inline-flex w-full items-center justify-center rounded-full border border-slate-300/20 bg-transparent px-5 py-2.5 font-medium text-slate-700 text-sm transition hover:bg-slate-100/50 dark:border-white/10 dark:text-white dark:hover:bg-white/10"
+				>
+					Cancel
+				</button>
 			</div>
 		</div>
 	);

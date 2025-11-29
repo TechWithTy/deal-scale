@@ -38,7 +38,7 @@ const BentoPage: React.FC<BentoPageProps> = ({ title, subtitle, features }) => {
 								</div>
 							}
 						>
-							<div className="relative z-10 flex transform-gpu flex-col gap-4 rounded-2xl bg-background/98 p-5 text-left text-foreground shadow-[0_15px_45px_-30px_rgba(14,165,233,0.35)] ring-1 ring-border/40 backdrop-blur-lg transition-all duration-300 ease-out will-change-opacity will-change-transform before:absolute before:inset-0 before:rounded-2xl before:bg-black/10 before:pointer-events-none group-hover:bg-background group-hover:ring-accent/50 dark:bg-background/90 dark:text-foreground">
+							<div className="relative z-10 flex transform-gpu flex-col gap-4 rounded-2xl bg-background/98 p-5 text-left text-foreground shadow-[0_15px_45px_-30px_rgba(14,165,233,0.35)] ring-1 ring-border/40 backdrop-blur-lg transition-all duration-300 ease-out will-change-opacity will-change-transform before:pointer-events-none before:absolute before:inset-0 before:rounded-2xl before:bg-black/10 group-hover:bg-background group-hover:ring-accent/50 dark:bg-background/90 dark:text-foreground">
 								{feature.content}
 							</div>
 						</MagicBentoCard>

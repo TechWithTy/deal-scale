@@ -30,8 +30,3 @@ export const Z_INDEX = {
 	MOBILE_MENU: 9999,
 	CRITICAL_OVERLAY: 9999,
 } as const;
-
-
-
-
-

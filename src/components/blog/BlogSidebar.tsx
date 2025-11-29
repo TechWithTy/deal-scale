@@ -155,10 +155,10 @@ const BlogSidebar = ({ posts }: BlogSidebarProps) => {
 				className="glass-card flex items-center justify-between rounded-xl p-6"
 			>
 				<div>
-					<h3 className="mb-1 font-semibold text-xl text-foreground">
+					<h3 className="mb-1 font-semibold text-foreground text-xl">
 						RSS Feed
 					</h3>
-					<p className="text-sm text-muted-foreground">
+					<p className="text-muted-foreground text-sm">
 						Subscribe to our RSS feed
 					</p>
 				</div>

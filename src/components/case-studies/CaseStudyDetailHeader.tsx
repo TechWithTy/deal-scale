@@ -1,8 +1,3 @@
-import { motion } from "framer-motion";
-import { ChevronLeft, Eye, Share2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { v4 as uuidv4 } from "uuid";
 import { SocialShare } from "@/components/common/social/share/SocialShare";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +7,11 @@ import {
 } from "@/components/ui/popover";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
+import { ChevronLeft, Eye, Share2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
 
 interface CaseStudyDetailHeaderProps {
 	caseStudy: CaseStudy;

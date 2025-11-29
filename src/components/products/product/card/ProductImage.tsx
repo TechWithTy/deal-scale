@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ProductCategory } from "@/types/products";
+import Link from "next/link";
 import type { ProductImageProps } from "./types";
 
 const ProductImage = ({
@@ -11,7 +11,11 @@ const ProductImage = ({
 	// Redirect Remote Closers products to application page
 	const isRemoteCloser =
 		categories?.includes(ProductCategory.RemoteClosers) ?? false;
-	const href = isRemoteCloser ? "/closers/apply" : slug ? `/products/${slug}` : "#";
+	const href = isRemoteCloser
+		? "/closers/apply"
+		: slug
+			? `/products/${slug}`
+			: "#";
 
 	return (
 		<div className="w-full pt-2">

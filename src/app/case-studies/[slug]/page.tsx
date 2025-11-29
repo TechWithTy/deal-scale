@@ -6,8 +6,8 @@ import type { CaseStudy } from "@/types/case-study";
 import { getTestBaseUrl } from "@/utils/env";
 import { getSeoMetadataForCaseStudy } from "@/utils/seo/dynamic/case-studies";
 import {
-	buildCaseStudyCreativeWorkSchema,
 	SchemaInjector,
+	buildCaseStudyCreativeWorkSchema,
 } from "@/utils/seo/schema";
 import CaseStudyPageClient from "./CaseStudyPageClient";
 
