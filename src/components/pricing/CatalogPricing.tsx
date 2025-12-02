@@ -50,7 +50,7 @@ type PricingView = PricingInterval | "oneTime";
 const VIEW_OPTIONS: Array<{ value: PricingView; label: string }> = [
 	{ value: "monthly", label: "Monthly" },
 	{ value: "annual", label: "Annual" },
-	{ value: "oneTime", label: "One-Time" },
+	{ value: "oneTime", label: "Success Based" },
 ];
 
 const ANNUAL_PLAN_BADGES: Record<
