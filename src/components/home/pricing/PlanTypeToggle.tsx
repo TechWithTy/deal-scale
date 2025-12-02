@@ -19,7 +19,7 @@ const PLAN_TYPE_ORDER: PlanType[] = ["monthly", "annual", "oneTime"];
 const PLAN_TYPE_LABEL: Record<PlanType, string> = {
 	monthly: "Monthly",
 	annual: "Annual",
-	oneTime: "One-Time",
+	oneTime: "Success Based",
 };
 
 function formatCurrency(amount: number) {

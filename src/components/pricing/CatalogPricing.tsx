@@ -50,7 +50,7 @@ type PricingView = PricingInterval | "oneTime";
 const VIEW_OPTIONS: Array<{ value: PricingView; label: string }> = [
 	{ value: "monthly", label: "Monthly" },
 	{ value: "annual", label: "Annual" },
-	{ value: "oneTime", label: "One-Time" },
+	{ value: "oneTime", label: "Success Based" },
 ];
 
 const ANNUAL_PLAN_BADGES: Record<
@@ -75,6 +75,7 @@ const ONE_TIME_PLAN_BADGES: Record<
 	string,
 	{ label: string; variant: "partner" | "basic" | "starter" | "enterprise" }
 > = {
+	whiteGloveSuccessBased: { label: "PERFORMANCE MODEL", variant: "enterprise" },
 	commissionPartner: { label: "Commission Partner", variant: "partner" },
 };
 
@@ -104,7 +105,7 @@ const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 	: null;
 
-const isSelfHosted = (plan: OneTimePlan): plan is SelfHostedPlan =>
+const _isSelfHosted = (plan: OneTimePlan): plan is SelfHostedPlan =>
 	"ctaPrimary" in plan && "roiEstimator" in plan;
 
 /**
@@ -213,10 +214,17 @@ export const CatalogPricing = ({
 	const selfHostedPlan = oneTimePlans.find(
 		(plan): plan is SelfHostedPlan => "roiEstimator" in plan,
 	);
-	const partnershipPlans = oneTimePlans.filter(
-		(plan): plan is Exclude<OneTimePlan, SelfHostedPlan> =>
-			!("roiEstimator" in plan),
-	);
+	const partnershipPlans = oneTimePlans
+		.filter(
+			(plan): plan is Exclude<OneTimePlan, SelfHostedPlan> =>
+				!("roiEstimator" in plan),
+		)
+		.sort((a, b) => {
+			// Prioritize White-Glove to appear first
+			if (a.id === "whiteGloveSuccessBased") return -1;
+			if (b.id === "whiteGloveSuccessBased") return 1;
+			return 0;
+		});
 
 	const handleSubscribe = useCallback(
 		async (recurringPlan: RecurringPlan, interval: PricingInterval) => {
@@ -1035,14 +1043,19 @@ export const CatalogPricing = ({
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 									{partnershipPlans.map((plan) => {
 										const badgeConfig = ONE_TIME_PLAN_BADGES[plan.id];
+										const isWhiteGlove = plan.id === "whiteGloveSuccessBased";
 
 										return (
-											<PartnershipCard
+											<div
 												key={plan.id}
-												{...toPartnershipProps(plan)}
-												badgeLabel={badgeConfig?.label}
-												badgeVariant={badgeConfig?.variant}
-											/>
+												className={isWhiteGlove ? "md:col-span-2" : ""}
+											>
+												<PartnershipCard
+													{...toPartnershipProps(plan)}
+													badgeLabel={badgeConfig?.label}
+													badgeVariant={badgeConfig?.variant}
+												/>
+											</div>
 										);
 									})}
 								</div>
