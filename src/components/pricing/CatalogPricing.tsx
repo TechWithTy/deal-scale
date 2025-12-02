@@ -104,7 +104,7 @@ const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 	: null;
 
-const isSelfHosted = (plan: OneTimePlan): plan is SelfHostedPlan =>
+const _isSelfHosted = (plan: OneTimePlan): plan is SelfHostedPlan =>
 	"ctaPrimary" in plan && "roiEstimator" in plan;
 
 /**
