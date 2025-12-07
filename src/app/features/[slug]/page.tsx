@@ -6,15 +6,16 @@ import { SchemaInjector, buildServiceJsonLd } from "@/utils/seo/schema";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-// Next.js 15+ Dynamic Route Compatibility Workaround
-// Use Promise type for params in generateMetadata; use type assertion inside the page function.
-// This prevents type errors in production builds due to Next.js 15+ breaking changes.
+// Next.js 15+ Dynamic Route Compatibility
+// Params are now Promises and must be awaited in both generateMetadata and page components.
+
+interface ServicePageProps {
+	params: Promise<{ slug: string }>;
+}
 
 export async function generateMetadata({
 	params,
-}: {
-	params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+}: ServicePageProps): Promise<Metadata> {
 	const { slug } = await params;
 	const allServices: ServiceItemData[] = Object.values(allServicesRaw).flatMap(
 		(category) => Object.values(category),
@@ -22,13 +23,13 @@ export async function generateMetadata({
 	return getSeoMetadataForService(slug, allServices);
 }
 
-export default async function ServicePage(props: unknown) {
-	const { params } = props as { params: { slug: string } };
+export default async function ServicePage({ params }: ServicePageProps) {
+	const { slug } = await params;
 	const allServices: ServiceItemData[] = Object.values(allServicesRaw).flatMap(
 		(category) => Object.values(category),
 	);
 	const service =
-		allServices.find((s) => s.slugDetails.slug === params.slug) || null;
+		allServices.find((s) => s.slugDetails.slug === slug) || null;
 	if (!service) return notFound();
 	const serviceSchema = buildServiceJsonLd(service);
 

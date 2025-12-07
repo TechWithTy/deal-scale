@@ -1,8 +1,8 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { motion, type Variants } from "framer-motion";
+
 import { cn } from "@/lib/utils";
-import { type Variants, motion } from "framer-motion";
 
 export interface BadgeMetrics {
 	dollarAmount: number;
@@ -55,7 +55,7 @@ export function ReactivateCampaignBadges({
 		},
 		{
 			id: "hobby",
-			label: `+${metrics.hobbyTimeHours} hours hobby time by the week`,
+			label: `${metrics.hobbyTimeHours}+ hobby time this week`,
 			color:
 				"bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900 dark:text-orange-100 dark:border-orange-700",
 		},

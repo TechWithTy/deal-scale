@@ -1,9 +1,8 @@
 import type { HeroVideoConfig } from "@external/dynamic-hero";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import React from "react";
 import type { ReactNode } from "react";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Mock } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
 
 const startTrialMock = vi.fn(() => Promise.resolve());
@@ -40,7 +39,7 @@ vi.mock("../../live-dynamic-hero-demo/LiveDynamicHeroClient", () => {
 						},
 						"See How It Works",
 					),
-					React.createElement("p", {}, "Review the rollout steps"),
+					React.createElement("p", {}, "See AI In Action"),
 				),
 			);
 		},
@@ -136,9 +135,7 @@ vi.mock("motion/react", () => ({
 	useInView: () => true,
 }));
 
-let LiveDynamicHeroDemoPage: typeof import(
-	"../../live-dynamic-hero-demo/page",
-).default;
+let LiveDynamicHeroDemoPage: typeof import("../../live-dynamic-hero-demo/page").default;
 
 beforeAll(async () => {
 	Object.defineProperty(window.HTMLElement.prototype, "scrollIntoView", {
@@ -211,7 +208,7 @@ describe("LiveDynamicHeroDemoPage", () => {
 
 		// Wait for hydrated version to render - findByText already asserts element exists
 		await screen.findByText("Get Started in 1 Click", {}, { timeout: 3000 });
-		await screen.findByText(/Review the rollout steps/i, {}, { timeout: 3000 });
+		await screen.findByText(/See AI In Action/i, {}, { timeout: 3000 });
 	});
 
 	it("triggers Stripe trial checkout when primary CTA is clicked", async () => {
