@@ -135,9 +135,7 @@ vi.mock("motion/react", () => ({
 	useInView: () => true,
 }));
 
-let LiveDynamicHeroDemoPage: typeof import(
-	"../../live-dynamic-hero-demo/page"
-).default;
+let LiveDynamicHeroDemoPage: typeof import("../../live-dynamic-hero-demo/page").default;
 
 beforeAll(async () => {
 	Object.defineProperty(window.HTMLElement.prototype, "scrollIntoView", {
