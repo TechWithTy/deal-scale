@@ -156,7 +156,7 @@ describe("redirect route with UTM parameter preservation", () => {
 		expect(location).toContain("affiliate_id=12345");
 	});
 
-	test("does not preserve params for relative paths (should use middleware)", async () => {
+	test("does not preserve params for relative paths (should use proxy)", async () => {
 		const searchParams = new URLSearchParams();
 		searchParams.set("utm_source", "test-source");
 
@@ -164,7 +164,7 @@ describe("redirect route with UTM parameter preservation", () => {
 		const response = await GET(req);
 
 		const location = response.headers.get("location");
-		// Relative paths should not have params preserved (middleware handles this)
+		// Relative paths should not have params preserved (proxy handles this)
 		expect(location).toMatch(/^https:\/\/example\.com\/signup$/);
 		expect(location).not.toContain("utm_source");
 	});

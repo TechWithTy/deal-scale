@@ -183,7 +183,7 @@ function getDestinationStrict(prop: unknown): string | undefined {
 }
 
 async function findRedirectBySlug(slug: string): Promise<Found | null> {
-	console.log(`[middleware] findRedirectBySlug searching for: '${slug}'`);
+	console.log(`[proxy] findRedirectBySlug searching for: '${slug}'`);
 	// Prefer Notion when credentials exist (even in development) so we can increment counters.
 	const isProd = process.env.NODE_ENV === "production";
 	const NOTION_KEY = process.env.NOTION_KEY;
@@ -306,7 +306,7 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 			} catch (err) {
 				// If mapping fails, continue without Facebook Pixel tracking
 				console.error(
-					"[middleware] Failed to extract Facebook Pixel fields:",
+					"[proxy] Failed to extract Facebook Pixel fields:",
 					err,
 				);
 			}
@@ -328,18 +328,18 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 				facebookPixelIntent,
 			};
 			console.log(
-				`[middleware] Notion found pageId: ${result.pageId}, nextCalls: ${result.nextCalls}`,
+				`[proxy] Notion found pageId: ${result.pageId}, nextCalls: ${result.nextCalls}`,
 			);
 			return result;
 		}
 	}
 	// Not found in Notion; use dev fallback if available (no counter increment)
 	if (devFallback)
-		console.log(`[middleware] Notion miss, using dev fallback for '${slug}'`);
+		console.log(`[proxy] Notion miss, using dev fallback for '${slug}'`);
 	return devFallback ? { destination: devFallback } : null;
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
 	const { pathname } = req.nextUrl;
 	// Skip Next.js internals and API/static routes
 	if (
@@ -358,17 +358,17 @@ export async function middleware(req: NextRequest) {
 	const slug = pathname.split("/")[1]?.toLowerCase();
 	if (!slug) return NextResponse.next();
 
-	console.log(`[middleware] Path: ${pathname}, Slug: ${slug}`);
+	console.log(`[proxy] Path: ${pathname}, Slug: ${slug}`);
 
 	try {
 		const found = await findRedirectBySlug(slug);
-		console.log("[middleware] findRedirectBySlug result:", found);
+		console.log("[proxy] findRedirectBySlug result:", found);
 		if (!found) return NextResponse.next();
 
 		let dest = sanitizeUrlLike(found.destination || "");
 		if (dest.length < 3) {
 			console.warn(
-				"[middleware] Weak destination for slug:",
+				"[proxy] Weak destination for slug:",
 				slug,
 				JSON.stringify(dest),
 			);
@@ -385,7 +385,7 @@ export async function middleware(req: NextRequest) {
 			else {
 				// Suspicious destination like single letter; skip redirect
 				console.warn(
-					"[middleware] Ignoring suspicious destination for slug:",
+					"[proxy] Ignoring suspicious destination for slug:",
 					slug,
 					JSON.stringify(dest),
 				);
@@ -408,7 +408,7 @@ export async function middleware(req: NextRequest) {
 
 		if (!isRelative && !isValidAbsoluteHttpUrl(dest)) {
 			console.warn(
-				"[middleware] Malformed absolute URL, skipping redirect:",
+				"[proxy] Malformed absolute URL, skipping redirect:",
 				JSON.stringify(dest),
 			);
 			return NextResponse.next();
@@ -433,7 +433,7 @@ export async function middleware(req: NextRequest) {
 			url.searchParams.set("utm_redirect_url", found.utm_redirect_url);
 
 		// Debug: show the UTMs we are about to use (helps verify Notion -> URL mapping)
-		console.log("[middleware] UTMs (after Notion + optional overrides):", {
+		console.log("[proxy] UTMs (after Notion + optional overrides):", {
 			source: url.searchParams.get("utm_source"),
 			campaign: url.searchParams.get("utm_campaign"),
 			medium: url.searchParams.get("utm_medium"),
@@ -477,7 +477,7 @@ export async function middleware(req: NextRequest) {
 			}
 		}
 
-		console.log("[middleware] Final redirect:", url.toString());
+		console.log("[proxy] Final redirect:", url.toString());
 
 		// Add RedirectSource based on referer
 		const referer = req.headers.get("referer");
@@ -511,7 +511,7 @@ export async function middleware(req: NextRequest) {
 		const nextCalls = found.nextCalls;
 		if (NOTION_KEY && pageId && typeof nextCalls === "number") {
 			console.log(
-				`[middleware] Attempting to increment count for pageId: ${pageId} to ${nextCalls}`,
+				`[proxy] Attempting to increment count for pageId: ${pageId} to ${nextCalls}`,
 			);
 			// Fire-and-forget, but log errors
 			(async () => {
@@ -532,17 +532,17 @@ export async function middleware(req: NextRequest) {
 					if (!res.ok) {
 						const errorBody = await res.json();
 						console.error(
-							`[middleware] FAILED to increment count for pageId: ${pageId}. Status: ${res.status}`,
+							`[proxy] FAILED to increment count for pageId: ${pageId}. Status: ${res.status}`,
 							JSON.stringify(errorBody, null, 2),
 						);
 					} else {
 						console.log(
-							`[middleware] Successfully incremented count for pageId: ${pageId}. Status: ${res.status}`,
+							`[proxy] Successfully incremented count for pageId: ${pageId}. Status: ${res.status}`,
 						);
 					}
 				} catch (e) {
 					console.error(
-						`[middleware] Network error while incrementing count for pageId: ${pageId}`,
+						`[proxy] Network error while incrementing count for pageId: ${pageId}`,
 						e,
 					);
 				}

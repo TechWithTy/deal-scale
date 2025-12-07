@@ -1,8 +1,8 @@
 /**
- * Tests for middleware redirect functionality with UTM parameters
+ * Tests for proxy redirect functionality with UTM parameters
  */
 
-import { middleware } from "@/middleware";
+import { proxy } from "@/proxy";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
@@ -27,7 +27,7 @@ afterEach(() => {
 	process.env.ALLOW_INCOMING_UTM = undefined;
 });
 
-describe("middleware redirects with UTM parameters", () => {
+describe("proxy redirects with UTM parameters", () => {
 	const createRequest = (
 		pathname: string,
 		searchParams?: URLSearchParams,
@@ -155,7 +155,7 @@ describe("middleware redirects with UTM parameters", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		expect(response).toBeInstanceOf(NextResponse);
 		expect(response?.status).toBe(307);
@@ -189,7 +189,7 @@ describe("middleware redirects with UTM parameters", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("utm_campaign=primary-campaign");
@@ -213,7 +213,7 @@ describe("middleware redirects with UTM parameters", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("utm_campaign=fallback-campaign");
@@ -240,7 +240,7 @@ describe("middleware redirects with UTM parameters", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("utm_source=notion-source");
@@ -273,7 +273,7 @@ describe("middleware redirects with UTM parameters", () => {
 		searchParams.set("utm_content", "incoming-content");
 
 		const req = createRequest("/pilot", searchParams);
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		// Incoming UTMs override Notion UTMs when ALLOW_INCOMING_UTM is set
@@ -304,7 +304,7 @@ describe("middleware redirects with UTM parameters", () => {
 		searchParams.set("utm_source", "incoming-source");
 
 		const req = createRequest("/pilot", searchParams);
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		// Notion UTMs should be used, incoming UTMs ignored
@@ -331,7 +331,7 @@ describe("middleware redirects with UTM parameters", () => {
 		const req = createRequest("/pilot");
 		req.headers.set("referer", "https://example.com/linktree");
 
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("RedirectSource=Linktree");
@@ -354,7 +354,7 @@ describe("middleware redirects with UTM parameters", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("RedirectSource=Direct");
@@ -377,7 +377,7 @@ describe("middleware redirects with UTM parameters", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toMatch(/^https:\/\/example\.com\/signup/);
@@ -417,7 +417,7 @@ describe("middleware redirects with UTM parameters", () => {
 			});
 
 		const req = createRequest("/pilot");
-		await middleware(req);
+		await proxy(req);
 
 		// Verify increment call was made
 		expect(global.fetch).toHaveBeenCalledTimes(2);
@@ -441,14 +441,14 @@ describe("middleware redirects with UTM parameters", () => {
 
 		for (const path of paths) {
 			const req = createRequest(path);
-			const response = await middleware(req);
+			const response = await proxy(req);
 			expect(response).toBeInstanceOf(NextResponse);
 			expect(response?.status).toBe(200);
 		}
 	});
 });
 
-describe("middleware redirects with Facebook Pixel tracking", () => {
+describe("proxy redirects with Facebook Pixel tracking", () => {
 	const createRequest = (
 		pathname: string,
 		searchParams?: URLSearchParams,
@@ -549,10 +549,10 @@ describe("middleware redirects with Facebook Pixel tracking", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		expect(response).toBeInstanceOf(NextResponse);
-		expect(response?.status).toBe(307); // Middleware uses 307
+		expect(response?.status).toBe(307); // Proxy uses 307
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("/redirect");
@@ -578,7 +578,7 @@ describe("middleware redirects with Facebook Pixel tracking", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		expect(response).toBeInstanceOf(NextResponse);
 		expect(response?.status).toBe(307);
@@ -610,7 +610,7 @@ describe("middleware redirects with Facebook Pixel tracking", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("/redirect");
@@ -638,7 +638,7 @@ describe("middleware redirects with Facebook Pixel tracking", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		const location = response?.headers.get("location");
 		expect(location).toContain("/redirect");
@@ -678,7 +678,7 @@ describe("middleware redirects with Facebook Pixel tracking", () => {
 			});
 
 		const req = createRequest("/pilot");
-		const response = await middleware(req);
+		const response = await proxy(req);
 
 		// Should fall back to direct redirect
 		expect(response).toBeInstanceOf(NextResponse);
