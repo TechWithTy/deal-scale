@@ -78,7 +78,11 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 		let lastIndex = 0;
 		const linkRegex = /<link\s+href="([^"]+)">(.*?)<\/link>/gi;
 		const brRegex = /<br\s*\/?>/gi;
-		const allMatches: Array<{ type: "link" | "br"; index: number; match: RegExpExecArray }> = [];
+		const allMatches: Array<{
+			type: "link" | "br";
+			index: number;
+			match: RegExpExecArray;
+		}> = [];
 
 		// Collect all link matches
 		let match: RegExpExecArray | null = linkRegex.exec(copy);
@@ -106,7 +110,7 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 			}
 
 			if (type === "link") {
-				const [fullMatch, href, text] = currentMatch;
+				const [_fullMatch, href, text] = currentMatch;
 				elements.push(
 					<span
 						key={`cta-link-${index}`}
