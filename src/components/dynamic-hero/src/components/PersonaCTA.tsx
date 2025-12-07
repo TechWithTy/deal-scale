@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import type { FC, ReactNode } from "react";
+import type { FC, MouseEvent, ReactNode } from "react";
 import { useCallback, useMemo } from "react";
 import { z } from "zod";
 
@@ -111,6 +111,20 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 
 			if (type === "link") {
 				const [_fullMatch, href, text] = currentMatch;
+				const isAnchorLink = href.startsWith("#");
+				const handleClick = isAnchorLink
+					? (e: MouseEvent<HTMLAnchorElement>) => {
+							e.preventDefault();
+							const targetId = href.slice(1);
+							const targetElement = document.getElementById(targetId);
+							if (targetElement) {
+								targetElement.scrollIntoView({
+									behavior: "smooth",
+									block: "center",
+								});
+							}
+						}
+					: undefined;
 				elements.push(
 					<span
 						key={`cta-link-${index}`}
@@ -118,6 +132,7 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 					>
 						<a
 							href={href}
+							onClick={handleClick}
 							className={cn(
 								"bg-primary/10",
 								"font-semibold",
