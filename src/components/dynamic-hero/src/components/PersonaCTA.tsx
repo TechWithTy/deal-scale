@@ -77,51 +77,78 @@ const PersonaCTA: FC<PersonaCTAProps> = ({
 		const elements: ReactNode[] = [];
 		let lastIndex = 0;
 		const linkRegex = /<link\s+href="([^"]+)">(.*?)<\/link>/gi;
-		let match: RegExpExecArray | null = linkRegex.exec(copy);
+		const brRegex = /<br\s*\/?>/gi;
+		const allMatches: Array<{ type: "link" | "br"; index: number; match: RegExpExecArray }> = [];
 
+		// Collect all link matches
+		let match: RegExpExecArray | null = linkRegex.exec(copy);
 		while (match !== null) {
-			const [fullMatch, href, text] = match;
-			if (match.index > lastIndex) {
-				elements.push(copy.slice(lastIndex, match.index));
-			}
-			elements.push(
-				<span
-					key={`cta-link-${match.index}`}
-					className={cn("inline-flex", "items-center", "relative")}
-				>
-					<a
-						href={href}
-						className={cn(
-							"bg-primary/10",
-							"font-semibold",
-							"gap-1",
-							"hover:bg-primary/15",
-							"inline-flex",
-							"items-center",
-							"no-underline",
-							"px-2.5",
-							"py-1",
-							"relative",
-							"rounded-full",
-							"text-primary",
-							"text-sm",
-							"transition",
-						)}
-					>
-						{text}
-					</a>
-					<Pointer
-						className="text-primary"
-						initial={{ opacity: 0, scale: 0 }}
-						animate={{ opacity: 0.9, scale: 1 }}
-						exit={{ opacity: 0, scale: 0 }}
-						transition={{ type: "spring", stiffness: 160, damping: 20 }}
-					/>
-				</span>,
-			);
-			lastIndex = match.index + fullMatch.length;
+			allMatches.push({ type: "link", index: match.index, match });
 			match = linkRegex.exec(copy);
 		}
+
+		// Collect all br matches
+		brRegex.lastIndex = 0;
+		match = brRegex.exec(copy);
+		while (match !== null) {
+			allMatches.push({ type: "br", index: match.index, match });
+			match = brRegex.exec(copy);
+		}
+
+		// Sort matches by index
+		allMatches.sort((a, b) => a.index - b.index);
+
+		// Process matches in order
+		for (const item of allMatches) {
+			const { type, index, match: currentMatch } = item;
+			if (index > lastIndex) {
+				elements.push(copy.slice(lastIndex, index));
+			}
+
+			if (type === "link") {
+				const [fullMatch, href, text] = currentMatch;
+				elements.push(
+					<span
+						key={`cta-link-${index}`}
+						className={cn("inline-flex", "items-center", "relative")}
+					>
+						<a
+							href={href}
+							className={cn(
+								"bg-primary/10",
+								"font-semibold",
+								"gap-1",
+								"hover:bg-primary/15",
+								"inline-flex",
+								"items-center",
+								"no-underline",
+								"px-2.5",
+								"py-1",
+								"relative",
+								"rounded-full",
+								"text-primary",
+								"text-sm",
+								"transition",
+							)}
+						>
+							{text}
+						</a>
+						<Pointer
+							className="text-primary"
+							initial={{ opacity: 0, scale: 0 }}
+							animate={{ opacity: 0.9, scale: 1 }}
+							exit={{ opacity: 0, scale: 0 }}
+							transition={{ type: "spring", stiffness: 160, damping: 20 }}
+						/>
+					</span>,
+				);
+				lastIndex = index + currentMatch[0].length;
+			} else if (type === "br") {
+				elements.push(<br key={`cta-br-${index}`} />);
+				lastIndex = index + currentMatch[0].length;
+			}
+		}
+
 		if (lastIndex < copy.length) {
 			elements.push(copy.slice(lastIndex));
 		}
