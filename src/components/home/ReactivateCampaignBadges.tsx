@@ -1,8 +1,8 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { motion, type Variants } from "framer-motion";
+
 import { cn } from "@/lib/utils";
-import { type Variants, motion } from "framer-motion";
 
 export interface BadgeMetrics {
 	dollarAmount: number;
