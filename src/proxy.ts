@@ -305,10 +305,7 @@ async function findRedirectBySlug(slug: string): Promise<Found | null> {
 				facebookPixelIntent = mapped.facebookPixelIntent;
 			} catch (err) {
 				// If mapping fails, continue without Facebook Pixel tracking
-				console.error(
-					"[proxy] Failed to extract Facebook Pixel fields:",
-					err,
-				);
+				console.error("[proxy] Failed to extract Facebook Pixel fields:", err);
 			}
 
 			const result: Found = {
