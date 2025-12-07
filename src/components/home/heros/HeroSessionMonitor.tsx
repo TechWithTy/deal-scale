@@ -200,7 +200,6 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 
 			{/* Session Monitor Carousel */}
 			<div
-				id="ai-outreach-demo"
 				data-testid="session-monitor-carousel"
 				className="relative mx-auto flex w-full max-w-[calc(100vw-3rem)] items-stretch justify-center sm:max-w-[calc(100vw-4rem)] md:max-w-4xl"
 			>

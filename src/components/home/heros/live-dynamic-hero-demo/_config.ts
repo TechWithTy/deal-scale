@@ -222,7 +222,7 @@ export const LIVE_SECONDARY_CTA = {
 };
 
 export const LIVE_MICROCOPY =
-	'<link href="#ai-outreach-demo">See AI In Action</link><br />"People buy from people who make them feel capable and confident." - Dale Carnegie.';
+	'<link href="#ai-outreach-studio">See AI In Action</link><br />"People buy from people who make them feel capable and confident." - Dale Carnegie.';
 
 export const LIVE_SOCIAL_PROOF = {
 	...DEFAULT_HERO_SOCIAL_PROOF,
