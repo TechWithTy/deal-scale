@@ -43,7 +43,7 @@ function sanitizeUrlLike(input: string | undefined | null): string {
 function pickProp(props: Record<string, unknown>, aliases: string[]): unknown {
 	// 1) Exact alias match
 	for (const a of aliases) {
-		if (Object.prototype.hasOwnProperty.call(props, a)) return props[a];
+		if (Object.hasOwn(props, a)) return props[a];
 	}
 	// 2) Case-insensitive exact
 	const lowerMap = new Map<string, string>();
@@ -185,7 +185,7 @@ function getDestinationStrict(prop: unknown): string | undefined {
 async function findRedirectBySlug(slug: string): Promise<Found | null> {
 	console.log(`[proxy] findRedirectBySlug searching for: '${slug}'`);
 	// Prefer Notion when credentials exist (even in development) so we can increment counters.
-	const isProd = process.env.NODE_ENV === "production";
+	const _isProd = process.env.NODE_ENV === "production";
 	const NOTION_KEY = process.env.NOTION_KEY;
 	const DB_ID = process.env.NOTION_REDIRECTS_ID;
 	const devFallback = (() => {
@@ -547,7 +547,7 @@ export async function proxy(req: NextRequest) {
 		}
 
 		return NextResponse.redirect(url);
-	} catch (error) {
+	} catch (_error) {
 		// Fail open
 		return NextResponse.next();
 	}
