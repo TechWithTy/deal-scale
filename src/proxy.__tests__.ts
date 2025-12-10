@@ -2,15 +2,12 @@
  * Tests for proxy redirect functionality with UTM parameters
  */
 
-/// <reference types="vitest/globals" />
-
 import { proxy } from "@/proxy";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { vi } from "vitest";
 
 // Mock fetch globally
-global.fetch = vi.fn();
+global.fetch = jest.fn();
 
 // Mock environment variables
 const mockEnv: NodeJS.ProcessEnv = {
@@ -20,7 +17,7 @@ const mockEnv: NodeJS.ProcessEnv = {
 };
 
 beforeEach(() => {
-	vi.clearAllMocks();
+	jest.clearAllMocks();
 	// Assign individual properties (NODE_ENV is read-only, skip it)
 	process.env.NOTION_KEY = mockEnv.NOTION_KEY;
 	process.env.NOTION_REDIRECTS_ID = mockEnv.NOTION_REDIRECTS_ID;
@@ -146,7 +143,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_id: "campaign-456",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -180,7 +177,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_campaign_relation: "primary-campaign",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -204,7 +201,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_campaign: "fallback-campaign",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -228,7 +225,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_campaign: "notion-campaign",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -260,7 +257,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_campaign: "notion-campaign",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -292,7 +289,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_campaign: "notion-campaign",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -320,7 +317,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_source: "linktree",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -345,7 +342,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_source: "linkedin",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -369,7 +366,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_campaign: "internal-campaign",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () => createNotionResponse("/signup", utmParams),
@@ -393,7 +390,7 @@ describe("proxy redirects with UTM parameters", () => {
 			utm_source: "test",
 		};
 
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () => ({
@@ -424,8 +421,7 @@ describe("proxy redirects with UTM parameters", () => {
 
 		// Verify increment call was made
 		expect(global.fetch).toHaveBeenCalledTimes(2);
-		const incrementCall = (global.fetch as ReturnType<typeof vi.fn>).mock
-			.calls[1];
+		const incrementCall = (global.fetch as jest.Mock).mock.calls[1];
 		expect(incrementCall[0]).toBe(
 			"https://api.notion.com/v1/pages/test-page-id",
 		);
@@ -536,7 +532,7 @@ describe("proxy redirects with Facebook Pixel tracking", () => {
 	};
 
 	test("redirects to client-side tracking page when Facebook Pixel is enabled", async () => {
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -567,7 +563,7 @@ describe("proxy redirects with Facebook Pixel tracking", () => {
 	});
 
 	test("uses direct redirect when Facebook Pixel is disabled", async () => {
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -593,7 +589,7 @@ describe("proxy redirects with Facebook Pixel tracking", () => {
 	});
 
 	test("preserves UTM parameters when redirecting to tracking page", async () => {
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -626,7 +622,7 @@ describe("proxy redirects with Facebook Pixel tracking", () => {
 	});
 
 	test("handles Facebook Pixel with only source parameter", async () => {
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () =>
@@ -653,7 +649,7 @@ describe("proxy redirects with Facebook Pixel tracking", () => {
 
 	test("handles Facebook Pixel when mapper fails gracefully", async () => {
 		// Mock Notion response that will cause mapper to fail
-		(global.fetch as ReturnType<typeof vi.fn>)
+		(global.fetch as jest.Mock)
 			.mockResolvedValueOnce({
 				ok: true,
 				json: async () => ({

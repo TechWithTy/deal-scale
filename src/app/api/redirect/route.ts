@@ -100,7 +100,7 @@ export async function GET(req: Request) {
 		// 2) Preserve query parameters from the redirect request if the destination URL doesn't have them
 		// This allows incoming UTMs and other tracking parameters to be passed through
 		try {
-			// Only preserve params for absolute URLs (relative paths should use middleware logic)
+			// Only preserve params for absolute URLs (relative paths should use proxy logic)
 			if (/^https?:/i.test(location)) {
 				const destUrl = new URL(location);
 				const requestParams = url.searchParams;

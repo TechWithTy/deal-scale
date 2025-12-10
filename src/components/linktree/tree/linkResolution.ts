@@ -36,7 +36,7 @@ export function resolveLink(item: LinkTreeItem): {
 		isExternal = true;
 	}
 
-	// Always route through internal slug so middleware can increment Redirects (Calls)
+	// Always route through internal slug so proxy can increment Redirects (Calls)
 	const slugPath = item.slug ? `/${String(item.slug).replace(/^\//, "")}` : "#";
 	// If destination is an internal path already, keep it; otherwise force slug path
 	if (!isRelativePath) {

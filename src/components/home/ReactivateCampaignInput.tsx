@@ -611,18 +611,18 @@ export function ReactivateCampaignInput({
 
 							{/* Enrich Toggle with Info - on same line when no file, new line when file uploaded */}
 							<div
-								className={`flex items-center gap-1.5 sm:gap-2 ${uploadedFile ? "w-full sm:ml-auto sm:w-auto" : "ml-auto"}`}
+								className={`flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors hover:bg-slate-100/50 sm:gap-2 dark:hover:bg-white/5 ${uploadedFile ? "w-full sm:ml-auto sm:w-auto" : "ml-auto"}`}
 							>
 								<Label
 									htmlFor="enrich"
-									className="flex cursor-pointer items-center gap-1 text-slate-700 text-sm sm:gap-1.5 dark:text-white/90"
+									className="flex cursor-pointer items-center gap-1 text-slate-700 text-sm transition-colors hover:text-sky-600 sm:gap-1.5 dark:text-white/90 dark:hover:text-sky-400"
 								>
 									<span className="hidden sm:inline">Enrich</span>
 									{/* Mobile: Use Dialog, Desktop: Use Popover */}
 									<>
 										<button
 											type="button"
-											className="focus:outline-none sm:hidden"
+											className="rounded-full p-1 transition-colors focus:outline-none hover:bg-sky-500/10 active:bg-sky-500/20 dark:hover:bg-sky-400/10 dark:active:bg-sky-400/20 sm:hidden"
 											aria-label="Learn more about enrichment"
 											onClick={(e) => {
 												e.preventDefault();
@@ -630,29 +630,29 @@ export function ReactivateCampaignInput({
 												setShowEnrichInfo(true);
 											}}
 										>
-											<Info className="h-4 w-4 text-sky-500 opacity-90 transition-opacity active:opacity-100 dark:text-sky-400" />
+											<Info className="h-4 w-4 text-sky-500 transition-opacity hover:opacity-100 active:opacity-100 dark:text-sky-400 dark:opacity-90" />
 										</button>
 										<Popover>
 											<PopoverTrigger asChild>
 												<button
 													type="button"
-													className="hidden focus:outline-none sm:block"
+													className="rounded-full p-1 transition-colors focus:outline-none hover:bg-sky-500/10 active:bg-sky-500/20 dark:hover:bg-sky-400/10 dark:active:bg-sky-400/20 sm:block hidden"
 													aria-label="Learn more about enrichment"
 												>
-													<Info className="h-3.5 w-3.5 text-sky-500 opacity-80 transition-opacity hover:opacity-100 dark:text-sky-400" />
+													<Info className="h-3.5 w-3.5 text-sky-500 opacity-80 transition-opacity hover:opacity-100 dark:text-sky-400 dark:opacity-80 dark:hover:opacity-100" />
 												</button>
 											</PopoverTrigger>
 											<PopoverContent
-												className="z-50 w-80 border-sky-500/30 bg-background-dark text-white"
+												className="z-50 w-80 border-sky-500/30 bg-white shadow-lg backdrop-blur-sm dark:border-sky-500/40 dark:bg-slate-900/95 dark:backdrop-blur-xl"
 												side="top"
 												align="end"
 											>
 												<div className="space-y-3">
 													<div>
-														<h4 className="mb-2 font-semibold text-base text-white">
+														<h4 className="mb-2 font-semibold text-base text-slate-900 dark:text-white">
 															What is Enrichment?
 														</h4>
-														<p className="text-sm text-white/80 leading-relaxed">
+														<p className="text-sm text-slate-700 leading-relaxed dark:text-white/80">
 															Automatically enhance your contact data with
 															verified phone numbers, email addresses, and
 															additional information to improve your outreach
@@ -660,30 +660,36 @@ export function ReactivateCampaignInput({
 														</p>
 													</div>
 													<div>
-														<h5 className="mb-2 font-semibold text-sky-400 text-sm">
+														<h5 className="mb-2 font-semibold text-sky-600 text-sm dark:text-sky-400">
 															What you get:
 														</h5>
-														<ul className="space-y-1.5 text-sm text-white/80">
+														<ul className="space-y-1.5 text-sm text-slate-700 dark:text-white/80">
 															<li className="flex items-start gap-2">
-																<span className="mt-0.5 text-sky-400">✓</span>
+																<span className="mt-0.5 text-sky-600 dark:text-sky-400">✓</span>
 																<span>
 																	Verified contact information (phone, email)
 																</span>
 															</li>
 															<li className="flex items-start gap-2">
-																<span className="mt-0.5 text-sky-400">✓</span>
+																<span className="mt-0.5 text-sky-600 dark:text-sky-400">✓</span>
 																<span>
 																	Enhanced lead data for better targeting
 																</span>
 															</li>
 															<li className="flex items-start gap-2">
-																<span className="mt-0.5 text-sky-400">✓</span>
+																<span className="mt-0.5 text-sky-600 dark:text-sky-400">✓</span>
+																<span>
+																	Social media accounts and social activity summary
+																</span>
+															</li>
+															<li className="flex items-start gap-2">
+																<span className="mt-0.5 text-sky-600 dark:text-sky-400">✓</span>
 																<span>
 																	Higher conversion rates with accurate contacts
 																</span>
 															</li>
 															<li className="flex items-start gap-2">
-																<span className="mt-0.5 text-sky-400">✓</span>
+																<span className="mt-0.5 text-sky-600 dark:text-sky-400">✓</span>
 																<span>
 																	Time saved on manual data verification
 																</span>
@@ -700,7 +706,7 @@ export function ReactivateCampaignInput({
 									checked={skipTrace}
 									onCheckedChange={setSkipTrace}
 									disabled={isProcessing}
-									className="h-7 w-12 shrink-0 border-2 border-slate-300/50 data-[state=checked]:border-sky-500 data-[state=checked]:bg-sky-500 data-[state=unchecked]:bg-slate-200/80 dark:border-slate-600/50 dark:data-[state=checked]:border-sky-500 dark:data-[state=checked]:bg-sky-500 dark:data-[state=unchecked]:bg-slate-700/80 [&>span]:h-6 [&>span]:w-6 [&>span]:shadow-md"
+									className="h-7 w-12 shrink-0 border-2 border-slate-300/50 transition-all data-[state=checked]:border-sky-500 data-[state=checked]:bg-sky-500 data-[state=unchecked]:bg-slate-200/80 hover:border-sky-400/70 hover:shadow-sm dark:border-slate-600/50 dark:data-[state=checked]:border-sky-500 dark:data-[state=checked]:bg-sky-500 dark:data-[state=unchecked]:bg-slate-700/80 dark:hover:border-sky-400/70 dark:hover:shadow-sm [&>span]:h-6 [&>span]:w-6 [&>span]:shadow-md"
 								/>
 							</div>
 						</div>
@@ -775,6 +781,10 @@ export function ReactivateCampaignInput({
 										<li className="flex items-start gap-2">
 											<span className="mt-0.5 text-sky-400">✓</span>
 											<span>Enhanced lead data for better targeting</span>
+										</li>
+										<li className="flex items-start gap-2">
+											<span className="mt-0.5 text-sky-400">✓</span>
+											<span>Social media accounts and social activity summary</span>
 										</li>
 										<li className="flex items-start gap-2">
 											<span className="mt-0.5 text-sky-400">✓</span>
