@@ -970,6 +970,134 @@ export const caseStudies: CaseStudy[] = [
 		featured: true,
 		redirectToContact: false,
 	},
+	{
+		id: "taylor-spreadsheet-to-scale-2025-01",
+		title: "From Spreadsheet Chaos to Seamless Scale",
+		subtitle:
+			"A real investor case study: how a small team moved from spreadsheet lead chaos to a connected workflow with automation + AI—and improved lead-to-deal consistency.",
+		referenceLink: null,
+		slug: "taylor-spreadsheet-chaos-to-seamless-scale",
+		categories: [
+			"workflow-automation",
+			"crm-integration",
+			"lead-management",
+			"pipeline-management",
+		],
+		industries: ["real-estate-investing", "property-acquisition"],
+		copyright: {
+			title:
+				"Want help mapping your workflow and identifying the exact breakpoints?",
+			subtitle:
+				"Stop wasting time on manual data entry and missed follow-ups. See how DealScale's AI can automate your entire pipeline and give you back your day.",
+			ctaText: "Request a Live Demo",
+			ctaLink: "/contact",
+		},
+		tags: [
+			"Spreadsheet Automation",
+			"Workflow Consolidation",
+			"AI Integration",
+			"Pipeline Management",
+			"Lead Conversion",
+			"Ecosystem Thinking",
+		],
+		clientName: "Taylor",
+		clientDescription:
+			"Small-to-mid investor operation with steady inbound flow (referrals + marketing), a part-time VA, and a simple acquisitions rhythm. Goal: close consistently without living in the inbox.",
+		featuredImage: "/case-studies/taylor-spreadsheet-to-scale.png",
+		thumbnailImage: "/case-studies/taylor-spreadsheet-to-scale.png",
+		businessChallenges: [
+			"Leads living in multiple spreadsheets (Spreadsheet A = lead intake, Spreadsheet B = follow-up tracker)",
+			"Notes scattered across texts, DMs, and call logs with no centralized location",
+			"Follow-ups that depend on memory rather than systematic processes",
+			"The same lead 'owned' by three different people, causing confusion and missed opportunities",
+			"No single place to trust to answer: 'What's the next move?'",
+			"Pipeline was a mix of tabs, memory, and good intentions rather than a reliable system",
+			"Reporting was 'best guess' rather than data-driven insights",
+		],
+		lastModified: new Date("2025-01-22T10:00:00.000Z"),
+		howItWorks: [
+			{
+				stepNumber: 1,
+				title: "Consolidate into a Single Source of Truth",
+				subtitle: "Define minimum viable pipeline with consistent structure",
+				description:
+					"Taylor defined the minimum viable pipeline: one record per lead, consistent stages, consistent required fields, one owner per lead, and one 'next action' + 'next follow-up date'. This eliminated the 'it's in the other sheet' problem and created a trustworthy foundation.",
+				icon: "Database",
+				label: "consolidate",
+				positionLabel: "step-1",
+				payload: [],
+			},
+			{
+				stepNumber: 2,
+				title: "Automate the Handoffs",
+				subtitle: "Set triggers so follow-up doesn't depend on memory",
+				description:
+					"The team set simple triggers: when a lead is added → assign an owner; when a lead is marked 'warm' → create next-step tasks; when follow-up date hits → surface it automatically; when status changes → log it consistently. This is where the operation began to feel lighter—not because they worked less, but because the workflow carried the load.",
+				icon: "Zap",
+				label: "automate",
+				positionLabel: "step-2",
+				payload: [],
+			},
+			{
+				stepNumber: 3,
+				title: "Add AI Where It Creates Leverage",
+				subtitle: "Remove the slowest, most repetitive friction",
+				description:
+					"Taylor added AI to remove the slowest, most repetitive friction: initial intake qualification, summarizing lead context into usable notes, making sure no lead sits untouched, and keeping outreach consistent when the team is busy. AI wasn't added to 'sound futuristic'—it was added to create real leverage.",
+				icon: "BrainCircuit",
+				label: "ai-leverage",
+				positionLabel: "step-3",
+				payload: [],
+			},
+		],
+		businessOutcomes: [
+			{
+				title: "Pipeline Stability & Predictability",
+				subtitle:
+					"The pipeline stopped feeling random. Taylor could finally say: 'I know what's next. I know what's stuck. I know we're not dropping opportunities.'",
+			},
+			{
+				title: "Measurable Conversion Improvements",
+				subtitle:
+					"Lead-to-deal conversion improved from 0.6% to 1.8%—a 3x increase—while reducing weekly time spent updating records from 10 hours to 1.5 hours.",
+			},
+		],
+		solutions: [
+			"Standardized intake into one unified pipeline (eliminated multiple spreadsheets)",
+			"Centralized lead context with consistent fields and AI-generated summaries",
+			"Clear ownership and routing rules (one owner per lead, no more confusion)",
+			"Automated tasks and required follow-up dates (no more memory-dependent follow-ups)",
+			"Pipeline truth with visibility into where deals stall (replaced 'best guess' reporting)",
+			"AI-powered initial intake qualification and lead context summarization",
+			"Automated outreach consistency when the team is busy",
+		],
+		description:
+			"Taylor runs a lean investor operation with steady inbound flow, a part-time VA, and a simple acquisitions rhythm. The problem wasn't effort—it was fragmentation. Leads lived in multiple spreadsheets, notes were scattered across texts and email, follow-ups depended on memory, and there was no single place to trust for 'What's the next move?' This case study shows how Taylor moved from spreadsheet chaos to a connected workflow that scales without replacing every tool they already used. The transition happened in three phases: (1) Consolidate into a single source of truth, (2) Automate the handoffs so follow-up doesn't depend on memory, and (3) Add AI where it creates leverage, not noise. The result? Lead response time dropped from 24 hours to 15 minutes, leads touched within 24 hours increased from 35% to 95%, follow-ups completed on time jumped from 40% to 96%, and lead-to-deal conversion improved from 0.6% to 1.8%. The biggest win wasn't just numbers—it was stability. The pipeline stopped feeling random, and Taylor could finally operate with confidence.",
+		results: [
+			{
+				title: "Lead Response Time",
+				value: "24 hours → 15 minutes",
+			},
+			{
+				title: "Leads Touched Within 24 Hours",
+				value: "35% → 95%",
+			},
+			{
+				title: "Follow-ups Completed on Time",
+				value: "40% → 96%",
+			},
+			{
+				title: "Lead-to-Deal Conversion",
+				value: "0.6% → 1.8%",
+			},
+			{
+				title: "Weekly Time Spent Updating Records",
+				value: "10 hours → 1.5 hours",
+			},
+		],
+		featured: true,
+		redirectToContact: false,
+	},
 ];
 
 // Debug: Log case studies on module load
