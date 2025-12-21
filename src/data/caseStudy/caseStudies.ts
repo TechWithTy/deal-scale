@@ -1098,6 +1098,177 @@ export const caseStudies: CaseStudy[] = [
 		featured: true,
 		redirectToContact: false,
 	},
+	{
+		id: "beta-data-report-2025-q4",
+		title:
+			"DealScale Beta Data Report: Real Metrics from 500+ AI-Powered Lead Interactions",
+		subtitle:
+			"Early beta findings across investors and wholesalers, focused on speed, coverage, throughput, and clean handoffs. Anonymized, aggregated data revealing what established teams care about when scaling responsibly.",
+		referenceLink: null,
+		slug: "dealscale-beta-data-report-2025",
+		categories: [
+			"data-report",
+			"beta-insights",
+			"ai-automation",
+			"lead-management",
+			"workflow-automation",
+		],
+		industries: [
+			"real-estate-investing",
+			"property-acquisition",
+			"wholesaling",
+		],
+		copyright: {
+			title: "Want to be part of the next wave and help shape the Q1 roadmap?",
+			subtitle:
+				"See how DealScale's AI can automate your entire pipeline with real data-driven insights.",
+			ctaText: "Request a Demo",
+			ctaLink: "/contact",
+		},
+		tags: [
+			"Beta Data",
+			"Performance Metrics",
+			"AI Automation",
+			"Lead Response Time",
+			"Follow-up Coverage",
+			"Qualification Speed",
+			"Data-Driven Insights",
+		],
+		clientName: "DealScale Beta Users (Aggregated)",
+		clientDescription:
+			"Early beta activity across 500+ AI-powered lead interactions (conversations + automations triggered) from established investors and wholesalers. All metrics are anonymized and aggregated, with outliers trimmed to ensure accurate representation.",
+		featuredImage: "/case-studies/beta-data-report-2025.png",
+		thumbnailImage: "/case-studies/beta-data-report-2025.png",
+		businessChallenges: [
+			"Most operators don't lose deals because they lack leads—they lose deals because the follow-up system can't keep up",
+			"Response time slips, causing hot leads to cool off in silence",
+			"Notes get fragmented across multiple systems and touchpoints",
+			"Handoffs get messy, leading to missed opportunities and dropped leads",
+			"Teams need operator-grade metrics: speed, coverage, throughput, and clean handoffs",
+		],
+		lastModified: new Date("2025-12-22T10:00:00.000Z"),
+		howItWorks: [
+			{
+				stepNumber: 1,
+				title: "Speed to First Touch",
+				subtitle: "Median: 18 minutes from lead creation",
+				description:
+					"Fast response isn't a 'nice-to-have'—it's your first compounding advantage. Beta results show median time to first touch of 18 minutes, with 42% touched within 15 minutes and 81% within 60 minutes.",
+				icon: "Bolt",
+				label: "speed",
+				positionLabel: "step-1",
+				payload: [],
+			},
+			{
+				stepNumber: 2,
+				title: "Follow-up Coverage Within SLA",
+				subtitle: "88% within 2 hours, 97% within 24 hours",
+				description:
+					"AI handles follow-ups within defined windows: 88% within 2 hours and 97% within 24 hours. Only 2.5% of leads receive zero follow-ups. This is what 'scaling responsibly' looks like: not just more outreach, but more coverage with fewer blind spots.",
+				icon: "CheckSquare",
+				label: "coverage",
+				positionLabel: "step-2",
+				payload: [],
+			},
+			{
+				stepNumber: 3,
+				title: "Lead Qualification & AI Task Completion",
+				subtitle: "1.6 hour median qualification, 86% AI completion rate",
+				description:
+					"Median qualification time is 1.6 hours, with 93% qualified within 24 hours. AI completes 86% of tasks end-to-end without human intervention, while 14% require handoff for complex situations, missing data, or compliance needs.",
+				icon: "BrainCircuit",
+				label: "qualification",
+				positionLabel: "step-3",
+				payload: [],
+			},
+			{
+				stepNumber: 4,
+				title: "Engagement Signal & Next Steps",
+				subtitle: "41% reply rate, 18% positive intent, 9% appointments set",
+				description:
+					"Engagement metrics reveal real impact: 41% reply rate, 63% conversation completion rate, 18% positive intent rate (warm/hot signals), and 9% appointment/next-step set rate. If you're measuring only 'messages sent,' you're blind—measure engagement → intent → next step → conversion.",
+				icon: "BarChart",
+				label: "engagement",
+				positionLabel: "step-4",
+				payload: [],
+			},
+		],
+		businessOutcomes: [
+			{
+				title: "Operator-Grade Performance Metrics",
+				subtitle:
+					"When follow-up becomes automatic, teams stop 'hoping' their pipeline is real and start operating like it is. Clear visibility into speed, coverage, throughput, and handoff reasons.",
+			},
+			{
+				title: "AI-First Execution with Clean Handoffs",
+				subtitle:
+					"AI handles the repeatable work (86% completion rate) while cleanly escalating complex situations, missing data, compliance needs, and negotiation complexity to humans (14% handoff rate).",
+			},
+		],
+		solutions: [
+			"Speed to first touch: Median 18 minutes from lead creation to first outreach",
+			"Follow-up coverage within SLA: 88% within 2 hours, 97% within 24 hours",
+			"Lead qualification automation: Median 1.6 hours from creation to qualified/disqualified status",
+			"AI task completion: 86% of tasks completed end-to-end without human intervention",
+			"Human handoff system: 14% of cases escalated for missing data, edge cases, compliance, or complexity",
+			"Engagement tracking: Reply rates, conversation completion, positive intent, and next-step metrics",
+			"Data quality and enrichment: Reduced handoff friction through standardized fields and data enrichment",
+		],
+		description:
+			"Most operators don't lose deals because they lack leads—they lose deals because the follow-up system can't keep up. Response time slips, notes get fragmented, handoffs get messy, and 'hot' leads cool off in silence. This original data post is based on early beta usage across investors and wholesalers, summarizing 500+ AI-powered lead interactions with a focus on operator-grade metrics: speed, coverage, throughput, and clean handoffs. Key findings include median time to first touch of 18 minutes (with 42% touched within 15 minutes), follow-up coverage of 88% within 2 hours and 97% within 24 hours, median qualification time of 1.6 hours, AI task completion rate of 86% with 14% human handoff rate, and engagement signals showing 41% reply rate and 18% positive intent rate. The data reveals where real estate ops are ready for AI today: fast response, consistent follow-up, structured qualification, and context summarization. Humans still win at negotiation, complex situations, judgment calls, compliance nuance, and relationship dynamics. The 'right' model is AI-first execution with clean handoffs, not automation theater.",
+		results: [
+			{
+				title: "Median Speed to First Touch",
+				value: "18 minutes",
+			},
+			{
+				title: "Touched Within 15 Minutes",
+				value: "42%",
+			},
+			{
+				title: "Touched Within 60 Minutes",
+				value: "81%",
+			},
+			{
+				title: "Follow-up Coverage Within 2 Hours",
+				value: "88%",
+			},
+			{
+				title: "Follow-up Coverage Within 24 Hours",
+				value: "97%",
+			},
+			{
+				title: "Median Lead Qualification Time",
+				value: "1.6 hours",
+			},
+			{
+				title: "AI Task Completion Rate",
+				value: "86%",
+			},
+			{
+				title: "Human Handoff Rate",
+				value: "14%",
+			},
+			{
+				title: "Reply Rate",
+				value: "41%",
+			},
+			{
+				title: "Conversation Completion Rate",
+				value: "63%",
+			},
+			{
+				title: "Positive Intent Rate",
+				value: "18%",
+			},
+			{
+				title: "Appointment/Next-Step Set Rate",
+				value: "9%",
+			},
+		],
+		featured: false,
+		redirectToContact: false,
+	},
 ];
 
 // Debug: Log case studies on module load
