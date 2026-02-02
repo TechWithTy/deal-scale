@@ -196,9 +196,9 @@ export const Footer: React.FC<FooterProps> = ({
 				</div>
 
 				<div className="mt-12 flex flex-col items-center border-white/10 border-t pt-8 md:items-center md:space-y-4 lg:flex-row lg:justify-between lg:space-y-0">
-					<p className="mb-4 text-center text-black text-sm md:mb-0 dark:text-white/60">
-						DealScaleREI © 2025 Deal Scale. All rights reserved.
-					</p>
+										<p className="mb-4 text-center text-black text-sm md:mb-0 dark:text-white/60">
+												© 2025 Deal Scale™ — All Rights Reserved. Deal Scale is a registered trademark.
+										</p>
 					<div className="flex flex-col space-y-2 sm:flex-row sm:flex-wrap sm:justify-center sm:space-x-4 sm:space-y-2 lg:justify-end lg:space-x-6 lg:space-y-0">
 						<Link
 							href="/legal"
