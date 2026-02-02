@@ -2,14 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import {
-	useCallback,
-	useEffect,
-	useId,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
 import { ShinyButton } from "@/components/ui/shiny-button";
@@ -37,6 +30,9 @@ const ROI_CALCULATOR_URL =
 export function FeatureShowcase({
 	features,
 }: FeatureShowcaseProps): JSX.Element | null {
+	// Use React's useId hook for SSR-safe ID generation
+	// This ensures server and client render the same IDs and prevents hydration mismatches
+	const generatedId = useId();
 	const stableFeatures = useMemo(() => features.filter(Boolean), [features]);
 	const featureIds = useMemo(
 		() => stableFeatures.map((feature) => feature.id),
@@ -48,7 +44,6 @@ export function FeatureShowcase({
 	}
 
 	const fallbackId = stableFeatures[0]?.id ?? "";
-	const generatedId = useId();
 	const [activeId, setActiveId] = useState(fallbackId);
 	const interactionRef = useRef(false);
 	const lastManualSelectionRef = useRef(Date.now());

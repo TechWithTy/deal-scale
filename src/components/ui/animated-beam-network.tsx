@@ -228,6 +228,7 @@ export function AnimatedBeamNetwork({
 							<AnimatedBeam
 								// eslint-disable-next-line react/no-array-index-key -- position stable for <=6 nodes
 								key={`beam-${index}`}
+								beamId={`animated-beam-network-${index}`}
 								containerRef={containerRef}
 								fromRef={nodeRefs[index]}
 								toRef={centerRef}
