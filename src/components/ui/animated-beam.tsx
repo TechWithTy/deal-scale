@@ -21,6 +21,8 @@ export interface AnimatedBeamProps {
 	startYOffset?: number;
 	endXOffset?: number;
 	endYOffset?: number;
+	/** Stable ID for SSR/client hydration consistency. If not provided, useId() is used. */
+	beamId?: string;
 }
 
 export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
@@ -41,8 +43,11 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
 	startYOffset = 0,
 	endXOffset = 0,
 	endYOffset = 0,
+	beamId,
 }) => {
-	const id = useId();
+	const reactId = useId();
+	// Use provided beamId for SSR consistency, fall back to React's useId()
+	const id = beamId ?? reactId;
 	const [pathD, setPathD] = useState("");
 	const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
 
