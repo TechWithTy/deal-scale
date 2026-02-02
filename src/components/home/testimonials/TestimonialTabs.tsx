@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Testimonial } from "@/types/testimonial";
 import { AnimatePresence, type Variants, motion } from "framer-motion";
+import { useId } from "react";
 import { TAB_KEYS, type TabKey } from "./tabConfig";
 
 interface TestimonialTabsProps {
@@ -22,9 +23,9 @@ export function TestimonialTabs({
 	fadeInUp,
 	testimonial,
 }: TestimonialTabsProps) {
-	// Use a stable ID to prevent hydration mismatches with Radix UI's random ID generation
-	// This ensures server and client render the same IDs
-	const tabsId = "testimonial-tabs";
+	// Use React's useId hook for SSR-safe ID generation
+	// This ensures server and client render the same IDs and prevents hydration mismatches
+	const tabsId = useId();
 
 	return (
 		<Tabs
