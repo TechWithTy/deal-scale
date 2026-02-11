@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const BEEHIIV_FEED = "https://rss.beehiiv.com/feeds/th0QQipR7J.xml";
+const BEEHIIV_FEED = "https://rss.beehiiv.com/feeds/rsU6YI0l4Z.xml";
 const CACHE_CONTROL = "s-maxage=3600, stale-while-revalidate=86400";
 
 export default async function handler(
